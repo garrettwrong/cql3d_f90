@@ -1,5 +1,13 @@
 c
 c
+      module netcdfrf_mod
+      integer, private, parameter :: nmodsa=155 ! XXX from param.h, replace later
+      integer, private ::  numrec(nmodsa) !-YuP-> added: as a function of krf
+      
+      save
+
+      contains
+
       subroutine netcdfrf(kopt,krf)
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -66,9 +74,6 @@ c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
       include 'netcdf.inc'
 CMPIINSERT_INCLUDE
-
-      integer numrec(nmodsa) !-YuP-> added: as a function of krf
-      common/netcdfrf_numrec/numrec ! counter for recording data
       
 c --- some stuff for netCDF file ---
       character*128 name
@@ -1852,3 +1857,4 @@ c-YuP:      call ncclos(ncid,istatus)
       return
       end
 
+      end module netcdfrf_mod

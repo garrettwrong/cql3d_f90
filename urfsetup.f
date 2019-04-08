@@ -1,6 +1,7 @@
 c
 c
       subroutine urfsetup
+      use netcdfrf_mod, only : netcdfrf
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
