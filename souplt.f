@@ -1,6 +1,7 @@
 c
 c
       subroutine souplt
+      use pltdf_mod, only : cont, tempcntr, nconta
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -9,8 +10,6 @@ c..................................................................
 
       include 'param.h'
       include 'comm.h'
-      parameter(nconta=100)
-      common/contours/cont(nconta),tempcntr(nconta)
 
       REAL RILIN
       REAL RTAM1(jx),RTAM2(jx)

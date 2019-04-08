@@ -1,6 +1,7 @@
 c
 c
       subroutine prpprctr
+      use pltdf_mo, only : cont, tempcntr, nconta
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -18,8 +19,6 @@ c...............................................................
 c     This routine performs contour plots of data
 c     set in tempcntr by subroutine pltcont
 c...............................................................
-      parameter(nconta=100)
-      common/contours/cont(nconta),tempcntr(nconta)
       ipjpxy=ipxy*jpxy
       dmin=0.
       dmax=0.

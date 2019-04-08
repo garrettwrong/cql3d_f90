@@ -1,6 +1,7 @@
 c
 c
       subroutine pltcont(k,pltcase,tt_,itype)
+      use pltdf_mod, only : cont, tempcntr, nconta
       !YuP[2018-02-07] added input itype, to identify what is plotted.
       ! itype=1 for plots of f(),
       !      =2 for df
@@ -16,8 +17,6 @@ c
       include 'comm.h'
 CMPIINSERT_INCLUDE
 
-      parameter(nconta=100)
-      common/contours/cont(nconta),tempcntr(nconta)
       integer pltcase
       character*(*) tt_
       character*64 tx_,ty_

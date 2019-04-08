@@ -1,6 +1,7 @@
 c
 c
       subroutine pltmain
+      use pltdf_mod, only: pltdf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c

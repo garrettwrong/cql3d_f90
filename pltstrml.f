@@ -1,6 +1,7 @@
 c
 c
       subroutine pltstrml
+      use pltdf_mod, only : cont, tempcntr, nconta
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 
@@ -26,8 +27,6 @@ c
 CMPIINSERT_INCLUDE
       include 'advnce.h'
 
-      parameter(nconta=100)
-      common/contours/cont(nconta),tempcntr(nconta)      
       integer pltcase
       character*64 tt_
       character*64 tx_,ty_
