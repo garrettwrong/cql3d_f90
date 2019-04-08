@@ -1,7 +1,7 @@
 c
 c
       subroutine prpprctr
-      use pltdf_mo, only : cont, tempcntr, nconta
+      use pltdf_mod, only : cont, tempcntr, nconta
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c

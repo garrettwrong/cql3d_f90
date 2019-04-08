@@ -1,5 +1,16 @@
 c
 c
+      module equilib_mod
+      use iso_c_binding, only : c_double
+      ! these are used outside the module in tdeqdisk
+      integer, parameter, public ::  ncoila=5, nccoila=50
+      real(c_double), public :: pcvac(0:9)
+      real(c_double), public :: ccoil(nccoila,ncoila)
+      real(c_double), public :: ncoil(ncoila)
+      save
+
+      contains
+
       subroutine equilib(Requil,Zequil,index,PSIequil,BReq,BPHIeq,BZeq)
      
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -12,11 +23,9 @@ c                    for a given Requil,Zequil coordinate.
       include 'comm.h'
       
       parameter(nworka=3*nnra+1)
-      parameter (ncoila=5,nccoila=50)
 
       character*8 ntitle,dat   ! Added for g95 compiler, Urban 110708
       dimension ntitle(5),workk(nworka)
-      common/coils/ cvac(0:9), ccoil(nccoila,ncoila),ncoil(ncoila)
 c..................................................................
 c     CQL3D subroutine:  Oct. 27, 2004, RWH.
 c     This routine will read in the eqdsk file if eqsource="eqdsk".
@@ -720,3 +729,5 @@ c         endif
 
       return
       end
+
+      end module equilib_mod

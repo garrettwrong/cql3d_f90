@@ -1,17 +1,17 @@
 c
 c
       subroutine tdeqdsk
+      use equilib_mod, only : ncoila, nccoila, pcvac, ccoil, ncoil
+
       implicit integer (i-n), real*8 (a-h,o-z)
       save
       include 'param.h'
       parameter (niterate=20)
-      parameter (ncoila=5,nccoila=50)
       include 'comm.h'
 
       dimension fpsiareq(nnra),ffpareq(nnra),prareq(nnra),
      1  ppareq(nnra),q(nnra),eqpsi_(nconteqa),d2q_(nconteqa)
       parameter(itlrza=3*lrza+1+3*nrada+3*nconteqa)
-      common/coils/ cvac(0:9), ccoil(nccoila,ncoila),ncoil(ncoila)
       dimension workk(itlrza),atw(ntotala),dpsiar(nrada),d2gpary(nrada),
      1  d2pary(nrada),d2ppary(nrada),ene(lrza),te(lrza),
      1  ti(lrza,ntotala),enp(lrza,ntotala),eni(lrza,ntotala),
@@ -380,7 +380,7 @@ cBH070116        write(17,220) (q(i),i=1,nnv_)
           if(ncoil(i).le.0) go to 230
           write(17,250) (ccoil(nn,i),nn=1,ncoil(i))
  230    continue
-        write(17,250) (cvac(i),i=1,9)
+        write(17,250) (pcvac(i),i=1,9)
       endif
       if (partner.ne."selene") then
          write(*,*) 
