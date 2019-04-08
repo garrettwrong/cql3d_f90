@@ -153,6 +153,7 @@ CMPIINSERT_ENDIF_RANK
 c=======================================================================      
       
       subroutine de_alloc ! YuP[11-2017] more deallocation
+      use impavnc0_mod, only : abd, ipivot 
       implicit integer (i-n), real*8 (a-h,o-z)
       include 'param.h'
       include 'comm.h'
@@ -175,11 +176,6 @@ c  Other arrays like abd(),...ampfda() [few lines below]
 c  are NOT in comm.h, but rather in local common blocks.
 c  So, these common blocks must be added here, too.
 
-      dimension abd(:,:)
-      pointer abd 
-      dimension ipivot(:) 
-      pointer ipivot
-      common/gauss_/ inewjmax,abd,ipivot,ialloc ! from impavnc0
       dimension ampfda(:,:),ampfdd(:,:)
       pointer ampfda,ampfdd
       common /ampf/ ampfda,ampfdd ! from impavnc0

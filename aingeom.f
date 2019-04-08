@@ -1,6 +1,7 @@
 c
 c
       subroutine aingeom
+      use equilib_mod, only : equilib
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................

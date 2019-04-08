@@ -1,5 +1,16 @@
 c
 c
+      module impavnc0_mod
+      use iso_c_binding, only : c_double
+      ! these are used outside module in it3dalloc.f
+      integer, public ::  inewjmax, ialloc      
+      integer, pointer, public ::  abd(:,:), ipivot(:)
+
+      
+      save
+
+      contains
+
       subroutine impavnc0(kopt)
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -35,11 +46,6 @@ c.................................................................
 c     matrix declared as pointer
 c     need inewjmax in common to use with pointer
 c.................................................................
-      dimension abd(:,:)
-      pointer abd 
-      dimension ipivot(:) 
-      pointer ipivot
-      common/gauss_/ inewjmax,abd,ipivot,ialloc
       dimension ampfda(:,:),ampfdd(:,:)
       pointer ampfda,ampfdd
       common /ampf/ ampfda,ampfdd !BH: Saves this data
@@ -2702,3 +2708,5 @@ c              itl (or itu)case:
 
 
 c      end of file impavnc0.f
+
+      end module impavnc0_mod
