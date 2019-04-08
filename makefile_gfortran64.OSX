@@ -33,7 +33,7 @@ SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  ainalloc.f  \
 	frstup.f  frsubs.f  frsuppor.f  frwrong.f  \
 	ilut.f impavnc0.f  impchk.f  impnorm.f  it3dalloc.f  \
 	lookup.f  losscone.f  lossegy.f  lossorbm.f  \
-	losstor.f  micfrplt.f  micgetr.f   \
+	losstor.f  micgetr.f   \
 	micgmbnd.f  micgnbnd.f  micxinil.f  micxinim.f  micxinit.f  \
 	micxiniz.f  netcdfrf.f  netcdfrw2.f ntdstore.f   \
 	ntloop.f  pack21.f  pltcont.f  pltcycl.f  pltdf.f  \
