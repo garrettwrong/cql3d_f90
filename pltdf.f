@@ -6,6 +6,11 @@ c
       integer, parameter, public :: nconta=100
       ! these are shared with other routines (outside the contains)
       real(c_double), public :: cont(nconta),tempcntr(nconta)
+      ! PGLOCAL1 from pltcont.f
+      real(c_double), pointer, public :: wx(:), wy(:)
+      integer, public :: IIY, JXQ
+
+      save
 
       contains 
 

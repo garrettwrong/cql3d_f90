@@ -2,6 +2,7 @@ c
 c
       subroutine pltcont(k,pltcase,tt_,itype)
       use pltdf_mod, only : cont, tempcntr, nconta
+      use pltdf_mod, only : wx, wy, IIY, JXQ
       !YuP[2018-02-07] added input itype, to identify what is plotted.
       ! itype=1 for plots of f(),
       !      =2 for df
@@ -35,11 +36,9 @@ cmnt    the calling routine.
 c...
 C
 C     PASSING ARRAYS TO PGFUNC1, FOR PGPLOT PGCONX:
-      pointer wx,wy
-      REAL wx(:),wy(:), xpt,ypt
+      REAL xpt,ypt
       REAL RCONT,RXMAXQ,RTEMP1,RXPTS,RYPTS
       DIMENSION RCONT(NCONTA),RTEMP1(iy,jx),RXPTS(2),RYPTS(2)
-      COMMON /PGLOCAL1/wx,wy,IIY,JXQ
 C     wx IS V-NORM ARRAY, wy IS THETA ARRAY.  TYPE REAL.
       real*4 RTAB1(iy),RTAB2(iy) ! local
 
@@ -488,6 +487,7 @@ c..................................................................
 C
 C
       subroutine PGFUNC1(VISBLE,yplt,xplt,zplt)
+      use pltdf_mod, only : IIY
       INTEGER VISBLE
       REAL xplt,yplt,zplt
       pointer wx,wy
@@ -496,8 +496,6 @@ C
 C 
       INCLUDE 'param.h'
       include 'comm.h'
-
-      COMMON /PGLOCAL1/wx,wy,IIY,JXQ
 
 C     wx IS V-NORM ARRAY, wy IS THETA ARRAY.  TYPE REAL.
 C     xplt (yplt) IS FRACTIONAL INDEX IN V-NORM (THETA) ARRAY.

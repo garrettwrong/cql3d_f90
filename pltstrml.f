@@ -2,6 +2,8 @@ c
 c
       subroutine pltstrml
       use pltdf_mod, only : cont, tempcntr, nconta
+      use pltdf_mod, only : wx, wy, IIY, JXQ
+      
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 
@@ -34,11 +36,9 @@ CMPIINSERT_INCLUDE
       REAL RILIN !-> For PGPLOT (text output positioning)
 
 C     PASSING ARRAYS TO PGFUNC1, FOR PGPLOT PGCONX:
-      pointer wx,wy
-      REAL wx(:),wy(:), xpt,ypt
+      REAL xpt,ypt
       REAL RCONT,RXMAXQ,RTEMP1,RXPTS,RYPTS
       DIMENSION RCONT(NCONTA),RTEMP1(iy,jx),RXPTS(2),RYPTS(2)
-      COMMON /PGLOCAL1/wx,wy,IIY,JXQ
 C     wx IS V-NORM ARRAY, wy IS THETA ARRAY.  TYPE REAL.
       real*4 RTAB1(iy),RTAB2(iy) ! local
       EXTERNAL PGFUNC1
