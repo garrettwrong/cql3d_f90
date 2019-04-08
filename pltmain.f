@@ -1,5 +1,14 @@
 c
 c
+      module pltmain_mod
+      use iso_c_binding, only : c_float
+      character*7, private :: scale
+      real(c_float), private ::  X, Y, ANGLE, FJUST
+            
+      save
+
+      contains
+
       subroutine pltmain
       use pltdf_mod, only: pltdf
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -246,8 +255,7 @@ c---------------------------------------------------------------------
       implicit integer (i-n), real*8 (a-h,o-z)
       REAL*4 PGxmin,PGxmax,PGymin,PGymax, RPG1,RPG2 ! PGPLOT uses REAL*4
       REAL*4 RBOUND
-      character*7 scale,scales ! = "linlin$" or "linlog$","loglin$","loglog$"
-      common/GRAFLIB_PGPLOT_scale/ scale
+      character*7 scales ! = "linlin$" or "linlog$","loglin$","loglog$"
         scale  = scales ! To gpcv2d -> PGLINE
         PGxmin = RBOUND(xmin)
         PGxmax = RBOUND(xmax)
@@ -290,8 +298,6 @@ c---------------------------------------------------------------------
       real*8 xarray(length),yarray(length)
       integer length
       REAL*4 PGxarray(length),PGyarray(length)
-      character*7 scale ! = "linlin$" or "linlog$","loglin$","loglog$"
-      common/GRAFLIB_PGPLOT_scale/ scale
       small_p = EPSILON(1.0) !a positive number that is almost negligible
         if(scale.eq."linlin$") then
           do n=1,length
@@ -458,5 +464,4 @@ c TEXT   (input)  : the character string to be plotted.
 c---------------------------------------------------------------------
       
 
-
-
+      end module pltmain_mod

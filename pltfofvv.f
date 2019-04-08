@@ -1,6 +1,7 @@
 c
 c
       subroutine pltfofvv
+      use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 **SCC10/7/94

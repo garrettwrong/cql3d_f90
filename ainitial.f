@@ -1,6 +1,7 @@
 
 
       subroutine ainitial
+      use pltmain_mod, only : pltmain
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

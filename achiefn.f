@@ -2,6 +2,7 @@ c
 c
       subroutine achiefn(kopt)
       use impavnc0_mod, only : impavnc0
+      use pltmain_mod, only : pltmain
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

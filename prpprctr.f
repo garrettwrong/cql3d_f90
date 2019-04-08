@@ -2,6 +2,7 @@ c
 c
       subroutine prpprctr
       use pltdf_mod, only : cont, tempcntr, nconta
+      use pltmain_mod, only : gslnst, gslnsz, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c

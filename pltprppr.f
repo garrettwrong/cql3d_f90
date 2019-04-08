@@ -1,6 +1,7 @@
 c
 c
       subroutine pltprppr
+      use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
 c...  
 cmnt  This routine plots the parallel distribution function.
@@ -72,8 +73,8 @@ c990131        fmax=amax1(fmax1,fmax2)
         call GSVP2D(.2,.8,.25,.95) ! (XLEFT, XRIGHT, YBOT, YTOP)
         CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlin$",0.d0,xlu,fmin,fmax)
-        call GPCV2D(xlm(jpxyh),tem1,jpxyhm)
-        call GPCV2D(xlm(jpxyh),tem2,jpxyhm)
+        call GPCV2D(xlm(jpxyh:jpxyh+jpxyh), tem1, jpxyhm)
+        call GPCV2D(xlm(jpxyh:jpxyh+jpxyh), tem2, jpxyhm)
         
         write(t_,10011) k
 10011 format("asymmetric cmpt of f_par, and xpar*cmpt, species:",1x,i5)

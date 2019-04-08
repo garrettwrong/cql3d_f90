@@ -1,6 +1,7 @@
 c
 c
       subroutine pltrstv
+      use pltmain_mod, only : gxglfr, gsvp2d, gswd2d, gpcv2d
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Plot electron resistivity and related quantities.
@@ -31,9 +32,12 @@ c
       text(1)="spitzer"
       !-YuP:   call GSCVLB(1)
       !-YuP:   call GSCVTX(loc(text))
-      call GPCV2D(ptime(2,l_),sptzrp(2,lmdpln_),nch(l_)-1)
+
+      call GPCV2D(ptime(2:nch(l_)-1,l_), sptzrp(2:nch(l_)-1,lmdpln_),
+     + nch(l_)-1)
       text(1)="rstvty"
-      call GPCV2D(ptime(2,l_),restp(2,lr_),nch(l_)-1)
+      call GPCV2D(ptime(2:nch(l_)-1,l_), restp(2:nch(l_)-1,lr_),
+     + nch(l_)-1)
       !-YuP:   call GSCVLB(0)
       write(t_,170)
  170  format("upper graph - flux avg and spitzer resistivities")
@@ -53,7 +57,8 @@ c
       call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),
      + .95d0*emin,1.05d0*emax)
       CALL PGLAB('time (sec)',' ',' ')
-      call GPCV2D(ptime(2,l_),rovsp(2,illeff),nch(l_)-1)
+      call GPCV2D(ptime(2:nch(l_)-1,l_), rovsp(2:nch(l_)-1,illeff),
+     + nch(l_)-1)
 
       if (efswtchn.eq."neo_hh") then
          write(t_,10164) 

@@ -3,7 +3,7 @@ c
       subroutine pltstrml
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
-      
+      use pltmain_mod, only : gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 

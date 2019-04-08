@@ -2,6 +2,7 @@ c
 c
       subroutine tdchief
       use netcdfrf_mod, only : netcdfrf
+      use pltmain_mod, only : pltmain
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

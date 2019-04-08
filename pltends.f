@@ -1,6 +1,7 @@
 c
 c
       subroutine pltends
+      use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Plot energy, density, parallel current and density conservation
@@ -38,7 +39,7 @@ c...
         CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin,
      1       emax*1.05)
-        call GPCV2D(ptime(1,l_),pdens(1,k,l_),nch(l_)) ! density(time)
+        call GPCV2D(ptime(1:nch(l_),l_),pdens(1:nch(l_),k,l_),nch(l_)) ! density(time)
         CALL PGLAB('time (sec)',' ',' ')
         !call GSCPVS(.08,.75) ! set current position for text
         write(t_,10120) k
@@ -55,7 +56,7 @@ c...
         CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin,
      1       emax*1.05)
-        call GPCV2D(ptime(1,l_),pengy(1,k,l_),nch(l_)) ! energy(time)
+        call GPCV2D(ptime(1:nch(l_),l_), pengy(1:nch(l),k,l_), nch(l_)) ! energy(time)
         CALL PGLAB('time (sec)',' ',' ')
         !call GSCPVS(.08,.35) ! set current position for text
         write(t_,10110) k
@@ -98,7 +99,7 @@ c...
         call GSVP2D(.2,.8,.6,.9) 
         CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin,emax)
-        call GPCV2D(ptime(1,l_),pcurr(1,k,l_),nch(l_)) ! current_dens(time)
+        call GPCV2D(ptime(1:nch(l_),l_),pcurr(1:nch(l_),k,l_),nch(l_)) ! current_dens(time)
         CALL PGLAB('time (sec)',' ',' ')
         curramp=currm(k,l_)/3.e9
         write(t_,10160) k,curramp
@@ -123,7 +124,7 @@ c...
         call GSVP2D(.2,.8,.6,.9) !---------------> 1st subplot
         CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlin$",x(1),x(jx),fnmin,fnmax)
-        call GPCV2D(x,currv(1,k,l_),jx)
+        call GPCV2D(x,currv(1:jx,k,l_),jx)
         CALL PGLAB('v/vnorm','current: J(v)',' ') ! 
         
         call aminmx(currvs(1,k),1,jx,1,fnmin,fnmax,kmin,kmax)
@@ -132,7 +133,7 @@ c...
         call GSVP2D(.2,.8,.2,.5) !---------------> 2nd subplot
         CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlin$",x(1),x(jx),fnmin,fnmax)
-        call GPCV2D(x,currvs(1,k),jx)
+        call GPCV2D(x,currvs(1:jx,k),jx)
         CALL PGLAB('v/vnorm','Integral from 0 to v of J(v)dv',' ') !
          
         write(t_,10183) currvs(jx,k)
@@ -159,7 +160,7 @@ c...
       call GSVP2D(.2,.8,.6,.9)
       CALL PGSCH(1.) ! set character size; default is 1.
       call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin,emax)
-      call GPCV2D(ptime(1,l_),consnp(1,l_),nch(l_))      
+      call GPCV2D(ptime(1:nch(l_),l_),consnp(1:nch(l_),l_),nch(l_))      
       CALL PGLAB('time (sec)','consn(l_) conservation diag',' ')
       
       write(t_,10250) consn(l_)
