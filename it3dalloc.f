@@ -154,6 +154,7 @@ c=======================================================================
       
       subroutine de_alloc ! YuP[11-2017] more deallocation
       use impavnc0_mod, only : abd, ipivot 
+      use impavnc0_mod, only : ampfda, ampfdd
       implicit integer (i-n), real*8 (a-h,o-z)
       include 'param.h'
       include 'comm.h'
@@ -175,10 +176,6 @@ c  in front of deallocate(array_name) statement.
 c  Other arrays like abd(),...ampfda() [few lines below]
 c  are NOT in comm.h, but rather in local common blocks.
 c  So, these common blocks must be added here, too.
-
-      dimension ampfda(:,:),ampfdd(:,:)
-      pointer ampfda,ampfdd
-      common /ampf/ ampfda,ampfdd ! from impavnc0
 
 
 CMPIINSERT_IF_RANK_EQ_0

@@ -2,11 +2,11 @@ c
 c
       module impavnc0_mod
       use iso_c_binding, only : c_double
-      ! these are used outside module in it3dalloc.f
+      ! gauss_, these are used outside module in it3dalloc.f
       integer, public ::  inewjmax, ialloc      
       integer, pointer, public ::  abd(:,:), ipivot(:)
-
-      
+      ! ampf, these are used outside module in it3dalloc.f
+      real(c_double), pointer, public :: ampfda(:,:), ampfdd(:,:)      
       save
 
       contains
@@ -41,14 +41,6 @@ cBH080303    Using f95 intrinsic subroutine, cpu_time
       dimension zavarj1(iy+4),ijaj1(iy+4)
       dimension  zmatcont(12), janelt(12)
       character*1 transpose
-
-c.................................................................
-c     matrix declared as pointer
-c     need inewjmax in common to use with pointer
-c.................................................................
-      dimension ampfda(:,:),ampfdd(:,:)
-      pointer ampfda,ampfdd
-      common /ampf/ ampfda,ampfdd !BH: Saves this data
 
       integer icount_imp   !Counter for calls to impavnc0
       data icount_imp/0/
