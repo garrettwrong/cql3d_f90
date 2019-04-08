@@ -1,13 +1,12 @@
 c
 c
       subroutine tdplteq(krf)
+      use frplteq_mod, only : micfrplt, textt
       implicit integer (i-n), real*8 (a-h,o-z)
       include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 
-      character*8 textt
-      common /plttextt/ textt(200)
       character*8 pltrays
       character*8 plteq
 
