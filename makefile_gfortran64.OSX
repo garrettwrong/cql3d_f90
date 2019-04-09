@@ -121,11 +121,11 @@ $(SOURCES):        $(INCLUDES)
 $(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
 	$(COMPILE) $< -o $@
 
-$(filter %.o,$(F03OBJECTS)): %.o: %.f03 
-	$(COMPILE) $< -o $@ $(INCLUDES)
+$(filter %.o,$(F03OBJECTS)): %.o: %.f03 $(INCLUDES)
+	$(COMPILE) $< -o $@ 
 
 rebuild:
-	$(COMPILE) $(SOURCES)
+	$(COMPILE) $(SOURCES) $(F03SOURCES)
 	$(LOAD) $(OBJECTS) $(F03OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
