@@ -1,6 +1,7 @@
 c
 c
       subroutine ainplt
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -10,7 +11,6 @@ c....................................................
 c     This routine plots out  data read in by code.
 c....................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

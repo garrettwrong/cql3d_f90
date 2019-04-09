@@ -2,12 +2,12 @@ c
 c
 c
       subroutine pltelec
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
 cmnt  this routine plots electron density as a function of poloidal angl
 c
-      include 'param.h'
       include 'comm.h'
 
       REAL RTAM1(LZA),RTAM2(LZA)

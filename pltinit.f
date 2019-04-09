@@ -1,12 +1,12 @@
 c
 c
       subroutine pltinit
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c................................................................
 c     Initiates PGPLOT
 c................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 
@@ -33,7 +33,7 @@ c      Remember, pgopen should be integer
       CALL PGSLW(lnwidth)
       write(*,*) 'PLTINIT-1 ier=1 is OK: ier=',ier
 c      ier=pgbeg(0,'?',1,1)
-c      if (ier.ne.1) write(*,*) 
+c      if (ier.ne.1) write(*,*)
 c     +              'Problem1 with initiating PGPLOT library'
 c      ier=pgbeg(0,'?',1,1)
 c      write(*,*) 'ier=',ier

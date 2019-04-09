@@ -1,6 +1,7 @@
 c
 c
       subroutine micxinil
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c..................................................................
@@ -11,7 +12,6 @@ c     orbits. Many are used in the routines used to compute the
 c     collisional coefficients, cfp*****
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 ccc      real*8,dimension(iy):: prnt1,prnt2,prnt3
 ccc      real*8,dimension(iy):: prnt4,prnt5,prnt6

@@ -1,12 +1,12 @@
 c
 c
       subroutine sigmax(kk)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 cmnt  generate a maxwellian with same density and temp as species
 cmnt  "kk".
 
-      include 'param.h'
       include 'comm.h'
       
       if(kk.eq.0) then

@@ -1,8 +1,8 @@
 c
 c
       subroutine frset(lrz,noplots,nmlstout)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'frcomm.h'
       include 'frname.h'
 CMPIINSERT_INCLUDE

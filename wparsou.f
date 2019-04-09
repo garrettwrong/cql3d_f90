@@ -1,6 +1,7 @@
 c
 c
       subroutine wparsou
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -9,7 +10,6 @@ c     transport operator applied on f_n, needed for the velocity split
 c     with the ADI (Alternating Direction Implicit) method.
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
       dimension zdns(lrorsa)
       dimension zdnspa(lrorsa),zdnvel(lrorsa),zdnp1(lrorsa)

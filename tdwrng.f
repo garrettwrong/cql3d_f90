@@ -2,6 +2,7 @@
 
 c-----------------------------------------------------------------
       subroutine tdwrng(kerr)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -11,7 +12,6 @@ cmnt  diagnostic error messages
 c
 c...  
 
-      include 'param.h'
 CMPIINSERT_INCLUDE     
       
 ! print error messages - on mpirank.eq.0 only

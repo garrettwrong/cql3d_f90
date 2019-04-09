@@ -1,6 +1,7 @@
 c
 c
       subroutine diag
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -11,7 +12,6 @@ c     In particular, it determines density gain and loss due to
 c     various physical and numerical processes.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       if (n .gt. 0) go to 20

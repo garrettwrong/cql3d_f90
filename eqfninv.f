@@ -2,9 +2,9 @@
 c
 c
       real*8 function eqfninv(psival,scalfct)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
-      include 'param.h'
       include 'comm.h'
 
 

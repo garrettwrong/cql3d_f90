@@ -9,9 +9,9 @@ c
 
       subroutine frplteq(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep,
      1     nfrplt,frplt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

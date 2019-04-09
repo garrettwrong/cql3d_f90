@@ -1,6 +1,7 @@
 c
 c
       subroutine tdsxr(ien,chi,thpol,ll,edotei,edotee)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 c     This routine computes the BREMSSTRAHLUNG contribution to the
@@ -21,7 +22,6 @@ c
 c     ll is the index of the flux surface (rz(ll))
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
       character*8 ione
       allocatable :: plegg(:) ! local array

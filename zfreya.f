@@ -373,6 +373,7 @@ c
       subroutine crsecs(iexcit,atw,ebkev,ibion,mb,mfm1,nion,vbeam,zne,
      .                  zni,zte,zzi,dtemax,dnemax,dzemax,
      .                  sgvxne,sgxn,sgxnmi)
+      use param_mod
 c
 c     This subroutine calculates charge exchange, proton ionization, and
 c     electron ionization cross sections from the fitted results of
@@ -381,7 +382,6 @@ c
       implicit  integer (i-n), real*8 (a-h, o-z)
 c      include 'params.inc'   BH: The file is in Kinsey's cql3d update.
 c                                 Not needed except in standalone freya.
-      include 'param.h'
 c
       integer mb, nion, ibion
       real*8 atw(kion), ebkev(kb), vbeam(ke,kb), zne(kz), zni(kz,kion),
@@ -4442,7 +4442,7 @@ c
       subroutine sorspt1(nbshape,bheigh,bwidth,bhfoc,bvfoc,
      .                  bhdiv,bvdiv,ib,ie,isourc,nsourc,sfrac1,vbeam,
      .                  x0,y0,z0,vx0,vy0,vz0)
-
+      use param_mod
 c... generates a particle at the injector surface with
 c    coordinates and velocities x0,y0,z0,vx0,vy0,vz0
 c    These coordinates are attached to the source center, with the
@@ -4450,7 +4450,6 @@ c    x-direction perp to the source along the source centerline.
 c
       implicit  integer (i-n), real*8 (a-h, o-z)
 c      include 'params.inc'
-      include 'param.h'
 c
 cBH131015      external RANDOM_my  ! random number generator
       integer nsourc
@@ -4704,14 +4703,13 @@ c.......................................................................
      .    ib,ie,mfm1,mim1,mjm1,newpar,psiax,psi,r,rmajor,rin,rmax,sgxn,
      .    sgxnmi,x0,y0,z0,vx0,vy0,vz0,vbeam,z,zax,zmin,zmax,izone,pzone,
      .    rzone,rpos,xpos,ypos,zpos)
-
+      use param_mod
 c     This subroutine follows the particle from the pivot point
 c     into, through, or around the plasma. It is the older version
 c     of sub. inject to be used when crsecs (iexcit=0) is used.
 c
       implicit  integer (i-n), real*8 (a-h, o-z)
 c      include 'params.inc'
-      include 'param.h'
 c      save
 c
 cBH131015      external  RANDOM_my             ! random number generator
@@ -5268,11 +5266,12 @@ c          debin
 c                 - width of energy bins (keV/amu)
 c ----------------------------------------------------------------------
 c
+      use param_mod
       implicit  integer (i-n), real*8 (a-h, o-z)
 c
 c      include 'params.inc'  ! both of these .inc's used in stand alone
 c      include 'fileiou.inc'
-      include 'param.h'
+
 c
       parameter (ksrc = 3)
       character*8 namei(kimp), namep(kprim)   ! added for cql3d
@@ -5764,6 +5763,7 @@ c
      .                     ebkev,ebfac,ibion,nebin,vbeam,zne,zni,zte,
      .                     zti0,zzi,debin,sgxn,sgxnmi,atw_beam)
 c
+      use param_mod
       implicit  integer (i-n), real*8 (a-h, o-z)
 c
 c      character what_id*45
@@ -5852,7 +5852,7 @@ c           Used only for rotatation case.
 c ----------------------------------------------------------------------
 c
 c       include 'params.inc'
-      include 'param.h'
+
 c
       character*8 namei(kimp), namep(kprim)   ! added for cql3d
       integer mb, mfm1, nion, nprim
@@ -6123,6 +6123,7 @@ c
       subroutine adasqh6 (ti,ecol,bmz,iflag,ne,zeff,conche,
      .                    concbe,concb,concc,concn,conco,concne,
      .                    qrat,ierr)
+      use param_mod
 c
 c  Calculate and return the rate coefficient for beam stopping
 c  This routine is a modified version of L.D. Horton's (JET)
@@ -6195,7 +6196,6 @@ c      USE ext_prog_info, only : nchars_12,onetwo_xsct
 c
       implicit  integer (i-n), real*8 (a-h, o-z)
 c      include 'params.inc'
-       include 'param.h'
 c      include 'io.i'
 
 c
@@ -6488,6 +6488,7 @@ c
       subroutine nbsgold (mb,mfm1,nebin,nprim,nimp,nion,atw,ebkev,
      .                    ebfac,ibion,vbeam,zne,zni,zte,zzi,debin,
      .                    sgxn,sgxnmi,atw_beam)
+      use param_mod
 c
 c
 c ----------------------------------------------------------------------
@@ -6554,7 +6555,6 @@ c
 c 
       implicit  integer (i-n), real*8 (a-h, o-z)
 c      include 'params.inc'   ! for stand alone code
-      include 'param.h'
 c
       integer mb, mfm1, ibion, nebin, nprim, nimp, nion
       real*8 ebfac,debin,atw(kion),ebkev(kb),vbeam(ke,kb)

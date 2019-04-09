@@ -1,6 +1,7 @@
 c
 c
       subroutine coefwti(k)
+      use param_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -16,7 +17,6 @@ c     justified theoretically, helps to keep the distribution from
 c     going negative for strongly driven problems.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       

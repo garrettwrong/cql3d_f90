@@ -1,6 +1,7 @@
 c
 c
       subroutine tdxin23d(a,rya,klrz,ngn,nso,k,kk,expn1,expm1)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -8,7 +9,6 @@ c..................................................................
 c     Fill in input arrays between center and edge parabolically.
 c..................................................................
 
-      include 'param.h'
 
       dimension rya(0:klrz), a(ngn,nso,0:klrz)
       data em90 /1.d-90/ 

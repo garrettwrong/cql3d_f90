@@ -18,7 +18,6 @@ c$$$c---essentially the same cross sections as crsecs does. note
 c$$$c---however that the cross section parameterization is different
 c$$$c---inhexnb and crsecs.
 c$$$c     ONETWO DIVERGENCE
-c$$$      include 'param.h'
 c$$$      include 'frcomm.h'
 c$$$c
 c$$$c

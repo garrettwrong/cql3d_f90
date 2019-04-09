@@ -1,6 +1,7 @@
 c
 c
       subroutine urfread
+      use param_mod
       use netcdfrf_mod, only : netcdfrf
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -18,7 +19,6 @@ c     Then ray data is copied to additional ray data sets for
 c     cases where nharms(k).gt.1.
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

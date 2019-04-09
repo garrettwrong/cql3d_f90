@@ -1,9 +1,9 @@
 c
 c
       subroutine tdplteq(krf)
+      use param_mod
       use frplteq_mod, only : micfrplt, textt
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

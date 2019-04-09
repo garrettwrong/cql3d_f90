@@ -1,6 +1,7 @@
 c
 c
       subroutine frsplft(lrz,oldx,oldf,npts,ynewx,ynewf)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -9,7 +10,6 @@ c     (finer) NFREYA radial mesh.
 c..................................................................
 
 
-      include 'param.h'
       parameter (nwka=3*lrza+1)
       dimension work(nwka),oldx(*),oldf(*),ynewx(*),ynewf(*),i1p(2),
      1  secondd(lrza),itab(3),tab(3)

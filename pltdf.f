@@ -15,6 +15,7 @@ c
       contains 
 
       subroutine pltdf
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -26,7 +27,6 @@ c     at the current time and f at the previous time
 c     step.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       REAL RILIN

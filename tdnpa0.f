@@ -1,6 +1,7 @@
 c
 c
       subroutine tdnpa0(rb,ene,icall,iplotnbi)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 cVT....V.Tang, NPA diagnostic 9-25-05.............................
@@ -77,7 +78,6 @@ c     the input variable zeff(lr_).
 c.......................................................................
 
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

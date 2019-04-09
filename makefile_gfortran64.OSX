@@ -5,8 +5,8 @@ NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
 INCLUDES  = comm.h frcomm.h frname.h frname_decl.h name.h  \
-	param.h trans.h wpadvnc.h name_decl.h
-SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  advnce.f03 ainalloc.f  \
+	trans.h wpadvnc.h name_decl.h
+SOURCES  =   param.f03 advnce.f03 a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
 	ainsetpa.f  ainsetva.f  ainspec.f  ainvnorm.f ampfar.f \
@@ -81,8 +81,8 @@ SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  advnce.f03 ainal
 #	zblock.f  zcunix.f  zfreya.f    znonsym.f dgbtrf.f ilaenv.f
 #	zblock.f  zcunix.f  zfreya.F    zgauss.f   znonsym.f 
 #	zblock.f  zcunix.f  zfreya.F    zgauss.f    dropfile.c znonsym.f 
-OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
 F03OBJECTS = $(filter %.o,$(SOURCES:.f03=.o))
+OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
 
 LOCATION  =   -L /usr/lib -L/usr/local/lib  
 LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
@@ -104,8 +104,8 @@ DELETE    = rm -f
 # Written without dependencies, it may be useful to turn of such checking?
 .SUFFIXES:
 
-$(NAME):           $(OBJECTS) $(F03OBJECTS)
-	$(LOAD)    $(OBJECTS) $(F03OBJECTS) $(LOCATION) $(LIBRARIES)
+$(NAME):           $(F03OBJECTS) $(OBJECTS) 
+	$(LOAD)    $(F03OBJECTS) $(OBJECTS)  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
 
 # Following use of pattern matching works; 
@@ -118,11 +118,11 @@ $(NAME):           $(OBJECTS) $(F03OBJECTS)
 $(SOURCES):        $(INCLUDES)
 
 # see Sect. 4.10.1, Static Pattern Rules.
-$(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
-	$(COMPILE) $< -o $@
-
 $(filter %.o,$(F03OBJECTS)): %.o: %.f03 $(INCLUDES)
 	$(COMPILE) $< -o $@ 
+
+$(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
+	$(COMPILE) $< -o $@
 
 rebuild:
 	$(COMPILE) $(SOURCES) $(F03SOURCES)

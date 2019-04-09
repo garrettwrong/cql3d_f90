@@ -1,6 +1,7 @@
 c
 c
       subroutine urfwrong(kerr)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 
@@ -8,7 +9,6 @@ c..................................................................
 c     Flags errors in urf model - and terminates execution.
 c..................................................................
 
-      include 'param.h'
 CMPIINSERT_INCLUDE     
       
 ! print error messages - on mpirank.eq.0 only

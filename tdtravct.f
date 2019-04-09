@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtravct(f1,kprofile,ktransp)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -28,7 +29,6 @@ c     be utilized. The "old" distribution is f1 (defined on the
 c     transport velocity mesh).
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 
       dimension f1(0:iyp1,0:jxp1,ngen,0:*)
@@ -486,6 +486,7 @@ c.......................................................................
 c=======================================================================            
 c=======================================================================            
       subroutine funcv(nn,xx,fvec)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -496,7 +497,6 @@ c                    xx(1:nn)=adv(k,1:lrz-1)
 c                    fvec=(dentarget(l)-reden(ktransp,l)),l=1,lrz-1
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       common /newt_norm/adv_norm(lrza),reden_norm(lrza)
@@ -571,6 +571,7 @@ c     +                 lr,dentarget(l),reden(k,lr),xx(lr),fvec(lr)
 c=======================================================================            
 c=======================================================================            
       subroutine tdtransp1
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -580,7 +581,6 @@ c     prepared to Newton iteration for velocities to maintain
 c     the target densities.
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 
       character*8 nobind

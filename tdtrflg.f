@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtrflg
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -8,7 +9,6 @@ c     This routine sets some mesh flag arrays to facilitate
 c     coding of the transport routine
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 
       if (transp.eq."disabled") return

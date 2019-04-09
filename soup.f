@@ -1,6 +1,7 @@
 c
 c
       subroutine soup(cosi,l,kk,m)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -11,7 +12,6 @@ c     compute a velocity source profile soupp(j,lr_),j=1,jx
 c     for source number m of species kk.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       dimension ifirst(lrza)

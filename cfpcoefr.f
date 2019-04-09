@@ -1,6 +1,7 @@
 c
 c
       subroutine cfpcoefr
+      use param_mod
       use r8subs_mod, only : daxpy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -10,7 +11,6 @@ c     coefficients. Used for relativ='fully'. See Mark Franz thesis.
 c     If (cqlpmod .eq. "enabled") then compute only the coefficients
 c     at the orbit position l=l_ and do not perform the bounce-averages.
 c..................................................................
-      include 'param.h'
       include 'comm.h'
 c
 c..................................................................

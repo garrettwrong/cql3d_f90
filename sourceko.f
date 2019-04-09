@@ -1,6 +1,7 @@
 c
 c
       subroutine sourceko ! must be called for k=kelecg only
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -19,7 +20,6 @@ c       Numerical method in Harvey et al, Phys. of Plasmas, 2000.
 c
 c.......................................................................
 c      save
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE     
 

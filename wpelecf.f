@@ -1,6 +1,7 @@
 c
 c
       subroutine wpelecf(kopt)
+      use param_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -21,7 +22,6 @@ c
 c     This routine assumes that f is the updated distribution function
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
       dimension z4pirho(lsa)
 

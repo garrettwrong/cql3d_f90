@@ -1,9 +1,9 @@
 c
 c
       real*8 function bsl(jj,kk,ll)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'param.h'
       include 'comm.h'
 C      dimension f_(0:iy+1,0:jx+1,ngen,lrz)
 C      f_ is passed in common

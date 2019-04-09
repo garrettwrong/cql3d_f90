@@ -1,6 +1,7 @@
 c
 c
       subroutine aindflt
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -12,7 +13,6 @@ c     BH070305:  Some other constants derived from namelist
 c                variables have been moved to new subroutine aindlft1.
 c..................................................................
 
-      include 'param.h'
       include 'name_decl.h'
 
 c     Set a few local constants, same as in subroutine ainsetpa.

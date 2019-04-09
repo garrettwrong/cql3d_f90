@@ -1,6 +1,7 @@
 c
 c
       subroutine wpcthta
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -8,7 +9,6 @@ c     This routine calculates the coefficient cthta(i,j) encounting for
 c     the mu*grad_parallel B force, when cqlpmod=enabled
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 c.......................................................................
 

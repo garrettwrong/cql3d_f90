@@ -10,6 +10,7 @@ c     BE THROUGH FRCOMM
 c..................................................................
 
       subroutine freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
       integer, intent(out) :: ipts
@@ -253,7 +254,6 @@ c     (i.e. ang. momtm. deposited in shell per second /volume of she
 c     angmpz contains only the toroidal component of ang momentum.
 c---------------------------------------------------------------------
 c     ONETWO DIVERGENCE
-      include 'param.h'
       include 'frcomm.h'
 
 c     Automatic arrays for local dynamic mem, for case where NUBEAM

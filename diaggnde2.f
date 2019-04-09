@@ -1,6 +1,7 @@
 c
 c
       subroutine diaggnde2
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -17,7 +18,6 @@ c     energies, z=effective, J/P. Also redefies electron density
 c     to maintain quasineutrality if necessary.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 c.......................................................................
 

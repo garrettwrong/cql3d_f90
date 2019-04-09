@@ -1,8 +1,8 @@
 c
 c
       subroutine sourcpwr(k)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

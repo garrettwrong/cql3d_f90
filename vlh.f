@@ -3,6 +3,7 @@
 
 c
       subroutine vlh(action)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) action
       save
@@ -14,7 +15,6 @@ cmnt  lower hybrid range of frequencies in mind.
 cmnt  subroutine vlh requires: nrf.eq.1 .and. vlhmod.eq."enabled"
 c.................................................................
 c
-      include 'param.h'
       include 'comm.h'
 
       if (action.ne."setup") return

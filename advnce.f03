@@ -6,9 +6,6 @@
 !..................................................................
 
 module advnce_mod
-  private
-
-  include 'comm.h'
 
 contains
 

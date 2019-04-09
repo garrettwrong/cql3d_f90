@@ -1,6 +1,7 @@
 c
 c
       subroutine urfedge(i1,i2,c1,c2,lp,lrad,jval)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..........................................................
@@ -8,7 +9,6 @@ c     Computes weights for diffusion coefficients if spectral
 c     width of ray element is small.
 c..........................................................
 
-      include 'param.h'
       include 'comm.h'
 
       if (c2 .lt. -1.) c2=-1.

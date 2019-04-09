@@ -1,13 +1,13 @@
 c
 c
       subroutine wptrafx
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..............................................................
 c     Time advancement for parallel transport.
 c     Assumes constant total number of y mesh points vs. l: iy_(l)=cst
 c..............................................................
 
-      include 'param.h'
       parameter(lmatsa=(lsa+1)*nbanda)
       dimension zmat(lmatsa),zxdumy(lsa+1)
       dimension zmat2(lmatsa),zxdumy2(lsa+1)

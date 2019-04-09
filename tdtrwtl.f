@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtrwtl
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -8,7 +9,6 @@ c     Computes the Chang-Cooper weights for the transport
 c     calculation.
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 
       do 1 k=1,ngen

@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtrdfus
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -21,7 +22,6 @@ c    a d_rr computed in this subroutine and the grids.
 c    (Also, d_r advection is subsequently added.)
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 c%OS
       dimension drshape(0:lrz), rhotr(0:lrz)
@@ -190,6 +190,7 @@ c$$$         call diffus_io(4) !Reads d_rr and d_r for k=1 from .nc file
 c
 c
       real*8 function tdtrrshape(lr)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -199,7 +200,6 @@ c     Coefficients in the following expression are input
 c     throught the namelist variable difus_rshape(1:7).
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 c 
       if (lr.eq.0) then
@@ -242,6 +242,7 @@ c        Simply use last (lrzmax) value of density....
 c
 c
       real*8 function tdtrrshape1(lr)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -251,7 +252,6 @@ c     Coefficients in the following expression are input
 c     throught the namelist variable difus_rshape(1:7).
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 c 
       if (lr.eq.0) then
@@ -291,6 +291,7 @@ c
 c
 c
       subroutine tdtrvshape(k,l)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -306,7 +307,6 @@ c     (not momentum-per-mass) normalized to central thermal
 c     velocity vth(k,1), with value 1.0 at the thermal vel.
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       real*8 l_autocorr,lambda_mfp
@@ -347,6 +347,7 @@ c     +                     idx(i,l),i,j,l,temp1(idx(i,l),j),coll_cutoff
 c 
 c
       real*8 function coll_freq(vel,k,lr)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -359,7 +360,6 @@ c     less than the magnetic fluctuation autocorrelation length,
 c     generally for velocites much less that vth.
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       real*8 lnlambda
@@ -408,6 +408,7 @@ c     perp. deflection time
       end
         
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -420,7 +421,6 @@ c
 c     At this stage uses linear interpolation
 c.......................................................................
 
-      include 'param.h'
       parameter (nwka=3*lrza+1)
       dimension work(nwka),oldx(1),oldf(1),ynewx(1),ynewf(1),i1p(2),
      1  secondd(lrza),itab(3),tab(3)
@@ -440,6 +440,7 @@ c.......................................................................
 
 
       subroutine diffus_io(kopt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -453,7 +454,6 @@ c     kopt=3:  read d_rr
 c     kopt=4:  read d_rr,d_r
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
       include 'netcdf.inc'
 
@@ -968,8 +968,8 @@ c     Read d_rr and (kopt.eq.4) d_r
 c
 c
       real*8 function difus_io_scale(k,iopt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 
 c......................................................................

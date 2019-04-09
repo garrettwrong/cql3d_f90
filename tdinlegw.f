@@ -1,4 +1,5 @@
       subroutine tdinlegw(klpar,klrad,klindxr,klmesh)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Prepares weights for computing the Legendre coefficients:
@@ -31,7 +32,6 @@ c     turning-point is added in dcofleg(imax).
 c
 c     CQLP case:th = th(l) given in y(i,l_) for i=1,iy_(l_), i.e. [0,pi]
 c
-      include 'param.h'
       include 'comm.h'
 
       allocatable :: zxg(:),zxgh(:,:),zli(:,:), ilaglim(:,:)

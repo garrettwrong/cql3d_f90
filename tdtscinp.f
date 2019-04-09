@@ -2,6 +2,7 @@
 c
 c
       subroutine tdtscinp
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -13,7 +14,6 @@ c     Magnetic geometry is also read in here. This supersedes eqdsk
 c     files - the code will CREATE an eqdsk file later.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       common /tsc1/ psimago,psilimo

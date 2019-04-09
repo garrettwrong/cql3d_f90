@@ -1,6 +1,7 @@
 c
 c
       subroutine tdinitl ! called only at n=0
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -10,7 +11,6 @@ c     It also controls the initialization of distribution
 c     functions and quasilinear coefficients.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       include 'name.h'

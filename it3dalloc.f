@@ -1,8 +1,8 @@
 c
 c
       subroutine it3dalloc
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 
@@ -121,8 +121,8 @@ CMPIINSERT_ENDIF_RANK
 c=======================================================================      
       
       subroutine it3ddalloc 
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 
@@ -153,10 +153,10 @@ CMPIINSERT_ENDIF_RANK
 c=======================================================================      
       
       subroutine de_alloc ! YuP[11-2017] more deallocation
+      use param_mod
       use impavnc0_mod, only : abd, ipivot 
       use impavnc0_mod, only : ampfda, ampfdd
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

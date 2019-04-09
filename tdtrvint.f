@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtrvint
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -8,7 +9,6 @@ c     This routine creates some integration coefficients on the
 c     transport mesh.
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 
       if (transp.eq."disabled") return

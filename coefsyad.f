@@ -1,6 +1,7 @@
 c
 c
       subroutine coefsyad(k)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -8,7 +9,6 @@ c..................................................................
 c     Adds in contribution of synchrotron radiation to coefficients..
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       if (k .ne. kelecg .or. syncrad .eq. "disabled") return

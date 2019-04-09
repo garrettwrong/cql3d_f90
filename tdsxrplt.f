@@ -2,10 +2,10 @@ c
 c
       subroutine tdsxrplt(en,eflux,nen,nenaa,
      +                    efluxt,nv,inegsxr,softxry,lnwidth)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-      include 'param.h'
 
 CMPIINSERT_INCLUDE
 
@@ -147,8 +147,8 @@ c$$$ 300  continue
 c
 c
       subroutine tdsxrvw(tempp4,tempp5,tempp6)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

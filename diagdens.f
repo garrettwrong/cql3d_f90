@@ -1,6 +1,7 @@
 c
 c
       subroutine diagdens(xline,xmid,eline)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -12,7 +13,6 @@ c     eline=(complete) line energy density (ergs/cm**2)/(.5*m*vnorm**2)
 c..................................................................
 
       save
-      include 'param.h'
       include 'comm.h'
 
       xline=0.

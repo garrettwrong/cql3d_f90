@@ -1,6 +1,7 @@
 c
 c
       subroutine micxinit
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -16,7 +17,6 @@ c
 c     It also defines related mesh quantities such as sinn, coss, dy,..
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 c.......................................................................

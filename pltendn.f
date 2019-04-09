@@ -1,13 +1,13 @@
 c
 c
       subroutine pltendn
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
 c     Plot energy, density, electric field, parallel current,
 c     and density conservation constant vs. time.
 c
-      include 'param.h'
       include 'comm.h'
 c     Conversion to real function for PGPLOT
       REAL*4 RBOUND
@@ -434,11 +434,11 @@ C======================================================================
 C======================================================================
 
       subroutine plt_fow_cons ! developed for FOW, but can also be used for ZOW
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
       ! Plot the change in Total N of ptcles as a func of time.
       ! Calculations are done in sub. fow_cons()
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 c     Conversion to real function for PGPLOT

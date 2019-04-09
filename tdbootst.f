@@ -1,9 +1,9 @@
 c
 c
       subroutine tdbootst
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'param.h'
       parameter(itlrza=3*lrza+1)
       include 'comm.h'
 

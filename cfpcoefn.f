@@ -1,6 +1,7 @@
 c
 c
       subroutine cfpcoefn
+      use param_mod
       use r8subs_mod, only : daxpy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -13,7 +14,6 @@ c     U.S.A.F.)
 c     If (cqlpmod .eq. "enabled") then compute only the coefficients
 c     at the orbit position l=l_ and do not perform the bounce-averages.
 c..................................................................
-      include 'param.h'
       include 'comm.h'
 c
       data naccel/100/

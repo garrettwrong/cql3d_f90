@@ -1,8 +1,8 @@
 c
 c
       subroutine urfread_(krf,i_)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 
 
@@ -415,8 +415,8 @@ ccc 4    format (9(' ',i4)) ! YuP:  as inGENRAY
 c=======================================================================
 c=======================================================================
       subroutine urfread_i(krf,i_)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
       
       ! working array for dummy read

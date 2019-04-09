@@ -1,6 +1,7 @@
 c
 c
       subroutine diagentr(lefct,k)
+      use param_mod
       use r8subs_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -66,7 +67,6 @@ cBH180906:  Need to add power related to distr function scaling.
 c     
 c
 
-      include 'param.h'
       include 'comm.h'
 
       ncentr=ncentr+1
@@ -349,8 +349,8 @@ c=====================================================================
 c
 c
       subroutine diagentr_vol
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 
 c     Integrate the FSA power densities over volume.
@@ -397,11 +397,11 @@ c=====================================================================
 c
 c
       real*8 function gfi(i,j,k)
+      use param_mod
 c..................................................................
 c     Express the velocity flux at (i,j+1/2)
 c..................................................................
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
        
       if((i.ne.itl .and. i.ne.itu) .or. symtrap.ne."enabled") then
@@ -424,12 +424,12 @@ c=====================================================================
 c
 c
       real*8 function gfu(i,j,k)
+      use param_mod
 c..................................................................
 c     Define the flux related quantities G ( H not needed for
 c     the power calculation) used in the r.h.s. of the FP eqn.
 c..................................................................
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
        
       if(i .ne. itl  .and. i .ne. itu) then

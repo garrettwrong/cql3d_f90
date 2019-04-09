@@ -1,6 +1,7 @@
 c
 c
       subroutine coefstup(k)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -9,7 +10,6 @@ c     This routine stores all the relevant coefficients into the
 c     proper arrays for time advancement
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       call bcast(da,zero,iyjxp1)

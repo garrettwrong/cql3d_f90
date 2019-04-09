@@ -1,6 +1,7 @@
 c
 c
       subroutine impchk(k)
+      use param_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -12,7 +13,6 @@ c     normalized difference and should be as close to roundoff as
 c     possible.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 C%OS  
       dimension zermx(51),imx(51),jmx(51),zsumj3(iy),zsumj4(iy)

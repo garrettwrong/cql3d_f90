@@ -1,6 +1,7 @@
 c
 c
       subroutine sigv5d
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c.......................................................................
@@ -21,7 +22,6 @@ cBH110330:  Might want to do this calculation with the number of
 cBH110330:  Legendre poly expansion different from mx, similar
 cBH110330:  to SXR case.
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

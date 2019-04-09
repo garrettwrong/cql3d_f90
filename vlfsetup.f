@@ -1,13 +1,13 @@
 c
 c
       subroutine vlfsetup
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
 c     This routine sets up arrays for vlf urf modules
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
 c...................................................................

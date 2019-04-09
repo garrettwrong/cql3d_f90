@@ -13,6 +13,7 @@ c
       contains
 
       subroutine impavnc0(kopt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.................................................................
@@ -28,7 +29,6 @@ c     kopt=3:
 c     Calc h and g functions for iterative Amp-Far eqn solve
 c.................................................................
 
-      include 'param.h'
       include 'comm.h'
 
 CMPIINSERT_INCLUDE     
@@ -2583,9 +2583,9 @@ c-YuP      endif
 C=======================================================================
 C=======================================================================      
          real*8 function z00(i,j,k)
+         use param_mod
          implicit integer (i-n), real*8 (a-h,o-z)
 ccc         save  ! YuP: Not really needed
-         include 'param.h'
          include 'comm.h'
 
 c      CONTAINS     PG90 at GA couldn't accept this construct,

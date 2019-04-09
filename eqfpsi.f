@@ -1,8 +1,8 @@
 c
 c
       subroutine eqfpsi(psval,fpsi__,fppsi__)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 
 c..................................................................
@@ -37,8 +37,8 @@ c..................................................................
 c
 c
       subroutine eqppsi(psval,ppsi__,pppsi__)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 
 c..................................................................

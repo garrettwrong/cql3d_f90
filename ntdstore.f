@@ -1,10 +1,10 @@
 c
 c
       subroutine ntdstore
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
-      include 'param.h'
       include 'comm.h'
 
       if (n .ne. nchec*(n/nchec)) return

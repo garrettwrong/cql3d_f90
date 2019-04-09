@@ -1,6 +1,7 @@
 c
 c
       subroutine achiefn(kopt)
+      use param_mod
       use impavnc0_mod, only : impavnc0
       use pltmain_mod, only : pltmain
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -31,7 +32,6 @@ c             BH131104, with help from YuP.
 c             
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE     
  

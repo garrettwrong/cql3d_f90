@@ -2,11 +2,11 @@ c
 c
       subroutine frnfreya(frmod_,fr_gyro_,beamplse_,beampon_,beampoff_,
      1     hibrz_,mfm1_,noplots)
+      use param_mod
       use frplteq_mod, only :frplteq
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.................................................................
-      include 'param.h'
       include 'frcomm.h'
 c     ONETWO DIVERGENCE: SEE COMMENTS AT BEGINNING OF FREYA
       character*8 frmod_,fr_gyro_,beamplse_,noplots,codeid

@@ -1,4 +1,5 @@
       subroutine urfbplt
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -6,7 +7,6 @@ c..................................................................
 c     plots rf urfb coefficient as a contour plot.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

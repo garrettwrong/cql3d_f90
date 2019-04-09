@@ -1,8 +1,8 @@
 c
 c
       subroutine hpalloc0(iptr,ln)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
 
 c     NO_OP:  Not needed after 081216, after changing from
 c             CRAY pointers to f90 pointers.

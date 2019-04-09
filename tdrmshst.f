@@ -2,6 +2,7 @@
 c
 c
       subroutine tdrmshst
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 c     This routine initializes the radial meshes and integration
@@ -15,7 +16,6 @@ c     Sets some radial quantities related to neoclassical transp.
 c            
 c..................................................................
       save
-      include 'param.h'
       integer itlrza
       parameter(itlrza=3*lrza+1)
       include 'comm.h'

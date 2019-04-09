@@ -1,6 +1,7 @@
 c
 c
       subroutine tdsxr0(rb,ene,icall,iplotsxr)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 
@@ -67,7 +68,6 @@ c     the input variable zeff(lr_).
 c.......................................................................
 
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

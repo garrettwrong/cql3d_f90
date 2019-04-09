@@ -1,6 +1,7 @@
 c
 c
       subroutine eflditer ! for k=kelecg (=1) only
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -13,7 +14,6 @@ c     to the beginning of the time step, so that another trial can
 c     be make.
 c.........................................................................
 
-      include 'param.h'
       include 'comm.h'
 
 c     Return, for cases not implemented:

@@ -1,6 +1,7 @@
 c
 c
       subroutine tddiag
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -8,7 +9,6 @@ c     This routine computes radial diagnostics (total rf power
 c     and current)
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 
 c.......................................................................

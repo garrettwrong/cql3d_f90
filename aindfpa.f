@@ -1,6 +1,7 @@
 c
 c
       subroutine aindfpa
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -13,7 +14,6 @@ c     in first namelist setup/setup0/fsetup.
 c     This also shows which variables belong to the 1st namelist setup.
 c..................................................................
 
-      include 'param.h'
       include 'name_decl.h'
 c.......................................................................
 

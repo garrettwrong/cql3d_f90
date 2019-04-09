@@ -12,14 +12,13 @@ c
       contains
 
       subroutine equilib(Requil,Zequil,index,PSIequil,BReq,BPHIeq,BZeq)
-     
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       
 c  Call with index=0 for setup,
 c            index=1 for PSI,BR,BPHI,BZ return (cgs units)
 c                    for a given Requil,Zequil coordinate.
       
-      include 'param.h'
       include 'comm.h'
       
       parameter(nworka=3*nnra+1)

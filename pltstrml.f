@@ -1,6 +1,7 @@
 c
 c
       subroutine pltstrml
+      use param_mod
       use advnce_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
@@ -25,7 +26,6 @@ c     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 c     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 c     YuP[2018-01-04] Adjusted, to make plots of streamlines.
 c
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

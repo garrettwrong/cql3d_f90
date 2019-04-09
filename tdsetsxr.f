@@ -1,6 +1,7 @@
 c
 c
       subroutine tdsetsxr(ien)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -17,7 +18,6 @@ c     dimension, msxr the Legendre polynomial dimension, nen the
 c     dimension of the photon energy spectrum, and the last 
 c     argument is for e-i and e-e collisions.
 c......................................................................
-      include 'param.h'
       include 'comm.h'
 
 c

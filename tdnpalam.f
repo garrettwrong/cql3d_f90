@@ -1,4 +1,5 @@
       subroutine lam(en_m,ene,stoplamda)
+      use param_mod
 c.............................................
 c This subroutine determines the neutral mean free path as a function of 
 c its energy.
@@ -11,7 +12,6 @@ c Version 1.0
 c Outputs checked and looks reasonable.
 c..............V.Tang 9-25-05...............................................
        implicit integer (i-n), real*8 (a-h,o-z)
-       include 'param.h'
        include 'comm.h'
        real*8,dimension(lrzmax,nen_npa)::stoplamda
        real*8,dimension(nen_npa)::en_m 

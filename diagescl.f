@@ -1,5 +1,6 @@
 c******************************************************************
       subroutine diagescl(k)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -8,7 +9,6 @@ cmnt  This routine scales the electron distribution function to maintain
 cmnt  charge neutrality.
 cmnt  It is used iff (colmodl.eq.4 .and. k.eq.kelecg)
 c...  
-      include 'param.h'
       include 'comm.h'
 
       data naccel/100/

@@ -1,6 +1,7 @@
 
 
       subroutine ainitial
+      use param_mod
       use pltmain_mod, only : pltmain
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -9,7 +10,6 @@ c............................................................
 c     initializes the driver.
 c............................................................
 
-      include 'param.h'
       include 'comm.h'
       include 'name.h'
 CMPIINSERT_INCLUDE     

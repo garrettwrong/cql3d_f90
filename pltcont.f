@@ -1,6 +1,7 @@
 c
 c
       subroutine pltcont(k,pltcase,tt_,itype)
+      use param_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
       !YuP[2018-02-07] added input itype, to identify what is plotted.
@@ -14,7 +15,6 @@ c
       !      =8 for loss region (from pltlosc)
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 
@@ -487,6 +487,7 @@ c..................................................................
 C
 C
       subroutine PGFUNC1(VISBLE,yplt,xplt,zplt)
+      use param_mod
       use pltdf_mod, only : IIY
       INTEGER VISBLE
       REAL xplt,yplt,zplt
@@ -494,7 +495,6 @@ C
       REAL wx(:),wy(:)
 C
 C 
-      INCLUDE 'param.h'
       include 'comm.h'
 
 C     wx IS V-NORM ARRAY, wy IS THETA ARRAY.  TYPE REAL.

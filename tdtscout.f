@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtscout
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -10,7 +11,6 @@ c     created here has the power and the current as a function of
 c     rho_, the radial coordinate given by TSC.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

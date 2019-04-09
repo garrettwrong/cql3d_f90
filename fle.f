@@ -1,6 +1,7 @@
 c
 c
       subroutine fle_pol(setup,lp)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -19,7 +20,6 @@ c  Normalization of the output distribution fl is such that it equals
 c  vnorm*f_cgs(v_parallel).
 c.......................................................................
       save
-      include 'param.h'
       include 'comm.h'
 
 c     Diagnostic array:
@@ -205,6 +205,7 @@ c     Diagnostic check of densities:
 c
 c
       subroutine fle_fsa(setup)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -221,7 +222,6 @@ c  Normalization of the output distribution fl is such that it equals
 c  vnorm*f_cgs(v_parallel).
 c.......................................................................
       save
-      include 'param.h'
       include 'comm.h'
 
       character*8 ifirst
@@ -367,6 +367,7 @@ c990131         fl(jf)=amax1(flmin,fl(jf))
 c
 c
       subroutine fle(setup,lp)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -383,7 +384,6 @@ c  Normalization of the output distribution fl is such that it equals
 c  vnorm*f_cgs(v_parallel).
 c.......................................................................
       save
-      include 'param.h'
       include 'comm.h'
 
 c     Diagnostic array:

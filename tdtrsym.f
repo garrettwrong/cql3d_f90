@@ -1,8 +1,8 @@
 c
 c
       subroutine tdtrsym
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 
       do 5 k=1,ngen

@@ -1,6 +1,7 @@
 c
 c
       real*8 function flxfn(ra)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -8,7 +9,6 @@ cmnt  This routine calculates the poloidal magnetic field and the
 cmnt  flux function at (normalized) radius ra (r/radmin) based on a
 cmnt  gaussian current profile of specified width.
 
-      include 'param.h'
       include 'comm.h'
 
       data idata/0/

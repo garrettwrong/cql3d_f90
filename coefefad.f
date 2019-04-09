@@ -1,6 +1,7 @@
 c
 c
       subroutine coefefad(k)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -8,7 +9,6 @@ c     This routine adds in the contribution of the D.C. electric
 c     field to the coefficients used for time advancement.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
 c.......................................................................

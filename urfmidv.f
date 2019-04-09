@@ -1,9 +1,9 @@
 c
 c
       subroutine urfmidv_db(jmin,jmax)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'param.h'
       include 'comm.h'
 c..................................................................
 c     This routine redefines the velocity mesh points at the
@@ -71,9 +71,9 @@ c..................................................................
 c====================================================================
 c====================================================================
       subroutine urfmidv_dc(jmin,jmax)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'param.h'
       include 'comm.h'
 c..................................................................
 c     This routine redefines the velocity mesh points at the

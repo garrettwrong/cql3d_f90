@@ -2,9 +2,9 @@ c
 c
       subroutine frinitz(
      +        nprim,nimp,nion,ibion,namep,namei,atw,fd,smth)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
-      include 'param.h'
       include 'comm.h'
 
 

@@ -1,13 +1,13 @@
 c
 c
       subroutine sigv(icall)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
 c     sets up calls to sigma-v calculator
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

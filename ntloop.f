@@ -3,10 +3,10 @@ c
 
 c
       subroutine ntloop
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-      include 'param.h'
       include 'comm.h'
       include 'name.h'
 

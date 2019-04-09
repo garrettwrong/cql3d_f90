@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtoaray
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c     Storing values on limited lrz mesh and time-dependent quantities
@@ -9,7 +10,6 @@ c     lr_     : radial index
 c     l_      : spatial variable index
 c     lmdpln_ : midplane at l_=lmdpln_
 c
-      include 'param.h'
       include 'comm.h'
 
 

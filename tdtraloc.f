@@ -1,13 +1,13 @@
 c
 c
       subroutine tdtraloc
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
 c     Allocates arrays used by transport routines.
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 c.......................................................................
 

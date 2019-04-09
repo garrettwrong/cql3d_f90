@@ -1,13 +1,13 @@
 c
 c
       subroutine wpmshchk
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
 c     Check some mesh related values. e.g. sin(th)dth (s)
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       return

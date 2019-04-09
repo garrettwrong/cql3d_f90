@@ -1,6 +1,7 @@
 c
 c
       subroutine lossegy
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -30,7 +31,6 @@ c     off the grid.
 
 
 
-      include 'param.h'
       include 'comm.h'
       data gam1/2.30097589089281/,   gam2/16.4312912649856/
 

@@ -1,6 +1,7 @@
 c
 c
       subroutine wpbdry(kiorj,kspec,kleft,kright,kopt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -25,7 +26,6 @@ c     3: forward
 c     4: centered
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 
       include 'wpadvnc.h'

@@ -1,6 +1,7 @@
 c
 c
       subroutine ainvnorm
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c.....................................................................
 c     Determine mesh normalization constant vnorm.
@@ -12,7 +13,6 @@ c     Running electrons and ions in tandem as general species
 c     requires special treatment.
 c.....................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

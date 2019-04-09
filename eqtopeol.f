@@ -1,8 +1,8 @@
 c
 c
       subroutine eqtopeol
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       integer tnrza
       parameter(tnrza=3*(nnra+nnza)+1)
       include 'comm.h'

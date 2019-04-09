@@ -1,8 +1,8 @@
 c
 c
       subroutine eqjac(neq,t,yv,ml,mu,pd,nrowpd)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
       include 'comm.h'
 
       dimension yv(neq),pd(nrowpd,neq)

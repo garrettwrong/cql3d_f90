@@ -2,6 +2,7 @@
 c
 c
       subroutine pltvec(lefct)
+      use param_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -10,7 +11,6 @@ c     Plots fluxes with arrows..
 c...................................................................
 
       save
-      include 'param.h'
       include 'comm.h'
 
       character*8 target

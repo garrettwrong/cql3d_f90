@@ -1,6 +1,7 @@
 c
 c
       subroutine urfdamp1(krf)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 cyup      save
 
@@ -15,7 +16,6 @@ c     Local values of the distribution function are obtained from
 c     midplane values.  The algorithm follows that of urfb0.
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

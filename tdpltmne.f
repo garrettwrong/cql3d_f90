@@ -1,13 +1,13 @@
 c
 c
       subroutine tdpltmne
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
 c     This routine plots out data as a function of r/a.
 c     (Also a time-dependent plot of fusion rate.)
 c
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
       dimension trilr(lrza),tr1s(lrorsa),tr2s(lrorsa)

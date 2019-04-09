@@ -1,6 +1,7 @@
 c
 c
       subroutine urfdampa(krf)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -10,7 +11,6 @@ c     ray elements on all rays for UNIT power delpwr.
 c     It only needs to be done once.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       character*8 ifirst

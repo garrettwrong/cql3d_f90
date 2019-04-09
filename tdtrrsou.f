@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtrrsou
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -11,7 +12,6 @@ c     mesh and then is interpolated on the full velocity mesh, such
 c     that int(R(f_)*d3u0) is constant.
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
       character*8 nobind
       common/nob/ nobind

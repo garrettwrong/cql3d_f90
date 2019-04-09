@@ -3,6 +3,7 @@ c
 c     ONETWO DIVERGENCE
       subroutine frnbdep2(psi,mi,mj,r,z,potsid,mf,rzpat,nrpat,nzpat,me,
      &  mb,sgxn,vbeam,hxfrac,iopt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c-----------------------------------------------------------------------
 c     calculates neutral beam deposition on (r,z) grid.  grid size
@@ -11,7 +12,6 @@ c     elements in the r and z axes.  outputs the 3rd excited state
 c     component, rzhex, to file 'beamdep' for postprocessing.
 c-----------------------------------------------------------------------
 c     ONETWO DIVERGENCE
-      include 'param.h'
 CMPIINSERT_INCLUDE
 
       parameter (nbdep=29)

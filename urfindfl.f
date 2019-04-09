@@ -1,13 +1,13 @@
 c
 c
       subroutine urfindfl
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
 c     This routine sets defaults for the "urf" module
 c..................................................................
 
-      include 'param.h'
       include 'name_decl.h'
 
 

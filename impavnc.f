@@ -1,6 +1,7 @@
 c
 c
       subroutine impavnc
+      use param_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -14,7 +15,6 @@ c.................................................................
 cBH170802:  It uses a different treatment of the f(v=0) BC, and is no
 cBH170802:  longer called (for many years).
 
-      include 'param.h'
       include 'comm.h'
 
       parameter(md1abd=3*(iya+3)+1)
@@ -1293,9 +1293,9 @@ c_pc     call free(abdptr)
 c      CONTAINS !removed this construct for franklin.nerc.gov: pg compiler
       
          real*8 function z00(i,j,k)
+         use param_mod
          implicit integer (i-n), real*8 (a-h,o-z)
          save
-         include 'param.h'
          include 'comm.h'
 
 

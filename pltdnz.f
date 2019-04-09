@@ -1,12 +1,12 @@
 c
 c
       subroutine pltdnz
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     plot the density as a function of poloidal angle for a given
 c     set of energy ranges.
 c
-      include 'param.h'
       include 'comm.h'
 
       REAL RTAM1(LZA),RTAM2(LZA)

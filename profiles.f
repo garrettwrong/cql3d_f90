@@ -1,6 +1,7 @@
 c     
 c     
       subroutine profiles
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c     
@@ -9,7 +10,6 @@ c     Obtain time-dependent
 c     "parabolic" and "spline" profiles, for time-varying quantities.
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

@@ -2,6 +2,7 @@ c
 c
       subroutine aingeom
       use equilib_mod, only : equilib
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -16,7 +17,6 @@ c     A heuristic mirror scenario (supplied by Gary Smith, LLNL) is also
 c     available.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
             

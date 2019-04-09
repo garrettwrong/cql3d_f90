@@ -1,6 +1,7 @@
 c
 c
       subroutine lossorbm(ephi,ksp)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -8,7 +9,6 @@ c     Mirror loss cone calculation.
 c..................................................................
 
       save
-      include 'param.h'
       include 'comm.h'
 
       vp2=2.*ephi*ergtkev/fmass(ksp)

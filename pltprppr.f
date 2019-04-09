@@ -1,6 +1,7 @@
 c
 c
       subroutine pltprppr
+      use param_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
 c...  
@@ -13,7 +14,6 @@ c
 c     Need to re-work this a bit, for plot of pitch angle averaged
 c     reduced distributions (knockon=.ne."disabled" case).
 c  
-      include 'param.h'
       include 'comm.h'
 
       REAL RILIN !-> For PGPLOT (text output positioning)

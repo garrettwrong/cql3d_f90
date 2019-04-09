@@ -3,6 +3,7 @@ c
 c
 c
       subroutine coefefld
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -10,7 +11,6 @@ c     compute coefficients required to represent parallel
 c     electric field (flux surface averaged) due to ohmic current
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       call bcast(cex(1,1,l_),zero,iyjx)

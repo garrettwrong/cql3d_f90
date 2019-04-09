@@ -1,6 +1,7 @@
 c
 c
       subroutine wptramu
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..............................................................
 c     Time advancement for parallel transport. (meshy="fixed_mu" case)
@@ -8,7 +9,6 @@ c     Assume non-constant total number of y mesh points vs. l: iy_(l).ne.cst
 c     Assume l_lower(i)=1, for all i (checked in wpinitl)
 c..............................................................
 
-      include 'param.h'
       parameter(lmatsa=(lsa+1)*nbanda)
 
       include 'comm.h'

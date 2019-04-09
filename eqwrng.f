@@ -1,8 +1,8 @@
 c
 c
       subroutine eqwrng(kerr)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'param.h'
 CMPIINSERT_INCLUDE     
 
 ! print error messages - on mpirank.eq.0 only

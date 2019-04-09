@@ -1,11 +1,11 @@
 c
 c
       subroutine rdc_multi
+      use param_mod
       use netcdfrf_mod, only : netcdf_rdcb
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

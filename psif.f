@@ -2,6 +2,7 @@ c
 c
 c
       real*8 function psif(xz)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c-------------------------------------------------------------------
@@ -17,7 +18,6 @@ c     OK with eqsym.eq."none".  xz is measured from es(1) and in
 c       this case covers a whole poloidal turn.
 c
 c-------------------------------------------------------------------
-      include 'param.h'
       include 'comm.h'
 
       dimension tabl(3),itabl(3)

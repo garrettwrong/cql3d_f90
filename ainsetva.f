@@ -1,5 +1,6 @@
 c
       subroutine ainsetva
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -12,7 +13,6 @@ c     Also, it checks some namelist variables for consistency,
 c       and resets some if necessary.
 c.......................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 c

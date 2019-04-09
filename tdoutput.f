@@ -1,6 +1,7 @@
 c
 c
       subroutine tdoutput(kopt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -11,7 +12,6 @@ c     kopt=2 ==> printout after specified number of time steps,
 c                including at least the last time step.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

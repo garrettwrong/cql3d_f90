@@ -1,11 +1,11 @@
 c
 c
       subroutine tdeqdsk
+      use param_mod
       use equilib_mod, only : ncoila, nccoila, pcvac, ccoil, ncoil
 
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'param.h'
       parameter (niterate=20)
       include 'comm.h'
 

@@ -1,6 +1,7 @@
 c
 c
       subroutine urfdout(ll)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -9,7 +10,6 @@ c     This subroutine writes a disk file which is read by the Ray Tracin
 c     code (Brambilla).
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

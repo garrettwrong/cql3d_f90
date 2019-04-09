@@ -3,6 +3,7 @@ c
 c
 c     ONETWO DIVERGENCE
       subroutine frsuppor(a,ni,nj,nk,nl,isupp,ifail)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c-----------------------------------------------------------------------
 c     determines crude 2d support of four-dimensional array
@@ -12,7 +13,6 @@ c     i1,i2,j1,j2, the indices of a corresponding to the
 c     vertices of the smallest rectangle supporting a.
 c-----------------------------------------------------------------------
 c     ONETWO DIVERGENCE
-      include 'param.h'
       dimension a(kix2,kjx2,ke,kb),isupp(4,ke,kb)
 
       zero=0.d0

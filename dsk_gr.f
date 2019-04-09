@@ -1,6 +1,7 @@
 c
 c
       subroutine dsk_gr
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -13,7 +14,6 @@ c..................................................................
 
 cBH000506:   De-activated by following goto.
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

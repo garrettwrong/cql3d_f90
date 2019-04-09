@@ -1,6 +1,7 @@
 c
 c
       subroutine tdfinterp(u,pitch,rho,polang,fdist)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -23,7 +24,6 @@ c     Bob Harvey, June, 2000/April, 2010
 c
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
       real*8, dimension(:), allocatable ::  rovera_ 
       data ifirst/1/, icount/0/

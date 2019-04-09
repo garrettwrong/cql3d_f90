@@ -1,6 +1,7 @@
 c
 c
       subroutine wpwrng(kerr)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...  
@@ -9,7 +10,6 @@ cmnt  diagnostic error messages  + chkpnt if ichkpnt.ne."disabled"
 c
 c...  
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

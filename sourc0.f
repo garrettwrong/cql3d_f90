@@ -1,6 +1,7 @@
 c
 c
       subroutine sourc0
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -8,7 +9,6 @@ c..................................................................
 c     define source uniquely at v=0
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
       do 10 k=1,ngen

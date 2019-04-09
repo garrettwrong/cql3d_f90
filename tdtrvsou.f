@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtrvsou(k)
+      use param_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -12,7 +13,6 @@ c     For up/down symmetry cases, also compute the value of f
 c     at l_=1 and ls (if sbdry.ne."periodic")
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
       dimension zdns(lrorsa),zdns1(lrorsa)
 

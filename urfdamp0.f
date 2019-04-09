@@ -1,6 +1,7 @@
 c
 c
       subroutine urfdamp0(irfpwr,kopt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 cyup      save
 
@@ -29,7 +30,6 @@ c                      species, continuation of the identical files
 c                      applied to different species.
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
 

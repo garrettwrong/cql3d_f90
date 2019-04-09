@@ -1,11 +1,11 @@
 c
 c
       subroutine tdstin
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
 c
-      include 'param.h'
       include 'comm.h'
 
 

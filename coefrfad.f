@@ -1,6 +1,7 @@
 c
 c
       subroutine coefrfad(k,xrf)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...............................................................
@@ -9,7 +10,6 @@ c     coefficients for species k.
 c...............................................................
 
       save
-      include 'param.h'
 
 c..................................................................
 c     rf module contributions first.

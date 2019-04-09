@@ -1,12 +1,12 @@
 c
 c
       subroutine tdtrcon
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c..............................................................
 c     Compute conservation constant.
 c..............................................................
-      include 'param.h'
       include 'comm.h'
       data sgainr /0.0/
 c jakub urban 110708: commented out for g95 compiler

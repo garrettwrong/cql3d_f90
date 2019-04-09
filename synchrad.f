@@ -1,6 +1,7 @@
 c
 c
       subroutine synchrad
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -17,7 +18,6 @@ c     synchrotron radiation due to toroidal and poloidal rotation
 c     (BH + Paul Parks, March 2000).
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
 
 

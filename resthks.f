@@ -2,6 +2,7 @@ c
 c
       subroutine resthks(kl_,klr_,klmdpln,preshin,preskim,pressau1,
      !  pressau2)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c     ------------------------------------------------------------------
 c
@@ -20,7 +21,6 @@ c
 c     Assume restcon called just before, i.e. xconn corresponds to kl_
 c
       save
-      include 'param.h'
       include 'comm.h'
 c.......................................................................
 c     N(Zeff) from Spitzer such that N(1,2,4,16,inf)=

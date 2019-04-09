@@ -1,6 +1,7 @@
 c
 c
       subroutine tdnpadiag(icall)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*8 icall
  
@@ -8,7 +9,6 @@ c..................................................................
 c     sets up call to NPA diagnostic, Version 1.0
 c..................................................................
 
-      include 'param.h'
       include 'comm.h'
       character*8 iplotnbi
 

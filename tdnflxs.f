@@ -2,13 +2,13 @@
 c
 c
       subroutine tdnflxs(ll)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c.......................................................................
 c     This routine is used when the code jumps from calculations on
 c     one flux surface to another. It sets a few mesh and time variables
 c.......................................................................
-      include 'param.h'
       include 'comm.h'
 c
 

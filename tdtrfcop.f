@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtrfcop(kopt)
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -17,7 +18,6 @@ c     2: fvn -> f
 c     3: f_ -> f (=> 1 and 3 give same f)
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 
       if (cqlpmod .ne. "enabled") then

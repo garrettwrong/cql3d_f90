@@ -1,6 +1,7 @@
 c
 c
       subroutine wpinitl
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -8,7 +9,6 @@ c     Initialize some arrays for CQLP case (transport along B).
 c     Computes the (Chang-Cooper) weights.
 c..............................................................
 
-      include 'param.h'
       include 'comm.h'
 
 c.......................................................................
