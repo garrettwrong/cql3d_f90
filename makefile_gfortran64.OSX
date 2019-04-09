@@ -81,7 +81,8 @@ SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  advnce.f03 ainal
 #	zblock.f  zcunix.f  zfreya.f    znonsym.f dgbtrf.f ilaenv.f
 #	zblock.f  zcunix.f  zfreya.F    zgauss.f   znonsym.f 
 #	zblock.f  zcunix.f  zfreya.F    zgauss.f    dropfile.c znonsym.f 
-OBJECTS   = $(SOURCES:.f=.o)
+OBJECTS = $(SOURCES:.f=.o)
+F03OBJECTS = $(SOURCES:.f03=.o)
 
 LOCATION  =   -L /usr/lib -L/usr/local/lib  
 LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
@@ -93,7 +94,6 @@ LISTING   = -Mlist
 CSPECIAL  = 
 SPECIAL   = -byteswapio -Mbackslash
 LDSPECIAL =
-#COMPILE   = $(COMPILER) -c $(CSPECIAL) $(DEBUG) -I $(INCLUDE) # or use $(OPTIMIZE)
 COMPILE   =  $(COMPILER) -c $(CSPECIAL) $(OPTIMIZE) -I $(INCLUDE) # or use $(DEBUG)
 #LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG) # Remove -m for optimize
 LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL)  # Remove -m for optimize
@@ -104,8 +104,8 @@ DELETE    = rm -f
 # Written without dependencies, it may be useful to turn of such checking?
 .SUFFIXES:
 
-$(NAME):           $(OBJECTS)
-	$(LOAD)    $(OBJECTS) $(LOCATION) $(LIBRARIES)
+$(NAME):           $(OBJECTS) $(F03OBJECTS)
+	$(LOAD)    $(OBJECTS) $(F03OBJECTS) $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
 
 # Following use of pattern matching works; 
@@ -121,9 +121,8 @@ $(SOURCES):        $(INCLUDES)
 $(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
 	$(COMPILE) $< -o $@
 
-$(filter %.o,$(F03OBJECTS)): %.o: %.f03 $(INCLUDES)
-	$(COMPILE) $< -o $@
-
+$(filter %.o,$(F03OBJECTS)): %.o: %.f03 
+	$(COMPILE) $< -o $@ $(INCLUDES)
 
 rebuild:
 	$(COMPILE) $(SOURCES)
