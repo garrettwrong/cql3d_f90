@@ -81,8 +81,8 @@ SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  advnce.f03 ainal
 #	zblock.f  zcunix.f  zfreya.f    znonsym.f dgbtrf.f ilaenv.f
 #	zblock.f  zcunix.f  zfreya.F    zgauss.f   znonsym.f 
 #	zblock.f  zcunix.f  zfreya.F    zgauss.f    dropfile.c znonsym.f 
-OBJECTS = $(SOURCES:.f=.o)
-F03OBJECTS = $(SOURCES:.f03=.o)
+OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
+F03OBJECTS = $(filter %.o,$(SOURCES:.f03=.o))
 
 LOCATION  =   -L /usr/lib -L/usr/local/lib  
 LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
