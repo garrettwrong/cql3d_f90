@@ -6,7 +6,7 @@ COMPILER=	gfortran
 BUILDER=	$(COMPILER)
 INCLUDES  = comm.h frcomm.h frname.h frname_decl.h name.h  \
 	param.h trans.h wpadvnc.h name_decl.h
-SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  advnce.fainalloc.f  \
+SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  advnce.f03 ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
 	ainsetpa.f  ainsetva.f  ainspec.f  ainvnorm.f ampfar.f \
@@ -118,7 +118,7 @@ $(NAME):           $(OBJECTS)
 $(SOURCES):        $(INCLUDES)
 
 # see Sect. 4.10.1, Static Pattern Rules.
-$(OBJECTS): %.o: %.f    $(INCLUDES)
+$(OBJECTS): %.o: %.f  %.o: %.f03  $(INCLUDES)
 	$(COMPILE) $< -o $@
 
 rebuild:
