@@ -8,6 +8,8 @@
 module advnce_mod
   private
 
+  include 'comm.h'
+
 contains
 
   !..................................................................
@@ -118,7 +120,7 @@ contains
          (dc(i,j)*(f1j(i+1,j)-f1j(i-1,j))*0.5*dyi(i,l_) &
          -dc(i,j-1)*(f1j(i+1,j-1)-f1j(i-1,j-1))*0.5*dyi(i,l_)) *qz(j)), &
          DBLE((cdf(j)-cdf(j-1)) * qz(j)*ident(i)), &
-         iota(i).ne.itl .and. iota(i).ne.itu_) &
+         iota(i).ne.itl .and. iota(i).ne.itu) &
          +vptb(i,lr_)*.5*so(i,j) &
          +vptb(i,lr_)*temp1(i,j)*rbgn
   end function delx
