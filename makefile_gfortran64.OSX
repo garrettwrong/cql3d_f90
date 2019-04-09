@@ -118,13 +118,17 @@ $(NAME):           $(OBJECTS)
 $(SOURCES):        $(INCLUDES)
 
 # see Sect. 4.10.1, Static Pattern Rules.
-$(OBJECTS): %.o: %.f  %.o: %.f03  $(INCLUDES)
+$(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
 	$(COMPILE) $< -o $@
+
+$(filter %.o,$(F03OBJECTS)): %.o: %.f03 $(INCLUDES)
+	$(COMPILE) $< -o $@
+
 
 rebuild:
 	$(COMPILE) $(SOURCES)
-	$(LOAD) $(OBJECTS) $(LOCATION) $(LIBRARIES)
+	$(LOAD) $(OBJECTS) $(F03OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE)  $(NAME) $(OBJECTS) *.lst
+	$(DELETE)  $(NAME) $(OBJECTS) $(F03OBJECTS) *.lst
 
