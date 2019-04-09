@@ -2,7 +2,7 @@
 c
 c
       subroutine pltvec(lefct)
-      use advce_mod
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...................................................................
