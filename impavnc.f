@@ -1,6 +1,7 @@
 c
 c
       subroutine impavnc
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.................................................................
@@ -32,7 +33,6 @@ c.................................................................
 
       save inewmax, mlmax, mumax
 
-      include 'advnce.h'
 CMPIINSERT_INCLUDE
 c.......................................................................
 c     Indicate progress of code
@@ -510,7 +510,6 @@ c     Define the 9 coefficients of the left hand side
 c     for example xmm(i,j)*f(i-1,j-1,l_)+ x0m(i,j-1)*f(i,j-1,l_) +..
 c     + seven other terms on left side = z00(i,j,k)
 c     xmm, xpm, t0m, z00 etc are statement functions defined in
-c     advnce.h
 c
 c     abd stores the transposed of the band matrix in the LAPACK sgbtrf format
 c.................................................................
@@ -1298,7 +1297,6 @@ c      CONTAINS !removed this construct for franklin.nerc.gov: pg compiler
          save
          include 'param.h'
          include 'comm.h'
-         include 'advnce.h'
 
 
 c.......................................................................

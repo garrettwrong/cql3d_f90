@@ -20,7 +20,6 @@ c.......................................................................
 CMPIINSERT_INCLUDE
 
       complex*16 cwz,cwxyp,cwxym,cei
-ccc      include 'advnce.h'  ! YuP: No need?
 
       integer*1 ipwr(nrayelts) ! YuP: For MPI:  indicator  (0 or 1) 
                                ! that a ray element contributed any power

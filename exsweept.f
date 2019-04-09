@@ -1,6 +1,7 @@
 c
 c
       subroutine exsweept(k)
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -17,7 +18,6 @@ c..................................................................
       include 'param.h'
       include 'comm.h'
 
-      include 'advnce.h'
       sumleft=0.
       sumright=0.
       do 90 i=1,iy

@@ -1,6 +1,7 @@
 c
 c
       subroutine impchk(k)
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -13,7 +14,6 @@ c..................................................................
 
       include 'param.h'
       include 'comm.h'
-      include 'advnce.h'
 C%OS  
       dimension zermx(51),imx(51),jmx(51),zsumj3(iy),zsumj4(iy)
       dimension zdiffj(iy),zdiffi(jx)

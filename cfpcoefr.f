@@ -1,6 +1,7 @@
 c
 c
       subroutine cfpcoefr
+      use r8subs_mod, only : daxpy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c..................................................................
@@ -297,13 +298,13 @@ c     general  to the Max. species.
  70       continue
  
           if(k.eq.kelecm) then
-            call daxpy(iyjx,one,tem1,1,eal(1,1,kk,1,l_),1)
-            call daxpy(iyjx,one,tem2,1,ebl(1,1,kk,1,l_),1)
+            call daxpy(iyjx,one,tem1,1,eal(1:iyjx,1,kk,1,l_),1)
+            call daxpy(iyjx,one,tem2,1,ebl(1:iyjx,1,kk,1,l_),1)
           else
             do 101 i=1,nionm
               if(k.eq.kionm(i)) then
-                call daxpy(iyjx,one,tem1,1,eal(1,1,kk,2,l_),1)
-                call daxpy(iyjx,one,tem2,1,ebl(1,1,kk,2,l_),1)
+                call daxpy(iyjx,one,tem1,1,eal(1:iyjx,1,kk,2,l_),1)
+                call daxpy(iyjx,one,tem2,1,ebl(1:iyjx,1,kk,2,l_),1)
               endif
  101        continue
           endif

@@ -1,6 +1,7 @@
 c
 c
       subroutine diagxswx(k)
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -20,8 +21,6 @@ c..................................................................
 
       include 'param.h'
       include 'comm.h'
-
-      include 'advnce.h'
 
 c..................................................................
 c     sgain(i,k) will contain the local gain in density due to

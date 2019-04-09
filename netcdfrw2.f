@@ -2,6 +2,7 @@
 c
 c
       subroutine netcdfrw2(kopt)
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -4280,9 +4281,6 @@ c...................................................................
       save
       include 'param.h'
       include 'comm.h'
-c     advnce.h contains statement functions,
-c     including gfi,hfi used below:
-      include 'advnce.h'
       include 'netcdf.inc'
       
       dimension ll_netcdf(lrza),rya_netcdf(lrza),

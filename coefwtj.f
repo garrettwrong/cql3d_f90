@@ -1,6 +1,7 @@
 c
 c
       subroutine coefwtj(k)
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -18,7 +19,6 @@ c..................................................................
       include 'param.h'
       include 'comm.h'
 
-      include 'advnce.h'
       
 c-YuP      call bcast(dj(1,0,k,l_),half,iyjxp1) ! could it be error?
       call bcast(dj(0,0,k,l_),half,(iy+2)*(jx+1))

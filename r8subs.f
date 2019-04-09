@@ -63,6 +63,14 @@ c           See the RETURN VALUES section of this man page for more
 c           information on how the type of k affects the return value.
 c
 c
+
+      module r8subs_mod
+      ! CLAENV
+      integer, private :: IPARMS(100)
+      save
+
+      contains
+
       real*8 function cvmgm(x,y,z)
       implicit integer (i-n), real*8 (a-h,o-z)
       cvmgm=y
@@ -3287,14 +3295,6 @@ cBH090905      real*4 rbound
       INTEGER            IEEECK
       EXTERNAL           IEEECK
 *     ..
-*     .. Arrays in Common ..
-      INTEGER            IPARMS( 100 )
-*     ..
-*     .. Common blocks ..
-      COMMON             / CLAENV / IPARMS
-*     ..
-*     .. Save statement ..
-      SAVE               / CLAENV /
 *     ..
 *     .. Executable Statements ..
 *
@@ -5805,3 +5805,4 @@ c$$$*
 c$$$*     End of XERBLA
 c$$$*
 c$$$      END
+      end module r8subs_mod

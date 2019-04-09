@@ -2,6 +2,7 @@
 c
 c
       subroutine pltfluxs
+      use advnce_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -19,7 +20,6 @@ c
       include 'param.h'
       include 'comm.h'
 
-      include 'advnce.h'
 
       REAL RILIN !-> For PGPLOT (text output positioning)
       real*8 wkd(jx) 

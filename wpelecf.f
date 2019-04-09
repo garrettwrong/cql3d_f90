@@ -1,6 +1,7 @@
 c
 c
       subroutine wpelecf(kopt)
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -24,7 +25,6 @@ c..............................................................
       include 'comm.h'
       dimension z4pirho(lsa)
 
-      include 'advnce.h'
       ghelec(i,j)=qz(j)*(zdaij*fpj(i,j)-zdaijm1*fpj(i,j-1)) +
      +  ry(i,j)*(zddij*fpi(i,j)-zddim1j*fpi(i-1,j))
 c.......................................................................

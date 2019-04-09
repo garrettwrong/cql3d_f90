@@ -1,6 +1,7 @@
 c
 c
       module impavnc0_mod
+      use advnce_mod
       use iso_c_binding, only : c_double
       ! gauss_, these are used outside module in it3dalloc.f
       integer, public ::  inewjmax, ialloc      
@@ -29,7 +30,6 @@ c.................................................................
 
       include 'param.h'
       include 'comm.h'
-      include 'advnce.h'
 
 CMPIINSERT_INCLUDE     
 
@@ -922,7 +922,6 @@ c     Define the 9 coefficients of the left hand side
 c     for example xmm(i,j)*f(i-1,j-1,l_)+ x0m(i,j-1)*f(i,j-1,l_) +..
 c     + seven other terms on left side = z00(i,j,k)
 c     xmm, xpm, t0m, z00 etc are statement functions defined in
-c     advnce.h
 c
 c     abd stores the transposed of the band matrix in the LAPACK sgbtrf format
 c.................................................................
@@ -2588,7 +2587,6 @@ C=======================================================================
 ccc         save  ! YuP: Not really needed
          include 'param.h'
          include 'comm.h'
-         include 'advnce.h'
 
 c      CONTAINS     PG90 at GA couldn't accept this construct,
 c                   complaining that functions in advnce.h were 

@@ -1,6 +1,7 @@
 c
 c
       subroutine pltstrml
+      use advnce_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
       use pltmain_mod, only : gxglfr
@@ -27,7 +28,6 @@ c
       include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
-      include 'advnce.h'
 
       integer pltcase
       character*64 tt_

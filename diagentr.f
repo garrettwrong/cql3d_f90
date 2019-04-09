@@ -1,6 +1,8 @@
 c
 c
       subroutine diagentr(lefct,k)
+      use r8subs_mod
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -63,10 +65,10 @@ c
 cBH180906:  Need to add power related to distr function scaling.
 c     
 c
+
       include 'param.h'
       include 'comm.h'
 
-      include 'advnce.h'
       ncentr=ncentr+1
 
 c..................................................................
@@ -152,7 +154,7 @@ c..................................................................
       elseif (lefct.eq.5) then
         if (n .lt. nonso(k,1) .or. n .gt. noffso(k,1)) go to 3000
         call bcast(tam1,zero,jx)
-        call dcopy(iyjx2,source(0,0,k,indxlr_),1,so,1)
+        call dcopy(iyjx2,source(0:iyjx2,0,k,indxlr_),1,so,1)
         do 99 i=1,iy
           do 100 j=1,jx
             tam1(j)=tam1(j)+so(i,j)*cynt2(i,l_)*vptb(i,lr_)
@@ -168,7 +170,7 @@ c..................................................................
       elseif (lefct.eq.6 .or. lefct.eq.7) then
         if(lefct.eq.6) then
           call coefload(k)
-          call dcopy(iyjx2,gon(0,0),1,temp1(0,0),1)
+          call dcopy(iyjx2,gon(0:iyjx2,0),1,temp1(0:iyjx2,0),1)
           go to 105
         endif
         call coefload(k)
@@ -249,7 +251,7 @@ c     If splitting scheme was utilized..
 c..................................................................
 
       if (implct .eq. "disabled") then
-        call dcopy(iyjx2,f_(0,0,k,l_),1,temp1(0,0),1)
+        call dcopy(iyjx2,f_(0:iyjx2,0,k,l_),1,temp1(0:iyjx2,0),1)
       endif
 
 c..................................................................
@@ -401,7 +403,6 @@ c..................................................................
       implicit integer (i-n), real*8 (a-h,o-z)
       include 'param.h'
       include 'comm.h'
-      include 'advnce.h'
        
       if((i.ne.itl .and. i.ne.itu) .or. symtrap.ne."enabled") then
        gfii= dc(i,j)*0.5*dyi(i,l_)*(fpjp(i,j)-fpj0(i-1,j))
@@ -430,7 +431,6 @@ c..................................................................
       implicit integer (i-n), real*8 (a-h,o-z)
       include 'param.h'
       include 'comm.h'
-      include 'advnce.h'
        
       if(i .ne. itl  .and. i .ne. itu) then
         gfuu=dc(i,j)*(f1j(i+1,j)-f1j(i-1,j))*0.5*dyi(i,l_)

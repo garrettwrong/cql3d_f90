@@ -1,6 +1,7 @@
 c
 c
       subroutine cfpcoefn
+      use r8subs_mod, only : daxpy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 ccc      real*8,dimension(iy):: prnt1,prnt2,prnt3
@@ -222,13 +223,13 @@ ccc             prnt5(i)=bavpd(i,lr_)
 ccc          enddo
 
           if(k.eq.kelecm) then
-            call daxpy(iyjx,one,tem1,1,eal(1,1,kk,1,l_),1)
-            call daxpy(iyjx,one,tem2,1,ebl(1,1,kk,1,l_),1)
+            call daxpy(iyjx,one,tem1,1,eal(1:iyjx,1,kk,1,l_),1)
+            call daxpy(iyjx,one,tem2,1,ebl(1:iyjx,1,kk,1,l_),1)
           else
             do 101 i=1,nionm
               if(k.eq.kionm(i)) then
-                call daxpy(iyjx,one,tem1,1,eal(1,1,kk,2,l_),1)
-                call daxpy(iyjx,one,tem2,1,ebl(1,1,kk,2,l_),1)
+                call daxpy(iyjx,one,tem1,1,eal(1:iyjx,1,kk,2,l_),1)
+                call daxpy(iyjx,one,tem2,1,ebl(1:iyjx,1,kk,2,l_),1)
 
 cBH180807:  Saving individual Maxwl ion components of coll operator
 cBH180807:                call daxpy(iyjx,one,tem1,1,eal(1,1,kk,k+1,l_),1)

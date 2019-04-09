@@ -4,9 +4,9 @@ SHELL     = /bin/sh
 NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
-INCLUDES  = advnce.h comm.h frcomm.h frname.h frname_decl.h name.h  \
+INCLUDES  = comm.h frcomm.h frname.h frname_decl.h name.h  \
 	param.h trans.h wpadvnc.h name_decl.h
-SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  ainalloc.f  \
+SOURCES  = a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f  advnce.fainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
 	ainsetpa.f  ainsetva.f  ainspec.f  ainvnorm.f ampfar.f \

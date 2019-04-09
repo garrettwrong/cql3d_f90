@@ -1,6 +1,7 @@
 c
 c
       subroutine diagimpd(k)
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 
@@ -40,8 +41,6 @@ c..................................................................
       include 'param.h'
       include 'comm.h'
 CMPIINSERT_INCLUDE
-
-      include 'advnce.h'
 
       dimension lefcti(12) ! local working array-index
 c..................................................................

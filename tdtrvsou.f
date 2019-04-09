@@ -1,6 +1,7 @@
 c
 c
       subroutine tdtrvsou(k)
+      use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -15,7 +16,6 @@ c..............................................................
       include 'comm.h'
       dimension zdns(lrorsa),zdns1(lrorsa)
 
-      include 'advnce.h'
       fpithta(i,j)=f(i+1,j,k,l_)*(1.-dithta(i,j,l_)) + 
      +             f(i  ,j,k,l_)*dithta(i,j,l_)
 c.......................................................................
