@@ -3,6 +3,7 @@ c
       subroutine resthks(kl_,klr_,klmdpln,preshin,preskim,pressau1,
      !  pressau2)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c     ------------------------------------------------------------------
 c
@@ -21,7 +22,6 @@ c
 c     Assume restcon called just before, i.e. xconn corresponds to kl_
 c
       save
-      include 'comm.h'
 c.......................................................................
 c     N(Zeff) from Spitzer such that N(1,2,4,16,inf)=
 c                                               1.,0.85,0.74,0.63,0.58

@@ -2,6 +2,7 @@ c
 c
       subroutine coeffpad(k)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c      real*8,dimension(iy):: prnt1,prnt2,prnt3
 c      real*8,dimension(iy):: prnt4,prnt5,prnt6
@@ -13,7 +14,6 @@ c     scatfrac=0. disables pitch angle scattering (along with
 c       mx=0, see cqlinput_help. scatfrac=1. by default).
 c..................................................................
 
-      include 'comm.h'
 
       do 10 j=1,jx
         do 11 i=1,iy

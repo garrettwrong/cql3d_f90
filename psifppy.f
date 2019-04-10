@@ -1,6 +1,7 @@
 c
       real*8 function psifppy(yval,iupdown)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -20,7 +21,6 @@ c
 c
 c------------------------------------------------------------
 
-      include 'comm.h'
 
       itab(1)=0
       itab(2)=0

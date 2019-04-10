@@ -2,6 +2,7 @@ c
 c
       subroutine diagxswt(k)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -14,7 +15,6 @@ c     distribution function to 0 during theta sweep.
 c     3- particle source contribution.
 c..................................................................
 
-      include 'comm.h'
 
 
 c..................................................................

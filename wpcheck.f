@@ -2,6 +2,7 @@ c
 c
       subroutine wpcheck
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -11,7 +12,6 @@ c     difference equation and then comparing. Aggregate sums (sumleft and
 c     sumright) are also computed. Errors should be near round-off.
 c..............................................................
 
-      include 'comm.h'
 C%OS  
       dimension zermx(51,lsa),imx(51,lsa),jmx(51,lsa),zsumj3(iy,lsa)
       dimension zermxii(51,lsa),imxii(51,lsa),jmxii(51,lsa)

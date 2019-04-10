@@ -4,6 +4,7 @@ c
 c
       subroutine coefegad(k)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -11,7 +12,6 @@ c..................................................................
 c     Adds in coefficient of energy loss term to fp coefficients.
 c..................................................................
 
-      include 'comm.h'
 
       if(k.gt.ngen)  return
       do 10  j=1,jx

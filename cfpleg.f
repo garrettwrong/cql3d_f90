@@ -2,6 +2,7 @@ c
 c
       subroutine cfpleg(m,l,jzval)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -20,7 +21,6 @@ c     The method for integrating over theta to obtain the Leg. coeff.
 c     depends on the value of ngauss (and subsequently of analegco)
 c.......................................................................
 
-      include 'comm.h'
 
       call bcast(tam1,zero,jx) !-> Reset all Legendre coefficients to zero
       

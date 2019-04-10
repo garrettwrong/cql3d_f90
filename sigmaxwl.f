@@ -2,12 +2,12 @@ c
 c
       subroutine sigmaxwl(k,kk)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 cmnt  generate a maxwellian species "k" normalized to the general
 cmnt  species "kk".
 
-      include 'comm.h'
 
       fxllm2=2./3.*energy(k,lr_)/fions(k)
       fxppm2=fxllm2

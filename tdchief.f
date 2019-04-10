@@ -2,6 +2,7 @@ c
 c
       subroutine tdchief
       use param_mod
+      use cqcomm_mod
       use netcdfrf_mod, only : netcdfrf
       use pltmain_mod, only : pltmain
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -13,7 +14,6 @@ c     input, output, calls to CQL, calls to WD*, and holds the
 c     main loops over radius of the toroidal device.
 c..................................................................
 
-      include 'comm.h'
       include 'name.h'
 CMPIINSERT_INCLUDE
 

@@ -2,8 +2,8 @@ c
 c
       subroutine vlfalloc
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
       complex*16 czero
 cdir$ nobounds
 

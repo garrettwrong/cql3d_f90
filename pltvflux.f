@@ -2,6 +2,7 @@ c
 c
       subroutine pltvflux
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Plot the fraction of the total particle density that is fluxing
@@ -11,7 +12,6 @@ c     vth is the thermal velocity =sqrt(T/m) (at t=0 defined in ainpla).
 c     But, T==temp(k,lr) can be changed in profiles.f, 
 c     in case of iprote (or iproti) equal to "prbola-t" or "spline-t"
 c..................................................................
-      include 'comm.h'
 
       REAL RTAM1(jx),RTAM2(jx), vth_mark
       REAL REMAX,REMIN,RILIN, RXMAXQ

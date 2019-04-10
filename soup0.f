@@ -2,9 +2,9 @@ c
 c
       subroutine soup0
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'comm.h'
 
       if (soucoord.eq."cart") return
       do 10 kk=1,ngen

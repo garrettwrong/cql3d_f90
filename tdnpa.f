@@ -2,6 +2,7 @@ c
 c
       subroutine tdnpa(vel,pitch,ibinn,thpol,sigmanpa,emitnpa)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 cvt....Modified from SRX routine tdsxr for NPA calculations.......
@@ -37,7 +38,6 @@ c     where rho=rya(ibinn).
 c
 c.......................................................................
 
-      include 'comm.h'
 
       real*8,dimension(nen_npa)::vel
       real*8,dimension(nen_npa,npaproc)::sigmanpa,emitnpa

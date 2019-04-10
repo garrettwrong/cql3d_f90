@@ -2,6 +2,7 @@ c
 c
       subroutine dskout(ll)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -13,7 +14,6 @@ c     Also, write out to disk file 'idskrf' rf diffusion coefficients,
 c     and related quantities.
 c..................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       character*80 line

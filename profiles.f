@@ -2,6 +2,7 @@ c
 c     
       subroutine profiles
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c     
@@ -10,7 +11,6 @@ c     Obtain time-dependent
 c     "parabolic" and "spline" profiles, for time-varying quantities.
 c.......................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       real*8:: tmpt(njene)  !Temporary array

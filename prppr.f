@@ -2,6 +2,7 @@ c
 c
       subroutine prppr(target,action,xll,xlu,xpl,xpu)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) target,action
       save
@@ -12,7 +13,6 @@ cmnt  and linearly interpolates to a quantity fpn in xpar,xperp
 cmnt  coordinates.
 c...............................................................
 
-      include 'comm.h'
 
       logical trnsfm
       ipxjpx=jpxy*ipxy

@@ -3,6 +3,7 @@ c
       subroutine tdsxrplt(en,eflux,nen,nenaa,
      +                    efluxt,nv,inegsxr,softxry,lnwidth)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -148,8 +149,8 @@ c
 c
       subroutine tdsxrvw(tempp4,tempp5,tempp6)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       character*8  pltsxrvw

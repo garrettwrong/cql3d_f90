@@ -2,6 +2,7 @@ c
 c
       subroutine wpchgdy
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -12,7 +13,6 @@ c     where ll=1 for CQLP and lrz for CQL3D. This may be useful for
 c     meshy=fixed_mu option
 c.......................................................................
 
-      include 'comm.h'
 c.......................................................................
 cl    1. Re-define dyp5(iyh,l_)
 c.......................................................................

@@ -2,6 +2,7 @@ c
 c
       subroutine baviorbt
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
  
@@ -43,7 +44,6 @@ c                 fill in dtau for i=itl pitch angle (tp-bndry).
 c                 Need to check this. (start with mnemonic.nc op).
 c...................................................................
 
-      include 'comm.h'
 ccc      common/temp_imax_old/ imax_old(lza)
       
 ccc      dimension lmax_old(iy) ! for tests/debug only
@@ -518,7 +518,6 @@ c     g(i,l+1)=g(i,l).
 c     Refer to p. 96-7, Killeen, Kerbel, Mccoy, Mirin book.
 c...................................................................
 
-      include 'comm.h'
 ccc      real*8, dimension(iy):: prnt1,prnt2,prnt3,prnt4  !For gdb printing
 ccc      real*8, dimension(iy,lrzmax):: prnt5   !For gdb printing
 
@@ -698,10 +697,10 @@ c
 c
       subroutine deltar
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-      include 'comm.h'
 
 c     Calculate the first order orbit-width shift, deltarho, of 
 c     guiding center orbits from their associated zero-orbit-width, 
@@ -1127,10 +1126,10 @@ c     +                   deltarz(1:nr_delta,nz_delta/2+2,1)
 
       real*8 function deltarz_interp(rr,zz,thet,v)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-      include 'comm.h'
 
 c     Interpolate deltarz array to given r,z,thet point, 
 c     multiply by velocity v, and adjust calc if necessary

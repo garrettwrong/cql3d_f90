@@ -2,6 +2,7 @@ c
 c
       subroutine wpavg
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -9,7 +10,6 @@ c     Compute flux surface average of various quantities for
 c     CQLP case
 c..............................................................
 
-      include 'comm.h'
 
 c.......................................................................
 cl    1. Surface average of parallel current and parallel electric field

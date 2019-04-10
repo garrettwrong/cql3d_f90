@@ -2,8 +2,8 @@ c
 c
       subroutine eqrhs(neq,t,yv,ydot)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 
       dimension yv(2), ydot(2)
 c..................................................................

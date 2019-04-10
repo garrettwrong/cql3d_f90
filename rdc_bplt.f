@@ -1,5 +1,6 @@
       subroutine rdc_bplt(krf)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -7,7 +8,6 @@ c..................................................................
 c     plots rf rdcb coefficient as a contour plot on cql3d grid.
 c..................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       character*8 pltvlhb

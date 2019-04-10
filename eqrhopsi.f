@@ -2,6 +2,7 @@ c
 c
       module eqrhopsi_mod
       use param_mod
+      use cqcomm_mod
       use iso_c_binding, only : c_double
       real(c_double), private :: btor00,bthr00,bmod00
       save
@@ -10,7 +11,6 @@ c
 
       subroutine eqrhopsi(generate)
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
       character*8 generate
 
       parameter(nworka=3*nconteqa+1)

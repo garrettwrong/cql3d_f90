@@ -2,6 +2,7 @@ c
 c
       subroutine achief1
       use param_mod
+      use cqcomm_mod
       use pltmain_mod, only : pltmain
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -10,7 +11,6 @@ c..................................................................
 c     This routine directs the calculation for lrzmax=1
 c..................................................................
 
-      include 'comm.h'
 
       include 'name.h'
 c.......................................................................

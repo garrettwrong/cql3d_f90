@@ -10,10 +10,10 @@ c
 
       subroutine netcdfrf(kopt,krf)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-      include 'comm.h'
 
 c     This subroutine uses netCDF-2 subroutines. 
 c     http://www.unidata.ucar.edu/packages/netcdf/index.html
@@ -1473,10 +1473,10 @@ C==========================================================================
 
       subroutine netcdf_rdcb(krf)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 c     This subroutine uses netCDF-2 subroutines. 

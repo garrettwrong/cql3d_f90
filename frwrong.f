@@ -2,8 +2,8 @@ c
 c
       subroutine frwrong(kerr)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 CMPIINSERT_INCLUDE     
 
 ! print error messages - on mpirank.eq.0 only

@@ -3,6 +3,7 @@ c
 c
       subroutine urfchief
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -62,7 +63,6 @@ c                            type is applied to (a nml variable)
 c
 c..................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 c...................................................................

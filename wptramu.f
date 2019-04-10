@@ -2,6 +2,7 @@ c
 c
       subroutine wptramu
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..............................................................
 c     Time advancement for parallel transport. (meshy="fixed_mu" case)
@@ -11,7 +12,6 @@ c..............................................................
 
       parameter(lmatsa=(lsa+1)*nbanda)
 
-      include 'comm.h'
       dimension zmat(lmatsa),zxdumy(lsa+1)
       dimension zmat2(lmatsa),zxdumy2(lsa+1)
       dimension ism1(0:lsa+1), isdiag(0:lsa+1), isp1(0:lsa+1)

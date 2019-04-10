@@ -3,9 +3,9 @@ c
       subroutine frinitz(
      +        nprim,nimp,nion,ibion,namep,namei,atw,fd,smth)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
-      include 'comm.h'
 
 
 c..................................................................

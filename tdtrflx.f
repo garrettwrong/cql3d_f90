@@ -3,6 +3,7 @@ c
 c
       subroutine tdtrflx
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -12,7 +13,6 @@ c     the change in the number of particles in the plasma over
 c     the last time step.
 c..............................................................
 
-      include 'comm.h'
 
       include 'trans.h'
 

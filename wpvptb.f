@@ -2,13 +2,13 @@ c
 c
       subroutine wpvptb
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
 c     Reset some bounce average quantities for CQLP run
 c..................................................................
 
-      include 'comm.h'
 
 c.......................................................................
 c     1. Set lambda=vptb=cos(theta_0)*tau to 1.0

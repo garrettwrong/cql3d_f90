@@ -2,8 +2,8 @@ c
 c
       subroutine urfread_(krf,i_)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 
 
 c..................................................................
@@ -416,8 +416,8 @@ c=======================================================================
 c=======================================================================
       subroutine urfread_i(krf,i_)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
       
       ! working array for dummy read
       real*8, allocatable, dimension(:) :: urfwk 

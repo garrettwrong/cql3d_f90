@@ -2,13 +2,13 @@ c
 c
       subroutine eqalloc
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...................................................................
 c     Allocate allocatable arrays
 c...................................................................
 
-      include 'comm.h'
 cdir$ nobounds
 
 c..................................................................

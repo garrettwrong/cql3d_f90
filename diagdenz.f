@@ -2,6 +2,7 @@ c
 c
       subroutine diagdenz
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -20,7 +21,6 @@ c     jegy(ny,2,k,lr_) (upper). Note that the
 c     final energy bin or range is forced to be the entire energy range.
 c..................................................................
 
-      include 'comm.h'
 
       if (negyrg.lt.1) return
       do 103 k=1,ngen

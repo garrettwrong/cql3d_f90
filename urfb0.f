@@ -2,6 +2,7 @@ c
 c
       subroutine urfb0
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -15,7 +16,6 @@ c     YuP-110222: Now includes all lr_ internally.
 c                 Modification, to facilitate MPI parallelization.
 cc..................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
             
       allocatable :: urfbwk(:) ! local working array, for MPI
@@ -467,6 +467,7 @@ c=======================================================================
      +           iurfb,prf_rayel)
 
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c YuP-2011
 c..................................................................
@@ -480,7 +481,6 @@ c..................................................................
       !             iurfb=1 for calc. of prf_rayel (called by urfdamp1)
       ! called for each krf=1:mrfn (all wave types and harmonics)
 c..................................................................
-      include 'comm.h'
                               
       complex*16 cwz,cwxyp,cwxym,cei
       real*8 sum_dth(iy,lrz)

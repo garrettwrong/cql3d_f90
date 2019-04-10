@@ -2,8 +2,8 @@ c
 c
       subroutine urfavg
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 
       alpha=1.
       if (n.gt.2) then

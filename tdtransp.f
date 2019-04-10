@@ -1,10 +1,10 @@
       subroutine tdtransp
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..............................................................
 c     Time advancement splitting step for radial transport.
 c..............................................................
-      include 'comm.h'
       character*8 nobind
       common/nob/ nobind
       include 'trans.h'

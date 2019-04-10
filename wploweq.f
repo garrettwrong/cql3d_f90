@@ -2,6 +2,7 @@ c
 c
       subroutine wploweq
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -10,7 +11,6 @@ c     assuming an up/down symmetric flux surface. The total mesh
 c     points is lsmax, thus the mesh point at theta_pol=pi is lsmax/2+1
 c.......................................................................
 
-      include 'comm.h'
 
 c.......................................................................
 cl    1. Copy values of top half flux-surface onto lower half

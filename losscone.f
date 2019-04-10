@@ -2,6 +2,7 @@ c
 c
       subroutine losscone
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -30,7 +31,6 @@ c     determines suitable Krook operator loss times, depending on the
 c     local value of gone.
 c..................................................................
 
-      include 'comm.h'
 
 c     Pointers for dynamic memory allocation, local usage:
       real*8, dimension(:), pointer :: upar,uprp,rho_a

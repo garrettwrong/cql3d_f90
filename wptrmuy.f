@@ -2,8 +2,8 @@ c
 c
       subroutine wptrmuy
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 
       dimension zmunod(iy+lsa),zmidth0(lsa+2),zyfix(lsa+1)
 

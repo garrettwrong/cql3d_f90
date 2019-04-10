@@ -2,6 +2,7 @@ c
 c
       subroutine pltfofvv
       use param_mod
+      use cqcomm_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
 c
@@ -13,7 +14,6 @@ c
 c     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 c     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 c
-      include 'comm.h'
 
       REAL RILIN !-> For PGPLOT (text output positioning)
 
@@ -95,6 +95,7 @@ c
 c
       subroutine fofv(target,action)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) target,action
       save
@@ -109,7 +110,6 @@ c      xul,xuu: lower and upper values of x (normalized u)
 c      ytl,ytu:  "     "   "      "    "  y (theta0)
 c...............................................................
 
-      include 'comm.h'
 
       logical trnsfm
       trnsfm=(target.eq."velocity".and. relativ .ne. "disabled")

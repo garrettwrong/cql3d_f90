@@ -2,13 +2,13 @@ c
 c
       subroutine wpalloc
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
 c     Allocates arrays used by parallel transport routines.
 c..............................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 c.......................................................................
 

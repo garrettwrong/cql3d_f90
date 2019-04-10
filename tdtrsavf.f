@@ -2,6 +2,7 @@ c
 c
       subroutine tdtrsavf
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -23,7 +24,6 @@ c     frn====>frn_1
 c     Then we copy fvn====>fvn_1
 c..............................................................
 
-      include 'comm.h'
       
 
       do 10 k=1,ngen

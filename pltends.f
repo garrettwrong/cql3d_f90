@@ -2,6 +2,7 @@ c
 c
       subroutine pltends
       use param_mod
+      use cqcomm_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
 c
@@ -12,7 +13,6 @@ c
 c     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 c     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 c
-      include 'comm.h'
 
       REAL RILIN !-> For PGPLOT (text output positioning)
       dimension wk_nch(nonch)

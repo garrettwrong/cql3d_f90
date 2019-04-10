@@ -3,6 +3,7 @@ c
 c
       subroutine pltfluxs
       use param_mod
+      use cqcomm_mod
       use advnce_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -18,7 +19,6 @@ c     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 c
 
       save
-      include 'comm.h'
 
 
       REAL RILIN !-> For PGPLOT (text output positioning)

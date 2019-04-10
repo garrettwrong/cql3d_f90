@@ -2,6 +2,7 @@ c
 c
       subroutine aclear
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -10,7 +11,6 @@ c     This routine clears some arrays, especially radial arrays, before
 c     starting the calculus
 c..................................................................
 
-      include 'comm.h'
 c.......................................................................
 
 c     Scalars

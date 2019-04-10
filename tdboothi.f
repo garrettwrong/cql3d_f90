@@ -2,9 +2,9 @@ c
 c
       subroutine tdboothi
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       parameter(itlrza=3*lrza+1)
-      include 'comm.h'
 
 c     Calculation of Hirshman bootstrap current expression,
 c     according to Phys. Fluids 31, p3150-2 (1988),

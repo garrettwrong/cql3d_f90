@@ -2,6 +2,7 @@ c
 c
       subroutine tdtrrtov(f1)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -9,7 +10,6 @@ c     This routine interpolates onto the full velocity mesh
 c     from the transport velocity mesh.
 c     f1 ======> f1,    THAT IS, just fix up itl+/-1,itu+/-1
 c..............................................................
-      include 'comm.h'
 
       dimension f1(0:iyp1,0:jxp1,ngen,0:*),denrad(ngen,lrorsa)
       dimension denvel(ngen,lrorsa)

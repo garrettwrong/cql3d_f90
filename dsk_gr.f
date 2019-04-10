@@ -2,6 +2,7 @@ c
 c
       subroutine dsk_gr
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -14,7 +15,6 @@ c..................................................................
 
 cBH000506:   De-activated by following goto.
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 CMPIINSERT_IF_RANK_NE_0_RETURN

@@ -2,6 +2,7 @@ c
 c
       subroutine bavgmax
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c.................................................................
 c     This routine computes the bounce average of several bbpsi
@@ -9,7 +10,6 @@ c     related quantities.
 c.................................................................
       save
 
-      include 'comm.h'
 
       if (n .ge. 2) return
       call bcast(psiiv(1,lr_),zero,iy)

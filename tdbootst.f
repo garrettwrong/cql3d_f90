@@ -2,10 +2,10 @@ c
 c
       subroutine tdbootst
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
       parameter(itlrza=3*lrza+1)
-      include 'comm.h'
 
       real*8 nedrv,k13,k23
       dimension workk(itlrza),d2ne(lrza),d2te(lrza),d2ti(lrza),

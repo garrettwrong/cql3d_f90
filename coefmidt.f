@@ -2,6 +2,7 @@ c
 c
       subroutine coefmidt(c,nn)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -10,7 +11,6 @@ c     mesh points (i+1/2). nn=1 means dd; nn=2 means de;
 c     nn=3 means df.
 c..................................................................
 
-      include 'comm.h'
 
       dimension c(0:iy,jx) 
 

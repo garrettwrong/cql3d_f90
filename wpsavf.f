@@ -2,6 +2,7 @@ c
 c
       subroutine wpsavf
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -9,7 +10,6 @@ c     This routine saves various versions of the distribution
 c     function.
 c..............................................................
 
-      include 'comm.h'
 c.......................................................................
 
       if (relaxtsp.ne."enabled" .or. n.lt.nonavgf .or.

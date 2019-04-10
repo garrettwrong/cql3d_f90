@@ -3,6 +3,7 @@ c
 c
       subroutine tdrmshst
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 c     This routine initializes the radial meshes and integration
@@ -18,7 +19,6 @@ c..................................................................
       save
       integer itlrza
       parameter(itlrza=3*lrza+1)
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       dimension d2equ(lrza),d2areamd(lrza),d2volmid(lrza),worka(lrza)

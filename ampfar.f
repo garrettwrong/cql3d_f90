@@ -1,6 +1,7 @@
 
       double precision function ampfarl(distn,ll)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c     Returns result of an integral of the distribution function
@@ -11,7 +12,6 @@ c     ``Kinetic Modeling of SOL Plasmas'', K. Kupfer, R.W. Harvey,
 c     O. Sauter, G. Staebler, and M.J. Schaffer,  Physics of Plasmas
 c     3,  3644 (1996).
 
-      include 'comm.h'
       double precision distn(0:iy+1,0:jx+1)
 
 c     following diaggnde integration
@@ -56,6 +56,7 @@ cBH131110, BUT think vnorm* is correct, cancels vnorm in impanvc0:dfdvz
 
       subroutine ampfalloc
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -63,7 +64,6 @@ c     Allocates arrays used in Ampere-Faraday routines.
 c     COULD move alloc of some other A-F specific arrays here.
 c..............................................................
 
-      include 'comm.h'
 c.......................................................................
 
 
@@ -107,6 +107,7 @@ c           Only needed for electrons.
 
       subroutine ampfinit 
       use param_mod
+      use cqcomm_mod
       ! n is not updated yet, n=0,1,...,nstop-1
       ! Called from tdchief when n+1.eq.nonampf
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -115,7 +116,6 @@ c..............................................................
 c     Initialize arrays used in Ampere-Faraday routines.
 c..............................................................
 
-      include 'comm.h'
 c.......................................................................
 c     Electric field elecfld(0:lrza) units are the mixed Volts/cm.  
 c     (1 cgs statvolt=300 volts).  elecfld is used for FP eqn solutions.
@@ -193,6 +193,7 @@ c      endif
 
       subroutine ampfefldb(nn,timett)
       use param_mod
+      use cqcomm_mod
       ! n is not updated yet, n=0,1,...,nstop-1
       ! Called from tdchief when n+1.eq.nonampf, as ampfefldb(n+1,time+dtr)
       ! So, nn= nonampf,nonampf+1,...,nstop
@@ -211,7 +212,6 @@ c     nn=time-advanced step
 c     timett=time-advanced time
 c.......................................................................
 
-      include 'comm.h'
 
 cBH131107: For starters, only use elec field specified by fixed parabola
 cBH131107: input, or prbola-t, with efswtch=method1, tmdmeth=method1.
@@ -306,8 +306,8 @@ c     Zero delecfld0
 
       subroutine ampfdiff(iflag)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 
 c     No real test here, to start with.
 c     Future: based on (elecfldn(ll,nn,it+1)-elecfldn(ll,nn,it+1))/
@@ -324,6 +324,7 @@ c             elecfldn(ll,nn,it+1).
                                  ! here nn=nonampf,...,nstop
                                  ! it=1,nampfmax
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       integer, allocatable:: ipiv(:)
 
@@ -335,7 +336,6 @@ c     it=iteration number, starting at 1
 c     nn=(advanced) time step, starting at 1
 c.......................................................................
 
-      include 'comm.h'
 
 
       do ll=1,lrz

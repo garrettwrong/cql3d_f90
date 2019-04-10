@@ -2,6 +2,7 @@ c
 c
       subroutine tddiag
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -9,7 +10,6 @@ c     This routine computes radial diagnostics (total rf power
 c     and current)
 c.......................................................................
 
-      include 'comm.h'
 
 c.......................................................................
 c     Compute the total current in AMPS, (currza).

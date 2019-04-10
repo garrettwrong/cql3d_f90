@@ -3,9 +3,9 @@ c
       subroutine freyasou(qx,qy,qz,qr,vx,vy,vz,iqts,curdep,
      1  bmsprd,multiply,multiplyn)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       character*8 multiply,method

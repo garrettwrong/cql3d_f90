@@ -2,6 +2,7 @@ c
 c
       subroutine tdtrvtor3(f1,f2,vp,vp_,kopt,k)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -24,7 +25,6 @@ c     Assumes that vp is vp(lrindx(l)) if kopt = 1 and vp(l) otherwise,
 c     where l=1,lrors
 c..............................................................
 
-      include 'comm.h'
 
       dimension f1(0:iyp1,0:jxp1,ngen,*)
       dimension f2(0:iyp1,0:jxp1,ngen,*)

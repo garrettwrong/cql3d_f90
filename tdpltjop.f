@@ -3,8 +3,8 @@ c
 c
       subroutine tdpltjop
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       REAL RILIN

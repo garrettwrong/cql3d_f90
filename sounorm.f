@@ -5,6 +5,7 @@ c
 c
       subroutine sounorm
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -15,7 +16,6 @@ c     profile. It is called only at initialization.
 c..................................................................
 
 
-      include 'comm.h'
 
 
 c..................................................................

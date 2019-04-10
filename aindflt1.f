@@ -2,6 +2,7 @@ c
 c
       subroutine aindflt1
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -9,7 +10,6 @@ c     Set defaults for some basic variables depending on the
 c     namelist values (all sets except frsetup) or parameter values.
 c..................................................................
 
-      include 'comm.h'
 
       do ll=0,lrorsa
         indxlr(ll)=ll

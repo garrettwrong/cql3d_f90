@@ -2,6 +2,7 @@ c
 c
       subroutine fle_pol(setup,lp)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -20,7 +21,6 @@ c  Normalization of the output distribution fl is such that it equals
 c  vnorm*f_cgs(v_parallel).
 c.......................................................................
       save
-      include 'comm.h'
 
 c     Diagnostic array:
 c      dimension den_of_s(lza)  !Now comm.h:den_of_s2
@@ -206,6 +206,7 @@ c
 c
       subroutine fle_fsa(setup)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -222,7 +223,6 @@ c  Normalization of the output distribution fl is such that it equals
 c  vnorm*f_cgs(v_parallel).
 c.......................................................................
       save
-      include 'comm.h'
 
       character*8 ifirst
       data ifirst/"first"/
@@ -368,6 +368,7 @@ c
 c
       subroutine fle(setup,lp)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -384,7 +385,6 @@ c  Normalization of the output distribution fl is such that it equals
 c  vnorm*f_cgs(v_parallel).
 c.......................................................................
       save
-      include 'comm.h'
 
 c     Diagnostic array:
 c      dimension den_of_s(lza)  !  !Now comm.h:den_of_s1

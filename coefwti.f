@@ -2,6 +2,7 @@ c
 c
       subroutine coefwti(k)
       use param_mod
+      use cqcomm_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -17,7 +18,6 @@ c     justified theoretically, helps to keep the distribution from
 c     going negative for strongly driven problems.
 c..................................................................
 
-      include 'comm.h'
 
       
 c-YuP      call bcast(di(0,1,k,l_),half,(iy+1)*jx) ! could it be error?

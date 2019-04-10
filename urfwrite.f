@@ -2,6 +2,7 @@ c
 c
       subroutine urfwrite
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -10,7 +11,6 @@ c     i.e., a disk file "rayop" in written or updated with ray tracing
 c     data.
 c..................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 CMPIINSERT_IF_RANK_NE_0_RETURN

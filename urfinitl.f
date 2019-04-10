@@ -2,6 +2,7 @@ c
 c
       subroutine urfinitl
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -9,7 +10,6 @@ c     This routine does some post-namelist-read initialization
 c     and checking of input.
 c..................................................................
 
-      include 'comm.h'
 
 CMPIINSERT_INCLUDE
 

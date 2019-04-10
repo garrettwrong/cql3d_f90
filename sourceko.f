@@ -2,6 +2,7 @@ c
 c
       subroutine sourceko ! must be called for k=kelecg only
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -20,7 +21,6 @@ c       Numerical method in Harvey et al, Phys. of Plasmas, 2000.
 c
 c.......................................................................
 c      save
-      include 'comm.h'
 CMPIINSERT_INCLUDE     
 
 c      The ii0m1 method is an alternative translation from

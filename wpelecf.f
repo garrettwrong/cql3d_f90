@@ -2,6 +2,7 @@ c
 c
       subroutine wpelecf(kopt)
       use param_mod
+      use cqcomm_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -22,7 +23,6 @@ c
 c     This routine assumes that f is the updated distribution function
 c..............................................................
 
-      include 'comm.h'
       dimension z4pirho(lsa)
 
       ghelec(i,j)=qz(j)*(zdaij*fpj(i,j)-zdaijm1*fpj(i,j-1)) +

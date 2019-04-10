@@ -2,6 +2,7 @@ c
 c
       subroutine finit
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -14,7 +15,6 @@ c       plus a shifted "Maxwellian" or a read in distribution,
 c       as specified through fpld).
 c..................................................................
 
-      include 'comm.h'
       data ireturn/0/
 c.......................................................................
 

@@ -2,6 +2,7 @@ c
 c
       subroutine micgnbnd
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -15,7 +16,6 @@ c     integrable.
 c     See the user manual for mathematical details.
 c..................................................................
 
-      include 'comm.h'
 
       sp=(y(itl,l_)+y(itl-1,l_))*.5
       sm=(y(itl+1,l_)+y(itl,l_))*.5

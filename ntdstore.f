@@ -2,10 +2,10 @@ c
 c
       subroutine ntdstore
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
-      include 'comm.h'
 
       if (n .ne. nchec*(n/nchec)) return
       if (nch(l_) .eq. nonch) nch(l_) =0

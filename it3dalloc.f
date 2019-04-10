@@ -2,8 +2,8 @@ c
 c
       subroutine it3dalloc
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       dimension istat(18)
@@ -122,8 +122,8 @@ c=======================================================================
       
       subroutine it3ddalloc 
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 CMPIINSERT_IF_RANK_EQ_0
@@ -154,10 +154,10 @@ c=======================================================================
       
       subroutine de_alloc ! YuP[11-2017] more deallocation
       use param_mod
+      use cqcomm_mod
       use impavnc0_mod, only : abd, ipivot 
       use impavnc0_mod, only : ampfda, ampfdd
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 c  The purpose of this subroutine is to ensure deallocation of variables

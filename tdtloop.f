@@ -2,6 +2,7 @@ c
 c
       subroutine tdtloop
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -9,7 +10,6 @@ c..................................................................
 c     Determines whether or not it is time to halt execution.
 c..................................................................
 
-      include 'comm.h'
       include 'name.h'
 CMPIINSERT_INCLUDE
 

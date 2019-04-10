@@ -2,9 +2,9 @@ c
 c
       subroutine pltfvsv
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'comm.h'
 
       REAL RTAM1(jx),RTAM2(jx)
       REAL REMAX,REMIN

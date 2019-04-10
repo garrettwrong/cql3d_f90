@@ -2,6 +2,7 @@ c
 c
       subroutine wpbdry(kiorj,kspec,kleft,kright,kopt)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -26,7 +27,6 @@ c     3: forward
 c     4: centered
 c..............................................................
 
-      include 'comm.h'
 
       include 'wpadvnc.h'
       flin(dx1,dx2,f1,f2)=f1-(f2-f1)*dx1/dx2

@@ -2,6 +2,7 @@ c
 c
       subroutine urffflx
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -21,7 +22,6 @@ c     NOTE: psivalm(l) demarks the outer edge of the flux volume associated
 c      with flux surface l (vol(l)).
 c..................................................................
 
-      include 'comm.h'
 
 
       do 1 l=1,lrzmax

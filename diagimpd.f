@@ -2,6 +2,7 @@ c
 c
       subroutine diagimpd(k)
       use param_mod
+      use cqcomm_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
@@ -39,7 +40,6 @@ c     if ineg .eq. "enabled".or."trunc_d"
 c..................................................................
 
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       dimension lefcti(12) ! local working array-index

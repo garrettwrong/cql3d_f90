@@ -2,6 +2,7 @@ c
 c
       subroutine urfsetup
       use param_mod
+      use cqcomm_mod
       use netcdfrf_mod, only : netcdfrf
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -9,7 +10,6 @@ c..................................................................
 c     This routine sets up arrays unique to urf module
 c..................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 c..................................................................

@@ -3,6 +3,7 @@ c
       subroutine diagxswx(k)
       use advnce_mod
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -20,7 +21,6 @@ c     Further - the normalized velocity flux at mesh point x(j+.5) is pu
 c     into vflux(j,k,l_).
 c..................................................................
 
-      include 'comm.h'
 
 c..................................................................
 c     sgain(i,k) will contain the local gain in density due to

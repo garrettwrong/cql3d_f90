@@ -2,8 +2,8 @@ c
 c
       subroutine eqfndpsi(psides,areades,volum)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 CMPIINSERT_INCLUDE     
 
 c     Set parameter for trapped particle frac calc (150 in ONETWO).

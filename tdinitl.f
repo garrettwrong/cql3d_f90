@@ -2,6 +2,7 @@ c
 c
       subroutine tdinitl ! called only at n=0
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -11,7 +12,6 @@ c     It also controls the initialization of distribution
 c     functions and quasilinear coefficients.
 c..................................................................
 
-      include 'comm.h'
 
       include 'name.h'
 CMPIINSERT_INCLUDE     

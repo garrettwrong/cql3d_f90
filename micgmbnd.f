@@ -2,6 +2,7 @@ c
 c
       subroutine micgmbnd(xlbmd2)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c......................................................................
@@ -12,7 +13,6 @@ c     It is called from subroutine micgnbnd.
 c......................................................................
 
       save
-      include 'comm.h'
 
       uupls=((y(itl-1,l_)+y(itl,l_))*.5)
       uumns=((y(itl,l_)+y(itl+1,l_))*.5)

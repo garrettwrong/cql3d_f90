@@ -1,6 +1,7 @@
 c
       real*8 function psifpy(yval)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -14,7 +15,6 @@ cBH091106:  Only called from psifp, and only for psimodel.eq."axitorus".
 c
 c------------------------------------------------------------
 
-      include 'comm.h'
       
       iupdown=1
 

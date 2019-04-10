@@ -2,13 +2,13 @@ c
 c
       subroutine tdwritef
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c.......................................................................
 c     Save current parameters ,distribution function and spatial source
 c     to enable complete restart of run
 c.......................................................................
 
-      include 'comm.h'
       include 'frname_decl.h'
       include 'name.h'
       include 'frname.h'

@@ -2,12 +2,12 @@ c
 c
       subroutine pltpower
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     This routine plots the power due to the various physical mechanism
 c     vs. time
 c
-      include 'comm.h'
       REAL RILIN
       REAL RPG1,RPG2
       REAL RNONCHA1(nonch),RNONCHA2(nonch)

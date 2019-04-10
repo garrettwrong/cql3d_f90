@@ -2,6 +2,7 @@ c
 c
       subroutine tdtrchkd(f1,vp,densty)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.............................................................
@@ -9,7 +10,6 @@ c     This routine computes the density of species f1, given
 c     that vpint=vp(lrindx). This will work for arrays defined on
 c     radial as well as the velocity mesh.
 c.............................................................
-      include 'comm.h'
 
       dimension f1(0:iyp1,0:jxp1,ngen,0:*),vp(iy,lrza)
       dimension densty(ngen,lrza)

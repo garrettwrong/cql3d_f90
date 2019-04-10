@@ -2,6 +2,7 @@ c
 c
       subroutine tdsetnpa(sigmanpa)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -24,7 +25,6 @@ c.......................................................................
       character*30 kermsg
 
 c     
-      include 'comm.h'
 
 
       call bcast(sigmanpa,zero,nen_npa*npaproc)

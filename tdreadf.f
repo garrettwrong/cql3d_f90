@@ -2,6 +2,7 @@ c
 c
       subroutine tdreadf(kopt)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -15,7 +16,6 @@ c               not needed.
 c          = 2: Read f
 c.......................................................................
 
-      include 'comm.h'
 
       character*1 blank
       character*8 ilrestrt 

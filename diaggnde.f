@@ -2,6 +2,7 @@ c
 c
       subroutine diaggnde
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -11,7 +12,6 @@ c     energies, z=effective, J/P. Also redefies electron density
 c     to maintain quasineutrality if necessary.
 c..................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
       
 c.......................................................................

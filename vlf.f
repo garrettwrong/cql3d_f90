@@ -2,6 +2,7 @@ c
 c
       subroutine vlf(action)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) action
       save
@@ -40,7 +41,6 @@ c              cqlpmod="enabled" option, to facilitate examination
 c              of finite-length effects on RFCD efficiency.
 c.................................................................
 c
-      include 'comm.h'
 c      common/temp_imax_old/ imax_old(lza)   ;for checking taunew.
 
 

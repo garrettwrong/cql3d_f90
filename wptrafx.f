@@ -2,6 +2,7 @@ c
 c
       subroutine wptrafx
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..............................................................
 c     Time advancement for parallel transport.
@@ -11,7 +12,6 @@ c..............................................................
       parameter(lmatsa=(lsa+1)*nbanda)
       dimension zmat(lmatsa),zxdumy(lsa+1)
       dimension zmat2(lmatsa),zxdumy2(lsa+1)
-      include 'comm.h'
 
       include 'wpadvnc.h'
       dithta(i,j,l)=0.5-0.5*(1/(i+1))+0.5*(1/(iy_(l)+1-i))

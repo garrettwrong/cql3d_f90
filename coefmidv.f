@@ -2,9 +2,9 @@ c
 c
       subroutine coefmidv(c,nn)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-      include 'comm.h'
 
 c..................................................................
 c     This routine redefines the velocity mesh points at the

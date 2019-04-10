@@ -3,6 +3,7 @@ c
 c
       subroutine urfbes
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -13,7 +14,6 @@ c     calls check to see if the maximum argument has increased beyond
 c     table limits. If so, table is augmented.
 c..................................................................
 
-      include 'comm.h'
       
       pointer besl
       dimension besl(:) ! Now it's a local working array

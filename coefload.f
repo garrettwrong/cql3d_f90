@@ -2,6 +2,7 @@ c
 c
       subroutine coefload(k)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -9,7 +10,6 @@ c     This routine adds in the krook operator contribution to the
 c     coefficients employed in time advancement..
 c..................................................................
 
-      include 'comm.h'
 
 
 c..................................................................

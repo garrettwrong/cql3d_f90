@@ -1,6 +1,7 @@
 
       subroutine losstor(k)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -35,7 +36,6 @@ c     that all particles with an energy greater than .9*enorm
 c     are also lost is a loss time of tauloss(2,k).
 c..................................................................
 
-      include 'comm.h'
 
 
 c..................................................................

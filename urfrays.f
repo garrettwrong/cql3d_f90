@@ -2,6 +2,7 @@ c
 c
       subroutine urfrays(initrf,nrayptlh,nrayptec,nrayptfw)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.................................................................
@@ -9,7 +10,6 @@ c     This routine calls ray tracing code(s), if namelist
 c     variables, call_lh, call_ech, or call_fw are "enabled".
 c.................................................................
 
-      include 'comm.h'
 
       save icall
       data icall /0/

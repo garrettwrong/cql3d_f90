@@ -2,13 +2,13 @@ c
 c
       subroutine tdsxray(icall,iplotsxr)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
 c     sets up call to soft-x-ray analyzer
 c..................................................................
 
-      include 'comm.h'
       character*8 icall,iplotsxr
 
       do 1 l=1,lrzmax

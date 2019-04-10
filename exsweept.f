@@ -2,6 +2,7 @@ c
 c
       subroutine exsweept(k)
       use param_mod
+      use cqcomm_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -16,7 +17,6 @@ c     be the r.h.s.  and the two arrays should (ideally) be identical.
 c     Each array is summed for purposes of comparison.
 c..................................................................
 
-      include 'comm.h'
 
       sumleft=0.
       sumright=0.

@@ -2,6 +2,7 @@ c
 c
       subroutine coefrfad(k,xrf)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...............................................................
@@ -15,7 +16,6 @@ c..................................................................
 c     rf module contributions first.
 c..................................................................
 
-      include 'comm.h'
 
       call bcast(dbb(1,0),zero,iyjxp1)
       call bcast(dff(0,1),zero,iyp1jx)

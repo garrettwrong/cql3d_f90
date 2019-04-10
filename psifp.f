@@ -1,6 +1,7 @@
 
       real*8 function psifp(xz)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c-------------------------------------------------------------------
@@ -15,7 +16,6 @@ c       this case covers a whole poloidal turn.  The function
 c       will be negative for xz>es_bmax(lr_).
 c
 c-------------------------------------------------------------------
-      include 'comm.h'
 
       itab(1)=0
       itab(2)=1

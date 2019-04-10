@@ -11,6 +11,7 @@ c
 
       subroutine pltmain
       use param_mod
+      use cqcomm_mod
       use pltdf_mod, only: pltdf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -21,7 +22,6 @@ c
 c     Modified some Graflib to pgplot calls by Yuri Petrov, 090727,
 c     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 c
-      include 'comm.h'
       REAL RILIN
       
 CMPIINSERT_INCLUDE

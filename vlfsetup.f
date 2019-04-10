@@ -2,13 +2,13 @@ c
 c
       subroutine vlfsetup
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
 c     This routine sets up arrays for vlf urf modules
 c..................................................................
 
-      include 'comm.h'
 
 c...................................................................
 c     mrf is the number of RF modes  being calculated.

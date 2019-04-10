@@ -2,6 +2,7 @@
 c
       real*8 function psiinv(yval,iupdown)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c---------------------------------------------------------------------
@@ -22,7 +23,6 @@ c     Arclength is measured counter-clockwise from s=0 at the
 c     minimum |B|-pt, in either case.
 c
 c---------------------------------------------------------------------
-      include 'comm.h'
 
       data toll/1.e-8/,nhalve/10/
       niter=0

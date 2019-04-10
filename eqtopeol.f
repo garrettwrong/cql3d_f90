@@ -2,10 +2,10 @@ c
 c
       subroutine eqtopeol
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       integer tnrza
       parameter(tnrza=3*(nnra+nnza)+1)
-      include 'comm.h'
 
       dimension br(nnra,nnza),bt(nnra,nnza),bz(nnra,nnza)
       dimension workk(tnrza),temz(nnza),d2bz(nnza),d2br(nnra)

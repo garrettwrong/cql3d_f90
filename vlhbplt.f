@@ -1,12 +1,12 @@
       subroutine vlhbplt
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
 c     plots rf cqlb coefficient as a contour plot.
 c..................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       character*8 pltvlhb

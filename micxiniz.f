@@ -2,6 +2,7 @@ c
 c
       subroutine micxiniz
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -13,7 +14,6 @@ c     These meshes are tailored to suit requirements specified by
 c     the user in the namelist input.
 c..................................................................
 
-      include 'comm.h'
       dimension zd2bpol(lfielda),zd2solr(lfielda),zd2solz(lfielda),
      +  znormsh(0:lza)
 

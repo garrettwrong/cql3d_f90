@@ -2,6 +2,7 @@ c
 c
       subroutine exsweep
       use param_mod
+      use cqcomm_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -11,7 +12,6 @@ c     (called if implct.ne.enabled)
 c..................................................................
 
       save
-      include 'comm.h'
 
 c.......................................................................
 

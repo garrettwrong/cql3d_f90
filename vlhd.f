@@ -2,6 +2,7 @@ c
 c
       real*8 function vlhd(vll,vprp,thp,nmod)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c     Determine the local phenomenological lower hybrid
@@ -10,7 +11,6 @@ c     v-parallel, v-perpendicular and poloidal angle.
 c
 c
 c
-      include 'comm.h'
 
 
       if (vprprop .eq. "enabled") then

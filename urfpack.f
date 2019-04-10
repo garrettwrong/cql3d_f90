@@ -1,5 +1,6 @@
       subroutine urfpack
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -10,7 +11,6 @@ c     urfb0 is called it uses and reuses the information computed
 c     and stored in this routine.
 c.......................................................................
 
-      include 'comm.h'
       data nray0 /1/
 
 c     Temporary printout, checking ray data is on radial mesh.

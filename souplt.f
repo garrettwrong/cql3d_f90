@@ -2,6 +2,7 @@ c
 c
       subroutine souplt
       use param_mod
+      use cqcomm_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -9,7 +10,6 @@ c..................................................................
 c     contour plots the ion source.
 c..................................................................
 
-      include 'comm.h'
 
       REAL RILIN
       REAL RTAM1(jx),RTAM2(jx)
@@ -79,12 +79,12 @@ c
 c=======================================================================
       subroutine pltsofvv
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Calculates the pitch angle integrated source
 c**********************
 c
-      include 'comm.h'
 
       REAL RILIN, RXMAXQ
       REAL RTAM1(jx),RTAM2(jx), wk_tam(jx)
@@ -262,6 +262,7 @@ c
 c=======================================================================
       subroutine pltso_theta
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c     YuP[06-2016]
 c     Calculates and plots the speed-integrated source,
@@ -269,7 +270,6 @@ c     as a function of pitch angle theta0 at the midplane
 c     Called for every flux surface lr_ (lr_ is stored in comm.h)
 c**********************
 c
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       REAL RILIN

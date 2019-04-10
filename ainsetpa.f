@@ -2,6 +2,7 @@ c
 c
       subroutine ainsetpa
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -25,7 +26,6 @@ c     and some real*8 numbers used in subroutine arguments.
 c..................................................................
 
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 c.......................................................................

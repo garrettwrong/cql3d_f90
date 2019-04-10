@@ -1,6 +1,7 @@
 c
       subroutine bavdens(k)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -9,7 +10,6 @@ c     This routine computes the bounce average of certain
 c     density related quantities.
 c.............................................................
 
-      include 'comm.h'
 
       do 1 i=1,iy
         bavdn(i,lr_)=reden(k,lr_)

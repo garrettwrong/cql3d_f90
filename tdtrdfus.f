@@ -2,6 +2,7 @@ c
 c
       subroutine tdtrdfus
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -22,7 +23,6 @@ c    a d_rr computed in this subroutine and the grids.
 c    (Also, d_r advection is subsequently added.)
 c..............................................................
 
-      include 'comm.h'
 c%OS
       dimension drshape(0:lrz), rhotr(0:lrz)
 
@@ -191,6 +191,7 @@ c
 c
       real*8 function tdtrrshape(lr)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -200,7 +201,6 @@ c     Coefficients in the following expression are input
 c     throught the namelist variable difus_rshape(1:7).
 c.......................................................................
 
-      include 'comm.h'
 c 
       if (lr.eq.0) then
 
@@ -243,6 +243,7 @@ c
 c
       real*8 function tdtrrshape1(lr)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -252,7 +253,6 @@ c     Coefficients in the following expression are input
 c     throught the namelist variable difus_rshape(1:7).
 c.......................................................................
 
-      include 'comm.h'
 c 
       if (lr.eq.0) then
 
@@ -292,6 +292,7 @@ c
 c
       subroutine tdtrvshape(k,l)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -307,7 +308,6 @@ c     (not momentum-per-mass) normalized to central thermal
 c     velocity vth(k,1), with value 1.0 at the thermal vel.
 c.......................................................................
 
-      include 'comm.h'
 
       real*8 l_autocorr,lambda_mfp
 
@@ -348,6 +348,7 @@ c
 c
       real*8 function coll_freq(vel,k,lr)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -360,7 +361,6 @@ c     less than the magnetic fluctuation autocorrelation length,
 c     generally for velocites much less that vth.
 c.......................................................................
 
-      include 'comm.h'
 
       real*8 lnlambda
 
@@ -409,6 +409,7 @@ c     perp. deflection time
         
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -441,6 +442,7 @@ c.......................................................................
 
       subroutine diffus_io(kopt)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -454,7 +456,6 @@ c     kopt=3:  read d_rr
 c     kopt=4:  read d_rr,d_r
 c.......................................................................
 
-      include 'comm.h'
       include 'netcdf.inc'
 
 c --- some stuff for netCDF file ---
@@ -969,8 +970,8 @@ c
 c
       real*8 function difus_io_scale(k,iopt)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'comm.h'
 
 c......................................................................
 c     Returns t-dependent scale factor for radial diffusion drr 

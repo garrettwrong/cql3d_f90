@@ -2,6 +2,7 @@ c
 c
       subroutine tdtrvtor(f1,f2)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -11,7 +12,6 @@ c     on which the transport is done. The new distribution is f2
 c     and it has the same density as f1 (particle conserving).
 c..............................................................
 
-      include 'comm.h'
 
       dimension f1(0:iyp1,0:jxp1,ngen,0:*)
       dimension f2(0:iyp1,0:jxp1,ngen,0:*)

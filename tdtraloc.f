@@ -2,13 +2,13 @@ c
 c
       subroutine tdtraloc
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
 c     Allocates arrays used by transport routines.
 c..............................................................
 
-      include 'comm.h'
 c.......................................................................
 
       lnyxgrz=(iyp1+1)*(jxp1+1)*ngen*(lrz+1)

@@ -2,6 +2,7 @@ c
 c
       subroutine sourcee
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -18,7 +19,6 @@ c     Also, calls Knock On source modules, if specified.
 c..................................................................
 
       save
-      include 'comm.h'
 
 
 c..................................................................

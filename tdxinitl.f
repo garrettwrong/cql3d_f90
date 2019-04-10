@@ -2,13 +2,13 @@ c
 c
       subroutine tdxinitl
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c..................................................................
 c     This routine "fills in" input data parabolically. It also
 c     computes the normalized radial mesh.
 c..................................................................
-      include 'comm.h'
 CMPIINSERT_INCLUDE     
 
       dimension titmp(250),detmp(250)

@@ -2,9 +2,9 @@ c
 c
       subroutine sigsetup
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
 c     Written by m.g. mccoy, revised for cql3d by bobH (dec94).

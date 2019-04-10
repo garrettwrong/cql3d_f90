@@ -2,12 +2,12 @@ c
 c
       subroutine tdeqdsk
       use param_mod
+      use cqcomm_mod
       use equilib_mod, only : ncoila, nccoila, pcvac, ccoil, ncoil
 
       implicit integer (i-n), real*8 (a-h,o-z)
       save
       parameter (niterate=20)
-      include 'comm.h'
 
       dimension fpsiareq(nnra),ffpareq(nnra),prareq(nnra),
      1  ppareq(nnra),q(nnra),eqpsi_(nconteqa),d2q_(nconteqa)

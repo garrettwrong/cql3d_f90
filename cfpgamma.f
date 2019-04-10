@@ -2,6 +2,7 @@ c
 c
       subroutine cfpgamma
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -12,7 +13,6 @@ c     or 17.) is used.  Should re-investigate ln(Lambda) expressions.
 c     Compare/code NRL formulary expressions.
 c.......................................................................
 
-      include 'comm.h'
 
 
 c..................................................................

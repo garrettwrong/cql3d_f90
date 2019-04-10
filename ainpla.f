@@ -3,6 +3,7 @@ c
 c
       subroutine ainpla
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -12,7 +13,6 @@ c     on the whole lrzmax radial mesh
 c     (some where defined in diaggnde before)
 c.............................................................
 
-      include 'comm.h'
 
 c.......................................................................
 cl    1. Energy, v-thermal

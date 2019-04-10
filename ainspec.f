@@ -2,6 +2,7 @@ c
 c
       subroutine ainspec
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -39,7 +40,6 @@ c    beginning of the Maxwellian ion species.
 
 c.......................................................................
 
-      include 'comm.h'
 CMPIINSERT_INCLUDE
 
       ntotal=ngen+nmax

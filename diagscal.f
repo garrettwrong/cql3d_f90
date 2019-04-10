@@ -2,6 +2,7 @@ c
 c
       subroutine diagscal(k)
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -11,7 +12,6 @@ c     It is used only if lbdry(k)="scale" or "consscal" (which uses
 c     conservative differencing at v=0 and scaling of density).
 cyup140806: Prior, it was only enabled for lbdry(k)="scale".
 c..................................................................
-      include 'comm.h'
 
       ratio(k,lr_)=1.
 cyup+bh140806: Enable new "consscal" option

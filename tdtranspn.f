@@ -1,8 +1,8 @@
       subroutine tdtranspn
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       dimension  zmatcont(12), janelt(12)
-      include 'comm.h'
       include 'trans.h'
       save ifirst
       data ifirst /1/

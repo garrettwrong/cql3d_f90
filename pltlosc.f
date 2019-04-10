@@ -2,6 +2,7 @@ c
 c
       subroutine pltlosc
       use param_mod
+      use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Plot contours of the loss region..
@@ -9,7 +10,6 @@ c
 c     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 c     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 c
-      include 'comm.h'
 
       if (noplots.eq."enabled1") return
 
