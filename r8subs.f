@@ -66,6 +66,7 @@ c
 
       module r8subs_mod
       ! CLAENV
+      use cqcomm_mod
       integer, private :: IPARMS(100)
       save
 

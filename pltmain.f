@@ -235,7 +235,7 @@ c---------------------------------------------------------------------
 c---------------------------------------------------------------------
       subroutine gsvp2d(xmin,xmax,ymin,ymax) ! called explicitly with real*4 args
       ! xmin,...defines where on the frame the data is plotted. 
-      real*4 xmin,xmax,ymin,ymax
+      REAL*8 xmin,xmax,ymin,ymax
       REAL*4 PGxmin,PGxmax,PGymin,PGymax ! PGPLOT uses REAL*4
         PGxmin = xmin
         PGxmax = xmax
@@ -361,7 +361,7 @@ c current window. The new pen position is (X,Y) in world coordinates.
 c---------------------------------------------------------------------
       subroutine gslnsz(size) ! called explicitly with real*4 args
       ! set line size (width), where 0. is the default.
-      real*4 size
+      real*8 size
       INTEGER  LW
       LW = int(size*10. + 1.) !-YuP: Not sure if this conversion is ok
         CALL PGSLW(LW)

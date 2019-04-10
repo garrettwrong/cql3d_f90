@@ -4,9 +4,10 @@ SHELL     = /bin/sh
 NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
-INCLUDES  = comm.h frcomm.h frname.h frname_decl.h name.h  \
+INCLUDES  = frcomm.h frname.h frname_decl.h name.h  \
 	trans.h wpadvnc.h name_decl.h
-SOURCES  =   param.f03 advnce.f03 a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
+SOURCES  =   param.f03 cqcomm.f advnce.f03 pltmain.f \
+        a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
 	ainsetpa.f  ainsetva.f  ainspec.f  ainvnorm.f ampfar.f \
@@ -36,10 +37,10 @@ SOURCES  =   param.f03 advnce.f03 a_cqlp.f  abchief.f  achief1.f  achiefn.f  acl
 	losstor.f  micgetr.f   \
 	micgmbnd.f  micgnbnd.f  micxinil.f  micxinim.f  micxinit.f  \
 	micxiniz.f  netcdfrf.f  netcdfrw2.f ntdstore.f   \
-	ntloop.f  pack21.f  pltcont.f  pltcycl.f  pltdf.f  \
+	ntloop.f  pack21.f pltcont.f  pltcycl.f  pltdf.f  \
 	pltdnz.f  pltelec.f  pltendn.f   \
 	pltends.f  pltfluxs.f pltfofvv.f pltfvsv.f  pltinit.f  pltlosc.f  \
-	pltmain.f  pltpower.f  pltprppr.f   \
+	pltpower.f  pltprppr.f   \
 	pltrstv.f  pltrun.f pltstrml.f  pltvec.f  pltvectr.f  \
 	pltvflux.f  profaxis.f  profiles.f prppr.f   \
 	prpprctr.f  psif.f  psifp.f  psifppy.f  psifpy.f  psiinv.f  \
@@ -91,7 +92,7 @@ INCLUDE   =/usr/local/include
 DEBUG     = -g 
 OPTIMIZE  = -O1
 LISTING   = -Mlist
-CSPECIAL  = 
+CSPECIAL  = -fdefault-real-8  -fdefault-double-8 
 SPECIAL   = -byteswapio -Mbackslash
 LDSPECIAL =
 COMPILE   =  $(COMPILER) -c $(CSPECIAL) $(OPTIMIZE) -I $(INCLUDE) # or use $(DEBUG)

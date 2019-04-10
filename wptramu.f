@@ -3,6 +3,8 @@ c
       subroutine wptramu
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : cvmgt
+
       implicit integer (i-n), real*8 (a-h,o-z)
 c..............................................................
 c     Time advancement for parallel transport. (meshy="fixed_mu" case)

@@ -1,9 +1,9 @@
 c
 c
       subroutine eqorbit(epsicon_)
-      implicit integer (i-n), real*8 (a-h,o-z)
       use param_mod
       use cqcomm_mod
+      implicit integer (i-n), real*8 (a-h,o-z)
       save
 
       dimension slrz(2),rwork(80),iwork(30),epsierr(lfielda)

@@ -2,7 +2,9 @@ c
 c
       subroutine tdtrdfus
       use param_mod
-      use cqcomm_mod
+      use cqcomm_mod, only : d_rr, mnemonic, lrz
+      use cqcomm_mod, only : transp, difus_io, difus_type
+
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -191,7 +193,7 @@ c
 c
       real*8 function tdtrrshape(lr)
       use param_mod
-      use cqcomm_mod
+      !use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -243,7 +245,7 @@ c
 c
       real*8 function tdtrrshape1(lr)
       use param_mod
-      use cqcomm_mod
+      !use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -292,7 +294,7 @@ c
 c
       subroutine tdtrvshape(k,l)
       use param_mod
-      use cqcomm_mod
+      use cqcomm_mod, only : gamma, temp1
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -348,7 +350,7 @@ c
 c
       real*8 function coll_freq(vel,k,lr)
       use param_mod
-      use cqcomm_mod
+      use cqcomm_mod, only : bnumb
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -409,7 +411,7 @@ c     perp. deflection time
         
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
-      use cqcomm_mod
+      !use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -442,7 +444,8 @@ c.......................................................................
 
       subroutine diffus_io(kopt)
       use param_mod
-      use cqcomm_mod
+      use cqcomm_mod, only : difus_io, d_rr, d_r
+      use cqcomm_mod, only : temp1, difus_io_file, mnemonic, t_
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -970,7 +973,7 @@ c
 c
       real*8 function difus_io_scale(k,iopt)
       use param_mod
-      use cqcomm_mod
+      !use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c......................................................................

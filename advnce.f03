@@ -6,6 +6,8 @@
 !..................................................................
 
 module advnce_mod
+  use cqcomm_mod
+  use r8subs_mod, only : cvmgt
 
 contains
 
@@ -110,7 +112,6 @@ contains
   end function cdf
 
   function delx(i,j) 
-    use r8subs_mod, only : cvmgt
     use iso_c_binding, only : c_double
     real(c_double) :: delx
     delx = cvmgt( DBLE(&
