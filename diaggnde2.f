@@ -3,6 +3,7 @@ c
       subroutine diaggnde2
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dscal, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -47,7 +48,7 @@ c..................................................................
 
 c     compute Legendre decomposition from temp3 to tam1
 c     m=0 contribution
-        call dcopy(iyjx2,f(0,0,k,l_),1,temp3(0,0),1)
+        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp3(0:iyjx2-1,0),1)
         call cfpleg(0,ilegen,1)
         do 10 j=1,jx
           tam11(j)=tam1(j)*4.*pi
@@ -182,7 +183,7 @@ c..................................................................
           if (cqlpmod .eq. "enabled") zfact=gni*denpar(k,ls_)
 cBH070414  if (.not. nlrestrt) call dscal(iyjx2,zfact,f(0,0,k,l_),1)
           if (nlrestrt.eq."disabled") 
-     1         call dscal(iyjx2,zfact,f(0,0,k,l_),1)
+     1         call dscal(iyjx2,zfact,f(0:iyjx2-1,0,k,l_),1)
 
 c..................................................................
 c     xlndn is the field line density (particles/cm**2)
@@ -233,8 +234,8 @@ c..................................................................
           if (l_ .eq. lmdpln_) curr(k,lr_)=currm(k,l_)*psifct
           fgni=faccur*psifct/3.e+9
           if (cqlpmod .eq. "enabled") fgni=faccur/3.e+9
-          call dscal(jx,fgni,currv(1,k,l_),1)
-          call dscal(jx,fgni,currvs(1,k),1)
+          call dscal(jx,fgni,currv(1:jx,k,l_),1)
+          call dscal(jx,fgni,currvs(1:jx,k),1)
 
 c..................................................................
 c     Standard, non-initialization time step logic follows..
@@ -257,8 +258,8 @@ c     currmtp(l_) adds in general local in s electron contribution to currm
 c..................................................................
 
           facpsi=faccur*psifct
-          call dscal(jx,facpsi,currv(1,k,l_),1)
-          call dscal(jx,facpsi,currvs(1,k),1)
+          call dscal(jx,facpsi,currv(1:jx,k,l_),1)
+          call dscal(jx,facpsi,currvs(1:jx,k),1)
           currm(k,l_)=faccur*cn
           currmtp(l_)=currmtp(l_)+currm(k,l_)
           denpar(k,ls_)=one_*gn

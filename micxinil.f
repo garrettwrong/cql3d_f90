@@ -3,6 +3,7 @@ c
       subroutine micxinil
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dscal
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c..................................................................
@@ -482,10 +483,10 @@ c.......................................................................
 
  360  continue
 
-      call dscal(iy*lz*mmxp1,-one,dpcosz(1,1,0,lr_),1)
+      call dscal(iy*lz*mmxp1,-one,dpcosz(1:iy*lz*mmxp1,1,0,lr_),1)
 cBH110330:  Doesn't look like waa and wbb are used for anything?
-      call dscal(lz*mxp1,-one,waa(1,0,lr_),1)
-      call dscal(lz*mxp1,-one,wbb(1,0,lr_),1)
+      call dscal(lz*mxp1,-one,waa(1:lz*mxp1,0,lr_),1)
+      call dscal(lz*mxp1,-one,wbb(1:lz*mxp1,0,lr_),1)
 
 
 

@@ -251,10 +251,11 @@ c YTOP   (input)  : y-coordinate of top  edge of viewport, in NDC.
       end
 c---------------------------------------------------------------------
       subroutine gswd2d(scales,xmin,xmax,ymin,ymax) ! NOT USED ANYMORE?
+      use r8subs_mod, only : rbound
       ! xmin,... defines the user coordinate system.            
       implicit integer (i-n), real*8 (a-h,o-z)
       REAL*4 PGxmin,PGxmax,PGymin,PGymax, RPG1,RPG2 ! PGPLOT uses REAL*4
-      REAL*4 RBOUND
+      !REAL*4 RBOUND
       character*7 scales ! = "linlin$" or "linlog$","loglin$","loglog$"
         scale  = scales ! To gpcv2d -> PGLINE
         PGxmin = RBOUND(xmin)

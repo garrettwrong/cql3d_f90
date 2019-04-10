@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use advnce_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 
@@ -53,7 +54,7 @@ c     Initialize..
 c..................................................................
 
 
-      call dcopy(iyjx2,f(0,0,k,l_),1,temp2(0,0),1)
+      call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp2(0:iyjx2-1,0),1)
       sgain(1,k)=0.
       sgain(2,k)=0.
       sgain(3,k)=0.
@@ -176,7 +177,7 @@ c..................................................................
 c     if ineg="enabled" or "enabled1" or "trunc_d", set f.le.0 to zero.
 c..................................................................
 
-      call dcopy(iyjx2,temp2(0,0),1,temp1(0,0),1)
+      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
       call bcast(temp4,zero,iyjx2)
 
       if (ineg .eq. "disabled") go to 141
@@ -265,7 +266,7 @@ c990131          fmax=amax1(ffmax,fmax)
 
         if(fmin.lt.0.) then
 c     calculate line average density of f
-          call dcopy(iyjx2,temp1(0,0),1,temp4(0,0),1)
+          call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
           call diagdens(xline0,xmidp0,eline0)
 c     add 1.1*fmin to f
           fadd=1.1*abs(fmin)
@@ -275,7 +276,7 @@ c     add 1.1*fmin to f
  521        continue
  520      continue
 c     recalculate density
-          call dcopy(iyjx2,temp1(0,0),1,temp4(0,0),1)
+          call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
           call diagdens(xline1,xmidp1,eline1)
 c         renormalize f to old density
           ffac=xline0/xline1
@@ -302,7 +303,7 @@ CMPIINSERT_IF_RANK_EQ_0
      + 'diagimpd neg.val.adjusted n,l_,MIN(temp1),MAX(temp1)',
      +   n,l_,MINVAL(temp1),MAXVAL(temp1)
 CMPIINSERT_ENDIF_RANK
-      call dcopy(iyjx2,temp1(0,0),1,f(0,0,k,l_),1)
+      call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,f(0:iyjx2-1,0,k,l_),1)
 CMPIINSERT_IF_RANK_EQ_0      
       WRITE(*,'(a,2i4,3e15.7)')
      + 'diagimpd AFTER  f update. n,l_,MIN(f),MAX(f),SUM(f)=', 

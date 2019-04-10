@@ -3,6 +3,7 @@ c
       subroutine soup(cosi,l,kk,m)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dscal, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -78,7 +79,7 @@ c..................................................................
           soupp(j,lr_)=(tam7(j)+tam8(j))*.5
  12     continue
       else
-        call dcopy(jx,tam7,1,soupp(1,lr_),1)
+        call dcopy(jx,tam7,1,soupp(1:jx,lr_),1)
       endif
 
 c..................................................................
@@ -88,7 +89,7 @@ c..................................................................
       if (isounor .ne. 1) then
         facz=exp(-(zl-zm1(kk,m,lr_))**2/zm2(kk,m,lr_))
         call dscal(jx,facz*sounor(kk,m,l,lr_)*asor(kk,m,lr_),
-     1    soupp(1,lr_),1)
+     1    soupp(1:jx,lr_),1)
       endif
       return
       end

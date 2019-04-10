@@ -3,6 +3,7 @@ c
       subroutine coefmidv(c,nn)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dscal
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -25,12 +26,12 @@ c..................................................................
       if (nn .eq. 1) then
 c     note: x(jx)=1.
         do 110 j=2,jx-1
-          call dscal(iy,x3i(j),c(1,j),1) !Note: x3i(j)=one/x(j)**3
+          call dscal(iy,x3i(j),c(1:iy,j),1) !Note: x3i(j)=one/x(j)**3
  110    continue
         call dcopy(iy,c(1,2),1,c(1,1),1)
       elseif (nn .eq. 2) then
         do 120 j=2,jx-1
-          call dscal(iy,x2i(j),c(1,j),1) !Note: x2i(j)=one/x(j)**2
+          call dscal(iy,x2i(j),c(1:iy,j),1) !Note: x2i(j)=one/x(j)**2
  120    continue
         call dcopy(iy,c(1,2),1,c(1,1),1)
       endif
@@ -119,11 +120,11 @@ c..................................................................
 
       if (nn .eq. 1) then
         do 210 j=1,jx-1
-          call dscal(iy,xcent3(j),c(1,j),1) ! xcent3(j)=xcenter(j)**3
+          call dscal(iy,xcent3(j),c(1:iy,j),1) ! xcent3(j)=xcenter(j)**3
  210    continue
       elseif (nn .eq. 2) then
         do 220 j=1,jx-1
-          call dscal(iy,xcensq(j),c(1,j),1) ! xcensq(j)=xcenter(j)**2
+          call dscal(iy,xcensq(j),c(1:iy,j),1) ! xcensq(j)=xcenter(j)**2
  220    continue
       endif
       

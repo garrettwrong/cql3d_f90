@@ -3,7 +3,7 @@ c
       subroutine tdsxrplt(en,eflux,nen,nenaa,
      +                    efluxt,nv,inegsxr,softxry,lnwidth)
       use param_mod
-      !use cqcomm_mod
+      use r8subs_mod, only : rbound
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -12,8 +12,8 @@ CMPIINSERT_INCLUDE
 
       REAL*4 RTAM1(nena),RTAM2(nena)
       REAL*4 REMAX,REMIN
-cBH092022:
-      REAL*4 RBOUND
+cBH092022: XXX
+      !REAL*4 RBOUND
 
 c..................................................................
 cmnt  this routine plots SXR/NPA energy/particle flux spectra 
@@ -149,7 +149,7 @@ c
 c
       subroutine tdsxrvw(tempp4,tempp5,tempp6)
       use param_mod
-      use cqcomm_mod, only : eqsym, softxry
+      use cqcomm_mod, only : eqsym, softxry, ez, er
       implicit integer (i-n), real*8 (a-h,o-z)
 CMPIINSERT_INCLUDE
 

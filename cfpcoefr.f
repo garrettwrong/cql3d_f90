@@ -3,7 +3,7 @@ c
       subroutine cfpcoefr
       use param_mod
       use cqcomm_mod
-      use r8subs_mod, only : daxpy
+      use r8subs_mod, only : daxpy, dscal
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c..................................................................
@@ -845,14 +845,14 @@ c.......................................................................
             endif
             anr1=gama(kk,k)*satioz2(k,kk)*one_
             if (anr1.lt.em90) goto 490
-            call dscal(iyjx,anr1,ca(1,1),1) !-YuP: size of ca..cf: iy*jx
-            call dscal(iyjx,anr1,cb(1,1),1)
-            call dscal(iyjx,anr1,cc(1,1),1)
-            call dscal(iyjx,anr1,cd(1,1),1)
-            call dscal(iyjx,anr1,ce(1,1),1)
-            call dscal(iyjx,anr1,cf(1,1),1)
-            call dscal(iyjx,satiom(kk,k),ca(1,1),1)
-            call dscal(iyjx,satiom(kk,k),cd(1,1),1)
+            call dscal(iyjx,anr1,ca(1:iyjx,1),1) !-YuP: size of ca..cf: iy*jx
+            call dscal(iyjx,anr1,cb(1:iyjx,1),1)
+            call dscal(iyjx,anr1,cc(1:iyjx,1),1)
+            call dscal(iyjx,anr1,cd(1:iyjx,1),1)
+            call dscal(iyjx,anr1,ce(1:iyjx,1),1)
+            call dscal(iyjx,anr1,cf(1:iyjx,1),1)
+            call dscal(iyjx,satiom(kk,k),ca(1:iyjx,1),1)
+            call dscal(iyjx,satiom(kk,k),cd(1:iyjx,1),1)
 c.......................................................................
 c     Note: At this point, ca, ..,cf(i,j) are the coeff. from gen. species k
 c     at a given orbit position l.
@@ -931,14 +931,14 @@ cBH091031 440            continue
  485          continue
             endif
 
-            call dscal(iyjx,one/anr1,ca(1,1),1) !-YuP: size of ca..cf: iy*jx
-            call dscal(iyjx,one/anr1,cb(1,1),1)
-            call dscal(iyjx,one/anr1,cc(1,1),1)
-            call dscal(iyjx,one/anr1,cd(1,1),1)
-            call dscal(iyjx,one/anr1,ce(1,1),1)
-            call dscal(iyjx,one/anr1,cf(1,1),1)
-            call dscal(iyjx,one/satiom(kk,k),ca(1,1),1)
-            call dscal(iyjx,one/satiom(kk,k),cd(1,1),1)
+            call dscal(iyjx,one/anr1,ca(1:iyjx,1),1) !-YuP: size of ca..cf: iy*jx
+            call dscal(iyjx,one/anr1,cb(1:iyjx,1),1)
+            call dscal(iyjx,one/anr1,cc(1:iyjx,1),1)
+            call dscal(iyjx,one/anr1,cd(1:iyjx,1),1)
+            call dscal(iyjx,one/anr1,ce(1:iyjx,1),1)
+            call dscal(iyjx,one/anr1,cf(1:iyjx,1),1)
+            call dscal(iyjx,one/satiom(kk,k),ca(1:iyjx,1),1)
+            call dscal(iyjx,one/satiom(kk,k),cd(1:iyjx,1),1)
  490      continue
 
 c     end of loop over gen. species k
@@ -968,16 +968,16 @@ c..................................................................
       if (madd .eq. 2) call cfpsymt
       
       do 2000 k=1,ngen
-        call dscal(iyjx,one/tnorm(k),cal(1,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),cbl(1,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),ccl(1,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),cdl(1,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),cel(1,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),cfl(1,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),eal(1,1,k,1,l_),1)
-        call dscal(iyjx,one/tnorm(k),ebl(1,1,k,1,l_),1)
-        call dscal(iyjx,one/tnorm(k),eal(1,1,k,2,l_),1)
-        call dscal(iyjx,one/tnorm(k),ebl(1,1,k,2,l_),1)
+        call dscal(iyjx,one/tnorm(k),cal(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),cbl(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),ccl(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),cdl(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),cel(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),cfl(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),eal(1:iyjx,1,k,1,l_),1)
+        call dscal(iyjx,one/tnorm(k),ebl(1:iyjx,1,k,1,l_),1)
+        call dscal(iyjx,one/tnorm(k),eal(1:iyjx,1,k,2,l_),1)
+        call dscal(iyjx,one/tnorm(k),ebl(1:iyjx,1,k,2,l_),1)
 c..................................................................
 c     For the case that colmodl=3, a positive definite operator
 c     is not guaranteed. This is a bastardized, hybrid collisional

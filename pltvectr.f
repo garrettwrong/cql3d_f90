@@ -1,6 +1,7 @@
 c
 c
       subroutine pltvectr(xt,yt,xh,yh,rheads,jpxy,ipxy,veclen,noplots)
+      use r8subs_mod, only : rbound
       implicit integer (i-n), real*8 (a-h,o-z)
       character*8 noplots
       save
@@ -18,7 +19,7 @@ c
 c     
       REAL*4 RPX1,RPY1,RPX2,RPY2
       REAL*4 ANGLE,BARB,SIZE
-      REAL*4 RBOUND
+      !XXX REAL*4 RBOUND
 cBH011228 Modifications for plotting with PGPLOT,  011228.
 
       ep90=1.d+90

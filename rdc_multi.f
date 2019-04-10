@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use netcdfrf_mod, only : netcdf_rdcb
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -508,10 +509,14 @@ c......................................................................
 
          do i_psi=1,n_psi
 
-            call dcopy(n_upar*n_uprp,rdc_cqlb(1,1,i_psi),1,ddd(1,1,1),1)
-            call dcopy(n_upar*n_uprp,rdc_cqlc(1,1,i_psi),1,ddd(1,1,2),1)
-            call dcopy(n_upar*n_uprp,rdc_cqle(1,1,i_psi),1,ddd(1,1,3),1)
-            call dcopy(n_upar*n_uprp,rdc_cqlf(1,1,i_psi),1,ddd(1,1,4),1)
+            call dcopy(n_upar*n_uprp,rdc_cqlb(1:n_upar*n_uprp,1,i_psi)
+     +           ,1,ddd(1:n_upar*n_uprp,1,1),1)
+            call dcopy(n_upar*n_uprp,rdc_cqlc(1:n_upar*n_uprp,1,i_psi)
+     +           ,1,ddd(1:n_upar*n_uprp,1,2),1)
+            call dcopy(n_upar*n_uprp,rdc_cqle(1:n_upar*n_uprp,1,i_psi)
+     +           ,1,ddd(1:n_upar*n_uprp,1,3),1)
+            call dcopy(n_upar*n_uprp,rdc_cqlf(1:n_upar*n_uprp,1,i_psi)
+     +           ,1,ddd(1:n_upar*n_uprp,1,4),1)
 
          do kk=1,3
          do j=1,n_uprp
@@ -554,10 +559,14 @@ c......................................................................
          enddo
 
 
-            call dcopy(n_upar*n_uprp,ddd(1,1,1),1,rdc_cqlb(1,1,i_psi),1)
-            call dcopy(n_upar*n_uprp,ddd(1,1,2),1,rdc_cqlc(1,1,i_psi),1)
-            call dcopy(n_upar*n_uprp,ddd(1,1,3),1,rdc_cqle(1,1,i_psi),1)
-            call dcopy(n_upar*n_uprp,ddd(1,1,4),1,rdc_cqlf(1,1,i_psi),1)
+            call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,1),1,
+     +        rdc_cqlb(1:n_upar*n_uprp,1,i_psi),1)
+            call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,2),1,
+     +           rdc_cqlc(1:n_upar*n_uprp,1,i_psi),1)
+            call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,3),1,
+     +           rdc_cqle(1:n_upar*n_uprp,1,i_psi),1)
+            call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,4),1,
+     +           rdc_cqlf(1:n_upar*n_uprp,1,i_psi),1)
 
          enddo  ! On i_psi
 
@@ -578,10 +587,14 @@ c  We assume here that upar grid is symmetric about parallel vel 0.
 
       if (rdc_upar_sign.lt.0.d0) then
          do i_psi=1,n_psi
-            call dcopy(n_upar*n_uprp,rdc_cqlb(1,1,i_psi),1,tmpb,1)
-            call dcopy(n_upar*n_uprp,rdc_cqlc(1,1,i_psi),1,tmpc,1)
-            call dcopy(n_upar*n_uprp,rdc_cqle(1,1,i_psi),1,tmpe,1)
-            call dcopy(n_upar*n_uprp,rdc_cqlf(1,1,i_psi),1,tmpf,1)
+            call dcopy(n_upar*n_uprp,rdc_cqlb(1:n_upar*n_uprp,1,i_psi)
+     +           ,1,tmpb,1)
+            call dcopy(n_upar*n_uprp,rdc_cqlc(1:n_upar*n_uprp,1,i_psi)
+     +           ,1,tmpc,1)
+            call dcopy(n_upar*n_uprp,rdc_cqle(1:n_upar*n_uprp,1,i_psi)
+     +           ,1,tmpe,1)
+            call dcopy(n_upar*n_uprp,rdc_cqlf(1:n_upar*n_uprp,1,i_psi)
+     +           ,1,tmpf,1)
             do i_upar=1,n_upar
                i_uparinv=n_upar-(i_upar-1)
                do i_uprp=1,n_uprp

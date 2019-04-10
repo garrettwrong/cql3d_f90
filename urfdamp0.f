@@ -3,6 +3,7 @@ c
       subroutine urfdamp0(irfpwr,kopt)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 cyup      save
 
@@ -307,7 +308,8 @@ c        endif ! if (irffile.eq.'combined')
       if (maxmodes.gt.1) then
         do 600 kk=2,maxmodes
           kkk=krf+kk-1
-          call dcopy(nrayn*nrayelts,delpwr(1,1,krf),1,delpwr(1,1,kkk),1)
+          call dcopy(nrayn*nrayelts,delpwr(1:nrayn*nrayelts,1,krf),1,
+     +         delpwr(1:nrayn*nrayelts,1,kkk),1)
           do iray=1,nrayn
              nrayelt0(iray,kkk)=nrayelt0(iray,krf)
           enddo

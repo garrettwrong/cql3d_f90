@@ -3,6 +3,7 @@ c
       subroutine diagscal(k)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dscal, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -21,8 +22,8 @@ c..................................................................
 c     Compute the new density..
 c..................................................................
 
-      call dcopy(iyjx2,f(0,0,k,l_),1,temp2(0,0),1)
-      call dcopy(iyjx2,temp2(0,0),1,temp1(0,0),1)
+      call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp2(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2,0),1)
       call bcast(tam1,zero,jx)
       call bcast(tam4,zero,jx)
 
@@ -116,7 +117,7 @@ cYuP,BH180918: adding enein_t
          enddo ! j
       else  !---> nbctime=0 (not a time-dependent profile)
          ratio(k,lr_)=xlndn00(k,lr_)/runden ! field-line-aver <n>
-         call dscal(iyjx2,ratio(k,lr_),f(0,0,k,l_),1) !rescale f
+         call dscal(iyjx2,ratio(k,lr_),f(0:iyjx2-1,0,k,l_),1) !rescale f
 c         write(*,'(a,3i4,3e13.5)')'diagscal: n,k,lr,xlndn00,runden,gn',
 c     +                               n,k,lr_,xlndn00(k,lr_),runden,gn
          write(*,'(a,3i4,e13.5)')

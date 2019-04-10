@@ -3,6 +3,7 @@ c
       subroutine diaggnde
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dscal
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -240,7 +241,7 @@ CMPIINSERT_ENDIF_RANK
      +         .or. (fpld(1,1).eq.-1.0)) then
              continue
           else
-             call dscal(iyjx2,zfact,f(0,0,k,l_),1)
+             call dscal(iyjx2,zfact,f(0:iyjx2-1,0,k,l_),1)
           endif
 c          write(*,*)'diaggnde: k,lr_,zfact,reden(k,lr_)=',
 c     +                         k,lr_,zfact,reden(k,lr_)
@@ -309,8 +310,8 @@ c..................................................................
 
           fgni=faccur*psifct/3.e+9
           if (cqlpmod .eq. "enabled") fgni=faccur/3.e+9
-          call dscal(jx,fgni,currv(1,k,l_),1)
-          call dscal(jx,fgni,currvs(1,k),1)
+          call dscal(jx,fgni,currv(1:jx,k,l_),1)
+          call dscal(jx,fgni,currvs(1:jx,k),1)
 
 c..................................................................
 c     Standard, non-initialization time step (n.ne.0) logic follows..
@@ -346,8 +347,8 @@ c..................................................................
           facpsi=faccur*psifct
 c         Scaling units of currv to be statamps/cm**2*vnorm,
 c                          currvs to be statamps/cm**2
-          call dscal(jx,facpsi,currv(1,k,l_),1)
-          call dscal(jx,facpsi,currvs(1,k),1)
+          call dscal(jx,facpsi,currv(1:jx,k,l_),1)
+          call dscal(jx,facpsi,currvs(1:jx,k),1)
           currm(k,l_)=faccur*cn
           curra(k,l_)=faccur*curra(k,l_)
           currmtp(l_)=currmtp(l_)+currm(k,l_)

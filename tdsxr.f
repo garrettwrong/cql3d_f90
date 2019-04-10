@@ -3,6 +3,7 @@ c
       subroutine tdsxr(ien,chi,thpol,ll,edotei,edotee)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 c     This routine computes the BREMSSTRAHLUNG contribution to the
@@ -89,7 +90,7 @@ c     non-relativistic Maxwellian distribution function.
 c....................................................................
 
       if (illcal .eq. 1) then
-        call dcopy(iyjx2,f(0,0,kelec,l_),1,temp2(0,0),1)
+        call dcopy(iyjx2,f(0:iyjx2-1,0,kelec,l_),1,temp2(0:iyjx2-1,0),1)
       else
         zthta=0.5*fmass(kelec)*vnorm**2/(temp(kelec,lr_)*ergtkev)
         zcoef=vnorm**3*reden(kelec,lr_)/
@@ -138,7 +139,7 @@ c......................................................................
 c     Copy the distribution into temp3 (for cfpleg)
 c......................................................................
 
-      call dcopy(iyjx2,temp2(0,0),1,temp3(0,0),1)
+      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
 
       do 20 m=0,msxr
         call bcast(feta(1,m),zero,jx)
@@ -150,7 +151,7 @@ c.......................................................................
 
         jzval=jval_(ien)
         call cfpleg(m,lll,jzval)
-        call dcopy(jx,tam1,1,feta(1,m),1)
+        call dcopy(jx,tam1,1,feta(1:jx,m),1)
 
         if (ione .eq. "yes") go to 30
 
@@ -160,7 +161,7 @@ c.......................................................................
         lm1=lll-1
         jzval=jval_(ien)
         call cfpleg(m,lm1,jzval)
-        call dcopy(jx,tam1,1,fetb(1,m),1)
+        call dcopy(jx,tam1,1,fetb(1:jx,m),1)
         
 cBH110331 Checking feta/b calc in accord with msxr setting.
 c        write(*,*)'tdsxr: m,feta(jx/2:jx/2+5,m),fetb(jx/2:jx/2+5,m)=',

@@ -3,6 +3,7 @@ c
       subroutine tdtrvtor(f1,f2)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................

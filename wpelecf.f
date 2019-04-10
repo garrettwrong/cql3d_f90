@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use advnce_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -78,7 +79,7 @@ c.......................................................................
 cl    2. Compute the new parallel component of the electric field
 c.......................................................................
 
-      call dcopy(ls+2,elparnw(0),1,elparol(0),1)
+      call dcopy(ls+2,elparnw(0:ls+1),1,elparol(0:ls+1),1)
       zsumrho=0.0
       elparnw(1)=elpar0
       zel0cof=elparnw(1)/psipols(1)**2

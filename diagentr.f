@@ -399,7 +399,7 @@ c
       real*8 function gfi(i,j,k)
       use param_mod
       use cqcomm_mod
-      use advnce_mod, only : cl
+      use advnce_mod, only : cl, fpj0, fpj, fpjp
 c..................................................................
 c     Express the velocity flux at (i,j+1/2)
 c..................................................................
@@ -427,7 +427,7 @@ c
       real*8 function gfu(i,j,k)
       use param_mod
       use cqcomm_mod
-      use advnce_mod, only : cdf
+      use advnce_mod, only : cdf, f1j, f2j
 c..................................................................
 c     Define the flux related quantities G ( H not needed for
 c     the power calculation) used in the r.h.s. of the FP eqn.

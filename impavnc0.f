@@ -15,6 +15,7 @@ c
       subroutine impavnc0(kopt)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dgbtrf, dgbtrs, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.................................................................
@@ -2287,7 +2288,8 @@ c_pc    32-bit-compiler uses dgbtrf (from lapack library).
         if (factor .ne. "disabled") then
 c          call sgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
 c          write(*,*)'impavnc0 before dgbtrf, l_,inewjx,ml=',l_,inewjx,ml
-          call dgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
+           ! XXX
+          call dgbtrf(inewjx,inewjx,ml,mu,REAL(abd),md1abd,ipivot,info)
           if (info .ne. 0) then
             print *,' warning after sgbtrf in impavnc0: info = ',info
             stop 'impavnc0 1'
@@ -2306,8 +2308,9 @@ cBH080303        tm1 = etime(tm)
         inbrhs = 1
         transpose = 'n'
 c        call sgbtrs(transpose,inewjx,ml,mu,inbrhs,abd,md1abd,ipivot
-        call dgbtrs(transpose,inewjx,ml,mu,inbrhs,abd,md1abd,ipivot
-     +    ,rhs,inewjx,info)
+        ! XXXX
+        call dgbtrs(transpose,inewjx,ml,mu,inbrhs,REAL(abd),md1abd,
+     +    ipivot,rhs,inewjx,info)
      
         if (info .ne. 0) then
           print *,' warning after sgbtrs in impavnc0: info = ',info
@@ -2482,7 +2485,8 @@ c.......................................................................
            if (icount_ese.eq.1) then
               
 c             Store new f into fh        
-              call dcopy(iyjx2*ngen,f(0,0,1,l_),1,fh(0,0,1,l_),1)
+              call dcopy(iyjx2*ngen,f(0:iyjx2*ngen-1,0,1,l_),1,
+     +             fh(0:iyjx2*ngen-1,0,1,l_),1)
               factor="disabled"
               icount_ese=2
               go to 10
@@ -2496,7 +2500,8 @@ c             Calculate fluxes, restore f with f_, and return.
      +             1,x,coss(1,l_),cynt2(1,l_),cint2,temp1,iy,jx)
               flux2(l_)=fluxpar(
      +             1,x,coss(1,l_),cynt2(1,l_),cint2,temp2,iy,jx)
-              call dcopy(iyjx2*ngen,f_(0,0,1,l_),1,f(0,0,1,l_),1)
+              call dcopy(iyjx2*ngen,f_(0:iyjx2*ngen-1,0,1,l_),1,
+     +             f(0:iyjx2*ngen-1,0,1,l_),1)
               
               go to 999
            endif
@@ -2515,7 +2520,8 @@ c.......................................................................
            if (icount_ampf.eq.1) then
               
 c             Store new f into fh        
-              call dcopy(iyjx2,f(0,0,kelec,l_),1,fh(0,0,1,l_),1)
+              call dcopy(iyjx2,f(0:iyjx2-1,0,kelec,l_),1,
+     +             fh(0:iyjx2-1,0,1,l_),1)
               !YuP[05-2017] corrected dcopy in the above line:
               !was iyjx2*ngen, but we only copy one species (kelec)
               factor="disabled"
@@ -2525,13 +2531,15 @@ c             Store new f into fh
            elseif (icount_ampf.eq.2) then
 
 c             g function is in f, store into fg
-              call dcopy(iyjx2,f(0,0,kelec,l_),1,fg(0,0,1,l_),1)
+              call dcopy(iyjx2,f(0:iyjx2-1,0,kelec,l_),1,
+     +             fg(0:iyjx2-1,0,1,l_),1)
               !YuP[05-2017] corrected dcopy in the above line:
               !was iyjx2*ngen, but we only copy one species (kelec)
 cBH170312:  Checking effect of zeroing correction part of distn:
 cBH170312:              call bcast(fg(0,0,1,l_),zero,iyjx2*ngen)
 c             Restore f with f_, and return.
-              call dcopy(iyjx2,f_(0,0,kelec,l_),1,f(0,0,kelec,l_),1)
+              call dcopy(iyjx2,f_(0:iyjx2-1,0,kelec,l_),1,
+     +             f(0:iyjx2-1,0,kelec,l_),1)
               !YuP[05-2017] corrected dcopy in the above line:
               !was iyjx2*ngen, but we only copy one species (kelec)
               go to 999

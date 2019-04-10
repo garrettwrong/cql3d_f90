@@ -3,6 +3,7 @@ c
       subroutine urfmidv_db(jmin,jmax)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c..................................................................
@@ -26,7 +27,7 @@ c..................................................................
             db(i,j)=db(i,j)/xsq(j)
  120      continue
  110    continue
-        call dcopy(iy,db(1,2),1,db(1,1),1)
+        call dcopy(iy,db(1:iy,2),1,db(1:iy,1),1)
 
 c     This averaging extends diffusion coeff range to jmin-1:
       do 2 j=jminm,jmax0

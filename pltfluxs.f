@@ -6,6 +6,7 @@ c
       use cqcomm_mod
       use advnce_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
+      use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...................................................................

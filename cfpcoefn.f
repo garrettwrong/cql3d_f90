@@ -3,7 +3,7 @@ c
       subroutine cfpcoefn
       use param_mod
       use cqcomm_mod
-      use r8subs_mod, only : daxpy
+      use r8subs_mod, only : daxpy, dscal
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 ccc      real*8,dimension(iy):: prnt1,prnt2,prnt3
@@ -652,14 +652,14 @@ c.......................................................................
             anr1=gama(kk,k)*satioz2(k,kk)*one_
             if (anr1.lt.em90) goto 490
 CPTR>>>REPLACE PTR-DSCALCACD
-            call dscal(iyjx,anr1,ca(1,1),1) !-YuP: size of ca..cf: iy*jx
-            call dscal(iyjx,anr1,cb(1,1),1)
-            call dscal(iyjx,anr1,cc(1,1),1)
-            call dscal(iyjx,anr1,cd(1,1),1)
-            call dscal(iyjx,anr1,ce(1,1),1)
-            call dscal(iyjx,anr1,cf(1,1),1)
-            call dscal(iyjx,satiom(kk,k),ca(1,1),1)
-            call dscal(iyjx,satiom(kk,k),cd(1,1),1)
+            call dscal(iyjx,anr1,ca(1:iyjx,1),1) !-YuP: size of ca..cf: iy*jx
+            call dscal(iyjx,anr1,cb(1:iyjx,1),1)
+            call dscal(iyjx,anr1,cc(1:iyjx,1),1)
+            call dscal(iyjx,anr1,cd(1:iyjx,1),1)
+            call dscal(iyjx,anr1,ce(1:iyjx,1),1)
+            call dscal(iyjx,anr1,cf(1:iyjx,1),1)
+            call dscal(iyjx,satiom(kk,k),ca(1:iyjx,1),1)
+            call dscal(iyjx,satiom(kk,k),cd(1:iyjx,1),1)
 CPTR<<<END PTR-DSCALCACD
 
             
@@ -749,14 +749,14 @@ cBH180906: species from itself and other species.
 
 CPTR>>>REPLACE PTR-DSCAL2
             fscal= one/anr1
-            call dscal(iyjx,fscal,ca(1,1),1)
-            call dscal(iyjx,fscal,cb(1,1),1)
-            call dscal(iyjx,fscal,cc(1,1),1)
-            call dscal(iyjx,fscal,cd(1,1),1)
-            call dscal(iyjx,fscal,ce(1,1),1)
-            call dscal(iyjx,fscal,cf(1,1),1)
-            call dscal(iyjx,one/satiom(kk,k),ca(1,1),1)
-            call dscal(iyjx,one/satiom(kk,k),cd(1,1),1)
+            call dscal(iyjx,fscal,ca(1:iyjx,1),1)
+            call dscal(iyjx,fscal,cb(1:iyjx,1),1)
+            call dscal(iyjx,fscal,cc(1:iyjx,1),1)
+            call dscal(iyjx,fscal,cd(1:iyjx,1),1)
+            call dscal(iyjx,fscal,ce(1:iyjx,1),1)
+            call dscal(iyjx,fscal,cf(1:iyjx,1),1)
+            call dscal(iyjx,one/satiom(kk,k),ca(1:iyjx,1),1)
+            call dscal(iyjx,one/satiom(kk,k),cd(1:iyjx,1),1)
 CPTR<<<END PTR-DSCAL2
 
  490      continue ! kk=1,ngen
@@ -813,16 +813,16 @@ c..................................................................
 
       do 2000 k=1,ngen
         fscal= one/tnorm(k)  !tnorm=vnorm**3/(GAM1*one_), see ainvnorm.f
-        call dscal(iyjx,fscal,cal(1,1,k,l_),1)
-        call dscal(iyjx,fscal,cbl(1,1,k,l_),1)
-        call dscal(iyjx,fscal,ccl(1,1,k,l_),1)
-        call dscal(iyjx,fscal,cdl(1,1,k,l_),1)
-        call dscal(iyjx,fscal,cel(1,1,k,l_),1)
-        call dscal(iyjx,fscal,cfl(1,1,k,l_),1)
-        call dscal(iyjx,fscal,eal(1,1,k,1,l_),1)
-        call dscal(iyjx,fscal,ebl(1,1,k,1,l_),1)
-        call dscal(iyjx,fscal,eal(1,1,k,2,l_),1)
-        call dscal(iyjx,fscal,ebl(1,1,k,2,l_),1)
+        call dscal(iyjx,fscal,cal(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,fscal,cbl(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,fscal,ccl(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,fscal,cdl(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,fscal,cel(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,fscal,cfl(1:iyjx,1,k,l_),1)
+        call dscal(iyjx,fscal,eal(1:iyjx,1,k,1,l_),1)
+        call dscal(iyjx,fscal,ebl(1:iyjx,1,k,1,l_),1)
+        call dscal(iyjx,fscal,eal(1:iyjx,1,k,2,l_),1)
+        call dscal(iyjx,fscal,ebl(1:iyjx,1,k,2,l_),1)
 
 c..................................................................
 c     For the case that colmodl=3, a positive definite operator

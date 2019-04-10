@@ -3,6 +3,7 @@ c
       subroutine eflditer ! for k=kelecg (=1) only
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dscal
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -90,7 +91,7 @@ c     and should be excised from the code. (BobH, 010301).
       currtp(lr_)=currtp(lr_)+curr(1,lr_)
       curra(1,l_)=faccur*psifct*curra(1,l_)
 c     Following statement for consistency with diaggnde
-      call dscal(jx,faccur*psifct,currv(1,1,l_),1)
+      call dscal(jx,faccur*psifct,currv(1:jx,1,l_),1)
 c     (End of following subroutine diaggnde.)
 
       if (efswtchn.eq."neo_hh") then

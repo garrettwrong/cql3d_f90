@@ -1,6 +1,7 @@
       subroutine urfpack
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -188,7 +189,7 @@ c     Determine the relevant index "ll" on the computational poloidal
 c     mesh - this will differ slightly from the exact value thetapol.
 c..................................................................
 
-              ll=luf(thetapol,pol(1,lr_),lz)
+              ll=luf(thetapol,pol(1:lz,lr_),lz)
               if (ll.gt.lz) then
 c      write(*,*)
 c     +'urfpack: thetapol,lr_,lz,pol(lz,lr_),pol(lz,lr_-1)=',
@@ -307,8 +308,8 @@ c     Determine the lowest(highest) theta index for which there is a
 c     resonance at speed mesh sx(j)
 c..................................................................
 
-                ilim2(jmin)=luf(vu/sx(jmin),cosmz(1,ll,lr_),iyh)
-                ilim1(jmin)=luf(vl/sx(jmin),cosmz(1,ll,lr_),iyh)
+                ilim2(jmin)=luf(vu/sx(jmin),cosmz(1:iyh,ll,lr_),iyh)
+                ilim1(jmin)=luf(vl/sx(jmin),cosmz(1:iyh,ll,lr_),iyh)
                 
                 !YuP[04-2016] adjusted the range in theta around resonance
                 !to have at least 3 points
@@ -335,8 +336,8 @@ c..................................................................
                 call urfedge(ilim1(jmin),ilim2(jmin),vl/sx(jmin),
      +            vu/sx(jmin),ll,lr_,jmin)
      
-                ilim2(jx)=luf(vu/sx(jx),cosmz(1,ll,lr_),iyh)
-                ilim1(jx)=luf(vl/sx(jx),cosmz(1,ll,lr_),iyh)
+                ilim2(jx)=luf(vu/sx(jx),cosmz(1:iyh,ll,lr_),iyh)
+                ilim1(jx)=luf(vl/sx(jx),cosmz(1:iyh,ll,lr_),iyh)
                 !YuP[04-2016] adjusted the range in theta around resonance
                 !to have at least 3 points
 !                i2=ilim2(jx)
@@ -365,10 +366,12 @@ c..................................................................
                 iupjx=ilim2(jx)
                 ilwjx=ilim1(jx)
                 do 30 j=jmin+1,jx-1
-                  ilim2(j)=luf(vu/sx(j),cosmz(ilim2(j-1),ll,lr_),iupjx-
-     1              ilim2(j-1))-1+ilim2(j-1)
-                  ilim1(j)=luf(vl/sx(j),cosmz(ilim1(j-1),ll,lr_),ilwjx-
-     1              ilim1(j-1))-1+ilim1(j-1)
+                  ilim2(j)=luf(vu/sx(j),cosmz(ilim2(j-1):
+     1              ilim2(j-1)+iupjx-ilim2(j-1),ll,lr_),
+     1              iupjx-ilim2(j-1))-1+ilim2(j-1)
+                  ilim1(j)=luf(vl/sx(j),cosmz(ilim1(j-1):
+     1              ilim1(j-1)+ilwjx-ilim1(j-1),ll,lr_),
+     1              ilwjx-ilim1(j-1))-1+ilim1(j-1)
                     !YuP[04-2016] adjusted the range in theta around resonance
                     !to have at least 3 points
 !                    i2=ilim2(j)
@@ -510,10 +513,12 @@ c*bh*940227if(x(jmin).le.upar11)then
                     ilim2(jmin)=1
                   else
                     vres1=clight*(1.-omn/gamma(jmin))/(rnpar1*vnorm)
-                    ilim2(jmin)=luf(-vres1/sx(jmin),cosmz(1,ll,lr_),iyh)
+                    ilim2(jmin)=luf(-vres1/sx(jmin),
+     1                  cosmz(1:iyh,ll,lr_),iyh)
                   endif
                   vres2=clight*(1.-omn/gamma(jmin))/(rnpar2*vnorm)
-                  ilim1(jmin)=luf(-vres2/sx(jmin),cosmz(1,ll,lr_),iyh)
+                  ilim1(jmin)=luf(-vres2/sx(jmin),
+     1                cosmz(1:iyh,ll,lr_),iyh)
                   ii1=ilim1(jmin)
                   call urfedge(ii1,ilim2(jmin),-vres2/sx(jmin),
      +              -vres1/sx(jmin),ll,lr_,jmin)
@@ -521,16 +526,16 @@ c*bh*940227if(x(jmin).le.upar11)then
                     if(x(j).le.upar11)  then
                       ilim2(j)=1
                       vres2=clight*(1.-omn/gamma(j))/(rnpar2*vnorm)
-                      ilim1(j)=luf(-vres2/sx(j),cosmz(1,ll,lr_),iyh)
+                      ilim1(j)=luf(-vres2/sx(j),cosmz(1:iyh,ll,lr_),iyh)
                     elseif (x(j).lt.upar12)  then
                       vres1=clight*(1.-omn/gamma(j))/(rnpar1*vnorm)
                       vres2=clight*(1.-omn/gamma(j))/(rnpar2*vnorm)
-                      ilim2(j)=luf(-vres1/sx(j),cosmz(1,ll,lr_),iyh)
-                      ilim1(j)=luf(-vres2/sx(j),cosmz(1,ll,lr_),iyh)
+                      ilim2(j)=luf(-vres1/sx(j),cosmz(1:iyh,ll,lr_),iyh)
+                      ilim1(j)=luf(-vres2/sx(j),cosmz(1:iyh,ll,lr_),iyh)
                     else
                       ilim2(j)=1
                       vres2=clight*(1.-omn/gamma(j))/(rnpar2*vnorm)
-                      ilim1(j)=luf(-vres2/sx(j),cosmz(1,ll,lr_),iyh)
+                      ilim1(j)=luf(-vres2/sx(j),cosmz(1:iyh,ll,lr_),iyh)
                     endif
                     ii1=ilim1(j)
                     call urfedge(ii1,ilim2(j),-vres2/sx(j),-vres1/sx(j),
@@ -551,10 +556,12 @@ cbh940227
                     ilim1(jmin)=iy
                   else
                     vres1=clight*(1.-omn/gamma(jmin))/(rnpar1*vnorm)
-                    ilim1(jmin)=luf(-vres1/sx(jmin),cosmz(1,ll,lr_),iy)
+                    ilim1(jmin)=luf(-vres1/sx(jmin),
+     1                  cosmz(1:iy,ll,lr_),iy)
                   endif
                   vres2=clight*(1.-omn/gamma(jmin))/(rnpar2*vnorm)
-                  ilim2(jmin)=luf(-vres2/sx(jmin),cosmz(1,ll,lr_),iy)
+                  ilim2(jmin)=luf(-vres2/sx(jmin),
+     1              cosmz(1:iy,ll,lr_),iy)
                   ii1=ilim1(jmin)
                   call urfedge(ii1,ilim2(jmin),-vres1/sx(jmin),
      +              -vres2/sx(jmin),ll,lr_,jmin)
@@ -563,25 +570,27 @@ cbh940227
                     vres2=clight*(1.-omn/gamma(j))/(rnpar2*vnorm)
                     if(x(j).le.abs(upar11))  then
                       ilim1(j)=iy
-                      ilim2(j)=luf(-vres2/sx(j),cosmz(1,ll,lr_),iy)
+                      ilim2(j)=luf(-vres2/sx(j),
+     1                 cosmz(1:iy,ll,lr_),iy)
                       ii1=ilim1(j)
                       call urfedge(ii1,ilim2(j),-vres1/sx(j),
      +                  -vres2/sx(j),ll,lr_,j)
                     elseif (x(j).lt.uperpstr)  then
-                      ilim2(j)=luf(-vres2/sx(j),cosmz(1,ll,lr_),iy)
-                      ilim1(j)=luf(-vres1/sx(j),cosmz(1,ll,lr_),iy)
+                      ilim2(j)=luf(-vres2/sx(j),
+     1                 cosmz(1:iy,ll,lr_),iy)
+                      ilim1(j)=luf(-vres1/sx(j),cosmz(1:iy,ll,lr_),iy)
                       ii1=ilim1(j)
                       call urfedge(ii1,ilim2(j),-vres1/sx(j),
      +                  -vres2/sx(j),ll,lr_,j)
                     elseif(x(j).lt.upar12)  then
-                      ilim2(j)=luf(-vres1/sx(j),cosmz(1,ll,lr_),iy)
-                      ilim1(j)=luf(-vres2/sx(j),cosmz(1,ll,lr_),iy)
+                      ilim2(j)=luf(-vres1/sx(j),cosmz(1:iy,ll,lr_),iy)
+                      ilim1(j)=luf(-vres2/sx(j),cosmz(1:iy,ll,lr_),iy)
                       ii1=ilim1(j)
                       call urfedge(ii1,ilim2(j),-vres2/sx(j),
      +                  -vres1/sx(j),ll,lr_,j)
                     elseif (x(j).lt.upar22)  then
                       ilim2(j)=1
-                      ilim1(j)=luf(-vres2/sx(j),cosmz(1,ll,lr_),iy)
+                      ilim1(j)=luf(-vres2/sx(j),cosmz(1:iy,ll,lr_),iy)
                       ii1=ilim1(j)
                       call urfedge(ii1,ilim2(j),-vres2/sx(j),
      +                  -vres1/sx(j),ll,lr_,j)

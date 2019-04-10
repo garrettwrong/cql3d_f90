@@ -5,6 +5,7 @@ c
       use param_mod
       use cqcomm_mod
       use advnce_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...................................................................
@@ -209,15 +210,17 @@ c$$$     +                    ((temp4(i,j),i=46,50),j=1,20)
 
 
          else
-            call dcopy(iyjx2,f_(0,0,k,l_),1,temp1(0,0),1)
-            call dcopy(iyjx2,fxsp(0,0,k,l_),1,temp2(0,0),1)
+            call dcopy(iyjx2,f_(0:iyjx2-1,0,k,l_),1,
+     +           temp1(0:iyjx2-1,0),1)
+            call dcopy(iyjx2,fxsp(0:iyjx2-1,0,k,l_),1,
+     +           temp2(0:iyjx2-1,0),1)
             do 240 j=2,jxm1
                do 241 i=2,iy-1
                   temp6(i,j)=-(gfu(i,j,k)+gfu(i,j-1,k))*.5/xsq(j)
  241           continue
  240        continue
-            call dcopy(iyjx2,temp2(0,0),1,temp1(0,0),1)
-            call dcopy(iyjx2,f(0,0,k,l_),1,temp2(0,0),1)
+            call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
+            call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp2(0:iyjx2-1,0),1)
             do 242 i=2,iy-1
                do 243 j=2,jxm1
                   tam3(j)=-(hfu(i,j)+hfu(i-1,j))*.5*xi(j)
@@ -242,7 +245,7 @@ c      write(*,*)'pltvec:  lr_,lefct =',lr_,lefct
 c      write(*,*)'pltvec:  temp4, temp5',
 c     +     ((temp4(i,j),temp5(i,j),i=1,10),j=1,10)
 
-         call dcopy(iyjx2,temp5(0,0),1,temp3(0,0),1)
+         call dcopy(iyjx2,temp5(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
 
          call prppr(target,"norm",xll,xlu,xpl,xpu)
 
@@ -250,7 +253,7 @@ cBH090226         call dcopy(iyjx2,temp2(0,0),1,temp1,1)
          ipxjpx=jpxy*ipxy
          call dcopy(ipxjpx,fpn,1,xhead,1)
 
-         call dcopy(iyjx2,temp4(0,0),1,temp3(0,0),1)
+         call dcopy(iyjx2,temp4(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
 
          call prppr(target,"norm",xll,xlu,xpl,xpu)
 

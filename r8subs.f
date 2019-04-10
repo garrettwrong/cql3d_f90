@@ -468,7 +468,7 @@ c
 c
 c
       subroutine dscal(n,da,dx,incx)
-c
+c     !XXX, just multiply it..
 c     scales a vector by a constant.
 c     uses unrolled loops for increment equal to one.
 c     jack dongarra, linpack, 3/11/78.
@@ -680,11 +680,8 @@ cBH090905      real*4 rbound
       INTEGER            I, J, JP, JU, KM, KV
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      EXTERNAL           IDAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGER, DSCAL, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -889,12 +886,8 @@ cBH090905      real*4 rbound
      $                   WORK31( LDWORK, NBMAX )
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX, ILAENV
-      EXTERNAL           IDAMAX, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGBTF2, DGEMM, DGER, DLASWP, DSCAL,
-     $                   DSWAP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -1310,11 +1303,8 @@ cBH090905      real*4 rbound
       INTEGER            I, J, KD, L, LM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER, DSWAP, DTBSV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -1545,11 +1535,8 @@ cBH090905      real*4 rbound
 *
 *
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -1837,11 +1824,8 @@ cBH090905      real*4 rbound
       INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY,LENX,LENY
 *     ..
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -2076,7 +2060,6 @@ cBH090905      real*4 rbound
       INTEGER I,INFO,IX,J,JY,KX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -2487,11 +2470,8 @@ cBH090905      real*4 rbound
       LOGICAL NOUNIT
 *     ..
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX,MIN
@@ -2802,11 +2782,8 @@ cBH090905      real*4 rbound
 *
 *
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -3293,8 +3270,6 @@ cBH090905      real*4 rbound
       INTRINSIC          INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            IEEECK
-      EXTERNAL           IEEECK
 *     ..
 *     ..
 *     .. Executable Statements ..
@@ -3623,7 +3598,6 @@ c$$$
 *  =====================================================================
 *
 *     .. External Subroutines ..
-      EXTERNAL           DGETRF, DGETRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -3731,13 +3705,7 @@ c$$$
       INTEGER            I, J, JP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH      
-      INTEGER            IDAMAX
-      EXTERNAL           DLAMCH, IDAMAX
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           DGER, DSCAL, DSWAP, XERBLA
-*     ..
+
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
@@ -3877,12 +3845,7 @@ c$$$
 *     .. Local Scalars ..
       INTEGER            I, IINFO, J, JB, NB
 *     ..
-*     .. External Subroutines ..
-      EXTERNAL           DGEMM, DGETF2, DLASWP, DTRSM, XERBLA
-*     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -4042,11 +4005,7 @@ c$$$
       LOGICAL            NOTRAN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
 *     ..
-*     .. External Subroutines ..
-      EXTERNAL           DLASWP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -4208,8 +4167,6 @@ c$$$
       DOUBLE PRECISION   RND, EPS, SFMIN, SMALL, RMACH
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DIGITS, EPSILON, HUGE, MAXEXPONENT,

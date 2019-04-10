@@ -3,6 +3,7 @@ c
       subroutine diagdenz
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -76,7 +77,8 @@ c..................................................................
         iorbend=l_
       endif
       do 10 k=1,ngen
-        call dcopy(iyjx2,f(0,0,k,l_),1,temp3(0,0),1)
+         ! xxx just assign it, sigh
+        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp3(0:iyjx2-1,0),1)
         do 11 l=iorbstr,iorbend
           ileff=l
           if (cqlpmod .eq. "enabled") ileff=ls_

@@ -3,6 +3,7 @@ c
       subroutine sigv5d
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c.......................................................................
@@ -148,23 +149,23 @@ c     Loop over Legendre polynomials
       call bcast(feta(1,l1),zero,jx)
 c     Copy distribution a into temp3, for cfpleg:
 c%bh      call dcopy(iyjx2,temp4,1,temp3,1)
-      call dcopy(iyjx2,temp1(0,0),1,temp3(0,0),1)
+      call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
       do 202 j=1,jx
       tam3(j)=temp1(iy+1-imax(l,lr_),j)
 202   tam2(j)=temp1(imax(l,lr_),j)
       call cfpleg(l1,l,1)
-      call dcopy(jx,tam1,1,feta(1,l1),1)
+      call dcopy(jx,tam1,1,feta(1:jx,l1),1)
 
       if (knumb .ge. 3) go to 210
 
 c%bh      call dcopy(iyjx2,temp5,1,temp3,1)
-      call dcopy(iyjx2,temp2(0,0),1,temp3(0,0),1)
+      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
       do 201 j=1,jx
       tam3(j)=temp2(iy+1-imax(l,lr_),j)
       tam2(j)=temp2(imax(l,lr_),j)
 201   continue
       call cfpleg(l1,l,1)
- 210  call dcopy(jx,tam1,1,fetb(1,l1),1)
+ 210  call dcopy(jx,tam1,1,fetb(1:jx,l1),1)
 
       call bcast(tam6,zero,jx)
       do 60 jv1=1,jx

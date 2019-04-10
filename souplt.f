@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use pltdf_mod, only : cont, tempcntr, nconta
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -24,7 +25,8 @@ c..................................................................
 
          if (xlncur(k,lr_).lt.1.e-10) goto 10
 cBH171231         if(frmodp.eq.'enabled')then ! NBI source
-           call dcopy(iyjx2,source(0,0,k,indxlr_),1,temp1(0,0),1)
+           call dcopy(iyjx2,source(0:iyjx2-1,0,k,indxlr_),1,
+     +        temp1(0:iyjx2-1,0),1)
 cBH171231         endif
          write(t_,550) k
  550     format(1x,"Species ",i2,
@@ -80,6 +82,8 @@ c=======================================================================
       subroutine pltsofvv
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : luf
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Calculates the pitch angle integrated source
@@ -100,7 +104,8 @@ c
         temp3=0.d0 ! initialize for each k species
         if (xlncur(k,lr_).lt.1.e-10) goto 20
 cBH171231        if(frmodp.eq.'enabled')then ! NBI source
-          call dcopy(iyjx2,source(0,0,k,indxlr_),1,temp3(0,0),1) ! temp3
+          call dcopy(iyjx2,source(0:iyjx2-1,0,k,indxlr_),1,
+     +       temp3(0:iyjx2-1,0),1) ! temp3
 cBH171231        endif
 
 c-----YuP[2018-01-08] revised to match cqlinput_help:
@@ -263,6 +268,7 @@ c=======================================================================
       subroutine pltso_theta
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 c     YuP[06-2016]
 c     Calculates and plots the speed-integrated source,
@@ -289,7 +295,8 @@ CMPIINSERT_INCLUDE
         if (xlncur(k,lr_).lt.1.e-10) goto 20
         
         if(frmodp.eq.'enabled')then ! NBI source
-          call dcopy(iyjx2,source(0,0,k,indxlr_),1,temp3(0,0),1) ! temp3
+          call dcopy(iyjx2,source(0:iyjx2-1,0,k,indxlr_),1,
+     +          temp3(0:iyjx2-1,0),1) ! temp3
         endif
          
 

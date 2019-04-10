@@ -2,6 +2,7 @@ c
 c
       module equilib_mod
       use iso_c_binding, only : c_double
+      use r8subs_mod, only : dcopy
       ! these are used outside the module in tdeqdisk
       integer, parameter, public ::  ncoila=5, nccoila=50
       real(c_double), public :: pcvac(0:9)

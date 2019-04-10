@@ -3,13 +3,14 @@ c
       subroutine pltrun
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : rbound
       implicit integer (i-n), real*8 (a-h,o-z)
       dimension yg(nonch),xg(nonch)
 
 c     PGPLOT REAL Variables:
       REAL*4 RPG1,RPG2
       REAL*4 RNONCHA1(nonch),RNONCHA2(nonch)
-      REAL*4 RBOUND
+      !XXX REAL*4 RBOUND
 c-----------------
 c   This subroutine writes and plots runaway population and current
 c------------------

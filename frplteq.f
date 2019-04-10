@@ -11,6 +11,7 @@ c
      1     nfrplt,frplt)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 CMPIINSERT_INCLUDE
@@ -90,8 +91,8 @@ c---- PLOTS in (R,Z) ---------------------------------------------------
         l1=l
         if (l1.gt.lrz-nconskp) l1=lrz
         call tdnflxs(l1)
-        call dcopy(lfield,solr(1,lr_),1,tlorb1,1)
-        call dcopy(lfield,solz(1,lr_),1,tlorb2,1)
+        call dcopy(lfield,solr(1:lfield,lr_),1,tlorb1,1)
+        call dcopy(lfield,solz(1:lfield,lr_),1,tlorb2,1)
 
         do 20 j=1,lorbit(lr_)
           solr(j,lr_)=tlorb1(lorbit(lr_)+1-j)
@@ -120,8 +121,8 @@ c       if eqsym.ne."none", still need to plot lower flux surface
            endif
         endif
 
-        call dcopy(lfield,tlorb1,1,solr(1,lr_),1)
-        call dcopy(lfield,tlorb2,1,solz(1,lr_),1)
+        call dcopy(lfield,tlorb1,1,solr(1:lfield,lr_),1)
+        call dcopy(lfield,tlorb2,1,solz(1:lfield,lr_),1)
  10   continue ! l=1,lrz,nconskp
  
       if(ncontr.gt.1) then

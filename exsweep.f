@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use advnce_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -21,7 +22,8 @@ c..................................................................
 c     Copy current distribution into f_.
 c..................................................................
 
-      call dcopy(iyjx2*ngen,f(0,0,1,l_),1,f_(0,0,1,l_),1)
+      call dcopy(iyjx2*ngen,f(0:iyjx2*ngen-1,0,1,l_),1,
+     +     f_(0:iyjx2*ngen-1,0,1,l_),1)
 
 c..................................................................
 c     loop over all time advanced species..
@@ -98,7 +100,7 @@ c..................................................................
 c     copy the distribution function into temp1
 c..................................................................
 
-        call dcopy(iyjx2,f(0,0,k,l_),1,temp1(0,0),1)
+        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp1(0:iyjx2-1,0),1)
 
 c..................................................................
 c     Initialize at x=0 for the forward recursion of the velocity
@@ -198,7 +200,7 @@ c..................................................................
 c     store distribution function after velocity split in fxsp
 c..................................................................
 
-        call dcopy(iyjx2,temp1(0,0),1,fxsp(0,0,k,l_),1)
+        call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,fxsp(0:iyjx2-1,0,k,l_),1)
 
 c..................................................................
 c     velocity split done - commence with theta split
@@ -366,7 +368,7 @@ c..................................................................
 c     store new distribution in f.
 c..................................................................
 
-        call dcopy(iyjx2,temp1(0,0),1,f(0,0,k,l_),1)
+        call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,f(0:iyjx2-1,0,k,l_),1)
  600  continue
       return
       end

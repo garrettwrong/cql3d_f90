@@ -3,6 +3,7 @@ c
       subroutine fle_pol(setup,lp)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -110,7 +111,7 @@ c         do 204 ll=1,lrz
          do 205 j=1,jx
          do 206 i=1,min(imax(l,ll)+1,iyh_(ll))
             xll=x(j)*cosz(i,l,ll)
-            jbin=luf(xll,xlm(1),jfl)
+            jbin=luf(xll,xlm(1:jfl),jfl)
             wt=(xlm(jbin)-xll)/(xlm(jbin)-xlm(jbin-1))
             wta=dtau(i,l,ll)*coss(i,ll)/dz(l,ll)*cynt2(i,ll)*cint2(j)
             jflbin(i,j,l)=jbin
@@ -207,6 +208,7 @@ c
       subroutine fle_fsa(setup)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -296,7 +298,7 @@ c          weight wtflm(i,j,ll).
          do 205 j=1,jx
          do 206 i=1,iyh_(ll)
             xll=x(j)*coss(i,ll)
-            jbin=luf(xll,xlm(1),jfl)
+            jbin=luf(xll,xlm(1:jfl),jfl)
             wt=(xlm(jbin)-xll)/(xlm(jbin)-xlm(jbin-1))
             wta=vptb(i,ll)*cynt2(i,ll)*cint2(j)
             jflbin(i,j,ll)=jbin
@@ -369,6 +371,7 @@ c
       subroutine fle(setup,lp)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
 c
@@ -407,8 +410,8 @@ cBH180717: dcopy can give an overwrite for jfl<jx (which is not
 cBH180717: detected with gdb/ddd bounds checking).
 cBH180717:      jflh=0  Not used.
 
-      call dcopy(jx,x,1,xl(1),1)
-      call dcopy(jx,dx,1,dxl(1),1)
+      call dcopy(jx,x,1,xl(1:jx),1)
+      call dcopy(jx,dx,1,dxl(1:jx),1)
 
       go to 999
 

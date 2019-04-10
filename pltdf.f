@@ -17,6 +17,7 @@ c
       subroutine pltdf
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -41,7 +42,7 @@ c..................................................................
       
         ! This part is plotted for any pltd.ne.'disabled'
         
-        call dcopy(iyjx2,f(0,0,k,l_),1,temp1(0,0),1)
+        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp1(0:iyjx2-1,0),1)
         write(t_,550) k
  550    format(1x,"Species ",i2," Distribution Function Contour Plot")
         CALL PGPAGE

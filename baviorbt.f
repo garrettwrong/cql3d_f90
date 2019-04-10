@@ -3,6 +3,7 @@ c
       subroutine baviorbt
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : lug, luf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
  
@@ -179,7 +180,8 @@ c           (If there are several zeros in a row (a roundoff effect)
 c            step back to the first nonzero tem2).  
             do ii=1,nii
               iguess=1  ! YuP: ??? what for? doesn't work in lug()
-              itemc1(ii)=lug(zero,tem2(1+(ii-1)*nsteps),nsteps,iguess)-1
+              itemc1(ii)=lug(zero,tem2(1+(ii-1)*nsteps:
+     1              1+(ii-1)*nsteps+nsteps),nsteps,iguess)-1
                !write(*,*)'b1 after LUG itemc1=',lr_,l,itemc1(ii)
                if (itemc1(ii).ge.1) then
                   if (tem2(itemc1(ii)+(ii-1)*nsteps).eq.zero) then
@@ -340,7 +342,8 @@ c           (If there are several zeros in a row (a roundoff effect
 c            step back to the first nonzero tem2).  
             do ii=1,nii
               iguess=1
-              itemc1(ii)=lug(zero,tem2(1+(ii-1)*nsteps),nsteps,iguess)-1
+              itemc1(ii)=lug(zero,tem2(1+(ii-1)*nsteps:
+     1            1+(ii-1)*nsteps+nsteps),nsteps,iguess)-1
                !write(*,*)'b2 after LUG itemc1=',lr_,l,itemc1(ii)
                if (itemc1(ii).ge.1) then
                   if (tem2(itemc1(ii)+(ii-1)*nsteps).eq.zero) then
@@ -497,6 +500,7 @@ c
       subroutine baviorbto
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c...................................................................
@@ -700,6 +704,7 @@ c
       subroutine deltar
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -1029,7 +1034,7 @@ c$$$            endif
             endif
             
 c           Determine pol angle bin
-            ll=min(luf(thetpol,pol(1,lr),lz),lz-1)
+            ll=min(luf(thetpol,pol(1:lz,lr),lz),lz-1)
 c            write(*,*)'deltar:rpos,rmag,zpos,zmag,tang,thetpol=',
 c     +                        rpos,rmag,zpos,zmag,tang,thetpol
 

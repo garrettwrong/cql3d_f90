@@ -1,6 +1,7 @@
 c
 c
       subroutine pack21(a,ibot,itop,jbot,jtop,b,iy,jx)
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -17,13 +18,14 @@ c.......................................................................
       dimension b(iy*jx)
       do 1 j=1,jx
         i1=(j-1)*iy+1
-        call dcopy(iy,a(1,j),1,b(i1),1)
+        call dcopy(iy,a(1:iy,j),1,b(i1:i1+iy),1)
  1    continue
       return
       end
 c
 c
       subroutine unpack21(a,ibot,itop,jbot,jtop,b,iy,jx)
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -43,7 +45,7 @@ c.......................................................................
       call bcast(a,zero,(itop-ibot+1)*(jtop-jbot+1))
       do 1 j=1,jx
         i1=(j-1)*iy+1
-        call dcopy(iy,b(i1),1,a(1,j),1)
+        call dcopy(iy,b(i1:i1+iy),1,a(1:iy,j),1)
  1    continue
       return
       end

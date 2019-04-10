@@ -12,6 +12,7 @@ c /ls_lsode/ and /eh_lsode/
 
       subroutine lsode (f, neq, y, t, tout, itol, rtol, atol, itask,
      1            istate, iopt, rwork, lrw, iwork, liw, jac, mf)
+      use r8subs_mod, only : d1mach
       save
       external f, jac
       integer neq, itol, itask, istate, iopt, lrw, iwork, liw, mf
@@ -966,8 +967,8 @@ c-----------------------------------------------------------------------
       double precision rowns,
      1   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround
       double precision atoli, ayi, big, ewti, h0, hmax, hmx, rh, rtoli,
-     1   tcrit, tdist, tnext, tol, tolsf, tp, size, sum, w0,
-     2   d1mach, vnorm_lsode
+     1   tcrit, tdist, tnext, tol, tolsf, tp, size, sum, w0, vnorm_lsose
+CXXX     2   d1mach, vnorm_lsode
       dimension mord(2)
       logical ihit
 c-----------------------------------------------------------------------

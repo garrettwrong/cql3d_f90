@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use equilib_mod, only : ncoila, nccoila, pcvac, ccoil, ncoil
+      use r8subs_mod, only : dcopy
 
       implicit integer (i-n), real*8 (a-h,o-z)
       save

@@ -325,6 +325,7 @@ c             elecfldn(ll,nn,it+1).
                                  ! it=1,nampfmax
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dgesv
       implicit integer (i-n), real*8 (a-h,o-z)
       integer, allocatable:: ipiv(:)
 

@@ -5,6 +5,7 @@ c
       use cqcomm_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
+      use r8subs_mod, only : luf
       !YuP[2018-02-07] added input itype, to identify what is plotted.
       ! itype=1 for plots of f(),
       !      =2 for df

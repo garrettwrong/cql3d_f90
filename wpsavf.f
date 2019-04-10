@@ -3,6 +3,7 @@ c
       subroutine wpsavf
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................
@@ -29,8 +30,10 @@ c.......................................................................
  120      continue
  110    continue
  100  continue
-      call dcopy(iyjx2*ngen*ls,fnp1(0,0,1,1),1,f(0,0,1,1),1)
-      call dcopy(iyjx2*ngen*ls,fnp1(0,0,1,1),1,f_(0,0,1,1),1)
+      call dcopy(iyjx2*ngen*ls,fnp1(0:iyjx2*ngen*ls-1,0,1,1),1,
+     +     f(0:iyjx2*ngen*ls-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*ls,fnp1(0:iyjx2*ngen*ls-1,0,1,1),1,
+     +     f_(0:iyjx2*ngen*ls-1,0,1,1),1)
 
       return
 
@@ -40,9 +43,12 @@ c.......................................................................
 
  200  continue
 
-      call dcopy(iyjx2*ngen*(ls+2),fnp1(0,0,1,0),1,fnp0(0,0,1,0),1)
-      call dcopy(iyjx2*ngen*ls,fnp1(0,0,1,1),1,f(0,0,1,1),1)
-      call dcopy(iyjx2*ngen*ls,fnp1(0,0,1,1),1,f_(0,0,1,1),1)
+      call dcopy(iyjx2*ngen*(ls+2),fnp1(0:iyjx2*ngen*(ls+2)-1,0,1,0),1,
+     +     fnp0(0:iyjx2*ngen*(ls+2)-1,0,1,0),1)
+      call dcopy(iyjx2*ngen*ls,fnp1(0:iyjx2*ngen*ls-1,0,1,1),1,
+     +     f(0:iyjx2*ngen*ls-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*ls,fnp1(0:iyjx2*ngen*ls-1,0,1,1),1,
+     +     f_(0:iyjx2*ngen*ls-1,0,1,1),1)
 
       return
       end

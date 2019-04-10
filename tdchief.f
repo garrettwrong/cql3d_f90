@@ -5,6 +5,7 @@ c
       use cqcomm_mod
       use netcdfrf_mod, only : netcdfrf
       use pltmain_mod, only : pltmain
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -369,7 +370,8 @@ c        Find dtr for this time-step
             endif
          enddo
 c        Copy current distribution f into f_
-         call dcopy(iyjx2*ngen*lrors,f(0,0,kelec,1),1,f_(0,0,kelec,1),1)
+         call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,kelec,1),
+     +        1,f_(0:iyjx2*ngen*lrors-1,0,kelec,1),1)
 c        Bring background profiles up to time step n
          ! No effect if bctime=0 (time-indep. profiles).
          call profiles ! if(ampfmod.eq.'enabled' .and. n+1.ge.nonampf)
@@ -464,7 +466,8 @@ c...........................................................
 CMPIINSERT_BARRIER
 
 c     Copy current distribution f into f_
-      call dcopy(iyjx2*ngen*lrors,f(0,0,1,1),1,f_(0,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1,
+     +     f_(0:iyjx2*ngen*lrors-1,0,1,1),1)
       
       if (transp.eq."enabled" .and. n.ne.0 .and. adimeth.ne."enabled"
      +      .and. soln_method.ne."it3drv" .and. nefiter.eq.1)  then
@@ -477,7 +480,8 @@ c     soln_method=it3drv:  soln is in f(,,,) on last call on the set of
 c     flux surfaces (soln at start of step is in f_(,,,)).
 c.......................................................................
         if(cqlpmod.ne."enabled" .and. n.ge.nontran .and. n.lt.nofftran)
-     +      call dcopy(iyjx2*ngen*lrors,frn_2(0,0,1,1),1,f(0,0,1,1),1)
+     +      call dcopy(iyjx2*ngen*lrors,frn_2(0:iyjx2*ngen*lrors-1,
+     +        0,1,1),1,f(0:iyjx2*ngen*lrors-1,0,1,1),1)
       endif
       
 c..................................................
@@ -582,7 +586,8 @@ CMPIINSERT_BCAST_VELSOU
            ! (For lbdry0='enabled', coeff matrix is set up 
            !   to automatically maintain unicity.)
            if (lbdry0.ne."enabled") then !-YuP: moved here from impavnc0
-             call dcopy(iyjx2,f(0,0,k,l_),1,fxsp(0,0,k,l_),1)
+             call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,
+     +             fxsp(0:iyjx2-1,0,k,l_),1)
              s=0.
              t=0.
              do 2100 i=1,iy
@@ -634,7 +639,8 @@ c..................................................................
          do ll=1,ilend 
             ! determine local variables depending on flux surface (l_, iy,..)
             call tdnflxs(ll)
-            call dcopy(iyjx2,f_(0,0,1,l_),1,f(0,0,1,l_),1)           
+            call dcopy(iyjx2,f_(0:iyjx2-1,0,1,l_),1,
+     +           f(0:iyjx2-1,0,1,l_),1)           
          enddo ! ll
          nefiter=nefiter+1 ! counts iterations
          go to 20 ! Another iteration, using old f() but new elecfld()

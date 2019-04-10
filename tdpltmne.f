@@ -3,6 +3,7 @@ c
       subroutine tdpltmne
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : rbound
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -18,7 +19,7 @@ c     real*4 variables (and function rbound) for pgplot:
       REAL*4 RLRZAP(0:LRZA)
       REAL*4 RLRORSA(LRORSA),RLRORSA1(LRORSA),RLRORSA2(LRORSA)
       REAL*4 RNONCHA1(nonch),RNONCHA2(nonch)
-      REAL*4 RBOUND
+      !XXX REAL*4 RBOUND
       character*16 t_horiz
 
       data em33/1.d-33/

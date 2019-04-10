@@ -5,6 +5,7 @@ c
       use param_mod
       use cqcomm_mod
       use advnce_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -4264,6 +4265,8 @@ c
       subroutine netcdfvec(lefct,igrid)
       use param_mod
       use cqcomm_mod
+      use advnce_mod, only : hfu, hfi
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...................................................................
@@ -4818,15 +4821,19 @@ c
                endif
  140        continue
          else
-            call dcopy(iyjx2,f_(0,0,k,l_),1,temp1(0,0),1)
-            call dcopy(iyjx2,fxsp(0,0,k,l_),1,temp2(0,0),1)
+            call dcopy(iyjx2,f_(0:iyjx2-1,0,k,l_),1,
+     +           temp1(0:iyjx2-1,0),1)
+            call dcopy(iyjx2,fxsp(0:iyjx2-1,0,k,l_),1,
+     +           temp2(0:iyjx2-1,0),1)
             do 240 j=2,jxm1
                do 241 i=2,iy-1
                   temp6(i,j)=-(gfu(i,j,k)+gfu(i,j-1,k))*.5/xsq(j)
  241           continue
  240        continue
-            call dcopy(iyjx2,temp2(0,0),1,temp1(0,0),1)
-            call dcopy(iyjx2,f(0,0,k,l_),1,temp2(0,0),1)
+            call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,
+     +           temp1(0:iyjx2-1,0),1)
+            call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,
+     +           temp2(0:iyjx2-1,0),1)
             do 242 i=2,iy-1
                do 243 j=2,jxm1
                   tam3(j)=-(hfu(i,j)+hfu(i-1,j))*.5*xi(j)
@@ -4870,17 +4877,17 @@ c       (xhead(jpxy,ipxy) has temp1 ptr,
 c        yhead(jpxy,ipxy) has temp4 ptr),
 c        and these are output to the netcdf file.
 
-         call dcopy(iyjx2,temp5(0,0),1,temp3(0,0),1)
+         call dcopy(iyjx2,temp5(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
          
          call prppr(target,"norm",xll,xlu,xpl,xpu)
          
-         call dcopy(iyjx2,temp2(0,0),1,temp1(0,0),1)
+         call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
          
-         call dcopy(iyjx2,temp4(0,0),1,temp3(0,0),1)
+         call dcopy(iyjx2,temp4(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
          
          call prppr(target,"norm",xll,xlu,xpl,xpu)
          
-         call dcopy(iyjx2,temp2(0,0),1,temp4(0,0),1)
+         call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
 
          endif  !end igrid.eq.0
          

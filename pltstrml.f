@@ -7,6 +7,7 @@ c
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
       use pltmain_mod, only : gxglfr
+      use r8subs_mod, only : luf, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 
@@ -162,8 +163,9 @@ c     In the case implct .eq. "disabled" copy the former values
 c     of the distribution function into temporary arrays.
 c
         if (implct .eq. "disabled") then
-          call dcopy(iyjx2,fxsp(0,0,k,l_),1,temp1(0,0),1)
-          call dcopy(iyjx2,f(0,0,k,l_),1,temp2(0,0),1)
+          call dcopy(iyjx2,fxsp(0:iyjx2-1,0,k,l_),1,
+     +          temp1(0:iyjx2-1,0),1)
+          call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp2(0:iyjx2-1,0),1)
         endif
 c
 c     Now proceed with the integration over H

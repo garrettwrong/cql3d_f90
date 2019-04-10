@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use netcdfrf_mod, only : netcdfrf
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -271,40 +272,56 @@ c     in order not to overwrite data initially stored as krf=1,mrf.
          do 30 iray=1,nray(krfn(k))
             nrayelt(iray,k)=nrayelt(iray,krfn(k))
             istarts(iray,k)=istarts(iray,krfn(k))
-            call dcopy(nrayelt(iray,k),ws(1,iray,krfn(k)),1,
+            call dcopy(nrayelt(iray,k),ws(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
 cBH081106     &         ws(1,iray,k),krfn(k))   Causes big bug when
 cBH081106                                krfn(k).ne.1: i.e., neg B0.
-     &           ws(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),seikon(1,iray,krfn(k)),1,
-     &           seikon(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),spsi(1,iray,krfn(k)),1,
-     &           spsi(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),wr(1,iray,krfn(k)),1,
-     &           wr(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),wphi(1,iray,krfn(k)),1,
-     &           wphi(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),wz(1,iray,krfn(k)),1,
-     &           wz(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),wnpar(1,iray,krfn(k)),1,
-     &           wnpar(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),wnper(1,iray,krfn(k)),1,
-     &           wnper(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),delpwr(1,iray,krfn(k)),1,
-     &           delpwr(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),sdpwr(1,iray,krfn(k)),1,
-     &           sdpwr(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),wdnpar(1,iray,krfn(k)),1,
-     &           wdnpar(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),fluxn(1,iray,krfn(k)),1,
-     &           fluxn(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),sbtot(1,iray,krfn(k)),1,
-     &           sbtot(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),sene(1,iray,krfn(k)),1,
-     &           sene(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),salphac(1,iray,krfn(k)),1,
-     &           salphac(1,iray,k),1)
-            call dcopy(nrayelt(iray,k),salphal(1,iray,krfn(k)),1,
-     &           salphal(1,iray,k),1)
+     &           ws(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),seikon(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           seikon(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),spsi(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           spsi(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),wr(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           wr(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),wphi(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           wphi(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),wz(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           wz(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),wnpar(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           wnpar(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),wnper(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           wnper(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),delpwr(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           delpwr(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),sdpwr(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           sdpwr(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),wdnpar(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           wdnpar(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),fluxn(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           fluxn(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),sbtot(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           sbtot(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),sene(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           sene(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),salphac(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           salphac(1:nrayelt(iray,k),iray,k),1)
+            call dcopy(nrayelt(iray,k),salphal(1:nrayelt(iray,k),
+     +           iray,krfn(k)),1,
+     &           salphal(1:nrayelt(iray,k),iray,k),1)
             
             do is=1,nrayelt(iray,k)
                cwexde(is,iray,k)=cwexde(is,iray,krfn(k))

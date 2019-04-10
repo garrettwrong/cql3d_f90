@@ -3,6 +3,7 @@ c
       subroutine sourcef
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dscal
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -99,7 +100,7 @@ c..................................................................
 c     scale the current to be equal to asor
 c..................................................................
 
-          call dscal(iyjx2,q1,temp2(0,0),1)
+          call dscal(iyjx2,q1,temp2(0:iyjx2,0),1)
           do 200 j=1,jx
             do 150 i=1,iy
               source(i,j,k,indxlr_)=source(i,j,k,indxlr_)+temp2(i,j)

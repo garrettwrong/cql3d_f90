@@ -3,7 +3,7 @@ c
       subroutine wpinitl
       use param_mod
       use cqcomm_mod
-      use r8subs_mod, only : cvmgt
+      use r8subs_mod, only : cvmgt, dcopy
 
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -150,13 +150,19 @@ c.......................................................................
 cl    4.1 fnp1 (which may be used before first time-step in wparsou)
 c.......................................................................
 
-      call dcopy(iyjx2*ngen*lrors,f(0,0,1,1),1,fnp0(0,0,1,1),1)
-      call dcopy(iyjx2*ngen*lrors,f(0,0,1,1),1,fnp1(0,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1,
+     +     fnp0(0:iyjx2*ngen*lrors-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1,
+     +     fnp1(0:iyjx2*ngen*lrors-1,0,1,1),1)
       if (sbdry .eq. "periodic") then
-        call dcopy(iyjx2*ngen,fnp0(0,0,1,1),1,fnp0(0,0,1,lrors+1),1)
-        call dcopy(iyjx2*ngen,fnp0(0,0,1,lrors),1,fnp0(0,0,1,0),1)
-        call dcopy(iyjx2*ngen,fnp1(0,0,1,1),1,fnp1(0,0,1,lrors+1),1)
-        call dcopy(iyjx2*ngen,fnp1(0,0,1,lrors),1,fnp1(0,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnp0(0:iyjx2*ngen-1,0,1,1),1,
+     +        fnp0(0:iyjx2*ngen-1,0,1,lrors+1),1)
+        call dcopy(iyjx2*ngen,fnp0(0:iyjx2*ngen-1,0,1,lrors),1,
+     +       fnp0(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,1),1,
+     +       fnp1(0:iyjx2*ngen-1,0,1,lrors+1),1)
+        call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,lrors),1,
+     +       fnp1(0:iyjx2*ngen-1,0,1,0),1)
       endif
 
 c.......................................................................

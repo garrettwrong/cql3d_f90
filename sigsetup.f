@@ -3,6 +3,7 @@ c
       subroutine sigsetup
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 CMPIINSERT_INCLUDE
@@ -273,7 +274,7 @@ c990131      usq=amax1(usq,0.)
  80   sum1=sum1+sqrt(usq)*suc*pleg(m,jfee)*temc4(jfee)
  13   continue
  90   tamm1(m)=sum1*vicp2*vnorm/twopi  ! m=0,mmsv
-      call dcopy(mmsv+1,tamm1,1,csv(jsum,0,iq),jxis)
+      call dcopy(mmsv+1,tamm1,1,csv(jsum:jsum+mmsv+1,0,iq),jxis)
 
  100  continue  !on jv2=1,jv1
  110  continue  !on jv1=1,jx

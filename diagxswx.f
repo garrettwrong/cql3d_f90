@@ -4,6 +4,7 @@ c
       use advnce_mod
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -112,7 +113,7 @@ c..................................................................
       call coefmidt(de,2)
       call coefmidt(df,3)
  90   continue
-      call dcopy(iyjx2,temp2(0,0),1,temp1(0,0),1)
+      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
       if (ineg .eq. "disabled") go to 400
 
       do 410 j=1,jx
@@ -142,7 +143,7 @@ c     if debugging,compute density at end of velocity split
 c..................................................................
 
       if (iactst .eq. "disabled") go to 500
-      call dcopy(iyjx2,temp1(0,0),1,temp4(0,0),1)
+      call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
       call diagdens(yline,ymidd,eline)
       yline=yline*one_
  500  continue

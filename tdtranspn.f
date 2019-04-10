@@ -1,6 +1,8 @@
       subroutine tdtranspn
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : cvmgt, dcopy
+
       implicit integer (i-n), real*8 (a-h,o-z)
       dimension  zmatcont(12), janelt(12)
       include 'trans.h'
@@ -18,7 +20,8 @@ c     tdtranspn provides an alternative (new) soln method to the
 c     splitting soln implemented in tdtransp.
 c     BH071105
 c.......................................................................
-      call dcopy(iyjx2*ngen*lrors,f(0,0,1,1),1,fvn(0,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1,
+     +     fvn(0:iyjx2*ngen*lrors-1,0,1,1),1)
 c..............................................................
 c     The distribution from the previous time step resides in 
 c     fvn(i,j,k,l).  This is now (071111) defined on the complete

@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 **SCC10/7/94
@@ -20,7 +21,7 @@ c
       character*8 target
       do 20 k=1,ngen
         call GXGLFR(0) ! new page(s)
-        call dcopy(iyjx2,f(0,0,k,l_),1,temp3(0,0),1)
+        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp3(0:iyjx2-1,0),1)
         if (tandem.eq."enabled" .and. k.eq.kionn) then
           target="ionmesh"
           jxq=jlwr

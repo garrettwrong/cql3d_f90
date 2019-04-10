@@ -393,6 +393,7 @@ c-----------------------------------------------------------------------
        subroutine pgmres(n, im, rhs, sol, vv, eps, maxits, iout,
      *                    aa, ja, ia, alu, jlu, ju, ierr)
 c-----------------------------------------------------------------------
+       use r8subs_mod, only : ddot, daxpy
        implicit real*8 (a-h,o-z)
 cBH070419
        integer n, im, maxits, iout, ierr, ja(*), ia(n+1), jlu(*), ju(n)

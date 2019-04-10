@@ -3,6 +3,7 @@ c
       subroutine lossorbm(ephi,ksp)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -30,7 +31,8 @@ c     For case "mirrsnk" f_ in loss hole near x=0.
 c..................................................................
 
       if (lossmode(ksp) .eq. "mirrorcc") then
-        call dcopy(iyjx2,temp1(0,0),1,gone(0,0,ksp,indxlr_),1)
+        call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,
+     +        gone(0:iyjx2-1,0,ksp,indxlr_),1)
       elseif (lossmode(ksp) .eq. "mirrsnk") then
         do 30 i=1,iy
           do 40 j=1,jx

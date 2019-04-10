@@ -3,6 +3,7 @@ c
       subroutine sourceko ! must be called for k=kelecg only
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only: lug, luf, dscal, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -206,7 +207,8 @@ cBH180416:	 write(*,*)
                i0=iyh_(ir)
                do ii=2,i0param
                   sinth=(ii-1)*dsinth
-                  i0=lug(sinth,sinz(1,il,lrindx(ir)),iyh_(ir),i0)
+                  i0=lug(sinth,sinz(1:iyh_(ir),il,
+     1             lrindx(ir)),iyh_(ir),i0)
                   i0m1=i0-1
                   if (i0m1.eq.0) then
                      i0m1=1
@@ -474,8 +476,9 @@ c..................................................................
            
       if (n.eq.nstop) then
       if (knockon.eq."fpld_dsk") then
-         call dcopy(iyjx2,source(0,0,k,l_),1,temp1(0,0),1)
-         call dscal(iyjx2,dtr,temp1(0,0),1)
+         call dcopy(iyjx2,source(0:iyjx2-1,0,k,l_),1,
+     +        temp1(0:iyjx2-1,0),1)
+         call dscal(iyjx2,dtr,temp1(0:iyjx2-1,0),1)
          iunit=20
          open (unit=iunit,file='fpld_dsk',status='unknown')
          !do 80 k=1,1 !  k=kelecg
@@ -488,8 +491,9 @@ c990307         call geglxx(0)
          stop 'Wrote disk file from subroutine souceko: fpld_dsk'
       endif
       if (knockon.eq."fpld_ds1") then
-         call dcopy(iyjx2,source(0,0,k,l_),1,temp1(0,0),1)
-         call dscal(iyjx2,dtr,temp1(0,0),1)
+         call dcopy(iyjx2,source(0:iyjx2-1,0,k,l_),1,
+     +        temp1(0:iyjx2-1,0),1)
+         call dscal(iyjx2,dtr,temp1(0:iyjx2-1,0),1)
          do j=1,jx
             do i=1,iy
                temp1(i,j)=temp1(i,j)+f_(i,j,k,1)

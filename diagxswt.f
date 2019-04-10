@@ -3,6 +3,7 @@ c
       subroutine diagxswt(k)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -22,7 +23,7 @@ c     Add in the source contribution.
 c..................................................................
 
       sgain(3,k)=xlncur(k,lr_)*.5*dtr+sgain(3,k)
-      call dcopy(iyjx2,temp2(0,0),1,temp1(0,0),1)
+      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
       s=0.
       if (ineg .eq. "disabled") go to 350
 
@@ -45,7 +46,7 @@ c..................................................................
       engain(k)=engain(k)+eline*one_
       sgain(2,k)=xline*one_
  350  continue
-      call dcopy(iyjx2,temp1(0,0),1,temp4(0,0),1)
+      call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
 
 c..................................................................
 c     Compute power from df/dt and from setting neg f to zero.
@@ -54,7 +55,7 @@ c..................................................................
       if (n .gt. 0 .and. n/nchec*nchec .eq. n) then
         call diagentr(9,k)
         call diagentr(10,k)
-        call dcopy(iyjx2,temp4(0,0),1,temp1(0,0),1)
+        call dcopy(iyjx2,temp4(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
       endif
       if (iactst.eq."disabled") go to 500
 
