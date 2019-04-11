@@ -490,11 +490,10 @@ C
       subroutine PGFUNC1(VISBLE,yplt,xplt,zplt)
       use param_mod
       use cqcomm_mod
-      use pltdf_mod, only : IIY
+      use pltdf_mod, only : IIX, IIY, wx, wy
       INTEGER VISBLE
       REAL xplt,yplt,zplt
-      pointer wx,wy
-      REAL wx(:),wy(:)
+
 C
 C 
 

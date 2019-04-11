@@ -8,7 +8,7 @@ c
       real(c_double), public :: cont(nconta),tempcntr(nconta)
       ! PGLOCAL1 from pltcont.f
       real(c_double), pointer, public :: wx(:), wy(:)
-      integer, public :: IIY, JXQ
+      integer, public :: IIX, IIY, JXQ
 
       save
 
