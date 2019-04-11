@@ -1,5 +1,16 @@
 c
 c
+      
+      function ghelec(i,j,k)
+      use param_mod
+      use cqcomm_mod
+      use advnce_mod
+      
+      ghelec = qz(j)*(zdaij*fpj(i,j,k)-zdaijm1*fpj(i,j-1,k))
+     +  + ry(i,j)*(zddij*fpi(i,j)-zddim1j*fpi(i-1,j))
+      end function ghelec
+
+c
       subroutine wpelecf(kopt)
       use param_mod
       use cqcomm_mod
@@ -25,9 +36,6 @@ c     This routine assumes that f is the updated distribution function
 c..............................................................
 
       dimension z4pirho(lsa)
-
-      ghelec(i,j)=qz(j)*(zdaij*fpj(i,j)-zdaijm1*fpj(i,j-1)) +
-     +  ry(i,j)*(zddij*fpi(i,j)-zddim1j*fpi(i-1,j))
 c.......................................................................
 
       if (n.lt.nonelpr .or. n.gt.noffelpr) return
@@ -121,7 +129,7 @@ CDIR$ NOVECTOR
               zdaijm1=zdacofm*coss(i,l)
               zddij=zddcof*(sinn(i,l)+sinn(i+1-1/(iy_(l)+1-i),l))**2
               zddim1j=zddcof*(sinn(i-1+1/i,l)+sinn(i,l))**2
-              velsou(i,j,k,l)=velsou(i,j,k,l)+ghelec(i,j)
+              velsou(i,j,k,l)=velsou(i,j,k,l)+ghelec(i,j,k)
  330        continue
  320      continue
  310    continue

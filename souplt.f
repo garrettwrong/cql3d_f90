@@ -3,7 +3,7 @@ c
       subroutine souplt
       use param_mod
       use cqcomm_mod
-      use pltdf_mod, only : cont, tempcntr, nconta
+      use pltdf_mod, only : cont, tempcntr, nconta, JXQ
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 

@@ -458,16 +458,19 @@ contains
   !     Express the Chang-Cooper weighted average f(i,j+1/2,l_): fpj
   !..................................................................
 
-  function fpj(i,j)
-    fpj = f(i,j+1,advnce_k,l_)+ (f(i,j,advnce_k,l_)-f(i,j+1,advnce_k,l_))*dj(i,j,advnce_k,l_)
+  function fpj(i,j,k)
+    !k bug
+    fpj = f(i,j+1,k,l_)+ (f(i,j,k,l_)-f(i,j+1,k,l_))*dj(i,j,advnce_k,l_)
   end function fpj
 
-  function fpjp(i,j)
-    fpjp = fpj(i+1,j) + cvmgt(bsl(j,advnce_k,l_),zero,(i+1).eq.itl)
+  function fpjp(i,j, k)
+    ! k bug
+    fpjp = fpj(i+1,j,k) + cvmgt(bsl(j,k,l_),zero,(i+1).eq.itl)
   end function fpjp
 
-  function fpj0(i,j)
-    fpj0 = fpj(i,j) + cvmgt(bsu(j,advnce_k,l_),zero,i.eq.itu)
+  function fpj0(i,j,k)
+    ! k bug
+    fpj0 = fpj(i,j,k) + cvmgt(bsu(j,k,l_),zero,i.eq.itu)
   end function fpj0
 
   !YuP-110106: error corrected:  l_

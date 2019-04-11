@@ -406,15 +406,15 @@ c..................................................................
       implicit integer (i-n), real*8 (a-h,o-z)
        
       if((i.ne.itl .and. i.ne.itu) .or. symtrap.ne."enabled") then
-       gfii= dc(i,j)*0.5*dyi(i,l_)*(fpjp(i,j)-fpj0(i-1,j))
+       gfii= dc(i,j)*0.5*dyi(i,l_)*(fpjp(i,j,k)-fpj0(i-1,j,k))
        else
        gfii= 
-     1  +cl(itl-1,j)*eyp5(itl-1,l_)*(fpjp(itl-1,j)-fpj(itl-1,j))
-     1  +2.*cl(itl+1,j)*eyp5(itl,l_)*(fpj(itl+1,j)-fpj(itl,j))
-     1  +cl(itu+1,j)*eyp5(itu,l_)*(fpj(itu+1,j)-fpj0(itu,j))
+     1  +cl(itl-1,j)*eyp5(itl-1,l_)*(fpjp(itl-1,j,k)-fpj(itl-1,j,k))
+     1  +2.*cl(itl+1,j)*eyp5(itl,l_)*(fpj(itl+1,j,k)-fpj(itl,j,k))
+     1  +cl(itu+1,j)*eyp5(itu,l_)*(fpj(itu+1,j,k)-fpj0(itu,j,k))
       endif
       
-      gfi=da(i,j)*fpj(i,j)
+      gfi=da(i,j)*fpj(i,j,k)
      1   +db(i,j)*exp5(j)*(f(i,j+1,k,l_)-f(i,j,k,l_)) +gfii
      
       end function gfi

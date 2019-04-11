@@ -4,7 +4,6 @@ c
       use iso_c_binding, only : c_float
       character*7, private :: scale
       real(c_float), private ::  X, Y, ANGLE, FJUST
-            
       save
 
       contains
@@ -392,8 +391,6 @@ c---------------------------------------------------------------------
       subroutine  gscpvs(gl_x,gl_y) ! called explicitly with real*4 args
       ! set current position for text
       real*4 gl_x,gl_y
-      REAL*4 X,Y,ANGLE,FJUST
-      common/GRAFLIB_PGPLOT_text/ X,Y,ANGLE,FJUST
         X = gl_x  ! To PGPTXT(X,Y,ANGLE,FJUST,TEXT)
         Y = gl_y
       return 
@@ -402,8 +399,6 @@ c---------------------------------------------------------------------
       subroutine  gstxan(gl_angle) ! called explicitly with real*4 args
       ! set angle to plot text
       real*4 gl_angle
-      REAL*4 X,Y,ANGLE,FJUST
-      common/GRAFLIB_PGPLOT_text/ X,Y,ANGLE,FJUST
         ANGLE = gl_angle ! To PGPTXT(X,Y,ANGLE,FJUST,TEXT) 
       return 
       end
@@ -412,8 +407,7 @@ c---------------------------------------------------------------------
       ! set justification of string
       character*(*) just1 !can be 'left', 'right', or 'center'
       character*(*) just2 !can be 'top', 'bottom', or 'center'
-      REAL*4 X,Y,ANGLE,FJUST
-      common/GRAFLIB_PGPLOT_text/ X,Y,ANGLE,FJUST
+
          FJUST = 0.0
          if(just1.eq."left")   FJUST = 0.0
          if(just1.eq."center") FJUST = 0.5
@@ -435,8 +429,6 @@ c---------------------------------------------------------------------
       subroutine  gptx2d(text) 
       ! Plot Text
       character*(*) text
-      REAL*4 X,Y,ANGLE,FJUST
-      common/GRAFLIB_PGPLOT_text/ X,Y,ANGLE,FJUST
         call PGPTXT(X, Y, ANGLE, FJUST, text)
 c Primitive routine for drawing text. The text may be drawn at any
 c angle with the horizontal, and may be centered or left- or right-
