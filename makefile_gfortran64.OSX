@@ -6,7 +6,7 @@ COMPILER=	gfortran
 BUILDER=	$(COMPILER)
 INCLUDES  = frcomm.h frname.h frname_decl.h name.h  \
 	trans.h wpadvnc.h name_decl.h
-SOURCES  =   param.f03 cqcomm.f advnce.f03 pltmain.f \
+SOURCES  =   param.f03 cqcomm.f03 advnce.f03 pltmain.f \
         impavnc0.f \
         a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
