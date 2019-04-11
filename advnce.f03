@@ -8,6 +8,8 @@
 module advnce_mod
   use cqcomm_mod
   use r8subs_mod, only : cvmgt
+  save
+  integer, public ::  advnce_k 
 
 contains
 
@@ -52,19 +54,19 @@ contains
   !     f2i(i,j)=temp2(i+1,j)*(1.-di(i,j,k,l_))+temp2(i,j)*di(i,j,k,l_)
   ! YuP-101228: same as above, but re-arranged to have one '*'
   function f1j(i,j)
-    f1j = temp1(i,j+1) + (temp1(i,j)-temp1(i,j+1))*dj(i,j,k,l_)
+    f1j = temp1(i,j+1) + (temp1(i,j)-temp1(i,j+1))*dj(i,j,advnce_k,l_)
   end function f1j
 
   function f2j(i,j)
-    f2j = temp2(i,j+1) + (temp2(i,j)-temp2(i,j+1))*dj(i,j,k,l_)
+    f2j = temp2(i,j+1) + (temp2(i,j)-temp2(i,j+1))*dj(i,j,advnce_k,l_)
   end function f2j
 
   function f1i(i,j)
-    f1i = temp1(i+1,j) + (temp1(i,j)-temp1(i+1,j))*di(i,j,k,l_)
+    f1i = temp1(i+1,j) + (temp1(i,j)-temp1(i+1,j))*di(i,j,advnce_k,l_)
   end function f1i
 
   function f2i(i,j)
-    f2i = temp2(i+1,j) + (temp2(i,j)-temp2(i+1,j))*di(i,j,k,l_)
+    f2i = temp2(i+1,j) + (temp2(i,j)-temp2(i+1,j))*di(i,j,advnce_k,l_)
   end function f2i
 
   !..................................................................
@@ -82,19 +84,19 @@ contains
   !..................................................................
   
   function alpx(i,j) 
-    alpx =  (da(i,j)*(1.-dj(i,j,k,l_))+db(i,j)*exp5(j)) * qz(j)
+    alpx =  (da(i,j)*(1.-dj(i,j,advnce_k,l_))+db(i,j)*exp5(j)) * qz(j)
   end function alpx
 
   function betx(i,j) 
     betx =  (db(i,j)*exp5(j)+db(i,j-1)*exm5(j)-da(i,j) &
-         *dj(i,j,k,l_)+da(i,j-1) &
-         *(1.-dj(i,j-1,k,l_))) &
+         *dj(i,j,advnce_k,l_)+da(i,j-1) &
+         *(1.-dj(i,j-1,advnce_k,l_))) &
          * qz(j)-vptb(i,lr_) &
          *cah(i,j)+vptb(i,lr_)*rbgn
   end function betx
 
   function gamx(i,j) 
-    gamx =  (-da(i,j-1)*dj(i,j-1,k,l_)+db(i,j-1)*exm5(j)) * qz(j)
+    gamx =  (-da(i,j-1)*dj(i,j-1,advnce_k,l_)+db(i,j-1)*exm5(j)) * qz(j)
   end function gamx
 
   !..................................................................
@@ -136,19 +138,19 @@ contains
   !..................................................................
   
   function alpy(i,j) 
-    alpy =  (dd(i,j)*(1.-di(i,j,k,l_))+df(i,j)*eyp5(i,l_)) *ry(i,j)
+    alpy =  (dd(i,j)*(1.-di(i,j,advnce_k,l_))+df(i,j)*eyp5(i,l_)) *ry(i,j)
   end function alpy
 
   function bety(i,j) 
-    bety =  (-dd(i,j)*di(i,j,k,l_) & 
+    bety =  (-dd(i,j)*di(i,j,advnce_k,l_) & 
          +df(i,j)*eyp5(i,l_) &
-         +dd(i-1,j)*(1.-di(i-1,j,k,l_)) &
+         +dd(i-1,j)*(1.-di(i-1,j,advnce_k,l_)) &
          +df(i-1,j)*eym5(i,l_)) *ry(i,j) &
          +vptb(i,lr_)*rbgn
   end function bety
 
   function gamy(i,j) 
-    gamy =  -ry(i,j)*(dd(i-1,j)*di(i-1,j,k,l_) - df(i-1,j)*eym5(i,l_))
+    gamy =  -ry(i,j)*(dd(i-1,j)*di(i-1,j,advnce_k,l_) - df(i-1,j)*eym5(i,l_))
   end function gamy
 
   function dely(i,j) 
@@ -213,62 +215,62 @@ contains
   !.......................................................................
   
   function xmm(i,j)
-    xmm = (-qz(j)*dc(i,j-1)*dj(i-1,j-1,k,l_)*dyi(i,l_) &
-         -ry(i,j)*de(i-1,j)*di(i-1,j-1,k,l_)*dxi(j))*.5
+    xmm = (-qz(j)*dc(i,j-1)*dj(i-1,j-1,advnce_k,l_)*dyi(i,l_) &
+         -ry(i,j)*de(i-1,j)*di(i-1,j-1,advnce_k,l_)*dxi(j))*.5
   end function xmm
 
   function x0m(i,j)
-    x0m = qz(j)*da(i,j-1)*dj(i,j-1,k,l_)+ry(i,j)*(de(i,j)* & 
-          di(i,j-1,k,l_)-de(i-1,j)*(1.-di(i-1,j-1,k,l_)))*0.5*dxi(j) &
+    x0m = qz(j)*da(i,j-1)*dj(i,j-1,advnce_k,l_)+ry(i,j)*(de(i,j)* & 
+          di(i,j-1,advnce_k,l_)-de(i-1,j)*(1.-di(i-1,j-1,advnce_k,l_)))*0.5*dxi(j) &
           -qz(j)*db(i,j-1)*exm5(j)
   end function x0m
 
   function xpm(i,j)
-    xpm = (qz(j)*dc(i,j-1)*dj(i+1,j-1,k,l_)*dyi(i,l_)+ &
-         ry(i,j)*de(i,j)*(1.-di(i,j-1,k,l_))*dxi(j))*.5
+    xpm = (qz(j)*dc(i,j-1)*dj(i+1,j-1,advnce_k,l_)*dyi(i,l_)+ &
+         ry(i,j)*de(i,j)*(1.-di(i,j-1,advnce_k,l_))*dxi(j))*.5
   end function xpm
 
   function xm0(i,j)
-    xm0 = qz(j)*(dc(i,j)*dj(i-1,j,k,l_) & 
-         -dc(i,j-1)*(1.-dj(i-1,j-1,k,l_))) &
-         *0.5*dyi(i,l_)+ry(i,j)*(dd(i-1,j)*di(i-1,j,k,l_) &
+    xm0 = qz(j)*(dc(i,j)*dj(i-1,j,advnce_k,l_) & 
+         -dc(i,j-1)*(1.-dj(i-1,j-1,advnce_k,l_))) &
+         *0.5*dyi(i,l_)+ry(i,j)*(dd(i-1,j)*di(i-1,j,advnce_k,l_) &
          -df(i-1,j)*eym5(i,l_)) &
          +cthta(i,j)*dithta(i-1,j,l_) !Added since 1992
   end function xm0
 
   function x00(i,j)
     x00 = qz(j)* &
-         (-da(i,j)*dj(i,j,k,l_)+da(i,j-1)*(1.-dj(i,j-1,k,l_)) &
+         (-da(i,j)*dj(i,j,advnce_k,l_)+da(i,j-1)*(1.-dj(i,j-1,advnce_k,l_)) &
          +db(i,j)*exp5(j)+db(i,j-1)*exm5(j)) &
-         +ry(i,j)*(-dd(i,j)*di(i,j,k,l_) &
-         +dd(i-1,j)*(1.-di(i-1,j,k,l_))+df(i,j)*eyp5(i,l_)+df(i-1,j) &
+         +ry(i,j)*(-dd(i,j)*di(i,j,advnce_k,l_) &
+         +dd(i-1,j)*(1.-di(i-1,j,advnce_k,l_))+df(i,j)*eyp5(i,l_)+df(i-1,j) &
          *eym5(i,l_)) &
          -vptb(i,lr_)*(cah(i,j)-1./dtreff) &
          +cthta(i,j)*(1.-dithta(i-1,j,l_)-dithta(i,j,l_)) !Added since 1992
   end function x00
 
   function xp0(i,j)
-    xp0 = qz(j)*(-dc(i,j)*dj(i+1,j,k,l_) &
-         +dc(i,j-1)*(1.-dj(i+1,j-1,k,l_)))*0.5*dyi(i,l_) &
+    xp0 = qz(j)*(-dc(i,j)*dj(i+1,j,advnce_k,l_) &
+         +dc(i,j-1)*(1.-dj(i+1,j-1,advnce_k,l_)))*0.5*dyi(i,l_) &
          -ry(i,j)*(dd(i,j) &
-         *(1.-di(i,j,k,l_))+df(i,j)*eyp5(i,l_)) &
+         *(1.-di(i,j,advnce_k,l_))+df(i,j)*eyp5(i,l_)) &
          -cthta(i,j)*(1.-dithta(i,j,l_)) !Added since 1992
   end function xp0
 
   function xmp(i,j)
-    xmp = qz(j)*dc(i,j)*(1.-dj(i-1,j,k,l_))*.5*dyi(i,l_)+ &
-         ry(i,j)*de(i-1,j)*.5*dxi(j)*di(i-1,j+1,k,l_)
+    xmp = qz(j)*dc(i,j)*(1.-dj(i-1,j,advnce_k,l_))*.5*dyi(i,l_)+ &
+         ry(i,j)*de(i-1,j)*.5*dxi(j)*di(i-1,j+1,advnce_k,l_)
   end function xmp
 
   function x0p(i,j)
-    x0p = qz(j)*(-da(i,j)*(1.-dj(i,j,k,l_))-db(i,j)*exp5(j)) &
-         +ry(i,j)*(-de(i,j)*di(i,j+1,k,l_) &
-         +de(i-1,j)*(1.-di(i-1,j+1,k,l_)))*0.5*dxi(j) 
+    x0p = qz(j)*(-da(i,j)*(1.-dj(i,j,advnce_k,l_))-db(i,j)*exp5(j)) &
+         +ry(i,j)*(-de(i,j)*di(i,j+1,advnce_k,l_) &
+         +de(i-1,j)*(1.-di(i-1,j+1,advnce_k,l_)))*0.5*dxi(j) 
   end function x0p
 
   function xpp(i,j)
-    xpp = -qz(j)*dc(i,j)*(1.-dj(i+1,j,k,l_))*0.5*dyi(i,l_) &
-         -ry(i,j)*de(i,j)*(1.-di(i,j+1,k,l_))*0.5*dxi(j)
+    xpp = -qz(j)*dc(i,j)*(1.-dj(i+1,j,advnce_k,l_))*0.5*dyi(i,l_) &
+         -ry(i,j)*de(i,j)*(1.-di(i,j+1,advnce_k,l_))*0.5*dxi(j)
   end function xpp
 
   !.......................................................................
@@ -363,93 +365,93 @@ contains
   
 
   function tmm(j)
-    tmm = -qz(j)*cl(itl-1,j-1)*dj(itl-1,j-1,k,l_)*eym5(itl,l_) &
-         -r2y(j)*di(itl-1,j-1,k,l_)*de(itl-1,j)*0.5*dxi(j)
+    tmm = -qz(j)*cl(itl-1,j-1)*dj(itl-1,j-1,advnce_k,l_)*eym5(itl,l_) &
+         -r2y(j)*di(itl-1,j-1,advnce_k,l_)*de(itl-1,j)*0.5*dxi(j)
   end function tmm
 
   function tm0(j)
-    tm0 = qz(j)*cl(itl-1,j)*dj(itl-1,j,k,l_)*eym5(itl,l_) &
-         -qz(j)*cl(itl-1,j-1)*(1.-dj(itl-1,j-1,k,l_))*eym5(itl,l_) &
-         +r2y(j)*(dd(itl-1,j)*di(itl-1,j,k,l_) &
+    tm0 = qz(j)*cl(itl-1,j)*dj(itl-1,j,advnce_k,l_)*eym5(itl,l_) &
+         -qz(j)*cl(itl-1,j-1)*(1.-dj(itl-1,j-1,advnce_k,l_))*eym5(itl,l_) &
+         +r2y(j)*(dd(itl-1,j)*di(itl-1,j,advnce_k,l_) &
          -df(itl-1,j)*eym5(itl,l_))
   end function tm0
 
   function tmp(j)
-    tmp = qz(j)*cl(itl-1,j)*(1.-dj(itl-1,j,k,l_))*eym5(itl,l_) &
-         +r2y(j)*di(itl-1,j+1,k,l_)*de(itl-1,j)*0.5*dxi(j)
+    tmp = qz(j)*cl(itl-1,j)*(1.-dj(itl-1,j,advnce_k,l_))*eym5(itl,l_) &
+         +r2y(j)*di(itl-1,j+1,advnce_k,l_)*de(itl-1,j)*0.5*dxi(j)
   end function tmp
 
   function t0m(j)
-    t0m = qz(j)*(da(itl,j-1)*dj(itl,j-1,k,l_)-db(itl,j-1)*exm5(j)+ &
-         cl(itl-1,j-1)*dj(itl,j-1,k,l_)*eym5(itl,l_)-2.*cl(itl+1,j-1)* &
-         dj(itl,j-1,k,l_)*eyp5(itl,l_) &
-         -cl(itu+1,j-1)*dj(itu,j-1,k,l_)*eyp5(itu,l_)) &
-         +r2y(j)*(-de(itl-1,j)*(1.-di(itl-1,j-1,k,l_))+2.*de(itl,j) &
-         *di(itl,j-1,k,l_)+de(itu,j)*di(itu,j-1,k,l_))*0.5*dxi(j) 
+    t0m = qz(j)*(da(itl,j-1)*dj(itl,j-1,advnce_k,l_)-db(itl,j-1)*exm5(j)+ &
+         cl(itl-1,j-1)*dj(itl,j-1,advnce_k,l_)*eym5(itl,l_)-2.*cl(itl+1,j-1)* &
+         dj(itl,j-1,advnce_k,l_)*eyp5(itl,l_) &
+         -cl(itu+1,j-1)*dj(itu,j-1,advnce_k,l_)*eyp5(itu,l_)) &
+         +r2y(j)*(-de(itl-1,j)*(1.-di(itl-1,j-1,advnce_k,l_))+2.*de(itl,j) &
+         *di(itl,j-1,advnce_k,l_)+de(itu,j)*di(itu,j-1,advnce_k,l_))*0.5*dxi(j) 
   end function t0m
 
   function t00(j)
     t00 = vptb(itl,lr_)/dtreff &
-         +qz(j)*(-da(itl,j)*dj(itl,j,k,l_)+db(itl,j)* &
-         exp5(j)-cl(itl-1,j)*dj(itl,j,k,l_)*eym5(itl,l_) &
-         +2.*cl(itl+1,j)*dj(itl,j,k,l_) &
+         +qz(j)*(-da(itl,j)*dj(itl,j,advnce_k,l_)+db(itl,j)* &
+         exp5(j)-cl(itl-1,j)*dj(itl,j,advnce_k,l_)*eym5(itl,l_) &
+         +2.*cl(itl+1,j)*dj(itl,j,advnce_k,l_) &
          *eyp5(itl,l_) &
-         +cl(itu+1,j)*dj(itu,j,k,l_)*eyp5(itu,l_) &
-         +da(itl,j-1)*(1.-dj(itl,j-1,k,l_)) &
+         +cl(itu+1,j)*dj(itu,j,advnce_k,l_)*eyp5(itu,l_) &
+         +da(itl,j-1)*(1.-dj(itl,j-1,advnce_k,l_)) &
          +db(itl,j-1)*exm5(j) &
-         +cl(itl-1,j-1)*(1.-dj(itl,j-1,k,l_))*eym5(itl,l_) &
-         -2.*cl(itl+1,j-1)*(1.-dj(itl,j-1,k,l_))*eyp5(itl,l_) &
-         -cl(itu+1,j-1)*(1.-dj(itu,j-1,k,l_))*eyp5(itu,l_)) &
-         +r2y(j)*(dd(itl-1,j)*(1.-di(itl-1,j,k,l_)) &
+         +cl(itl-1,j-1)*(1.-dj(itl,j-1,advnce_k,l_))*eym5(itl,l_) &
+         -2.*cl(itl+1,j-1)*(1.-dj(itl,j-1,advnce_k,l_))*eyp5(itl,l_) &
+         -cl(itu+1,j-1)*(1.-dj(itu,j-1,advnce_k,l_))*eyp5(itu,l_)) &
+         +r2y(j)*(dd(itl-1,j)*(1.-di(itl-1,j,advnce_k,l_)) &
          +df(itl-1,j)*eym5(itl,l_) &
-         -2.*dd(itl,j)*di(itl,j,k,l_) &
+         -2.*dd(itl,j)*di(itl,j,advnce_k,l_) &
          +2.*df(itl,j)*eyp5(itl,l_)-dd(itu,j) &
-         *di(itu,j,k,l_) &
+         *di(itu,j,advnce_k,l_) &
          +df(itu,j)*eyp5(itu,l_))-vptb(i,lr_)*cah(itl,j)
   end function t00
 
   function t0p(j)
-    t0p = qz(j)*(-da(itl,j)*(1.-dj(itl,j,k,l_))-db(itl,j)*exp5(j) &
-         -cl(itl-1,j)*eym5(itl,l_)*(1.-dj(itl,j,k,l_))+2.*cl(itl+1,j) &
-         *eyp5(itl,l_)*(1.-dj(itl,j,k,l_)) &
-         +cl(itu+1,j)*(1.-dj(itu,j,k,l_))*eyp5(itu,l_)) &
-         +r2y(j)*(de(itl-1,j)*0.5*dxi(j)*(1.-di(itl-1,j+1,k,l_))- &
-         2.*de(itl,j)*di(itl,j+1,k,l_)*0.5*dxi(j) &
-         -de(itu,j)*di(itu,j+1,k,l_)*0.5*dxi(j) )
+    t0p = qz(j)*(-da(itl,j)*(1.-dj(itl,j,advnce_k,l_))-db(itl,j)*exp5(j) &
+         -cl(itl-1,j)*eym5(itl,l_)*(1.-dj(itl,j,advnce_k,l_))+2.*cl(itl+1,j) &
+         *eyp5(itl,l_)*(1.-dj(itl,j,advnce_k,l_)) &
+         +cl(itu+1,j)*(1.-dj(itu,j,advnce_k,l_))*eyp5(itu,l_)) &
+         +r2y(j)*(de(itl-1,j)*0.5*dxi(j)*(1.-di(itl-1,j+1,advnce_k,l_))- &
+         2.*de(itl,j)*di(itl,j+1,advnce_k,l_)*0.5*dxi(j) &
+         -de(itu,j)*di(itu,j+1,advnce_k,l_)*0.5*dxi(j) )
   end function t0p
 
   function tpm(j)
-    tpm = 2.*qz(j)*cl(itl+1,j-1)*eyp5(itl,l_)*dj(itl+1,j-1,k,l_) &
-          +2.*r2y(j)*de(itl,j)*(1.-di(itl,j-1,k,l_))*0.5*dxi(j)
+    tpm = 2.*qz(j)*cl(itl+1,j-1)*eyp5(itl,l_)*dj(itl+1,j-1,advnce_k,l_) &
+          +2.*r2y(j)*de(itl,j)*(1.-di(itl,j-1,advnce_k,l_))*0.5*dxi(j)
   end function tpm
 
   function tp0(j)
-    tp0 = -2.*qz(j)*(cl(itl+1,j)*dj(itl+1,j,k,l_)*eyp5(itl,l_)- &
-         cl(itl+1,j-1)*(1.-dj(itl+1,j-1,k,l_))*eyp5(itl,l_)) &
+    tp0 = -2.*qz(j)*(cl(itl+1,j)*dj(itl+1,j,advnce_k,l_)*eyp5(itl,l_)- &
+         cl(itl+1,j-1)*(1.-dj(itl+1,j-1,advnce_k,l_))*eyp5(itl,l_)) &
          -2.*r2y(j)*df(itl,j)*eyp5(itl,l_) &
-         -2.*r2y(j)*dd(itl,j)*(1.-di(itl,j,k,l_))
+         -2.*r2y(j)*dd(itl,j)*(1.-di(itl,j,advnce_k,l_))
   end function tp0
 
   function tpp(j)
-    tpp = -2*qz(j)*cl(itl+1,j)*eyp5(itl,l_)*(1.-dj(itl+1,j,k,l_)) &
-         -2.*r2y(j)*de(itl,j)*0.5*dxi(j)*(1.-di(itl,j+1,k,l_))
+    tpp = -2*qz(j)*cl(itl+1,j)*eyp5(itl,l_)*(1.-dj(itl+1,j,advnce_k,l_)) &
+         -2.*r2y(j)*de(itl,j)*0.5*dxi(j)*(1.-di(itl,j+1,advnce_k,l_))
   end function tpp
 
   function tum(j)
-    tum = qz(j)*cl(itu+1,j-1)*eyp5(itu,l_)*dj(itu+1,j-1,k,l_) &
-         +r2y(j)*de(itu,j)*0.5*dxi(j)*(1.-di(itu,j-1,k,l_))
+    tum = qz(j)*cl(itu+1,j-1)*eyp5(itu,l_)*dj(itu+1,j-1,advnce_k,l_) &
+         +r2y(j)*de(itu,j)*0.5*dxi(j)*(1.-di(itu,j-1,advnce_k,l_))
   end function tum
 
   function tu0(j)
-    tu0 = -qz(j)*cl(itu+1,j)*dj(itu+1,j,k,l_)*eyp5(itu,l_) & 
-         +qz(j)*cl(itu+1,j-1)*eyp5(itu,l_)*(1.-dj(itu+1,j-1,k,l_)) &
-         -r2y(j)*(dd(itu,j)*(1.-di(itu,j,k,l_)) &
+    tu0 = -qz(j)*cl(itu+1,j)*dj(itu+1,j,advnce_k,l_)*eyp5(itu,l_) & 
+         +qz(j)*cl(itu+1,j-1)*eyp5(itu,l_)*(1.-dj(itu+1,j-1,advnce_k,l_)) &
+         -r2y(j)*(dd(itu,j)*(1.-di(itu,j,advnce_k,l_)) &
          +df(itu,j)*eyp5(itu,l_))
   end function tu0
 
   function tup(j)
-    tup = -qz(j)*cl(itu+1,j)*eyp5(itu,l_)*(1.-dj(itu+1,j,k,l_)) &
-         -r2y(j)*de(itu,j)*(1.-di(itu,j+1,k,l_))*0.5*dxi(j)
+    tup = -qz(j)*cl(itu+1,j)*eyp5(itu,l_)*(1.-dj(itu+1,j,advnce_k,l_)) &
+         -r2y(j)*de(itu,j)*(1.-di(itu,j+1,advnce_k,l_))*0.5*dxi(j)
   end function tup
 
   !..................................................................
@@ -457,15 +459,15 @@ contains
   !..................................................................
 
   function fpj(i,j)
-    fpj = f(i,j+1,k,l_)+ (f(i,j,k,l_)-f(i,j+1,k,l_))*dj(i,j,k,l_)
+    fpj = f(i,j+1,advnce_k,l_)+ (f(i,j,advnce_k,l_)-f(i,j+1,advnce_k,l_))*dj(i,j,advnce_k,l_)
   end function fpj
 
   function fpjp(i,j)
-    fpjp = fpj(i+1,j) + cvmgt(bsl(j,k,l_),zero,(i+1).eq.itl)
+    fpjp = fpj(i+1,j) + cvmgt(bsl(j,advnce_k,l_),zero,(i+1).eq.itl)
   end function fpjp
 
   function fpj0(i,j)
-    fpj0 = fpj(i,j) + cvmgt(bsu(j,k,l_),zero,i.eq.itu)
+    fpj0 = fpj(i,j) + cvmgt(bsu(j,advnce_k,l_),zero,i.eq.itu)
   end function fpj0
 
   !YuP-110106: error corrected:  l_
@@ -491,18 +493,19 @@ contains
   !..................................................................
 
   function fpip(i,j)
-    fpip = f(i+1,j,k,l_) + cvmgt(bsl(j,k,l_),zero,(i+1).eq.itl)
+    !XXX integer :: k=1, l_=1
+    fpip = f(i+1,j,advnce_k,l_) + cvmgt(bsl(j,advnce_k,l_),0.,(i+1).eq.itl)
   end function fpip
 
   function fpi0(i,j)
-    fpi0 = f(i,j,k,l_) + cvmgt(bsu(j,k,l_),zero,i.eq.itu)
+    fpi0 = f(i,j,advnce_k,l_) + cvmgt(bsu(j,advnce_k,l_),zero,i.eq.itu)
   end function fpi0
 
   !     Note: no need to check bootcalc="disabled" or not,
   !     because when bootcalc="disabled",  bsl==0 and bsu==0.
 
   function fpi(i,j)
-    fpi = fpip(i,j)*(1.-di(i,j,k,l_)) + fpi0(i,j)*di(i,j,k,l_)
+    fpi = fpip(i,j)*(1.-di(i,j,advnce_k,l_)) + fpi0(i,j)*di(i,j,advnce_k,l_)
   end function fpi
 
   !..................................................................

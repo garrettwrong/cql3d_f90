@@ -7,6 +7,7 @@ BUILDER=	$(COMPILER)
 INCLUDES  = frcomm.h frname.h frname_decl.h name.h  \
 	trans.h wpadvnc.h name_decl.h
 SOURCES  =   param.f03 cqcomm.f advnce.f03 pltmain.f \
+        impavnc0.f \
         a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
@@ -32,7 +33,7 @@ SOURCES  =   param.f03 cqcomm.f advnce.f03 pltmain.f \
 	frinitl.f  frinitz.f  frnbdep2.f  frnfreya.f  \
 	frplteq.f  frset.f frsmooth.f  frsplft.f   \
 	frstup.f  frsubs.f  frsuppor.f  frwrong.f  \
-	ilut.f impavnc0.f  impchk.f  impnorm.f  it3dalloc.f  \
+	ilut.f  impchk.f  impnorm.f  it3dalloc.f  \
 	lookup.f  losscone.f  lossegy.f  lossorbm.f  \
 	losstor.f  micgetr.f   \
 	micgmbnd.f  micgnbnd.f  micxinil.f  micxinim.f  micxinit.f  \
@@ -130,5 +131,6 @@ rebuild:
 	$(LOAD) $(OBJECTS) $(F03OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE)  $(NAME) $(OBJECTS) $(F03OBJECTS) *.lst
+	$(DELETE)  $(NAME) $(OBJECTS) $(F03OBJECTS) *.lst$(DELETE) *.mod
+	#$(DELETE) *.mod
 

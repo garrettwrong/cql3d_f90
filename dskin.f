@@ -1,5 +1,14 @@
 c
 c
+      module dskin_mod
+
+      public ! please limit some of this
+      ! XXX itl, itu
+      include 'dskin.h'
+      save
+
+      contains
+
       subroutine dskin(initial,energy,pitch,rho,fdist)
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -29,7 +38,6 @@ c     Bob Harvey, June, 2000
 c
 c..................................................................
 
-      include 'dskin.h'
 
       character*8  idskf
       character*80 line
@@ -307,3 +315,4 @@ c
       return
       end
 
+      end module dskin_mod

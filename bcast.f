@@ -1,3 +1,5 @@
+C XXX every thing in this file and related to it should be deleted
+
 c
 c
       subroutine bcast(a,val,n)

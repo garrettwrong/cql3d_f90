@@ -1,11 +1,14 @@
 c
 c
       module impavnc0_mod
-      use advnce_mod
       use iso_c_binding, only : c_double
+      ! XXX this is probably a bug in the original code.
+      use advnce_mod, only :  k => advnce_k ! use advnce_mod's advnce_k
       ! gauss_, these are used outside module in it3dalloc.f
       integer, public ::  inewjmax, ialloc      
-      integer, pointer, public ::  abd(:,:), ipivot(:)
+      ! XXX this was an integer somewhere?
+      real(c_double), pointer, public ::  abd(:,:)
+      integer, pointer, public :: ipivot(:)
       ! ampf, these are used outside module in it3dalloc.f
       real(c_double), pointer, public :: ampfda(:,:), ampfdd(:,:)      
       save
@@ -15,6 +18,7 @@ c
       subroutine impavnc0(kopt)
       use param_mod
       use cqcomm_mod
+      use advnce_mod
       use r8subs_mod, only : dgbtrf, dgbtrs, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -339,7 +343,8 @@ c-YuP      if (alloc.eq."enabled") then
          write(*,*)'impavnc0 Before allocate; Size req. for abd:',lenabd
          allocate(abd(md1abd,inewjmax),STAT=istat) !Big size ~3*jx*iy^2
          write(*,*)'impavnc0 abd: Allocate/istat=',istat
-         call bcast(abd,zero,lenabd)
+         !XXXcall bcast(abd,0,lenabd)
+         abd = 0.
          allocate(ipivot(iyjx),STAT=istat)
          call ibcast(ipivot,0,iyjx)
          ! will preset the values to zero in loop k=1,ngen
@@ -730,7 +735,8 @@ c     reinitialize to zero matrix and rhs
 c
 c          write(*,*)'impavnc0:size(rhs) ',size(rhs)
           if (soln_method.eq.'direct' .or. soln_method.eq.'itsol1') then
-              call bcast(abd,zero,lenabd)
+              !XXX call bcast(abd,0,lenabd)
+             abd = 0.
               do i=1,inewjx_(l_)
                  rhs(i)=0.0
                  ipivot(i)=0
@@ -2289,7 +2295,7 @@ c_pc    32-bit-compiler uses dgbtrf (from lapack library).
 c          call sgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
 c          write(*,*)'impavnc0 before dgbtrf, l_,inewjx,ml=',l_,inewjx,ml
            ! XXX
-          call dgbtrf(inewjx,inewjx,ml,mu,REAL(abd),md1abd,ipivot,info)
+          call dgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
           if (info .ne. 0) then
             print *,' warning after sgbtrf in impavnc0: info = ',info
             stop 'impavnc0 1'
@@ -2592,7 +2598,8 @@ C=======================================================================
 C=======================================================================      
          real*8 function z00(i,j,k)
          use param_mod
-      use cqcomm_mod
+         use cqcomm_mod
+         use advnce_mod
          implicit integer (i-n), real*8 (a-h,o-z)
 ccc         save  ! YuP: Not really needed
 
