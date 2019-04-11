@@ -321,13 +321,13 @@ c     equal to that defined for the distribution:
       IIY=iy
       RXMAXQ=XMAXQ
 
-      CALL PGSVP(.2,.8,.65,.9)
+CPGPLT      CALL PGSVP(.2,.8,.65,.9)
         IF ( RXMAXQ.eq.0. ) THEN
            RXMAXQ=1.
         ENDIF
-      CALL PGSWIN(-RXMAXQ,RXMAXQ,0.,RXMAXQ)
-      CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
-      CALL PGLAB(tx_,ty_,tt_)
+CPGPLT      CALL PGSWIN(-RXMAXQ,RXMAXQ,0.,RXMAXQ)
+CPGPLT      CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+CPGPLT      CALL PGLAB(tx_,ty_,tt_)
 
       if( (itype.eq.1 .and. pltd.eq.'color')   .or. 
      +    (itype.eq.1 .and. pltd.eq.'df_color')      .or.
@@ -390,24 +390,24 @@ c     equal to that defined for the distribution:
       
       ! Draw the map with PGIMAG. 
       ! Valid only for RTEMP2(ipar,iprp) over rectangular grid!
-      CALL PGIMAG(RTEMP2,npar,nprp,1,npar,1,nprp,FLOGMIN,FLOGMAX,TRPG)
+CPGPLT      CALL PGIMAG(RTEMP2,npar,nprp,1,npar,1,nprp,FLOGMIN,FLOGMAX,TRPG)
       ! Colorbar:
-      CALL pgwedg('RI', 2.0, 5.0, FLOGMIN,FLOGMAX, 'log10(..)')
+CPGPLT      CALL pgwedg('RI', 2.0, 5.0, FLOGMIN,FLOGMAX, 'log10(..)')
       
       endif ! on color option
 
       ! Overlay contours, with black color:
-      CALL PGSCI(1) ! 1==black 
+CPGPLT      CALL PGSCI(1) ! 1==black 
 
       ! Plot original f(i,j) in (v,pitch) coord 
       ! (lin.scale of f, but log scale of RCONT)
-      CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,NCONT,PGFUNC1)
+CPGPLT      CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,NCONT,PGFUNC1)
 
       ! Or plot the interpolated fparprp(ipar,iprp) 
       ! over (vpar,vprp) rectangular grid:
       !CALL PGSLW(1) !lnwidth=1 thin line
       !CALL PGCONT(RTEMP2,npar,nprp,1,npar,1,nprp,RCONTLOG,-NCONT,TR)
-      CALL PGSLW(3) !restore lnwidth=3 normal line width
+CPGPLT      CALL PGSLW(3) !restore lnwidth=3 normal line width
 
 
 
@@ -417,17 +417,17 @@ c     equal to that defined for the distribution:
          RYPTS(1)=0.
          RXPTS(2)=XMAXQ
          RYPTS(2)=XMAXQ*T0T
-         CALL PGLINE(2,RXPTS,RYPTS)
+CPGPLT         CALL PGLINE(2,RXPTS,RYPTS)
          RXPTS(2)=-XMAXQ
-         CALL PGLINE(2,RXPTS,RYPTS)
+CPGPLT         CALL PGLINE(2,RXPTS,RYPTS)
       else
          RXPTS(1)=0.
          RYPTS(1)=0.
          RXPTS(2)=XMAXQ/T0T
          RYPTS(2)=XMAXQ
-         CALL PGLINE(2,RXPTS,RYPTS)
+CPGPLT         CALL PGLINE(2,RXPTS,RYPTS)
          RXPTS(2)=-XMAXQ/T0T
-         CALL PGLINE(2,RXPTS,RYPTS)
+CPGPLT         CALL PGLINE(2,RXPTS,RYPTS)
       endif
 
 
@@ -444,7 +444,7 @@ c     equal to that defined for the distribution:
         RTAB2(i)= sinn(i,lr_) ! v_perp/vnorm
         enddo
       endif
-      CALL PGLINE(iy,RTAB1,RTAB2)
+CPGPLT      CALL PGLINE(iy,RTAB1,RTAB2)
       
       !plot v=vth line, for the k-th gen. species
 c..................................................................
@@ -466,20 +466,20 @@ c..................................................................
       endif
       ! Five different line styles are available:
       ! 1 (full line), 2 (dashed), 3 (dot-dash-dot-dash), 4 (dotted),
-      CALL PGSLS(4) 
-      CALL PGLINE(iy,RTAB1,RTAB2)
-      CALL PGSLS(1) ! 1-> restore solid line
-      CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
+CPGPLT      CALL PGSLS(4) 
+CPGPLT      CALL PGLINE(iy,RTAB1,RTAB2)
+CPGPLT      CALL PGSLS(1) ! 1-> restore solid line
+CPGPLT      CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
 
 
       if (k.eq.0) return
       rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
       write(t_,150) n,timet
-        CALL PGMTXT('B',6.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',6.,0.,0.,t_)
       write(t_,151) rovera(lr_),rr
-        CALL PGMTXT('B',7.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',7.,0.,0.,t_)
       write(t_,153) rya(lr_), rpcon(lr_), lr_
-        CALL PGMTXT('B',8.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',8.,0.,0.,t_)
  150  format("time step n=",i5,5x,"time=",1pe10.2," secs")
  151  format( "r/a=",1pe10.3,5x,"radial position (R)=",1pe12.4," cm")
  153  format( "rya=",1pe10.3,5x,"R=rpcon=",1pe12.4," cm,  Surf#",i4)
@@ -524,11 +524,11 @@ C     THIS SUBROUTINE MOVES PEN TO NORMALIZED V_PARALLEL,V_PERP COORDS.
 
 C      write(*,*) 'visble,x,y,z,xworld,yworld',visble,x,y,z,xworld,yworld
 
-      IF (VISBLE.EQ.0) THEN
-         CALL PGMOVE(XWORLD,YWORLD)
-      ELSE
-         CALL PGDRAW(XWORLD,YWORLD)
-      ENDIF
+CPGPLT      IF (VISBLE.EQ.0) THEN
+CPGPLT         CALL PGMOVE(XWORLD,YWORLD)
+CPGPLT      ELSE
+CPGPLT         CALL PGDRAW(XWORLD,YWORLD)
+CPGPLT      ENDIF
 
       RETURN
       END
@@ -582,20 +582,20 @@ C
       DATA AB /0.0, 0.0, 0.3, 0.3, 0.7, 0.7, 0.7, 0.7, 0.9, 0.9,
      :         0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0/
 C
-      IF (TYPE.EQ.1) THEN
+CPGPLT      IF (TYPE.EQ.1) THEN
 C        -- gray scale
-         CALL PGCTAB(GL, GR, GG, GB, 2, CONTRA, BRIGHT)
-      ELSE IF (TYPE.EQ.2) THEN
+CPGPLT         CALL PGCTAB(GL, GR, GG, GB, 2, CONTRA, BRIGHT)
+CPGPLT      ELSE IF (TYPE.EQ.2) THEN
 C        -- rainbow
-         CALL PGCTAB(RL, RR, RG, RB, 9, CONTRA, BRIGHT)
-      ELSE IF (TYPE.EQ.3) THEN
-C        -- heat
-         CALL PGCTAB(HL, HR, HG, HB, 5, CONTRA, BRIGHT)
-      ELSE IF (TYPE.EQ.4) THEN
-C        -- weird IRAF
-         CALL PGCTAB(WL, WR, WG, WB, 10, CONTRA, BRIGHT)
-      ELSE IF (TYPE.EQ.5) THEN
-C        -- AIPS
-         CALL PGCTAB(AL, AR, AG, AB, 20, CONTRA, BRIGHT)
-      END IF
+CPGPLT         CALL PGCTAB(RL, RR, RG, RB, 9, CONTRA, BRIGHT)
+CPGPLT      ELSE IF (TYPE.EQ.3) THEN
+CPGPLTC        -- heat
+CPGPLT         CALL PGCTAB(HL, HR, HG, HB, 5, CONTRA, BRIGHT)
+CPGPLT      ELSE IF (TYPE.EQ.4) THEN
+CPGPLTC        -- weird IRAF
+CPGPLT         CALL PGCTAB(WL, WR, WG, WB, 10, CONTRA, BRIGHT)
+CPGPLT      ELSE IF (TYPE.EQ.5) THEN
+CPGPLTC        -- AIPS
+CPGPLT         CALL PGCTAB(AL, AR, AG, AB, 20, CONTRA, BRIGHT)
+CPGPLT      END IF
       END
