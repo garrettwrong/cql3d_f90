@@ -202,13 +202,13 @@ c     equal to that defined for the distribution:
       IIY=iy
       RXMAXQ=XMAXQ
 
-      CALL PGSVP(.2,.8,.65,.9)
+CPGPLT      CALL PGSVP(.2,.8,.65,.9)
         IF ( RXMAXQ.eq.0. ) THEN
            RXMAXQ=1.
         ENDIF
-      CALL PGSWIN(-RXMAXQ,RXMAXQ,0.,RXMAXQ)
-      CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
-      CALL PGLAB(tx_,ty_,tt_)
+CPGPLT      CALL PGSWIN(-RXMAXQ,RXMAXQ,0.,RXMAXQ)
+CPGPLT      CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+CPGPLT      CALL PGLAB(tx_,ty_,tt_)
 
       t0t=sin(thb(l_))/cos(thb(l_))  ! PLOT t-p boundary (ZOW cone)
       if (t0t .lt. 1.) then
@@ -216,17 +216,17 @@ c     equal to that defined for the distribution:
          RYPTS(1)=0.
          RXPTS(2)=XMAXQ
          RYPTS(2)=XMAXQ*T0T
-         CALL PGLINE(2,RXPTS,RYPTS)
+CPGPLT         CALL PGLINE(2,RXPTS,RYPTS)
          RXPTS(2)=-XMAXQ
-         CALL PGLINE(2,RXPTS,RYPTS)
+CPGPLT         CALL PGLINE(2,RXPTS,RYPTS)
       else
          RXPTS(1)=0.
          RYPTS(1)=0.
          RXPTS(2)=XMAXQ/T0T
          RYPTS(2)=XMAXQ
-         CALL PGLINE(2,RXPTS,RYPTS)
+CPGPLT         CALL PGLINE(2,RXPTS,RYPTS)
          RXPTS(2)=-XMAXQ/T0T
-         CALL PGLINE(2,RXPTS,RYPTS)
+CPGPLT         CALL PGLINE(2,RXPTS,RYPTS)
       endif
 
       !YuP[03-2016] Added: plot v=vnorm line
@@ -234,7 +234,7 @@ c     equal to that defined for the distribution:
         RTAB1(i)= coss(i,lr_) ! v_par
         RTAB2(i)= sinn(i,lr_) ! v_perp
       enddo
-      CALL PGLINE(iy,RTAB1,RTAB2)
+CPGPLT      CALL PGLINE(iy,RTAB1,RTAB2)
       
       !YuP[03-2016] Added: plot v=vth line, for the 1st gen. species
       do i=1,iy
@@ -243,23 +243,23 @@ c     equal to that defined for the distribution:
       enddo
       ! Five different line styles are available:
       ! 1 (full line), 2 (dashed), 3 (dot-dash-dot-dash), 4 (dotted),
-      CALL PGSLS(4) 
-      CALL PGLINE(iy,RTAB1,RTAB2)
-      CALL PGSLS(1) ! 1-> restore solid line
+CPGPLT      CALL PGSLS(4) 
+CPGPLT      CALL PGLINE(iy,RTAB1,RTAB2)
+CPGPLT      CALL PGSLS(1) ! 1-> restore solid line
       
-      CALL PGSLS(1) ! 1-> solid line
-      CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
+CPGPLT      CALL PGSLS(1) ! 1-> solid line
+CPGPLT      CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
 
-      CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,NCONT,PGFUNC1)
+CPGPLT      CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,NCONT,PGFUNC1)
 
       if (k.eq.0) return
       rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
       write(t_,150) n,timet
-        CALL PGMTXT('B',6.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',6.,0.,0.,t_)
       write(t_,151) rovera(lr_),rr
-        CALL PGMTXT('B',7.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',7.,0.,0.,t_)
       write(t_,153) rya(lr_), rpcon(lr_), lr_
-        CALL PGMTXT('B',8.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',8.,0.,0.,t_)
  150  format("time step n=",i5,5x,"time=",1pe10.2," secs")
  151  format( "r/a=",1pe10.2,5x,"radial position (R)=",1pe10.3," cm")
  153  format( "rya=",1pe10.3,5x,"R=rpcon=",1pe10.3," cm,  Surf#",i4)
@@ -307,9 +307,9 @@ C     THIS SUBROUTINE MOVES PEN TO NORMALIZED V_PARALLEL,V_PERP COORDS.
 C      write(*,*) 'visble,x,y,z,xworld,yworld',visble,x,y,z,xworld,yworld
 
       IF (VISBLE.EQ.0) THEN
-         CALL PGMOVE(XWORLD,YWORLD)
+CPGPLT         CALL PGMOVE(XWORLD,YWORLD)
       ELSE
-         CALL PGDRAW(XWORLD,YWORLD)
+CPGPLT         CALL PGDRAW(XWORLD,YWORLD)
       ENDIF
 
       RETURN

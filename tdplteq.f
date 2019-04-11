@@ -56,8 +56,8 @@ c     it isn't done at the moment....
       PGZMIN=real(solz_min) 
       PGZMAX=real(solz_max) 
       
-      CALL PGPAGE
-      CALL PGSVP(.15,.85,.15,ztop)
+CPGPLT      CALL PGPAGE
+CPGPLT      CALL PGSVP(.15,.85,.15,ztop)
 
       PGER1=er(1)
       PGERNNR=er(nnr)
@@ -68,23 +68,23 @@ c     it isn't done at the moment....
          !plot half only
 c-YuP         CALL PGSWIN(PGER1,PGERNNR,PGZERO,PGEZNNZ)
 c-YuP         CALL PGWNAD(PGER1,PGERNNR,PGZERO,PGEZNNZ)
-         CALL PGSWIN(PGER1,PGERNNR,PGZMIN,PGZMAX)
-         CALL PGWNAD(PGER1,PGERNNR,PGZMIN,PGZMAX)
+CPGPLT         CALL PGSWIN(PGER1,PGERNNR,PGZMIN,PGZMAX)
+CPGPLT         CALL PGWNAD(PGER1,PGERNNR,PGZMIN,PGZMAX)
       else !eqsym=none; and/or urfmod='enabled',
          ! plot upper and lower halves:
-         CALL PGSWIN(PGER1,PGERNNR,-PGEZNNZ,PGEZNNZ)
-         CALL PGWNAD(PGER1,PGERNNR,-PGEZNNZ,PGEZNNZ)
+CPGPLT         CALL PGSWIN(PGER1,PGERNNR,-PGEZNNZ,PGEZNNZ)
+CPGPLT         CALL PGWNAD(PGER1,PGERNNR,-PGEZNNZ,PGEZNNZ)
       endif
      
-      CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
-      if ( (urfmod.ne."disabled") .and. (pltrays.eq.'enabled') 
-     +                            .and. (krf.gt.0)            ) then
-         CALL PGLAB('Major radius (cms)','Vert height (cms)',
-     +        'Fokker-Planck Flux Surfaces + Rays')
-      else ! urfmod='disabled', or krf=0
-         CALL PGLAB('Major radius (cms)','Vert height (cms)',
-     +        'Fokker-Planck Flux Surfaces')
-      endif
+CPGPLT      CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+CPGPLT      if ( (urfmod.ne."disabled") .and. (pltrays.eq.'enabled') 
+CPGPLT     +                            .and. (krf.gt.0)            ) then
+CPGPLT         CALL PGLAB('Major radius (cms)','Vert height (cms)',
+CPGPLT     +        'Fokker-Planck Flux Surfaces + Rays')
+CPGPLT      else ! urfmod='disabled', or krf=0
+CPGPLT         CALL PGLAB('Major radius (cms)','Vert height (cms)',
+CPGPLT     +        'Fokker-Planck Flux Surfaces')
+CPGPLT      endif
 
       IF (LRZMAX.GT.200) STOP 'TDPLTEQ: CHECK DIM OF TEXTT'
 
@@ -95,7 +95,7 @@ c-YuP         CALL PGWNAD(PGER1,PGERNNR,PGZERO,PGEZNNZ)
            RTAB2(j)=solz(lorbit(l)+1-j,l)
  20     continue
         text(1)=textt(l)
-        CALL PGLINE(LORBIT(L),RTAB1,RTAB2)
+CPGPLT        CALL PGLINE(LORBIT(L),RTAB1,RTAB2)
         ! YuP[03-2016] Added plotting rays in cross-sectional view
         if ( (urfmod.ne."disabled") .and. (pltrays.eq.'enabled')
      +       .and. (eqsym.ne.'none')) then 
@@ -103,7 +103,7 @@ c-YuP         CALL PGWNAD(PGER1,PGERNNR,PGZERO,PGEZNNZ)
          ! For up-dn symmetrical case only half of surfaces are plotted
          ! but rays could be in the other hemisphere, 
          ! so plot the other half:
-         CALL PGLINE(LORBIT(L),RTAB1,-RTAB2)
+CPGPLT         CALL PGLINE(LORBIT(L),RTAB1,-RTAB2)
         endif
  10   continue
 
@@ -117,7 +117,7 @@ c-YuP         CALL PGWNAD(PGER1,PGERNNR,PGZERO,PGEZNNZ)
              RTAB1(ilim)=rcontr(ilim)
              RTAB2(ilim)=zcontr(ilim)
           enddo
-          CALL PGLINE(ncontr_,RTAB1,RTAB2)
+CPGPLT          CALL PGLINE(ncontr_,RTAB1,RTAB2)
         endif
       
         if(nlimiter.gt.1) then
@@ -127,12 +127,12 @@ c-YuP         CALL PGWNAD(PGER1,PGERNNR,PGZERO,PGEZNNZ)
              RTAB1(ilim)=rlimiter(ilim)
              RTAB2(ilim)=zlimiter(ilim)
           enddo
-          CALL PGSLW(lnwidth*2) ! bold
-          CALL PGLINE(nline,RTAB1,RTAB2)
+CPGPLT          CALL PGSLW(lnwidth*2) ! bold
+CPGPLT          CALL PGLINE(nline,RTAB1,RTAB2)
           if(machine.eq."mirror") then
-          CALL PGLINE(nline,-RTAB1,RTAB2) !mirror area to the left of Z-axis
+CPGPLT          CALL PGLINE(nline,-RTAB1,RTAB2) !mirror area to the left of Z-axis
           endif
-          CALL PGSLW(lnwidth) ! restore
+CPGPLT          CALL PGSLW(lnwidth) ! restore
         endif
         
       endif !eqsym.eq.'none' or (urfmod.ne."disabled")&(pltrays.eq.'enabled')
@@ -159,13 +159,13 @@ c     +      iray,lloc(nrayelt00,iray,krf),llray(nrayelt00,iray,krf) !local to r
            enddo
 c           write(*,*)'tdplteq: krf, minval(wk_ray_r),maxval(wk_ray_r)=',
 c     +                         krf, minval(wk_ray_r),maxval(wk_ray_r)
-           CALL PGLINE(nrayelt00,wk_ray_r,wk_ray_z)
+CPGPLT           CALL PGLINE(nrayelt00,wk_ray_r,wk_ray_z)
         enddo  ! iray 
         !Add some info on rays:
         write(t_,'(a,i3, a,2i3, a,e12.5)') 'krf=',krf, 
      +                        '  nharm,nharms=', nharm(krf),nharms(krf),
      +                        '    f[Hz]=', freqcy(krf)
-        CALL PGMTXT('T',0.9,0.0,0.,t_) ! 0.9=just outside of viewport
+CPGPLT        CALL PGMTXT('T',0.9,0.0,0.,t_) ! 0.9=just outside of viewport
         !enddo
       endif  
 c..................................................................

@@ -206,7 +206,7 @@ ccc           call netcdfrw2(1) !YuP: Why here? Also called from tdchief
 ccc        endif
         if(n.eq.nstop) then
            call dskout(l_)
-           call pgend
+CPGPLT           call pgend
 cBH080106           cputime=etime(tarray)
            call cpu_time(cputime)
            write (*,*) 'achiefn/lrzmax=1: CPU time (seconds)', cputime

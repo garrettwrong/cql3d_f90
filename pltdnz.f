@@ -13,7 +13,7 @@ c
       REAL RPGMIN,RPGMAX
       REAL RILIN,PGCOORD
 
-      CALL PGSAVE
+CPGPLT      CALL PGSAVE
 
 c
       if (noplots.eq."enabled1") return
@@ -29,8 +29,8 @@ ccc          write(*,*) 'pltdnz: fmin,fmax',fmin,fmax
           if (fmin/fmax .lt. fu) fu=fmin/fmax
  3006   continue
 
-        CALL PGPAGE
-        CALL PGSVP(.2,.8,.45,.95)
+CPGPLT        CALL PGPAGE
+CPGPLT        CALL PGSVP(.2,.8,.45,.95)
 
         DO L=1,LZ
            RTAM1(L)=pol(l,lr_)
@@ -39,8 +39,8 @@ ccc          write(*,*) 'pltdnz: fmin,fmax',fmin,fmax
         RPGMAX=1.
 
           
-        CALL PGSWIN(RTAM1(1),RTAM1(LZ),RPGMIN,RPGMAX)
-        CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+CPGPLT        CALL PGSWIN(RTAM1(1),RTAM1(LZ),RPGMIN,RPGMAX)
+CPGPLT        CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
 
 
         xu=negyrg
@@ -55,12 +55,12 @@ ccc          write(*,*) 'pltdnz: fmin,fmax',fmin,fmax
           DO L=1,LZ
              RTAM2(L)=tz1(l)
           ENDDO
-          CALL PGSLS(MOD(NY,5))
-          CALL PGLINE(LZ,RTAM1,RTAM2)
+CPGPLT          CALL PGSLS(MOD(NY,5))
+CPGPLT          CALL PGLINE(LZ,RTAM1,RTAM2)
 
  3002   continue
-        CALL PGLAB('Poloidal angle (radians)','Normalized density',
-     +       'Density as a function of poloidal angle(=pi*z/zmax) ')
+CPGPLT        CALL PGLAB('Poloidal angle (radians)','Normalized density',
+CPGPLT     +       'Density as a function of poloidal angle(=pi*z/zmax) ')
 
         PGCOORD=-.15
 c        RILIN=5.
@@ -68,17 +68,17 @@ c        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
         write(T_,611)
  611    FORMAT("(curves are normalized to a maximum of 1.)")
         RILIN=5.
-        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+CPGPLT        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
         write(T_,6111)
  6111   FORMAT(
      +  "(Line order: full,dashed,dot-dash,dotted,dash-dot-dot-dot)")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+CPGPLT        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
         write(t_,612) k,rovera(lr_),n,timet
  612    FORMAT(
      +  "species",i2,"  r/a=",1pe8.2,"  n=",i5,"  time= ",1pe11.4)
         RILIN=RILIN+2.
-        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+CPGPLT        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
 c        write(t_,613) xlndnz(k,negyrg)
 c 613    FORMAT("line density (line-integration) =",1pe16.5)
 c        RILIN=RILIN+1.
@@ -89,10 +89,10 @@ c        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
         do 3005 ny=1,negyrg
            RILIN=RILIN+1.
            write(t_,3003) eegy(ny,1,k,lr_),eegy(ny,2,k,lr_)
-           CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+CPGPLT           CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
            RILIN=RILIN+1.
            write(t_,3004) tam1(ny)
-           CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+CPGPLT           CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
  3005      continue
 
  3003   format("lower egy =",1pe10.2," kev;  upper egy =",1pe10.2,"kev")
@@ -103,7 +103,7 @@ c        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
 
  100  continue
 
-      CALL PGUNSA
+CPGPLT      CALL PGUNSA
 
       return
       end

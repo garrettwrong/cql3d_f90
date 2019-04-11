@@ -58,16 +58,16 @@ c..................................................................
 
       do 300 k=1,ntotal
         if (k.gt.ngen .and. k.ne.kelec .and. n.gt.1) go to 300
-        CALL PGPAGE
-        CALL PGSVP(.2,.8,.2,.6)
+CPGPLT        CALL PGPAGE
+CPGPLT        CALL PGSVP(.2,.8,.2,.6)
 
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGMTXT('T',6.,0.5,0.5,'DENSITIES (/CC) OF SPECIES')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGMTXT('T',6.,0.5,0.5,'DENSITIES (/CC) OF SPECIES')
+CPGPLT        CALL PGUNSA
 
         write(t_,3002) k,kspeci(1,k),kspeci(2,k),n
-        CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',3.,0.,0.,t_)
  3002   format("species no. ",i2,4x,a8,2x,a8,2x," time step n=",i4)
         do 19 l=1,lrzmax
           tr1(l)=reden(k,l)
@@ -96,29 +96,29 @@ c..................................................................
         ENDDO
         RPG1=fmin
         RPG2=fmax
-        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
-        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+CPGPLT        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         DO I=1,LRZMAX
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
-        CALL PGSLS(2)
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+CPGPLT        CALL PGSLS(2)
         DO I=1,LRZMAX
            RLRZAP12(I)=tr2(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
-        CALL PGSLS(3)
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+CPGPLT        CALL PGSLS(3)
         DO I=1,LRZMAX
            RLRZAP13(I)=tr3(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
-        CALL PGSLS(1)
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
+CPGPLT        CALL PGSLS(1)
         write(t_,4050) pltvs
  4050   format(a8)
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGLAB(t_,'density (/cm\u3\d)',' ')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGLAB(t_,'density (/cm\u3\d)',' ')
+CPGPLT        CALL PGUNSA
 
 
  300  continue
@@ -126,16 +126,16 @@ c..................................................................
       do 400 k=1,ntotal
         if (k.gt.ngen .and. n.ge.1) go to 400
 
-        CALL PGPAGE
-        CALL PGSVP(.2,.8,.2,.6)
+CPGPLT        CALL PGPAGE
+CPGPLT        CALL PGSVP(.2,.8,.2,.6)
 
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGMTXT('T',6.,0.5,0.5,'ENERGIES OF SPECIES IN KEV')
-        if(k.le.ngen) CALL PGMTXT('T',5.2,0.5,0.5,'(Solid: <..>_FSA)')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGMTXT('T',6.,0.5,0.5,'ENERGIES OF SPECIES IN KEV')
+CPGPLT        if(k.le.ngen) CALL PGMTXT('T',5.2,0.5,0.5,'(Solid: <..>_FSA)')
+CPGPLT        CALL PGUNSA
         write(t_,3002) k,kspeci(1,k),kspeci(2,k),n
-        CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',3.,0.,0.,t_)
 
         if (n .eq. 0) then
           do 18 l=1,lrzmax
@@ -183,25 +183,25 @@ c     tr3 set to zero so no need to change following plot statements
         RPG1=fmin
         RPG2=fmax
         RPG1=min(fmin,0.)		
-        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
-        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+CPGPLT        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         
-        CALL PGSLS(1)  !solid
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+CPGPLT        CALL PGSLS(1)  !solid
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
         
-        CALL PGSLS(2)  !Set dashed line style
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+CPGPLT        CALL PGSLS(2)  !Set dashed line style
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
         
-        CALL PGSLS(3)  !Set dot-dash line style
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
+CPGPLT        CALL PGSLS(3)  !Set dot-dash line style
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
         
-        CALL PGSLS(1)  !Re-set solid line style for annotation
+CPGPLT        CALL PGSLS(1)  !Re-set solid line style for annotation
         
         write(t_,4050) pltvs
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGLAB(t_,'energy (kev)',' ')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGLAB(t_,'energy (kev)',' ')
+CPGPLT        CALL PGUNSA
 
  400  continue
 
@@ -210,17 +210,17 @@ c     tr3 set to zero so no need to change following plot statements
         do 350 k=1,ntotal
           if (k.gt.ngen .and. k.ne.kelec .and. n.gt.1) go to 350
 
-        CALL PGPAGE
-        CALL PGSVP(.2,.8,.2,.6)
+CPGPLT        CALL PGPAGE
+CPGPLT        CALL PGSVP(.2,.8,.2,.6)
 
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGMTXT('T',6.,0.5,0.5,'DENSITIES (/CC) OF SPECIES')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGMTXT('T',6.,0.5,0.5,'DENSITIES (/CC) OF SPECIES')
+CPGPLT        CALL PGUNSA
           write(t_,3050) k,kspeci(1,k),kspeci(2,k)
-        CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',3.,0.,0.,t_)
           write(t_,3051) lrindx(1),rz(lrindx(1))/radmin
-        CALL PGMTXT('T',2.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',2.,0.,0.,t_)
  3050     format("species no. ",i2,2x,a8,2x,a8)
  3051     format("r(",i2,")/a=",1pe11.4)
 
@@ -250,33 +250,33 @@ c     tr3 set to zero so no need to change following plot statements
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-        CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
-        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
+CPGPLT        CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
+CPGPLT        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
 
           write(t_,4051)
  4051     format("s (cms)")
 
-          CALL PGLAB(t_,'Density (/cm\u3\d)',' ')
+CPGPLT          CALL PGLAB(t_,'Density (/cm\u3\d)',' ')
 
  350    continue
 
         do 450 k=1,ntotal
           if (k.gt.ngen .and. n.gt.1) go to 450
 
-        CALL PGPAGE
-        CALL PGSVP(.2,.8,.2,.6)
+CPGPLT        CALL PGPAGE
+CPGPLT        CALL PGSVP(.2,.8,.2,.6)
 
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGMTXT('T',6.,0.5,0.5,'ENERGIES OF SPECIES IN KEV')
-        CALL PGMTXT('T',5.,0.,0.,
-     +         'Solid: midplane;  Dashed: <..>_FSA')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGMTXT('T',6.,0.5,0.5,'ENERGIES OF SPECIES IN KEV')
+CPGPLT        CALL PGMTXT('T',5.,0.,0.,
+CPGPLT     +         'Solid: midplane;  Dashed: <..>_FSA')
+CPGPLT        CALL PGUNSA
           write(t_,3050) k,kspeci(1,k),kspeci(2,k)
-        CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',3.,0.,0.,t_)
           write(t_,3051) lrindx(1),rz(lrindx(1))/radmin
-        CALL PGMTXT('T',2.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',2.,0.,0.,t_)
 
           do 452 ll=1,lsmax
             tr1s(ll)=enrgypa(k,ll) ! Midplane
@@ -303,13 +303,13 @@ c     tr3 set to zero so no need to change following plot statements
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-        CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
-        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
+CPGPLT        CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
+CPGPLT        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
 
           write(t_,4051)
 
-          CALL PGLAB(t_,'Energy (keV)',' ')
+CPGPLT          CALL PGLAB(t_,'Energy (keV)',' ')
 
 
  450    continue
@@ -327,17 +327,17 @@ c.......................................................................
  5001     format(2("curr(",e12.5,")=",e15.5," Amps per cm**2",3x),"$")
  5011     format(("curr(",e12.5,")=",e15.5," Amps per cm**2",3x),"$")
 
-        CALL PGPAGE
-        CALL PGSVP(.2,.8,.2,.6)
+CPGPLT        CALL PGPAGE
+CPGPLT        CALL PGSVP(.2,.8,.2,.6)
 
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGMTXT('T',6.,0.5,0.5,
-     +              'FLUX SURF. AV. CURNT. (AMPS/CM\u2\d)')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGMTXT('T',6.,0.5,0.5,
+CPGPLT     +              'FLUX SURF. AV. CURNT. (AMPS/CM\u2\d)')
+CPGPLT        CALL PGUNSA
           write(t_,5002) k, currza(k)
  5002     format("Species:",i2,"  Total current =",e16.6," Amps")
-        CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',3.,0.,0.,t_)
 
 
 
@@ -364,25 +364,25 @@ c.......................................................................
         ENDDO
         RPG1=fmin
         RPG2=fmax
-        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
-        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+CPGPLT        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         DO I=1,LRZMAX
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
-        CALL PGSLS(2)
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+CPGPLT        CALL PGSLS(2)
         DO I=1,LRZMAX
            RLRZAP12(I)=tr2(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
-        CALL PGSLS(3)
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+CPGPLT        CALL PGSLS(3)
         DO I=1,LRZMAX
            RLRZAP13(I)=tr3(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
-        CALL PGSLS(1) ! restore solid line
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
+CPGPLT        CALL PGSLS(1) ! restore solid line
         write(t_,4050) pltvs
-        CALL PGLAB(t_,'Curr Den (A/cm\u2\d)',' ')
+CPGPLT        CALL PGLAB(t_,'Curr Den (A/cm\u2\d)',' ')
 
 
 
@@ -393,18 +393,18 @@ c.......................................................................
 c
           if (cqlpmod.eq."enabled") then
 
-        CALL PGPAGE
-        CALL PGSVP(.2,.8,.2,.6)
+CPGPLT        CALL PGPAGE
+CPGPLT        CALL PGSVP(.2,.8,.2,.6)
 
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGMTXT('T',6.,0.5,0.5,
-     +       'LOCAL IN s CURNT. DENS. (AMPS per CM**2)')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGMTXT('T',6.,0.5,0.5,
+CPGPLT     +       'LOCAL IN s CURNT. DENS. (AMPS per CM**2)')
+CPGPLT        CALL PGUNSA
           write(t_,3050) k,kspeci(1,k),kspeci(2,k)
-        CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',3.,0.,0.,t_)
           write(t_,3051) lrindx(1),rz(lrindx(1))/radmin
-        CALL PGMTXT('T',2.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',2.,0.,0.,t_)
  
 
 
@@ -440,14 +440,14 @@ c
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-        CALL PGSWIN(RLRORSA(1),RLRORSA(LSMAX),RPG1,RPG2)
-        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
-        CALL PGSLS(2)
-        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA2(1))
-        CALL PGSLS(1)
+CPGPLT        CALL PGSWIN(RLRORSA(1),RLRORSA(LSMAX),RPG1,RPG2)
+CPGPLT        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
+CPGPLT        CALL PGSLS(2)
+CPGPLT        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA2(1))
+CPGPLT        CALL PGSLS(1)
         write(t_,4051)
-        CALL PGLAB(t_,'Curr Den (A/cm\u2\d',' ')
+CPGPLT        CALL PGLAB(t_,'Curr Den (A/cm\u2\d',' ')
 
 
 
@@ -456,20 +456,20 @@ c
 c
           if (nrf .ne. 0) then
 
-        CALL PGPAGE
-        CALL PGSVP(.2,.8,.2,.6)
+CPGPLT        CALL PGPAGE
+CPGPLT        CALL PGSVP(.2,.8,.2,.6)
 
-        CALL PGSAVE
-        CALL PGSCH(1.44)
-        CALL PGMTXT('T',6.,0.5,0.5,
-     +       'LOCAL RF POWER (WATTS per CC)')
-        CALL PGUNSA
+CPGPLT        CALL PGSAVE
+CPGPLT        CALL PGSCH(1.44)
+CPGPLT        CALL PGMTXT('T',6.,0.5,0.5,
+CPGPLT     +       'LOCAL RF POWER (WATTS per CC)')
+CPGPLT        CALL PGUNSA
           write(t_,3002) k,kspeci(1,k),kspeci(2,k),n
-        CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',3.,0.,0.,t_)
 
             write(t_,6002) rfpwrt(k)
  6002       format("total rf power =",1pe10.2," Watts")
-        CALL PGMTXT('T',2.,0.,0.,t_)
+CPGPLT        CALL PGMTXT('T',2.,0.,0.,t_)
 
             do 99 ll=1,lrzmax
  99         tr1(ll)=rfpwrz(k,ll)
@@ -492,31 +492,31 @@ cBH090220        RPG2=fmax
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
-        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+CPGPLT        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         DO I=1,LRZMAX
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
-        CALL PGLAB('Radius','RF Power (W/cm\u3\d)',' ')
+CPGPLT        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+CPGPLT        CALL PGLAB('Radius','RF Power (W/cm\u3\d)',' ')
 
 
           endif
 c
           if(syncrad.ne."disabled" .and. k.eq.kelecg) then
              
-            CALL PGPAGE
-            CALL PGSVP(.2,.8,.2,.6)            
-            CALL PGSAVE
-            CALL PGSCH(1.44)
-            CALL PGMTXT('T',6.,0.5,0.5,
-     +           'LOCAL RF POWER (WATTS per CC)')
-            CALL PGUNSA
+CPGPLT            CALL PGPAGE
+CPGPLT            CALL PGSVP(.2,.8,.2,.6)            
+CPGPLT            CALL PGSAVE
+CPGPLT            CALL PGSCH(1.44)
+CPGPLT            CALL PGMTXT('T',6.,0.5,0.5,
+CPGPLT     +           'LOCAL RF POWER (WATTS per CC)')
+CPGPLT            CALL PGUNSA
             write(t_,3002) k,kspeci(1,k),kspeci(2,k),n
-            CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT            CALL PGMTXT('T',3.,0.,0.,t_)
             write(t_,6004) psynct
  6004       format(";","synchrotron radiated power =",e16.6," Watts")
-            CALL  PGMTXT('T',2.,0.,0.,t_)
+CPGPLT            CALL  PGMTXT('T',2.,0.,0.,t_)
             
             do 79 ll=1,lrzmax
  79            tr1(ll)=psyncz(ll)
@@ -534,13 +534,13 @@ c
             IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
                RPG2= RPG1+1.e-16
             ENDIF
-            CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
-            CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT            CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+CPGPLT            CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
             DO I=1,LRZMAX
                RLRZAP11(I)=tr1(i)
             ENDDO
-            CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
-            CALL PGLAB('Radius','Synch Power (W/cm\u3\d)',' ')
+CPGPLT            CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+CPGPLT            CALL PGLAB('Radius','Synch Power (W/cm\u3\d)',' ')
                
           endif ! syncrad.ne."disabled" .and. k.eq.kelecg
 c     
@@ -549,18 +549,18 @@ c
             do 800 lsig=1,4
                if(isigmas(lsig).eq.0) go to 800
                   
-               CALL PGPAGE
-               CALL PGSVP(.2,.8,.2,.5)
-               CALL PGSAVE
-               CALL PGSCH(1.44)
-               CALL PGMTXT('T',8.,0.5,0.5,
-     +              'Fusion Power (Watts/cm\u3\d)')
-               CALL PGUNSA
+CPGPLT               CALL PGPAGE
+CPGPLT               CALL PGSVP(.2,.8,.2,.5)
+CPGPLT               CALL PGSAVE
+CPGPLT               CALL PGSCH(1.44)
+CPGPLT               CALL PGMTXT('T',8.,0.5,0.5,
+CPGPLT     +              'Fusion Power (Watts/cm\u3\d)')
+CPGPLT               CALL PGUNSA
                write(t_,3002) k,kspeci(1,k),kspeci(2,k),n
-               CALL PGMTXT('T',7.,0.,0.,t_)
+CPGPLT               CALL PGMTXT('T',7.,0.,0.,t_)
                write(t_,8001) lsig
  8001          format("Fusion reaction number ",i3)
-               CALL PGMTXT('T',6.,0.,0.,t_)
+CPGPLT               CALL PGMTXT('T',6.,0.,0.,t_)
                if (lsig.eq.1) then
                   write(t_,*) "d+t=>alpha(3.5MeV)+n(14.1MeV)"
                elseif (lsig.eq.2) then
@@ -570,11 +570,11 @@ c
                elseif (lsig.eq.4) then
                   write(t_,*) "d+d=>he3(.82MeV)+n(2.45MeV)"
                endif
-               CALL PGMTXT('T',5.,0.,0.,t_)
+CPGPLT               CALL PGMTXT('T',5.,0.,0.,t_)
           
                write(t_,8002) fuspwrvt(lsig)
  8002          format("fusion power =",1pe16.6," Watts")
-               CALL PGMTXT('T',3.,0.,0.,t_)
+CPGPLT               CALL PGMTXT('T',3.,0.,0.,t_)
 
 cBH120314:  Have removed the isigsgv2 option and references to it, since
 cBH120314:  this functionality appears to have no physical use.
@@ -608,38 +608,38 @@ cBH120314               endif
                IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
                   RPG2= RPG1+1.e-16
                ENDIF
-               CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
-               CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT               CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+CPGPLT               CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
                DO I=1,LRZMAX
                   RLRZAP11(I)=tr1(i)
                ENDDO
-               CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
-               CALL PGSLS(2)
+CPGPLT               CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+CPGPLT               CALL PGSLS(2)
                DO I=1,LRZMAX
                   RLRZAP12(I)=tr2(i)
                ENDDO
-               CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
-               CALL PGSLS(1)
-               CALL PGSAVE
-               CALL PGSCH(1.44)
-               CALL PGLAB(t_,'Fusion Power (W/cm/u3/d',' ')
-               CALL PGUNSA        
+CPGPLT               CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+CPGPLT               CALL PGSLS(1)
+CPGPLT               CALL PGSAVE
+CPGPLT               CALL PGSCH(1.44)
+CPGPLT               CALL PGLAB(t_,'Fusion Power (W/cm/u3/d',' ')
+CPGPLT               CALL PGUNSA        
 c...           mnt  Generate time-dependent plot of total fusion rates
-               CALL PGPAGE
-               CALL PGSVP(.2,.8,.2,.5)
-               CALL PGSAVE
-               CALL PGSCH(1.44)
-               CALL PGMTXT('T',8.,0.5,0.5,
-     +            'Fusion Rx Rate (/sec) Vs Time')
-               CALL PGUNSA
+CPGPLT               CALL PGPAGE
+CPGPLT               CALL PGSVP(.2,.8,.2,.5)
+CPGPLT               CALL PGSAVE
+CPGPLT               CALL PGSCH(1.44)
+CPGPLT               CALL PGMTXT('T',8.,0.5,0.5,
+CPGPLT     +            'Fusion Rx Rate (/sec) Vs Time')
+CPGPLT               CALL PGUNSA
                write(t_,3002) k,kspeci(1,k),kspeci(2,k),n
-               CALL PGMTXT('T',7.,0.,0.,t_)
+CPGPLT               CALL PGMTXT('T',7.,0.,0.,t_)
                write(t_,8005) lsig
  8005          format('Fusion reaction number ',i3)
-               CALL PGMTXT('T',6.,0.,0.,t_)              
+CPGPLT               CALL PGMTXT('T',6.,0.,0.,t_)              
                write(t_,8006) sigftt(nch(1),lsig)
  8006          format("Reaction rate =",1pe16.6," /sec")
-               CALL PGMTXT('T',4.,0.,0.,t_)
+CPGPLT               CALL PGMTXT('T',4.,0.,0.,t_)
               
 cBH120314               if (isigsgv2.eq.1) then
 cBH120314                 write(t_,8007) sigmtt(nch(1),lsig)
@@ -666,13 +666,13 @@ cBH120314               endif
                IF ( RPG2-RPG1 .le. 1.e-16 ) THEN
                    RPG2= RPG1+1.e-16
                ENDIF
-               CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(1)),RPG1,RPG2)
-               CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-               CALL PGLAB('Time (sec)','Fusion Rx Rate (/sec)',' ')
+CPGPLT               CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(1)),RPG1,RPG2)
+CPGPLT               CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT               CALL PGLAB('Time (sec)','Fusion Rx Rate (/sec)',' ')
                DO I=1,NCH(1)
                   RNONCHA2(I)=sigftt(I,lsig)
                ENDDO
-               CALL PGLINE(nch(1),RNONCHA1,RNONCHA2)
+CPGPLT               CALL PGLINE(nch(1),RNONCHA1,RNONCHA2)
 cBH120314               if (isigsgv2.eq.1) then
 cBH120314                  DO I=1,NCH(1)
 cBH120314                     RNONCHA2(I)=sigmtt(I,lsig)

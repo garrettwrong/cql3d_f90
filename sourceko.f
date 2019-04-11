@@ -487,7 +487,7 @@ c..................................................................
          close(unit=iunit)
          call tdoutput(2)
 c990307         call geglxx(0)
-         call pgend
+CPGPLT         call pgend
          stop 'Wrote disk file from subroutine souceko: fpld_dsk'
       endif
       if (knockon.eq."fpld_ds1") then
@@ -512,7 +512,7 @@ c990307         call geglxx(0)
          close(unit=iunit)
          call tdoutput(2)
 c990307         call geglxx(0)
-         call pgend
+CPGPLT         call pgend
          stop 'Wrote disk files from subroutine souceko: fpld_dskx'
       endif
       endif

@@ -18,7 +18,7 @@ c
       do 100 k=1,ngen
         if (colmodl.eq.4 .and. k.eq.ngen) goto 100
 c$$$        call gxglfr(0)
-        CALL PGPAGE
+CPGPLT        CALL PGPAGE
         emin=ep90
         emax=-em90
         do 192 lu=-1,11
@@ -33,7 +33,7 @@ c191  continue
  192    continue
         emax=emax+.05*(abs(emax))
         emin=emin-.05*(abs(emin))
-        CALL PGSVP(.2,.8,.4,.95)
+CPGPLT        CALL PGSVP(.2,.8,.4,.95)
         DO I=1,NCH(L_)
            RNONCHA1(I)=ptime(i,l_)
         ENDDO
@@ -42,88 +42,88 @@ c191  continue
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN
            RPG2= RPG1+1.e-16
         ENDIF
-        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
-        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLAB('Time (sec)','Power Den (W/cm\u3\d)',' ')
+CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+CPGPLT        CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+CPGPLT        CALL PGLAB('Time (sec)','Power Den (W/cm\u3\d)',' ')
         ! Note: pentr(nch(l_),k,is,l_)=entr(k,is,l_)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,4,l_) !total - sum of all power sources
         ENDDO
-        CALL PGSLS(1) ! 1-> solid
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGSLS(1) ! 1-> solid
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
         
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,9,l_) !Power computed from df/dt. 
         ENDDO                          !Should equal entr(k,4,l_).
-        CALL PGSLS(2) ! 2-> dashed
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGSLS(2) ! 2-> dashed
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,3,l_) !RF - radio frequency heating
         ENDDO
-        CALL PGSLS(3) ! 3-> -.-.- 
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGSLS(3) ! 3-> -.-.- 
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,2,l_) !ohmic - electric field term
         ENDDO
-        CALL PGSLS(4) ! 4-> .....
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGSLS(4) ! 4-> .....
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,1,l_) !collisional transfer from gens.
         ENDDO
-        CALL PGSLS(1) ! 1-> solid
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGSLS(1) ! 1-> solid
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,5,l_) !particle sources
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,6,l_) !loss-lossmode
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,7,l_) !losses-torloss
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,-1,l_) !collisional transfer from Maxw. elec.
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,0,l_) !collisional transfer from Maxw. ions
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,8,l_) !losses due to runaway
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,10,l_) !setting neg f to zero
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
         
         if (k .ne. kelecg .or. syncrad .eq. "disabled") go to 300
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,11,l_) !synchrotron rad losses
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)        
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)        
  300    continue
  
         if(tauegy(k,lr_).gt.0.)  then
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,12,l_) !phenomenological energy losses
         ENDDO
-        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)        
+CPGPLT        CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)        
         endif
         
 c$$$ 200    format("COMPONENT BY COMPONENT POWER FLOW: SPECIES",i2,";",
@@ -142,44 +142,44 @@ c$$$     1    "los-egy---phenomenological energy loss","$")
         RILIN=4.
         write(t_,210) k ! Gen. species number
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,211) entr(k,4,l_),entr(k,9,l_) !sum over all components
                                         !and from df/dt (should be same)
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,212) entr(k,-1,l_) !collisional transfer from Maxwellian elec.
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,213) entr(k,0,l_)  !collisional transfer from Maxwellian ions
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,214) entr(k,1,l_)  !collisional transfer from gens.
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,215) entr(k,2,l_)  !ohmic drive
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,216) entr(k,3,l_)  !RF drive
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,217) entr(k,5,l_)  !particle sources
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,218) entr(k,6,l_),entr(k,7,l_) !loss-lossmode;losses-torloss
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,219) entr(k,8,l_)  !losses due to runaway
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,220) entr(k,10,l_) !setting neg f to zero
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_) 
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_) 
         write(t_,221) entr(k,11,l_) !synchrotron rad losses
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         write(t_,222) entr(k,12,l_) !phenomenological energy losses
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
 
  210    format("Species k=",i2, "    Final powers in Watts/cc are:")
  211    format("sum over all comp=",1pe10.2, 3x,

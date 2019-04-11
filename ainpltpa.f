@@ -24,39 +24,39 @@ CMPIINSERT_IF_RANK_NE_0_RETURN
 
       if (noplots.eq."enabled1") return
 
-      CALL PGPAGE
+CPGPLT      CALL PGPAGE
       RILIN=0.
-      CALL PGMTXT('T',-RILIN,0.,0.,"PARAMETER VALUES")
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,"PARAMETER VALUES")
 
       write(t_,12998) version
 12998 format("====> version =  ",a50)
       RILIN=RILIN+2.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,12999) precursr
 12999 format("====> precursr = ",a50)
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13000)
 13000 format("ngena is the max. # of general (time advanced) species")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13001) ngena
 13001 format("====> ngena = ",i5)
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13002)
 13002 format("nmaxa is the max. # of background Maxwellian species")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13003) nmaxa
 13003 format("====> nmaxa = ",i5)
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
 c      write(t_,13006) 
 13006 format("jx is the number of velocity mesh points")
@@ -81,12 +81,12 @@ c      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       write(t_,13010) 
 13010 format("lza is the maximum number of z mesh points")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13011) lza
 13011 format("====> lza = ",i5)
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
 c      write(t_,13012) 
 13012 format("mx is the highest order legendre polynomial employable")
@@ -103,27 +103,27 @@ c      CALL PGMTXT('T',-RILIN,0.,0.,t_)
          write(t_,13014)
 13014    format("lrza is the maximum number of radial flux surfaces")
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
          
          write(t_,13015) lrza
 13015    format("====> lrza = ",i5)
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
          
          write(t_,13016)
 13016    format("analytic source routine parameters")
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
          
          write(t_,13017)
 13017    format( "nsoa is the number of sources per species.")
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
          
          write(t_,13018) nsoa
 13018    format("====> nsoa = ",i5)
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
          
          
       endif
@@ -146,52 +146,52 @@ c      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       write(t_,13022)
 13022 format("nplota is max number of plot times for 2d and 3d plots.")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13023) nplota
 13023 format("====> nplota = ",i5)
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13024)
 13024 format("nbctimea is max number of points in arrays giving time")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13025)
 13025 format("dependent profile information.")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13026) nbctimea
 13026 format("====> nbctimea = ",i5)
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13027)
 13027 format("ndtr1a is maximum number of time step intervals dtr1().")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13028) ndtr1a
 13028 format("====> ndtr1a = ",i5)
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13029)
 13029 format("nefitera is the max number of iterations permitted for")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13030)
 13030 format("electric field per time step (to obtain target current).")
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13031) nefitera
 13031 format("====> nefitera = ",i5)
       RILIN=RILIN+1.
-      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
 
 c      write(t_,13032)
@@ -241,17 +241,17 @@ c         CALL PGMTXT('T',-RILIN,0.,0.,t_)
          write(t_,13040)
 13040    format("nmodsa is max number of wave modes or harmonics for")
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
          
          write(t_,13041)
 13041    format("a single mode. CHECK code,  for values .ne. 3.")
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
          
          write(t_,13042) nmodsa
 13042    format("====> nmodsa = ",i5)
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
 c         write(t_,13043)
 13043    format("nharma is max harmonic for cyclotron interactions")

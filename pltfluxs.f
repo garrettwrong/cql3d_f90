@@ -252,7 +252,7 @@ c       'x', 'u/c', or 'energy', up to maximum pltlimm.
 
         call GXGLFR(0) ! new page
         call GSVP2D(.2,.8,.3,.9)
-        CALL PGSCH(1.) ! set character size; default is 1.
+CPGPLT        CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlog$",tam1(1),tam1(jxq),emin,emax)
         !-YuP:   call GSCVLB(1)
         !-YuP:   call GSCVFT(0.)
@@ -283,66 +283,66 @@ c       'x', 'u/c', or 'energy', up to maximum pltlimm.
  310    continue
         !-YuP:   call GSCVLB(0)
 
-       CALL PGLAB(tx_,' ',' ') ! YuP/added: horizontal axis label
+CPGPLT       CALL PGLAB(tx_,' ',' ') ! YuP/added: horizontal axis label
         
 c     Write previously set title
         RILIN=1.
-        CALL PGSCH(0.8) ! set character size; default is 1.
-        CALL PGMTXT('T',RILIN,0.,0.,t_) ! Top
+CPGPLT        CALL PGSCH(0.8) ! set character size; default is 1.
+CPGPLT        CALL PGMTXT('T',RILIN,0.,0.,t_) ! Top
         
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,10020) k
 10020 format("Flux vs. velocity for some angles; species number = ",i3)
         RILIN=3.
-        CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
         
         write(t_,10010) n,timet
 10010 format("time step (n) is",i5,5x,"time=",e14.6," secs")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
 
         write(t_,10011) rovera(lr_),rr
 10011 format("r/a=",e14.6,5x,"radial position (R) =",e14.6," cm")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         
         write(t_,10030) 
 10030 format("pll    ---- theta = 0 radians")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_) 
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_) 
 
         write(t_,10031) 
 10031 format("pll-pi ---- theta = pi radians")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_) 
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_) 
 
         write(t_,10032) y(itl,l_)
 10032 format("trp/ps ---- theta = ",e13.5," radians")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_) 
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_) 
 
         write(t_,10033) trpmd
 10033 format("midtrp ---- theta = ",e13.5," radians")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_) 
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_) 
 
         write(t_,10034) y(iyh,l_)
 10034 format("perp   ---- theta = ",e13.5," radians")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_) 
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_) 
 
         write(t_,10035) 
 10035 format("avg    ---- theta averaged over pi radians")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_) 
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_) 
         
-        CALL PGSCH(1.0) ! recover default 1.0 fontsize
+CPGPLT        CALL PGSCH(1.0) ! recover default 1.0 fontsize
 
  410    continue
  400    continue ! k species
  500  continue ! skipping handle
  
-      CALL PGSCH(1.0) ! recover default 1.0 fontsize
+CPGPLT      CALL PGSCH(1.0) ! recover default 1.0 fontsize
 
  910  format("species no.",i2,5x,"combined velocity space fluxes")
  920  format("species no.",i2,5x,"Fokker-Planck velocity space flux")

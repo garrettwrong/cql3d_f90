@@ -384,7 +384,7 @@ CPGPLT      CALL PGPAGE
           wk_nch(i)=consnp(i,l_)
         enddo
         call aminmx(wk_nch,1,nch(l_),1,emin,emax,kmin,kmax)
-        CALL PGSVP(.2,.8,.5,.9)
+CPGPLT        CALL PGSVP(.2,.8,.5,.9)
         DO I=1,NCH(L_)
            RNONCHA1(I)=RBOUND(ptime(i,l_))
            RNONCHA2(I)=RBOUND(consnp(i,l_))

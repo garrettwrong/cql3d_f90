@@ -54,18 +54,18 @@ c       This do 560 loop was overlapping the modes on one plot.
              endif
  560       continue ! krf mode (usually = harmonic number)
            if( MAXVAL(temp1)-MINVAL(temp1) .gt. 0.d0 ) then
-             CALL PGPAGE ! new page for each k 
+CPGPLT             CALL PGPAGE ! new page for each k 
 	       itype=4 ! means: plots are made for urfb
              call pltcont(k,1,'Contours of UrfB vs. v_parallel,v_perp',
      +         itype) !YuP:summed-up
              write(t_,552) 
-             CALL PGMTXT('B',10.,0.,0.,t_)
+CPGPLT             CALL PGMTXT('B',10.,0.,0.,t_)
              write(t_,553) lr_
-             CALL PGMTXT('B',11.,0.,0.,t_)
+CPGPLT             CALL PGMTXT('B',11.,0.,0.,t_)
              write(t_,692) MAXVAL(temp1) !YuP[10-2016] max value for this krf
-             CALL PGMTXT('B',12.,0.,0.,t_)
+CPGPLT             CALL PGMTXT('B',12.,0.,0.,t_)
              write(t_,693) k 
-             CALL PGMTXT('B',13.,0.,0.,t_)
+CPGPLT             CALL PGMTXT('B',13.,0.,0.,t_)
            endif
         enddo ! k species
         
@@ -81,18 +81,18 @@ c     This do 680 loop plots the individual mode contributions:
          enddo
          if (nrfspecies(krfn(krf)) .eq. k) then
          if( MAXVAL(temp1)-MINVAL(temp1) .gt. 0.d0 ) then
-          CALL PGPAGE ! opens new page for each krf-mode
+CPGPLT          CALL PGPAGE ! opens new page for each krf-mode
           itype=4 ! means: plots are made for urfb
           call pltcont(k,1,'Contours of UrfB vs. v_parallel,v_perp',
      +      itype)
           write(t_,690) 
-          CALL PGMTXT('B',10.,0.,0.,t_)
+CPGPLT          CALL PGMTXT('B',10.,0.,0.,t_)
           ! write flux surface number and mode number;
           ! also harmonic number and species number (added YuP[10-2016])
           write(t_,691) lr_ ,krf,nharm(krf),k 
-          CALL PGMTXT('B',11.,0.,0.,t_)
+CPGPLT          CALL PGMTXT('B',11.,0.,0.,t_)
           write(t_,692) MAXVAL(temp1) !YuP[10-2016] max value for this krf
-          CALL PGMTXT('B',12.,0.,0.,t_)
+CPGPLT          CALL PGMTXT('B',12.,0.,0.,t_)
          endif
          endif
  680  continue ! krf

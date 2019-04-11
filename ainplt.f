@@ -142,7 +142,7 @@ CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       do i=1,(lenmac/60+1)
          write(line_,1004) line(1+(i-1)*60:i*60)
          RILIN=RILIN+1.
-         CALL PGMTXT('T',-RILIN,0.,0.,line_)
+CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,line_)
       enddo
       write(t_,2008)
       RILIN=RILIN+2.

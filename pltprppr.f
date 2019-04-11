@@ -71,7 +71,7 @@ c990131        fmax=amax1(fmax1,fmax2)
         
         call GXGLFR(0) ! new page(s)
         call GSVP2D(.2,.8,.25,.95) ! (XLEFT, XRIGHT, YBOT, YTOP)
-        CALL PGSCH(1.) ! set character size; default is 1.
+CPGPLT        CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlin$",0.d0,xlu,fmin,fmax)
         call GPCV2D(xlm(jpxyh:jpxyh+jpxyh), tem1, jpxyhm)
         call GPCV2D(xlm(jpxyh:jpxyh+jpxyh), tem2, jpxyhm)
@@ -79,19 +79,19 @@ c990131        fmax=amax1(fmax1,fmax2)
         write(t_,10011) k
 10011 format("asymmetric cmpt of f_par, and xpar*cmpt, species:",1x,i5)
         RILIN=5.
-        CALL PGSCH(0.8) ! set character size; default is 1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGSCH(0.8) ! set character size; default is 1.
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         
         write(t_,10012)
 10012 format("(f_par normed so int(-1,+1)=equatorial ne)")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
        
         call GXGLFR(0) ! new page(s)
         call aminmx(fl(1),1,2*jpxyhm,1,fmin,fmax,kmin,kmax)
         fmin=1.d-08*fmax
         call GSVP2D(.2,.8,.25,.95)
-        CALL PGSCH(1.) ! set character size; default is 1.
+CPGPLT        CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlog$",xll,xlu,fmin,fmax)
         do 10 jj=1,2*jpxyhm
           if (fl(jj) .lt. fmin ) fl(jj)=fmin
@@ -103,31 +103,31 @@ c990131        fmax=amax1(fmax1,fmax2)
         write(t_,10013) k
 10013 format("parallel distribution function for species:",1x,i5)
         RILIN=3.
-        CALL PGSCH(0.8) ! set character size; default is 1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGSCH(0.8) ! set character size; default is 1.
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         
         write(t_,10014) 
 10014 format("(normed so int(-1,+1)=equatorial ne)")        
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         
         write(t_,10020)
 10020 format( "(log plot)")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,10030) n,timet
 10030 format("time step (n) is",i5,5x,"time=",e14.6," secs")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
 
         write(t_,10031) rovera(lr_),rr
 10031 format("r/a=",e14.6,5x,"radial position (R) =",e14.6," cm")
         RILIN=RILIN+1.
-        CALL PGMTXT('B',RILIN,0.,0.,t_)
+CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
         
-        CALL PGSCH(1.0) ! recover default 1.0 fontsize
+CPGPLT        CALL PGSCH(1.0) ! recover default 1.0 fontsize
         
  20   continue
 

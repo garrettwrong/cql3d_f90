@@ -28,7 +28,7 @@ c      Remember, pgopen should be integer
       write(t_,1000) mnemonic(1:length_char(mnemonic))
  1000 format(a,".ps/VCPS") !YuP: was /VPS (vertical black&white)
                            ! Use /VCPS for vertical Color pages
-      ier=PGOPEN(t_)
+CPGPLT      ier=PGOPEN(t_)
 CPGPLT      CALL PGSCI(1)
 CPGPLT      CALL PGSLW(lnwidth)
       write(*,*) 'PLTINIT-1 ier=1 is OK: ier=',ier

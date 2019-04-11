@@ -34,13 +34,13 @@ c$$   do 560 k=1,mrfn
             temp1(i,j)=rdcb(i,j,lr_,krf)
  562     continue
  561  continue
-      CALL PGPAGE
+CPGPLT      CALL PGPAGE
       itype=7 ! means: plots are made for rdcb
       call pltcont(nrdcspecies(krf),1,
      +     'Contours of RdcB vs. v_parallel,v_perp',7)
       write(t_,552) lr_
  552  format(" Flux surface number",i3,";   all modes, krf=",i2)
-      CALL PGMTXT('B',10.,0.,0.,t_)
+CPGPLT      CALL PGMTXT('B',10.,0.,0.,t_)
       
 c$$$  560    continue
       

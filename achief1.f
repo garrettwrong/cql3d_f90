@@ -141,7 +141,7 @@ c............................................................
       if (nstop.eq.0) then
         call pltmain
         write(*,*) 'In ACHIEF1, before call pgend'
-        call pgend
+CPGPLT        call pgend
         stop 'achief1: nstop=0'
       endif
 
