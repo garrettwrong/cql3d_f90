@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use pltmain_mod, only : pltmain
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -158,7 +159,8 @@ c.......................................................................
 
       call tdnflxs(1)
 c     Copy current distribution f into f_
-      call dcopy(iyjx2*ngen*lrors,f(0,0,1,1),1,f_(0,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1,
+     +     f_(0:iyjx2*ngen*lrors-1,0,1,1),1)
 c     bring background profiles up to time step n
       if(nefiter.eq.1) call profiles
       ! Reset time step if (n+1).eq.nondtr1(i). .AND. LRZMAX=1
@@ -189,7 +191,8 @@ c     bring background profiles up to time step n
            ! (For lbdry0='enabled', coeff matrix is set up 
            !   to automatically maintain unicity.)
            if (lbdry0.ne."enabled") then !-YuP: moved here from impavnc0
-             call dcopy(iyjx2,f(0,0,k,l_),1,fxsp(0,0,k,l_),1)
+             call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,
+     +             fxsp(0:iyjx2-1,0,k,l_),1)
              s=0.
              t=0.
              do 2100 i=1,iy

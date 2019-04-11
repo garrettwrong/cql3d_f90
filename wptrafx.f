@@ -115,17 +115,26 @@ c.......................................................................
 cl    2.1 Initialize f_n+1/2
 c.......................................................................
 
-      call dcopy(iyjx2*ngen*lrors,f(0,0,1,1),1,fnhalf(0,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1,
+     + fnhalf(0:iyjx2*ngen*lrors-1,0,1,1),1)
       if (sbdry .eq. "periodic") then
-        call dcopy(iyjx2*ngen,fnhalf(0,0,1,1),1,fnhalf(0,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,fnhalf(0,0,1,ls),1,fnhalf(0,0,1,0),1)
-        call dcopy(iyjx2*ngen,velsou(0,0,1,1),1,velsou(0,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,velsou(0,0,1,ls),1,velsou(0,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1,
+     + fnhalf(0:iyjx2*ngen,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1,
+     + fnhalf(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,1),1,
+     + velsou(0:iyjx2*ngen-1,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,ls),1,
+     + velsou(0:iyjx2*ngen-1,0,1,0),1)
       else
-        call dcopy(iyjx2*ngen,fnhalf(0,0,1,1),1,fnhalf(0,0,1,0),1)
-        call dcopy(iyjx2*ngen,fnhalf(0,0,1,ls),1,fnhalf(0,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,velsou(0,0,1,1),1,velsou(0,0,1,0),1)
-        call dcopy(iyjx2*ngen,velsou(0,0,1,ls),1,velsou(0,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1,
+     + fnhalf(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1,
+     + fnhalf(0:iyjx2*ngen-1,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,1),1,
+     + velsou(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,ls),1,
+     + velsou(0:iyjx2*ngen-1,0,1,ls+1),1)
       endif
 
 c.......................................................................
@@ -145,12 +154,16 @@ c.......................................................................
  2121     continue
  2120   continue
         if (sbdry .eq. "periodic") then
-          call dcopy(iyjx2*ngen,fnhalf(0,0,1,1),1,fnhalf(0,0,1,ls+1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1,
+     +          fnhalf(0:iyjx2*ngen-1,0,1,ls+1)
      +      ,1)
-          call dcopy(iyjx2*ngen,fnhalf(0,0,1,ls),1,fnhalf(0,0,1,0),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1,
+     +         fnhalf(0:iyjx2*ngen-1,0,1,0),1)
         else
-          call dcopy(iyjx2*ngen,fnhalf(0,0,1,1),1,fnhalf(0,0,1,0),1)
-          call dcopy(iyjx2*ngen,fnhalf(0,0,1,ls),1,fnhalf(0,0,1,ls+1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1,
+     +          fnhalf(0:iyjx2*ngen-1,0,1,0),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1,
+     +         fnhalf(0:iyjx2*ngen-1,0,1,ls+1)
      +      ,1)
         endif
       endif
@@ -284,7 +297,7 @@ c.......................................................................
 
 c%OS  
             call dcopy(ilslen*iband,zmat,1,zmat2,1)
-            call dcopy(ilslen,rhspar(1,i,1),1,zxdumy2,1)
+            call dcopy(ilslen,rhspar(1:ilslen,i,1),1,zxdumy2,1)
 c%OS  
 
 c%OS  
@@ -374,8 +387,10 @@ c     end of loop over momentum
 c     end of loop over general species
  220  continue
 
-      call dcopy(iyjx2*ngen,fnp1(0,0,1,1),1,fnp1(0,0,1,ls+1),1)
-      call dcopy(iyjx2*ngen,fnp1(0,0,1,ls),1,fnp1(0,0,1,0),1)
+      call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,1),1,
+     +     fnp1(0:iyjx2*ngen-1,0,1,ls+1),1)
+      call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,ls),1,
+     +     fnp1(0:iyjx2*ngen-1,0,1,0),1)
 
 c.......................................................................
 cl    3. Check the solution
@@ -404,8 +419,10 @@ c.......................................................................
 
           if (sbdry .eq. "periodic") then
 c     Assumes ilspts=ls, i.e. solution at 0 and ls+1 not yet calculated
-            call dcopy(iyp1+1,fnp1(0,1,k,1),1,fnp1(0,1,k,ls+1),1)
-            call dcopy(iyp1+1,fnp1(0,1,k,ls),1,fnp1(0,1,k,0),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,1),1,
+     +            fnp1(0:iyp1,1,k,ls+1),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,ls),1,
+     +           fnp1(0:iyp1,1,k,0),1)
           endif
 
  400    continue

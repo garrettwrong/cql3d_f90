@@ -3,7 +3,7 @@ c
       subroutine wptramu
       use param_mod
       use cqcomm_mod
-      use r8subs_mod, only : cvmgt
+      use r8subs_mod, only : cvmgt, dcopy
 
       implicit integer (i-n), real*8 (a-h,o-z)
 c..............................................................
@@ -136,12 +136,17 @@ c.......................................................................
         iymxper(l)=iy_(l)
         iyhper(l)=iyh_(l)
  210  continue
-      call dcopy(iyjx2*ngen*lrors,f(0,0,1,1),1,fnhalf(0,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1,
+     +     fnhalf(0:iyjx2*ngen*lrors,0,1,1),1)
       if (sbdry .eq. "periodic") then
-        call dcopy(iyjx2*ngen,fnhalf(0,0,1,1),1,fnhalf(0,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,fnhalf(0,0,1,ls),1,fnhalf(0,0,1,0),1)
-        call dcopy(iyjx2*ngen,velsou(0,0,1,1),1,velsou(0,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,velsou(0,0,1,ls),1,velsou(0,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1,
+     +        fnhalf(0:iyjx2*ngen-1,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1,
+     +       fnhalf(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,1),1,
+     +       velsou(0:iyjx2*ngen-1,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,ls),1,
+     +       velsou(0:iyjx2*ngen-1,0,1,0),1)
         imaxper(0)=imaxper(ls)
         imaxper(ls+1)=imaxper(1)
         iymxper(0)=iymxper(ls)
@@ -149,10 +154,14 @@ c.......................................................................
         iyhper(0)=iyhper(ls)
         iyhper(ls+1)=iyhper(1)
       else
-        call dcopy(iyjx2*ngen,fnhalf(0,0,1,1),1,fnhalf(0,0,1,0),1)
-        call dcopy(iyjx2*ngen,fnhalf(0,0,1,ls),1,fnhalf(0,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,velsou(0,0,1,1),1,velsou(0,0,1,0),1)
-        call dcopy(iyjx2*ngen,velsou(0,0,1,ls),1,velsou(0,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1,
+     +        fnhalf(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1,
+     +       fnhalf(0:iyjx2*ngen-1,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,1),1,
+     +       velsou(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,ls),1,
+     +       velsou(0:iyjx2*ngen-1,0,1,ls+1),1)
         imaxper(0)=imaxper(1)
         imaxper(ls+1)=imaxper(ls)
         iymxper(0)=iymxper(1)
@@ -195,9 +204,10 @@ c.......................................................................
  2125       continue
  2124     continue
         else
-          call dcopy(iyjx2*ngen,fnhalf(0,0,1,1),1,fnhalf(0,0,1,0),1)
-          call dcopy(iyjx2*ngen,fnhalf(0,0,1,ls),1,fnhalf(0,0,1,ls+1)
-     +      ,1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1,
+     +          fnhalf(0:iyjx2*ngen-1,0,1,0),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1,
+     +         fnhalf(0:iyjx2*ngen-1,0,1,ls+1),1)
         endif
       endif
       ivelmid=1
@@ -470,7 +480,7 @@ c     point l=1:
 
 c%OS  
               call dcopy(ilslen*iband,zmat,1,zmat2,1)
-              call dcopy(ilslen,rhspar(1,j,iic),1,zxdumy2,1)
+              call dcopy(ilslen,rhspar(1:ilslen,j,iic),1,zxdumy2,1)
 c%OS  
 
 c.......................................................................
@@ -533,11 +543,15 @@ c     end of loop over general species
  220  continue
 
       if (sbdry .eq. "periodic") then
-        call dcopy(iyjx2*ngen,fnp1(0,0,1,1),1,fnp1(0,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,fnp1(0,0,1,ls),1,fnp1(0,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,1),1,
+     +        fnp1(0:iyjx2*ngen-1,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,ls),1,
+     +       fnp1(0:iyjx2*ngen-1,0,1,0),1)
       else
-        call dcopy(iyjx2*ngen,fnp1(0,0,1,1),1,fnp1(0,0,1,0),1)
-        call dcopy(iyjx2*ngen,fnp1(0,0,1,ls),1,fnp1(0,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,1),1,
+     +        fnp1(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,ls),1,
+     +       fnp1(0:iyjx2*ngen-1,0,1,ls+1),1)
       endif
 
 c.......................................................................
@@ -566,11 +580,15 @@ c.......................................................................
  410      continue
 
           if (sbdry .eq. "periodic") then
-            call dcopy(iyp1+1,fnp1(0,1,k,1),1,fnp1(0,1,k,ls+1),1)
-            call dcopy(iyp1+1,fnp1(0,1,k,ls),1,fnp1(0,1,k,0),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,1),1,
+     +            fnp1(0:iyp1,1,k,ls+1),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,ls),1,
+     +           fnp1(0:iyp1,1,k,0),1)
           else
-            call dcopy(iyp1+1,fnp1(0,1,k,1),1,fnp1(0,1,k,0),1)
-            call dcopy(iyp1+1,fnp1(0,1,k,ls),1,fnp1(0,1,k,ls+1),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,1),1,
+     +            fnp1(0:iyp1,1,k,0),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,ls),1,
+     +           fnp1(0:iyp1,1,k,ls+1),1)
           endif
 
  400    continue

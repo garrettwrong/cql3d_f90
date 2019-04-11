@@ -3,7 +3,7 @@ c
       subroutine cfpcoefn
       use param_mod
       use cqcomm_mod
-      use r8subs_mod, only : daxpy, dscal
+      use r8subs_mod, only : daxpy, dscal, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 ccc      real*8,dimension(iy):: prnt1,prnt2,prnt3
@@ -283,7 +283,8 @@ c..................................................................
  220        continue
           else
             call diagescl(kelecg)
-            call dcopy(iyjx2,f(0,0,ngen,l_),1,fxsp(0,0,ngen,l_),1)
+            call dcopy(iyjx2,f(0:iyjx2-1,0,ngen,l_),1,
+     +           fxsp(0:iyjx2-1,0,ngen,l_),1)
           endif
  250    continue
       else
@@ -351,9 +352,11 @@ CPTR<<<END PTR-BCASTCACD
           endif
           do 400 m=mu1,mu2,mu3
             if (colmodl.eq.4 .and. n.ge.naccel) then
-              call dcopy(iyjx2,fxsp(0,0,k,l_),1,temp3(0,0),1)
+              call dcopy(iyjx2,fxsp(0:iyjx2-1,0,k,l_),1,
+     +              temp3(0:iyjx2-1,0),1)
             else
-              call dcopy(iyjx2,f(0,0,k,l_),1,temp3(0,0),1)
+              call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,
+     +              temp3(0:iyjx2-1,0),1)
             endif
 
 c     compute V_m_b in tam1(j), for given l, m and gen. species b

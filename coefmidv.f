@@ -3,7 +3,7 @@ c
       subroutine coefmidv(c,nn)
       use param_mod
       use cqcomm_mod
-      use r8subs_mod, only : dscal
+      use r8subs_mod, only : dscal, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -28,12 +28,12 @@ c     note: x(jx)=1.
         do 110 j=2,jx-1
           call dscal(iy,x3i(j),c(1:iy,j),1) !Note: x3i(j)=one/x(j)**3
  110    continue
-        call dcopy(iy,c(1,2),1,c(1,1),1)
+        call dcopy(iy,c(1:iy,2),1,c(1:iy,1),1)
       elseif (nn .eq. 2) then
         do 120 j=2,jx-1
           call dscal(iy,x2i(j),c(1:iy,j),1) !Note: x2i(j)=one/x(j)**2
  120    continue
-        call dcopy(iy,c(1,2),1,c(1,1),1)
+        call dcopy(iy,c(1:iy,2),1,c(1:iy,1),1)
       endif
       do 2 i=1,iy
         do 21 j=1,jx-1

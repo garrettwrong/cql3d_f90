@@ -3,6 +3,7 @@ c
       subroutine coefstup(k)
       use param_mod
       use cqcomm_mod
+      use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -33,7 +34,7 @@ c..................................................................
       if (ifag.eq.0) then
         call bcast(so,zero,iyjx2)
       else
-        call dcopy(iyjx2,source(0,0,k,indxlr_),1,so,1)
+        call dcopy(iyjx2,source(0:iyjx2-1,0,k,indxlr_),1,so,1)
       endif
       xrf=0.
 
