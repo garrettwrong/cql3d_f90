@@ -4,11 +4,10 @@ SHELL     = /bin/sh
 NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
-INCLUDES  = frcomm.h frname.h frname_decl.h name.h  \
-	trans.h wpadvnc.h name_decl.h
-SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f \
+INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h
+SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f03 \
 	pltdf.f03 eqrhopsi.f03 equilib.f03 \
-	impavnc0.f  frplteq.f \
+	impavnc0.f  frplteq.f03 \
 	a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
@@ -48,7 +47,7 @@ SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f \
 	prpprctr.f  psif.f  psifp.f  psifppy.f  psifpy.f  psiinv.f  \
 	r8lsode.f  rdc_multi.f rdc_bplt.f restcon.f resthks.f  \
 	restvty.f  rf.f  sigalloc.f  siggy.f  sigmax.f  sigsetup.f  \
-        sigv5d.f sigfn.f      sigie.f  sigmaxwl.f   sigv.f  \
+	sigv5d.f sigfn.f sigie.f  sigmaxwl.f   sigv.f  \
 	soucrit.f sounorm.f  soup.f  soup0.f  souplt.f   \
 	sourc0.f  sourcee.f  sourcef.f  sourceko.f sourcpwr.f   \
 	synchrad.f  tdbootst.f tdboothi.f  tdchief.f  tddiag.f  \
@@ -75,15 +74,13 @@ SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f \
 	urfpack.f  urfpackm.f  urfrays.f  urfread.f   \
 	urfread_.f  urfsetup.f  urfwrite.f  urfwrite_.f  \
 	urfwrong.f  urfwr0.f  urfwr0c.f \
-        vlf.f vlfalloc.f vlfbplt.f vlfsetup.f vlh.f  vlhbplt.f vlhd.f  \
+	vlf.f vlfalloc.f vlfbplt.f vlfsetup.f vlh.f  vlhbplt.f vlhd.f  \
 	wpalloc.f  wparsou.f  wpavg.f  wpbdry.f  \
 	wpcheck.f  wpchgdy.f wpcthta.f  wpelecf.f   \
 	wpinitl.f  wploweq.f  wpsavf.f  wptrafx.f  wptramu.f  \
 	wptrmuy.f  wpvptb.f  wpwrng.f  wpmshchk.f \
 	zblock.f  zcunix.f  zfreya.f    znonsym.f
-#	zblock.f  zcunix.f  zfreya.f    znonsym.f dgbtrf.f ilaenv.f
-#	zblock.f  zcunix.f  zfreya.F    zgauss.f   znonsym.f 
-#	zblock.f  zcunix.f  zfreya.F    zgauss.f    dropfile.c znonsym.f 
+
 F03OBJECTS = $(filter %.o,$(SOURCES:.f03=.o))
 OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
 
@@ -93,13 +90,10 @@ INCLUDE   =/usr/local/include
 
 DEBUG     = -g 
 OPTIMIZE  = -O1
-LISTING   = -Mlist
-CSPECIAL  = -fdefault-real-8  -fdefault-double-8 
-SPECIAL   = -byteswapio -Mbackslash
+CSPECIAL  = -fdefault-real-8  -fdefault-double-8
 LDSPECIAL =
 COMPILE   =  $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE) 
 LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG) # Remove -m for optimize
-#LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL)  # Remove -m for optimize
 PROTECT   = chmod 755
 DELETE    = rm -f
 
@@ -111,20 +105,54 @@ $(NAME):           $(F03OBJECTS) $(OBJECTS)
 	$(LOAD)    $(F03OBJECTS) $(OBJECTS)  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
 
+# Check if inlude files have changed i guess
+$(SOURCES):        $(INCLUDES)
+
+
 # Following use of pattern matching works; 
 # it is based on statements in Sect. 10.7 of gmake Manual
 # by Stallman and McGrath.
 # However, the two rules following this seem clearer to me (BobH).
+# Me too BobH, me too. ;)  (GBW).
 #%.o:               %.f        $(INCLUDES)
 #	$(COMPILE) $< -o $@
 
-$(SOURCES):        $(INCLUDES)
+
+#----
+# Now that we have modules and scope,
+#   we unfortunately do have dependencies.
+# Do not fret, they're not so bad.
+DAGOBJS = param.o cqcomm.o r8subs.o advnce.o pltmain.o \
+          pltdf.o eqrhopsi.o equilib.o \
+          impavnc0.o  frplteq.o
+# And this describes their dag...
+cqcomm.o: cqcomm.f03 param.o
+r8subs.o: r8subs.f03 cqcomm.o
+advnce.o: advnce.f03 cqcomm.o r8subs.o
+pltdf.o: pltdf.f03 param.o cqcomm.o r8subs.o
+pltmain.o: pltmain.f03 param.o cqcomm.o pltdf.o
+eqrhopsi.o: eqrhopsi.f03 param.o cqcomm.o
+equilib.o: equilib.f03 param.o cqcomm.o r8subs.o
+impavnc0.o: impavnc0.f param.o cqcomm.o advnce.o r8subs.o
+frplteq.o: frplteq.f03 param.o cqcomm.o r8subs.o
+
+#----
+# From here we will assume that all deps to build
+# remaining files have been met.
+# (Other words, we assume remaining .f files 
+#  require all DAGOBJS.
+# That is overkill, but simple.
+# As files migrate or evolve, we add small rules for each file.
+# This will also document how the code is structured in practice.
+
+#GBW, until all files have the same extension (03 I hope!)
+# filter out objects with correct extension
 
 # see Sect. 4.10.1, Static Pattern Rules.
 $(filter %.o,$(F03OBJECTS)): %.o: %.f03 $(INCLUDES)
 	$(COMPILE) $< -o $@ 
 
-$(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
+$(filter %.o,$(OBJECTS)): %.o: %.f $(DAGOBJS) $(INCLUDES)
 	$(COMPILE) $< -o $@
 
 rebuild:
