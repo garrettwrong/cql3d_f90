@@ -1,0 +1,6 @@
+*.o
+xcql3d_gfortran64*
+*.mod
+*.log
+*~
+*#*
