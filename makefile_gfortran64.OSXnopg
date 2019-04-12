@@ -132,6 +132,6 @@ rebuild:
 	$(LOAD) $(OBJECTS) $(F03OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE)  $(NAME) $(OBJECTS) $(F03OBJECTS) *.lst$(DELETE) *.mod
-	#$(DELETE) *.mod
+	$(DELETE)  $(NAME) $(OBJECTS) $(F03OBJECTS) *.lst$(DELETE)
+	$(DELETE) *.mod
 
