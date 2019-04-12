@@ -4,3 +4,4 @@ xcql3d_gfortran64*
 *.log
 *~
 *#*
+oldmakefiles*
