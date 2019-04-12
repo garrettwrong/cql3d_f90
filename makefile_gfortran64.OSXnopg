@@ -7,8 +7,8 @@ BUILDER=	$(COMPILER)
 INCLUDES  = frcomm.h frname.h frname_decl.h name.h  \
 	trans.h wpadvnc.h name_decl.h
 SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f \
-	pltdf.f03 \
-	impavnc0.f equilib.f eqrhopsi.f frplteq.f \
+	pltdf.f03 eqrhopsi.f03 equilib.f03 \
+	impavnc0.f  frplteq.f \
 	a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
