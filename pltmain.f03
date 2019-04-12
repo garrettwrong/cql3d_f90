@@ -79,8 +79,7 @@ contains
        ! for the case of ngen=2 tandem i+e runs:
        !In this case, enorm=enorme
        !and  xlwr=sqrt(enormi*fmass(kelecg)/(enorme*fmass(kionn)))
-       write(t_,'(a,2f11.3)') ' enormi, enorme(=enorm) (kev) =',
-       +                           enormi, enorme
+       write(t_,'(a,2f11.3)') ' enormi, enorme(=enorm) (kev) =',enormi, enorme
     else
        write(t_,'(a,f11.3)') ' enorm (kev) =' ,enorm
     endif
