@@ -40,8 +40,11 @@
 !.......................................................................
 
 module cqcomm_mod
+  use iso_c_binding, only : c_float             !REAL*4
+  use iso_c_binding, only : c_double            !REAL*8
+  use iso_c_binding, only : c_double_complex    !COMPLEX*16
   use param_mod
-
+  !implicit none
   !      include 'name_decl.h'
   !     name_decl.h
   !
@@ -55,8 +58,7 @@ module cqcomm_mod
   !.......................................................................
   !     nml variables that take on the values assigned to parameters.
   !.......................................................................
-  common /params/ &
-       iy,jx, &
+  integer :: iy,jx, &
        lfield,lz,lrz, &
        lrzmax,ls,lsmax, &
        mx, &
@@ -66,8 +68,7 @@ module cqcomm_mod
   !     SCALAR INPUT FOR NAMELIST SETUP...
   !.......................................................................
 
-  character*8 &
-       chang, &
+  character*8 :: chang, &
        eqmod,eleccomp,f4d_out,tavg, &
        iactst,ineg,idrop,idskf,idskrf,ichkpnt,implct, &
        lbdry0,locquas,lrzdiff,lsdiff,taunew, &
@@ -86,94 +87,80 @@ module cqcomm_mod
        yreset, &
        nmlstout
 
-  character*256 netcdfnm
-  character*256 mnemonic
-  character*8 iuser,izeff,netcdfshort
+  character*256 :: netcdfnm
+  character*256 :: mnemonic
+  character*8 :: iuser,izeff,netcdfshort
 
-  integer colmodl
+  integer :: colmodl
 
 
-  common /readscal/ &
-       btor,bth, &
-       contrmin,constr,chang,colmodl, &
+  !common /readscal/ &
+  real(c_double) :: btor,bth, &
+       contrmin,constr,&
        deltabdb,droptol,dtr,dtr0,xsink, &
-       esink,ephicc,esfac,eoved,enorm,enorme,enormi,eleccomp, &
-       eqmod, f4d_out,tavg, &
-       gsla,gslb,gamaset,gamafac, &
-       iactst,ineg,idrop,idskf,idskrf,ichkpnt,implct, &
-       isigtst,isigsgv1,isigsgv2, &
-       iuser,izeff, &
+       esink,ephicc,esfac,eoved,enorm,enorme,enormi,&
+       gsla,gslb,gamaset
+  integer :: isigtst,isigsgv1,isigsgv2, &
        kenorm,lfil, &
-       lbdry0,locquas,lrzdiff,lsdiff,taunew, &
        nnspec
 
-  complex*16 vlfemin,vlfeplus
+  complex(c_double_complex) :: vlfemin,vlfeplus
 
-  common /readscal/ &
-       machine,mnemonic,meshy,manymat,netcdfnm,netcdfshort, &
-       netcdfvecal,netcdfvecc,netcdfvece,netcdfvecrf,netcdfvecs, &
-       nstop,ncoef,nchec,ncont,nrstrt,nstps,nfpld, &
+  !common /readscal/ &
+  integer :: nstop,ncoef,nchec,ncont,nrstrt,nstps,nfpld, &
        noncntrl,nonel,noffel,nonvphi,noffvphi,nonloss,noffloss, &
-       numby,lnwidth,noplots,nmlstout, &
-       psimodel,pltpowe,pltend,pltinput,pltlim,pltlimm,pltrdc, &
-       pltrst,plturfb,pltvflu,pltra,pltfvs,pltd,pltprpp,pltfofv,pltlos, &
-       pltdn,pltvecal,pltvecc,pltvecrf,pltvece, &
-       pltstrm,pltflux,pltmag,pltsig,profpsi, &
-       pltdnpos,xprpmax, &
-       qsineut,trapmod,trapredc,scatmod,scatfrac, &
-       radmaj,radmin,rmirror,relativ, &
-       sigvi,sigmamod,sigvcx,soln_method, &
-       symtrap,syncrad,bremsrad,brfac,brfac1,brfacgm3, &
-       tfac,tfacz,tandem,temp_den, &
+       numby,lnwidth
+  real(c_double) :: pltmag, &
+       xprpmax, &
+       trapredc,scatfrac, &
+       radmaj,radmin,rmirror, &
+       sigvi,sigvcx, &
+       brfac,brfac1,brfacgm3, &
+       tfac,tfacz,temp_den, &
        veclnth, &
        vnorm
 
-  real*8 mpwr,npwr,megy,negy,mtorloss,ntorloss, &
+  real(c_double) :: npwr(0:ntotala),negy(ngena),ntorloss(ngena), &
+       mpwr(0:ntotala),megy(ngena),mtorloss(ngena), &
        mpwrzeff,npwrzeff,mpwrvphi,npwrvphi, &
        mpwrelec,npwrelec,mpwrxj,npwrxj
 
-  common /readscal/ &
-       xfac,xpctlwr,xpctmdl,xlwr,xmdl,xsinkm, &
-       yreset,ylower,yupper, &
-       mpwrzeff,npwrzeff,mpwrvphi,npwrvphi,mpwrxj,npwrxj, &
-       mpwrelec,npwrelec, &
+  !common /readscal/ &
+   real(c_double) ::   xfac,xpctlwr,xpctmdl,xlwr,xmdl,xsinkm, &
+       ylower,yupper, &
        elecscal,enescal,zeffscal,vphiscal,tescal,tiscal,bctimescal
   !..................................................................
   !     VECTOR DIMENSIONED NAMELIST SETUP COMMON BLOCK.....
   !..................................................................
 
-  character*8 &
-       ibox, &
-       kpress,kfield, &
-       lbdry,lossmode, &
-       regy, &
-       torloss, &
-       difus_type,difus_io
-
-  character*256  lossfile
-
-  common /readvec/ &
-       bnumb(ntotala), &
-       fmass(ntotala), &
-       ibox(3),ioutput(2),isigmas(6),pltflux1(7), &
+  character*8 :: ibox(3), &
        kpress(ntotala),kfield(ntotala), &
-       mpwr(0:ntotala),megy(ngena),mtorloss(ngena), &
-       npwr(0:ntotala),negy(ngena),ntorloss(ngena), &
-       lbdry(ngena), &
-       enloss(ngena),lossfile(ngena), &
-       lossmode(ngena),regy(ngena),gamegy(ngena), &
-       torloss(ngena),paregy(ngena),peregy(ngena),pegy(ngena), &
+       lbdry(ngena),lossmode(ngena), &
+       regy(ngena), &
+       torloss(ngena), &
+       difus_type(ngena), difus_io(ngena)
+
+  character*256 :: lossfile
+
+  !common /readvec/ &
+  real(c_double) :: bnumb(ntotala), &
+       fmass(ntotala), &
+       ioutput(2),isigmas(6),pltflux1(7), &
+       enloss(ngena), &
+       gamegy(ngena), &
+       paregy(ngena),peregy(ngena),pegy(ngena), &
        zeffin(0:njenea),vphiplin(0:njenea), &
        ennl(npaproca),ennb(npaproca),ennscal(npaproca), &
-       bctime(nbctimea),dtr1(ndtr1a),nondtr1(ndtr1a), &
+       bctime(nbctimea),dtr1(ndtr1a), &
        zeffc(nbctimea),zeffb(nbctimea), &
        elecc(nbctimea),elecb(nbctimea), &
        vphic(nbctimea),vphib(nbctimea), &
        xjc(nbctimea),xjb(nbctimea), &
        totcrt(nbctimea), &
        nplot(nplota),nsave(nsavea), &
-       difus_type(ngena),difus_io(ngena), &
        tavg1(ntavga),tavg2(ntavga)
+  ! XXX bug
+  integer :: nondtr1(ndtr1a)
 
   !..................................................................
   !     TWO DIMENSIONAL NAMELIST SETUP COMMON BLOCK.....
