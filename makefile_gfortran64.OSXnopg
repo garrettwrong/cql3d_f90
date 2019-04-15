@@ -8,12 +8,13 @@ INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h
 SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f03 \
 	pltdf.f03 eqrhopsi.f03 equilib.f03 \
 	impavnc0.f03  frplteq.f03 tdeqdsk.f03  \
+	bsl.f03  bsu.f03 \
 	a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
 	ainsetpa.f  ainsetva.f  ainspec.f  ainvnorm.f ampfar.f \
 	aminmx.f bavdens.f  bavgmax.f  baviorbt.f   \
-	bcast.f  bsl.f  bsu.f  cfpcoefc.f  cfpcoefn.f  \
+	bcast.f cfpcoefc.f  cfpcoefn.f  \
 	cfpcoefr.f  cfpgamma.f  cfpleg.f     \
 	cfpmodbe.f  cfpsymt.f  coefefad.f  coefefld.f  coefegad.f  \
 	coeffpad.f  coefload.f  coefmidt.f  coefmidv.f   \
@@ -128,12 +129,14 @@ DAGOBJS = param.o cqcomm.o r8subs.o advnce.o pltmain.o \
 # And this describes their dag...
 cqcomm.o: cqcomm.f03 param.o
 r8subs.o: r8subs.f03 cqcomm.o
-advnce.o: advnce.f03 cqcomm.o r8subs.o
+bsl.o: bsl.f03 param.o cqcomm.o
+bsu.o: bsu.f03 param.o cqcomm.o
+advnce.o: advnce.f03 cqcomm.o r8subs.o bsu.o bsl.o
 pltdf.o: pltdf.f03 param.o cqcomm.o r8subs.o
 pltmain.o: pltmain.f03 param.o cqcomm.o pltdf.o
 eqrhopsi.o: eqrhopsi.f03 param.o cqcomm.o
 equilib.o: equilib.f03 param.o cqcomm.o r8subs.o
-impavnc0.o: impavnc0.f03 param.o cqcomm.o advnce.o r8subs.o
+impavnc0.o: impavnc0.f03 param.o cqcomm.o advnce.o r8subs.o bsu.o bsl.o
 frplteq.o: frplteq.f03 param.o cqcomm.o r8subs.o
 tdeqdsk.o: tdeqdsk.f03 param.o cqcomm.o equilib.o r8subs.o
 

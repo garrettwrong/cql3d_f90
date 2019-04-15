@@ -4,6 +4,8 @@ module impavnc0_mod
   use iso_c_binding, only : c_double
   ! XXX this is probably a bug in the original code.
   use advnce_mod, only :  k => advnce_k ! use advnce_mod's advnce_k
+  use bsu_mod, only : bsu
+  use bsl_mod, only : bsl
   ! gauss_, these are used outside module in it3dalloc.f
   integer, public ::  inewjmax, ialloc      
   ! XXX this was an integer somewhere?
