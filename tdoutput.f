@@ -18,7 +18,7 @@ CMPIINSERT_INCLUDE
       dimension ztr(lrza)
       dimension xj(lrza),xp(lrza),xe(lrza),xc(lrza)
       dimension rban_vth(lrzmax),dn_scale(lrzmax),dt_scale(lrzmax) !print-out
-      character*8 ztext
+      character(len=8) :: ztext
       
 
 CMPIINSERT_IF_RANK_NE_0_RETURN

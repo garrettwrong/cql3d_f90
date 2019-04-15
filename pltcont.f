@@ -539,19 +539,20 @@ CPGPLT      ENDIF
 c====================================================================
 c====================================================================
       SUBROUTINE PALETT(TYPE, CONTRA, BRIGHT)
+      use iso_c_binding, only : c_float
 C-----------------------------------------------------------------------
 C Set a "palette" of colors in the range of color indices used by
 C PGIMAG.
 c From pgdemo4.f
 C-----------------------------------------------------------------------
       INTEGER TYPE
-      REAL CONTRA, BRIGHT
+      REAL(c_float) CONTRA, BRIGHT
 C
-      REAL GL(2), GR(2), GG(2), GB(2)
-      REAL RL(9), RR(9), RG(9), RB(9)
-      REAL HL(5), HR(5), HG(5), HB(5)
-      REAL WL(10), WR(10), WG(10), WB(10)
-      REAL AL(20), AR(20), AG(20), AB(20)
+      REAL(c_float) GL(2), GR(2), GG(2), GB(2)
+      REAL(c_float) RL(9), RR(9), RG(9), RB(9)
+      REAL(c_float) HL(5), HR(5), HG(5), HB(5)
+      REAL(c_float) WL(10), WR(10), WG(10), WB(10)
+      REAL(c_float) AL(20), AR(20), AG(20), AB(20)
 C
       DATA GL /0.0, 1.0/
       DATA GR /0.0, 1.0/

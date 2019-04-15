@@ -7,7 +7,7 @@ module equilib_mod
   integer, parameter, public ::  ncoila=5, nccoila=50
   real(c_double), public :: pcvac(0:9)
   real(c_double), public :: ccoil(nccoila,ncoila)
-  real(c_double), public :: ncoil(ncoila)
+  integer,  public :: ncoil(ncoila)
   save
   
 contains

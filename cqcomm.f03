@@ -1,6 +1,4 @@
 !     cqcomm
-! XXX need to convert name and name_decl before 
-! XXX can get away from f77 here
 !
 !.......................................................................
 !     There are a number of arrays intended for temporary storage
@@ -141,7 +139,7 @@ module cqcomm_mod
        torloss(ngena), &
        difus_type(ngena), difus_io(ngena)
 
-  character(len=256) :: lossfile
+  character(len=256) :: lossfile(ngena)
 
   !common /readvec/ &
   real(c_double) :: bnumb(ntotala), &
@@ -597,8 +595,9 @@ module cqcomm_mod
        miyjx,ibeampon,ibeamponp
 
   !common &
-  integer :: ipad1,r0geomp, rgeomp, zgeomp, rgeom1, rgeom2, &
-       niyjx,nccoef,ncentr,navnc,ncplt,n, &
+  integer :: ipad1
+  real(c_double) :: r0geomp, rgeomp, zgeomp, rgeom1, rgeom2
+  integer :: niyjx,nccoef,ncentr,navnc,ncplt,n, &
        nflux,nframe,npltmx, ipad2
   real(c_double) :: one,one_, &
        pi,pio180,pio2,psir,proton, &
@@ -1691,9 +1690,9 @@ module cqcomm_mod
   real(c_double) ::     sorpwtza
 
   !common /csxr/
-  real(c_double) :: sxry(lrza,4),sang(lrza,4),spol(lrza,4), &
-       ibin(lrza,4),eflux(nena,nva),efluxt(nva),alphad(3),xs_(3), &
-       enk(nena),en_(nena)
+  real(c_double) :: sxry(lrza,4),sang(lrza,4),spol(lrza,4)
+  integer :: ibin(lrza,4)
+  real(c_double) ::eflux(nena,nva),efluxt(nva),alphad(3),xs_(3), enk(nena),en_(nena)
   integer :: jval_(nena),inegsxr(nva),lensxr(nva)
 
   !common /csigma/
