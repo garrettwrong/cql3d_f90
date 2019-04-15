@@ -42,17 +42,8 @@ module cqcomm_mod
   use iso_c_binding, only : c_double            !REAL*8
   use iso_c_binding, only : c_double_complex    !COMPLEX*16
   use param_mod
+  implicit none
   public
-  !implicit none
-  !      include 'name_decl.h'
-  !     name_decl.h
-  !
-  !.......................................................................
-  !     This file will hold all declarations of the namelist variables
-  !     (given in name.h), type and dimensions.
-  !.......................................................................
-
-
 
   !.......................................................................
   !     nml variables that take on the values assigned to parameters.
@@ -661,926 +652,629 @@ module cqcomm_mod
   !     Allocatable arrays allocated in subroutine ainalloc
   !..................................................................
 
-  pointer :: ix1(:),ix2(:),ix3(:),ix4(:),   &  !!!(0:mx) &
+  integer, pointer :: ix1(:),ix2(:),ix3(:),ix4(:),   &  !!!(0:mx) &
        ix5(:),ix6(:),ix7(:),ix8(:)      !!!(0:mx)
 
-  pointer :: tom1(:),tom2(:),tom3(:),tom4(:)  !!!(0:mxp1)
+  real(c_double), pointer :: tom1(:),tom2(:),tom3(:),tom4(:)  !!!(0:mxp1)
 
   !BH_YP090809  WAS: choose(0:mx+2,0:mx+2),fctrl(0:mx+2)
   !BH_YP090809  First dimension of choose should be larger of 2*mx,mx+2
-  pointer :: fctrl(:)     !!!(0:2*mx+2)
-  pointer :: choose(:,:)  !!!(0:2*mx+2,0:mx+2)
-  pointer :: cog(:,:)     !!!(0:mx,15)
-  pointer :: pm(:,:)      !!!(0:mxp1,lrors)
+  real(c_double), pointer :: fctrl(:)     !!!(0:2*mx+2)
+  real(c_double), pointer :: choose(:,:)  !!!(0:2*mx+2,0:mx+2)
+  real(c_double), pointer :: cog(:,:)     !!!(0:mx,15)
+  real(c_double), pointer :: pm(:,:)      !!!(0:mxp1,lrors)
 
   !common /dptr95/
-  integer :: ix1,ix2,ix3,ix4,ix5,ix6,ix7,ix8
-  real(c_double) :: tom1,tom2,tom3,tom4,  &
-       fctrl,choose,cog,pm
 
-  pointer f
-  dimension f(:,:,:,:)  !f(0:iy+1,0:jx+1,ngen,lrors)
+  real(c_double), pointer :: f(:,:,:,:)  !f(0:iy+1,0:jx+1,ngen,lrors)
   !common /dptr95/ f
-  pointer favg
-  dimension favg(:,:,:,:)
+  real(c_double), pointer :: favg(:,:,:,:)
   !common /dptr95/ favg
-  pointer fxsp
-  dimension fxsp(:,:,:,:)
+  real(c_double), pointer :: fxsp(:,:,:,:)
   !common /dptr95/ fxsp
-  pointer f_
-  dimension f_(:,:,:,:)
+  real(c_double), pointer :: f_(:,:,:,:)
   !common /dptr95/ f_
-  pointer spasou
-  dimension spasou(:,:,:,:)
+  real(c_double), pointer :: spasou(:,:,:,:)
   !common /dptr95/ spasou
-  pointer velsou
-  dimension velsou(:,:,:,:)
+  real(c_double), pointer :: velsou(:,:,:,:)
   !common /dptr95/ velsou
-  pointer velsou2
-  dimension velsou2(:,:,:,:)
+  real(c_double), pointer :: velsou2(:,:,:,:)
   !common /dptr95/ velsou2
-  pointer source
-  dimension source(:,:,:,:)
+  real(c_double), pointer :: source(:,:,:,:)
   !common /dptr95/ source
-  pointer gone
-  dimension gone(:,:,:,:)
+  real(c_double), pointer :: gone(:,:,:,:)
   !common /dptr95/ gone
-  pointer egylosa
-  dimension egylosa(:,:,:,:)
+  real(c_double), pointer :: egylosa(:,:,:,:)
   !common /dptr95/ egylosa
-  pointer i0tran
-  dimension i0tran(:,:,:)
+  integer, pointer :: i0tran(:,:,:)
   !common /dptr95/ i0tran
-  pointer cal
-  dimension cal(:,:,:,:)
+  real(c_double), pointer :: cal(:,:,:,:)
   !common /dptr95/ cal
-  pointer cbl
-  dimension cbl(:,:,:,:)
+  real(c_double), pointer :: cbl(:,:,:,:)
   !common /dptr95/ cbl
-  pointer ccl
-  dimension ccl(:,:,:,:)
+  real(c_double), pointer :: ccl(:,:,:,:)
   !common /dptr95/ ccl
-  pointer cdl
-  dimension cdl(:,:,:,:)
+  real(c_double), pointer :: cdl(:,:,:,:)
   !common /dptr95/ cdl
-  pointer cel
-  dimension cel(:,:,:,:)
+  real(c_double), pointer :: cel(:,:,:,:)
   !common /dptr95/ cel
-  pointer cfl
-  dimension cfl(:,:,:,:)
+  real(c_double), pointer :: cfl(:,:,:,:)
   !common /dptr95/ cfl
-  pointer eal
-  dimension eal(:,:,:,:,:)
+  real(c_double), pointer :: eal(:,:,:,:,:)
   !common /dptr95/ eal
-  pointer ebl
-  dimension ebl(:,:,:,:,:)
+  real(c_double), pointer :: ebl(:,:,:,:,:)
   !common /dptr95/ ebl
-  pointer scal
-  dimension scal(:,:)
+  real(c_double), pointer :: scal(:,:)
   !common /dptr95/ scal
-  pointer cet
-  dimension cet(:,:,:)
+  real(c_double), pointer :: cet(:,:,:)
   !common /dptr95/ cet
-  pointer cex
-  dimension cex(:,:,:)
+  real(c_double), pointer :: cex(:,:,:)
   !common /dptr95/ cex
-  pointer synca
-  dimension synca(:,:,:)
+  real(c_double), pointer :: synca(:,:,:)
   !common /dptr95/ synca
-  pointer syncd
-  dimension syncd(:,:,:)
+  real(c_double), pointer :: syncd(:,:,:)
   !common /dptr95/ syncd
-  pointer taulos
-  dimension taulos(:,:,:)
+  real(c_double), pointer :: taulos(:,:,:)
   !common /dptr95/ taulos
-  pointer elecfldn
-  dimension elecfldn(:,:,:)
+  real(c_double), pointer :: elecfldn(:,:,:)
   !common /dptr95/ elecfldn
-  pointer delecfld0n
-  dimension delecfld0n(:,:,:)
+  real(c_double), pointer :: delecfld0n(:,:,:)
   !common /dptr95/ delecfld0n
-  pointer elecn
-  dimension elecn(:,:,:)
+  real(c_double), pointer :: elecn(:,:,:)
   !common /dptr95/ elecn
-  pointer delecfld0
-  dimension delecfld0(:,:)
+  real(c_double), pointer :: delecfld0(:,:)
   !common /dptr95/ delecfld0
-  pointer psi0bar
-  dimension psi0bar(:,:)
+  real(c_double), pointer :: psi0bar(:,:)
   !common /dptr95/ psi0bar
-  pointer di
-  dimension di(:,:,:,:)
+  real(c_double), pointer :: di(:,:,:,:)
   !common /dptr95/ di
-  pointer dj
-  dimension dj(:,:,:,:)
+  real(c_double), pointer :: dj(:,:,:,:)
   !common /dptr95/ dj
-  pointer dym5
-  dimension dym5(:,:)
+  real(c_double), pointer :: dym5(:,:)
   !common /dptr95/ dym5
-  pointer dyp5
-  dimension dyp5(:,:)
+  real(c_double), pointer :: dyp5(:,:)
   !common /dptr95/ dyp5
-  pointer eyp5
-  dimension eyp5(:,:)
+  real(c_double), pointer :: eyp5(:,:)
   !common /dptr95/ eyp5
-  pointer eym5
-  dimension eym5(:,:)
+  real(c_double), pointer :: eym5(:,:)
   !common /dptr95/ eym5
-  pointer y
-  dimension y(:,:)
+  real(c_double), pointer :: y(:,:)
   !common /dptr95/ y
-  pointer dy,dyi
-  dimension dy(:,:),dyi(:,:)
+  real(c_double), pointer :: dy(:,:),dyi(:,:)
   !common /dptr95/ dy,dyi
-  pointer yptb
-  dimension yptb(:,:)
+  real(c_double), pointer :: yptb(:,:)
   !common /dptr95/ yptb
-  pointer coss
-  dimension coss(:,:)
+  real(c_double), pointer :: coss(:,:)
   !common /dptr95/ coss
-  pointer cynt2
-  dimension cynt2(:,:)
+  real(c_double), pointer :: cynt2(:,:)
   !common /dptr95/ cynt2
-  pointer batot
-  dimension batot(:,:)
+  real(c_double), pointer :: batot(:,:)
   !common /dptr95/ batot
-  pointer lmax
-  dimension lmax(:,:)
+  integer, pointer :: lmax(:,:)
   !common /dptr95/ lmax
-  pointer vpint
-  dimension vpint(:,:)
+  real(c_double), pointer :: vpint(:,:)
   !common /dptr95/ vpint
-  pointer psiiv
-  dimension psiiv(:,:)
+  real(c_double), pointer :: psiiv(:,:)
   !common /dptr95/ psiiv
-  pointer psiba
-  dimension psiba(:,:)
+  real(c_double), pointer :: psiba(:,:)
   !common /dptr95/ psiba
-  pointer psisq
-  dimension psisq(:,:)
+  real(c_double), pointer :: psisq(:,:)
   !common /dptr95/ psisq
-  pointer psicu
-  dimension psicu(:,:)
+  real(c_double), pointer :: psicu(:,:)
   !common /dptr95/ psicu
-  pointer psiqu
-  dimension psiqu(:,:)
+  real(c_double), pointer :: psiqu(:,:)
   !common /dptr95/ psiqu
-  pointer bavpd
-  dimension bavpd(:,:)
+  real(c_double), pointer :: bavpd(:,:)
   !common /dptr95/ bavpd
-  pointer bavdn
-  dimension bavdn(:,:)
+  real(c_double), pointer :: bavdn(:,:)
   !common /dptr95/ bavdn
-  pointer psiir
-  dimension psiir(:,:)
+  real(c_double), pointer :: psiir(:,:)
   !common /dptr95/ psiir
-  pointer vderb
-  dimension vderb(:,:)
+  real(c_double), pointer :: vderb(:,:)
   !common /dptr95/ vderb
-  pointer sinn
-  dimension sinn(:,:)
+  real(c_double), pointer :: sinn(:,:)
   !common /dptr95/ sinn
-  pointer tann
-  dimension tann(:,:)
+  real(c_double), pointer :: tann(:,:)
   !common /dptr95/ tann
-  pointer ymid
-  dimension ymid(:,:)
+  real(c_double), pointer :: ymid(:,:)
   !common /dptr95/ ymid
-  pointer tau
-  dimension tau(:,:)
+  real(c_double), pointer :: tau(:,:)
   !common /dptr95/ tau
-  pointer vptb
-  dimension vptb(:,:)
+  real(c_double), pointer :: vptb(:,:)
   !common /dptr95/ vptb
-  pointer zboun
-  dimension zboun(:,:)
+  real(c_double), pointer :: zboun(:,:)
   !common /dptr95/ zboun
-  pointer idx
-  dimension idx(:,:)
+  integer, pointer :: idx(:,:)
   !common /dptr95/ idx
-  pointer imax
-  dimension imax(:,:)
+  integer, pointer :: imax(:,:)
   !common /dptr95/ imax
-  pointer dz
-  dimension dz(:,:)
+  real(c_double), pointer :: dz(:,:)
   !common /dptr95/ dz
-  pointer pol
-  dimension pol(:,:)
+  real(c_double), pointer :: pol(:,:)
   !common /dptr95/ pol
-  pointer solrz
-  dimension solrz(:,:)
+  real(c_double), pointer :: solrz(:,:)
   !common /dptr95/ solrz
-  pointer solzz
-  dimension solzz(:,:)
+  real(c_double), pointer :: solzz(:,:)
   !common /dptr95/ solzz
-  pointer bpolz, btorz ! Equil.field at pol.angle grid (lza)
-  dimension bpolz(:,:), btorz(:,:)  ! (lza,lrzmax)
+  real(c_double), pointer :: bpolz(:,:), btorz(:,:)  ! (lza,lrzmax)
   !common /dptr95/ bpolz, btorz
 
   ! YuP: [added Apr/2014] area and volume of a cell associated with each
   !                     (R,Z) point on flux surface, (R,Z)==(solrz,solzz)
-  pointer ddarea, ddvol
-  dimension ddarea(:,:), ddvol(:,:)  !  (lza,lrzmax)
+  real(c_double), pointer :: ddarea(:,:), ddvol(:,:)  !  (lza,lrzmax)
   !common /dptr95/ ddarea, ddvol
 
-  pointer thtab
-  dimension thtab(:,:)
+  real(c_double), pointer :: thtab(:,:)
   !common /dptr95/ thtab
-  pointer z
-  dimension z(:,:)
+  real(c_double), pointer :: z(:,:)
   !common /dptr95/ z
-  pointer zmid
-  dimension zmid(:,:)
+  real(c_double), pointer :: zmid(:,:)
   !common /dptr95/ zmid
-  pointer bbpsi
-  dimension bbpsi(:,:)
+  real(c_double), pointer :: bbpsi(:,:)
   !common /dptr95/ bbpsi
-  pointer consnp
-  dimension consnp(:,:)
+  real(c_double), pointer :: consnp(:,:)
   !common /dptr95/ consnp
-  pointer ptime
-  dimension ptime(:,:)
+  real(c_double), pointer :: ptime(:,:)
   !common /dptr95/ ptime
-  pointer sptzrp
-  dimension sptzrp(:,:)
+  real(c_double), pointer :: sptzrp(:,:)
   !common /dptr95/ sptzrp
-  pointer pefld
-  dimension pefld(:,:)
+  real(c_double), pointer :: pefld(:,:)
   !common /dptr95/ pefld
-  pointer rovsp
-  dimension rovsp(:,:)
+  real(c_double), pointer :: rovsp(:,:)
   !common /dptr95/ rovsp
-  pointer restp
-  dimension restp(:,:)
+  real(c_double), pointer :: restp(:,:)
   !common /dptr95/ restp
-  pointer restnp
-  dimension restnp(:,:)
+  real(c_double), pointer :: restnp(:,:)
   !common /dptr95/ restnp
-  pointer vpov
-  dimension vpov(:,:)
+  real(c_double), pointer :: vpov(:,:)
   !common /dptr95/ vpov
-  pointer es
-  dimension es(:,:)
+  real(c_double), pointer :: es(:,:)
   !common /dptr95/ es
-  pointer bpsi
-  dimension bpsi(:,:)
+  real(c_double), pointer :: bpsi(:,:)
   !common /dptr95/ bpsi
-  pointer d2bpsi
-  dimension d2bpsi(:,:)
+  real(c_double), pointer :: d2bpsi(:,:)
   !common /dptr95/ d2bpsi
-  pointer d2solrz
-  dimension d2solrz(:,:)
+  real(c_double), pointer :: d2solrz(:,:)
   !common /dptr95/ d2solrz
-  pointer d2solzz
-  dimension d2solzz(:,:)
+  real(c_double), pointer :: d2solzz(:,:)
   !common /dptr95/ d2solzz
-  pointer d2bpolz, d2btorz
-  dimension d2bpolz(:,:), d2btorz(:,:)
+  real(c_double), pointer :: d2bpolz(:,:), d2btorz(:,:)
   !common /dptr95/ d2bpolz, d2btorz
-  pointer d2thtpol
-  dimension d2thtpol(:,:)
+  real(c_double), pointer :: d2thtpol(:,:)
   !common /dptr95/ d2thtpol
-  pointer d2es
-  dimension d2es(:,:)
+  real(c_double), pointer :: d2es(:,:)
   !common /dptr95/ d2es
-  pointer thtpol
-  dimension thtpol(:,:)
+  real(c_double), pointer :: thtpol(:,:)
   !common /dptr95/ thtpol
-  pointer esfi
-  dimension esfi(:,:)
+  real(c_double), pointer :: esfi(:,:)
   !common /dptr95/ esfi
-  pointer psiesfi
-  dimension psiesfi(:,:)
+  real(c_double), pointer :: psiesfi(:,:)
   !common /dptr95/ psiesfi
-  pointer psifi
-  dimension psifi(:,:)
+  real(c_double), pointer :: psifi(:,:)
   !common /dptr95/ psifi
-  pointer espsifi
-  dimension espsifi(:,:)
+  real(c_double), pointer :: espsifi(:,:)
   !common /dptr95/ espsifi
-  pointer soupp
-  dimension soupp(:,:)
+  real(c_double), pointer :: soupp(:,:)
   !common /dptr95/ soupp
-  pointer waa
-  dimension waa(:,:,:)
+  real(c_double), pointer :: waa(:,:,:)
   !common /dptr95/ waa
-  pointer wbb
-  dimension wbb(:,:,:)
+  real(c_double), pointer :: wbb(:,:,:)
   !common /dptr95/ wbb
-  pointer cosz
-  dimension cosz(:,:,:)
+  real(c_double), pointer :: cosz(:,:,:)
   !common /dptr95/ cosz
-  pointer dtau
-  dimension dtau(:,:,:)
+  real(c_double), pointer :: dtau(:,:,:)
   !common /dptr95/ dtau
-  pointer sinz
-  dimension sinz(:,:,:)
+  real(c_double), pointer :: sinz(:,:,:)
   !common /dptr95/ sinz
-  pointer tanz
-  dimension tanz(:,:,:)
+  real(c_double), pointer :: tanz(:,:,:)
   !common /dptr95/ tanz
-  pointer yz
-  dimension yz(:,:,:)
+  real(c_double), pointer :: yz(:,:,:)
   !common /dptr95/ yz
-  pointer tot
-  dimension tot(:,:,:)
+  real(c_double), pointer :: tot(:,:,:)
   !common /dptr95/ tot
-  pointer vflux
-  dimension vflux(:,:,:)
+  real(c_double), pointer :: vflux(:,:,:)
   !common /dptr95/ vflux
-  pointer f_aveth
-  dimension f_aveth(:,:,:,:)
+  real(c_double), pointer :: f_aveth(:,:,:,:)
   !common /dptr95/ f_aveth
-  pointer sincosba
-  dimension sincosba(:,:,:)
+  real(c_double), pointer :: sincosba(:,:,:)
   !common /dptr95/ sincosba
-  pointer densz
-  dimension densz(:,:,:,:)
+  real(c_double), pointer :: densz(:,:,:,:)
   !common /dptr95/ densz
-  pointer ss
-  dimension ss(:,:,:,:)
+  real(c_double), pointer :: ss(:,:,:,:)
   !common /dptr95/ ss
-  pointer dcofleg
-  dimension dcofleg(:,:,:,:)
+  real(c_double), pointer :: dcofleg(:,:,:,:)
   !common /dptr95/ dcofleg
-  pointer dpcosz
-  dimension dpcosz(:,:,:,:)
+  real(c_double), pointer :: dpcosz(:,:,:,:)
   !common /dptr95/ dpcosz
-  pointer ssy
-  dimension ssy(:,:,:,:)
+  real(c_double), pointer :: ssy(:,:,:,:)
   !common /dptr95/ ssy
-  pointer ssyy
-  dimension ssyy(:,:,:,:)
+  real(c_double), pointer :: ssyy(:,:,:,:)
   !common /dptr95/ ssyy
-  pointer ssyi
-  dimension ssyi(:,:,:,:)
+  real(c_double), pointer :: ssyi(:,:,:,:)
   !common /dptr95/ ssyi
-  pointer ssyyy
-  dimension ssyyy(:,:,:,:)
+  real(c_double), pointer :: ssyyy(:,:,:,:)
   !common /dptr95/ ssyyy
-  pointer pcurr, pcurrm
-  dimension pcurr(:,:,:), pcurrm(:,:,:)
+  real(c_double), pointer :: pcurr(:,:,:), pcurrm(:,:,:)
   !common /dptr95/ pcurr, pcurrm
-  pointer pdens, pdenm
-  dimension pdens(:,:,:), pdenm(:,:,:)
+  real(c_double), pointer :: pdens(:,:,:), pdenm(:,:,:)
   !common /dptr95/ pdens, pdenm
-  pointer pengy, pengym
-  dimension pengy(:,:,:), pengym(:,:,:)
+  real(c_double), pointer :: pengy(:,:,:), pengym(:,:,:)
   !common /dptr95/ pengy, pengym
-  pointer pdenra
-  dimension pdenra(:,:)
+  real(c_double), pointer :: pdenra(:,:)
   !common /dptr95/ pdenra
-  pointer pcurra
-  dimension pcurra(:,:)
+  real(c_double), pointer :: pcurra(:,:)
   !common /dptr95/ pcurra
-  pointer pfdenra
-  dimension pfdenra(:,:)
+  real(c_double), pointer :: pfdenra(:,:)
   !common /dptr95/ pfdenra
-  pointer pfcurra
-  dimension pfcurra(:,:)
+  real(c_double), pointer :: pfcurra(:,:)
   !common /dptr95/ pfcurra
-  pointer pucrit
-  dimension pucrit(:,:)
+  real(c_double), pointer :: pucrit(:,:)
   !common /dptr95/ pucrit
-  pointer peoe0
-  dimension peoe0(:,:)
+  real(c_double), pointer :: peoe0(:,:)
   !common /dptr95/ peoe0
-  pointer psrc
-  dimension psrc(:,:)
+  real(c_double), pointer :: psrc(:,:)
   !common /dptr95/ psrc
-  pointer peoed
-  dimension peoed(:,:)
+  real(c_double), pointer :: peoed(:,:)
   !common /dptr95/ peoed
-  pointer cint2
-  dimension cint2(:)
+  real(c_double), pointer :: cint2(:)
   !common /dptr95/ cint2
-  pointer dx,dxi
-  dimension dx(:),dxi(:)
+  real(c_double), pointer :: dx(:),dxi(:)
   !common /dptr95/ dx,dxi
-  pointer ifp
-  dimension ifp(:)
+  integer, pointer :: ifp(:)
   !common /dptr95/ ifp
-  pointer sg
-  dimension sg(:)
+  real(c_double), pointer :: sg(:)
   !common /dptr95/ sg
-  pointer sgx
-  dimension sgx(:)
+  real(c_double), pointer :: sgx(:)
   !common /dptr95/ sgx
-  pointer sgxx
-  dimension sgxx(:)
+  real(c_double), pointer :: sgxx(:)
   !common /dptr95/ sgxx
-  pointer sh
-  dimension sh(:)
+  real(c_double), pointer :: sh(:)
   !common /dptr95/ sh
-  pointer shx
-  dimension shx(:)
+  real(c_double), pointer :: shx(:)
   !common /dptr95/ shx
-  pointer shxx
-  dimension shxx(:)
+  real(c_double), pointer :: shxx(:)
   !common /dptr95/ shxx
-  pointer shxxx
-  dimension shxxx(:)
+  real(c_double), pointer :: shxxx(:)
   !common /dptr95/ shxxx
-  pointer tam1
-  dimension tam1(:)
+  real(c_double), pointer :: tam1(:)
   !common /dptr95/ tam1
-  pointer tam2
-  dimension tam2(:)
+  real(c_double), pointer :: tam2(:)
   !common /dptr95/ tam2
-  pointer tam3
-  dimension tam3(:)
+  real(c_double), pointer :: tam3(:)
   !common /dptr95/ tam3
-  pointer tam4
-  dimension tam4(:)
+  real(c_double), pointer :: tam4(:)
   !common /dptr95/ tam4
-  pointer tam5
-  dimension tam5(:)
+  real(c_double), pointer :: tam5(:)
   !common /dptr95/ tam5
-  pointer tam6
-  dimension tam6(:)
+  real(c_double), pointer :: tam6(:)
   !common /dptr95/ tam6
-  pointer tam7
-  dimension tam7(:)
+  real(c_double), pointer :: tam7(:)
   !common /dptr95/ tam7
-  pointer tam8
-  dimension tam8(:)
+  real(c_double), pointer :: tam8(:)
   !common /dptr95/ tam8
-  pointer tam9
-  dimension tam9(:)
+  real(c_double), pointer :: tam9(:)
   !common /dptr95/ tam9
-  pointer tam10
-  dimension tam10(:)
+  real(c_double), pointer :: tam10(:)
   !common /dptr95/ tam10
-  pointer tam11
-  dimension tam11(:)
+  real(c_double), pointer :: tam11(:)
   !common /dptr95/ tam11
-  pointer tam12
-  dimension tam12(:)
+  real(c_double), pointer :: tam12(:)
   !common /dptr95/ tam12
-  pointer tam13
-  dimension tam13(:)
+  real(c_double), pointer :: tam13(:)
   !common /dptr95/ tam13
-  pointer tam14
-  dimension tam14(:)
+  real(c_double), pointer :: tam14(:)
   !common /dptr95/ tam14
-  pointer tam15
-  dimension tam15(:)
+  real(c_double), pointer :: tam15(:)
   !common /dptr95/ tam15
-  pointer tam16
-  dimension tam16(:)
+  real(c_double), pointer :: tam16(:)
   !common /dptr95/ tam16
-  pointer tam17
-  dimension tam17(:)
+  real(c_double), pointer :: tam17(:)
   !common /dptr95/ tam17
-  pointer tam18
-  dimension tam18(:)
+  real(c_double), pointer :: tam18(:)
   !common /dptr95/ tam18
-  pointer tam19
-  dimension tam19(:)
+  real(c_double), pointer :: tam19(:)
   !common /dptr95/ tam19
-  pointer tam20
-  dimension tam20(:)
+  real(c_double), pointer :: tam20(:)
   !common /dptr95/ tam20
-  pointer tam21
-  dimension tam21(:)
+  real(c_double), pointer :: tam21(:)
   !common /dptr95/ tam21
-  pointer tam22
-  dimension tam22(:)
+  real(c_double), pointer :: tam22(:)
   !common /dptr95/ tam22
-  pointer tam23
-  dimension tam23(:)
+  real(c_double), pointer :: tam23(:)
   !common /dptr95/ tam23
-  pointer tam24
-  dimension tam24(:)
+  real(c_double), pointer :: tam24(:)
   !common /dptr95/ tam24
-  pointer tam25
-  dimension tam25(:)
+  real(c_double), pointer :: tam25(:)
   !common /dptr95/ tam25
-  pointer tam26
-  dimension tam26(:)
+  real(c_double), pointer :: tam26(:)
   !common /dptr95/ tam26
-  pointer tam27
-  dimension tam27(:)
+  real(c_double), pointer :: tam27(:)
   !common /dptr95/ tam27
-  pointer tam28
-  dimension tam28(:)
+  real(c_double), pointer :: tam28(:)
   !common /dptr95/ tam28
-  pointer tam29
-  dimension tam29(:)
+  real(c_double), pointer :: tam29(:)
   !common /dptr95/ tam29
-  pointer tam30
-  dimension tam30(:)
+  real(c_double), pointer :: tam30(:)
   !common /dptr95/ tam30
-  pointer x
-  dimension x(:)
+  real(c_double), pointer :: x(:)
   !common /dptr95/ x
-  pointer xmidpt
-  dimension xmidpt(:)
+  real(c_double), pointer :: xmidpt(:)
   !common /dptr95/ xmidpt
-  pointer xi
-  dimension xi(:)
+  real(c_double), pointer :: xi(:)
   !common /dptr95/ xi
-  pointer xsq
-  dimension xsq(:)
+  real(c_double), pointer :: xsq(:)
   !common /dptr95/ xsq
-  pointer x3i
-  dimension x3i(:)
+  real(c_double), pointer :: x3i(:)
   !common /dptr95/ x3i
-  pointer x2i
-  dimension x2i(:)
+  real(c_double), pointer :: x2i(:)
   !common /dptr95/ x2i
-  pointer xcu
-  dimension xcu(:)
+  real(c_double), pointer :: xcu(:)
   !common /dptr95/ xcu
-  pointer xcenter
-  dimension xcenter(:)
+  real(c_double), pointer :: xcenter(:)
   !common /dptr95/ xcenter
-  pointer xcensq, xcent3
-  dimension xcensq(:), xcent3(:)
+  real(c_double), pointer :: xcensq(:), xcent3(:)
   !common /dptr95/ xcensq, xcent3
-  pointer uoc
-  dimension uoc(:)
+  real(c_double), pointer :: uoc(:)
   !common /dptr95/ uoc
-  pointer enerkev
-  dimension enerkev(:,:) !YuP[2018-01-08] added 2nd index (k)
+  real(c_double), pointer :: enerkev(:,:) !YuP[2018-01-08] added 2nd index (k)
   !common /dptr95/ enerkev
-  pointer gamma
-  dimension gamma(:)
+  real(c_double), pointer :: gamma(:)
   !common /dptr95/ gamma
-  pointer gamsqr
-  dimension gamsqr(:)
+  real(c_double), pointer :: gamsqr(:)
   !common /dptr95/ gamsqr
-  pointer gamcub
-  dimension gamcub(:)
+  real(c_double), pointer :: gamcub(:)
   !common /dptr95/ gamcub
-  pointer gammi
-  dimension gammi(:)
+  real(c_double), pointer :: gammi(:)
   !common /dptr95/ gammi
-  pointer gamm2i
-  dimension gamm2i(:)
+  real(c_double), pointer :: gamm2i(:)
   !common /dptr95/ gamm2i
-  pointer gamm1
-  dimension gamm1(:)
+  real(c_double), pointer :: gamm1(:)
   !common /dptr95/ gamm1
-  pointer tcsgm1
-  dimension tcsgm1(:)
+  real(c_double), pointer :: tcsgm1(:)
   !common /dptr95/ tcsgm1
-  pointer gamefac
-  dimension gamefac(:)
+  real(c_double), pointer :: gamefac(:)
   !common /dptr95/ gamefac
-  pointer ident
-  dimension ident(:)
+  integer, pointer :: ident(:)
   !common /dptr95/ ident
-  pointer temc1
-  dimension temc1(:)
+  real(c_double), pointer :: temc1(:)
   !common /dptr95/ temc1
-  pointer temc2
-  dimension temc2(:)
+  real(c_double), pointer :: temc2(:)
   !common /dptr95/ temc2
-  pointer temc3
-  dimension temc3(:)
+  real(c_double), pointer :: temc3(:)
   !common /dptr95/ temc3
-  pointer temc4
-  dimension temc4(:)
+  real(c_double), pointer :: temc4(:)
   !common /dptr95/ temc4
-  pointer itemc1
-  dimension itemc1(:)
+  integer, pointer :: itemc1(:)
   !common /dptr95/ itemc1
-  pointer itemc2
-  dimension itemc2(:)
+  integer, pointer :: itemc2(:)
   !common /dptr95/ itemc2
-  pointer l_lower
-  dimension l_lower(:)
+  integer, pointer :: l_lower(:)
   !common /dptr95/ l_lower
-  pointer lpt
-  dimension lpt(:)
+  integer, pointer :: lpt(:)
   !common /dptr95/ lpt
-  pointer mun
-  dimension mun(:)
+  real(c_double), pointer :: mun(:) !for real?
   !common /dptr95/ mun
-  pointer fll
-  dimension fll(:)
+  real(c_double), pointer :: fll(:)
   !common /dptr95/ fll
-  pointer xpar
-  dimension xpar(:)
+  real(c_double), pointer :: xpar(:)
   !common /dptr95/ xpar
-  pointer rheads
-  dimension rheads(:)
+  real(c_double), pointer :: rheads(:)
   !common /dptr95/ rheads
-  pointer dfvlle
-  dimension dfvlle(:)
+  real(c_double), pointer :: dfvlle(:)
   !common /dptr95/ dfvlle
-  pointer dfvlli
-  dimension dfvlli(:)
+  real(c_double), pointer :: dfvlli(:)
   !common /dptr95/ dfvlli
-  pointer xperp
-  dimension xperp(:)
+  real(c_double), pointer :: xperp(:)
   !common /dptr95/ xperp
-  pointer xl
-  dimension xl(:)
+  real(c_double), pointer :: xl(:)
   !common /dptr95/ xl
-  pointer jmaxxl
-  dimension jmaxxl(:)
+  integer, pointer :: jmaxxl(:)
   !common /dptr95/ jmaxxl
-  pointer xlm
-  dimension xlm(:)
+  real(c_double), pointer :: xlm(:)
   !common /dptr95/ xlm
-  pointer dxl
-  dimension dxl(:)
+  real(c_double), pointer :: dxl(:)
   !common /dptr95/ dxl
-  pointer fl
-  dimension fl(:)
+  real(c_double), pointer :: fl(:)
   !common /dptr95/ fl
-  pointer fl1
-  dimension fl1(:)
+  real(c_double), pointer :: fl1(:)
   !common /dptr95/ fl1
-  pointer fl2
-  dimension fl2(:)
+  real(c_double), pointer :: fl2(:)
   !common /dptr95/ fl2
-  pointer ppars
-  dimension ppars(:,:)
+  real(c_double), pointer :: ppars(:,:)
   !common /dptr95/ ppars
-  pointer pprps
-  dimension pprps(:,:)
+  real(c_double), pointer :: pprps(:,:)
   !common /dptr95/ pprps
-  pointer faci
-  dimension faci(:,:)
+  real(c_double), pointer :: faci(:,:)
   !common /dptr95/ faci
-  pointer pparea
-  dimension pparea(:,:)
+  real(c_double), pointer :: pparea(:,:)
   !common /dptr95/ pparea
-  pointer wtfl0
-  dimension wtfl0(:,:,:)
+  real(c_double), pointer :: wtfl0(:,:,:)
   !common /dptr95/ wtfl0
-  pointer wtflm
-  dimension wtflm(:,:,:)
+  real(c_double), pointer :: wtflm(:,:,:)
   !common /dptr95/ wtflm
-  pointer jflbin
-  dimension jflbin(:,:,:)
+  integer, pointer :: jflbin(:,:,:)
   !common /dptr95/ jflbin
-  pointer xm
-  dimension xm(:,:)
+  real(c_double), pointer :: xm(:,:)
   !common /dptr95/ xm
-  pointer dbb
-  dimension dbb(:,:)
+  real(c_double), pointer :: dbb(:,:)
   !common /dptr95/ dbb
-  pointer dd
-  dimension dd(:,:)
+  real(c_double), pointer :: dd(:,:)
   !common /dptr95/ dd
-  pointer de
-  dimension de(:,:)
+  real(c_double), pointer :: de(:,:)
   !common /dptr95/ de
-  pointer df
-  dimension df(:,:)
+  real(c_double), pointer :: df(:,:)
   !common /dptr95/ df
-  pointer dff
-  dimension dff(:,:)
+  real(c_double), pointer :: dff(:,:)
   !common /dptr95/ dff
-  pointer cah
-  dimension cah(:,:)
+  real(c_double), pointer :: cah(:,:)
   !common /dptr95/ cah
-  pointer cthta
-  dimension cthta(:,:)
+  real(c_double), pointer :: cthta(:,:)
   !common /dptr95/ cthta
-  pointer gon
-  dimension gon(:,:)
+  real(c_double), pointer :: gon(:,:)
   !common /dptr95/ gon
-  pointer so
-  dimension so(:,:)
+  real(c_double), pointer :: so(:,:)
   !common /dptr95/ so
-  pointer currv
-  dimension currv(:,:,:)
+  real(c_double), pointer :: currv(:,:,:)
   !common /dptr95/ currv
-  pointer currvs
-  dimension currvs(:,:)
+  real(c_double), pointer :: currvs(:,:)
   !common /dptr95/ currvs
-  pointer pwrrf
-  dimension pwrrf(:,:,:)
+  real(c_double), pointer :: pwrrf(:,:,:)
   !common /dptr95/ pwrrf
-  pointer tal
-  dimension tal(:,:)
+  real(c_double), pointer :: tal(:,:)
   !common /dptr95/ tal
-  pointer tbl
-  dimension tbl(:,:)
+  real(c_double), pointer :: tbl(:,:)
   !common /dptr95/ tbl
-  pointer tfl
-  dimension tfl(:,:)
+  real(c_double), pointer :: tfl(:,:)
   !common /dptr95/ tfl
-  pointer pwrrfs
-  dimension pwrrfs(:,:,:)
+  real(c_double), pointer :: pwrrfs(:,:,:)
   !common /dptr95/ pwrrfs
-  pointer pleg
-  dimension pleg(:,:)
+  real(c_double), pointer :: pleg(:,:)
   !common /dptr95/ pleg
-  pointer feta
-  dimension feta(:,:)
+  real(c_double), pointer :: feta(:,:)
   !common /dptr95/ feta
-  pointer fetb
-  dimension fetb(:,:)
+  real(c_double), pointer :: fetb(:,:)
   !common /dptr95/ fetb
-  pointer wflux
-  dimension wflux(:,:,:)
+  real(c_double), pointer :: wflux(:,:,:)
   !common /dptr95/ wflux
   !     NB:  rhs set up here for full 3d set of eqns (BH070525)
-  pointer rhs
-  dimension rhs(:)
+  real(c_double), pointer :: rhs(:)
   !common /dptr95/ rhs
-  pointer sovt
-  dimension sovt(:,:,:,:)
+  real(c_double), pointer :: sovt(:,:,:,:)
   !common /dptr95/ sovt
-  pointer sigsxr
-  dimension sigsxr(:,:,:,:)
+  real(c_double), pointer :: sigsxr(:,:,:,:)
   !common /dptr95/ sigsxr
 
-  pointer pentr
-  dimension pentr(:,:,:,:)  !!!(nonch,ngen,-1:15,lrors)
+  real(c_double), pointer :: pentr(:,:,:,:)  !!!(nonch,ngen,-1:15,lrors)
   !common /dptr95/ pentr
 
-  pointer constp
-  dimension constp(:,:)  !!!(nonch,lrors)
+  real(c_double), pointer :: constp(:,:)  !!!(nonch,lrors)
   !common /dptr95/ constp
 
-  pointer :: sigmtt(:,:),sigftt(:,:)  !!!(nonch,4)
+  real(c_double), pointer :: sigmtt(:,:),sigftt(:,:)  !!!(nonch,4)
   !common /dptr95/ sigmtt,sigftt
 
-  pointer sgaint
-  dimension sgaint(:,:,:)  !!!(8,ngen,lrors)
-  pointer entr
-  dimension entr(:,:,:)    !!!(ngen,-1:15,lrors)
-  pointer xlndnz
-  dimension xlndnz(:,:)    !!!(ngen+1,negyrga)
-  pointer sounor
-  dimension sounor(:,:,:,:)   !!!(ngen,nsoa,lz,lrz)
+  real(c_double), pointer :: sgaint(:,:,:)  !!!(8,ngen,lrors)
+  real(c_double), pointer :: entr(:,:,:)    !!!(ngen,-1:15,lrors)
+  real(c_double), pointer :: xlndnz(:,:)    !!!(ngen+1,negyrga)
+  real(c_double), pointer :: sounor(:,:,:,:)   !!!(ngen,nsoa,lz,lrz)
   !common /dptr95/ sgaint,entr,xlndnz,sounor
 
 
   !.......................................................................
   !*****arrays related to relativ=fully option
   !.......................................................................
-  pointer gamman
-  dimension gamman(:,:)
+  real(c_double), pointer :: gamman(:,:)
   !common /dptr95/ gamman
-  pointer alphan
-  dimension alphan(:,:)
+  real(c_double), pointer :: alphan(:,:)
   !common /dptr95/ alphan
 
-  pointer asnha
-  dimension asnha(:)
+  real(c_double), pointer :: asnha(:)
   !common /dptr95/ asnha
-  pointer item1
-  dimension item1(:)
+  integer, pointer :: item1(:)
   !common /dptr95/ item1
-  pointer item2
-  dimension item2(:)
+  integer, pointer :: item2(:)
   !common /dptr95/ item2
-  pointer item3
-  dimension item3(:)
+  integer, pointer :: item3(:)
   !common /dptr95/ item3
-  pointer item4
-  dimension item4(:)
+  integer, pointer :: item4(:)
   !common /dptr95/ item4
-  pointer item5
-  dimension item5(:)
+  integer, pointer :: item5(:)
   !common /dptr95/ item5
-  pointer item6
-  dimension item6(:)
+  integer, pointer :: item6(:)
   !common /dptr95/ item6
-  pointer dxm5
-  dimension dxm5(:)
+  real(c_double), pointer :: dxm5(:)
   !common /dptr95/ dxm5
-  pointer exm5
-  dimension exm5(:)
+  real(c_double), pointer :: exm5(:)
   !common /dptr95/ exm5
-  pointer dxp5
-  dimension dxp5(:)
+  real(c_double), pointer :: dxp5(:)
   !common /dptr95/ dxp5
-  pointer exp5
-  dimension exp5(:)
+  real(c_double), pointer :: exp5(:)
   !common /dptr95/ exp5
-  pointer tamt1
-  dimension tamt1(:,:,:,:)
+  real(c_double), pointer :: tamt1(:,:,:,:)
   !common /dptr95/ tamt1
-  pointer tamt2
-  dimension tamt2(:,:,:,:)
+  real(c_double), pointer :: tamt2(:,:,:,:)
   !common /dptr95/ tamt2
-  pointer da
-  dimension da(:,:)
+  real(c_double), pointer :: da(:,:)
   !common /dptr95/ da
-  pointer db
-  dimension db(:,:)
+  real(c_double), pointer :: db(:,:)
   !common /dptr95/ db
-  pointer dc
-  dimension dc(:,:)
+  real(c_double), pointer :: dc(:,:)
   !common /dptr95/ dc
-  pointer ca
-  dimension ca(:,:)
+  real(c_double), pointer :: ca(:,:)
   !common /dptr95/ ca
-  pointer cb
-  dimension cb(:,:)
+  real(c_double), pointer :: cb(:,:)
   !common /dptr95/ cb
-  pointer cc
-  dimension cc(:,:)
+  real(c_double), pointer :: cc(:,:)
   !common /dptr95/ cc
-  pointer cd
-  dimension cd(:,:)
+  real(c_double), pointer :: cd(:,:)
   !common /dptr95/ cd
-  pointer ce
-  dimension ce(:,:)
+  real(c_double), pointer :: ce(:,:)
   !common /dptr95/ ce
-  pointer cf
-  dimension cf(:,:)
+  real(c_double), pointer :: cf(:,:)
   !common /dptr95/ cf
 
-  pointer tem1
-  dimension tem1(:)
+  real(c_double), pointer :: tem1(:)
   !common /dptr95/ tem1
-  pointer tem2
-  dimension tem2(:)
+  real(c_double), pointer :: tem2(:)
   !common /dptr95/ tem2
-  pointer tem3
-  dimension tem3(:)
+  real(c_double), pointer :: tem3(:)
   !common /dptr95/ tem3
-  pointer tem4
-  dimension tem4(:)
+  real(c_double), pointer :: tem4(:)
   !common /dptr95/ tem4
-  pointer tem5
-  dimension tem5(:)
+  real(c_double), pointer :: tem5(:)
   !common /dptr95/ tem5
-  pointer tem6
-  dimension tem6(:)
+  real(c_double), pointer :: tem6(:)
   !common /dptr95/ tem6
 
-  pointer egg
-  dimension egg(:,:)
+  real(c_double), pointer :: egg(:,:)
   !common /dptr95/ egg
-  pointer fgg
-  dimension fgg(:,:)
+  real(c_double), pointer :: fgg(:,:)
   !common /dptr95/ fgg
 
-  pointer xhead
-  dimension xhead(:,:)
+  real(c_double), pointer :: xhead(:,:)
   !common /dptr95/ xhead
-  pointer xtail
-  dimension xtail(:,:)
+  real(c_double), pointer :: xtail(:,:)
   !common /dptr95/ xtail
-  pointer ytail
-  dimension ytail(:,:)
+  real(c_double), pointer :: ytail(:,:)
   !common /dptr95/ ytail
-  pointer yhead
-  dimension yhead(:,:)
+  real(c_double), pointer :: yhead(:,:)
   !common /dptr95/ yhead
 
-  pointer fpn
-  dimension fpn(:,:)
+  real(c_double), pointer :: fpn(:,:)
   !common /dptr95/ fpn
 
-  pointer temp1
-  dimension temp1(:,:)
+  real(c_double), pointer :: temp1(:,:)
   !common /dptr95/ temp1
-  pointer temp2
-  dimension temp2(:,:)
+  real(c_double), pointer :: temp2(:,:)
   !common /dptr95/ temp2
-  pointer temp3
-  dimension temp3(:,:)
+  real(c_double), pointer :: temp3(:,:)
   !common /dptr95/ temp3
-  pointer temp4
-  dimension temp4(:,:)
+  real(c_double), pointer :: temp4(:,:)
   !common /dptr95/ temp4
-  pointer temp5
-  dimension temp5(:,:)
+  real(c_double), pointer :: temp5(:,:)
   !common /dptr95/ temp5
-  pointer temp6
-  dimension temp6(:,:)
+  real(c_double), pointer :: temp6(:,:)
   !common /dptr95/ temp6
 
-  pointer xllji
-  dimension xllji(:,:)
+  real(c_double), pointer :: xllji(:,:)
   !common /dptr95/ xllji
-  pointer xppji
-  dimension xppji(:,:)
+  real(c_double), pointer :: xppji(:,:)
   !common /dptr95/ xppji
 
   !     Arrays used for first order orbit width calculations:
-  pointer deltarho
-  dimension deltarho(:,:,:)
+  real(c_double), pointer :: deltarho(:,:,:)
   !common /dptr95/ deltarho
-  pointer deltarhop
-  dimension deltarhop(:,:,:)
+  real(c_double), pointer :: deltarhop(:,:,:)
   !common /dptr95/ deltarhop
-  pointer deltarz
-  dimension deltarz(:,:,:)
+  real(c_double), pointer :: deltarz(:,:,:)
   !common /dptr95/ deltarz
-  pointer r_delta
-  dimension r_delta(:)
+  real(c_double), pointer :: r_delta(:)
   !common /dptr95/ r_delta
-  pointer z_delta
-  dimension z_delta(:)
+  real(c_double), pointer :: z_delta(:)
   !common /dptr95/ z_delta
-  pointer t_delta
-  dimension t_delta(:)
+  real(c_double), pointer :: t_delta(:)
   !common /dptr95/ t_delta
-  pointer delta_bdb0
-  dimension delta_bdb0(:,:)
+  real(c_double), pointer :: delta_bdb0(:,:)
   !common /dptr95/ delta_bdb0
 
 
@@ -1614,12 +1308,10 @@ module cqcomm_mod
   !     BEGIN arrays for rf package..(rf...,vlh[B,...,vlf...) routines
   !*****************************************************************
 
-  pointer cqlb,cqlc,cqle,cqlf     ! (iy,jx,lrz,mrfn)
-  dimension cqlb(:,:,:,:),cqlc(:,:,:,:),cqle(:,:,:,:),cqlf(:,:,:,:)
+  real(c_double), pointer :: cqlb(:,:,:,:),cqlc(:,:,:,:),cqle(:,:,:,:),cqlf(:,:,:,:)
   !common/qlcoef/cqlb,cqlc,cqle,cqlf 
 
-  pointer bqlm
-  dimension bqlm(:,:)  ! (iy,jx)
+  real(c_double), pointer :: bqlm(:,:)  ! (iy,jx)
   !common/qlcoef/ bqlm
 
 
@@ -1651,7 +1343,6 @@ module cqcomm_mod
 
   ! maybe bug
   real(c_double) :: jparb(lrza),jparbt(lrza),jparbp(lrza)
-  real(c_double) :: mun
   !common/ar3d/ 
   real(c_double) :: rrz(0:lrza), &
        tr(0:lrza),tr1(0:lrza),tr2(0:lrza), &
@@ -1702,23 +1393,19 @@ module cqcomm_mod
   real(c_double) :: sigm(4,lrorsa),sigf(4,lrorsa),sigmt(4),sigft(4), &
        fuspwrv(4,lrorsa),fuspwrvt(4),fuspwrm(4,lrorsa),fuspwrmt(4)
 
-  pointer tamm1
-  dimension tamm1(:)
+  real(c_double), pointer :: tamm1(:)
   !common /csigma/ tamm1  !(0:mmsv)
 
-  pointer iind
-  dimension iind(:)
+  real(c_double), pointer :: iind(:)
   !common /csigma/ iind  !(1:jx)
 
   !..............................................................
-  !     Set up pointers for sigma-v
+  !     Set up real(c_double), pointers
   !..............................................................
 
-  pointer csv
-  dimension csv(:,:,:)
+  real(c_double), pointer :: csv(:,:,:)
   !common /dptr95/ csv
-  pointer svtab
-  dimension svtab(:)
+  real(c_double), pointer :: svtab(:)
   !common /dptr95/ svtab
 
 
@@ -1728,68 +1415,47 @@ module cqcomm_mod
   !..............................................................
 
 
-  pointer frn_2
-  dimension frn_2(:,:,:,:)
+  real(c_double), pointer :: frn_2(:,:,:,:)
   !common /dptr95/ frn_2
-  pointer frn_1
-  dimension frn_1(:,:,:,:)
+  real(c_double), pointer :: frn_1(:,:,:,:)
   !common /dptr95/ frn_1
-  pointer frn
-  dimension frn(:,:,:,:)
+  real(c_double), pointer :: frn(:,:,:,:)
   !common /dptr95/ frn
-  pointer fvn_1
-  dimension fvn_1(:,:,:,:)
+  real(c_double), pointer :: fvn_1(:,:,:,:)
   !common /dptr95/ fvn_1
-  pointer fvn
-  dimension fvn(:,:,:,:)
+  real(c_double), pointer :: fvn(:,:,:,:)
   !common /dptr95/ fvn
-  pointer dl
-  dimension dl(:,:,:,:)
+  real(c_double), pointer :: dl(:,:,:,:)
   !common /dptr95/ dl
-  pointer d_rr
-  dimension d_rr(:,:,:,:)
+  real(c_double), pointer :: d_rr(:,:,:,:)
   !common /dptr95/ d_rr
-  pointer d_r
-  dimension d_r(:,:,:,:)
+  real(c_double), pointer :: d_r(:,:,:,:)
   !common /dptr95/ d_r
-  pointer f_lm
-  dimension f_lm(:,:,:)
+  real(c_double), pointer :: f_lm(:,:,:)
   !common /dptr95/ f_lm
-  pointer f_lp
-  dimension f_lp(:,:,:)
+  real(c_double), pointer :: f_lp(:,:,:)
   !common /dptr95/ f_lp
-  pointer f_up
-  dimension f_up(:,:,:)
+  real(c_double), pointer :: f_up(:,:,:)
   !common /dptr95/ f_up
-  pointer f_vtor
-  dimension f_vtor(:,:,:,:)
+  real(c_double), pointer :: f_vtor(:,:,:,:)
   !common /dptr95/ f_vtor
-  pointer cynt2_
-  dimension cynt2_(:,:)
+  real(c_double), pointer :: cynt2_(:,:)
   !common /dptr95/ cynt2_
-  pointer vpint_
-  dimension vpint_(:,:)
+  real(c_double), pointer :: vpint_(:,:)
   !common /dptr95/ vpint_
-  pointer vptb_
-  dimension vptb_(:,:)
+  real(c_double), pointer :: vptb_(:,:)
   !common /dptr95/ vptb_
-  pointer cosovb
-  dimension cosovb(:,:)
+  real(c_double), pointer :: cosovb(:,:)
   !common /dptr95/ cosovb
-  pointer bovcos
-  dimension bovcos(:,:)
+  real(c_double), pointer :: bovcos(:,:)
   !common /dptr95/ bovcos
-  pointer adv
-  dimension adv(:,:)
+  real(c_double), pointer :: adv(:,:)
   !common /dptr95/ adv
-  pointer dentarget
-  dimension dentarget(:)
+  real(c_double), pointer :: dentarget(:)
   !common /dptr95/ dentarget
-  pointer eg_
-  dimension eg_(:,:,:)
+  real(c_double), pointer :: eg_(:,:,:)
   !common /dptr95/ eg_
-  pointer fg_
-  dimension fg_(:,:,:)
+  real(c_double), pointer :: fg_(:,:,:)
   !common /dptr95/ fg_
 
 
@@ -1860,20 +1526,15 @@ module cqcomm_mod
   !     Allocatable arrays allocated in subroutine eqalloc
   !..................................................................
 
-  pointer drpmconz
-  dimension drpmconz(:)
+  real(c_double), pointer :: drpmconz(:)
   !common /dptr95/ drpmconz
-  pointer eqdell
-  dimension eqdell(:,:)
+  real(c_double), pointer :: eqdell(:,:)
   !common /dptr95/ eqdell
-  pointer eqbpol
-  dimension eqbpol(:,:)
+  real(c_double), pointer :: eqbpol(:,:)
   !common /dptr95/ eqbpol
-  pointer solr
-  dimension solr(:,:)
+  real(c_double), pointer :: solr(:,:)
   !common /dptr95/ solr
-  pointer solz
-  dimension solz(:,:)
+  real(c_double), pointer :: solz(:,:)
   !common /dptr95/ solz
 
 
@@ -1884,16 +1545,13 @@ module cqcomm_mod
 
 
   !common/params/ &
-  integer :: jjx, jbm1,jb0,jbp1
+  integer :: jjx
 
-  pointer jbm1
-  dimension jbm1(:,:)
+  integer, pointer :: jbm1(:,:)
   !common jbm1
-  pointer jb0
-  dimension jb0(:,:)
+  integer, pointer :: jb0(:,:)
   !common jb0
-  pointer jbp1
-  dimension jbp1(:,:)
+  integer, pointer :: jbp1(:,:)
   !common jbp1
 
   ! bug
@@ -1909,7 +1567,7 @@ module cqcomm_mod
        vnorm2,vnorm3,vnorm4, &
        dveps ! YuP[04-2016] for subr. urfb_add
 
-  complex(c_double_complex) :: cosz1,sinz1,sinz2
+  complex(c_double_complex),pointer :: cosz1(:),sinz1(:),sinz2(:)
   !common &
   real(c_double) :: bsslstp(nmodsa)
   integer  :: ncontrib(lrza)
@@ -1929,226 +1587,141 @@ module cqcomm_mod
   !..................................................................
 
 
-  complex(c_double_complex) :: cwexde,cweyde,cwezde
-
-  pointer urfb
-  dimension urfb(:,:,:,:)
+  real(c_double), pointer :: urfb(:,:,:,:)
   !common /dptr95/ urfb
-  pointer urfc
-  dimension urfc(:,:,:,:)
+  real(c_double), pointer :: urfc(:,:,:,:)
   !common /dptr95/ urfc
-  pointer cosmz
-  dimension cosmz(:,:,:)
+  real(c_double), pointer :: cosmz(:,:,:)
   !common /dptr95/ cosmz
-  pointer g_
-  dimension g_(:,:,:,:)
+  real(c_double), pointer :: g_(:,:,:,:)
   !common /dptr95/ g_
-  pointer alfag
-  dimension alfag(:)
+  real(c_double), pointer :: alfag(:)
   !common /dptr95/ alfag
-  pointer argmnt
-  dimension argmnt(:)
+  real(c_double), pointer :: argmnt(:)
   !common /dptr95/ argmnt
-  pointer ilim1d
-  dimension ilim1d(:)
+  integer, pointer :: ilim1d(:)
   !common /dptr95/ ilim1d
-  pointer ilim2d
-  dimension ilim2d(:)
+  integer, pointer :: ilim2d(:)
   !common /dptr95/ ilim2d
-  pointer ilim1dd
-  dimension ilim1dd(:)
+  integer, pointer :: ilim1dd(:)
   !common /dptr95/ ilim1dd
-  pointer ilim2dd
-  dimension ilim2dd(:)
+  integer, pointer :: ilim2dd(:)
   !common /dptr95/ ilim2dd
-  pointer sx
-  dimension sx(:)
+  real(c_double), pointer :: sx(:)
   !common /dptr95/ sx
-  pointer xmdx
-  dimension xmdx(:)
+  real(c_double), pointer :: xmdx(:)
   !common /dptr95/ xmdx
-  pointer cosz1
-  dimension cosz1(:)
-  !common /dptr95/ cosz1
-  pointer sinz1
-  dimension sinz1(:)
-  !common /dptr95/ sinz1
-  pointer sinz2
-  dimension sinz2(:)
-  !common /dptr95/ sinz2
-  pointer thtf1
-  dimension thtf1(:)
+  real(c_double), pointer :: thtf1(:)
   !common /dptr95/ thtf1
-  pointer thtf2
-  dimension thtf2(:)
+  real(c_double), pointer :: thtf2(:)
   !common /dptr95/ thtf2
-  pointer alfi
-  dimension alfi(:)
+  real(c_double), pointer :: alfi(:)
   !common /dptr95/ alfi
-  pointer alfa
-  dimension alfa(:)
+  real(c_double), pointer :: alfa(:)
   !common /dptr95/ alfa
-  pointer ilim1
-  dimension ilim1(:)
+  integer, pointer :: ilim1(:)
   !common /dptr95/ ilim1
-  pointer ilim2
-  dimension ilim2(:)
+  integer, pointer :: ilim2(:)
   !common /dptr95/ ilim2
-  pointer ifct1
-  dimension ifct1(:)
+  integer, pointer :: ifct1(:)
   !common /dptr95/ ifct1
-  pointer ifct2
-  dimension ifct2(:)
+  integer, pointer :: ifct2(:)
   !common /dptr95/ ifct2
-  pointer urftmp
-  dimension urftmp(:)
+  real(c_double), pointer :: urftmp(:)
   !common /dptr95/ urftmp
-  pointer urfpwr
-  dimension urfpwr(:,:,:)
+  real(c_double), pointer :: urfpwr(:,:,:)
   !common /dptr95/ urfpwr
-  pointer urfpwrc
-  dimension urfpwrc(:,:,:)
+  real(c_double), pointer :: urfpwrc(:,:,:)
   !common /dptr95/ urfpwrc
-  pointer urfpwrl
-  dimension urfpwrl(:,:,:)
+  real(c_double), pointer :: urfpwrl(:,:,:)
   !common /dptr95/ urfpwrl
-  pointer jminray
-  dimension jminray(:,:,:)
+  integer, pointer :: jminray(:,:,:)
   !common /dptr95/ jminray
-  pointer jmaxray
-  dimension jmaxray(:,:,:)
+  integer, pointer :: jmaxray(:,:,:)
   !common /dptr95/ jmaxray
-  pointer lloc
-  dimension lloc(:,:,:)
+  integer, pointer :: lloc(:,:,:)
   !common /dptr95/ lloc
-  pointer llray
-  dimension llray(:,:,:)
+  integer, pointer :: llray(:,:,:)
   !common /dptr95/ llray
-  pointer psiloc
-  dimension psiloc(:,:,:)
+  integer, pointer :: psiloc(:,:,:)
   !common /dptr95/ psiloc
-  pointer scalurf
-  dimension scalurf(:,:,:)
+  real(c_double), pointer :: scalurf(:,:,:)
   !common /dptr95/ scalurf
-  pointer cwexde
-  dimension cwexde(:,:,:)
-  !common /dptr95/ cwexde
-  pointer cweyde
-  dimension cweyde(:,:,:)
-  !common /dptr95/ cweyde
-  pointer cwezde
-  dimension cwezde(:,:,:)
+  complex(c_double_complex), pointer :: cwexde(:,:,:), cweyde(:,:,:), cwezde(:,:,:)
   !common /dptr95/ cwezde
-  pointer delpwr
-  dimension delpwr(:,:,:)
+  real(c_double), pointer :: delpwr(:,:,:)
   !common /dptr95/ delpwr
-  pointer fluxn
-  dimension fluxn(:,:,:)
+  real(c_double), pointer :: fluxn(:,:,:)
   !common /dptr95/ fluxn
-  pointer seikon
-  dimension seikon(:,:,:)
+  real(c_double), pointer :: seikon(:,:,:)
   !common /dptr95/ seikon
-  pointer spsi
-  dimension spsi(:,:,:)
+  real(c_double), pointer :: spsi(:,:,:)
   !common /dptr95/ spsi
-  pointer sdpwr
-  dimension sdpwr(:,:,:)
+  real(c_double), pointer :: sdpwr(:,:,:)
   !common /dptr95/ sdpwr
-  pointer sbtot
-  dimension sbtot(:,:,:)
+  real(c_double), pointer :: sbtot(:,:,:)
   !common /dptr95/ sbtot
-  pointer sene
-  dimension sene(:,:,:)
+  real(c_double), pointer :: sene(:,:,:)
   !common /dptr95/ sene
-  pointer salphac
-  dimension salphac(:,:,:)
+  real(c_double), pointer :: salphac(:,:,:)
   !common /dptr95/ salphac
-  pointer salphal
-  dimension salphal(:,:,:)
+  real(c_double), pointer :: salphal(:,:,:)
   !common /dptr95/ salphal
-  pointer ws
-  dimension ws(:,:,:)
+  real(c_double), pointer :: ws(:,:,:)
   !common /dptr95/ ws
-  pointer wr
-  dimension wr(:,:,:)
+  real(c_double), pointer :: wr(:,:,:)
   !common /dptr95/ wr
-  pointer wz
-  dimension wz(:,:,:)
+  real(c_double), pointer :: wz(:,:,:)
   !common /dptr95/ wz
-  pointer wnpar
-  dimension wnpar(:,:,:)
+  real(c_double), pointer :: wnpar(:,:,:)
   !common /dptr95/ wnpar
-  pointer wdnpar
-  dimension wdnpar(:,:,:)
+  real(c_double), pointer :: wdnpar(:,:,:)
   !common /dptr95/ wdnpar
-  pointer wnper
-  dimension wnper(:,:,:)
+  real(c_double), pointer :: wnper(:,:,:)
   !common /dptr95/ wnper
-  pointer wphi
-  dimension wphi(:,:,:)
+  real(c_double), pointer :: wphi(:,:,:)
   !common /dptr95/ wphi
-  pointer ilowp
-  dimension ilowp(:,:)
+  integer, pointer :: ilowp(:,:)
   !common /dptr95/ ilowp
-  pointer iupp
-  dimension iupp(:,:)
+  integer, pointer :: iupp(:,:)
   !common /dptr95/ iupp
-  pointer ifct1_
-  dimension ifct1_(:,:)
+  integer, pointer :: ifct1_(:,:)
   !common /dptr95/ ifct1_
-  pointer ifct2_
-  dimension ifct2_(:,:)
+  integer, pointer :: ifct2_(:,:)
   !common /dptr95/ ifct2_
-  pointer nrayelt
-  dimension nrayelt(:,:)
+  integer, pointer :: nrayelt(:,:)
   !common /dptr95/ nrayelt
-  pointer jslofas
-  dimension jslofas(:,:)
+  integer, pointer :: jslofas(:,:)
   !common /dptr95/ jslofas
-  pointer nurefls
-  dimension nurefls(:,:)
+  real(c_double), pointer :: nurefls(:,:)
   !common /dptr95/ nurefls
-  pointer keiks
-  dimension keiks(:,:)
+  real(c_double), pointer :: keiks(:,:)
   !common /dptr95/ keiks
-  pointer jpes
-  dimension jpes(:,:)
+  integer, pointer :: jpes(:,:)
   !common /dptr95/ jpes
-  pointer jpis
-  dimension jpis(:,:)
+  integer, pointer :: jpis(:,:)
   !common /dptr95/ jpis
-  pointer istarts
-  dimension istarts(:,:)
+  integer, pointer :: istarts(:,:)
   !common /dptr95/ istarts
-  pointer iprmt5
-  dimension iprmt5(:,:)
+  integer, pointer :: iprmt5(:,:)
   !common /dptr95/ iprmt5
-  pointer jhlfs
-  dimension jhlfs(:,:)
+  integer, pointer :: jhlfs(:,:)
   !common /dptr95/ jhlfs
-  pointer sxxrt
-  dimension sxxrt(:,:)
+  real(c_double), pointer :: sxxrt(:,:)
   !common /dptr95/ sxxrt
-  pointer skpsi
-  dimension skpsi(:,:)
+  real(c_double), pointer :: skpsi(:,:)
   !common /dptr95/ skpsi
-  pointer skth
-  dimension skth(:,:)
+  real(c_double), pointer :: skth(:,:)
   !common /dptr95/ skth
-  pointer skphi
-  dimension skphi(:,:)
+  real(c_double), pointer :: skphi(:,:)
   !common /dptr95/ skphi
-  pointer lrayelt
-  dimension lrayelt(:,:)
+  integer, pointer :: lrayelt(:,:)
   !common /dptr95/ lrayelt
-  pointer delpwr0
-  dimension delpwr0(:,:)
+  real(c_double), pointer :: delpwr0(:,:)
   !common /dptr95/ delpwr0
-  pointer nrayelt0
-  dimension nrayelt0(:,:)
+  real(c_double), pointer :: nrayelt0(:,:)
   !common /dptr95/ nrayelt0
-  pointer truncd
-  dimension truncd(:) ! 1:jx
+  real(c_double), pointer :: truncd(:) ! 1:jx
   !common /dptr95/ truncd
 
 
@@ -2158,17 +1731,13 @@ module cqcomm_mod
   !     Here, we introduce f90 pointers, as they are easier
   !     to allocate.
 
-  pointer rdcb
-  dimension rdcb(:,:,:,:)
+  real(c_double), pointer :: rdcb(:,:,:,:)
   !common /dptr95/ rdcb
-  pointer rdcc
-  dimension rdcc(:,:,:,:)
+  real(c_double), pointer :: rdcc(:,:,:,:)
   !common /dptr95/ rdcc
-  pointer rdce
-  dimension rdce(:,:,:,:)
+  real(c_double), pointer :: rdce(:,:,:,:)
   !common /dptr95/ rdce
-  pointer rdcf
-  dimension rdcf(:,:,:,:)
+  real(c_double), pointer :: rdcf(:,:,:,:)
   !common /dptr95/ rdcf
 
 
@@ -2183,12 +1752,11 @@ module cqcomm_mod
   !common / it3d/
   integer ::icsrijr,icsrijc
 
-  pointer abd_lapack,a_csr,alu,w_ilu,rhs0,sol,vv
-  pointer ja_csr,ia_csr,jlu,ju,jw_ilu
-  pointer ar_csr,ac_csr
-  pointer jar_csr,iar_csr,ipofi,jac_csr,iac_csr
-  dimension abd_lapack(:,:),a_csr(:), &
-       alu(:),w_ilu(:),rhs0(:),sol(:),vv(:)
+  real(c_double), pointer :: abd_lapack,a_csr,alu,w_ilu,rhs0,sol,vv
+  integer, pointer :: ja_csr,ia_csr,jlu,ju,jw_ilu
+  real(c_double), pointer :: ar_csr,ac_csr
+  integer, pointer :: jar_csr,iar_csr,ipofi,jac_csr,iac_csr
+  dimension abd_lapack(:,:),a_csr(:), alu(:),w_ilu(:),rhs0(:),sol(:),vv(:)
   dimension ja_csr(:),ia_csr(:),jlu(:),ju(:),jw_ilu(:)
   dimension ar_csr(:),ac_csr(:)
   dimension jar_csr(:),iar_csr(:),ipofi(:,:),jac_csr(:),iac_csr(:)
@@ -2235,49 +1803,34 @@ module cqcomm_mod
   !     Arrays allocated in subroutine wpalloc for CQLP
   !.......................................................................
 
-  pointer l_upper
-  dimension l_upper(:)  !!! (1:iy)
-  pointer ilpm1ef
-  dimension ilpm1ef(:,:,:)  !!! (0:iy+1,0:lsa1,-1:+1)
+  integer, pointer :: l_upper(:)  !!! (1:iy)
+  integer, pointer :: ilpm1ef(:,:,:)  !!! (0:iy+1,0:lsa1,-1:+1)
 
-  pointer fnhalf
-  dimension fnhalf(:,:,:,:)
+  real(c_double), pointer :: fnhalf(:,:,:,:)
   !common /dptr95/ fnhalf
-  pointer fnp0
-  dimension fnp0(:,:,:,:)
+  real(c_double), pointer :: fnp0(:,:,:,:)
   !common /dptr95/ fnp0
-  pointer fnp1
-  dimension fnp1(:,:,:,:)
+  real(c_double), pointer :: fnp1(:,:,:,:)
   !common /dptr95/ fnp1
-  pointer dls
-  dimension dls(:,:,:,:)
+  real(c_double), pointer :: dls(:,:,:,:)
   !common /dptr95/ dls
-  pointer fh
-  dimension fh(:,:,:,:)
+  real(c_double), pointer :: fh(:,:,:,:)
   !common /dptr95/ fh
-  pointer fg
-  dimension fg(:,:,:,:)
+  real(c_double), pointer :: fg(:,:,:,:)
   !common /dptr95/ fg
-  pointer fedge
-  dimension fedge(:,:,:,:)
+  real(c_double), pointer :: fedge(:,:,:,:)
   !common /dptr95/ fedge
-  pointer rhspar
-  dimension rhspar(:,:,:)
+  real(c_double), pointer :: rhspar(:,:,:)
   !common /dptr95/ rhspar
-  pointer bndmats
-  dimension bndmats(:,:,:,:)
+  real(c_double), pointer :: bndmats(:,:,:,:)
   !common /dptr95/ bndmats
-  pointer wcqlb
-  dimension wcqlb(:,:,:,:)
+  real(c_double), pointer :: wcqlb(:,:,:,:)
   !common /dptr95/ wcqlb
-  pointer wcqlc
-  dimension wcqlc(:,:,:,:)
+  real(c_double), pointer :: wcqlc(:,:,:,:)
   !common /dptr95/ wcqlc
-  pointer wcqle
-  dimension wcqle(:,:,:,:)
+  real(c_double), pointer :: wcqle(:,:,:,:)
   !common /dptr95/ wcqle
-  pointer wcqlf
-  dimension wcqlf(:,:,:,:)
+  real(c_double), pointer :: wcqlf(:,:,:,:)
   !common /dptr95/ wcqlf
 
 
@@ -2286,29 +1839,21 @@ module cqcomm_mod
   !     Arrays allocated in ampfalloc
   !.......................................................................
 
-  pointer ampfln
-  dimension ampfln(:)
+  real(c_double), pointer :: ampfln(:)
   !common /dptr95/ ampfln
-  pointer ampflh
-  dimension ampflh(:)
+  real(c_double), pointer :: ampflh(:)
   !common /dptr95/ ampflh
-  pointer ampflg
-  dimension ampflg(:)
+  real(c_double), pointer :: ampflg(:)
   !common /dptr95/ ampflg
-  pointer ampfa
-  dimension ampfa(:,:)
+  real(c_double), pointer :: ampfa(:,:)
   !common /dptr95/ ampfa
-  pointer ampfb
-  dimension ampfb(:,:)
+  real(c_double), pointer :: ampfb(:,:)
   !common /dptr95/ ampfb
-  pointer ampfaa
-  dimension ampfaa(:,:)
+  real(c_double), pointer :: ampfaa(:,:)
   !common /dptr95/ ampfaa
-  pointer ampfc
-  dimension ampfc(:)
+  real(c_double), pointer :: ampfc(:)
   !common /dptr95/ ampfc
-  pointer ampf2ebar
-  dimension ampf2ebar(:)
+  real(c_double), pointer :: ampf2ebar(:)
   !common /dptr95/ ampf2ebar
 
   !.......................................................................
@@ -2317,13 +1862,10 @@ module cqcomm_mod
 
   !common/psiaxis/ psi_lim,psi_mag,R_axis,Z_axis ![cgs]
 
-  pointer rcontr,zcontr,rlimiter,zlimiter
-  dimension rcontr(:),zcontr(:),rlimiter(:),zlimiter(:)
+  real(c_double), pointer :: rcontr(:),zcontr(:),rlimiter(:),zlimiter(:)
   !common/limiter/
   integer :: ncontr
   integer :: nlimiter
-  real(c_double) :: rcontr, zcontr,  &  !-> Last closed flux surface &
-       rlimiter, zlimiter !-> Limiter surface [cm]
   ! Setup by call equilib()
 
   !common/eqbox/
