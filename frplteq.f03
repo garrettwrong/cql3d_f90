@@ -1,7 +1,7 @@
 
 !
 module frplteq_mod
-  character*8, public :: textt(200)
+  character(len=8), public :: textt(200)
 
   save
 
@@ -16,7 +16,7 @@ contains
     !MPIINSERT_INCLUDE
 
 
-    character*8 frplt
+    character(len=8) frplt
 
     dimension xpts(*),ypts(*),zpts(*),rpts(*),vx(*),vy(*),vz(*)
 
