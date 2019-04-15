@@ -2453,10 +2453,20 @@ module cqcomm_mod
   !Purpose is communication with cql3d.
   !
 
+  ! These are from tdtransp and friends, which can become modules
+  ! on your time, I didn't feel like dealing with transp.h
+  ! i've done the harder ones.
   !common/nob/ nobind
-  ! this is from tdtransp and friends, which can become modules
-  ! on your time.
   character(len=8) :: nobind
+  !
+  !common /newt_norm/
+  real(c_double) :: adv_norm(lrza),reden_norm(lrza)
+  !COMMON /newtv/
+  integer, parameter :: NP=300
+  real(c_double) :: fvec(NP)
+  integer :: newtv_nn
+
+
 
   save
 contains

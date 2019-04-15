@@ -57,8 +57,8 @@ SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f03 \
 	tdplteq.f  tdpltjop.f  tdpltmne.f  tdpro.f  \
 	tdreadf.f  tdrmshst.f  tdsetnpa.f  tdsetsxr.f   \
 	tdstin.f  tdsxr.f  tdsxr0.f  tdsxray.f  tdsxrplt.f  \
-	tdtloop.f  tdtoarad.f   tdtranspn.f \
-	tdtoaray.f  tdtraloc.f  tdtransp.f  tdtranspn.f  \
+	tdtloop.f  tdtoarad.f   tdtranspn.f  \
+	tdtoaray.f  tdtraloc.f  tdtransp.f  tdtravct.f\
 	tdtrchk.f  tdtrchkd.f  tdtrcon.f   \
 	tdtrdfus.f  tdtrfcop.f  tdtrflg.f  tdtrflx.f  \
 	tdtrmuy.f  tdtrrsou.f  tdtrrtov.f   \

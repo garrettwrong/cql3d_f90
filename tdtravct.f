@@ -34,7 +34,7 @@ c..............................................................
 
       dimension f1(0:iyp1,0:jxp1,ngen,0:*)
 
-      common /newt_norm/adv_norm(lrza),reden_norm(lrza)
+
       dimension xx(lrza)
       logical check
       character*8 ifirst
@@ -486,10 +486,15 @@ c.......................................................................
 
 c=======================================================================            
 c=======================================================================            
-      subroutine funcv(nn,xx,fvec)
+      subroutine funcv(nn,xx,ffvec)
       use param_mod
-      use cqcomm_mod
+      use cqcomm_mod, only: lrz, ngen, pinch
+      use cqcomm_mod, only: adv, adv_norm, d_r, drrt, d_rr
+      use cqcomm_mod, only: lrindx,tam2, frn, cynt2, coss, tau
+      use cqcomm_mod, only: cint2, zmaxpsi, iy_
+      use cqcomm_mod, only: dentarget, reden, reden_norm
       implicit integer (i-n), real*8 (a-h,o-z)
+      real*8 :: ffvec(nn)
 
 c.......................................................................
 c     This user input subroutine is used by newt, giving the function
@@ -499,9 +504,7 @@ c                    xx(1:nn)=adv(k,1:lrz-1)
 c                    fvec=(dentarget(l)-reden(ktransp,l)),l=1,lrz-1
 c.......................................................................
 
-
-      common /newt_norm/adv_norm(lrza),reden_norm(lrza)
-      dimension xx(nn),fvec(nn)
+      dimension xx(nn)
 
       if (nn.ne.(lrz-1)) stop 'funcv: nn.ne.(lrz-1)'
 
@@ -557,7 +560,7 @@ c     Compute density from frn, and form fvec:
          
          reden(k,lr)=hn/zmaxpsi(lr)
          
-         fvec(l)=(dentarget(l)-reden(k,lr))/reden_norm(lr)
+         ffvec(l)=(dentarget(l)-reden(k,lr))/reden_norm(lr)
 
 c      write(*,*)'funcv: lr,dentarget(l),reden(k,lr),xx(lr),fvec(lr)',
 c     +                 lr,dentarget(l),reden(k,lr),xx(lr),fvec(lr)
@@ -584,9 +587,6 @@ c     prepared to Newton iteration for velocities to maintain
 c     the target densities.
 c..............................................................
 
-
-      character*8 nobind
-      common/nob/ nobind
       include 'trans.h'
 c      data nobind /"disabled"/    !Need BLOCK DATA or following stmt
       nobind="disabled"
@@ -808,12 +808,13 @@ c......................................................................
       endif
 
       return
-      end
+      end subroutine
 
 
 c=======================================================================            
 c=======================================================================            
       subroutine newt(x,n,iters,check)
+      use cqcomm_mod, only : NP, fvec, newtv_nn
 c 
 c..................................................................
 c     A Newton-Raphson iteration, here used with subroutine funcv
@@ -831,16 +832,15 @@ c     minimum rather than zero, else "false" for normal return.
 c
 c..................................................................
 c
-      INTEGER n,nn, NP,MAXITS, iters
+      INTEGER n,MAXITS, iters
       LOGICAL check
-      REAL*8 x(n),fvec,TOLF,TOLMIN,TOLX,STPMX
+      REAL*8 x(n),TOLF,TOLMIN,TOLX,STPMX
 c     Choose following TOLX to match value in lnsrch.
 c     Choose following NP to match value in fffmin.
 cBH091214      PARAMETER (NP=100,MAXITS=25,TOLF=1.e-2,TOLMIN=1.e-5,TOLX=1.e-3,
-      PARAMETER (NP=300,MAXITS=100,TOLF=1.e-6,TOLMIN=1.e-6,TOLX=1.e-10,
+      PARAMETER (MAXITS=100,TOLF=1.e-6,TOLMIN=1.e-6,TOLX=1.e-10,
      +           STPMX=100.)
-      COMMON /newtv/fvec(NP),nn
-      SAVE /newtv/
+
 C     USES fdjac,fffmin,lnsrch,lubksb,ludcmp
       
       
@@ -848,13 +848,12 @@ C     USES fdjac,fffmin,lnsrch,lubksb,ludcmp
       REAL*8 d,den,f,fold,stpmax,sum,temp,test,fjac(NP,NP),
      +		g(NP),p(NP),xold(NP),fffmin
       REAL*8 fn,fnp5,one
-      EXTERNAL fffmin
 
       one=1.d0
       iters=0
       if (n.gt.NP) stop 'newt: Increase NP.'
 
-      nn=n
+      newtv_nn=n
       f=fffmin(x)            ! Calls funcv
 c      write(*,*)'newt: fffmin',f
       test=0.
@@ -1054,17 +1053,14 @@ C     USES funcv
 c=======================================================================            
 c=======================================================================            
       REAL*8 function fffmin(x)
-      INTEGER n,NP
-      REAL*8 x(*),fvec
-      PARAMETER (NP=300)
-      COMMON  /newtv/ fvec(NP),n
-      SAVE /newtv/
+      use cqcomm_mod, only : NP, fvec, newtv_nn
+      REAL*8 x(*)
 C     USES funcv
       INTEGER i
       REAL*8 sum
-      call funcv (n,x,fvec)
+      call funcv (newtv_nn,x,fvec)
       sum=0.
-      do   i=1,n
+      do   i=1,newtv_nn
          sum=sum+fvec(i)**2
       enddo
       fffmin=0.5*sum
