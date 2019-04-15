@@ -1243,7 +1243,7 @@ c
 c------------------------------------------------------
 c     This routine computes the ERROR FUNCTION.
 c------------------------------------------------------
-      common /tusq/ tusqpi
+      real*8 tusqpi
       dimension a(5)
       sign=1.
       if (xxx .lt. 0.) sign=-1.
