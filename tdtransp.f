@@ -2,12 +2,11 @@
       use param_mod
       use cqcomm_mod
       use r8subs_mod, only : cvmgt, dcopy
+      use tdtravct_mod, only : tdtravct
       implicit integer (i-n), real*8 (a-h,o-z)
 c..............................................................
 c     Time advancement splitting step for radial transport.
 c..............................................................
-      character*8 nobind
-      common/nob/ nobind
       include 'trans.h'
       nobind="disabled"
 c.......................................................................

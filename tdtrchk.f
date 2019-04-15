@@ -14,8 +14,6 @@ c     sumright) are also computed. Errors should be near round-off.
 c..............................................................
 
 
-      character*8 nobind
-      common/nob/ nobind
       include 'trans.h'
       if (iactst.eq."disabled") return
       call bcast(fxsp,zero,iyjx2*ngen*lrors)

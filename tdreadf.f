@@ -1,5 +1,15 @@
 c
 c
+!      module tdreadf_mod
+!      use iso_c_binding.only :: c_double
+
+!      !common/tdreadf_com/
+!      real(c_double), private :: x_rstrt,v_rstrt,v_rstrt2,y_rstrt, &
+!          f_rstrt_ln,v,v2,aa,bb,d2fparr,workk,tam2r,cint2r, &
+!          f_rstrt,jf_rstrt
+!      save
+!      contains
+
       subroutine tdreadf(kopt)
       use param_mod
       use cqcomm_mod
@@ -45,9 +55,6 @@ c     Pointers for dynamic memory allocation, local usage:
       integer, dimension(:), pointer :: jf_rstrt
       real*8, allocatable :: wkpack(:) !local working array for pack21 YuP[2019]
       real*8, allocatable :: temp_rstrt(:,:) !(0:iy_rstrt+1,0:jx_rstrt+1)
-      common/tdreadf_com/x_rstrt,v_rstrt,v_rstrt2,y_rstrt,
-     1     f_rstrt_ln,v,v2,aa,bb,d2fparr,workk,tam2r,cint2r,
-     1     f_rstrt,jf_rstrt
 c      save foverf,renorm_f,k,iy_rstrt,jx_rstrt,lrz_rstrt
 
 c.......................................................................
@@ -868,3 +875,5 @@ cH080201 9210 format(1p10e13.6)
 c.......................................................................
 
       end
+
+!      end module tdreadf_mod

@@ -7,7 +7,7 @@ BUILDER=	$(COMPILER)
 INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h
 SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f03 \
 	pltdf.f03 eqrhopsi.f03 equilib.f03 \
-	impavnc0.f03  frplteq.f03 \
+	impavnc0.f03  frplteq.f03 tdeqdsk.f03  \
 	a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
@@ -51,14 +51,14 @@ SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f03 \
 	soucrit.f sounorm.f  soup.f  soup0.f  souplt.f   \
 	sourc0.f  sourcee.f  sourcef.f  sourceko.f sourcpwr.f   \
 	synchrad.f  tdbootst.f tdboothi.f  tdchief.f  tddiag.f  \
-	tddsig.f  tdeqdsk.f  tdfinterp.f  tdinitl.f  tdinlegw.f  \
+	tddsig.f  tdfinterp.f  tdinitl.f  tdinlegw.f  \
 	tdinterp.f  tdnflxs.f  tdnpa.f  tdnpadiag.f  tdnpa0.f  \
 	tdnpacxcs.f  tdnpalam.f  tdnpabscs.f  tdoutput.f   \
 	tdplteq.f  tdpltjop.f  tdpltmne.f  tdpro.f  \
 	tdreadf.f  tdrmshst.f  tdsetnpa.f  tdsetsxr.f   \
 	tdstin.f  tdsxr.f  tdsxr0.f  tdsxray.f  tdsxrplt.f  \
-	tdtloop.f  tdtoarad.f   \
-	tdtoaray.f  tdtraloc.f  tdtransp.f  tdtranspn.f  tdtravct.f  \
+	tdtloop.f  tdtoarad.f   tdtranspn.f \
+	tdtoaray.f  tdtraloc.f  tdtransp.f  tdtranspn.f  \
 	tdtrchk.f  tdtrchkd.f  tdtrcon.f   \
 	tdtrdfus.f  tdtrfcop.f  tdtrflg.f  tdtrflx.f  \
 	tdtrmuy.f  tdtrrsou.f  tdtrrtov.f   \
@@ -124,7 +124,7 @@ $(SOURCES):        $(INCLUDES)
 # Do not fret, they're not so bad.
 DAGOBJS = param.o cqcomm.o r8subs.o advnce.o pltmain.o \
           pltdf.o eqrhopsi.o equilib.o \
-          impavnc0.o  frplteq.o
+          impavnc0.o  frplteq.o tdeqdsk.o  
 # And this describes their dag...
 cqcomm.o: cqcomm.f03 param.o
 r8subs.o: r8subs.f03 cqcomm.o
@@ -135,6 +135,7 @@ eqrhopsi.o: eqrhopsi.f03 param.o cqcomm.o
 equilib.o: equilib.f03 param.o cqcomm.o r8subs.o
 impavnc0.o: impavnc0.f03 param.o cqcomm.o advnce.o r8subs.o
 frplteq.o: frplteq.f03 param.o cqcomm.o r8subs.o
+tdeqdsk.o: tdeqdsk.f03 param.o cqcomm.o equilib.o r8subs.o
 
 #----
 # From here we will assume that all deps to build

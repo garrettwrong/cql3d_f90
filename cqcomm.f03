@@ -2453,6 +2453,11 @@ module cqcomm_mod
   !Purpose is communication with cql3d.
   !
 
+  !common/nob/ nobind
+  ! this is from tdtransp and friends, which can become modules
+  ! on your time.
+  character(len=8) :: nobind
+
   save
 contains
   ! lolz

@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use r8subs_mod, only : cvmgt
+      use tdtravct_mod, only : tdtravct
 
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -15,8 +16,6 @@ c     mesh and then is interpolated on the full velocity mesh, such
 c     that int(R(f_)*d3u0) is constant.
 c.......................................................................
 
-      character*8 nobind
-      common/nob/ nobind
       include 'trans.h'
 
 c.......................................................................

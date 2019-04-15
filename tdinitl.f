@@ -3,6 +3,7 @@ c
       subroutine tdinitl ! called only at n=0
       use param_mod
       use cqcomm_mod
+      use tdeqdsk_mod, only: tdeqdsk
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
