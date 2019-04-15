@@ -28,9 +28,9 @@ c      Remember, pgopen should be integer
       write(t_,1000) mnemonic(1:length_char(mnemonic))
  1000 format(a,".ps/VCPS") !YuP: was /VPS (vertical black&white)
                            ! Use /VCPS for vertical Color pages
-CPGPLT      ier=PGOPEN(t_)
-CPGPLT      CALL PGSCI(1)
-CPGPLT      CALL PGSLW(lnwidth)
+      ier=PGOPEN(t_)
+      CALL PGSCI(1)
+      CALL PGSLW(lnwidth)
       write(*,*) 'PLTINIT-1 ier=1 is OK: ier=',ier
 c      ier=pgbeg(0,'?',1,1)
 c      if (ier.ne.1) write(*,*)
@@ -58,23 +58,23 @@ c      write(*,*) 'ier=',ier
       !'CURSOR'    * - does the current device have a graphics cursor?
       !                ('YES' or 'NO').
       ! Two other arg. are outputs:
-CPGPLT      CALL PGQINF('TYPE', PG_VAL, PG_L)
+      CALL PGQINF('TYPE', PG_VAL, PG_L)
       WRITE (*,*) 'PGPLOT device type: ', PG_VAL(1:PG_L)
-CPGPLT      CALL PGQINF('DEVICE', PG_VAL, PG_L)
+      CALL PGQINF('DEVICE', PG_VAL, PG_L)
       WRITE (*,*) 'PGPLOT device: ', PG_VAL(1:PG_L)
-CPGPLT      CALL PGQINF('USER', PG_VAL, PG_L)
+      CALL PGQINF('USER', PG_VAL, PG_L)
       WRITE (*,*) 'PGPLOT user: ', PG_VAL(1:PG_L)
-CPGPLT      CALL PGQINF('NOW', PG_VAL, PG_L)
+      CALL PGQINF('NOW', PG_VAL, PG_L)
       WRITE (*,*) 'PGPLOT time now: ', PG_VAL(1:PG_L)
       
       !Inquire color index range:
-CPGPLT      CALL PGQCIR(PG_C1, PG_C2)
+      CALL PGQCIR(PG_C1, PG_C2)
       PG_NC = MAX(0, PG_C2-PG_C1+1)
       WRITE (*,*) 'Number of color indices used for image: ', PG_NC
       ! On Yuri's PC: printed --   PG_NC=240
       IF (PG_NC .LT.8) THEN 
          WRITE (*,*) 'Not enough colors available on this device'
-CPGPLT         STOP
+         STOP
       ELSE
          WRITE (*,*)
       END IF

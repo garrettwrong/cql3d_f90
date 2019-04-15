@@ -18,7 +18,7 @@ CMPIINSERT_IF_RANK_EQ_0
       if (noplots.ne."enabled1") then
       write(t_,1000) 
  1000 format("Urf (lower hybrid, fast wave, ech, ebw...) parameters:")
-CPGPLT      CALL PGMTXT('T',-7.,0.,0.,t_)
+      CALL PGMTXT('T',-7.,0.,0.,t_)
 
 c      write(t_,1001) nrayn,nrayelts
  1001 format("====>NRAYn =",i5,"     ====>NRAYELTs = ",i5)
@@ -26,7 +26,7 @@ c      CALL PGMTXT('T',-8.,0.,0.,t_)
 
       write(t_,1002) nmodsa
  1002 format("====>NMODSA = ", i3)
-CPGPLT      CALL PGMTXT('T',-9.,0.,0.,t_)
+      CALL PGMTXT('T',-9.,0.,0.,t_)
       endif
 CMPIINSERT_ENDIF_RANK
 

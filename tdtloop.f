@@ -29,7 +29,7 @@ CMPIINSERT_INCLUDE
 CMPIINSERT_IF_RANK_EQ_0
       ! make plots on mpirank.eq.0 only
       if (noplots.ne."enabled1") then
-CPGPLT         call pgclos  ! PGCLOS
+         call pgclos  ! PGCLOS
          PRINT *,'PGPLOT CLOSED at time step n=',n
       endif
 CMPIINSERT_ENDIF_RANK

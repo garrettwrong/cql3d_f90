@@ -367,13 +367,13 @@ c990131        sminr=alog(constr)
 
 
         call GXGLFR(0) ! new page for each k
-CPGPLT        CALL PGSVP(.2,.8,.65,.9)
+        CALL PGSVP(.2,.8,.65,.9)
         IF ( RXMAXQ.eq.0. ) THEN
            RXMAXQ=1.
         ENDIF
-CPGPLT        CALL PGSWIN(-RXMAXQ,RXMAXQ,0.,RXMAXQ)
-CPGPLT        CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
-CPGPLT        CALL PGLAB(tx_,ty_,tt_)
+        CALL PGSWIN(-RXMAXQ,RXMAXQ,0.,RXMAXQ)
+        CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+        CALL PGLAB(tx_,ty_,tt_)
 
         t0t=sin(thb(l_))/cos(thb(l_))  ! PLOT t-p boundary (ZOW cone)
         if (t0t .lt. 1.) then
@@ -381,17 +381,17 @@ CPGPLT        CALL PGLAB(tx_,ty_,tt_)
           RYPTS(1)=0.
           RXPTS(2)=XMAXQ
           RYPTS(2)=XMAXQ*T0T
-CPGPLT          CALL PGLINE(2,RXPTS,RYPTS)
+          CALL PGLINE(2,RXPTS,RYPTS)
           RXPTS(2)=-XMAXQ
-CPGPLT          CALL PGLINE(2,RXPTS,RYPTS)
+          CALL PGLINE(2,RXPTS,RYPTS)
         else
           RXPTS(1)=0.
           RYPTS(1)=0.
           RXPTS(2)=XMAXQ/T0T
           RYPTS(2)=XMAXQ
-CPGPLT          CALL PGLINE(2,RXPTS,RYPTS)
+          CALL PGLINE(2,RXPTS,RYPTS)
           RXPTS(2)=-XMAXQ/T0T
-CPGPLT          CALL PGLINE(2,RXPTS,RYPTS)
+          CALL PGLINE(2,RXPTS,RYPTS)
         endif
 
         !plot v=vnorm line
@@ -406,7 +406,7 @@ CPGPLT          CALL PGLINE(2,RXPTS,RYPTS)
           RTAB2(i)= sinn(i,lr_) ! v_perp/vnorm
           enddo
         endif
-CPGPLT        CALL PGLINE(iy,RTAB1,RTAB2) ! v=vnorm line (or v=vnorm/c)
+        CALL PGLINE(iy,RTAB1,RTAB2) ! v=vnorm line (or v=vnorm/c)
       
         !plot v=vth line, for the k-th gen. species
 c..................................................................
@@ -428,29 +428,29 @@ c..................................................................
         endif
         ! Five different line styles are available:
         ! 1 (full line), 2 (dashed), 3 (dot-dash-dot-dash), 4 (dotted),
-CPGPLT        CALL PGSLS(4) 
-CPGPLT        CALL PGLINE(iy,RTAB1,RTAB2) ! v=vth line
-CPGPLT        CALL PGSLS(1) ! 1-> restore solid line     
-CPGPLT        CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
+        CALL PGSLS(4) 
+        CALL PGLINE(iy,RTAB1,RTAB2) ! v=vth line
+        CALL PGSLS(1) ! 1-> restore solid line     
+        CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
         !--------------------------------------------------------
-CPGPLT        CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,mcont,PGFUNC1)
+        CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,mcont,PGFUNC1)
         !subr.PGFUNC1(VISBLE,yplt,xplt,zplt) uses /PGLOCAL1/wx,wy,IIY,JXQ
         !--------------------------------------------------------
         !Add some text on the plot:
-CPGPLT        CALL PGSCH(1.0) ! set character size; default is 1.
+        CALL PGSCH(1.0) ! set character size; default is 1.
         write(t_,5001) k
  5001   format("Species number k=",i3)
-CPGPLT        CALL PGMTXT('B',6.,0.,0.,t_)
+        CALL PGMTXT('B',6.,0.,0.,t_)
         write(t_,150) n,timet
  150    format("time step n=",i5,5x," time=",1pe10.2," secs")
-CPGPLT        CALL PGMTXT('B',7.,0.,0.,t_)
+        CALL PGMTXT('B',7.,0.,0.,t_)
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,151) rovera(lr_),rr
  151    format( "r/a=",1pe10.3,5x," radial position (R)=",1pe12.4," cm")
-CPGPLT        CALL PGMTXT('B',8.,0.,0.,t_)
+        CALL PGMTXT('B',8.,0.,0.,t_)
         write(t_,153) rya(lr_), rpcon(lr_), lr_
  153    format( "rya=",1pe10.3,5x," R=rpcon=",1pe10.3," cm,  Surf#",i4)
-CPGPLT        CALL PGMTXT('B',9.,0.,0.,t_)
+        CALL PGMTXT('B',9.,0.,0.,t_)
         ! print contour values under the plot:
         do js=1,mcont
            tempcntr(js)=cont(js)
@@ -458,7 +458,7 @@ CPGPLT        CALL PGMTXT('B',9.,0.,0.,t_)
         write(t_,560)
  560    format("Contour values:")
         RILIN=11.
-CPGPLT        CALL PGMTXT('B',RILIN,-.2,0.,t_)
+        CALL PGMTXT('B',RILIN,-.2,0.,t_)
         do jcs=1,mcont,4
           write(t_,570) (tempcntr(jc),jc=jcs,min(jcs+3,mcont))
           if ((mcont/4)*4.ne.mcont .and. mcont-jcs.le.2) then
@@ -466,12 +466,12 @@ CPGPLT        CALL PGMTXT('B',RILIN,-.2,0.,t_)
             t_(icend:icend)="$"
           endif
           RILIN=RILIN+1.
-CPGPLT          CALL PGMTXT('B',RILIN,-.2,0.,t_)
+          CALL PGMTXT('B',RILIN,-.2,0.,t_)
         enddo
         
-CPGPLT        CALL PGSLS(1) ! restore: solid line
-CPGPLT        CALL PGSLW(lnwidth) ! restore linewidth
-CPGPLT        CALL PGSCH(1.0) ! recover default 1.0 fontsize
+        CALL PGSLS(1) ! restore: solid line
+        CALL PGSLW(lnwidth) ! restore linewidth
+        CALL PGSCH(1.0) ! recover default 1.0 fontsize
 
  500  continue ! k species ------------------------------------------
  

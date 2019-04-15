@@ -89,9 +89,9 @@ c990131        smaxm=alog(-dmin)
       
       call GXGLFR(0) ! new page
       call GSVP2D(.2,.8,.6,.9)
-CPGPLT      CALL PGSCH(1.) ! set character size; default is 1.
+      CALL PGSCH(1.) ! set character size; default is 1.
       call GSWD2D("linlin$",xpar(1),xpar(jpxy),xperp(1),xperp(ipxy))
-CPGPLT      call PGLAB('u/unorm_par','u/unorm_perp',' ')
+      call PGLAB('u/unorm_par','u/unorm_perp',' ')
       if (k2.gt.1) then
         call GSLNST(2)
         call GSLNSZ(.2)
@@ -101,8 +101,8 @@ CPGPLT      call PGLAB('u/unorm_par','u/unorm_perp',' ')
       call GSLNSZ(.2)
       call GSLNSZ(0.)
       
-CPGPLT      CALL PGSLS(1) ! restore: solid line
-CPGPLT      CALL PGSLW(lnwidth) ! restore linewidth
+      CALL PGSLS(1) ! restore: solid line
+      CALL PGSLW(lnwidth) ! restore linewidth
 
       return
       end

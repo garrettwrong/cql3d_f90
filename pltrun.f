@@ -132,18 +132,18 @@ c        call pltcycl(iymin,iymax,ymin,ymax)
 
 c      Following plot is with pdena,... with 1st dimension up to nch(l_).
 
-CPGPLT        CALL PGPAGE
-CPGPLT        CALL PGSVP(.2,.8,.6,.9)
+        CALL PGPAGE
+        CALL PGSVP(.2,.8,.6,.9)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN
            RPG2= RPG1+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
         IF (RPG1.ne.RPG2) THEN
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
-CPGPLT           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
         ENDIF
-CPGPLT        CALL PGLAB('time (secs)','RA density (cm\u-3\d)',
-CPGPLT     +       'Runaway Density and Current vs. Time')
+        CALL PGLAB('time (secs)','RA density (cm\u-3\d)',
+     +       'Runaway Density and Current vs. Time')
 
 cBH070405       do nt=1,nch(l_)
         do nt=1,nch(ll)
@@ -171,22 +171,22 @@ c        if (abs(ymin-ymax).le.abs(ymax)*dgts) ymax=ymin+0.001*abs(ymin)
         RPG2=LOG10(RPG2)
 
 
-CPGPLT        CALL PGSVP(.2,.8,.2,.5)
+        CALL PGSVP(.2,.8,.2,.5)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN
            RPG2= RPG1+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
         IF (RPG1.ne.RPG2) THEN
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
-CPGPLT           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
         ENDIF
-CPGPLT        CALL PGLAB('time (secs)','RA curr den (A/cm\u2\d)',' ')
+        CALL PGLAB('time (secs)','RA curr den (A/cm\u2\d)',' ')
 
 
         write(t_,10010) n,timet
-CPGPLT        CALL PGMTXT('B',6.,-.1,0.,t_)
+        CALL PGMTXT('B',6.,-.1,0.,t_)
         write(t_,10011) rovera(lr_),ll,rr
-CPGPLT        CALL PGMTXT('B',7.,-.1,0.,t_)
+        CALL PGMTXT('B',7.,-.1,0.,t_)
 
 c-----------------------------------------------------------------------
 
@@ -219,18 +219,18 @@ c        call pltcycl(iymin,iymax,ymin,ymax)
         RPG2=LOG10(RPG2)
 
 
-CPGPLT        CALL PGPAGE
-CPGPLT        CALL PGSVP(.2,.8,.6,.9)
+        CALL PGPAGE
+        CALL PGSVP(.2,.8,.6,.9)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
         IF (RPG1.ne.RPG2) THEN
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
-CPGPLT           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
         ENDIF
-CPGPLT        CALL PGLAB('time (secs)','Fraction RA density',
-CPGPLT     +       'Runaway Fraction of Density and Current vs. Time')
+        CALL PGLAB('time (secs)','Fraction RA density',
+     +       'Runaway Fraction of Density and Current vs. Time')
 
         do nt=1,nch(l_)
           xg(nt)=ptime(nt,1)
@@ -258,21 +258,21 @@ c        call pltcycl(iymin,iymax,ymin,ymax)
 
 
 
-CPGPLT        CALL PGSVP(.2,.8,.2,.5)
+        CALL PGSVP(.2,.8,.2,.5)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
         IF (RPG1.ne.RPG2) THEN
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
-CPGPLT           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
         ENDIF
-CPGPLT        CALL PGLAB('time (secs)','Fraction RA curr den',' ')
+        CALL PGLAB('time (secs)','Fraction RA curr den',' ')
 
         write(t_,10010) n,timet
-CPGPLT        CALL PGMTXT('B',6.,-.1,0.,t_)
+        CALL PGMTXT('B',6.,-.1,0.,t_)
         write(t_,10011) rovera(lr_),ll,rr
-CPGPLT        CALL PGMTXT('B',7.,-.1,0.,t_)
+        CALL PGMTXT('B',7.,-.1,0.,t_)
 
 c-----------------------------------------------------------------------
 
@@ -342,18 +342,18 @@ c     call pltcycl(iymin,iymax,ymin,ymax)
  1022    format("Critical runaway vel/vnorm")
       endif
 
-CPGPLT        CALL PGPAGE
-CPGPLT        CALL PGSVP(.2,.8,.6,.9)
+        CALL PGPAGE
+        CALL PGSVP(.2,.8,.6,.9)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
         IF (RPG1.ne.RPG2) THEN
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
-CPGPLT           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
         ENDIF
-CPGPLT        CALL PGLAB('time (secs)',t_,
-CPGPLT     +       'Critical vel(energy) and E/E\dDreicer\u vs. Time')
+        CALL PGLAB('time (secs)',t_,
+     +       'Critical vel(energy) and E/E\dDreicer\u vs. Time')
 
 cBH070405      do nt=1,nch(l_)
       do nt=1,nch(ll)
@@ -385,21 +385,21 @@ c     call pltcycl(iymin,iymax,ymin,ymax)
  1024 format("time(sec)")
 
 
-CPGPLT        CALL PGSVP(.2,.8,.2,.5)
+        CALL PGSVP(.2,.8,.2,.5)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
         IF (RPG1.ne.RPG2) THEN
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
-CPGPLT           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
         ENDIF
-CPGPLT        CALL PGLAB('time (secs)','E-field/E\dDreicer\u',' ')
+        CALL PGLAB('time (secs)','E-field/E\dDreicer\u',' ')
 
         write(t_,10010) n,timet
-CPGPLT        CALL PGMTXT('B',6.,-.1,0.,t_)
+        CALL PGMTXT('B',6.,-.1,0.,t_)
         write(t_,10011) rovera(lr_),ll,rr
-CPGPLT        CALL PGMTXT('B',7.,-.1,0.,t_)
+        CALL PGMTXT('B',7.,-.1,0.,t_)
 
 c-----------------------------------------------------------------------
 
@@ -434,18 +434,18 @@ c$$$      call gxglfr(0)
         RPG2=LOG10(RPG2)
 
 
-CPGPLT        CALL PGPAGE
-CPGPLT        CALL PGSVP(.2,.8,.6,.9)
+        CALL PGPAGE
+        CALL PGSVP(.2,.8,.6,.9)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
         IF (RPG1.ne.RPG2) THEN
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
-CPGPLT           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
         ENDIF
-CPGPLT        CALL PGLAB('time (secs)','E-field/E0',
-CPGPLT     +       'E/(Critical E0) and KO Source vs. Time')
+        CALL PGLAB('time (secs)','E-field/E0',
+     +       'E/(Critical E0) and KO Source vs. Time')
 
 
 cBH070405      do nt=1,nch(l_)
@@ -474,21 +474,21 @@ cBH180714      ymin=ymax/1.e3
         RPG2=LOG10(RPG2)
 
 
-CPGPLT        CALL PGSVP(.2,.8,.2,.5)
+        CALL PGSVP(.2,.8,.2,.5)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+        CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
         IF (RPG1.ne.RPG2) THEN
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
-CPGPLT           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+           CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+           CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
         ENDIF
-CPGPLT        CALL PGLAB('time (secs)','KO Src(electrons/cm\u3\d/sec)',' ')
+        CALL PGLAB('time (secs)','KO Src(electrons/cm\u3\d/sec)',' ')
 
         write(t_,10010) n,timet
-CPGPLT        CALL PGMTXT('B',6.,-.1,0.,t_)
+        CALL PGMTXT('B',6.,-.1,0.,t_)
         write(t_,10011) rovera(lr_),ll,rr
-CPGPLT        CALL PGMTXT('B',7.,-.1,0.,t_)
+        CALL PGMTXT('B',7.,-.1,0.,t_)
 
 c-----------------------------------------------------------------------
 

@@ -68,7 +68,7 @@ c     to appropriate limit:
          endif
          
 cBH060411         CALL PGSVP(.2,.8,.25,.55)
-CPGPLT         CALL PGSVP(.2,.8,.25,.50)
+         CALL PGSVP(.2,.8,.25,.50)
          RILIN=5.
 c     
          call bcast(da,zero,iyjxp1)
@@ -82,9 +82,9 @@ c
          if (lefct .eq. 3) go to 80    !rf
          if (lefct .eq. 4) go to 100   !total
  50      call coeffpad(k)
-CPGPLT         CALL PGPAGE
+         CALL PGPAGE
          write(t_,200) k
-CPGPLT         CALL PGMTXT('B',RILIN,0.,0.,t_)
+         CALL PGMTXT('B',RILIN,0.,0.,t_)
          go to 120
  60      if (abs(elecfld(lr_)) .lt. 1.e-09) go to 190
          call coefefad(k)
@@ -102,9 +102,9 @@ c$$$     +                    ((de(i,j),i=46,50),j=1,20)
 c$$$         write(*,*)'pltvec:((df(i,j),i=46,50),j=1,20)',
 c$$$     +                    ((df(i,j),i=46,50),j=1,20)
 
-CPGPLT         CALL PGPAGE
+         CALL PGPAGE
          write(t_,210) k
-CPGPLT         CALL PGMTXT('B',RILIN,0.,0.,t_)
+         CALL PGMTXT('B',RILIN,0.,0.,t_)
          go to 120
  80      continue
          xrf=0.
@@ -112,25 +112,25 @@ CPGPLT         CALL PGMTXT('B',RILIN,0.,0.,t_)
          call coefrfad(k,xrf)
  90      continue
          if (xrf.gt.0.) then
-CPGPLT            CALL PGPAGE
+            CALL PGPAGE
             write(t_,220) k
-CPGPLT            CALL PGMTXT('B',RILIN,0.,0.,t_)
+            CALL PGMTXT('B',RILIN,0.,0.,t_)
          endif
          go to 120
  100     continue
          call coefstup(k)
-CPGPLT         CALL PGPAGE
+         CALL PGPAGE
          write(t_,230) k
-CPGPLT         CALL PGMTXT('B',RILIN,0.,0.,t_)
+         CALL PGMTXT('B',RILIN,0.,0.,t_)
          write(t_,231)
          RILIN=RILIN+1.
-CPGPLT         CALL PGMTXT('B',RILIN,0.,0.,t_)
+         CALL PGMTXT('B',RILIN,0.,0.,t_)
          
  120     continue
          
          RILIN=RILIN+2.
          write(t_,398) n,timet,rovera(lr_)
-CPGPLT         CALL PGMTXT('B',RILIN,0.,0.,t_)
+         CALL PGMTXT('B',RILIN,0.,0.,t_)
          
  200     format("species no.",i2,5x,"Flux Due to Coulomb Collisions")
  210     format("species no.",i2,5x,"Flux Due to Electric Field")
@@ -271,8 +271,8 @@ c         write(*,*)'pltvec: ipxy,xperp=',ipxy,(xperp(i),i=1,ipxy)
 
         
          RPG1=xmaxq
-CPGPLT         CALL PGSWIN(-RPG1,RPG1,0.,RPG1)
-CPGPLT         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+         CALL PGSWIN(-RPG1,RPG1,0.,RPG1)
+         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
          if (pltlim.eq.'u/c') then
             write(t_,10184) 
          elseif (pltlim.eq.'energy') then
@@ -283,7 +283,7 @@ CPGPLT         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
 10184    format("u/c")
 10185    format("energy (keV)")
 10186    format("u/unorm")
-CPGPLT         CALL PGLAB('Parallel '//t_,'Perp '//t_,' ')
+         CALL PGLAB('Parallel '//t_,'Perp '//t_,' ')
 c     Plot vector field, vector lengths proportional to |flux|:
          
 c      write(*,*)'pltvec:  lr_,lefct =',lr_,lefct
@@ -306,18 +306,18 @@ cBH060411            RPGX(2)=xmaxq*t0t
             RPGX(2)=xmaxq
 cBH060411            RPGY(2)=xmaxq
             RPGY(2)=xmaxq*t0t
-CPGPLT            CALL PGLINE(2,RPGX,RPGY)
+            CALL PGLINE(2,RPGX,RPGY)
 cBH060411            RPGX(2)=-xmaxq*t0t
             RPGX(2)=-xmaxq
-CPGPLT            CALL PGLINE(2,RPGX,RPGY)
+            CALL PGLINE(2,RPGX,RPGY)
          else
             RPGX(1)=0.
             RPGY(1)=0.
             RPGX(2)=xmaxq/t0t
             RPGY(2)=xmaxq
-CPGPLT            CALL PGLINE(2,RPGX,RPGY)
+            CALL PGLINE(2,RPGX,RPGY)
             RPGX(2)=-xmaxq/t0t
-CPGPLT            CALL PGLINE(2,RPGX,RPGY)
+            CALL PGLINE(2,RPGX,RPGY)
          endif
 
          rhmin=ep90
@@ -341,10 +341,10 @@ CPGPLT            CALL PGLINE(2,RPGX,RPGY)
  171          continue
  170       continue
 cBH060411           CALL PGSVP(.2,.8,.6,.9)
-CPGPLT           CALL PGSVP(.2,.8,.65,.9)
+           CALL PGSVP(.2,.8,.65,.9)
            RPG1=xmaxq
-CPGPLT           CALL PGSWIN(-RPG1,RPG1,0.,RPG1)
-CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+           CALL PGSWIN(-RPG1,RPG1,0.,RPG1)
+           CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
            if (pltlim.eq.'u/c') then
               write(t_,10184) 
            elseif (pltlim.eq.'energy') then
@@ -352,7 +352,7 @@ CPGPLT           CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
            else
               write(t_,10186) 
            endif
-CPGPLT           CALL PGLAB(' ','Perp '//t_,' ')
+           CALL PGLAB(' ','Perp '//t_,' ')
 c     Plot vector field, vector lengths proportional to log(abs(flux)),
 c     from max(abs(flux)) to contrmin*max(abs(flux)):
            call pltvectr(xtail,ytail,xhead,yhead,rheads,jpxy,ipxy,
@@ -365,18 +365,18 @@ cBH170721            RPGX(2)=xmaxq*t0t
               RPGX(2)=xmaxq
 cBH170721            RPGY(2)=xmaxq
               RPGY(2)=xmaxq*t0t
-CPGPLT              CALL PGLINE(2,RPGX,RPGY)
+              CALL PGLINE(2,RPGX,RPGY)
 cBH170721            RPGX(2)=-xmaxq*t0t
               RPGX(2)=-xmaxq
-CPGPLT              CALL PGLINE(2,RPGX,RPGY)
+              CALL PGLINE(2,RPGX,RPGY)
            else
               RPGX(1)=0.
               RPGX(2)=xmaxq/t0t
               RPGY(1)=0.
               RPGY(2)=xmaxq
-CPGPLT              CALL PGLINE(2,RPGX,RPGY)
+              CALL PGLINE(2,RPGX,RPGY)
               RPGX(2)=-xmaxq/t0t
-CPGPLT              CALL PGLINE(2,RPGX,RPGY)
+              CALL PGLINE(2,RPGX,RPGY)
            endif
  190    continue
       return

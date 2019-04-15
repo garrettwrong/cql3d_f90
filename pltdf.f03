@@ -44,13 +44,13 @@ contains
        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp1(0:iyjx2-1,0),1)
        write(t_,550) k
 550    format(1x,"Species ",i2," Distribution Function Contour Plot")
-       !PGPLT        CALL PGPAGE
+               CALL PGPAGE
        itype=1 ! means: plots are made for distr.func f
        call pltcont(k,2,t_,itype) ! for f()
        write(t_,560)
 560    format("Contour values:")
        RILIN=10.
-       !PGPLT        CALL PGMTXT('B',RILIN,-.2,0.,t_)
+               CALL PGMTXT('B',RILIN,-.2,0.,t_)
 
 
        do 11 jcs=1,ncont,4
@@ -60,7 +60,7 @@ contains
              t_(icend:icend)="$"
           endif
           RILIN=RILIN+1.
-          !PGPLT          CALL PGMTXT('B',RILIN,-.2,0.,t_)
+                    CALL PGMTXT('B',RILIN,-.2,0.,t_)
 11     end do
 
 
@@ -76,12 +76,12 @@ contains
 20        end do
           write(t_,530) k,n
 530       format(1x, "Contours of df/dt for species",i2,1x,"during timestep",i5)
-          !PGPLT        CALL PGPAGE
+                  CALL PGPAGE
           itype=2 ! means: plots are made for df
-          !PGPLT        call pltcont(k,1,t_,itype) ! for df
+                  call pltcont(k,1,t_,itype) ! for df
           RILIN=10.
           write(t_,560)
-          !PGPLT        CALL PGMTXT('B',RILIN,-.2,0.,t_)
+                  CALL PGMTXT('B',RILIN,-.2,0.,t_)
           
           do 12 jcs=1,ncont,4
              write(t_,570) (tempcntr(jc),jc=jcs,min(jcs+3,ncont))
@@ -90,7 +90,7 @@ contains
                 t_(icend:icend)="$"
              endif
              RILIN=RILIN+1.
-             !PGPLT          CALL PGMTXT('B',RILIN,-.2,0.,t_)
+                       CALL PGMTXT('B',RILIN,-.2,0.,t_)
 12        end do
 
        endif !  pltd.eq."df" .or. pltd.eq."df_color"

@@ -23,29 +23,29 @@ CMPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
       if (noplots.ne."enabled1") then
-CPGPLT      CALL PGPAGE
+      CALL PGPAGE
       RILIN=0.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,"PARAMETER VALUES")
+      CALL PGMTXT('T',-RILIN,0.,0.,"PARAMETER VALUES")
       
       write(t_,1000) 
  1000 format("EQUILIBRIUM model parameters:")
       RILIN=2.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       
       write(t_,1001)
  1001 format("nnra,nnza give the Maximum size the eqdsk")
       RILIN=3.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       
       write(t_,1002) nnra,nnza
  1002 format("====>NNRA = ",i5,"        ====>NNZA = ",i5)
       RILIN=4.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       
       write(t_,1003) nconteqa
  1003 format("====>NCONTEQA = ",i5)
       RILIN=5.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       endif
 

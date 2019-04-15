@@ -46,25 +46,25 @@ cBH111102      else
 cBH111102         text24='special_calls.ne.enabled'
 cBH111102      endif
 
-CPGPLT      CALL PGPAGE
+      CALL PGPAGE
       write(t_,2001)
       RILIN=0.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       write(t_,2002)
       RILIN=RILIN+2.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       write(t_,2003)
       RILIN=RILIN+1.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       write(t_,2004)
       RILIN=RILIN+1.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       write(t_,2005)
       RILIN=RILIN+1.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       write(t_,2006) text24
       RILIN=RILIN+2.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
 c     Get, write, and plot machine characteristics
 c     by writing a file, reading it, and removing.
@@ -135,37 +135,37 @@ c      write(*,*)'lenpwd=',lenpwd
       
       write(t_,2007)
       RILIN=RILIN+2.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 !      write(line_,1002) line
 !      RILIN=RILIN+1.
 !      CALL PGMTXT('T',-RILIN,0.,0.,line_)
       do i=1,(lenmac/60+1)
          write(line_,1004) line(1+(i-1)*60:i*60)
          RILIN=RILIN+1.
-CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,line_)
+         CALL PGMTXT('T',-RILIN,0.,0.,line_)
       enddo
       write(t_,2008)
       RILIN=RILIN+2.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+      CALL PGMTXT('T',-RILIN,0.,0.,t_)
       do i=1,(lenpwd/60+1)
          write(text256_,1004) text256(1+(i-1)*60:i*60)
          RILIN=RILIN+1.
-CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,text256_)
+         CALL PGMTXT('T',-RILIN,0.,0.,text256_)
       enddo
       write(line,2009) trim(version)
       RILIN=RILIN+2.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,line)
+      CALL PGMTXT('T',-RILIN,0.,0.,line)
 
 c     PGQINF('VERSION', enquires pgplot version being used.
-CPGPLT      CALL PGQINF('VERSION',t_,ilength)
+      CALL PGQINF('VERSION',t_,ilength)
       if (ilength.gt.100) stop 'unlikely ilength problem in ainplt'
       write(line,2010) t_(1:ilength)
       RILIN=RILIN+2.
-CPGPLT      CALL PGMTXT('T',-RILIN,0.,0.,line)
+      CALL PGMTXT('T',-RILIN,0.,0.,line)
  
       WRITE(*,*) line
 c
-CPGPLT      CALL PGPAGE
+      CALL PGPAGE
 
 
  2001 format("OUTPUT FROM THE FOKKER-PLANCK CODE CQL3D.")
@@ -209,7 +209,7 @@ c$$$      call gscpvs(.01,1.)
         ! will be printed at the new page, so it will take iend lines.
         n_count=iend !!1 ! restart counting from new page
         RILIN=-1.
-CPGPLT        CALL PGPAGE
+        CALL PGPAGE
       endif
       !The "wrapping" procedure:
       do i=1,iend  
@@ -221,7 +221,7 @@ CPGPLT        CALL PGPAGE
          !i=5: line(241: 300)  [max possible i, with present setup] 
          !Note -- it is declared: character*300 line, line_
          RILIN=RILIN+1. !shift the text position down by one character height
-CPGPLT         CALL PGMTXT('T',-RILIN,0.,0.,line_)
+         CALL PGMTXT('T',-RILIN,0.,0.,line_)
       enddo
       !YuP: old version, without wrapping:     
       !write(line_,1002) line

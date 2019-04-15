@@ -36,11 +36,11 @@ c
 c     SET ARROW HEAD STYLE:
       ANGLE=90.
       BARB=0.7
-CPGPLT      CALL PGSAH(1,ANGLE,BARB)
+      CALL PGSAH(1,ANGLE,BARB)
 c     SAVE PGPLOT attributes, and reset character/arrowhead size:
-CPGPLT      CALL PGSAVE
+      CALL PGSAVE
       SIZE=10./jpxy
-CPGPLT      CALL PGSCH(SIZE)
+      CALL PGSCH(SIZE)
 c      write(*,*)''
 c      write(*,*)'pltvectr: j,i,x1,y1,x2,y2='
       do 200 i=1,ipxy
@@ -61,12 +61,12 @@ c          if ((RPX1.ne.0.) .and. (RPY1.ne.0.) .and.
 c     +        (RPX2.ne.0.) .and. (RPY2.ne.0.)) then
           if ((RPY1.ne.0.) .and. 
      +        (RPY2.ne.0.)) then
-CPGPLT              CALL PGARRO(RPX1,RPY1,RPX2,RPY2)
+              CALL PGARRO(RPX1,RPY1,RPX2,RPY2)
            endif
  201    continue
  200  continue
 c     RESTORE PGPLOT ATTRIBUTES
-CPGPLT      CALL PGUNSA
+      CALL PGUNSA
 c     
       return
       end

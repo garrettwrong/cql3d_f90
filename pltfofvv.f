@@ -38,7 +38,7 @@ c       Obtain integrated distribution in tam1
         call aminmx(tam1,1,jxq,1,fmin,fmax,kmin,kmax)
         fmin=1.d-08*fmax
         call GSVP2D(.2,.8,.25,.95)
-CPGPLT        CALL PGSCH(1.) ! set character size; default is 1.
+        CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlog$",x(1),x(jxq),fmin,fmax)
         do jj=1,jxq
           if (tam1(jj) .lt. fmin ) tam1(jj)=fmin
@@ -49,41 +49,41 @@ CPGPLT        CALL PGSCH(1.) ! set character size; default is 1.
         write(t_,10040) k
 10040 format("distribution integrated over theta0 for species",2x,i5)
         RILIN=3.
-CPGPLT        CALL PGSCH(0.8) ! set character size; default is 1.
-CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
+        CALL PGSCH(0.8) ! set character size; default is 1.
+        CALL PGMTXT('B',RILIN,0.,0.,t_)
 
         write(t_,10041) 
 10041 format("(normed so that int(0,1)*2pi*x**2*dx=mid-plane ne)")
         RILIN=RILIN+1.
-CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
+        CALL PGMTXT('B',RILIN,0.,0.,t_)
 
         write(t_,10042) vnorm
 10042 format("vnorm=",1x,e14.6,"cm/s")
         RILIN=RILIN+1.
-CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
+        CALL PGMTXT('B',RILIN,0.,0.,t_)
         
         write(t_,10020)
 10020 format( "(log plot)")
         RILIN=RILIN+1.
-CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
+        CALL PGMTXT('B',RILIN,0.,0.,t_)
         
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,10030) n,timet
 10030 format("time step (n) is",i5,5x,"time=",e14.6," secs")
         RILIN=RILIN+1.
-CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
+        CALL PGMTXT('B',RILIN,0.,0.,t_)
 
         write(t_,10031) rovera(lr_)
 10031 format("r/a=",e14.6)
         RILIN=RILIN+1.
-CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
+        CALL PGMTXT('B',RILIN,0.,0.,t_)
 
         write(t_,10032) rr
 10032 format("radial position (R) =",e14.6," cm")
         RILIN=RILIN+1.
-CPGPLT        CALL PGMTXT('B',RILIN,0.,0.,t_)
+        CALL PGMTXT('B',RILIN,0.,0.,t_)
 
-CPGPLT        CALL PGSCH(1.0) ! recover default 1.0 fontsize
+        CALL PGSCH(1.0) ! recover default 1.0 fontsize
         
  20   continue
 

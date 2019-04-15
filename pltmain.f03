@@ -36,30 +36,30 @@ contains
     if (pltend.eq."notplts") goto 10
     if (pltend.eq."last" .and. n.lt.nstop) goto 10
 
-    !PGPLT      CALL PGPAGE
-    !PGPLT      CALL PGSCH(1.0) ! restore to default font size
+          CALL PGPAGE
+          CALL PGSCH(1.0) ! restore to default font size
     !(sometimes font is too big from previous plot)
 
     RILIN=0.
     if (cqlpmod .ne. "enabled") then
-       !PGPLT         CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL RADIAL QUANTITIES")
+                CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL RADIAL QUANTITIES")
     else
-       !PGPLT         CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL PARALLEL QUANTITIES")
+                CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL PARALLEL QUANTITIES")
     endif
     RILIN=RILIN+1.
 
     write(t_,150) n,timet
     RILIN=RILIN+1.
-    !PGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+          CALL PGMTXT('T',-RILIN,0.,0.,t_)
     write(t_,1501) lr_,lrz
     RILIN=RILIN+1.
-    !PGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+          CALL PGMTXT('T',-RILIN,0.,0.,t_)
     write(t_,151) rovera(lr_),rr
     RILIN=RILIN+1.
-    !PGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+          CALL PGMTXT('T',-RILIN,0.,0.,t_)
     write(t_,153) rya(lr_),rpcon(lr_)
     RILIN=RILIN+1.
-    !PGPLT      CALL PGMTXT('T',-RILIN,0.,0.,t_)
+          CALL PGMTXT('T',-RILIN,0.,0.,t_)
 150 format("time step n=",i5,","5x,"time=",1pe12.4," secs")
 1501 format("flux surf=",i3,5x,"total flux surfs=",i3)
 151 format("r/a=",1pe10.3,5x,"radial position (R)=",1pe12.4," cms")
@@ -68,7 +68,7 @@ contains
     if (cqlpmod .eq. "enabled") then
        write(t_,152) l_,sz(l_)
        RILIN=RILIN+1.
-       !PGPLT        CALL PGMTXT('T',-RILIN,0.,0.,t_)
+               CALL PGMTXT('T',-RILIN,0.,0.,t_)
 152    format("orbit at s(",i5,") = ",1pe10.2)
     endif
 
@@ -84,16 +84,16 @@ contains
        write(t_,'(a,f11.3)') ' enorm (kev) =' ,enorm
     endif
     RILIN=RILIN+1.
-    !PGPLT        CALL PGMTXT('T',-RILIN,0.,0.,t_)
+            CALL PGMTXT('T',-RILIN,0.,0.,t_)
     write(t_,161)  vnormdc
     RILIN=RILIN+1.
-    !PGPLT        CALL PGMTXT('T',-RILIN,0.,0.,t_)
+            CALL PGMTXT('T',-RILIN,0.,0.,t_)
     write(t_,162)  vtedc
     RILIN=RILIN+1.
-    !PGPLT        CALL PGMTXT('T',-RILIN,0.,0.,t_)
+            CALL PGMTXT('T',-RILIN,0.,0.,t_)
     write(t_,163)  vtdvnorm
     RILIN=RILIN+1.
-    !PGPLT        CALL PGMTXT('T',-RILIN,0.,0.,t_)
+            CALL PGMTXT('T',-RILIN,0.,0.,t_)
     do k=1,ntotal
        vtdvnorm= vth(k,lr_)/vnorm
        !YuP/note: For time-dependent profiles,
@@ -101,7 +101,7 @@ contains
        ! See profiles.f.
        write(t_,'(a,i2,a,f15.7)') "k=",k, "  vth(k)/vnorm =", vtdvnorm
        RILIN=RILIN+1.
-       !PGPLT         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+                CALL PGMTXT('T',-RILIN,0.,0.,t_)
     enddo
 
 160 format("enorm (kev) = ",f11.3)
@@ -115,7 +115,7 @@ contains
        write(t_,164) zvthes
        write(t_,165) zvtheon
        RILIN=RILIN+1.
-       !PGPLT        CALL PGMTXT('T',-RILIN,0.,0.,t_)
+               CALL PGMTXT('T',-RILIN,0.,0.,t_)
 164    format(";","vthe(s) (sqrt(te/me))/c = ",f15.7)
 165    format("vthe(s)/vnorm = ",f15.7)
     endif
@@ -225,7 +225,7 @@ contains
   !---------------------------------------------------------------------
   subroutine gxglfr(n)
     integer n
-    !PGPLT        CALL PGPAGE
+            CALL PGPAGE
     return
   end subroutine gxglfr
   !---------------------------------------------------------------------
@@ -237,7 +237,7 @@ contains
     PGxmax = xmax
     PGymin = ymin
     PGymax = ymax
-    !PGPLT        CALL PGSVP(PGxmin,PGxmax,PGymin,PGymax)
+            CALL PGSVP(PGxmin,PGxmax,PGymin,PGymax)
     ! PGSVP (XLEFT, XRIGHT, YBOT, YTOP)
     ! XLEFT  (input)  : x-coordinate of left hand edge of viewport, in NDC.
     ! XRIGHT (input)  : x-coordinate of right hand edge of viewport,in NDC.
@@ -262,14 +262,14 @@ contains
     IF ( PGymax-PGymin .le. 1.e-16 ) THEN ! YuP [02-23-2016]
        PGymax= PGymin+1.e-16
     ENDIF
-    !PGPLT        CALL PGSCH(1.) ! set character size; default is 1.
+            CALL PGSCH(1.) ! set character size; default is 1.
     if(scale.eq."linlin$") then
-       !PGPLT          CALL PGSWIN(PGxmin,PGxmax,PGymin,PGymax)
-       !PGPLT          CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+                 CALL PGSWIN(PGxmin,PGxmax,PGymin,PGymax)
+                 CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
     endif
     if(scale.eq."loglin$") then
-       !PGPLT          CALL PGSWIN(log10(PGxmin),log10(PGxmax),PGymin,PGymax)
-       !PGPLT          CALL PGBOX('BCNSTL',0.,0,'BCNST',0.,0)
+                 CALL PGSWIN(log10(PGxmin),log10(PGxmax),PGymin,PGymax)
+                 CALL PGBOX('BCNSTL',0.,0,'BCNST',0.,0)
     endif
     !----------------------------
     PGymin= max(PGymin,1.e-32) ! cannot be negative
@@ -280,12 +280,12 @@ contains
        RPG2= RPG1+1.e-16
     ENDIF
     if(scale.eq."linlog$") then
-       !PGPLT          CALL PGSWIN(PGxmin,PGxmax,RPG1,RPG2)
-       !PGPLT          CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
+                 CALL PGSWIN(PGxmin,PGxmax,RPG1,RPG2)
+                 CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
     endif
     if(scale.eq."loglog$") then
-       !PGPLT          CALL PGSWIN(log10(PGxmin),log10(PGxmax),RPG1,RPG2)
-       !PGPLT          CALL PGBOX('BCNSTL',0.,0,'BCNSTL',0.,0)
+                 CALL PGSWIN(log10(PGxmin),log10(PGxmax),RPG1,RPG2)
+                 CALL PGBOX('BCNSTL',0.,0,'BCNSTL',0.,0)
     endif
     return
   end subroutine gswd2d
@@ -321,7 +321,7 @@ contains
           PGyarray(n)= log10( max(small_p,abs(yarray(n))) )
        enddo
     endif
-    !PGPLT        CALL PGLINE(length,PGxarray,PGyarray)
+            CALL PGLINE(length,PGxarray,PGyarray)
     ! Primitive routine to draw a Polyline. A polyline is one or more
     ! connected straight-line segments.  The polyline is drawn using
     ! the current setting of attributes color-index, line-style, and
@@ -347,10 +347,10 @@ contains
     PGx2 = x2 ! Convert to REAL*4
     PGy1 = y1 ! Convert to REAL*4
     PGy2 = y2 ! Convert to REAL*4
-    !PGPLT        CALL PGMOVE (PGx1, PGy1)
+            CALL PGMOVE (PGx1, PGy1)
     ! Move the "pen" to the point with world
     ! coordinates (X,Y). No line is drawn.
-    !PGPLT        CALL PGDRAW (PGx2, PGy2)
+            CALL PGDRAW (PGx2, PGy2)
     ! Draw a line from the current pen position to the point
     ! with world-coordinates (X,Y). The line is clipped at the edge of the
     ! current window. The new pen position is (X,Y) in world coordinates.
@@ -362,7 +362,7 @@ contains
     real size ! take the compiler default
     INTEGER  LW
     LW = int(size*10. + 1.) !-YuP: Not sure if this conversion is ok
-    !PGPLT        CALL PGSLW(LW)
+            CALL PGSLW(LW)
     ! Set the line-width attribute. This attribute affects lines, graph
     ! markers, and text. The line width is specified in units of 1/200
     ! (0.005) inch (about 0.13 mm) and must be an integer in the range
@@ -376,7 +376,7 @@ contains
     ! sets line style: 1-solid, 2-dashed, 3-dotted, 4-dash-dotted, etc.
     implicit integer (i-n), real*8 (a-h,o-z)
     INTEGER  LS
-    !PGPLT        CALL PGSLS(LS)
+            CALL PGSLS(LS)
     ! Set the line style attribute for subsequent plotting. This
     ! attribute affects line primitives only; it does not affect graph
     ! markers, text, or area fill.
@@ -420,14 +420,14 @@ contains
     real*4 size
     REAL*4 PGsize
     PGsize = size ! Convert to REAL*4
-    !PGPLT         CALL PGSCH(90./PGsize) ! set character size; default is 1.
+             CALL PGSCH(90./PGsize) ! set character size; default is 1.
     return
   end subroutine gstxno
   !---------------------------------------------------------------------
   subroutine  gptx2d(text)
     ! Plot Text
     character*(*) text
-    !PGPLT        call PGPTXT(X, Y, ANGLE, FJUST, text)
+            call PGPTXT(X, Y, ANGLE, FJUST, text)
     ! Primitive routine for drawing text. The text may be drawn at any
     ! angle with the horizontal, and may be centered or left- or right-
     ! justified at a specified position.  Routine PGTEXT provides a

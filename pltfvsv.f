@@ -130,21 +130,21 @@ c-----------------------------
         REMIN=LOG10(EMIN)
         REMAX=LOG10(EMAX)
 
-CPGPLT        CALL PGPAGE
+        CALL PGPAGE
 
-CPGPLT        CALL PGSVP(.2,.8,.35,.9)
+        CALL PGSVP(.2,.8,.35,.9)
         IF ( ReMAX-ReMIN .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            ReMAX= ReMIN+1.e-16
         ENDIF
-CPGPLT        CALL PGSWIN(Rtam1(1),Rtam1(jxq),Remin,Remax)
-CPGPLT        CALL PGSAVE
-CPGPLT        CALL PGSCH(0.8)
-CPGPLT        CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
-CPGPLT        CALL PGUNSA
-CPGPLT        CALL PGSAVE
-CPGPLT        CALL PGSCH(1.44)
-CPGPLT        CALL PGLAB(TX_, 'f', 'Cuts of f vs. v, at cnst pitch angle')
-CPGPLT        CALL PGUNSA
+        CALL PGSWIN(Rtam1(1),Rtam1(jxq),Remin,Remax)
+        CALL PGSAVE
+        CALL PGSCH(0.8)
+        CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
+        CALL PGUNSA
+        CALL PGSAVE
+        CALL PGSCH(1.44)
+        CALL PGLAB(TX_, 'f', 'Cuts of f vs. v, at cnst pitch angle')
+        CALL PGUNSA
 
         do 110 iu=1,5
            if (iu.ne.5) then
@@ -167,7 +167,7 @@ CPGPLT        CALL PGUNSA
               if(tam2(j).le.emin) tam2(j)=emin
               RTAM2(J)=LOG10(TAM2(J))
  100       continue
-CPGPLT           CALL PGLINE(JXQ,RTAM1,RTAM2)
+           CALL PGLINE(JXQ,RTAM1,RTAM2)
           xu=float(iu)
  110   continue
 
@@ -184,16 +184,16 @@ CPGPLT           CALL PGLINE(JXQ,RTAM1,RTAM2)
           write(t_,10020) 
        endif
 
-CPGPLT        CALL PGMTXT('B',7.,0.,0.,t_)
+        CALL PGMTXT('B',7.,0.,0.,t_)
         write(T_,10023) K,ENORM
-CPGPLT        CALL PGMTXT('B',8.,0.,0.,t_)
+        CALL PGMTXT('B',8.,0.,0.,t_)
 
 
 
        write(t_,10010) n,timet
-CPGPLT        CALL PGMTXT('B',9.,0.,0.,t_)
+        CALL PGMTXT('B',9.,0.,0.,t_)
        write(t_,10011) rovera(lr_),rr
-CPGPLT        CALL PGMTXT('B',10.,0.,0.,t_)
+        CALL PGMTXT('B',10.,0.,0.,t_)
 
 c        CALL PGEND
 c        STOP

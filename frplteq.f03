@@ -67,8 +67,8 @@ contains
        ztop=.99-(.9-delz)/2.
     endif
 
-    !PGPLT      CALL PGPAGE
-    !PGPLT      CALL PGSVP(rbot,rtop,zbot,ztop)
+          CALL PGPAGE
+          CALL PGSVP(rbot,rtop,zbot,ztop)
     RBOT=rmincon
     RTOP=rmaxcon*1.2 ! give 20% more outside of last surface
     if(machine.eq."mirror") then
@@ -76,15 +76,14 @@ contains
     endif
     ZBOT=zmincon
     ZTOP=zmaxcon
-    !PGPLT      CALL PGSWIN(rbot,rtop,zbot,ztop)
-    !PGPLT      CALL PGWNAD(rbot,rtop,zbot,ztop)  ! limits
-    !PGPLT      CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
-    !PGPLT      if(machine.eq."mirror") then      
-    !PGPLT      CALL PGLAB('X (cms)','Z (cms)', 'NBI Deposition')
-    !PGPLT      else
-    !PGPLT      CALL PGLAB('Major radius (cms)','Vert height (cms)',
-    !PGPLT     +           'NBI Deposition')
-    !PGPLT      endif
+          CALL PGSWIN(rbot,rtop,zbot,ztop)
+          CALL PGWNAD(rbot,rtop,zbot,ztop)  ! limits
+          CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+          if(machine.eq."mirror") then      
+          CALL PGLAB('X (cms)','Z (cms)', 'NBI Deposition')
+          else
+          CALL PGLAB('Major radius (cms)','Vert height (cms)', 'NBI Deposition')
+          endif
     xyplotmax=0. ! to set limits in (X,Y) plots
     do 10 l=1,lrz,nconskp
        l1=l
@@ -101,9 +100,9 @@ contains
           RTAB1(j)=solr(j,lr_)
           RTAB2(j)=solz(j,lr_)
        enddo
-       !PGPLT        CALL PGLINE(LORBIT(LR_),RTAB1,RTAB2)
+               CALL PGLINE(LORBIT(LR_),RTAB1,RTAB2)
        if(machine.eq."mirror") then
-          !PGPLT        CALL PGLINE(LORBIT(LR_),-RTAB1,RTAB2) !mirror area to the left of Z-axis
+                  CALL PGLINE(LORBIT(LR_),-RTAB1,RTAB2) !mirror area to the left of Z-axis
        endif
 
        !       if eqsym.ne."none", still need to plot lower flux surface
@@ -114,9 +113,9 @@ contains
           DO J=1,LORBIT(LR_)
              RTAB2(J)=SOLZ(J,LR_)
           ENDDO
-          !PGPLT           CALL PGLINE(LORBIT(LR_),RTAB1,RTAB2)
+                     CALL PGLINE(LORBIT(LR_),RTAB1,RTAB2)
           if(machine.eq."mirror") then
-             !PGPLT           CALL PGLINE(LORBIT(LR_),-RTAB1,RTAB2) !mirror area to the left of Z-axis
+                        CALL PGLINE(LORBIT(LR_),-RTAB1,RTAB2) !mirror area to the left of Z-axis
           endif
        endif
 
@@ -133,12 +132,12 @@ contains
           RTAB1(ilim)=rcontr(ilim)
           RTAB2(ilim)=zcontr(ilim)
        enddo
-       !PGPLT        CALL PGSLS(2) ! 2-> dashed
-       !PGPLT        CALL PGLINE(ncontr_,RTAB1,RTAB2)
+               CALL PGSLS(2) ! 2-> dashed
+               CALL PGLINE(ncontr_,RTAB1,RTAB2)
        if(machine.eq."mirror") then
-          !PGPLT        CALL PGLINE(ncontr_,-RTAB1,RTAB2) !mirror area to the left of Z-axis
+                  CALL PGLINE(ncontr_,-RTAB1,RTAB2) !mirror area to the left of Z-axis
        endif
-       !PGPLT        CALL PGSLS(1) ! 1-> restore solid line
+               CALL PGSLS(1) ! 1-> restore solid line
     endif
     if(nlimiter.gt.1) then
        ! YuP[2016] Add "last surface" (plasma border), if available
@@ -149,12 +148,12 @@ contains
           RTAB1(ilim)=rlimiter(ilim)
           RTAB2(ilim)=zlimiter(ilim)
        enddo
-       !PGPLT        CALL PGSLW(lnwidth*2) ! bold
-       !PGPLT        CALL PGLINE(nline,RTAB1,RTAB2)
+               CALL PGSLW(lnwidth*2) ! bold
+               CALL PGLINE(nline,RTAB1,RTAB2)
        if(machine.eq."mirror") then
-          !PGPLT        CALL PGLINE(nline,-RTAB1,RTAB2) !mirror area to the left of Z-axis
+                  CALL PGLINE(nline,-RTAB1,RTAB2) !mirror area to the left of Z-axis
        endif
-       !PGPLT        CALL PGSLW(lnwidth) ! restore
+               CALL PGSLW(lnwidth) ! restore
     endif
 
     !..................................................................
@@ -175,7 +174,7 @@ contains
              ! so the horizontal axis is X
           endif
           RPG2=ZPTS(I)
-          !PGPLT            CALL PGPT1(RPG1,RPG2,17)
+                      CALL PGPT1(RPG1,RPG2,17)
           xyplotmax= max(xyplotmax,RPG1) ! limits for plots in (X,Y)
        enddo
     endif
@@ -185,15 +184,14 @@ contains
     !---- PLOTS in (X,Y) (top view) -------------------------------------------   
     rbot=.1
     rtop=.9
-    !PGPLT      CALL PGPAGE
-    !PGPLT      CALL PGSVP(rbot,rtop,rbot,rtop)
+          CALL PGPAGE
+          CALL PGSVP(rbot,rtop,rbot,rtop)
     RBOT=-rmaxcon
     RTOP= rmaxcon
-    !PGPLT      CALL PGSWIN(rbot,rtop,rbot,rtop)
-    !PGPLT      CALL PGWNAD(-xyplotmax,xyplotmax,-xyplotmax,xyplotmax) ! limits 
-    !PGPLT      CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
-    !PGPLT      CALL PGLAB('X (cms)','Y (cms)',
-    !PGPLT     +           'NBI Deposition')
+          CALL PGSWIN(rbot,rtop,rbot,rtop)
+          CALL PGWNAD(-xyplotmax,xyplotmax,-xyplotmax,xyplotmax) ! limits 
+          CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+          CALL PGLAB('X (cms)','Y (cms)','NBI Deposition')
     ! Plot circles for the largest and smallest FP surfaces.
     nline=LFIELDA ! could be other number, but RTAB1 has LFIELDA size
     r_surf=rpcon(lrz)  ! R radius of largest FP surf, outboard
@@ -202,28 +200,28 @@ contains
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
-    !PGPLT      CALL PGLINE(nline,RTAB1,RTAB2)
+          CALL PGLINE(nline,RTAB1,RTAB2)
     r_surf=rmcon(lrz)  ! R radius of largest FP surf, inboard
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
-    !PGPLT      CALL PGLINE(nline,RTAB1,RTAB2)
+          CALL PGLINE(nline,RTAB1,RTAB2)
     r_surf=rpcon(1)  ! R radius of smallest FP surf, outboard 
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
-    !PGPLT      CALL PGLINE(nline,RTAB1,RTAB2)
+          CALL PGLINE(nline,RTAB1,RTAB2)
     r_surf=rmcon(1)  ! R radius of smallest FP surf, inboard 
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
-    !PGPLT      CALL PGLINE(nline,RTAB1,RTAB2)
+          CALL PGLINE(nline,RTAB1,RTAB2)
 
     if(ncontr.gt.1) then
        ! YuP[2016] Add "last surface" (plasma border), if available
@@ -234,9 +232,9 @@ contains
           RTAB1(iline)= r_surf*cos(tora)
           RTAB2(iline)= r_surf*sin(tora)
        enddo
-       !PGPLT        CALL PGSLS(2) ! 2-> dashed
-       !PGPLT        CALL PGLINE(nline,RTAB1,RTAB2)
-       !PGPLT        CALL PGSLS(1) ! 1 - solid
+               CALL PGSLS(2) ! 2-> dashed
+               CALL PGLINE(nline,RTAB1,RTAB2)
+               CALL PGSLS(1) ! 1 - solid
     endif
     if(nlimiter.gt.1) then
        ! YuP[2016] Add "last surface" (plasma border), if available
@@ -247,9 +245,9 @@ contains
           RTAB1(iline)= r_surf*cos(tora)
           RTAB2(iline)= r_surf*sin(tora)
        enddo
-       !PGPLT        CALL PGSLW(lnwidth*2) ! bold
-       !PGPLT        CALL PGLINE(nline,RTAB1,RTAB2)
-       !PGPLT        CALL PGSLW(lnwidth) ! restore
+               CALL PGSLW(lnwidth*2) ! bold
+               CALL PGLINE(nline,RTAB1,RTAB2)
+               CALL PGSLW(lnwidth) ! restore
     endif
 
     !..................................................................
@@ -264,7 +262,7 @@ contains
        do i=1,ipts,iskip
           RPG1=XPTS(I)
           RPG2=YPTS(I)
-          !PGPLT            CALL PGPT1(RPG1,RPG2,17)
+                      CALL PGPT1(RPG1,RPG2,17)
        enddo
     endif
 
