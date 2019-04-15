@@ -1,7 +1,7 @@
 c
 c
-      
-      function ghelec(i,j,k)
+      ! follow compiler default real
+      real*8 function ghelec(i,j,k)
       use param_mod
       use cqcomm_mod
       use advnce_mod

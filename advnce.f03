@@ -500,7 +500,7 @@ contains
 
   function fpip(i,j)
     !XXX integer :: k=1, l_=1
-    fpip = f(i+1,j,advnce_k,l_) + cvmgt(bsl(j,advnce_k,l_),0.,(i+1).eq.itl)
+    fpip = f(i+1,j,advnce_k,l_) + cvmgt(bsl(j,advnce_k,l_),zero,(i+1).eq.itl)
   end function fpip
 
   function fpi0(i,j)

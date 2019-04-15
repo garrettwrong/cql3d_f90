@@ -1216,6 +1216,7 @@ contains
       END
       SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, &
                          INFO )
+        use iso_c_binding, only : c_double
 !*
 !*  -- LAPACK routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -1227,7 +1228,7 @@ contains
 !*     ..
 !*     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   AB( LDAB, * ), B( LDB, * )
+      real(c_double)   AB( LDAB, * ), B( LDB, * )
 !*     ..
 !*
 !*  Purpose

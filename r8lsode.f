@@ -10,13 +10,15 @@ c to avoid conflicts with a possible common-name function.
 c Also, the common blocks /ls0001/ and /eh0001/ are renamed into
 c /ls_lsode/ and /eh_lsode/
 
+
       subroutine lsode (f, neq, y, t, tout, itol, rtol, atol, itask,
      1            istate, iopt, rwork, lrw, iwork, liw, jac, mf)
+      use iso_c_binding, only : c_double
       use r8subs_mod, only : d1mach
       save
       external f, jac
       integer neq, itol, itask, istate, iopt, lrw, iwork, liw, mf
-      double precision y, t, tout, rtol, atol, rwork
+      real(c_double) y, t, tout, rtol, atol, rwork
       dimension neq(*), y(*), rtol(*), atol(*), rwork(lrw), iwork(liw)
 c-----------------------------------------------------------------------
 c this is the march 30, 1987 version of
@@ -964,10 +966,10 @@ c-----------------------------------------------------------------------
      1   maxord, maxcor, msbp, mxncf, n, nq, nst, nfe, nje, nqu
       integer i, i1, i2, iflag, imxer, kgo, lf0,
      1   leniw, lenrw, lenwm, ml, mord, mu, mxhnl0, mxstp0
-      double precision rowns,
+      real(c_double) rowns,
      1   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround
-      double precision atoli, ayi, big, ewti, h0, hmax, hmx, rh, rtoli,
-     1   tcrit, tdist, tnext, tol, tolsf, tp, size, sum, w0, vnorm_lsose
+      real(c_double) atoli, ayi, big, ewti, h0, hmax, hmx, rh, rtoli,
+     1   tcrit, tdist, tnext, tol, tolsf, tp, size, sum, w0, vnorm_lsode
 CXXX     2   d1mach, vnorm_lsode
       dimension mord(2)
       logical ihit
@@ -1541,7 +1543,7 @@ c   lunit  = default value of logical unit number for printing of error
 c            messages.
 c-----------------------------------------------------------------------
       integer illin, iduma, ntrep, idumb, iowns, icomm, mesflg, lunit
-      double precision rowns, rcomm
+      real*8 rowns, rcomm
       common /ls_lsode/ rowns(209), rcomm(9),
      1   illin, iduma(10), ntrep, idumb(2), iowns(6), icomm(19)
       common /eh_lsode/ mesflg, lunit
@@ -1552,11 +1554,12 @@ c----------------------- end of block data -----------------------------
       end block data
 
       subroutine cfode (meth, elco, tesco)
+      use iso_c_binding, only : c_double
 clll. optimize
       integer meth
       integer i, ib, nq, nqm1, nqp1
-      double precision elco, tesco
-      double precision agamq, fnq, fnqm1, pc, pint, ragq,
+      real(c_double) elco, tesco
+      real(c_double)  agamq, fnq, fnqm1, pc, pint, ragq,
      1   rqfac, rq1fac, tsign, xpin
       dimension elco(13,12), tesco(3,12)
 c-----------------------------------------------------------------------
@@ -1664,6 +1667,8 @@ c store coefficients in elco and tesco. --------------------------------
 c----------------------- end of subroutine cfode -----------------------
       end
       subroutine ewset (n, itol, rtol, atol, ycur, ewt)
+      use iso_c_binding, only : c_double
+
 clll. optimize
 c-----------------------------------------------------------------------
 c this subroutine sets the error weight vector ewt according to
@@ -1673,7 +1678,7 @@ c depending on the value of itol.
 c-----------------------------------------------------------------------
       integer n, itol
       integer i
-      double precision rtol, atol, ycur, ewt
+      real(c_double) rtol, atol, ycur, ewt
       dimension rtol(*), atol(*), ycur(n), ewt(n)
 c
       go to (10, 20, 30, 40), itol
@@ -1696,16 +1701,17 @@ c
 c----------------------- end of subroutine ewset -----------------------
       end
       subroutine intdy (t, k, yh, nyh, dky, iflag)
+      use iso_c_binding, only : c_double
 clll. optimize
       integer k, nyh, iflag
       integer iownd, iowns,
      1   icf, ierpj, iersl, jcur, jstart, kflag, l, meth, miter,
      2   maxord, maxcor, msbp, mxncf, n, nq, nst, nfe, nje, nqu
       integer i, ic, j, jb, jb2, jj, jj1, jp1
-      double precision t, yh, dky
-      double precision rowns,
+      real(c_double) t, yh, dky
+      real(c_double) rowns,
      1   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround
-      double precision c, r, s, tp
+      real(c_double) c, r, s, tp
       dimension yh(nyh,*), dky(*)
       common /ls_lsode/ rowns(209),
      2   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround,
@@ -1781,6 +1787,7 @@ c----------------------- end of subroutine intdy -----------------------
       end
       subroutine prepj (neq, y, yh, nyh, ewt, ftem, savf, wm, iwm,
      1   f, jac)
+      use iso_c_binding, only : c_double
 clll. optimize
       external f, jac
       integer neq, nyh, iwm
@@ -1789,10 +1796,10 @@ clll. optimize
      2   maxord, maxcor, msbp, mxncf, n, nq, nst, nfe, nje, nqu
       integer i, i1, i2, ier, ii, j, j1, jj, lenp,
      1   mba, mband, meb1, meband, ml, ml3, mu, np1
-      double precision y, yh, ewt, ftem, savf, wm
-      double precision rowns,
+      real(c_double) y, yh, ewt, ftem, savf, wm
+      real(c_double) rowns,
      1   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround
-      double precision con, di, fac, hl0, r, r0, srur, yi, yj, yjj,
+      real(c_double) con, di, fac, hl0, r, r0, srur, yi, yj, yjj,
      1   vnorm_lsode
       dimension neq(*), y(*), yh(nyh,*), ewt(*), ftem(*), savf(*),
      1   wm(*), iwm(*)
@@ -1951,16 +1958,17 @@ c do lu decomposition of p. --------------------------------------------
 c----------------------- end of subroutine prepj -----------------------
       end
       subroutine solsy (wm, iwm, x, tem)
+      use iso_c_binding, only : c_double
 clll. optimize
       integer iwm
       integer iownd, iowns,
      1   icf, ierpj, iersl, jcur, jstart, kflag, l, meth, miter,
      2   maxord, maxcor, msbp, mxncf, n, nq, nst, nfe, nje, nqu
       integer i, meband, ml, mu
-      double precision wm, x, tem
-      double precision rowns,
+      real(c_double) wm, x, tem
+      real(c_double) rowns,
      1   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround
-      double precision di, hl0, phl0, r
+      real(c_double) di, hl0, phl0, r
       dimension wm(*), iwm(*), x(*), tem(*)
       common /ls_lsode/ rowns(209),
      2   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround,
@@ -2019,6 +2027,7 @@ c
 c----------------------- end of subroutine solsy -----------------------
       end
       subroutine srcom (rsav, isav, job)
+      use iso_c_binding, only : c_double
       save
 c-----------------------------------------------------------------------
 c this routine saves or restores (depending on job) the contents of
@@ -2035,7 +2044,7 @@ c-----------------------------------------------------------------------
       integer isav, job
       integer ieh, ils
       integer i, lenils, lenrls
-      double precision rsav,   rls
+      real(c_double) rsav,   rls
       dimension rsav(*), isav(*)
       common /ls_lsode/ rls(218), ils(39)
       common /eh_lsode/ ieh(2)
@@ -2063,6 +2072,7 @@ c----------------------- end of subroutine srcom -----------------------
       end
       subroutine stode (neq, y, yh, nyh, yh1, ewt, savf, acor,
      1   wm, iwm, f, jac, pjac, slvs)
+      use iso_c_binding, only : c_double
 clll. optimize
       external f, jac, pjac, slvs
       integer neq, nyh, iwm
@@ -2070,10 +2080,10 @@ clll. optimize
      1   icf, ierpj, iersl, jcur, jstart, kflag, l, meth, miter,
      2   maxord, maxcor, msbp, mxncf, n, nq, nst, nfe, nje, nqu
       integer i, i1, iredo, iret, j, jb, m, ncf, newq
-      double precision y, yh, yh1, ewt, savf, acor, wm
-      double precision conit, crate, el, elco, hold, rmax, tesco,
+      real(c_double) y, yh, yh1, ewt, savf, acor, wm
+      real(c_double) conit, crate, el, elco, hold, rmax, tesco,
      2   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround
-      double precision dcon, ddn, del, delp, dsm, dup, exdn, exsm, exup,
+      real(c_double) dcon, ddn, del, delp, dsm, dup, exdn, exsm, exup,
      1   r, rh, rhdn, rhsm, rhup, told, vnorm_lsode
       dimension neq(*), y(*), yh(nyh,*), yh1(*), ewt(*), savf(*),
      1   acor(*), wm(*), iwm(*)
@@ -2534,7 +2544,8 @@ c-----------------------------------------------------------------------
       return
 c----------------------- end of subroutine stode -----------------------
       end
-      double precision function vnorm_lsode(n, v, w)
+      real(c_double) function vnorm_lsode(n, v, w)
+      use iso_c_binding, only : c_double
 clll. optimize
 c-----------------------------------------------------------------------
 c this function routine computes the weighted root-mean-square norm
@@ -2543,7 +2554,7 @@ c contained in the array w of length n..
 c   vnorm_lsode = sqrt( (1/n) * sum( v(i)*w(i) )**2 )
 c-----------------------------------------------------------------------
       integer n,   i
-      double precision v, w,   sum
+      real(c_double) v, w,   sum
       dimension v(n), w(n)
       sum = 0.0d0
       do 10 i = 1,n
@@ -2553,15 +2564,16 @@ c-----------------------------------------------------------------------
 c----------------------- end of function vnorm_lsode -------------------------
       end
       subroutine xerrwv (msg, nmes, nerr, level, ni, i1, i2, nr, r1, r2)
+      use iso_c_binding, only : c_double
       integer msg, nmes, nerr, level, ni, i1, i2, nr,
      1   i, lun, lunit, mesflg, ncpw, nch, nwds
-      double precision r1, r2
+      real(c_double) r1, r2
       dimension msg(nmes)
 c-----------------------------------------------------------------------
 c subroutines xerrwv, xsetf, and xsetun, as given here, constitute
 c a simplified version of the slatec error handling package.
 c written by a. c. hindmarsh at llnl.  version of march 30, 1987.
-c this version is in double precision.
+c this version is in real(c_double).
 c
 c all arguments are input arguments.
 c
@@ -2584,7 +2596,7 @@ c 2. the value of nmes is assumed to be at most 60.
 c    (multi-line messages are generated by repeated calls.)
 c 3. if level = 2, control passes to the statement   stop
 c    to abort the run.  this statement may be machine-dependent.
-c 4. r1 and r2 are assumed to be in double precision and are printed
+c 4. r1 and r2 are assumed to be in real(c_double) and are printed
 c    in d21.13 format.
 c 5. the common block /eh_lsode/ below is data-loaded (a machine-
 c    dependent feature) with default values.
@@ -2667,6 +2679,8 @@ c abort the run if level = 2. ------------------------------------------
 c----------------------- end of subroutine xerrwv ----------------------
       end
       subroutine xsetf (mflag)
+      use iso_c_binding, only : c_double
+
 c
 c this routine resets the print control flag mflag.
 c
@@ -2678,6 +2692,8 @@ c
 c----------------------- end of subroutine xsetf -----------------------
       end
       subroutine xsetun (lun)
+      use iso_c_binding, only : c_double
+
 c
 c this routine resets the logical unit number for messages.
 c
@@ -2696,7 +2712,8 @@ c----------STUB-ROUTINES: Full versions need to be brought in from
 c----------LINPACK, if they are to be called.  [BH, 100622]
 
       subroutine dgesl(dum,idum1,idum2,idum3,ddum,idum4)
-      double precision dum,ddum
+      use iso_c_binding, only : c_double
+      real(c_double) dum,ddum
       dimension ddum(*)
       integer idum1,idum2,idum3,idum4
       write(*,*)'LINPACK subroutine dgesl not presently installed'
@@ -2706,7 +2723,8 @@ c----------LINPACK, if they are to be called.  [BH, 100622]
 
       subroutine dgbsl(dum,idum1,idum2,idum3,idum4,idum5,
      +     ddum,idum6)
-      double precision dum,ddum
+      use iso_c_binding, only : c_double
+      real(c_double) dum,ddum
       dimension ddum(*)
       integer idum1,idum2,idum3,idum4,idum5,idum6
       write(*,*)'LINPACK subroutine dgbsl not presently installed'
@@ -2715,7 +2733,9 @@ c----------LINPACK, if they are to be called.  [BH, 100622]
       end
 
       subroutine dgefa(dum,idum1,idum2,idum3,idum4)
-      double precision dum
+      use iso_c_binding, only : c_double
+
+      real(c_double) dum
       integer idum1,idum2,idum3,idum4
       write(*,*)'LINPACK subroutine dgefa not presently installed'
       STOP
@@ -2724,7 +2744,9 @@ c----------LINPACK, if they are to be called.  [BH, 100622]
 
       subroutine dgbfa(dum,idum1,idum2,idum3,idum4,
      +     idum5,idum6)
-      double precision dum
+      use iso_c_binding, only : c_double
+
+      real(c_double) dum
       integer idum1,idum2,idum3,idum4,idum5,idum6
       write(*,*)'LINPACK subroutine dgbfa not presently installed'
       STOP

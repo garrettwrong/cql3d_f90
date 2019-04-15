@@ -229,9 +229,9 @@ contains
     return
   end subroutine gxglfr
   !---------------------------------------------------------------------
-  subroutine gsvp2d(xmin,xmax,ymin,ymax) ! called explicitly with real*4 args
+  subroutine gsvp2d(xmin,xmax,ymin,ymax)
     ! xmin,...defines where on the frame the data is plotted.
-    REAL*8 xmin,xmax,ymin,ymax
+    REAL xmin,xmax,ymin,ymax ! let these take the compiler default...
     REAL*4 PGxmin,PGxmax,PGymin,PGymax ! PGPLOT uses REAL*4
     PGxmin = xmin
     PGxmax = xmax
@@ -245,6 +245,7 @@ contains
     ! YTOP   (input)  : y-coordinate of top  edge of viewport, in NDC.
     return
   end subroutine gsvp2d
+  
   !---------------------------------------------------------------------
   subroutine gswd2d(scales,xmin,xmax,ymin,ymax) ! NOT USED ANYMORE?
     use r8subs_mod, only : rbound
@@ -358,7 +359,7 @@ contains
   !---------------------------------------------------------------------
   subroutine gslnsz(size) ! called explicitly with real*4 args
     ! set line size (width), where 0. is the default.
-    real*8 size
+    real size ! take the compiler default
     INTEGER  LW
     LW = int(size*10. + 1.) !-YuP: Not sure if this conversion is ok
     !PGPLT        CALL PGSLW(LW)

@@ -2313,7 +2313,7 @@ contains
                 transpose = 'n'
                 !        call sgbtrs(transpose,inewjx,ml,mu,inbrhs,abd,md1abd,ipivot
                 ! XXXX
-                call dgbtrs(transpose,inewjx,ml,mu,inbrhs,REAL(abd),md1abd, &
+                call dgbtrs(transpose,inewjx,ml,mu,inbrhs,abd,md1abd, &
                      ipivot,rhs,inewjx,info)
                 
                 if (info .ne. 0) then
