@@ -125,7 +125,7 @@ $(SOURCES):        $(INCLUDES)
 # Do not fret, they're not so bad.
 DAGOBJS = param.o cqcomm.o r8subs.o advnce.o pltmain.o \
           pltdf.o eqrhopsi.o equilib.o \
-          impavnc0.o  frplteq.o tdeqdsk.o  
+          impavnc0.o  frplteq.o tdeqdsk.o bsu.o bsl.o
 # And this describes their dag...
 cqcomm.o: cqcomm.f03 param.o
 r8subs.o: r8subs.f03 cqcomm.o
