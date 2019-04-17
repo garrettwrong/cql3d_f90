@@ -17,7 +17,6 @@ c     files - the code will CREATE an eqdsk file later.
 c..................................................................
 
 
-      common /tsc1/ psimago,psilimo
       parameter (nra=33,nza=65)
       dimension epsinew(nra,nza),ernew(nra),eznew(nza)
 
