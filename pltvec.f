@@ -6,6 +6,7 @@ c
       use cqcomm_mod
       use advnce_mod
       use r8subs_mod, only : dcopy
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...................................................................

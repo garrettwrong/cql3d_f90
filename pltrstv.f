@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use pltmain_mod, only : gxglfr, gsvp2d, gswd2d, gpcv2d
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Plot electron resistivity and related quantities.
@@ -21,8 +22,10 @@ c
       if (kelecg .eq. 0 .or. abs(elecfld(lr_)) .lt. 1.e-10) go to 190
 
       call GXGLFR(0)    
-      call aminmx(sptzrp(2,lmdpln_),1,nch(l_)-1,1,emin,emax,kmin,kmax)
-      call aminmx(restp(2,lr_),1,nch(l_)-1,1,fmin,fmax,kmin,kmax)
+      call aminmx(sptzrp(2:nch(l_),lmdpln_),1,nch(l_)-1,
+     +     1,emin,emax,kmin,kmax)
+      call aminmx(restp(2:nch(l_),lr_),1,nch(l_)-1,
+     +     1,fmin,fmax,kmin,kmax)
       if (fmin .lt. emin) emin=fmin
       if (fmax .gt. emax) emax=fmax
       call GSVP2D(.2,.8,.6,.9) !---------------> 1st subplot
@@ -51,7 +54,8 @@ c
 
       illeff=lr_
       if (cqlpmod .eq. "enabled") illeff=ls_
-      call aminmx(rovsp(2,illeff),1,nch(l_)-1,1,emin,emax,kmin,kmax)
+      call aminmx(rovsp(2:nch(l_),illeff),1,nch(l_)-1,
+     +      1,emin,emax,kmin,kmax)
       
       call GSVP2D(.2,.8,.2,.5) !---------------> 2nd subplot
       call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),

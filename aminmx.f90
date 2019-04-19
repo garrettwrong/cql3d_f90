@@ -1,11 +1,16 @@
-      subroutine aminmx(array,ifirst,ilast,istride,amin,amax,
-     +  indmin,indmax)
+module aminmx_mod
+
+
+contains
+
+      subroutine aminmx(array,ifirst,ilast,istride,amin,amax, &
+        indmin,indmax)
       implicit integer (i-n), real*8 (a-h,o-z)
 
-c     compute max and min with indices
+!     compute max and min with indices
 
       dimension array(ilast)
-c
+!
       amin = array(ifirst)
       amax = array(ifirst)
       indmin = ifirst
@@ -20,6 +25,7 @@ c
           indmax = i
         end if
       end do
-c
+!
       return
       end
+end module aminmx_mod

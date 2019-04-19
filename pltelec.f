@@ -4,6 +4,7 @@ c
       subroutine pltelec
       use param_mod
       use cqcomm_mod
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -16,7 +17,8 @@ c
 
       if (noplots.eq."enabled1") return
 c$$$      call gxglfr(0)
-      call aminmx(densz(1,ngen+1,negyrg,lr_),1,lz,1,fmin,fmax,kmin,kmax)
+      call aminmx(densz(1:lz,ngen+1,negyrg,lr_),
+     + 1,lz,1,fmin,fmax,kmin,kmax)
       if (fmin .eq. fmax) fmin=.9*fmax-1.e-20
 c$$$      call gswd2d("linlin$",pol(1,lr_),pol(lz,lr_),fmin,fmax)
 c$$$      call gsvp2d(.2,.8,.25,.95)

@@ -1,17 +1,23 @@
-c
-c
-      subroutine abchief
-      use param_mod
-      use cqcomm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
-      save
+module abchief_mod
+!
+!
 
-c
-c      cputime=second()
+contains
 
-c.......................................................................
-c     2d code controlled by achief1, called at beginning of tdchief
-c.......................................................................
-      call tdchief
-      return
-      end
+subroutine abchief
+use param_mod
+use cqcomm_mod
+implicit integer (i-n), real*8 (a-h,o-z)
+save
+
+!
+!      cputime=second()
+
+!.......................................................................
+!     2d code controlled by achief1, called at beginning of tdchief
+!.......................................................................
+!all tdchief
+return
+end
+
+end module abchief_mod

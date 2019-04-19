@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 c...  
 cmnt  This routine plots the parallel distribution function.
@@ -88,7 +89,7 @@ c990131        fmax=amax1(fmax1,fmax2)
         CALL PGMTXT('B',RILIN,0.,0.,t_)
        
         call GXGLFR(0) ! new page(s)
-        call aminmx(fl(1),1,2*jpxyhm,1,fmin,fmax,kmin,kmax)
+        call aminmx(fl(1:2*jpxyhm),1,2*jpxyhm,1,fmin,fmax,kmin,kmax)
         fmin=1.d-08*fmax
         call GSVP2D(.2,.8,.25,.95)
         CALL PGSCH(1.) ! set character size; default is 1.

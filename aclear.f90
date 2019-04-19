@@ -1,28 +1,33 @@
-c
-c
+module aclear_mod
+
+!
+!
+
+contains
+
       subroutine aclear
       use param_mod
       use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-c..................................................................
-c     This routine clears some arrays, especially radial arrays, before
-c     starting the calculus
-c..................................................................
+!..................................................................
+!     This routine clears some arrays, especially radial arrays, before
+!     starting the calculus
+!..................................................................
 
-c.......................................................................
+!.......................................................................
 
-c     Scalars
+!     Scalars
       iupdn=0
       timet=0.d0 ! YuP[2017] added
       n=0 ! YuP[2017] added
 
-c.......................................................................
-cl    1. 1-D arrays
-c.......................................................................
+!.......................................................................
+!l    1. 1-D arrays
+!.......................................................................
 
-c     lrza
+!     lrza
       do 100 l=1,lrza
         currt(l)=0.0
         currtp(l)=0.0
@@ -119,7 +124,7 @@ c     lrza
  101  continue
       rya(lrza+1)=0.0
 
-c     lrorsa
+!     lrorsa
       do 110 l=1,lrorsa
         n_(l)=0        ! YuP[2017]added
         time_(l)=0.d0  ! YuP[2017]added
@@ -140,16 +145,16 @@ c     lrorsa
         sptzr(l)=0.0
  110  continue
 
-c     lsa
-c%OS  do 120 l=1,lsa
-c%OS  120  continue
+!     lsa
+!%OS  do 120 l=1,lsa
+!%OS  120  continue
 
 
-c.......................................................................
-cl    2. 2-D arrays
-c.......................................................................
+!.......................................................................
+!l    2. 2-D arrays
+!.......................................................................
 
-c     (ntotala,lrza) ; (ntotala,lrorsa)
+!     (ntotala,lrza) ; (ntotala,lrorsa)
       do 200 k=1,ntotala
         reden(k,0)=0.0
         temp(k,0)=0.0
@@ -171,10 +176,10 @@ c     (ntotala,lrza) ; (ntotala,lrorsa)
  202    continue
  200  continue
 
-c     (ngena,.)
+!     (ngena,.)
       do 210 k=1,ngena
 
-c     (ngena,lrza)
+!     (ngena,lrza)
         do 215 l=1,lrza
           curr(k,l)=0.0
           hnis(k,l)=0.0
@@ -204,7 +209,7 @@ c     (ngena,lrza)
           fcurra(k,l)=0.0
  215    continue
 
-c     (ngena,lrorsa)
+!     (ngena,lrorsa)
         do 216 l=1,lrorsa
           currm(k,l)=0.0
           energym(k,l)=0.0
@@ -212,7 +217,7 @@ c     (ngena,lrorsa)
  216    continue
  210  continue
 
-c     (lrza,nmodsa)
+!     (lrza,nmodsa)
       do 220 l=1,nmodsa
         do 221 k=1,lrza
           powrf(k,l)=0.0
@@ -221,12 +226,12 @@ c     (lrza,nmodsa)
  221    continue
  220  continue
 
-c     (nplota)
+!     (nplota)
       do i=1,nplota
          tplot(i)=-one
          tplt3d(i)=-one
       enddo
-c     (nsavea)
+!     (nsavea)
       do i=1,nsavea
          tsave(i)=-one
       enddo
@@ -234,3 +239,4 @@ c     (nsavea)
 
       return
       end
+end module aclear_mod

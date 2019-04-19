@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Plot energy, density, parallel current and density conservation
@@ -31,7 +32,8 @@ c...
 cmnt  Generate plot "endn"
 c...  
         call GXGLFR(0)    
-        call aminmx(pdens(1,k,l_),1,nch(l_),1,emin,emax,kmin,kmax)
+        call aminmx(pdens(1:nch(l_),k,l_),1,nch(l_),
+     +       1,emin,emax,kmin,kmax)
         if (abs(emin-emax).lt.emax*dgts) emax=emin+.001*abs(emin)
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range        
         !write(*,*) 'pltends-1:', ptime(1,l_),ptime(nch(l_),l_),emin,emax
@@ -48,7 +50,8 @@ c...
         CALL PGSCH(0.8) ! set character size; default is 1.
         CALL PGMTXT('LV',RILIN,0.,0.,t_) ! Left-Vertical
 
-        call aminmx(pengy(1,k,l_),1,nch(l_),1,emin,emax,kmin,kmax)
+        call aminmx(pengy(1:nch(l_),k,l_),1,nch(l_),
+     +          1,emin,emax,kmin,kmax)
         if (abs(emin-emax).lt.emax*dgts) emax=emin+.001*abs(emin)
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range        
         !write(*,*) 'pltends-2:', ptime(1,l_),ptime(nch(l_),l_),emin,emax
@@ -92,7 +95,8 @@ c...
 cmnt  Generate plot "curr"
 c...  
         call GXGLFR(0) ! new page
-        call aminmx(pcurr(1,k,l_),1,nch(l_),1,emin,emax,kmin,kmax)
+        call aminmx(pcurr(1:nch(l_),k,l_),
+     +       1,nch(l_),1,emin,emax,kmin,kmax)
         if (abs(emin-emax).lt.emax*dgts) emax=emin+.001*abs(emin)
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range
         !write(*,*) 'pltends-3:', ptime(1,l_),ptime(nch(l_),l_),emin,emax
@@ -118,7 +122,8 @@ c...
 cmnt  Generate plot "currv"
 c...  
         call GXGLFR(0) ! new page
-        call aminmx(currv(1,k,l_),1,jx,1,fnmin,fnmax,kmin,kmax)
+        call aminmx(currv(1:jx,k,l_),1,jx,
+     +      1,fnmin,fnmax,kmin,kmax)
         if (abs(fnmin-fnmax).lt.fnmax*dgts) fnmax=fnmin+.001*abs(fnmin)
         !write(*,*) 'pltends-4:', x(1),x(jx),fnmin,fnmax
         call GSVP2D(.2,.8,.6,.9) !---------------> 1st subplot
@@ -127,7 +132,8 @@ c...
         call GPCV2D(x,currv(1:jx,k,l_),jx)
         CALL PGLAB('v/vnorm','current: J(v)',' ') ! 
         
-        call aminmx(currvs(1,k),1,jx,1,fnmin,fnmax,kmin,kmax)
+        call aminmx(currvs(1:jx,k),1,jx,
+     +     1,fnmin,fnmax,kmin,kmax)
         if (abs(fnmin-fnmax).lt.fnmax*dgts) fnmax=fnmin+.001*abs(fnmin)
         !write(*,*) 'pltends-5:', x(1),x(jx),fnmin,fnmax
         call GSVP2D(.2,.8,.2,.5) !---------------> 2nd subplot
@@ -155,7 +161,8 @@ c...
 cmnt  Generate plot "consn(l_)"
 c...  
       call GXGLFR(0) ! new page
-      call aminmx(consnp(1,l_),1,nch(l_),1,emin,emax,kmin,kmax)
+      call aminmx(consnp(1:nch(l_),l_),1,nch(l_),
+     +  1,emin,emax,kmin,kmax)
       !write(*,*) 'pltends-6:', ptime(1,l_),ptime(nch(l_),l_),emin,emax
       call GSVP2D(.2,.8,.6,.9)
       CALL PGSCH(1.) ! set character size; default is 1.

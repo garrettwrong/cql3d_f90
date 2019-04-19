@@ -1,24 +1,29 @@
-c
-c
-c
+module ainpla_mod
+
+!
+!
+!
+
+contains
+
       subroutine ainpla
       use param_mod
       use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-c..........................................................
-c     This routine initialize some plasma parameter profiles
-c     on the whole lrzmax radial mesh
-c     (some where defined in diaggnde before)
-c.............................................................
+!..........................................................
+!     This routine initialize some plasma parameter profiles
+!     on the whole lrzmax radial mesh
+!     (some where defined in diaggnde before)
+!.............................................................
 
 
-c.......................................................................
-cl    1. Energy, v-thermal
-c.......................................................................
+!.......................................................................
+!l    1. Energy, v-thermal
+!.......................................................................
 
-cl    1.1 radial mesh
+!l    1.1 radial mesh
 
       do 110 k=1,ntotal
         rstmss=fmass(k)*clite2/ergtkev
@@ -32,15 +37,15 @@ cl    1.1 radial mesh
             energy(k,l)=rstmss*(bk1/bk2-1.+3./thta)
             !write(*,*)'ainpla.2:  energy(k,l)/1.5=',energy(k,l)/1.5
           endif
-c          write(*,*)'ainpla: k,l,energy(k,l):',k,l,energy(k,l)
+!          write(*,*)'ainpla: k,l,energy(k,l):',k,l,energy(k,l)
           vth(k,l)=((temp(k,l)*ergtkev)/fmass(k))**.5
           if (k .eq. kelec) vthe(l)=vth(kelec,l)
  111    continue
  110  continue
 
-c.......................................................................
-cl    1.2 parallel mesh
-c.......................................................................
+!.......................................................................
+!l    1.2 parallel mesh
+!.......................................................................
 
       if (cqlpmod .eq. "enabled") then
 
@@ -65,9 +70,9 @@ c.......................................................................
  120    continue
 
       endif
-c.......................................................................
-c     2. Compute radial Z-effective
-c.......................................................................
+!.......................................................................
+!     2. Compute radial Z-effective
+!.......................................................................
 
       if (izeff.eq."ion") then
         k1=ngen+1
@@ -81,7 +86,7 @@ c.......................................................................
         xq=0.
         do 210 k=k1,ntotal
           if (k.eq.kelecg .or. k.eq.kelecm) goto 210
-cBobH990128          if (k.eq.izeff) goto 210
+!BobH990128          if (k.eq.izeff) goto 210
           xq=xq+1.
           zeff(l)=zeff(l)+bnumb(k)**2*reden(k,l)
           zeff4(l)=bnumb(k)**4*reden(k,l)+zeff4(l)
@@ -93,3 +98,4 @@ cBobH990128          if (k.eq.izeff) goto 210
 
       return
       end
+end module ainpla_mod

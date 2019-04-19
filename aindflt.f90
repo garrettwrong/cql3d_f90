@@ -1,25 +1,30 @@
-c
-c
+module aindflt_mod
+
+!
+!
+
+contains
+
       subroutine aindflt
       use param_mod
       use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
-c..................................................................
-c     Set namelist input defaults for all namelist sections
-c     except setup0/fsetup and frsetup.
-c     Warning: should not set variables read in setup0/fsetup namelist
-c     as aindflt is called AFTER the first read(2,setup0).
-c     BH070305:  Some other constants derived from namelist
-c                variables have been moved to new subroutine aindlft1.
-c..................................................................
+!..................................................................
+!     Set namelist input defaults for all namelist sections
+!     except setup0/fsetup and frsetup.
+!     Warning: should not set variables read in setup0/fsetup namelist
+!     as aindflt is called AFTER the first read(2,setup0).
+!     BH070305:  Some other constants derived from namelist
+!                variables have been moved to new subroutine aindlft1.
+!..................................................................
 
 
-c     Set a few local constants, same as in subroutine ainsetpa.
+!     Set a few local constants, same as in subroutine ainsetpa.
       ep100=1.d+100
       zero=0.d0
       one=1.d0
-c      pi=3.141592653589793d0
+!      pi=3.141592653589793d0
       pi=atan2(zero,-one)
 
       iy=200 ! default value; will be over-written by cqlinput value
@@ -27,11 +32,11 @@ c      pi=3.141592653589793d0
       mx=3   ! default value; will be over-written by cqlinput value
 
       jfl=151  !!!min(201,jx)
-      if (mod(jfl,2).eq.0) jfl=jfl-1  
+      if (mod(jfl,2).eq.0) jfl=jfl-1
       ! jfl needed to be odd because of jpxyh=(jfl+1)/2 in pltprppr.f
 
       nmods=nmodsa ! YuP-101220: should be mrfn, but not known yet
-            
+
       nso=0
       lz=lza
 
@@ -40,7 +45,7 @@ c      pi=3.141592653589793d0
       ampferr=1.d-3
       nonampf=0
 
-      bootst="disabled"   ! analytic (Hinton and Haseltine) 
+      bootst="disabled"   ! analytic (Hinton and Haseltine)
                           ! bootstrap current
       bootcalc="disabled" !computational bootstrap current off.
       bootupdt="disabled" !updating 0th order distn for bs radial derv.
@@ -143,10 +148,10 @@ c      pi=3.141592653589793d0
       manymat="disabled"
       meshy="free"
       nummods=1
-c     if numixts= 1=>forw/back; -1=>back/forw for numindx=2
+!     if numixts= 1=>forw/back; -1=>back/forw for numindx=2
       numixts=1
       nchec=1
-c     if nchgdy=1 adapt dy(ith)
+!     if nchgdy=1 adapt dy(ith)
       nchgdy=0
       ndeltarho="disabled"
       negyrg=0
@@ -160,9 +165,9 @@ c     if nchgdy=1 adapt dy(ith)
       ncoef=1
       ncont=25
       nrstrt=1
-c     if ngauss.ge.1 => analegco=disabled
-c     good numbers are nlagran=4 and ngauss=4 or 6
-c     max. nlagran allowed: 15
+!     if ngauss.ge.1 => analegco=disabled
+!     good numbers are nlagran=4 and ngauss=4 or 6
+!     max. nlagran allowed: 15
       nfpld=0
       ngauss=0
       nlagran=4
@@ -182,7 +187,7 @@ c     max. nlagran allowed: 15
       nofftran=10000
       nonelpr=10000
       noffelpr=0
-cBH080305      do k=1,nmodsa
+!BH080305      do k=1,nmodsa
       do k=1,ngena
          nonrf(k)=0
          noffrf(k)=10000
@@ -203,13 +208,13 @@ cBH080305      do k=1,nmodsa
       atten_npa="enabled"
       nstop=5
       nstps=100
-c     old way of integrating dens,cur in diaggnde
+!     old way of integrating dens,cur in diaggnde
       oldiag="enabled"
       partner="disabled"
       profpsi="disabled"
       plt3d="enabled"
       pltd="enabled"
-       !YuP[2018-02-07] New: pltd='color' and 'df_color' 
+       !YuP[2018-02-07] New: pltd='color' and 'df_color'
        !for color contour plots
       pltdn="disabled"
       pltend="enabled"
@@ -218,8 +223,8 @@ c     old way of integrating dens,cur in diaggnde
       pltlim="disabled"
       pltlimm=1.
       pltlos="disabled"
-      pltso="disabled" 
-       !YuP[2018-02-07] New: pltso='color' and 'first_cl' 
+      pltso="disabled"
+       !YuP[2018-02-07] New: pltso='color' and 'first_cl'
        !for color contour plots
       pltmag=1.
       pltsig="enabled"
@@ -366,9 +371,9 @@ c     old way of integrating dens,cur in diaggnde
       urfwrray="disabled"
       xsink=0.
 
-c.......................................................................
-c     lrza arrays
-c.......................................................................
+!.......................................................................
+!     lrza arrays
+!.......................................................................
       drya=1.d0/dfloat(lrza)
       do 100 ll=1,lrza
         rovera(ll)=.1
@@ -381,17 +386,17 @@ c.......................................................................
       rya(0)=0.
       rya(lrza+1)=1.
 
-c.......................................................................
-c     lrorsa arrays
-c.......................................................................
+!.......................................................................
+!     lrorsa arrays
+!.......................................................................
       do 105 ll=1,lrorsa
-cBH080122         irzplt(ll)=ll
+!BH080122         irzplt(ll)=ll
          irzplt(ll)=0
  105  continue
 
-c.......................................................................
-c     nva arrays
-c.......................................................................
+!.......................................................................
+!     nva arrays
+!.......................................................................
       do nn=1,nva
          thet1(nn)=90.
          thet2(nn)=180.
@@ -409,7 +414,7 @@ c.......................................................................
          rd(1)=100.d0
 
 
-CDIR$ NEXTSCALAR
+!DIR$ NEXTSCALAR
       mpwrsou(0)=1.
       npwrsou(0)=2.
       do 11 k=1,ngena
@@ -501,9 +506,9 @@ CDIR$ NEXTSCALAR
       nkconro(1)=1
       nkconro(2)=2
       nnspec=1
-c..................................................................
-c     Profile options are "parabola", "splines", and "asdex":
-c..................................................................
+!..................................................................
+!     Profile options are "parabola", "splines", and "asdex":
+!..................................................................
 
       iprone="parabola"
       iprote="parabola"
@@ -525,10 +530,10 @@ c..................................................................
       vphiscal=1.
       bctimescal=1.d0
 
-c..................................................................
-c     acoef's specify ASDEX exponentail profiles
-c     (ti profiles given by te profile, for "asdex" option).
-c..................................................................
+!..................................................................
+!     acoef's specify ASDEX exponentail profiles
+!     (ti profiles given by te profile, for "asdex" option).
+!..................................................................
 
       acoefne(1)=-1.87
       acoefne(2)=-0.57
@@ -568,9 +573,9 @@ c..................................................................
  14     continue
  13   continue
 
-c..................................................................
-c     Time-dependent profile quantities
-c..................................................................
+!..................................................................
+!     Time-dependent profile quantities
+!..................................................................
 
       nbctime=0
       do 30 i=1,nbctimea
@@ -615,7 +620,7 @@ c..................................................................
       nz_f4d=21
       nv_f4d=20
       nt_f4d=20
-      
+
       nen=nena
       nen_npa=nena
       mmsv=mx
@@ -660,15 +665,15 @@ c..................................................................
  20     continue
  19   continue
 
-c     Some specific settings from cqlinput_help
+!     Some specific settings from cqlinput_help
 
 
-cBH080125  DON'T reset this, as it conflicts with past
-cBH080125  usage of asor.
-cBH080125      do ll=1,lrza
-cBH080125         asor(1,1,ll)=.25e+13
-cBH080125         asor(1,2,ll)=3.25e+13
-cBH080125      enddo
+!BH080125  DON'T reset this, as it conflicts with past
+!BH080125  usage of asor.
+!BH080125      do ll=1,lrza
+!BH080125         asor(1,1,ll)=.25e+13
+!BH080125         asor(1,2,ll)=3.25e+13
+!BH080125      enddo
 
       scm2(1,1)=.001
       scm2(1,2)=10000.
@@ -712,11 +717,11 @@ cBH080125      enddo
          enddo
       enddo
 
-      
 
-c.......................................................................
-cl    4. Output option arrays
-c.......................................................................
+
+!.......................................................................
+!l    4. Output option arrays
+!.......................................................................
 
       do 400 i=1,noutpta
         nlotp1(i)=.false.
@@ -725,58 +730,59 @@ c.......................................................................
         nlotp4(i)=.false.
  400  continue
       nlotp1(4)=.true.
-cBH070414      nlotp1(4)=.true.
+!BH070414      nlotp1(4)=.true.
 
-c.......................................................................
-c     5. Others, sometimes initialized later, but better do it before
-c     reading namelist
-c.......................................................................
+!.......................................................................
+!     5. Others, sometimes initialized later, but better do it before
+!     reading namelist
+!.......................................................................
 
 
-c$$$c.......................................................................
-c$$$c     6. Default values for finite orbit width (FOW) calculations
-c$$$c.......................................................................
-      fow="disabled" ! "disabled" is to use ZOW model 
+!$$$c.......................................................................
+!$$$c     6. Default values for finite orbit width (FOW) calculations
+!$$$c.......................................................................
+      fow="disabled" ! "disabled" is to use ZOW model
                      ! as the main model in CQL3D
-c$$$      outorb="Not-detailed" ! outorb='detailed' or 'Not-detailed'
-c$$$                ! (saving/not-saving data to a file for plotting)  
-c$$$      nmu =100  ! grid sizes for ad.ivariant mu 
-c$$$      npfi=100  ! and canonical momentum Pfi; 
-c$$$                ! to setup COM->R lookup table.
-c$$$      nsteps_orb=50000 ! Max.number of time steps for orbit integration.
-c$$$                ! Also used to trace Pfi=const levels for COM->R table
-c$$$                ! in order to find intersections with mu=const levels.
-c$$$      nptsorb=1 ! Number of points on a complete orbit 
-c$$$                ! (ityp=0 "main" orbit)
-c$$$                ! from which ityp=1 "secondary" orbits are launched.
-c$$$                ! ityp=1 orbit is stopped when it reaches the midplane.
-c$$$                ! (Note: secondary orbits are not traced usually, 
-c$$$                ! see below, iorb2=0)
-c$$$      i_orb_width=1 ! 1 -> Normal finite-orbit-width calculations. 
-c$$$                    ! 0 -> V_drift_perp is set to 0 
-c$$$                    ! (to mimic ZOW approximation)
-c$$$      iorb2= 0 ! set to 1 to perform Runge-Kutta integration for tracing
-c$$$               ! SECONDARY orbits to midplane; 0 - no RK tracing.
-c$$$               ! This option (1) can be used for plotting orbits
-c$$$               ! (together with outorb="detailed"),
-c$$$               ! otherwise not needed.
-c$$$      !=> MAIN orbits:  
-c$$$      ! u-grid:
-c$$$      j0_ini= 20 !20 !2 !max(2, inc_j0/2)
-c$$$      j0_end= 20 !20 !40
-c$$$      inc_j0= 2  ! increment
-c$$$      ! pitch-angle grid:
-c$$$      i0_ini= 2  ! select as max(1, (inc_i0+1)/2)
-c$$$      i0_end= iy-1
-c$$$      inc_i0= 4  ! increment
-c$$$      !=> SECONDARY orbits (launched from selected points on MAIN orbit)
-c$$$      ! u-grid:
-c$$$      j2_ini= 20 !20 !2  !max(2, inc_j2/2)
-c$$$      j2_end= 20 !20 !40 
-c$$$      inc_j2= 2  !1 !2  ! increment
-c$$$      ! pitch-angle grid:
-c$$$      i2_ini= 1 !max(1, (inc_i2+1)/2) !1
-c$$$      i2_end= iy-1
-c$$$      inc_i2= 10 !4  ! increment
+!$$$      outorb="Not-detailed" ! outorb='detailed' or 'Not-detailed'
+!$$$                ! (saving/not-saving data to a file for plotting)
+!$$$      nmu =100  ! grid sizes for ad.ivariant mu
+!$$$      npfi=100  ! and canonical momentum Pfi;
+!$$$                ! to setup COM->R lookup table.
+!$$$      nsteps_orb=50000 ! Max.number of time steps for orbit integration.
+!$$$                ! Also used to trace Pfi=const levels for COM->R table
+!$$$                ! in order to find intersections with mu=const levels.
+!$$$      nptsorb=1 ! Number of points on a complete orbit
+!$$$                ! (ityp=0 "main" orbit)
+!$$$                ! from which ityp=1 "secondary" orbits are launched.
+!$$$                ! ityp=1 orbit is stopped when it reaches the midplane.
+!$$$                ! (Note: secondary orbits are not traced usually,
+!$$$                ! see below, iorb2=0)
+!$$$      i_orb_width=1 ! 1 -> Normal finite-orbit-width calculations.
+!$$$                    ! 0 -> V_drift_perp is set to 0
+!$$$                    ! (to mimic ZOW approximation)
+!$$$      iorb2= 0 ! set to 1 to perform Runge-Kutta integration for tracing
+!$$$               ! SECONDARY orbits to midplane; 0 - no RK tracing.
+!$$$               ! This option (1) can be used for plotting orbits
+!$$$               ! (together with outorb="detailed"),
+!$$$               ! otherwise not needed.
+!$$$      !=> MAIN orbits:
+!$$$      ! u-grid:
+!$$$      j0_ini= 20 !20 !2 !max(2, inc_j0/2)
+!$$$      j0_end= 20 !20 !40
+!$$$      inc_j0= 2  ! increment
+!$$$      ! pitch-angle grid:
+!$$$      i0_ini= 2  ! select as max(1, (inc_i0+1)/2)
+!$$$      i0_end= iy-1
+!$$$      inc_i0= 4  ! increment
+!$$$      !=> SECONDARY orbits (launched from selected points on MAIN orbit)
+!$$$      ! u-grid:
+!$$$      j2_ini= 20 !20 !2  !max(2, inc_j2/2)
+!$$$      j2_end= 20 !20 !40
+!$$$      inc_j2= 2  !1 !2  ! increment
+!$$$      ! pitch-angle grid:
+!$$$      i2_ini= 1 !max(1, (inc_i2+1)/2) !1
+!$$$      i2_end= iy-1
+!$$$      inc_i2= 10 !4  ! increment
       return
       end
+end module aindflt_mod

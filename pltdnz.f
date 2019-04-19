@@ -3,6 +3,7 @@ c
       subroutine pltdnz
       use param_mod
       use cqcomm_mod
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     plot the density as a function of poloidal angle for a given
@@ -21,7 +22,7 @@ c
       do 100 k=1,ngen
         fu=.99999
         do 3006 ny=1,negyrg
-          call aminmx(densz(1,k,ny,lr_),1,lz,1,fmin,fmax,kmin,kmax)
+          call aminmx(densz(1:lz,k,ny,lr_),1,lz,1,fmin,fmax,kmin,kmax)
 ccc          write(*,*) 'pltdnz: fmin,fmax',fmin,fmax
           fmax=fmax+em90
           tam1(ny)=fmax

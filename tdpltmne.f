@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use r8subs_mod, only : rbound
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -80,12 +81,12 @@ c..................................................................
  19     continue   
         fmin=0.
         fmax=0.
-        call aminmx(tr1(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+        call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
         if (fmin .ge. .95*fmax) fmin=.95*fmax
-        call aminmx(tr2(1),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+        call aminmx(tr2(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
         if (fmin1.lt.fmin) fmin=fmin1
         if(fmax1.gt.fmax) fmax=fmax1
-        call aminmx(tr3(1),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+        call aminmx(tr3(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
         if (fmin1.lt.fmin) fmin=fmin1
         if(fmax1.gt.fmax) fmax=fmax1
         fmax=fmax*1.05 ! extend range, in case the profile is flat
@@ -164,12 +165,12 @@ c     tr3 set to zero so no need to change following plot statements
 
         fmin=0.
         fmax=0.
-        call aminmx(tr1(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+        call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
         if (fmin .ge. .95*fmax) fmin=.95*fmax
-        call aminmx(tr2(1),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+        call aminmx(tr2(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
         if (fmin1.lt.fmin) fmin=fmin1
         if(fmax1.gt.fmax) fmax=fmax1
-        call aminmx(tr3(1),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+        call aminmx(tr3(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
         if (fmin1.lt.fmin) fmin=fmin1
         if(fmax1.gt.fmax) fmax=fmax1
         fmax=fmax*1.05 ! extend range, in case the profile is flat
@@ -230,7 +231,7 @@ c     tr3 set to zero so no need to change following plot statements
  352      continue   
           fmin=0.
           fmax=0.
-          call aminmx(tr1s(1),1,lsmax,1,fmin,fmax,kmin,kmax)
+          call aminmx(tr1s(1:lsmax),1,lsmax,1,fmin,fmax,kmin,kmax)
           if (fmin .ge. .95*fmax) fmin=.95*fmax
           fmin=0.d0 ! YuP: make lower limit =0.0
           fmax=fmax*1.05 ! extend range, in case the profile is flat
@@ -283,7 +284,7 @@ c     tr3 set to zero so no need to change following plot statements
  452      continue
           fmin=0.
           fmax=0.
-          call aminmx(tr1s(1),1,lsmax,1,fmin,fmax,kmin,kmax)
+          call aminmx(tr1s(1:lsmax),1,lsmax,1,fmin,fmax,kmin,kmax)
           if (fmin .ge. .95*fmax) fmin=.95*fmax
           fmin=0.d0 ! YuP: make lower limit =0.0
           fmax=fmax*1.05 ! extend range, in case the profile is flat
@@ -348,12 +349,12 @@ c.......................................................................
  69       continue
           fmin=0.
           fmax=0.
-          call aminmx(tr1(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+          call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
           if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
-          call aminmx(tr2(1),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+          call aminmx(tr2(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
           if (fmin1.lt.fmin) fmin=fmin1
           if(fmax1.gt.fmax) fmax=fmax1
-          call aminmx(tr3(1),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+          call aminmx(tr3(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
           if (fmin1.lt.fmin) fmin=fmin1
           if(fmax1.gt.fmax) fmax=fmax1
           if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
@@ -422,9 +423,9 @@ c
             endif
             fmin=0.
             fmax=0.
-            call aminmx(tr1s(1),1,ilsmx,1,fmin,fmax,kmin,kmax)
+            call aminmx(tr1s(1:ilsmx),1,ilsmx,1,fmin,fmax,kmin,kmax)
             if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
-            call aminmx(tr2s(1),1,ilsmx,1,fmin1,fmax1,kmin,kmax)
+            call aminmx(tr2s(1:ilsmx),1,ilsmx,1,fmin1,fmax1,kmin,kmax)
             if (fmin1.lt.fmin) fmin=fmin1
             if(fmax1.gt.fmax) fmax=fmax1
             if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
@@ -475,7 +476,7 @@ c
  99         tr1(ll)=rfpwrz(k,ll)
             fmin=0.
             fmax=0.
-            call aminmx(tr1(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+            call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
 cBH090220            if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
         if (abs(fmin-fmax).lt.fmax*dgts) fmax=fmin+.001*abs(fmin)
         if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
@@ -522,7 +523,7 @@ c
  79            tr1(ll)=psyncz(ll)
             fmin=0.
             fmax=0.
-            call aminmx(tr1(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+            call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
             if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
             if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
                
@@ -591,7 +592,7 @@ cBH120314               endif
              
                fmin=0.
                fmax=0.
-               call aminmx(tr1(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+               call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
 cBH120314               if (isigsgv2.eq.1) then
 cBH120314                 call aminmx(tr2(1),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
 cBH120314                 fmin=min(fmin,fmin1)
@@ -647,7 +648,7 @@ cBH120314 8007           format("Reaction rate(equiv. Maxwln) =",1pe14.6," /sec"
 cBH120314                 CALL PGMTXT('T',2.,0.,0.,t_)
 cBH120314               endif
               
-               call aminmx(sigftt(1,lsig),1,nch(1),1,
+               call aminmx(sigftt(1:nch(1),lsig),1,nch(1),1,
      ~         emin,emax,kmin,kmax)
 cBH120314               if (isigsgv2.eq.1) then
 cBH120314                  call aminmx(sigmtt(1,lsig),1,nch(1),1,

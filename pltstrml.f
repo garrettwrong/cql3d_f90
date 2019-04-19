@@ -8,6 +8,7 @@ c
       use pltdf_mod, only : wx, wy, IIY, JXQ
       use pltmain_mod, only : gxglfr
       use r8subs_mod, only : luf, dcopy
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 
@@ -238,7 +239,7 @@ c
         cn3=cn1
         
         do 70 j=2,jx
-          call aminmx(temp4(1,j),1,itl,1,swwmin,swwmax,kmin,kmax)
+          call aminmx(temp4(1:itl,j),1,itl,1,swwmin,swwmax,kmin,kmax)
 c990131          cn1=amin1(cn1,swwmin)
 c990131          cx1=amax1(cx1,swwmax)
           cn1=min(cn1,swwmin)
@@ -251,7 +252,8 @@ c-sww60continue
             if (cn2 .gt. temp4(i,j)) cn2=temp4(i,j)
             if (cx2 .lt. temp4(i,j)) cx2=temp4(i,j)
  61       continue
-          call aminmx(temp4(itu+1,j),1,iy-itu,1,swwmin,swwmax,kmin,kmax)
+          call aminmx(temp4(itu+1:iy-itu,j),1,iy-itu,
+     +         1,swwmin,swwmax,kmin,kmax)
 c990131          cn3=amin1(cn3,swwmin)
 c990131          cx3=amax1(cx3,swwmax)
           cn3=min(cn3,swwmin)

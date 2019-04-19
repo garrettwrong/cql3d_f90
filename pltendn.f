@@ -4,6 +4,7 @@ c
       use param_mod
       use cqcomm_mod
       use r8subs_mod, only : rbound, luf
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c
@@ -54,7 +55,7 @@ c        write(*,*)'pltendn:  HERE1'
 c        write(*,*)'pltendn: nch(l_),pefld(1:nch(l_),1)=',
 c     +                      nch(l_),pefld(1:nch(l_),1)
 
-        call aminmx(pefld(1,l_),1,nch(l_),1,emin,emax,kmin,kmax)
+        call aminmx(pefld(1:nch(l),l_),1,nch(l_),1,emin,emax,kmin,kmax)
         if (abs(emin-emax).lt.abs(emax)*dgts) emax=emin+.001*abs(emin)
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range
         CALL PGSVP(.2,.8,.65,.95)
@@ -76,7 +77,8 @@ c     +             RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2
         CALL PGLAB(' ','Elec Fld (V/cm)',' ')
 
 
-        call aminmx(pcurr(1,k,l_),1,nch(l_),1,emin,emax,kmin,kmax)
+        call aminmx(pcurr(1:nch(l_),k,l_),1,nch(l_)
+     +       ,1,emin,emax,kmin,kmax)
         if (abs(emin-emax).lt.emax*dgts) emax=emin+.001*abs(emin)
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range
         DO I=1,NCH(L_)
@@ -254,7 +256,7 @@ c       'x', 'u/c', or 'energy', up to maximum pltlimm.
 c$$$        call gxglfr(0)
         CALL PGPAGE
 
-        call aminmx(currv(1,k,l_),1,jxq,1,fnmin,fnmax,kmin,kmax)
+        call aminmx(currv(1:jxq,k,l_),1,jxq,1,fnmin,fnmax,kmin,kmax)
         if (abs(fnmin-fnmax).lt.fnmax*dgts) fnmax=fnmin+.001*abs(fnmin)
 
         CALL PGSVP(.2,.8,.6,.9)
@@ -273,7 +275,7 @@ c       Convert from statAmps/cm**2 to Amps/cm**2, dividing by 3.e9
         CALL PGLINE(jxq,RJXA1,RJXA2)
         CALL PGLAB(tx_,'Par Curr Den: j(u/unorm)',' ')
 
-        call aminmx(currvs(1,k),1,jxq,1,fnmin,fnmax,kmin,kmax)
+        call aminmx(currvs(1:jxq,k),1,jxq,1,fnmin,fnmax,kmin,kmax)
         if (abs(fnmin-fnmax).lt.fnmax*dgts) fnmax=fnmin+.001*abs(fnmin)
         CALL PGSVP(.2,.8,.2,.5)
 c       Convert from statAmps/cm**2 to Amps/cm**2, dividing by 3.e9
@@ -315,7 +317,7 @@ cmnt  Generate plot "pwrrf"
 c...  
 c$$$        call gxglfr(0)
         CALL PGPAGE
-        call aminmx(pwrrf(1,k,l_),1,jxq,1,fnmin,fnmax,kmin,kmax)
+        call aminmx(pwrrf(1:jxq,k,l_),1,jxq,1,fnmin,fnmax,kmin,kmax)
         if (abs(fnmin-fnmax).lt.fnmax*dgts) fnmax=fnmin+.001*abs(fnmin)
         CALL PGSVP(.2,.8,.6,.9)
         DO J=1,JXQ
@@ -334,7 +336,7 @@ c$$$        call gxglfr(0)
         CALL PGLAB(' ','RF Pwr Den: p(u/unorm)',' ')
 
 
-        call aminmx(pwrrfs(1,k,l_),1,jxq,1,fnmin,fnmax,kmin,kmax)
+        call aminmx(pwrrfs(1:jxq,k,l_),1,jxq,1,fnmin,fnmax,kmin,kmax)
         if (abs(fnmin-fnmax).lt.fnmax*dgts) fnmax=fnmin+.001*abs(fnmin)
         CALL PGSVP(.2,.8,.2,.5)
         DO J=1,JXQ

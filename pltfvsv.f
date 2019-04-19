@@ -5,6 +5,7 @@ c
       use cqcomm_mod
       use r8subs_mod, only : luf
       use pltdf_mod, only : JXQ
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

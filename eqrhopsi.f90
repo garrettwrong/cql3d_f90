@@ -10,6 +10,7 @@ module eqrhopsi_mod
 contains
   
   subroutine eqrhopsi(generate)
+    use aminmx_mod, only : aminmx
     implicit integer (i-n), real*8 (a-h,o-z)
     character*8 generate
     

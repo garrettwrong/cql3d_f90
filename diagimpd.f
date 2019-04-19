@@ -5,6 +5,7 @@ c
       use cqcomm_mod
       use advnce_mod
       use r8subs_mod, only : dcopy
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 
@@ -257,7 +258,7 @@ c     find min and max of f
         fmin=ep100
         fmax=-ep100
         do 500 j=1,jx
-          call aminmx(temp1(1,j),1,jx,1,ffmin,ffmax,jmin,jmax)
+          call aminmx(temp1(1:jx,j),1,jx,1,ffmin,ffmax,jmin,jmax)
 c990131          fmin=amin1(ffmin,fmin)
 c990131          fmax=amax1(ffmax,fmax)
           fmin=min(ffmin,fmin)

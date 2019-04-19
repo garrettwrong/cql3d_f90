@@ -4,16 +4,16 @@ SHELL     = /bin/sh
 NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
-INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h
+INCLUDES  = frcomm.h frname.h frname_decl.h name.h name.h90 trans.h wpadvnc.h
 SOURCES  =   param.f90 cqcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	pltdf.f90 eqrhopsi.f90 equilib.f90 \
 	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \
 	bsl.f90  bsu.f90 \
-	a_cqlp.f90  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
-	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
-	ainpla.f  ainplt.f  ainpltpa.f   \
-	ainsetpa.f  ainsetva.f  ainspec.f  ainvnorm.f ampfar.f \
-	aminmx.f bavdens.f  bavgmax.f  baviorbt.f   \
+	a_cqlp.f90  abchief.f90  achief1.f90  achiefn.f90  aclear.f90 ainalloc.f90  \
+	aindflt.f90  aindflt1.f90 aindfpa.f90  aingeom.f90  ainitial.f90   \
+	ainpla.f90  ainplt.f90  ainpltpa.f90   \
+	ainsetpa.f90  ainsetva.f90  ainspec.f90  ainvnorm.f90 ampfar.f90 \
+	aminmx.f90 bavdens.f  bavgmax.f  baviorbt.f   \
 	bcast.f cfpcoefc.f  cfpcoefn.f  \
 	cfpcoefr.f  cfpgamma.f  cfpleg.f     \
 	cfpmodbe.f  cfpsymt.f  coefefad.f  coefefld.f  coefegad.f  \
@@ -125,7 +125,13 @@ $(SOURCES):        $(INCLUDES)
 # Do not fret, they're not so bad.
 DAGOBJS = param.o cqcomm.o r8subs.o advnce.o pltmain.o \
           pltdf.o eqrhopsi.o equilib.o \
-          impavnc0.o  frplteq.o tdeqdsk.o bsl.o bsu.o
+          impavnc0.o  frplteq.o tdeqdsk.o bsl.o bsu.o \
+          a_cqlp.f90   achief1.f90  aclear.f90   ainalloc.f90 \
+          aindflt1.f90 aingeom.f90  ainpla.f90   ainpltpa.f90 \
+          ainsetva.f90 ainvnorm.f90 ampfar.f90 abchief.f90  \
+          achiefn.f90  advnce.f90   aindflt.f90  aindfpa.f90 \
+          ainitial.f90 ainplt.f90   ainsetpa.f90 ainspec.f90  \
+          aminmx.f90
 # And this describes their dag...
 cqcomm.o: cqcomm.f90 param.o
 r8subs.o: r8subs.f90 cqcomm.o
@@ -134,11 +140,32 @@ bsu.o: bsu.f90 param.o cqcomm.o
 advnce.o: advnce.f90 cqcomm.o r8subs.o bsu.o bsl.o
 pltdf.o: pltdf.f90 param.o cqcomm.o r8subs.o
 pltmain.o: pltmain.f90 param.o cqcomm.o pltdf.o
-eqrhopsi.o: eqrhopsi.f90 param.o cqcomm.o
+eqrhopsi.o: eqrhopsi.f90 param.o cqcomm.o aminmx.o
 equilib.o: equilib.f90 param.o cqcomm.o r8subs.o
 impavnc0.o: impavnc0.f90 param.o cqcomm.o advnce.o r8subs.o bsu.o bsl.o
 frplteq.o: frplteq.f90 param.o cqcomm.o r8subs.o
 tdeqdsk.o: tdeqdsk.f90 param.o cqcomm.o equilib.o r8subs.o
+
+# a is for awful
+abchief.o: abchief.f90 param.o cqcomm.o
+achief1.o: achief1.f90 param.o cqcomm.o pltmain.o
+achiefn.o: achiefn.f90 param.o cqcomm.o impavnc0.o
+aclear.o: aclear.f90 param.o cqcomm.o
+ainalloc.o: ainalloc.f90 param.o cqcomm.o
+aindflt.o: aindflt.f90 param.o cqcomm.o
+aindflt1.o: aindflt1.f90 param.o cqcomm.o
+aindfpa.o: aindfpa.f90 param.o cqcomm.o 
+aingeom.o: aingeom.f90 equilib.o param.o cqcomm.o
+ainitial.o: ainitial.f90 param.o cqcomm.o pltmain.o
+ainpla.o: ainpla.f90 param.o cqcomm.o
+ainplt.o: ainplt.f90 param.o cqcomm.o
+ainpltpa.o: ainpltpa.f90 param.o cqcomm.o
+ainsetpa.o: ainsetpa.f90 param.o cqcomm.o
+ainsetva.o: ainsetva.f90 param.o cqcomm.o
+ainspec.o: ainspec.f90 param.o cqcomm.o
+ainvnorm.o: ainvnorm.f90 param.o cqcomm.o
+ampfar.o: ampfar.f90 param.o cqcomm.o r8subs.o
+
 
 #----
 # From here we will assume that all deps to build

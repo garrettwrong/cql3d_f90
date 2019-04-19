@@ -1,30 +1,35 @@
-c
-c
+module ainalloc_mod
+
+!
+!
+
+contains
+
       subroutine ainalloc
       use param_mod
       use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-CMPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
-cdir$ nobounds
+!dir$ nobounds
 
-c..................................................................
-c     One measure of whether the following allocations are
-c     successful is whether code is entered, then exited without
-c     a code stopping fault (e.g. Segmentation fault). See istat_tot
-c     comments below.
-c..................................................................
+!..................................................................
+!     One measure of whether the following allocations are
+!     successful is whether code is entered, then exited without
+!     a code stopping fault (e.g. Segmentation fault). See istat_tot
+!     comments below.
+!..................................................................
       write(*,*)'ainalloc:  Entering ainalloc'
-      
-      ! YuP-101220: Moved allocation of cqlb()-cqlf() to vlh and vlf 
 
-c..................................................................
-c     Allocate storage of main arrays:
-c     The following counters of storage are vestigial, to previously
-c     used cray pointer system, and linking pointers to one large
-c     array, dum(1:lndum).   Maintain it here, just to keep track
-c     of amount of storage used here, and for possible cross-checking.
-c..................................................................
+      ! YuP-101220: Moved allocation of cqlb()-cqlf() to vlh and vlf
+
+!..................................................................
+!     Allocate storage of main arrays:
+!     The following counters of storage are vestigial, to previously
+!     used cray pointer system, and linking pointers to one large
+!     array, dum(1:lndum).   Maintain it here, just to keep track
+!     of amount of storage used here, and for possible cross-checking.
+!..................................................................
 
       lnyxgrs=(iyp1+1)*(jxp1+1)*ngen*lrors
       lyxgsp2=(iyp1+1)*(jxp1+1)*ngen*(lrors+2)
@@ -76,7 +81,7 @@ c..................................................................
       lniyjxlz=iy*jx*lz
       lni0lzlr=(i0param+1)*lz*lrz
 
-c     Temporary add (bobh 960724)
+!     Temporary add (bobh 960724)
       lnipjpxy=ipxy*jpxy
 
       lnjxng=jx*ngen
@@ -85,71 +90,71 @@ c     Temporary add (bobh 960724)
       lnjmxp=jx*(mx+1)
       lnjxngi=jx*ngen*12
       lnrhs=1
-cBH070525      if (implct.eq."enabled") lnrhs=iyjx
-cBH080425       if (implct.eq."enabled") lnrhs=iyjx*lrza
+!BH070525      if (implct.eq."enabled") lnrhs=iyjx
+!BH080425       if (implct.eq."enabled") lnrhs=iyjx*lrza
       if (implct.eq."enabled") lnrhs=iyjx
-      if (soln_method.eq.'it3dv' .or. soln_method.eq.'it3drv')
-     +     lnrhs=iyjx*lrza
+      if (soln_method.eq.'it3dv' .or. soln_method.eq.'it3drv') &
+           lnrhs=iyjx*lrza
       lnjnsl=jx*ngen*nsoa*lrzmax
       lnjmpn=jx*(msxr+1)*nena*2
 
-c     New pointer use in this code: fully pointered variables, currv_*,
-c       pwrrf,pwrrfs
+!     New pointer use in this code: fully pointered variables, currv_*,
+!       pwrrf,pwrrfs
       lnjxnglr=jx*ngen*lrors
 
-      lndum= 2*lyxgsp2+4*lnyxgrs+3*lnyxgrz+
-     1  7*lnyxnrs+2*lnyxnrs2+2*lnyxrs+3*lnyxrz+lnefnorz+lnypx2+lny2xp+
-     1  4*lniyp+5*lniy+12*lniyrmx+3*lniy+3*lniyrmx+lniyrsp+8*lnlzmx+
-     1  4*lnoncrs+lnoncsx+3*lnoncmx+8*lnlfield+2*lnincz+2*lninczp+1*lnjx
-     1  +2*lnlzmxp+6*lniylzlra+lnxngrs+lnxngrs5+lnyngmx+lnlzgne+lnylzm2+
-     1  lnylzm+5*lnylzm1+3*lnnonng+8*lnnonz+59*lnj+4*lnj1+10*lni+
-     1  5*lnjp+lnip+lnxm+4*lnijp+4*lnipj+2*lnij+8*lnipjp+
-     1  4*lnjxng+lnjxpng+lnmxpi+2*lnjmxp+lnjxngi+lnrhs+lnjnsl+lnjmpn+
-     1  2*lnjf+5*lnjfp+4*lnjxjf+3*lniyjxlz+lni0lzlr+2*lnjxnglr
+      lndum= 2*lyxgsp2+4*lnyxgrs+3*lnyxgrz+ &
+        7*lnyxnrs+2*lnyxnrs2+2*lnyxrs+3*lnyxrz+lnefnorz+lnypx2+lny2xp+ &
+        4*lniyp+5*lniy+12*lniyrmx+3*lniy+3*lniyrmx+lniyrsp+8*lnlzmx+ &
+        4*lnoncrs+lnoncsx+3*lnoncmx+8*lnlfield+2*lnincz+2*lninczp+1*lnjx &
+        +2*lnlzmxp+6*lniylzlra+lnxngrs+lnxngrs5+lnyngmx+lnlzgne+lnylzm2+ &
+        lnylzm+5*lnylzm1+3*lnnonng+8*lnnonz+59*lnj+4*lnj1+10*lni+ &
+        5*lnjp+lnip+lnxm+4*lnijp+4*lnipj+2*lnij+8*lnipjp+ &
+        4*lnjxng+lnjxpng+lnmxpi+2*lnjmxp+lnjxngi+lnrhs+lnjnsl+lnjmpn+ &
+        2*lnjf+5*lnjfp+4*lnjxjf+3*lniyjxlz+lni0lzlr+2*lnjxnglr
 
 
-c****************SCChiu   2/8/95
-c    1  3*lnoncrs+lnoncsx+2*lnoncmx+8*lnlfield+2*lnincz+2*lninczp+2*lnjx
-c..................................................................
-c     Just for record keeping (vestigial to cray pointer system)
+!****************SCChiu   2/8/95
+!    1  3*lnoncrs+lnoncsx+2*lnoncmx+8*lnlfield+2*lnincz+2*lninczp+2*lnjx
+!..................................................................
+!     Just for record keeping (vestigial to cray pointer system)
       if(relativ .eq. "fully") then
         lnjxmx5=jx*(mx+5)
         lndum=lndum+2*lnjxmx5+lnj
       endif
-c..................................................................
-c..................................................................
-c     Just for record keeping (vestigial to cray pointer system)
-      if(ndeltarho.ne."disabled" .or. lossmode(1).eq.'simplban'
-     +   .or. lossmode(1).eq.'simplbn1'
-     +   .or. lossmode(1).eq.'simplbn2') then
+!..................................................................
+!..................................................................
+!     Just for record keeping (vestigial to cray pointer system)
+      if(ndeltarho.ne."disabled" .or. lossmode(1).eq.'simplban' &
+         .or. lossmode(1).eq.'simplbn1' &
+         .or. lossmode(1).eq.'simplbn2') then
         lnrzt=nr_delta*nz_delta*nt_delta
-        lndum=lndum+lniylzlr+2*lnrzt+nr_delta+nz_delta+nt_delta
-     +        +nr_delta*nz_delta
+        lndum=lndum+lniylzlr+2*lnrzt+nr_delta+nz_delta+nt_delta &
+              +nr_delta*nz_delta
       endif
-c..................................................................
-c..................................................................
-c     Just for record keeping (vestigial to cray pointer system)
+!..................................................................
+!..................................................................
+!     Just for record keeping (vestigial to cray pointer system)
       if(tavg.ne."disabled") then
         lndum=lndum+lnyxgrs
       endif
-c..................................................................
+!..................................................................
 
-c_cray   call hpalloc(dumptr,lndum,ierr,0)
-c_pc     Using malloc for unix library libU77.a;  Allocates bytes.
-c_pc     dumptr=malloc(8*lndum)
-c_pc     if (dumptr.eq.0) stop 'Problem with malloc(lndum)'
+!_cray   call hpalloc(dumptr,lndum,ierr,0)
+!_pc     Using malloc for unix library libU77.a;  Allocates bytes.
+!_pc     dumptr=malloc(8*lndum)
+!_pc     if (dumptr.eq.0) stop 'Problem with malloc(lndum)'
 
 
-c..................................................................
-c     Check on the allocate by adding up istat.
-c     If not zero, problem has occurred.
-cBH100830:  But, this didn't work with gfortran when nraya parameter
-cBH100830:  is  made excessively large.  Code gets Segmentation fault
-cBH100830:  [presumably in urfalloc.f].  But this indicates that
-cBH100830:  checking on istat is not sufficient to catch a problem
-cBH100830:  of using too much memory.
+!..................................................................
+!     Check on the allocate by adding up istat.
+!     If not zero, problem has occurred.
+!BH100830:  But, this didn't work with gfortran when nraya parameter
+!BH100830:  is  made excessively large.  Code gets Segmentation fault
+!BH100830:  [presumably in urfalloc.f].  But this indicates that
+!BH100830:  checking on istat is not sufficient to catch a problem
+!BH100830:  of using too much memory.
 
-c..................................................................
+!..................................................................
       istat_tot=0
       allocate(f(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
@@ -160,7 +165,7 @@ c..................................................................
       allocate(f_(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(f_(0,0,1,1),zero,SIZE(f_))
-      
+
       allocate(spasou(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(spasou(0,0,1,1),zero,SIZE(spasou))
@@ -170,23 +175,23 @@ c..................................................................
       allocate(velsou2(0:iy+1,0:jx+1,ngen,0:lrors+1),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(velsou2(0,0,1,0),zero,SIZE(velsou2))
-      
+
       allocate(source(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(source(0,0,1,1),zero,SIZE(source))
-      
+
       allocate(gone(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(gone(0,0,1,1),zero,SIZE(gone))
-      
+
       allocate(egylosa(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(egylosa,zero,SIZE(egylosa))
-      
+
       allocate(i0tran(i0param+1,lz,lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call ibcast(i0tran,0,SIZE(i0tran))
-      
+
       allocate(cal(iy,jx,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(cal,zero,SIZE(cal))
@@ -211,7 +216,7 @@ c..................................................................
       allocate(ebl(iy,jx,ngen,2,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ebl,zero,SIZE(ebl))
-      
+
       allocate(scal(iyjx*ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(scal,zero,SIZE(scal))
@@ -242,9 +247,9 @@ c..................................................................
       allocate(delecfld0n(1:lrz,1:nstop,1:nampfmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(delecfld0n,zero,SIZE(delecfld0n))
-c     nefitera=10, presently.
-cBH171231      allocate(elecn(1:lrz,0:nstop,nefitera),STAT=istat)
-cBH171231      Fixing write of elecn in tdoutput elecn(,nch(1),)
+!     nefitera=10, presently.
+!BH171231      allocate(elecn(1:lrz,0:nstop,nefitera),STAT=istat)
+!BH171231      Fixing write of elecn in tdoutput elecn(,nch(1),)
       allocate(elecn(1:lrz,0:nstop+1,nefitera),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(elecn,zero,SIZE(elecn))
@@ -255,11 +260,11 @@ cBH171231      Fixing write of elecn in tdoutput elecn(,nch(1),)
       allocate(dj(0:iyp1,0:jx,1:ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(dj,zero,SIZE(dj))  ! Maybe set to 0.5 ?
-cBH090810:  Think dyp5,dym5,eyp5, and eym5 are over-dimensioned
-cBH090810:  from i=0, when only need i=1.
-cHB090826:  NO, at least for dyp5, through hfi(i-1,j) in impchk, i=1.
-cHB090826:    Although multiplied by df(i,j) which is 0. for i=0,
-cBH090826:    still the dyp5(0,j) needs to exist.
+!BH090810:  Think dyp5,dym5,eyp5, and eym5 are over-dimensioned
+!BH090810:  from i=0, when only need i=1.
+!HB090826:  NO, at least for dyp5, through hfi(i-1,j) in impchk, i=1.
+!HB090826:    Although multiplied by df(i,j) which is 0. for i=0,
+!BH090826:    still the dyp5(0,j) needs to exist.
       allocate(dym5(1:iy,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(dym5,zero,SIZE(dym5))
@@ -293,7 +298,7 @@ cBH090826:    still the dyp5(0,j) needs to exist.
       call bcast(batot,zero,SIZE(batot))
       allocate(lmax(iy,lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
-      call ibcast(lmax,0,SIZE(lmax)) 
+      call ibcast(lmax,0,SIZE(lmax))
       allocate(vpint(iy,lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(vpint,zero,SIZE(vpint))
@@ -379,15 +384,15 @@ cBH090826:    still the dyp5(0,j) needs to exist.
       allocate(btorz(lza,lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(btorz,zero,SIZE(bbpsi))
-      
+
       allocate(consnp(nonch,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(consnp,zero,SIZE(consnp))
       allocate(ptime(nonch,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ptime,zero,SIZE(ptime))
-cBH120315: Prevent out of bounds reference:
-cBH120315:      allocate(sptzrp(nonch,lrors),STAT=istat)
+!BH120315: Prevent out of bounds reference:
+!BH120315:      allocate(sptzrp(nonch,lrors),STAT=istat)
       allocate(sptzrp(nonch,max(lrors,lrzmax)),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(sptzrp,zero,SIZE(sptzrp))
@@ -487,20 +492,20 @@ cBH120315:      allocate(sptzrp(nonch,lrors),STAT=istat)
       allocate(densz(lz,ngen+1,negyrga,lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(densz,zero,SIZE(densz))
-      
+
       mmx=mx
       if (softxry.ne.'disabled') mmx= max(msxr, mmx)
       if (sigmamod.ne.'disabled') mmx= max(mmsv, mmx)
-cBH Problem if msxr.lt.mx, or mmsv.lt.mx
-cBH      if (softxry.ne.'disabled') then
-cBH         mmx= max(msxr, mmx)
-cBH      elseif (sigmamod.ne.'disabled') then
-cBH         mmx= max(mmsv, mmx)
-cBH      else
-cBH         mmx=mx
-cBH      endif
+!BH Problem if msxr.lt.mx, or mmsv.lt.mx
+!BH      if (softxry.ne.'disabled') then
+!BH         mmx= max(msxr, mmx)
+!BH      elseif (sigmamod.ne.'disabled') then
+!BH         mmx= max(mmsv, mmx)
+!BH      else
+!BH         mmx=mx
+!BH      endif
       mmxp1=mmx+1
-      
+
       allocate(ss(iy,lz,0:mmxp1,lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ss,zero,SIZE(ss))
@@ -522,7 +527,7 @@ cBH      endif
       allocate(ssyyy(iy,lz,0:mx,lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ssyyy,zero,SIZE(ssyyy))
-      
+
       allocate(pcurr(nonch,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pcurr,zero,SIZE(pcurr))
@@ -536,14 +541,14 @@ cBH      endif
       allocate(pdenm(nonch,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pdenm,zero,SIZE(pdenm))
-      
+
       allocate(pengy(nonch,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pengy,zero,SIZE(pengy))
       allocate(pengym(nonch,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pengym,zero,SIZE(pengym))
-      
+
       allocate(pdenra(nonch,lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pdenra,zero,SIZE(pdenra))
@@ -568,7 +573,7 @@ cBH      endif
       allocate(peoed(nonch,lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(peoed,zero,SIZE(peoed))
-      
+
          jfljx=max(jfl,jx) !
       allocate(cint2(jfljx),STAT=istat)
       istat_tot=istat_tot+istat
@@ -577,7 +582,7 @@ cBH      endif
       istat_tot=istat_tot+istat
       call bcast(dx,zero,SIZE(dx))
       call bcast(dxi,zero,SIZE(dxi))
-      
+
       allocate(ifp(jx),STAT=istat)
       istat_tot=istat_tot+istat
       call ibcast(ifp,0,SIZE(ifp))
@@ -770,16 +775,16 @@ cBH      endif
       call bcast(temc4,zero,SIZE(temc4))
       allocate(itemc1(iy),STAT=istat)
       istat_tot=istat_tot+istat
-      call ibcast(itemc1,0,SIZE(itemc1)) 
+      call ibcast(itemc1,0,SIZE(itemc1))
       allocate(itemc2(iy),STAT=istat)
       istat_tot=istat_tot+istat
-      call ibcast(itemc2,0,SIZE(itemc2)) 
+      call ibcast(itemc2,0,SIZE(itemc2))
       allocate(l_lower(iy),STAT=istat)
       istat_tot=istat_tot+istat
-      call ibcast(l_lower,0,SIZE(l_lower)) 
+      call ibcast(l_lower,0,SIZE(l_lower))
       allocate(lpt(iy),STAT=istat)
       istat_tot=istat_tot+istat
-      call ibcast(lpt,0,SIZE(lpt)) 
+      call ibcast(lpt,0,SIZE(lpt))
       allocate(mun(iy),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(mun,zero,SIZE(mun)) !real*8
@@ -806,7 +811,7 @@ cBH      endif
       call bcast(xl,zero,SIZE(xl))
       allocate(jmaxxl(1:jfl),STAT=istat)
       istat_tot=istat_tot+istat
-      call ibcast(jmaxxl,0,SIZE(jmaxxl)) 
+      call ibcast(jmaxxl,0,SIZE(jmaxxl))
       allocate(xlm(0:jfl),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(xlm,zero,SIZE(xlm))
@@ -858,15 +863,15 @@ cBH      endif
       allocate(cthta(iy,jx),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(cthta,zero,SIZE(cthta))
-      
+
       allocate(gon(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(gon(0,0),zero,SIZE(gon))
-      
+
       allocate(so(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(so,zero,SIZE(so))
-      
+
       allocate(currv(jx,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(currv,zero,SIZE(currv))
@@ -898,7 +903,7 @@ cBH      endif
       allocate(fetb(jx,0:mmx),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(fetb,zero,SIZE(fetb))
-      
+
       allocate(wflux(jx,ngen,0:11),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(wflux,zero,SIZE(wflux))
@@ -935,8 +940,8 @@ cBH      endif
       allocate(exm5(jxp1),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(exm5,zero,SIZE(exm5))
-cBH080910      dxp5=>dxm5(2:) !due different start extent
-cBH080910      exp5=>exm5(2:) !due different start extent
+!BH080910      dxp5=>dxm5(2:) !due different start extent
+!BH080910      exp5=>exm5(2:) !due different start extent
       allocate(dxp5(0:jx),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(dxp5,zero,SIZE(dxp5))
@@ -947,11 +952,11 @@ cBH080910      exp5=>exm5(2:) !due different start extent
 
       allocate(ix1(0:mx),ix2(0:mx),ix3(0:mx),ix4(0:mx),STAT=istat)
       allocate(ix5(0:mx),ix6(0:mx),ix7(0:mx),ix8(0:mx),STAT=istat)
-      allocate(tom1(0:mmxp1),tom2(0:mmxp1),STAT=istat) 
+      allocate(tom1(0:mmxp1),tom2(0:mmxp1),STAT=istat)
       allocate(tom3(0:mmxp1),tom4(0:mmxp1),STAT=istat)
       allocate(fctrl(0:2*mx+2),STAT=istat)
       allocate(choose(0:2*mx+2,0:mx+2),STAT=istat)
-      allocate(cog(0:mx,15),STAT=istat)  
+      allocate(cog(0:mx,15),STAT=istat)
       allocate(pm(0:mmxp1,lrors),STAT=istat)
 
       call ibcast(ix1,0,SIZE(ix1))
@@ -995,7 +1000,7 @@ cBH080910      exp5=>exm5(2:) !due different start extent
       allocate(df(0:iy,jx),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(df,zero,SIZE(df))
-      
+
       allocate(ca(iy,jx),STAT=istat) !-YuP: changed from ca=>da
       istat_tot=istat_tot+istat
       call bcast(ca,zero,iyjx)
@@ -1017,7 +1022,7 @@ cBH080910      exp5=>exm5(2:) !due different start extent
 
       allocate(bqlm(iy,jx),STAT=istat)
       call bcast(bqlm,zero,iyjx)
-      
+
       iyjx2l=max(iy+2,lrz)*(jx+2)
       allocate(tem1(iyjx2l),STAT=istat)
       istat_tot=istat_tot+istat
@@ -1037,14 +1042,14 @@ cBH080910      exp5=>exm5(2:) !due different start extent
       allocate(tem6(iyjx2l),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(tem6,zero,SIZE(tem6))
-      
+
       allocate(egg(iy,jx),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(egg,zero,SIZE(egg))
       allocate(fgg(iy,jx),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(fgg,zero,SIZE(fgg))
-      
+
       allocate(xhead(jpxy,ipxy),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(xhead,zero,SIZE(xhead))
@@ -1060,7 +1065,7 @@ cBH080910      exp5=>exm5(2:) !due different start extent
       allocate(fpn(jpxy,ipxy),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(fpn,zero,SIZE(fpn))
-      
+
       allocate(temp1(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
       allocate(temp2(0:iy+1,0:jx+1),STAT=istat)
@@ -1079,7 +1084,7 @@ cBH080910      exp5=>exm5(2:) !due different start extent
       call bcast(temp4(0,0),zero,SIZE(temp4))
       call bcast(temp5(0,0),zero,SIZE(temp5))
       call bcast(temp6(0,0),zero,SIZE(temp6))
-      
+
       allocate(xllji(jpxy,ipxy),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(xllji,zero,SIZE(xllji))
@@ -1099,9 +1104,9 @@ cBH080910      exp5=>exm5(2:) !due different start extent
          call bcast(asnha,zero,SIZE(asnha))
       endif
 
-      if (ndeltarho.ne."disabled".or.lossmode(1).eq.'simplban'
-     +     .or. lossmode(1).eq.'simplbn1'
-     +     .or. lossmode(1).eq.'simplbn2') then
+      if (ndeltarho.ne."disabled".or.lossmode(1).eq.'simplban' &
+           .or. lossmode(1).eq.'simplbn1' &
+           .or. lossmode(1).eq.'simplbn2') then
          !YuP[2017-11-21] Need lossmode(k), checking all k?
          allocate(deltarho(iy,lz,lrzmax),STAT=istat)
          call bcast(deltarho,zero,SIZE(deltarho))
@@ -1147,45 +1152,47 @@ cBH080910      exp5=>exm5(2:) !due different start extent
       call bcast(xlndnz,zero,(ngen+1)*negyrga)
       allocate(sounor(ngen,nsoa,lz,lrz),STAT=istat)
       call bcast(sounor,zero,ngen*nsoa*lz*lrz)
-      
+
       call bcast(sgain,zero,8*ngena)
-      
+
       allocate(truncd(jx),STAT=istat)
       call bcast(truncd,one,jx)
 
-c      allocate(eflux_r_npa(nen_npa,nv_npa,4*lrz),STAT=istat)
-c      allocate(rho_npa(nv_npa,4*lrz),STAT=istat)
-c      allocate(s_npa(nv_npa,4*lrz),STAT=istat)
-c      allocate(ds_npa(nv_npa,4*lrz),STAT=istat)
-      
-      !YuP[07-2016] added: for neutron flux diagnostics (along view lines)
-c      allocate(flux_fus_f(4,nv_fus),STAT=istat)
-c      allocate(flux_fus_m(4,nv_fus),STAT=istat)
-c      allocate(flux_neutron_f(nv_fus), STAT=istat)
-c      allocate(flux_neutron_m(nv_fus), STAT=istat)
-c      allocate(flux_rad_fus_f(4,nv_fus,4*lrz),STAT=istat)
-c      allocate(flux_rad_fus_m(4,nv_fus,4*lrz),STAT=istat)
-c      allocate(rho_fus(nv_fus,4*lrz),STAT=istat)
-c      allocate(s_fus(nv_fus,4*lrz),STAT=istat)
-c      allocate(ds_fus(nv_fus,4*lrz),STAT=istat)
+!      allocate(eflux_r_npa(nen_npa,nv_npa,4*lrz),STAT=istat)
+!      allocate(rho_npa(nv_npa,4*lrz),STAT=istat)
+!      allocate(s_npa(nv_npa,4*lrz),STAT=istat)
+!      allocate(ds_npa(nv_npa,4*lrz),STAT=istat)
 
-c     Check that allocations were OK
+      !YuP[07-2016] added: for neutron flux diagnostics (along view lines)
+!      allocate(flux_fus_f(4,nv_fus),STAT=istat)
+!      allocate(flux_fus_m(4,nv_fus),STAT=istat)
+!      allocate(flux_neutron_f(nv_fus), STAT=istat)
+!      allocate(flux_neutron_m(nv_fus), STAT=istat)
+!      allocate(flux_rad_fus_f(4,nv_fus,4*lrz),STAT=istat)
+!      allocate(flux_rad_fus_m(4,nv_fus,4*lrz),STAT=istat)
+!      allocate(rho_fus(nv_fus,4*lrz),STAT=istat)
+!      allocate(s_fus(nv_fus,4*lrz),STAT=istat)
+!      allocate(ds_fus(nv_fus,4*lrz),STAT=istat)
+
+!     Check that allocations were OK
       if (istat_tot.ne.0) then
-CMPIINSERT_IF_RANK_EQ_0      
+!MPIINSERT_IF_RANK_EQ_0
          WRITE(*,*)'ainalloc.f:  Problem with allocation'
          WRITE(*,*)'ainalloc.f:  Reduce param.h paramaters?'
          WRITE(*,*)'ainalloc.f:  Stopping'
-CMPIINSERT_ENDIF_RANK
+!MPIINSERT_ENDIF_RANK
          STOP
       endif
-      
 
-cdir$ bounds
 
-c..................................................................
-c     Sucessful ainalloc
-c..................................................................
+!dir$ bounds
+
+!..................................................................
+!     Sucessful ainalloc
+!..................................................................
       write(*,*)'ainalloc:  Leaving ainalloc'
 
       return
-      end
+    end subroutine ainalloc
+
+end module ainalloc_mod

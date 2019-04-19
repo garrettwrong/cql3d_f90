@@ -8,6 +8,7 @@ c
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       use pltdf_mod, only : JXQ
       use r8subs_mod, only : luf
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...................................................................

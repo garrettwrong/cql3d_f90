@@ -1,30 +1,35 @@
-c
-c
+module aindflt1_mod
+
+!
+!
+
+contains
+
       subroutine aindflt1
       use param_mod
       use cqcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
-c..................................................................
-c     Set defaults for some basic variables depending on the
-c     namelist values (all sets except frsetup) or parameter values.
-c..................................................................
+!..................................................................
+!     Set defaults for some basic variables depending on the
+!     namelist values (all sets except frsetup) or parameter values.
+!..................................................................
 
 
       do ll=0,lrorsa
         indxlr(ll)=ll
         indxls(ll)=ll
-cBH080305        mplot(ll)="disabled"
+!BH080305        mplot(ll)="disabled"
       enddo
       do ll=1,lrorsa
         mplot(ll)="disabled"
       enddo
-      
+
       mbet=mbeta
       ntotal=ntotala
       mxp1=mx+1
 
-c     analegco="enabled" => ngauss should be .le. 0
+!     analegco="enabled" => ngauss should be .le. 0
       analegco="enabled"
       elpar0=0.
       lmdpln_=lmidpln
@@ -39,18 +44,18 @@ c     analegco="enabled" => ngauss should be .le. 0
       indxls_=1
       impadi=0
       xmax=1.
-c.......................................................................
-c     lrza arrays
-c.......................................................................
+!.......................................................................
+!     lrza arrays
+!.......................................................................
       do ll=1,lrza
         lorbit(ll)=lfielda
         currxj0(ll)=0.0
       enddo
       currxj0(0)=0.0
 
-c.......................................................................
-c     lrorsa arrays
-c.......................................................................
+!.......................................................................
+!     lrorsa arrays
+!.......................................................................
       do 105 ll=1,lrorsa
         itl_(ll)=iy/2
         itu_(ll)=iy-itl_(ll)+1
@@ -78,3 +83,4 @@ c.......................................................................
       return
       end
 
+end module aindflt1_mod

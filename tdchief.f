@@ -6,6 +6,16 @@ c
       use netcdfrf_mod, only : netcdfrf
       use pltmain_mod, only : pltmain
       use r8subs_mod, only : dcopy
+      use ampfar_mod, only : ampfarl, ampfdiff, ampfefldb
+      use ampfar_mod, only : ampfinit, ampfsoln
+      use ainsetpa_mod, only : ainsetpa
+      use ainpltpa_mod, only : ainpltpa
+      use ainplt_mod, only : ainplt
+      use aindfpa_mod, only : aindfpa, ainadjnl_fsetup_setup0, ainadjnl
+      use aclear_mod, only : aclear
+      use achiefn_mod, only : achiefn
+      use achief1_mod, only : achief1
+
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -420,10 +430,10 @@ cBH131109: fix the counter resetting for ll=ilend,1,-1.
                                    !Gives fh,fg(,,1,ll) for each ll.
                                    !it_ampf is passed in common block
                ! YuP test/printout
-               amp_f_=ampfarl(f_(0,0,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
-               amp_f=ampfarl(f(0,0,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
-               amp_h=ampfarl(fh(0,0,kelec,ll),ll)*dtr
-               amp_g=ampfarl(fg(0,0,kelec,ll),ll)*dtr
+               amp_f_=ampfarl(f_(0:ll,0,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
+               amp_f=ampfarl(f(0:ll,0,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
+               amp_h=ampfarl(fh(0:ll,0,kelec,ll),ll)*dtr
+               amp_g=ampfarl(fg(0:ll,0,kelec,ll),ll)*dtr
                write(*,'(a,3i4,3e12.4)')
      +           'after achiefn(3): n,it,ll,integrals f, f-h, g:',
      +            n,it,ll, amp_f, amp_f-amp_h, amp_g  

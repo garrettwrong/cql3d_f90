@@ -3,7 +3,18 @@ c
       subroutine tdinitl ! called only at n=0
       use param_mod
       use cqcomm_mod
-      use tdeqdsk_mod, only: tdeqdsk
+      use tdeqdsk_mod, only : tdeqdsk
+      use ampfar_mod, only : ampfalloc
+      use ainvnorm_mod, only : ainvnorm
+      use ainspec_mod, only : ainspec
+      use ainsetva_mod, only : ainsetva
+      use ainpla_mod, only : ainpla
+      use aingeom_mod, only : aingeom
+      use ainitial_mod, only : ainitial
+      use aindflt_mod, only : aindflt
+      use aindflt1_mod, only : aindflt1
+      use ainalloc_mod, only : ainalloc
+      use aindfpa_mod , only : ain_transcribe
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

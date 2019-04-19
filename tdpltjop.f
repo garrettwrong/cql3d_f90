@@ -4,6 +4,7 @@ c
       subroutine tdpltjop
       use param_mod
       use cqcomm_mod
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 CMPIINSERT_INCLUDE
 
@@ -75,14 +76,14 @@ c..................................................................
 
       fmin=0.
       fmax=0.
-      call aminmx(currtz(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
-      call aminmx(currtpz(1),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(currtz(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+      call aminmx(currtpz(1:lrzmax),1,lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (fmax.lt.gmax) fmax=gmax
-      call aminmx(bscurm(1,1,kke),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(bscurm(1:lrzmax,1,kke),1,lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (fmax.lt.gmax) fmax=gmax
-      call aminmx(bscurm(1,2,kki),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(bscurm(1:lrzmax,2,kki),1,lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (fmax.lt.gmax) fmax=gmax
       if (fmax-fmin.lt.1.e-8) fmin=fmax-.1*abs(fmax)-1.e-5
@@ -238,8 +239,8 @@ C%OS  call gscvlb(1)
       fmin=0.
       fmax=0.
 
-      call aminmx(currtzi(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
-      call aminmx(currtpzi(1),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(currtzi(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+      call aminmx(currtpzi(1:lrzmax),1,lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (fmax.lt.gmax) fmax=gmax
 cyup      call aminmx(totcurzi(1),1,lrzmax,1,gmin,gmax,kmin,kmax)
@@ -549,8 +550,8 @@ c..................................................................
       fmax=0.
       gmin=0.
       gmax=0.
-      call aminmx(powrft(1),1,lrzmax,1,gmin,gmax,kmin,kmax)
-      call aminmx(sorpwt(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+      call aminmx(powrft(1:lrzmax),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(sorpwt(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (gmax.gt.fmax) fmax=gmax
       !if (fmax-fmin.lt.1.e-16) fmin=fmax-.1*abs(fmax)-1.e-5
@@ -647,7 +648,7 @@ c..................................................................
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
       ! Vertical axis limits:
-      call aminmx(powrft(1),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(powrft(1:lrzmax),1,lrzmax,1,gmin,gmax,kmin,kmax)
       RPG1=gmin ! could be negative because of numerical errors
       RPG2=gmax*1.2 ! give 20% extra
       RPG1=min(gmin,0.) !Make lower limit 0 when gmin>0 
@@ -686,11 +687,11 @@ c..................................................................
 
       fmin=0.
       fmax=0.
-      call aminmx(sorpwti(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+      call aminmx(sorpwti(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
       if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
       
       do 50 kk=1,mrfn
-        call aminmx(powurfi(1,kk),1,lrzmax,1,gmin,gmax,kmin,kmax)
+        call aminmx(powurfi(1:lrzmax,kk),1,lrzmax,1,gmin,gmax,kmin,kmax)
         if (gmin.lt.fmin) fmin=gmin
         if (fmax.lt.gmax) fmax=gmax
  50   continue
@@ -768,7 +769,7 @@ c     plots of partial integration of RF-only powers [Watts]
       !(because, if the power level is too small, the curve can be too low)
 c..................................................................
 
-      call aminmx(powurfi(1,0),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(powurfi(1:lrzmax,0),1,lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmax-gmin.lt.1.e-8) gmin=gmax-.1*abs(gmax)-1.e-5
       RPG1=gmin
       RPG2=gmax*1.2 ! give 20% more

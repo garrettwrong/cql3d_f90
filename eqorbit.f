@@ -3,6 +3,7 @@ c
       subroutine eqorbit(epsicon_)
       use param_mod
       use cqcomm_mod
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

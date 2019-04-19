@@ -4,6 +4,7 @@ c
      +                    efluxt,nv,inegsxr,softxry,lnwidth)
       use param_mod
       use r8subs_mod, only : rbound
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -43,7 +44,8 @@ CMPIINSERT_IF_RANK_NE_0_RETURN
       fmax=-ep100 ! initialize to negative, will be found below
       do 100  nn=1,nv
         if (inegsxr(nn).le.1) go to 100 ! and then fmax remains negative
-        call aminmx(eflux(1,nn),1,inegsxr(nn),1,fmin1,fmax1,kmin,kmax)
+        call aminmx(eflux(1:inegsxr(nn),nn),1,inegsxr(nn),1
+     +    ,fmin1,fmax1,kmin,kmax)
         fmin=min(fmin,fmin1)
         fmax=max(fmax,fmax1)
  100  continue

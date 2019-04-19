@@ -4,6 +4,7 @@ c
       subroutine urfbes
       use param_mod
       use cqcomm_mod
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -44,7 +45,8 @@ c..................................................................
 c     Find maximum k-perp
 c..................................................................
 
-        call aminmx(wnper(1,1,krf),1,nrayelts*nrayn,1,emin,emax,
+        call aminmx(wnper(1:nrayelts*nrayelts,1,krf),
+     +        1,nrayelts*nrayn,1,emin,emax,
      +        kmin,kmax)
         em=emax
         if (abs(emin).gt.emax) em=abs(emin)

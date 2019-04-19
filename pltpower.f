@@ -3,6 +3,7 @@ c
       subroutine pltpower
       use param_mod
       use cqcomm_mod
+      use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     This routine plots the power due to the various physical mechanism
@@ -22,7 +23,8 @@ c$$$        call gxglfr(0)
         emin=ep90
         emax=-em90
         do 192 lu=-1,11
-          call aminmx(pentr(1,k,lu,l_),1,nonch,1,hmin,hmax,idmin,idmax)
+          call aminmx(pentr(1:nonch,k,lu,l_),1,
+     +        nonch,1,hmin,hmax,idmin,idmax)
           if (hmin .lt. emin) emin=hmin
           if (hmax .gt. emax) emax=hmax
 c     do 191 nc=1,nonch
