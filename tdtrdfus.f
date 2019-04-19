@@ -4,7 +4,7 @@ c
       use param_mod
       use comm_mod, only : d_rr, mnemonic, lrz
       use comm_mod, only : transp, difus_io, difus_type
-
+      use comm_mod, only : enerkev
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..............................................................

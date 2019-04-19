@@ -776,7 +776,7 @@ contains
 !*
 !*     End of DGBTF2
 !*
-      END
+    END  subroutine
       SUBROUTINE DGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.1) --
@@ -1213,7 +1213,7 @@ contains
 !*
 !*     End of DGBTRF
 !*
-      END
+   END subroutine
       SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, &
                          INFO )
         use iso_c_binding, only : c_double
@@ -1397,7 +1397,8 @@ contains
 !*
 !*     End of DGBTRS
 !*
-      END
+      END subroutine
+
       SUBROUTINE DGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 !*     .. Scalar Arguments ..
       DOUBLE PRECISION ALPHA,BETA
@@ -1707,7 +1708,8 @@ contains
 !*
 !*     End of DGEMM .
 !*
-      END
+      END subroutine
+
       SUBROUTINE DGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 !*     .. Scalar Arguments ..
       DOUBLE PRECISION ALPHA,BETA
@@ -1965,7 +1967,8 @@ contains
 !*
 !*     End of DGEMV .
 !*
-      END
+      END subroutine
+
       SUBROUTINE DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 !*     .. Scalar Arguments ..
       DOUBLE PRECISION ALPHA
@@ -2123,7 +2126,8 @@ contains
 !*
 !*     End of DGER  .
 !*
-      END
+      END subroutine
+
       SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -2242,7 +2246,8 @@ contains
 !*
 !*     End of DLASWP
 !*
-      END
+      END subroutine
+
       SUBROUTINE DSWAP(N,DX,INCX,DY,INCY)
 !*     .. Scalar Arguments ..
       INTEGER INCX,INCY,N
@@ -2312,7 +2317,8 @@ contains
           DY(I+2) = DTEMP
    50 CONTINUE
       RETURN
-      END
+      END subroutine 
+
       SUBROUTINE DTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
 !*     .. Scalar Arguments ..
       INTEGER INCX,K,LDA,N
@@ -2645,7 +2651,8 @@ contains
 !*
 !*     End of DTBSV .
 !*
-      END
+      END subroutine
+
       SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
 !*     .. Scalar Arguments ..
       DOUBLE PRECISION ALPHA
@@ -3015,7 +3022,8 @@ contains
 !*
 !*     End of DTRSM .
 !*
-      END
+      END subroutine
+
       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3162,7 +3170,7 @@ contains
       END IF
 !*
       RETURN
-      END
+    END FUNCTION IEEECK
       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, &
                        N4 )
 !*
@@ -3317,7 +3325,8 @@ contains
 !*
 !*     End of ILAENV
 !*
-      END
+    END FUNCTION ILAENV
+
       LOGICAL FUNCTION LSAME(CA,CB)
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3402,7 +3411,7 @@ contains
 !*
 !*     End of LSAME
 !*
-      END
+    END FUNCTION LSAME
       SUBROUTINE XERBLA( SRNAME, INFO )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3447,7 +3456,7 @@ contains
 !*
 !*     End of XERBLA
 !*
-      END
+    END SUBROUTINE XERBLA
 
 
 
@@ -3771,7 +3780,8 @@ contains
 !*
 !*     End of DGETF2
 !*
-      END
+   END subroutine
+
       SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.2) --
@@ -3926,7 +3936,8 @@ contains
 !*
 !*     End of DGETRF
 !*
-      END
+   END subroutine
+
       SUBROUTINE DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 !*
 !*  -- LAPACK routine (version 3.3.1) --
@@ -4072,7 +4083,7 @@ contains
 !*
 !*     End of DGETRS
 !*
-      END
+      END subroutine
 !*> \brief \b DLAMCH
 !*
 !*  =========== DOCUMENTATION ===========
@@ -4217,7 +4228,7 @@ contains
 !*
 !*     End of DLAMCH
 !*
-      END
+    END FUNCTION DLAMCH
 !************************************************************************
 !*> \brief \b DLAMC3
 !*> \details
@@ -4261,7 +4272,7 @@ contains
 !*
 !*     End of DLAMC3
 !*
-      END
+    END FUNCTION DLAMC3
 !*
 !************************************************************************
 !$$$      SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
@@ -5532,7 +5543,7 @@ contains
 !*
 !*     ==== End of IPARMQ ====
 !*
-      END
+    END FUNCTION IPARMQ
 !*> \brief \b LSAME
 !*
 !*  =========== DOCUMENTATION ===========

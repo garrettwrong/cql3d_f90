@@ -1,7 +1,7 @@
 c
 c
       module netcdfrf_mod
-      integer, private, parameter :: nmodsa=155 ! XXX from param.h, replace later
+      use param_mod, only : nmodsa
       integer, private ::  numrec(nmodsa) !-YuP-> added: as a function of krf
       
       save
@@ -1461,7 +1461,7 @@ c --- endif --- (kopt = 2  or  3  or  4)
 
 
       return
-      end
+      end subroutine
 
 
 
@@ -1855,6 +1855,6 @@ c-YuP:      call ncclos(ncid,istatus)
       call check_err(istatus)
 
       return
-      end
+      end subroutine
 
       end module netcdfrf_mod
