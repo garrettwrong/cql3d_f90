@@ -258,11 +258,11 @@ mpirank=0 ! When MPI is used, mpirank is set in init_mpi below
 
 !MPIINSERT_BARRIER
 
-!all cpu_time(tarray(1))    !This is an f95 intrinsic subroutine
+call cpu_time(tarray(1))    !This is an f95 intrinsic subroutine
 !------------!
-!all abchief !-> calls tdchief (only)
+call abchief !-> calls tdchief (only)
 !------------!
-!all cpu_time(tarray(2))
+call cpu_time(tarray(2))
 
 !MPIINSERT_BARRIER
 
@@ -271,8 +271,8 @@ WRITE(*,'(a,i5,f10.3)') ' a_cqlp: rank, Exec.time tarray(2)-tarray(1)', mpirank,
 !      WRITE(*,'(a)') ' a_cqlp: END of CQL3D, just before MPI_FINISH'
 !MPIINSERT_ENDIF_RANK
 
-!all it3ddalloc ! Deallocate it3d related storage
-!all de_alloc   ! Deallocate other arrays
+call it3ddalloc ! Deallocate it3d related storage
+call de_alloc   ! Deallocate other arrays
 !MPIINSERT_BARRIER
 
 !     close MPI (print 'MPI Full time =',MPI_WTIME()-mpitime0
@@ -280,7 +280,7 @@ WRITE(*,'(a,i5,f10.3)') ' a_cqlp: rank, Exec.time tarray(2)-tarray(1)', mpirank,
 !MPIINSERT_FINISH
 
 
-!all exit(0)
+call exit(0)
 stop
 end program a_cql3d
 
