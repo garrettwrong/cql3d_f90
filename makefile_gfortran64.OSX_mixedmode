@@ -5,10 +5,10 @@ NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
 INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h
-SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f03 \
-	pltdf.f03 eqrhopsi.f03 equilib.f03 \
-	impavnc0.f03  frplteq.f03 tdeqdsk.f03  \
-	bsl.f03  bsu.f03 \
+SOURCES  =   param.f90 cqcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
+	pltdf.f90 eqrhopsi.f90 equilib.f90 \
+	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \
+	bsl.f90  bsu.f90 \
 	a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
 	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
 	ainpla.f  ainplt.f  ainpltpa.f   \
@@ -82,7 +82,7 @@ SOURCES  =   param.f03 cqcomm.f03 r8subs.f03 advnce.f03 pltmain.f03 \
 	wptrmuy.f  wpvptb.f  wpwrng.f  wpmshchk.f \
 	zblock.f  zcunix.f  zfreya.f    znonsym.f
 
-F03OBJECTS = $(filter %.o,$(SOURCES:.f03=.o))
+F90OBJECTS = $(filter %.o,$(SOURCES:.f90=.o))
 OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
 
 LOCATION  =   -L /usr/lib -L/usr/local/lib  
@@ -102,8 +102,8 @@ DELETE    = rm -f
 # Written without dependencies, it may be useful to turn of such checking?
 .SUFFIXES:
 
-$(NAME):           $(F03OBJECTS) $(OBJECTS) 
-	$(LOAD)    $(F03OBJECTS) $(OBJECTS)  $(LOCATION) $(LIBRARIES)
+$(NAME):           $(F90OBJECTS) $(OBJECTS) 
+	$(LOAD)    $(F90OBJECTS) $(OBJECTS)  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
 
 # Check if inlude files have changed i guess
@@ -127,18 +127,18 @@ DAGOBJS = param.o cqcomm.o r8subs.o advnce.o pltmain.o \
           pltdf.o eqrhopsi.o equilib.o \
           impavnc0.o  frplteq.o tdeqdsk.o bsu.o bsl.o
 # And this describes their dag...
-cqcomm.o: cqcomm.f03 param.o
-r8subs.o: r8subs.f03 cqcomm.o
-bsl.o: bsl.f03 param.o cqcomm.o
-bsu.o: bsu.f03 param.o cqcomm.o
-advnce.o: advnce.f03 cqcomm.o r8subs.o bsu.o bsl.o
-pltdf.o: pltdf.f03 param.o cqcomm.o r8subs.o
-pltmain.o: pltmain.f03 param.o cqcomm.o pltdf.o
-eqrhopsi.o: eqrhopsi.f03 param.o cqcomm.o
-equilib.o: equilib.f03 param.o cqcomm.o r8subs.o
-impavnc0.o: impavnc0.f03 param.o cqcomm.o advnce.o r8subs.o bsu.o bsl.o
-frplteq.o: frplteq.f03 param.o cqcomm.o r8subs.o
-tdeqdsk.o: tdeqdsk.f03 param.o cqcomm.o equilib.o r8subs.o
+cqcomm.o: cqcomm.f90 param.o
+r8subs.o: r8subs.f90 cqcomm.o
+bsl.o: bsl.f90 param.o cqcomm.o
+bsu.o: bsu.f90 param.o cqcomm.o
+advnce.o: advnce.f90 cqcomm.o r8subs.o bsu.o bsl.o
+pltdf.o: pltdf.f90 param.o cqcomm.o r8subs.o
+pltmain.o: pltmain.f90 param.o cqcomm.o pltdf.o
+eqrhopsi.o: eqrhopsi.f90 param.o cqcomm.o
+equilib.o: equilib.f90 param.o cqcomm.o r8subs.o
+impavnc0.o: impavnc0.f90 param.o cqcomm.o advnce.o r8subs.o bsu.o bsl.o
+frplteq.o: frplteq.f90 param.o cqcomm.o r8subs.o
+tdeqdsk.o: tdeqdsk.f90 param.o cqcomm.o equilib.o r8subs.o
 
 #----
 # From here we will assume that all deps to build
@@ -149,21 +149,21 @@ tdeqdsk.o: tdeqdsk.f03 param.o cqcomm.o equilib.o r8subs.o
 # As files migrate or evolve, we add small rules for each file.
 # This will also document how the code is structured in practice.
 
-#GBW, until all files have the same extension (03 I hope!)
+#GBW, until all files have the same extension (90 I hope!)
 # filter out objects with correct extension
 
 # see Sect. 4.10.1, Static Pattern Rules.
-$(filter %.o,$(F03OBJECTS)): %.o: %.f03 $(INCLUDES)
+$(filter %.o,$(F90OBJECTS)): %.o: %.f90 $(INCLUDES)
 	$(COMPILE) $< -o $@ 
 
 $(filter %.o,$(OBJECTS)): %.o: %.f $(DAGOBJS) $(INCLUDES)
 	$(COMPILE) $< -o $@
 
 rebuild:
-	$(COMPILE) $(SOURCES) $(F03SOURCES)
-	$(LOAD) $(OBJECTS) $(F03OBJECTS) $(LOCATION) $(LIBRARIES)
+	$(COMPILE) $(SOURCES) $(F90SOURCES)
+	$(LOAD) $(OBJECTS) $(F90OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE)  $(NAME) $(OBJECTS) $(F03OBJECTS) *.lst$(DELETE)
+	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS) *.lst$(DELETE)
 	$(DELETE) *.mod
 
