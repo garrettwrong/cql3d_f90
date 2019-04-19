@@ -10,6 +10,19 @@ use param_mod
 use comm_mod
 use pltmain_mod, only : pltmain
 use r8subs_mod, only : dcopy
+use ainvnorm_mod, only : ainvnorm
+use ainspec_mod, only : ainspec
+use ainsetva_mod, only : ainsetva
+use ainpla_mod, only : ainpla
+use aingeom_mod, only : aingeom
+use ainitial_mod, only : ainitial
+use aindflt_mod, only : aindflt
+use aindflt1_mod, only : aindflt1
+use ainalloc_mod, only : ainalloc
+use aindfpa_mod , only : ain_transcribe
+use abchief_mod, only : abchief
+use achiefn_mod, only : achiefn
+ 
 implicit integer (i-n), real*8 (a-h,o-z)
 save
 
@@ -164,8 +177,9 @@ endif
 
 call tdnflxs(1)
 !     Copy current distribution f into f_
-call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1,
-!+     f_(0:iyjx2*ngen*lrors-1,0,1,1),1)
+call dcopy(iyjx2*ngen*lrors, &
+     f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
+     f_(0:iyjx2*ngen*lrors-1,0,1,1),1)
 !     bring background profiles up to time step n
 if(nefiter.eq.1) call profiles
 ! Reset time step if (n+1).eq.nondtr1(i). .AND. LRZMAX=1
@@ -196,8 +210,8 @@ do k=1,ngen  ! Compute density gains and losses, and powers.
 ! (For lbdry0='enabled', coeff matrix is set up
 !   to automatically maintain unicity.)
 if (lbdry0.ne."enabled") then !-YuP: moved here from impavnc0
-call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,
-!+             fxsp(0:iyjx2-1,0,k,l_),1)
+call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1, &
+     fxsp(0:iyjx2-1,0,k,l_),1)
 s=0.
 t=0.
 do 2100 i=1,iy
