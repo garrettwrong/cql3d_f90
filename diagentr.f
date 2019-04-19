@@ -2,7 +2,7 @@ c
 c
       subroutine diagentr(lefct,k)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -350,7 +350,7 @@ c
 c
       subroutine diagentr_vol
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c     Integrate the FSA power densities over volume.
@@ -398,7 +398,7 @@ c
 c
       real*8 function gfi(i,j,k)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod, only : cl, fpj0, fpj, fpjp
 c..................................................................
 c     Express the velocity flux at (i,j+1/2)
@@ -426,7 +426,7 @@ c
 c
       real*8 function gfu(i,j,k)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod, only : cdf, f1j, f2j
 c..................................................................
 c     Define the flux related quantities G ( H not needed for

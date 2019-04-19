@@ -3,7 +3,7 @@ c
 c
       subroutine tdrmshst
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 c     This routine initializes the radial meshes and integration

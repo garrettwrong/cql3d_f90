@@ -2,7 +2,7 @@ c
 c
       subroutine urfb0
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................
@@ -467,7 +467,7 @@ c=======================================================================
      +           iurfb,prf_rayel)
 
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c YuP-2011
 c..................................................................

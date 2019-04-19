@@ -10,7 +10,7 @@ contains
 
   subroutine pltmain
     use param_mod
-    use cqcomm_mod
+    use comm_mod
     use pltdf_mod, only: pltdf
     implicit integer (i-n), real*8 (a-h,o-z)
     save

@@ -3,7 +3,7 @@ c
 c
       subroutine netcdfrw2(kopt)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -4217,7 +4217,7 @@ c
 c
       subroutine netcdfmain
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -4264,7 +4264,7 @@ c
 c
       subroutine netcdfvec(lefct,igrid)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod, only : hfu, hfi
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -5188,7 +5188,7 @@ c======================================================================
 
       subroutine f4dwrite
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -5450,7 +5450,7 @@ c======================================================================
 
       subroutine ncwritef4d(f4dr,f4dz,f4dv,f4dt,f4ddv,f4ddt,f4d)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c --- include file for netCDF declarations 

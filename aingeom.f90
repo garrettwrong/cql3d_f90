@@ -8,7 +8,7 @@ contains
       subroutine aingeom
       use equilib_mod, only : equilib
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 !..................................................................

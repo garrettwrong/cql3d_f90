@@ -3,7 +3,7 @@ c
 c
       subroutine pltfluxs
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       use pltdf_mod, only : JXQ

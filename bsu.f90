@@ -6,7 +6,7 @@ contains
 
   real(c_double) function bsu(jj,kk,ll)
     use param_mod
-    use cqcomm_mod
+    use comm_mod
     implicit integer (i-n), real*8 (a-h,o-z)
     save
     !      dimension f_(0:iy+1,0:jx+1,ngen,lrz)

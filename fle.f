@@ -2,7 +2,7 @@ c
 c
       subroutine fle_pol(setup,lp)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
@@ -207,7 +207,7 @@ c
 c
       subroutine fle_fsa(setup)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup
@@ -370,7 +370,7 @@ c
 c
       subroutine fle(setup,lp)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) setup

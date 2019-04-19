@@ -2,7 +2,7 @@ c
 c
       subroutine urfwrite_(krf,i_)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c..................................................................
 c     Write total number of rays.

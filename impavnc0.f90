@@ -19,7 +19,7 @@ contains
 
   subroutine impavnc0(kopt)
     use param_mod
-    use cqcomm_mod
+    use comm_mod
     use advnce_mod
     use r8subs_mod, only : dgbtrf, dgbtrs, dcopy
     implicit integer (i-n), real*8 (a-h,o-z)
@@ -2596,7 +2596,7 @@ contains
   !=======================================================================      
   real*8 function z00(i,j,k)
     use param_mod
-    use cqcomm_mod
+    use comm_mod
     use advnce_mod
     implicit integer (i-n), real*8 (a-h,o-z)
     !cc         save  ! YuP: Not really needed

@@ -2,7 +2,7 @@ c
 c
       subroutine pltstrml
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ

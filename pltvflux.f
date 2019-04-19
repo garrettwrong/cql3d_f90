@@ -2,7 +2,7 @@ c
 c
       subroutine pltvflux
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : luf
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)

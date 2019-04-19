@@ -2,7 +2,7 @@ c
 c
       subroutine pltfofvv
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
@@ -97,7 +97,7 @@ c
 c
       subroutine fofv(target,action)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) target,action
       save

@@ -2,7 +2,7 @@ c
 c
       subroutine tdtoarad
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c     Storing values on whole mesh lrzmax and equilibrium quantities

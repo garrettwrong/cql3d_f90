@@ -2,7 +2,7 @@ c
 c
       subroutine urfread
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use netcdfrf_mod, only : netcdfrf
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)

@@ -2,7 +2,7 @@ c
 c
       subroutine pltfvsv
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : luf
       use pltdf_mod, only : JXQ
       use aminmx_mod, only : aminmx

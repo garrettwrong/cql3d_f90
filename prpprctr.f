@@ -2,7 +2,7 @@ c
 c
       subroutine prpprctr
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltmain_mod, only : gslnst, gslnsz, gsvp2d, gswd2d, gxglfr
       use aminmx_mod, only : aminmx

@@ -4,7 +4,7 @@ c
      1  rmax,zax,zminn,zmaxx,zni,zne,zte,zti,zzi,frpsi,psivol,
      1  xxx,yyy,nprim,nimp,zeffctv,zshift1)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 

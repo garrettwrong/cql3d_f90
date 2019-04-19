@@ -5,7 +5,7 @@ NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
 INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h
-SOURCES  =   param.f90 cqcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
+SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	pltdf.f90 eqrhopsi.f90 equilib.f90 \
 	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \
 	bsl.f90  bsu.f90 \
@@ -123,22 +123,22 @@ $(SOURCES):        $(INCLUDES)
 # Now that we have modules and scope,
 #   we unfortunately do have dependencies.
 # Do not fret, they're not so bad.
-DAGOBJS = param.o cqcomm.o r8subs.o advnce.o pltmain.o \
+DAGOBJS = param.o comm.o r8subs.o advnce.o pltmain.o \
           pltdf.o eqrhopsi.o equilib.o \
           impavnc0.o  frplteq.o tdeqdsk.o bsu.o bsl.o
 # And this describes their dag...
-cqcomm.o: cqcomm.f90 param.o
-r8subs.o: r8subs.f90 cqcomm.o
-bsl.o: bsl.f90 param.o cqcomm.o
-bsu.o: bsu.f90 param.o cqcomm.o
-advnce.o: advnce.f90 cqcomm.o r8subs.o bsu.o bsl.o
-pltdf.o: pltdf.f90 param.o cqcomm.o r8subs.o
-pltmain.o: pltmain.f90 param.o cqcomm.o pltdf.o
-eqrhopsi.o: eqrhopsi.f90 param.o cqcomm.o
-equilib.o: equilib.f90 param.o cqcomm.o r8subs.o
-impavnc0.o: impavnc0.f90 param.o cqcomm.o advnce.o r8subs.o bsu.o bsl.o
-frplteq.o: frplteq.f90 param.o cqcomm.o r8subs.o
-tdeqdsk.o: tdeqdsk.f90 param.o cqcomm.o equilib.o r8subs.o
+comm.o: comm.f90 param.o
+r8subs.o: r8subs.f90 comm.o
+bsl.o: bsl.f90 param.o comm.o
+bsu.o: bsu.f90 param.o comm.o
+advnce.o: advnce.f90 comm.o r8subs.o bsu.o bsl.o
+pltdf.o: pltdf.f90 param.o comm.o r8subs.o
+pltmain.o: pltmain.f90 param.o comm.o pltdf.o
+eqrhopsi.o: eqrhopsi.f90 param.o comm.o
+equilib.o: equilib.f90 param.o comm.o r8subs.o
+impavnc0.o: impavnc0.f90 param.o comm.o advnce.o r8subs.o bsu.o bsl.o
+frplteq.o: frplteq.f90 param.o comm.o r8subs.o
+tdeqdsk.o: tdeqdsk.f90 param.o comm.o equilib.o r8subs.o
 
 #----
 # From here we will assume that all deps to build

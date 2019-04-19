@@ -11,7 +11,7 @@ contains
 
   subroutine tdeqdsk
     use param_mod
-    use cqcomm_mod
+    use comm_mod
     use equilib_mod, only : ncoila, nccoila, pcvac, ccoil, ncoil
     use r8subs_mod, only : dcopy
     

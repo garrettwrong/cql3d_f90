@@ -2,7 +2,7 @@ c
 c
       subroutine pltprppr
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use pltmain_mod, only : gpcv2d, gsvp2d, gswd2d, gxglfr
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)

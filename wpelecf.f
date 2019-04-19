@@ -3,7 +3,7 @@ c
       ! follow compiler default real
       real*8 function ghelec(i,j,k)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod
       
       ghelec = qz(j)*(zdaij*fpj(i,j,k)-zdaijm1*fpj(i,j-1,k))
@@ -13,7 +13,7 @@ c
 c
       subroutine wpelecf(kopt)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)

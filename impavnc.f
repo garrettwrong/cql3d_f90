@@ -2,7 +2,7 @@ c
 c
       subroutine impavnc
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -1294,7 +1294,7 @@ c      CONTAINS !removed this construct for franklin.nerc.gov: pg compiler
       
          real*8 function z00(i,j,k)
          use param_mod
-      use cqcomm_mod
+      use comm_mod
          implicit integer (i-n), real*8 (a-h,o-z)
          save
 

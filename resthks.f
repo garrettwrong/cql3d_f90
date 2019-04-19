@@ -3,7 +3,7 @@ c
       subroutine resthks(kl_,klr_,klmdpln,preshin,preskim,pressau1,
      !  pressau2)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c     ------------------------------------------------------------------
 c

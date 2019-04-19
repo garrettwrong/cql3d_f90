@@ -2,7 +2,7 @@ c
 c
       subroutine souplt
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use pltdf_mod, only : cont, tempcntr, nconta, JXQ
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -81,7 +81,7 @@ c
 c=======================================================================
       subroutine pltsofvv
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : luf
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
@@ -268,7 +268,7 @@ c
 c=======================================================================
       subroutine pltso_theta
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)

@@ -1,6 +1,6 @@
       subroutine tdinlegw(klpar,klrad,klindxr,klmesh)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 c
 c     Prepares weights for computing the Legendre coefficients:

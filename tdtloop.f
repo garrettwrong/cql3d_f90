@@ -2,7 +2,7 @@ c
 c
       subroutine tdtloop
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use aindfpa_mod, only : aindfpa, ainadjnl_fsetup_setup0, ainadjnl
       implicit integer (i-n), real*8 (a-h,o-z)

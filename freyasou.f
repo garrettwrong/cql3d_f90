@@ -3,7 +3,7 @@ c
       subroutine freyasou(qx,qy,qz,qr,vx,vy,vz,iqts,curdep,
      1  bmsprd,multiply,multiplyn)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : dscal
       implicit integer (i-n), real*8 (a-h,o-z)
 

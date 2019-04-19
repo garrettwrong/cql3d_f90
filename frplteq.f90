@@ -9,7 +9,7 @@ contains
 
   subroutine frplteq(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep,nfrplt,frplt)
     use param_mod
-    use cqcomm_mod
+    use comm_mod
     use r8subs_mod, only : dcopy
     implicit integer (i-n), real*8 (a-h,o-z)
     save

@@ -7,7 +7,7 @@ contains
 
       subroutine achiefn(kopt)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use impavnc0_mod, only : impavnc0
       use pltmain_mod, only : pltmain
 

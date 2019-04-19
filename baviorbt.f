@@ -2,7 +2,7 @@ c
 c
       subroutine baviorbt
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : lug, luf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -499,7 +499,7 @@ c
 c
       subroutine baviorbto
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -703,7 +703,7 @@ c
 c
       subroutine deltar
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : luf
       implicit integer (i-n), real*8 (a-h,o-z)
       save
@@ -1133,7 +1133,7 @@ c     +                   deltarz(1:nr_delta,nz_delta/2+2,1)
 
       real*8 function deltarz_interp(rr,zz,thet,v)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

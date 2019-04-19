@@ -24,7 +24,7 @@ c-------------------------------------------------------
 
       subroutine send_data
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       include 'mpilib.h'
       
@@ -98,7 +98,7 @@ c         PRINT*,'SEND: mpirank,lr_=',mpirank,lr_
 c-------------------------------------------------------
       subroutine send_entr(k,lefct) 
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       !send/recv entr(k,lefct,l_),pwrrf(1:jx,k,l_),pwrrfs(1:jx,k,l_)
       implicit integer (i-n), real*8 (a-h,o-z)
       include 'mpilib.h'

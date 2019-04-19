@@ -2,7 +2,7 @@ c
 c
       subroutine tdtravct(f1,kprofile,ktransp)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : cvmgt
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -488,11 +488,11 @@ c=======================================================================
 c=======================================================================            
       subroutine funcv(nn,xx,ffvec)
       use param_mod
-      use cqcomm_mod, only: lrz, ngen, pinch
-      use cqcomm_mod, only: adv, adv_norm, d_r, drrt, d_rr
-      use cqcomm_mod, only: lrindx,tam2, frn, cynt2, coss, tau
-      use cqcomm_mod, only: cint2, zmaxpsi, iy_
-      use cqcomm_mod, only: dentarget, reden, reden_norm
+      use comm_mod, only: lrz, ngen, pinch
+      use comm_mod, only: adv, adv_norm, d_r, drrt, d_rr
+      use comm_mod, only: lrindx,tam2, frn, cynt2, coss, tau
+      use comm_mod, only: cint2, zmaxpsi, iy_
+      use comm_mod, only: dentarget, reden, reden_norm
       implicit integer (i-n), real*8 (a-h,o-z)
       real*8 :: ffvec(nn)
 
@@ -576,7 +576,7 @@ c=======================================================================
 c=======================================================================            
       subroutine tdtransp1
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : cvmgt, dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -814,7 +814,7 @@ c......................................................................
 c=======================================================================            
 c=======================================================================            
       subroutine newt(x,n,iters,check)
-      use cqcomm_mod, only : NP, fvec, newtv_nn
+      use comm_mod, only : NP, fvec, newtv_nn
 c 
 c..................................................................
 c     A Newton-Raphson iteration, here used with subroutine funcv
@@ -1053,7 +1053,7 @@ C     USES funcv
 c=======================================================================            
 c=======================================================================            
       REAL*8 function fffmin(x)
-      use cqcomm_mod, only : NP, fvec, newtv_nn
+      use comm_mod, only : NP, fvec, newtv_nn
       REAL*8 x(*)
 C     USES funcv
       INTEGER i

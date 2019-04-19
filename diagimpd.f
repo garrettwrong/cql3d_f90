@@ -2,7 +2,7 @@ c
 c
       subroutine diagimpd(k)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use advnce_mod
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx

@@ -2,7 +2,7 @@ c
 c
       subroutine pltendn
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : rbound, luf
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
@@ -438,7 +438,7 @@ C======================================================================
 
       subroutine plt_fow_cons ! developed for FOW, but can also be used for ZOW
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use r8subs_mod, only : rbound
       implicit integer (i-n), real*8 (a-h,o-z)
       save

@@ -1,6 +1,6 @@
       subroutine lam(en_m,ene,stoplamda)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
 c.............................................
 c This subroutine determines the neutral mean free path as a function of 
 c its energy.

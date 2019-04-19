@@ -2,7 +2,7 @@ c
 c
       subroutine it3dalloc
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 CMPIINSERT_INCLUDE
 
@@ -122,7 +122,7 @@ c=======================================================================
       
       subroutine it3ddalloc 
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 CMPIINSERT_INCLUDE
 
@@ -154,7 +154,7 @@ c=======================================================================
       
       subroutine de_alloc ! YuP[11-2017] more deallocation
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use impavnc0_mod, only : abd, ipivot 
       use impavnc0_mod, only : ampfda, ampfdd
       implicit integer (i-n), real*8 (a-h,o-z)

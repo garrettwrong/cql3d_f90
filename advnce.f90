@@ -6,7 +6,7 @@
 !..................................................................
 
 module advnce_mod
-  use cqcomm_mod
+  use comm_mod
   use r8subs_mod, only : cvmgt
   use bsu_mod, only : bsu
   use bsl_mod, only : bsl

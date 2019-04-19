@@ -2,7 +2,7 @@
 !
 module eqrhopsi_mod
   use param_mod
-  use cqcomm_mod
+  use comm_mod
   use iso_c_binding, only : c_double
   real(c_double), private :: btor00,bthr00,bmod00
   save

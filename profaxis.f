@@ -2,7 +2,7 @@ c
 c
       subroutine profaxis(rn,expn1,expm1,dratio,rova)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 c---------------------------------------------------------------------

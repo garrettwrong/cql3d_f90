@@ -2,7 +2,7 @@ c
 c
       subroutine tdchief
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use netcdfrf_mod, only : netcdfrf
       use pltmain_mod, only : pltmain
       use r8subs_mod, only : dcopy

@@ -1,4 +1,4 @@
-!     cqcomm
+!     comm
 !
 !.......................................................................
 !     There are a number of arrays intended for temporary storage
@@ -37,7 +37,7 @@
 !     SWIM project Integrated Plasma Simulation (IPS) modules.
 !.......................................................................
 
-module cqcomm_mod
+module comm_mod
   use iso_c_binding, only : c_float             !REAL*4
   use iso_c_binding, only : c_double            !REAL*8
   use iso_c_binding, only : c_double_complex    !COMPLEX*16
@@ -2013,4 +2013,4 @@ module cqcomm_mod
   save
 contains
   ! lolz
-end module cqcomm_mod
+end module comm_mod

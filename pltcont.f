@@ -2,7 +2,7 @@ c
 c
       subroutine pltcont(k,pltcase,tt_,itype)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
       use r8subs_mod, only : luf
@@ -489,7 +489,7 @@ C
 C
       subroutine PGFUNC1(VISBLE,yplt,xplt,zplt)
       use param_mod
-      use cqcomm_mod
+      use comm_mod
       use pltdf_mod, only : IIX, IIY, wx, wy
       INTEGER VISBLE
       REAL xplt,yplt,zplt
