@@ -30,10 +30,10 @@ SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	eqtopeol.f90  eqvolpsi.f90  eqwrng.f90  \
 	esefld.f90  exlin.f90  exsweep.f90  exsweept.f90   \
 	exsweepx.f90  finit.f90  firstdrv.f90  fle.f90 flxfn.f90  \
-	freya.f90  freyasou.f90  frhexdrv.f90   \
-	frinitl.f90  frinitz.f90  frnbdep2.f90  frnfreya.f90  \
-	frset.f90 frsmooth.f90  frsplft.f90   \
-	frstup.f90  frsubs.f90  frsuppor.f90  frwrong.f90  \
+	freya.f  freyasou.f  frhexdrv.f   \
+	frinitl.f  frinitz.f  frnbdep2.f  frnfreya.f  \
+	frset.f frsmooth.f  frsplft.f   \
+	frstup.f  frsubs.f  frsuppor.f  frwrong.f  \
 	ilut.f90  impchk.f90  impnorm.f90  it3dalloc.f90  \
 	lookup.f90  losscone.f90  lossegy.f90  lossorbm.f90  \
 	losstor.f90  micgetr.f90   \
@@ -80,7 +80,7 @@ SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	wpcheck.f90  wpchgdy.f90 wpcthta.f90  wpelecf.f90   \
 	wpinitl.f90  wploweq.f90  wpsavf.f90  wptrafx.f90  wptramu.f90  \
 	wptrmuy.f90  wpvptb.f90  wpwrng.f90  wpmshchk.f90 \
-	zblock.f90  zcunix.f90  zfreya.f90    znonsym.f
+	zblock.f90  zcunix.f90  zfreya.f   znonsym.f90
 
 F90OBJECTS = $(filter %.o,$(SOURCES:.f90=.o))
 OBJECTS = $(filter %.o,$(SOURCES:.f=.o))

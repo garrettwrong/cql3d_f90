@@ -202,9 +202,9 @@ contains
 !           Relaxation towards target parallel currxj:
 
             currxj0(lr_)=currxj(lr_)
-            elecfld(lr_)=elecfld(lr_)*(1.-efrelax*
+            elecfld(lr_)=elecfld(lr_)*(1.-efrelax* &
 !990131     +         (currpar(lr_) -currxj(lr_))/(sign(1.,currxj(lr_)) &
-                 (currpar(lr_) -currxj(lr_))/(sign(one,currxj(lr_))
+                 (currpar(lr_) -currxj(lr_))/(sign(one,currxj(lr_)) &
 !990131     +           *amax1(abs(currpar(lr_)),abs(currxj(lr_))))) &
                  *max(abs(currpar(lr_)),abs(currxj(lr_)))))
 
@@ -235,7 +235,7 @@ contains
 !           Relaxation towards saved target parallel currxj0:
 
             elecfld(lr_)=elecfld(lr_)*(1.-efrelax* &
-                 (currpar(lr_) -currxj0(lr_))/(sign(one,currxj0(lr_))
+                 (currpar(lr_) -currxj0(lr_))/(sign(one,currxj0(lr_)) &
 !990131     +           *amax1(abs(currpar(lr_)),abs(currxj0(lr_))))) &
                  *max(abs(currpar(lr_)),abs(currxj0(lr_)))))
 

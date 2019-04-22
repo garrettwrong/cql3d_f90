@@ -51,7 +51,7 @@ contains
         do 30 m=0,mbet
           s=s-alm(m,lr_)*coss(itl,l_)**(2*m+1)*betta(m,lr_)*(dm+dp)
  30     continue
-        s=s+coss(itl,l_)*sinn(itl,l_)
+        s=s+coss(itl,l_)*sinn(itl,l_) &
 !990131     1    *(dm*(ak0-bk0*(alog(2.*dm)-1.))+dp*(ak0-bk0*(alog(2.*dp)-1.))) &
           *(dm*(ak0-bk0*(log(2.*dm)-1.))+dp*(ak0-bk0*(log(2.*dp)-1.)))
         xlbnd(lr_)=s*8.*zmax(lr_)
