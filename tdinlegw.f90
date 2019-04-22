@@ -96,8 +96,8 @@ contains
 !l    1.1 construct Gaussian mesh and P_m*sin*dh for each m
 !.......................................................................
 
-      call congau(y(1,klmesh),zxg,zxgh(1,0),ipoints,ngauss)
-      if (iparts .eq. 2) call congau(y(iistart,klmesh), &
+      call congau(y(1:ipoints,klmesh),zxg,zxgh(1,0),ipoints,ngauss)
+      if (iparts .eq. 2) call congau(y(iistart:ipoints,klmesh), &
         zxg(iigstrt),zxgh(iigstrt,0),ipoints,ngauss)
 
       do 110 iside=1,iparts
@@ -189,8 +189,9 @@ contains
       do 131 iside=1,iparts
         iint0=(iside-1)*(iistart-1)
         do 132 iint=iint0+1,iint0+ipoints-1
-          call lagrng(y(1,klmesh),iint0+ipoints,ngauss,zxg,iint, &
-            ilaglim(iint,1),ilaglim(iint,2),zli,mdxgau)
+          call lagrng(y(1:iint0+ipoints,klmesh),iint0+ipoints,&
+               ngauss,zxg,iint, &
+               ilaglim(iint,1),ilaglim(iint,2),zli,mdxgau)
           do 133 ig=1,ngauss
             iig=(iint-1)*ngauss
             do 134 m=0,mmx

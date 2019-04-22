@@ -94,7 +94,7 @@ contains
       IF (LRZMAX.GT.200) STOP 'TDPLTEQ: CHECK DIM OF TEXTT'
 
       do 10 l=1,lrzmax
-         IF (LORBIT(L).GT.LFIELDA) STOP'TDPLTEQ: CHECK DIM OF RTAB1/2'
+         IF (LORBIT(L).GT.LFIELDA) STOP 'TDPLTEQ: CHECK DIM OF RTAB1/2'
         do 20 j=1,lorbit(l)
            RTAB1(j)=solr(lorbit(l)+1-j,l)
            RTAB2(j)=solz(lorbit(l)+1-j,l)

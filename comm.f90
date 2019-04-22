@@ -1396,7 +1396,7 @@ module comm_mod
   real(c_double), pointer :: tamm1(:)
   !common /csigma/ tamm1  !(0:mmsv)
 
-  real(c_double), pointer :: iind(:)
+  integer, pointer :: iind(:)
   !common /csigma/ iind  !(1:jx)
 
   !..............................................................

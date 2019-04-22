@@ -1,5 +1,7 @@
 module tdnpacxcs_mod
 
+contains
+
        REAL FUNCTION cxcs(enin)
        IMPLICIT integer (i-n), real*8 (a-h,o-z)
        REAL*8,DIMENSION(9)::a
@@ -65,8 +67,6 @@ module tdnpacxcs_mod
 !
 !######################################################################
 !
-
-contains
 
       subroutine alcheb(pet, pcf, kncf, pfit, kermsg)
 !

@@ -30,7 +30,7 @@ contains
 !     main loops over radius of the toroidal device.
 !..................................................................
 
-      include 'name.h'
+      include 'name.h90'
 !MPIINSERT_INCLUDE
 
       character*8 icall,iplotsxr
@@ -628,7 +628,7 @@ contains
          ! Stop iterations, if beyond iteration limit:
          if (nefiter .gt. nefitera) go to 21
          ! Stop iterations if n<(control turn on step):
-         if (n. le. noncntrl) go to 21
+         if (n .le. noncntrl) go to 21
          write(*,*)'TDCHIEF/EFLDITER: Time step=',n, &
                    '    Starting iteration #',nefiter
          nefiter_all=0 ! Summ-up nefiter_out (output of eflditer)
