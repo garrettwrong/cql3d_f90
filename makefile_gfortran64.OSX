@@ -4,7 +4,9 @@ SHELL     = /bin/sh
 NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
-INCLUDES  = frcomm.h frname.h frname_decl.h name.h name.h90 trans.h wpadvnc.h
+# h90 should go away as the need for f77 .h goes away, then will call .h again...
+INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h \
+	frname.h90 frname_decl.h90 name.h90 trans.h90
 SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	pltdf.f90 eqrhopsi.f90 equilib.f90 \
 	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \

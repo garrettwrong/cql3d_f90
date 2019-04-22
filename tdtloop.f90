@@ -17,7 +17,7 @@ contains
 !     Determines whether or not it is time to halt execution.
 !..................................................................
 
-      include 'name.h'
+      include 'name.h90'
 !MPIINSERT_INCLUDE
 
       character cptline*80

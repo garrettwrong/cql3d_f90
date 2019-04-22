@@ -1,6 +1,4 @@
-module frname.h_mod
-
-!     frname.h
+!     frname.h90
 !***********************************************************************
 !     Namelist variables for the NFREYA fr.... routines
 !***********************************************************************
@@ -21,8 +19,8 @@ module frname.h_mod
         ,rpivot,zpivot,ranseed,fionx,nbinject &
         ,xdebug &
         ,a1rf,a2rf,wrfe,wrfi,nrfzon,rfzone,ichmod,betalm &
-        ,beamplse,beampon,beampoff
-!     ONETWO DIVERGENCE &
+        ,beamplse,beampon,beampoff &
+!     ONETWO DIVERGENCE
         ,nimp,nprim,frmod,fr_gyro,smooth,multiply,multiplyn,bmsprd &
         ,frplt,nfrplt,inubpat,npat &
         ,ibcur,ibcx,ibslow,iborb,iyoka,ishot,itime &
@@ -31,8 +29,8 @@ module frname.h_mod
         ,kdeni,kdenz,ksvi,ksvz,ksve,krad,ngh,ngl,nouthx &
         ,hdepsmth &
         ,birth_pts_files,nbirth_pts_files,nbirth_pts,read_birth_pts &
-        ,ne_tk,ds_tk,fe_tk
-!     Remove NBI source at psi outside of psicutoff: &
+        ,ne_tk,ds_tk,fe_tk &
+!     Remove NBI source at psi outside of psicutoff:
         ,psicutoff
 
 
@@ -48,4 +46,3 @@ module frname.h_mod
 ! nshell,nraysh,thetsh,phish,praysh
 ! wdelt,wgam,wohm,nqrad,qradr,qradin,refrad
 ! rnp,irfcur,ifb,rfcur,lmode,ifbprof,alphaf
-end module frname.h_mod

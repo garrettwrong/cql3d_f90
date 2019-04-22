@@ -592,7 +592,7 @@ contains
 !     the target densities.
 !..............................................................
 
-      include 'trans.h'
+      include 'trans.h90'
 !      data nobind /"disabled"/    !Need BLOCK DATA or following stmt
       nobind="disabled"
 

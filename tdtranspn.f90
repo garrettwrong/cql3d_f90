@@ -10,7 +10,7 @@ contains
 
       implicit integer (i-n), real*8 (a-h,o-z)
       dimension  zmatcont(12), janelt(12)
-      include 'trans.h'
+      include 'trans.h90'
       save ifirst
       data ifirst /1/
 !..............................................................

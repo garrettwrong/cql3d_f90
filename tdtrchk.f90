@@ -19,7 +19,7 @@ contains
 !..............................................................
 
 
-      include 'trans.h'
+      include 'trans.h90'
       if (iactst.eq."disabled") return
       call bcast(fxsp,zero,iyjx2*ngen*lrors)
       call bcast(f,zero,iyjx2*ngen*lrors)
