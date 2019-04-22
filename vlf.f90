@@ -731,8 +731,8 @@ contains
               rnfactor=1.0
                 indx=sinz(i,l,lr_)*argmnt(j)/bsslstp(krfmode)+1
                 tem1(i)=alfag(j)*alfi(i)*abs(rnpar)*vptb(i,lr_) &
-                  *ax*rnfactor*temc2(i)
-!990131     1            *cabs(cosz1(i)*jb0(indx,krfmode) &
+                  *ax*rnfactor*temc2(i) &
+!990131     1            *cabs(cosz1(i)*jb0(indx,krfmode) 
                   *abs(cosz1(i)*jb0(indx,krfmode) &
                   +sinz1(i)*(signe*jbp1(indx,krfmode) &
                   +signi*jbm1(indx,krfmode)) &

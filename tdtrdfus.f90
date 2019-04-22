@@ -10,6 +10,9 @@ contains
       use comm_mod, only : d_rr, mnemonic, lrz
       use comm_mod, only : transp, difus_io, difus_type
       use comm_mod, only : enerkev
+      use comm_mod, only : ryain
+      use comm_mod, only : difin
+
       implicit integer (i-n), real*8 (a-h,o-z)
 
 !..............................................................
@@ -417,7 +420,7 @@ contains
 
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
-      !use comm_mod
+      !XXXXXXXXX use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 !.......................................................................

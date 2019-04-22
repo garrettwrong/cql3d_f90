@@ -554,7 +554,7 @@ contains
       else ! res.region is shifted from upar=0 point
          umn= min(abs(vparlo),abs(vparup))
          umn_norm= umn/vnorm
-         jmn= luf_bin(umn_norm,x,jx) ! x(jmn-1) <= umn_norm <  x(jmn)
+         jmn= luf_bin(umn_norm,x) ! x(jmn-1) <= umn_norm <  x(jmn)
          jmn= max(2,jmn)  ! to be sure jmn>1
          jmn= min(jmn,jx) ! to be sure jmn is not exceeding jx
       endif
@@ -741,7 +741,7 @@ contains
             sinn0= min(sinn0,one-em6) !make sure sin(theta0)<1.
             coss0= upar0/u0 ! |cos(theta0)|
             theta0=asin(sinn0) ! <pi/2
-            i=luf_bin(theta0,ymid(1,l_),iyh) ! nearest i in theta0-grid
+            i=luf_bin(theta0,ymid(1:iyh,l_)) ! nearest i in theta0-grid
             ! Note: from the above line, i<iyh, or at most i=iyh
 
             !YuP[09-16-2015] Indicator for
@@ -966,7 +966,7 @@ contains
 !=======================================================================
 
 
-      integer function luf_bin(px,parray,kn)
+      integer function luf_bin(px,parray)
       implicit integer (i-n), real*8 (a-h,o-z)
 ! YuP-2011
 !     LUF_BIN() is similar to LUF(), but with a BINARY SEARCH (faster).
@@ -975,7 +975,9 @@ contains
 !
 !     Elements in parray must be strictly increasing !!!
 !
-      dimension parray(kn)
+      real*8 :: parray(:)
+      integer :: kn
+      kn = size(parray)
 !
 !     YuP added: check that parray(i) is increasing with i
 !      do i=2,kn
