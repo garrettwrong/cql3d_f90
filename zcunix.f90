@@ -1242,45 +1242,47 @@ contains
 !************************************************************************
 !
 !
-      real*8 function erf(xxx)
-      implicit integer (i-n), real*8 (a-h,o-z)
-      save
-!------------------------------------------------------
-!     This routine computes the ERROR FUNCTION.
-!------------------------------------------------------
-      real*8 tusqpi
-      dimension a(5)
-      sign=1.
-      if (xxx .lt. 0.) sign=-1.
-      xcg=sign*xxx
-      x2=xcg*xcg
-      if (xcg .ge. .6) go to 20
-      sum=xcg
-      term=xcg
-      kmax=6
-      do 10 k=1,kmax
-        t1=dfloat(k)
-        t2=dfloat(2*k+1)/dfloat(2*k-1)
-        term=-term*x2/(t1*t2)
-        sum=sum+term
- 10   continue
-      erf=tusqpi*sum
-      erf=sign*erf
-      return
- 20   continue
-      p=.3275911
-      a(1)=.225836846
-      a(2)=-.252128668
-      a(3)=1.25969513
-      a(4)=-1.287822453
-      a(5)=.94064607
-      eta=1./(1.+p*xcg)
-      phip=tusqpi*exp(-x2)
-      term=(((a(5)*eta+a(4))*eta+a(3))*eta+a(2))*eta+a(1)
-      erf=1.-term*eta*phip
-      erf=sign*erf
-      return
-      end
+
+!!XXXXXX 
+!       real*8 function erf(xxx)
+!       implicit integer (i-n), real*8 (a-h,o-z)
+!       save
+! !------------------------------------------------------
+! !     This routine computes the ERROR FUNCTION.
+! !------------------------------------------------------
+!       real*8 tusqpi
+!       dimension a(5)
+!       sign=1.
+!       if (xxx .lt. 0.) sign=-1.
+!       xcg=sign*xxx
+!       x2=xcg*xcg
+!       if (xcg .ge. .6) go to 20
+!       sum=xcg
+!       term=xcg
+!       kmax=6
+!       do 10 k=1,kmax
+!         t1=dfloat(k)
+!         t2=dfloat(2*k+1)/dfloat(2*k-1)
+!         term=-term*x2/(t1*t2)
+!         sum=sum+term
+!  10   continue
+!       erf=tusqpi*sum
+!       erf=sign*erf
+!       return
+!  20   continue
+!       p=.3275911
+!       a(1)=.225836846
+!       a(2)=-.252128668
+!       a(3)=1.25969513
+!       a(4)=-1.287822453
+!       a(5)=.94064607
+!       eta=1./(1.+p*xcg)
+!       phip=tusqpi*exp(-x2)
+!       term=(((a(5)*eta+a(4))*eta+a(3))*eta+a(2))*eta+a(1)
+!       erf=1.-term*eta*phip
+!       erf=sign*erf
+!       return
+!       end
 
 
 !######date01jan1984     copyright ukaea, harwell.
