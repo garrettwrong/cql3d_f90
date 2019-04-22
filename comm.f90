@@ -1693,9 +1693,9 @@ module comm_mod
   !common /dptr95/ nrayelt
   integer, pointer :: jslofas(:,:)
   !common /dptr95/ jslofas
-  real(c_double), pointer :: nurefls(:,:)
+  integer, pointer :: nurefls(:,:)
   !common /dptr95/ nurefls
-  real(c_double), pointer :: keiks(:,:)
+  integer, pointer :: keiks(:,:)
   !common /dptr95/ keiks
   integer, pointer :: jpes(:,:)
   !common /dptr95/ jpes
