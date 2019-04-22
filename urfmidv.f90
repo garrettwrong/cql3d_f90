@@ -41,7 +41,7 @@ contains
  3      continue
  2    continue
 
-      if(jmax.eq.jx) call bcast(temp1(1,jx),zero,iy)
+      if(jmax.eq.jx) call bcast(temp1(1:iy,jx),zero,iy)
 
 !..................................................................
 !     Define db at the pass-trapped boundaries
@@ -96,7 +96,7 @@ contains
  3      continue
  2    continue
 
-      if(jmax.eq.jx) call bcast(temp1(1,jx),zero,iy)
+      if(jmax.eq.jx) call bcast(temp1(1:iy,jx),zero,iy)
 
 !..................................................................
 !     Set dc=0 at pi and 0
