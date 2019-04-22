@@ -27,9 +27,9 @@ contains
       go to 999
 
       if (lrzmax.le.1) then
-        if(idskf.eq. "disabled". or. n.ne.nstop+1)  return
+        if(idskf.eq. "disabled".or. n.ne.nstop+1)  return
       else
-        if(idskf.eq. "disabled". or. n.ne.nstop)  return
+        if(idskf.eq. "disabled".or. n.ne.nstop)  return
       endif
       if(l_.ne.lrors)  return
       open(unit=41,file='graph',status='unknown')

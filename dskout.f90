@@ -27,10 +27,10 @@ contains
 
       if (lrzmax.le.1) then
         if((idskf.eq. "disabled".and.idskrf.eq."disabled") &
-          . or. n.ne.nstop+1)  return
+          .or. n.ne.nstop+1)  return
       else
         if((idskf.eq. "disabled".and.idskrf.eq."disabled") &
-          . or. n.ne.nstop)  return
+          .or. n.ne.nstop)  return
       endif
       if(ll.gt.1)  go to 4
       if(idskf.ne."disabled") &

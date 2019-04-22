@@ -804,7 +804,7 @@ contains
  20   continue
 
 !..................................................................
-!     Store coeffs in cqlb... or wcqlb..., depending on cqlpmod.
+!     Store coeffs in cqlb...or wcqlb..., depending on cqlpmod.
 !..................................................................
 
       if (cqlpmod.ne."enabled") then
@@ -880,7 +880,7 @@ contains
       endif
 
 !..................................................................
-!     Store coeffs in cqlb... or wcqlb..., depending on cqlpmod.
+!     Store coeffs in cqlb...or wcqlb..., depending on cqlpmod.
 !..................................................................
 
       elseif (cqlpmod.eq."enabled") then

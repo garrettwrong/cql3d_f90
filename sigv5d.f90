@@ -188,7 +188,7 @@ contains
            ! summed over Legendre indices and dual-j indices;
            ! Units: [reactions/sec/cm^3]
 
-      enddo ! l1 (Legendre pol. order)
+      enddo ! l1 (Legendre pol.order)
 
 
 !     sum=sum*bn1*bn2   (Normalization of f in cql3d changed from cql).

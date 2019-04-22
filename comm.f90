@@ -1973,7 +1973,7 @@ module comm_mod
   !$$$
   !$$$
   !$$$      common/orb0/qmc,Rorb0,Zorb0,borb0,psiorb0,cosp0,Rmid
-  !$$$C---> '0' - values at the launching point of g.c. orbit [cgs]
+  !$$$C---> '0' - values at the launching point of g.c.orbit [cgs]
   !$$$C---> cosp0 is cos(pitch-angle) at launching point.
   !$$$C---> Rmid is R at midplane for given orbit found by Newton iterations
   !.......................................................................
