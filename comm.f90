@@ -1643,7 +1643,7 @@ module comm_mod
   !common /dptr95/ lloc
   integer, pointer :: llray(:,:,:)
   !common /dptr95/ llray
-  integer, pointer :: psiloc(:,:,:)
+  real(c_double), pointer :: psiloc(:,:,:)
   !common /dptr95/ psiloc
   real(c_double), pointer :: scalurf(:,:,:)
   !common /dptr95/ scalurf
@@ -1719,7 +1719,7 @@ module comm_mod
   !common /dptr95/ lrayelt
   real(c_double), pointer :: delpwr0(:,:)
   !common /dptr95/ delpwr0
-  real(c_double), pointer :: nrayelt0(:,:)
+  integer, pointer :: nrayelt0(:,:)
   !common /dptr95/ nrayelt0
   real(c_double), pointer :: truncd(:) ! 1:jx
   !common /dptr95/ truncd
