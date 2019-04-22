@@ -19,7 +19,7 @@ contains
       dimension zmat(lmatsa),zxdumy(lsa+1)
       dimension zmat2(lmatsa),zxdumy2(lsa+1)
 
-      include 'wpadvnc.h'
+      include 'wpadvnc.h90'
       dithta(i,j,l)=0.5-0.5*(1/(i+1))+0.5*(1/(iy_(l)+1-i))
       fpithta(i,j,k,l)=fnhalf(i+1,j,k,l)*(1.-dithta(i,j,l)) + &
         fnhalf(i  ,j,k,l)*dithta(i,j,l)
