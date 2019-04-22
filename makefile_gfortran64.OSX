@@ -64,7 +64,7 @@ SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	tdreadf.f90  tdrmshst.f90  tdsetnpa.f90  tdsetsxr.f90   \
 	tdstin.f90  tdsxr.f90  tdsxr0.f90  tdsxray.f90  tdsxrplt.f90  \
 	tdtloop.f90  tdtoarad.f90   tdtranspn.f90  \
-	tdtoaray.f90  tdtraloc.f90  tdtransp.f90  tdtravct.f\
+	tdtoaray.f90  tdtraloc.f90  tdtransp.f90  tdtravct.f90 \
 	tdtrchk.f90  tdtrchkd.f90  tdtrcon.f90   \
 	tdtrdfus.f90  tdtrfcop.f90  tdtrflg.f90  tdtrflx.f90  \
 	tdtrmuy.f90  tdtrrsou.f90  tdtrrtov.f90   \
@@ -120,7 +120,7 @@ $(SOURCES):        $(INCLUDES)
 # by Stallman and McGrath.
 # However, the two rules following this seem clearer to me (BobH).
 # Me too BobH, me too. ;)  (GBW).
-#%.o:               %.f90        $(INCLUDES)
+#%.o:               %.f        $(INCLUDES)
 #	$(COMPILE) $< -o $@
 
 
@@ -189,7 +189,7 @@ ampfar.o: ampfar.f90 param.o comm.o r8subs.o
 $(filter %.o,$(F90OBJECTS)): %.o: %.f90 $(INCLUDES)
 	$(COMPILE) $< -o $@ 
 
-$(filter %.o,$(OBJECTS)): %.o: %.f$(DAGOBJS) $(INCLUDES)
+$(filter %.o,$(OBJECTS)): %.o: %.f $(DAGOBJS) $(INCLUDES)
 	$(COMPILE) $< -o $@
 
 rebuild:
