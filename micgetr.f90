@@ -13,7 +13,7 @@ contains
 !     This subroutine computes a mesh ratio for the purpose of creating
 !     a geometric mesh.
 !     The solution is returned in r.
-!     Mesh ratio spacing factor h must be bounded by 10. and 0.1
+!     Mesh ratio spacing factor h must be bounded by 10.and 0.1
 !     Accuracy is to within 1 part in 14 places
 !     ksingul=1, if problem.
 !..................................................................

@@ -40,7 +40,7 @@ contains
       jzmin = jzval  !-YuP-> first non-zero coefficient
       !-YuP-> Keep high-m Legendre coefficients for small j (v~0) equal zero:
 
-      if(relativ.eq."fully". and. m.ge.1) jzmin=MAX(3,jzval) ! For temp=5keV:
+      if(relativ.eq."fully".and. m.ge.1) jzmin=MAX(3,jzval) ! For temp=5keV:
                                                              ! 33 ok (10% of jx=330);
                                                              ! 25 still bad
 

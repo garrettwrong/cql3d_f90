@@ -751,7 +751,7 @@ contains
             !includes one resonant point (or no resonance at all).
             !However, a trapped orbit that crosses a ray element
             !at near-tip part of orbit may include two resonance events:
-            !upar_loc=+/-|upar_eps| (small pos. and neg. values of upar).
+            !upar_loc=+/-|upar_eps| (small pos.and neg. values of upar).
             !Such crossing corresponds to TWO "kicks" obtained from given
             !ray element.
             !(Of course, the resonant condition at such ray element

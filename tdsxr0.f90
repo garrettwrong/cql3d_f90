@@ -314,7 +314,7 @@ contains
  150      if(ibin2.gt.4)  stop 'stop 3 in tdsxr0'
           sxry(ibin1,ibin2)=sxry(ibin1,ibin2)+ds
 !.......................................................................
-!     Angle between viewing dirn. and toroidal (approx. b-field) direction
+!     Angle between viewing dirn.and toroidal (approx. b-field) direction
 !     (Detector views sxr's emitted towards it).
 !.......................................................................
 

@@ -8,7 +8,7 @@ contains
       real*8 function taper(x,x0,x1,x2)
       implicit integer (i-n), real*8 (a-h,o-z)
 
-!     A multiplication factor between 0. and 1., giving a tapered
+!     A multiplication factor between 0.and 1., giving a tapered
 !     (i.e., smoothed) box function.
 !
 !     For abs(x-x0) .lt. x1/2., gives 1.

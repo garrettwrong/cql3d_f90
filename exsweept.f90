@@ -15,7 +15,7 @@ contains
 !..................................................................
 !     This routine checks the solution obtained after the velocity split
 !     by differentiation of the solution in time and comparison with
-!     the right hand side. temp4(i,j) will contain the l.h.s. and will b
+!     the right hand side. temp4(i,j) will contain the l.h.s.and will b
 !     multiplied by cint2(j)*cynt2(i,l_) so that it will contain the
 !     the change in the local particle number density. temp4(i,j) will
 !     be the r.h.s.  and the two arrays should (ideally) be identical.

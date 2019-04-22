@@ -119,7 +119,7 @@ contains
 
 
 !..................................................................
-!     fill in input arrays between rya=0. and rya=1.
+!     fill in input arrays between rya=0.and rya=1.
 !     This determines density, temperature, source, etc profiles as
 !     functions of the normalized radial coordinate rho. If density
 !     and temperatures are to be specified as functions of psi

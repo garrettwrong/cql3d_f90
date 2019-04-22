@@ -306,7 +306,7 @@ contains
 !          f must be declared external in the calling program.
 !
 !          subroutine f may access user-defined quantities in
-!          neq(2),... and/or in y(neq(1)+1),... if neq is an array
+!          neq(2),...and/or in y(neq(1)+1),... if neq is an array
 !          (dimensioned in f) and/or y has length exceeding neq(1).
 !          see the descriptions of neq and y below.
 !
@@ -613,7 +613,7 @@ contains
 !          if desired.  also, jac may alter the y array, if desired.
 !          jac must be declared external in the calling program.
 !               subroutine jac may access user-defined quantities in
-!          neq(2),... and/or in y(neq(1)+1),... if neq is an array
+!          neq(2),...and/or in y(neq(1)+1),... if neq is an array
 !          (dimensioned in jac) and/or y has length exceeding neq(1).
 !          see the descriptions of neq and y above.
 !

@@ -137,7 +137,7 @@ contains
             else
               rshape=drshape(ilr)
             endif
-            if (difus_rshape(8).ne.zero. and. &
+            if (difus_rshape(8).ne.zero.and. &
                          difus_type(k) .eq. "neo_plus") then
                rshape1=tdtrrshape1(ilr)
             else

@@ -35,7 +35,7 @@ contains
       zdns(l_)=0.0
 
 !..................................................................
-!     temp3 contains the r.h.s. and temp4 the l.h.s.
+!     temp3 contains the r.h.s.and temp4 the l.h.s.
 !..................................................................
 
       do 10 i=1,iy
