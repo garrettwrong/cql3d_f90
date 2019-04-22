@@ -38,7 +38,9 @@ SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	lookup.f90  losscone.f90  lossegy.f90  lossorbm.f90  \
 	losstor.f90  micgetr.f90   \
 	micgmbnd.f90  micgnbnd.f90  micxinil.f90  micxinim.f90  micxinit.f90  \
-	micxiniz.f90  netcdfrf.f90  netcdfrw2.f90 ntdstore.f90   \
+	micxiniz.f90  \
+	netcdfrf.f  netcdfrw2.f \
+	ntdstore.f90   \
 	ntloop.f90  pack21.f90 pltcont.f90  pltcycl.f90 \
 	pltdnz.f90  pltelec.f90  pltendn.f90   \
 	pltends.f90  pltfluxs.f90 pltfofvv.f90 pltfvsv.f90  pltinit.f90  pltlosc.f90  \
