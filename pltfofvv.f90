@@ -13,7 +13,7 @@ contains
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real*8 (a-h,o-z)
 !
-**SCC10/7/94
+!**SCC10/7/94
 !   prppru calculates the pitch angle integrated distribution function
 !**********************
 !

@@ -48,7 +48,8 @@ SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	pltrstv.f90  pltrun.f90 pltstrml.f90  pltvec.f90  pltvectr.f90  \
 	pltvflux.f90  profaxis.f90  profiles.f90 prppr.f90   \
 	prpprctr.f90  psif.f90  psifp.f90  psifppy.f90  psifpy.f90  psiinv.f90  \
-	r8lsode.f90  rdc_multi.f90 rdc_bplt.f90 restcon.f90 resthks.f90  \
+	r8lsode.f  \
+	rdc_multi.f90 rdc_bplt.f90 restcon.f90 resthks.f90  \
 	restvty.f90  rf.f90  sigalloc.f90  siggy.f90  sigmax.f90  sigsetup.f90  \
 	sigv5d.f90 sigfn.f90 sigie.f90  sigmaxwl.f90   sigv.f90  \
 	soucrit.f90 sounorm.f90  soup.f90  soup0.f90  souplt.f90   \
