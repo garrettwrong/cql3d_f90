@@ -21,7 +21,7 @@ contains
       dimension zdnspa2(iy),zdnvel2(iy),zspa2i(iy/2),zvel2i(iy/2)
       dimension zdnuspa(jx),zdnuvel(jx)
 
-      include 'wpadvnc.h'
+      include 'wpadvnc.h90'
 !.......................................................................
 !     with new try if sbdry=periodic .and. laddbnd=1 (see wpbdry)
 !.......................................................................
