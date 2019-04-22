@@ -154,7 +154,8 @@ tdeqdsk.o: tdeqdsk.f90 param.o comm.o equilib.o r8subs.o
 # a is for awful
 a_cqlp.o : a_cqlp.f90 abchief.o
 abchief.o: abchief.f90 param.o comm.o
-achief1.o: achief1.f90 param.o comm.o pltmain.o aingeom.o
+achief1.o: achief1.f90 param.o comm.o pltmain.o aingeom.o ainvnorm.o \
+ ainspec.o ainsetva.o ainpla.o ainitial.o aindflt.o aindflt1.o ainalloc.o aindfpa.o achiefn.o
 achiefn.o: achiefn.f90 param.o comm.o impavnc0.o pltmain.o
 aclear.o: aclear.f90 param.o comm.o
 ainalloc.o: ainalloc.f90 param.o comm.o
@@ -171,6 +172,7 @@ ainsetva.o: ainsetva.f90 param.o comm.o
 ainspec.o: ainspec.f90 param.o comm.o
 ainvnorm.o: ainvnorm.f90 param.o comm.o
 ampfar.o: ampfar.f90 param.o comm.o r8subs.o
+rdc_multi.o: rdc_multi.f90 param.o comm.o r8subs.o netcdfrf.o
 
 
 #----

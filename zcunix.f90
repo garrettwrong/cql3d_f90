@@ -1665,7 +1665,7 @@ contains
 10030 format (/13h *** note ***, &
         /53h to make the error message printed above be nonfatal, &
         /39h or to suppress the message completely, &
-        /37h insert an appropriate call to zzxset, &
+        /37h insert an appropriate zzxset, &
         30h at the start of your program. &
         /58h for example, to print up to 10 nonfatal warning messages, &
         /27h  use     call zzxset(10,0)    )
