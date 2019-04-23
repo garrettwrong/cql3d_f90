@@ -4,6 +4,7 @@ module tdnpa_mod
 
   use bcast_mod, only : bcast
   use tdfinterp_mod, only : tdfinterp
+  use tdnpalam_mod, only : lam
 
   !---END USE
 

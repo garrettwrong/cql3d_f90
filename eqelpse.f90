@@ -2,6 +2,8 @@ module eqelpse_mod
 
   !---BEGIN USE
 
+  use eqfn_mod, only : eqfn
+
   !---END USE
 
 

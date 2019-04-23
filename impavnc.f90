@@ -9,6 +9,7 @@ module impavnc_mod
   use coefwti_mod, only : coefwti
   use coefwtj_mod, only : coefwtj
   use diagimpd_mod, only : diagimpd
+  use esefld_mod, only : fluxpar
   use impchk_mod, only : impchk
   use impnorm_mod, only : impnorm
   use r8subs_mod, only : dcopy

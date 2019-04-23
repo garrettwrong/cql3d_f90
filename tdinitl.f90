@@ -24,19 +24,23 @@ module tdinitl_mod
   use micxiniz_mod, only : micxiniz
   use profiles_mod, only : profiles
   use rdc_multi_mod, only : rdc_multi
+  use sigv_mod, only : sigv
   use tddiag_mod, only : tddiag
   use tdeqdsk_mod, only : tdeqdsk
   use tdnflxs_mod, only : tdnflxs
+  use tdnpadiag_mod, only : tdnpadiag
   use tdoutput_mod, only : tdoutput
   use tdplteq_mod, only : tdplteq
   use tdpltmne_mod, only : tdpltmne
   use tdreadf_mod, only : tdreadf
   use tdrmshst_mod, only : tdrmshst
   use tdstin_mod, only : tdstin
+  use tdsxray_mod, only : tdsxray
   use tdtoarad_mod, only : tdtoarad
   use tdtoaray_mod, only : tdtoaray
   use tdtraloc_mod, only : tdtraloc
   use tdtrdfus_mod, only : diffus_io
+  use tdtrdfus_mod, only : difus_io_scale
   use tdtrdfus_mod, only : tdtrdfus
   use tdtrflg_mod, only : tdtrflg
   use tdtrmuy_mod, only : tdtrmuy

@@ -7,6 +7,7 @@ module tdsxr_mod
   use r8subs_mod, only : dcopy
   use tdnflxs_mod, only : tdnflxs
   use tdwrng_mod, only : tdwrng
+  use zcunix_mod, only : terp2
 
   !---END USE
 

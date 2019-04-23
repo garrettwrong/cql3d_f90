@@ -5,6 +5,7 @@ module micxinit_mod
   use diagwrng_mod, only : diagwrng
   use micgetr_mod, only : micgetr
   use tdtry_mod, only : tdtry
+  use zcunix_mod, only : taper
 
   !---END USE
 

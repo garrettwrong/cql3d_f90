@@ -2,6 +2,8 @@ module tdnpadiag_mod
 
   !---BEGIN USE
 
+  use tdnpa0_mod, only : tdnpa0
+
   !---END USE
 
 !

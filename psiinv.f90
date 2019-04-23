@@ -2,6 +2,8 @@ module psiinv_mod
 
   !---BEGIN USE
 
+  use psif_mod, only : psif
+  use psifp_mod, only : psifp
   use diagwrng_mod, only : diagwrng
 
   !---END USE

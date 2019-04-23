@@ -24,6 +24,8 @@ module tdchief_mod
   use diaggnde_mod, only : diaggnde
   use diagimpd_mod, only : diagimpd
   use diagscal_mod, only : diagscal
+  use dsk_gr_mod, only : dsk_gr
+  use dskout_mod, only : dskout
   use eflditer_mod, only : eflditer
   use esefld_mod, only : efld_cd
   use ntdstore_mod, only : ntdstore
@@ -34,20 +36,26 @@ module tdchief_mod
   use profiles_mod, only : profiles
   use r8subs_mod, only : dcopy
   use restvty_mod, only : restvty
+  use sigv_mod, only : sigv
   use tddiag_mod, only : tddiag
+  use tdinitl_mod, only : tdinitl
   use tdnflxs_mod, only : tdnflxs
+  use tdnpadiag_mod, only : tdnpadiag
   use tdoutput_mod, only : tdoutput
   use tdplteq_mod, only : tdplteq
   use tdpltmne_mod, only : tdpltmne
+  use tdsxray_mod, only : tdsxray
   use tdtloop_mod, only : tdtloop
   use tdtoaray_mod, only : tdtoaray
   use tdtransp_mod, only : tdtransp
   use tdtrcon_mod, only : tdtrcon
   use tdtrdfus_mod, only : diffus_io
+  use tdtrdfus_mod, only : difus_io_scale
   use tdtrfcop_mod, only : tdtrfcop
   use tdtrrsou_mod, only : tdtrrsou
   use tdtrsavf_mod, only : tdtrsavf
   use urfchief_mod, only : urfchief
+  use urfwrite_mod, only : urfwrite
   use wparsou_mod, only : wparsou
   use wpavg_mod, only : wpavg
   use wpelecf_mod, only : wpelecf

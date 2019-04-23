@@ -3,8 +3,19 @@ c
       subroutine freyasou(qx,qy,qz,qr,vx,vy,vz,iqts,curdep,
      1  bmsprd,multiply,multiplyn)
       use param_mod
+      use bcast_mod, only : bcast
+      use bcast_mod, only : ibcast
       use comm_mod
+      use eqfpsi_mod, only : eqppsi
+      use eqfpsi_mod, only : eqfpsi
       use r8subs_mod, only : dscal
+      use sourcpwr_mod, only :sourcpwr
+      use tdnflxs_mod, only : tdnflxs
+      use tdtoaray_mod, only : tdtoaray
+      use urfb0_mod, only : luf_bin
+      use zcunix_mod, only : coeff1
+      use zcunix_mod, only : terp1
+      use zcunix_mod, only : terp2
       implicit integer (i-n), real*8 (a-h,o-z)
 
 CMPIINSERT_INCLUDE
@@ -158,7 +169,7 @@ c..................................................................
         if (psibrth.lt.psilim) then  !i.e., outside LCFS
           lbrth(ipar)=0
         else
-          lbrth(ipar)=luf_bin(apsi,tr(1),lrz)
+          lbrth(ipar)=luf_bin(apsi,tr)
         endif
 
         if(fr_gyrop.eq.'enabled')then ! YuP[03/13/2015]
@@ -209,7 +220,7 @@ c..................................................................
               !Or maybe still use the actual particle position for lbrth?
               lbrth(ipar)=0
            else
-              lbrth(ipar)=luf_bin(apsi,tr(1),lrz)
+              lbrth(ipar)=luf_bin(apsi,tr)
            endif
            ! Also, update gx,qy,qz - it will update xpts,ypts,zpts
            qx(ipar)=px(ipar)
@@ -305,7 +316,7 @@ c.......................................................................
         call tdnflxs(ll)
         llbrth(ll)=0
 cBH171014        call bcast(source(0,0,kfrsou,ll),zero,iyjx2)
-        call bcast(source(0,0,k,ll),zero,iyjx2)
+        call bcast(source(0:iyjx2,0,k,ll),zero,iyjx2)
 
 c..................................................................
 c     Begin loop over the birth particles.
@@ -471,9 +482,9 @@ c     Locate the flux surface to which this particle will be
 c     assigned.
 c..................................................................
 
-          j=luf_bin(vmag/vnorm,xmidpt,jx)
+          j=luf_bin(vmag/vnorm,xmidpt) !jx
           if (j.gt.jx) go to 100
-          i=luf_bin(tmdplne,ymid(1,l_),iy)
+          i=luf_bin(tmdplne,ymid(1:iy,l_)) !iy
           if (i.gt.iy) then
              write(*,*)'freyasou: ll,i,j,iy,ipar,tmdplne=',
      +            ll,i,j,iy,ipar,tmdplne

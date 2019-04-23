@@ -8,6 +8,7 @@ module diagxswx_mod
   use coefstup_mod, only : coefstup
   use diagdens_mod, only : diagdens
   use diagentr_mod, only : diagentr
+  use diagentr_mod, only : gfu
   use r8subs_mod, only : dcopy
 
   !---END USE

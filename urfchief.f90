@@ -12,7 +12,7 @@ module urfchief_mod
   use urfpack_mod, only : urfpack
   use urfrays_mod, only : urfrays
   use urfread_mod, only : urfread
-
+  use urfwrite_mod, only : urfwrite
   !---END USE
 
 

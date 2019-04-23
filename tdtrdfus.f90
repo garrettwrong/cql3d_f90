@@ -3,11 +3,15 @@ module tdtrdfus_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
-  use pack21_mod, only : pack21
-  use pack21_mod, only : unpack21
+  !XXXXX use pack21_mod, only : pack21
+  !XXXXX use pack21_mod, only : unpack21
   use tdnflxs_mod, only : tdnflxs
 
   !---END USE
+
+  !XXXXX
+  external pack21
+  external unpack21
 
 !
 !

@@ -2,6 +2,8 @@ module micgmbnd_mod
 
   !---BEGIN USE
 
+  use psif_mod, only : psif
+
   !---END USE
 
 !

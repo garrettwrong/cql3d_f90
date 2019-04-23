@@ -3,6 +3,8 @@ module tdsetsxr_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
+  use tddsig_mod, only : haugyp
+  use tddsig_mod, only : tddsig
 
   !---END USE
 

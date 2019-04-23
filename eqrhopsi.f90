@@ -11,10 +11,14 @@ module eqrhopsi_mod
   use eqorbit_mod, only : eqorbit
   use eqvolpsi_mod, only : eqvolpsi
   use eqwrng_mod, only : eqwrng
+  use exlin_mod, only : exlin
   use zcunix_mod, only : coeff1
   use zcunix_mod, only : coeff2
+  use zcunix_mod, only : terp1
+  use zcunix_mod, only : terp2
 
   !---END USE
+
   use param_mod
   use comm_mod
   use iso_c_binding, only : c_double

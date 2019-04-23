@@ -14,6 +14,7 @@ module impavnc0_mod
   use coefstup_mod, only : coefstup
   use coefwti_mod, only : coefwti
   use coefwtj_mod, only : coefwtj
+  use esefld_mod, only : fluxpar
   use ilut_mod, only : aplb
   use ilut_mod, only : bndcsr
   use ilut_mod, only : ilut
@@ -2532,9 +2533,9 @@ contains
                    !             Calculate fluxes, restore f with f_, and return.
                    
                    flux1(l_)=fluxpar( &
-                        1,x,coss(1,l_),cynt2(1,l_),cint2,temp1,iy,jx)
+                        1,x,coss(1:iy,l_),cynt2(1:iy,l_),cint2,temp1,iy,jx)
                    flux2(l_)=fluxpar( &
-                        1,x,coss(1,l_),cynt2(1,l_),cint2,temp2,iy,jx)
+                        1,x,coss(1:iy,l_),cynt2(1:iy,l_),cint2,temp2,iy,jx)
                    call dcopy(iyjx2*ngen,f_(0:iyjx2*ngen-1,0,1,l_),1, &
                         f(0:iyjx2*ngen-1,0,1,l_),1)
                    

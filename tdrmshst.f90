@@ -6,6 +6,7 @@ module tdrmshst_mod
   use eqvolpsi_mod, only : eqvolpsi
   use zcunix_mod, only : coeff1
   use zcunix_mod, only : terp1
+  use zcunix_mod, only : terp2
 
   !---END USE
 

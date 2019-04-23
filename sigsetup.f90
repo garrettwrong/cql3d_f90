@@ -4,6 +4,8 @@ module sigsetup_mod
 
   use bcast_mod, only : ibcast
   use r8subs_mod, only : dcopy
+  use sigfn_mod, only : sigfn
+  use siggy_mod, only : siggy
 
   !---END USE
 

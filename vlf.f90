@@ -8,6 +8,7 @@ module vlf_mod
   use urfwrong_mod, only : urfwrong
   use vlfbplt_mod, only : vlfbplt
   use vlfsetup_mod, only : vlfsetup
+  use zcunix_mod, only : taper
 
   !---END USE
 

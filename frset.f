@@ -1,6 +1,7 @@
 c
 c
       subroutine frset(lrz,noplots,nmlstout)
+      use bcast_mod, only : bcast
       use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       include 'frcomm.h'

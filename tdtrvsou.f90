@@ -2,6 +2,7 @@ module tdtrvsou_mod
 
   !---BEGIN USE
 
+  use diagentr_mod, only : gfi
   use tdtrvtor3_mod, only : tdtrvtor3
 
   !---END USE

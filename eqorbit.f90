@@ -5,9 +5,13 @@ module eqorbit_mod
   use aminmx_mod, only : aminmx
   use bcast_mod, only : bcast
   use eqfpsi_mod, only : eqfpsi
+  use eqjac_mod, only : eqjac
+  use eqrhs_mod, only : eqrhs
   use eqwrng_mod, only : eqwrng
+  use exlin_mod, only : exlin
   use zcunix_mod, only : coeff1
   use zcunix_mod, only : terp1
+  use zcunix_mod, only : terp2
 
   !---END USE
 
@@ -31,7 +35,6 @@ contains
       pointer d2bpsi_,d2solr_,d2solz_
       pointer es_new,bpsi_new,solr_new,solz_new
 
-      external eqrhs, eqjac
 
       data iwarn/0/
 

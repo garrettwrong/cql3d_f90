@@ -6,6 +6,7 @@ module diagimpd_mod
   use bcast_mod, only : bcast
   use diagdens_mod, only : diagdens
   use diagentr_mod, only : diagentr
+  use diagentr_mod, only : gfi
   use r8subs_mod, only : dcopy
 
   !---END USE

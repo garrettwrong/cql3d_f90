@@ -13,6 +13,7 @@ module pltfluxs_mod
   use coefrfad_mod, only : coefrfad
   use coefstup_mod, only : coefstup
   use coefsyad_mod, only : coefsyad
+  use diagentr_mod, only : gfi
   use pltmain_mod, only : gpcv2d
   use pltmain_mod, only : gsvp2d
   use pltmain_mod, only : gswd2d

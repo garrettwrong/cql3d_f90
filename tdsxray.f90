@@ -2,6 +2,8 @@ module tdsxray_mod
 
   !---BEGIN USE
 
+  use tdsxr0_mod, only : tdsxr0
+
   !---END USE
 
 !

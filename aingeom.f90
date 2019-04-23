@@ -7,6 +7,7 @@ module aingeom_mod
   use eqcoord_mod, only : eqcoord
   use eqelpse_mod, only : eqelpse
   use equilib_mod, only : equilib
+  use flxfn_mod, only : flxfn
   use zcunix_mod, only : terp1
 
   !---END USE

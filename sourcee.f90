@@ -6,6 +6,7 @@ module sourcee_mod
   use sounorm_mod, only : sounorm
   use sourc0_mod, only : sourc0
   use sourcef_mod, only : sourcef
+  use sourceko_mod, only : sourceko
   use sourcpwr_mod, only : sourcpwr
 
   !---END USE

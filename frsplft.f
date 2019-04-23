@@ -2,6 +2,8 @@ c
 c
       subroutine frsplft(lrz,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
+      use zcunix_mod, only : coeff1
+      use zcunix_mod, only : terp1
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c..................................................................

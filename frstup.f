@@ -3,8 +3,11 @@ c
       subroutine frstup(mf,mfm1,mi,mj,nion,potsid,codeid,rin,
      1  rmax,zax,zminn,zmaxx,zni,zne,zte,zti,zzi,frpsi,psivol,
      1  xxx,yyy,nprim,nimp,zeffctv,zshift1)
-      use param_mod
+
+      use bcast_mod, only : bcast
       use comm_mod
+      use param_mod
+
       implicit integer (i-n), real*8 (a-h,o-z)
 
 

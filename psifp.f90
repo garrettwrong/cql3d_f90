@@ -1,7 +1,8 @@
 module psifp_mod
 
   !---BEGIN USE
-
+  use psif_mod, only : psif
+  use psifpy_mod, only : psifpy
   use zcunix_mod, only : terp1
 
   !---END USE

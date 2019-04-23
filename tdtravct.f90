@@ -865,8 +865,7 @@ contains
 
 
       INTEGER i,its,j,indx(NP)
-      REAL*8 d,den,f,fold,stpmax,sum,temp,test,fjac(NP,NP), &
-      		g(NP),p(NP),xold(NP),fffmin
+      REAL*8 :: d,den,f,fold,stpmax,sum,temp,test,fjac(NP,NP),g(NP),p(NP),xold(NP)
       REAL*8 fn,fnp5,one
 
       one=1.d0

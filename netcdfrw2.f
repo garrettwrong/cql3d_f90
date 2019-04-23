@@ -2,10 +2,14 @@
 c
 c
       subroutine netcdfrw2(kopt)
-      use param_mod
-      use comm_mod
       use advnce_mod
+      use bcast_mod, only : bcast
+      use comm_mod
+      use diagentr_mod, only : gfu
+      use param_mod
+      use prppr_mod, only : prppr
       use r8subs_mod, only : dcopy
+      use zcunix_mod, only : terp1
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -2706,21 +2710,21 @@ c-YuP:      vid=ncvid(ncid,'temp',istatus)
       istatus= NF_INQ_VARID(ncid,'edreicer',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r0_count,elecr,istatus)
 
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=vfluxz(lrindx(ll))
       enddo
       istatus= NF_INQ_VARID(ncid,'runaway_rate',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
 
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=denra(1,ll) !YuP[2018-09-24]
       enddo
       istatus= NF_INQ_VARID(ncid,'denra',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
 
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=curra(1,ll)/3.e9  !Scaling from statA/cm**2 ==> A/cm**2
       enddo
@@ -2740,7 +2744,7 @@ c-YuP:      vid=ncvid(ncid,'knockon',istatus)
 
       if (knockon.ne."disabled") then
          
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=eoe0(1,ll) !YuP[2018-09-24]
       enddo
@@ -3508,28 +3512,28 @@ c-YuP:      vid=ncvid(ncid,'edreicer',istatus)
       istatus= NF_INQ_VARID(ncid,'edreicer',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r0_count,elecr,istatus)
 
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=vfluxz(lrindx(ll))
       enddo
       istatus= NF_INQ_VARID(ncid,'runaway_rate',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
 
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=denra(1,ll) !YuP[2018-09-24]
       enddo
       istatus= NF_INQ_VARID(ncid,'denra',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
 
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=curra(1,ll)/3.e9
       enddo
       istatus= NF_INQ_VARID(ncid,'curra',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
 
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=ucrit(1,ll) !YuP[2018-09-24]
       enddo
@@ -3538,7 +3542,7 @@ c-YuP:      vid=ncvid(ncid,'edreicer',istatus)
 
       if (knockon.ne."disabled") then
          
-      call bcast(tr(1),zero,lrzmax)
+      call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=eoe0(1,ll) !YuP[2018-09-24]
       enddo
@@ -4263,10 +4267,21 @@ CMPIINSERT_IF_RANK_NE_0_RETURN
 c
 c
       subroutine netcdfvec(lefct,igrid)
-      use param_mod
-      use comm_mod
       use advnce_mod, only : hfu, hfi
+      use bcast_mod, only : bcast
+      use coefefad_mod, only : coefefad
+      use coeffpad_mod, only : coeffpad
+      use coefmidt_mod, only : coefmidt
+      use coefmidv_mod, only : coefmidv
+      use coefrfad_mod, only : coefrfad
+      use coefstup_mod, only : coefstup
+      use comm_mod
+      use diagentr_mod, only : gfi
+      use diagentr_mod, only : gfu
+      use param_mod
+      use prppr_mod, only : prppr
       use r8subs_mod, only : dcopy
+
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c...................................................................
@@ -4788,8 +4803,8 @@ c...................................................................
          call coefmidt(de,2)
          call coefmidt(df,3)
          if (lefct .eq. 3 .and. xrf .eq. 0) go to 190
-         call bcast(temp5(0,0),zero,iyjx2)
-         call bcast(temp4(0,0),zero,iyjx2)
+         call bcast(temp5(0:iyjx2-1,0),zero,iyjx2)
+         call bcast(temp4(0:iyjx2-1,0),zero,iyjx2)
 c
 c        In the following, tam2 and tam3 are u-space fluxes Gamma_x and
 c          sin(theta)*Gamma_theta (in code units)
@@ -5187,8 +5202,12 @@ c======================================================================
 c======================================================================
 
       subroutine f4dwrite
-      use param_mod
+      use bcast_mod, only : bcast
       use comm_mod
+      use param_mod
+      use tdfinterp_mod, only : tdfinterp
+      use zcunix_mod, only : terp1
+      use zcunix_mod, only : terp2
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -5334,8 +5353,12 @@ c              If rhoin.gt.1, point is outside the LCFS.  Leave f4d=0.
                      vn=f4dv(iv)*vnorm
                      do it=1,nt_f4d
                         pitch=f4dt(it)
-                        call tdfinterp(k,vn,pitch,rhoin,polang,
-     +                              f4d(ir,iz,iv,it),tau_b)
+!XXXXXXXXXXXXX k again, this is three bugs in one line!
+!XXXXXX                         call tdfinterp(k,vn,pitch,rhoin,polang,
+!XXXXXX     +                              f4d(ir,iz,iv,it),tau_b)
+                         call tdfinterp(vn,pitch,rhoin,polang,
+     +                                  f4d(ir,iz,iv,it))
+
                      enddo
                   enddo
                endif  ! On rhoin

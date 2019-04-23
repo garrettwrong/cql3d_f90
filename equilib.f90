@@ -10,6 +10,7 @@ module equilib_mod
   use zcunix_mod, only : coeff1
   use zcunix_mod, only : coeff2
   use zcunix_mod, only : terp1e
+  use zcunix_mod, only : t2
 
   !---END USE
   use iso_c_binding, only : c_double

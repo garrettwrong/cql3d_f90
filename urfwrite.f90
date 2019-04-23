@@ -1,7 +1,7 @@
 module urfwrite_mod
 
   !---BEGIN USE
-
+  use urfwrite__mod, only : urfwrite_
   !---END USE
 
 !

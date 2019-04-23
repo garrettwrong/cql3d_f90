@@ -2,6 +2,13 @@ c
 c
       module netcdfrf_mod
       use param_mod, only : nmodsa
+      use bcast_mod, only : bcast
+      use bcast_mod, only : ibcast
+      !use pack21_mod, only : pack21
+      !use pack21_mod, only : unpack21
+      ! XXXX ugh, you should fix these.
+      external pack21
+      external unpack21
       integer, private ::  numrec(nmodsa) !-YuP-> added: as a function of krf
       
       save

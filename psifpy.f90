@@ -1,6 +1,8 @@
 module psifpy_mod
 
   !---BEGIN USE
+  use psifp_mod, only : psifp
+  use psiinv_mod, only : psiinv
 
   !---END USE
 
@@ -43,7 +45,7 @@ contains
           xz=psiinv(yval,iupdown)
           psifpy=psifp(xz)
         else if (psimodel.eq."spline") then !But only called with axitorus
-          xt=psiinv(yval)
+          xt=psiinv(yval, iupdown) !XXXXX BUG, missing iupdown
           psifpy=psifp(xt)
         endif
       endif

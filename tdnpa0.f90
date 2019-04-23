@@ -5,9 +5,12 @@ module tdnpa0_mod
   use bcast_mod, only : bcast
   use eqfpsi_mod, only : eqfpsi
   use tdnpa_mod, only : tdnpa
+  use tdnpalam_mod, only : lam
   use tdsetnpa_mod, only : tdsetnpa
   use tdsxrplt_mod, only : tdsxrplt
   use tdsxrplt_mod, only : tdsxrvw
+  use zcunix_mod, only : terp1
+  use zcunix_mod, only : terp2
 
   !---END USE
 

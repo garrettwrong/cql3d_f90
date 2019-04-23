@@ -2,9 +2,6 @@ module pack21_mod
 
   !---BEGIN USE
 
-  use bcast_mod, only : bcast
-  use r8subs_mod, only : dcopy
-
   !---END USE
 
 !
@@ -12,8 +9,13 @@ module pack21_mod
 
 contains
 
+end module pack21_mod
+
+
+!XXXX this is a mess (relates to netcdf files)
       subroutine pack21(a,ibot,itop,jbot,jtop,b,iy,jx)
-      use r8subs_mod, only : dcopy
+        use bcast_mod, only : bcast
+        use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 !.......................................................................
@@ -37,7 +39,8 @@ contains
 !
 !
       subroutine unpack21(a,ibot,itop,jbot,jtop,b,iy,jx)
-      use r8subs_mod, only : dcopy
+        use bcast_mod, only : bcast
+        use r8subs_mod, only : dcopy
       implicit integer (i-n), real*8 (a-h,o-z)
 
 !.......................................................................
@@ -88,4 +91,3 @@ contains
       enddo
       return
       end
-end module pack21_mod

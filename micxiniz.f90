@@ -5,6 +5,8 @@ module micxiniz_mod
   use diagwrng_mod, only : diagwrng
   use micgetr_mod, only : micgetr
   use tdxin13d_mod, only : tdxin13d
+  use psif_mod, only : psif
+  use psifp_mod, only : psifp
   use zcunix_mod, only : coeff1
   use zcunix_mod, only : terp1
 

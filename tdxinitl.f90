@@ -6,6 +6,7 @@ module tdxinitl_mod
   use micgetr_mod, only : micgetr
   use profaxis_mod, only : profaxis
   use tdinterp_mod, only : tdinterp
+  use tdpro_mod, only : tdpro
   use tdtscinp_mod, only : tdtscinp
   use tdwrng_mod, only : tdwrng
   use tdxin13d_mod, only : tdxin13d

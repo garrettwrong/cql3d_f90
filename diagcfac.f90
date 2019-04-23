@@ -4,6 +4,8 @@ module diagcfac_mod
 
   use bcast_mod, only : bcast
   use zcunix_mod, only : coeff2
+  use zcunix_mod, only : terp1
+  use zcunix_mod, only : terp2
 
   !---END USE
 

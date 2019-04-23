@@ -10,6 +10,8 @@ module pltvec_mod
   use coefmidv_mod, only : coefmidv
   use coefrfad_mod, only : coefrfad
   use coefstup_mod, only : coefstup
+  use diagentr_mod, only : gfi
+  use diagentr_mod, only : gfu
   use pltvectr_mod, only : pltvectr
   use prppr_mod, only : prppr
   use r8subs_mod, only : dcopy

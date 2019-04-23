@@ -4,6 +4,7 @@ module diaggnde_mod
 
   use bcast_mod, only : bcast
   use diagdenz_mod, only : diagdenz
+  use diagcfac_mod, only : diagcfac
   use diaggnde2_mod, only : diaggnde2
   use diagwrng_mod, only : diagwrng
   use r8subs_mod, only : dscal

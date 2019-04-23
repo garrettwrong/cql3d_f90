@@ -2,6 +2,7 @@ module exsweepx_mod
 
   !---BEGIN USE
 
+  use diagentr_mod, only : gfu
   use diagwrng_mod, only : diagwrng
 
   !---END USE

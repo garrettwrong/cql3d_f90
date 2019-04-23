@@ -5,6 +5,7 @@ module diaggnde2_mod
   use bcast_mod, only : bcast
   use cfpleg_mod, only : cfpleg
   use diagdenz_mod, only : diagdenz
+  use diagcfac_mod, only : diagcfac
   use diagwrng_mod, only : diagwrng
   use r8subs_mod, only : dcopy
   use r8subs_mod, only : dscal

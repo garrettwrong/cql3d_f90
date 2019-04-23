@@ -9,6 +9,9 @@ module urfpackm_mod
 
 contains
 
+
+end module urfpackm_mod
+
         subroutine pack(ip, nbits, iu, nw)
 !
 !       PACK - Compresses stored data
@@ -142,5 +145,3 @@ contains
         return
         end
 
-
-end module urfpackm_mod

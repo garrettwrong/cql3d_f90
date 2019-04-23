@@ -6,7 +6,9 @@ module baviorbt_mod
   use bcast_mod, only : ibcast
   use lookup_mod, only : lookup
   use micgnbnd_mod, only : micgnbnd
+  use psif_mod, only : psif
   use zcunix_mod, only : terp1
+  use zcunix_mod, only : terp2
 
   !---END USE
 

@@ -6,11 +6,14 @@ module pltstrml_mod
   use bcast_mod, only : bcast
   use coefmidt_mod, only : coefmidt
   use coefstup_mod, only : coefstup
-  use pack21_mod, only : pack21
+  !XXXX use pack21_mod, only : pack21
+  use pltcont_mod, only : pgfunc1
   use pltmain_mod, only : gxglfr
   use r8subs_mod, only : dcopy
 
   !---END USE
+  !XXXX
+  external pack21
 
 !
 !
@@ -60,7 +63,6 @@ contains
       DIMENSION RCONT(NCONTA),RTEMP1(iy,jx),RXPTS(2),RYPTS(2)
 !     wx IS V-NORM ARRAY, wy IS THETA ARRAY.  TYPE REAL.
       real*4 RTAB1(iy),RTAB2(iy) ! local
-      EXTERNAL PGFUNC1
 
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only

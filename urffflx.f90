@@ -3,6 +3,7 @@ module urffflx_mod
   !---BEGIN USE
 
   use bcast_mod, only : ibcast
+  use zcunix_mod, only : terp2
 
   !---END USE
 

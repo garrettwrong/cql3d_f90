@@ -2,6 +2,7 @@ module soup_mod
 
   !---BEGIN USE
 
+  use psif_mod, only : psif
   use r8subs_mod, only : dcopy
   use r8subs_mod, only : dscal
   use soup0_mod, only : soup0

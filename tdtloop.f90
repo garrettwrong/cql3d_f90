@@ -6,6 +6,7 @@ module tdtloop_mod
   use aindfpa_mod, only : ainadjnl_fsetup_setup0
   use tdeqdsk_mod, only : tdeqdsk
   use tdtscout_mod, only : tdtscout
+  use tdwritef_mod, only : tdwritef
 
   !---END USE
 

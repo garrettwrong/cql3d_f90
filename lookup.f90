@@ -2,6 +2,8 @@ module lookup_mod
 
   !---BEGIN USE
 
+  use urfb0_mod, only : luf_bin
+
   !---END USE
 
 !
@@ -62,7 +64,7 @@ contains
          goto 10
       endif
 
-      lement=luf_bin(x,xarray,length)
+      lement=luf_bin(x,xarray(1:length))
       if(lement.le.1) stop 'lookup: lement.le.1' ! should never happen
       weightl=(xarray(lement)-x)/(xarray(lement)-xarray(lement-1))
       weightu=1.-weightl
@@ -130,7 +132,7 @@ contains
       endif
 
 !      write(*,*)'lookup_tdf[befor.luf_bin] x,xarray=',x,xarray(1:length)
-      lement=luf_bin(x,xarray,length)
+      lement=luf_bin(x,xarray(1:length))
 !      write(*,*)
 !     + 'lookup_tdf[aft.luf_bin] lement,xarray(lement-1),xarray(lement)',
 !     +                          lement,xarray(lement-1),xarray(lement)

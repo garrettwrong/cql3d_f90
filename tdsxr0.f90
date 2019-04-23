@@ -8,6 +8,7 @@ module tdsxr0_mod
   use tdsxr_mod, only : tdsxr
   use tdsxrplt_mod, only : tdsxrplt
   use tdsxrplt_mod, only : tdsxrvw
+  use zcunix_mod, only : terp2
 
   !---END USE
 

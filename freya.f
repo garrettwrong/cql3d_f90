@@ -10,8 +10,9 @@ c     BE THROUGH FRCOMM
 c..................................................................
 
       subroutine freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
-      use param_mod
       use aminmx_mod, only : aminmx
+      use bcast_mod, only : bcast
+      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
       integer, intent(out) :: ipts

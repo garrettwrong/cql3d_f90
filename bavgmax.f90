@@ -3,6 +3,7 @@ module bavgmax_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
+  use psif_mod, only : psif
 
   !---END USE
 

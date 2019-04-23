@@ -3,6 +3,7 @@ module impchk_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
+  use diagentr_mod, only : gfi
   use diagwrng_mod, only : diagwrng
 
   !---END USE
