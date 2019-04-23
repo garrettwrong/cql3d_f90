@@ -94,8 +94,8 @@ contains
       call bcast(cdl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
       call bcast(cel(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
       call bcast(cfl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(eal(1,1,1:,zero,iyjx*ngen*2,1,l_),zero,iyjx*ngen*2)
-      call bcast(ebl(1,1,1:,zero,iyjx*ngen*2,1,l_),zero,iyjx*ngen*2)
+      call bcast(eal(1:iyjx*ngen*2,1,1,1,l_),zero,iyjx*ngen*2)
+      call bcast(ebl(1:iyjx*ngen*2,1,1,1,l_),zero,iyjx*ngen*2)
 
 !..................................................................
 !     if only gen. species contributions are desired execute jump..
