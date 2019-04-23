@@ -264,34 +264,34 @@ contains
 
     !     So, no confusion:
     if (soln_method.eq.'itsol1')  &
-         call bcast(abd_lapack(1,1),zero,icsrij)
+         call bcast(abd_lapack(1:icsrijc,1),zero,icsrij)
 
     !      write(*,*)'impavnc0: size(ja_csr),icsrip=',size(ja_csr),icsrij
     !      write(*,*)'impavnc0: size(ia_csr),icsrip=',size(ia_csr),icsrip
 
     if (soln_method.eq.'itsol' .or. soln_method.eq.'itsol1') then
-       call bcast(a_csr(1),zero,icsrij)
-       call ibcast(ja_csr(1),0,icsrij)
-       call ibcast(ia_csr(1),0,icsrip)
+       call bcast(a_csr(1:icsrij),zero,icsrij)
+       call ibcast(ja_csr(1:icsrij),0,icsrij)
+       call ibcast(ia_csr(1:icsrip),0,icsrip)
     elseif (soln_method.eq.'it3dv') then
        if (ifirst_lr.eq.1) then
-          call bcast(a_csr(1),zero,icsrij)
-          call ibcast(ja_csr(1),0,icsrij)
-          call ibcast(ia_csr(1),0,icsrip)
+          call bcast(a_csr(1:icsrij),zero,icsrij)
+          call ibcast(ja_csr(1:icsrij),0,icsrij)
+          call ibcast(ia_csr(1:icsrip),0,icsrip)
        endif
     elseif (soln_method.eq.'it3drv') then
        if (ifirst_lr.eq.1) then
           !BH080429   Problem:  ipofi only calculated once in code, in tdtranspn.
           !BH080429            call ibcast(ipofi(1,1),0,iy*lrz)
-          call bcast(a_csr(1),zero,icsrij)
-          call ibcast(ja_csr(1),0,icsrij)
-          call ibcast(ia_csr(1),0,icsrip)
-          call bcast(ar_csr(1),zero,icsrijr)
-          call ibcast(jar_csr(1),0,icsrijr)
-          call ibcast(iar_csr(1),0,icsrip)
-          call bcast(ac_csr(1),zero,icsrijc)
-          call ibcast(jac_csr(1),0,icsrijc)
-          call ibcast(iac_csr(1),0,icsrip)
+          call bcast(a_csr(1:icsrij),zero,icsrij)
+          call ibcast(ja_csr(1:icsrij),0,icsrij)
+          call ibcast(ia_csr(1:icsrip),0,icsrip)
+          call bcast(ar_csr(1:icsrijr),zero,icsrijr)
+          call ibcast(jar_csr(1:icsrijr),0,icsrijr)
+          call ibcast(iar_csr(1:icsrip),0,icsrip)
+          call bcast(ac_csr(1:icsrijc),zero,icsrijc)
+          call ibcast(jac_csr(1:icsrijc),0,icsrijc)
+          call ibcast(iac_csr(1:icsrip),0,icsrip)
        endif
     endif
 
@@ -1972,7 +1972,7 @@ contains
                 lowd=ml+mu+1
                 ml_a=ml
                 mu_a=mu
-                call bndcsr(n_rows_A,abd_lapack(1,1),nabd,lowd,ml_a,mu_a, &
+                call bndcsr(n_rows_A,abd_lapack(1:nabd,1),nabd,lowd,ml_a,mu_a, &
                      a_csr(1),ja_csr(1),ia_csr(1),icsrij,ierr_csr)
                 if (ierr_csr.ne.0) then
                    WRITE(*,*)'impavnc0/bndcsr: STOP ierr_csr=',ierr_csr
