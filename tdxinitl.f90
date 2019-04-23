@@ -664,33 +664,33 @@ contains
          nga=ngena
          do 4 kk=1,nso
             !XXXX npwrsou and mpwrsou is int, but tdxin23d expected real
-            call tdxin23d(sellm1z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(sellm2z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(szm1z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(seppm1z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(seppm2z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(szm2z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(sem1z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(sem2z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(sthm1z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
-            call tdxin23d(scm2z,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(k)), &
-                 REAL(mpwrsou(k)))
+            call tdxin23d(sellm1z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(sellm2z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(szm1z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(seppm1z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(seppm2z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(szm2z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(sem1z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(sem2z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(sthm1z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
+            call tdxin23d(scm2z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
+                 DBLE(mpwrsou(k)))
 
 !     Allow for possiblity to intialize asorz(k,kk,1:lrzmax) directly
             ! XXX good chance this int/real was a bug by f77 rules
-            !  (no checks), means, no casts....
+            !  (no checks), sometimes means, no casts.... so unless was always 0....
             if(asorz(k,kk,0).ne.-1.) then
-               call tdxin23d(asorz,rya,lrzmax,nga,nsoa,k,kk,REAL(npwrsou(0)), &
-                    REAL(mpwrsou(0)))
+               call tdxin23d(asorz,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(0)), &
+                    DBLE(mpwrsou(0)))
             endif
 
             do 5  ll=1,lrzmax

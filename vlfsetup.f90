@@ -192,13 +192,13 @@ contains
       enddo
       write(*,*)'vlfsetup:  Before allocate'
       allocate(besl(nharmx+2),STAT=istat) !-YuP->added
-      call bcast(besl,0.0,SIZE(besl))     !-YuP->added
+      call bcast(besl,zero,SIZE(besl))     !-YuP->added
       allocate(jbm1(nbssltbl,mrfn),STAT=istat) !-YuP-> modified to real
-      call bcast(jbm1,0.0,SIZE(jbm1))          !-YuP-> modified to real
+      call bcast(jbm1,zero,SIZE(jbm1))          !-YuP-> modified to real
       allocate(jb0(nbssltbl,mrfn),STAT=istat)  !-YuP-> modified to real
-      call bcast(jb0,0.0,SIZE(jbm1))           !-YuP-> modified to real
+      call bcast(jb0,zero,SIZE(jbm1))           !-YuP-> modified to real
       allocate(jbp1(nbssltbl,mrfn),STAT=istat) !-YuP-> modified to real
-      call bcast(jbp1,0.0,SIZE(jbm1))          !-YuP-> modified to real
+      call bcast(jbp1,zero,SIZE(jbm1))          !-YuP-> modified to real
       write(*,*)'vlfsetup:  After allocate'
 !..................................................................
 !     Loop over excitation modes

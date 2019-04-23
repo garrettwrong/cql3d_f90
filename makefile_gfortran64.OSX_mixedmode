@@ -4,83 +4,88 @@ SHELL     = /bin/sh
 NAME      = xcql3d_gfortran64
 COMPILER=	gfortran
 BUILDER=	$(COMPILER)
-INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h
+# h90 should go away as the need for f77 .h goes away, then will call .h again...
+INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h \
+	frname.h90 frname_decl.h90 name.h90 trans.h90 wpadvnc.h90
 SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	pltdf.f90 eqrhopsi.f90 equilib.f90 \
 	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \
 	bsl.f90  bsu.f90 \
-	a_cqlp.f  abchief.f  achief1.f  achiefn.f  aclear.f ainalloc.f  \
-	aindflt.f  aindflt1.f aindfpa.f  aingeom.f  ainitial.f   \
-	ainpla.f  ainplt.f  ainpltpa.f   \
-	ainsetpa.f  ainsetva.f  ainspec.f  ainvnorm.f ampfar.f \
-	aminmx.f bavdens.f  bavgmax.f  baviorbt.f   \
-	bcast.f cfpcoefc.f  cfpcoefn.f  \
-	cfpcoefr.f  cfpgamma.f  cfpleg.f     \
-	cfpmodbe.f  cfpsymt.f  coefefad.f  coefefld.f  coefegad.f  \
-	coeffpad.f  coefload.f  coefmidt.f  coefmidv.f   \
-	coefrfad.f  coefstup.f  coefsyad.f  coefwti.f  \
-	coefwtj.f  diag.f  diagcfac.f   \
-	diagdens.f  diagdenz.f  diagentr.f  diagescl.f  diaggnde.f  \
-	diaggnde2.f  diagimpd.f  diagscal.f  diagwrng.f  diagxswt.f   \
-	diagxswx.f  dsk_gr.f dskout.f  efield.f  eflditer.f eqalloc.f   \
-	eqcoord.f  eqelpse.f  eqflxavg.f  eqfn.f  \
-	eqfndpsi.f  eqfninv.f  eqfpsi.f   \
-	eqindflt.f  eqinitl.f  eqjac.f  eqonovrp.f  \
-	eqorbit.f  eqrhs.f   \
-	eqtopeol.f  eqvolpsi.f  eqwrng.f  \
-	esefld.f  exlin.f  exsweep.f  exsweept.f   \
-	exsweepx.f  finit.f  firstdrv.f  fle.f flxfn.f  \
+	a_cqlp.f90  abchief.f90  achief1.f90  achiefn.f90  aclear.f90 ainalloc.f90  \
+	aindflt.f90  aindflt1.f90 aindfpa.f90  aingeom.f90  ainitial.f90   \
+	ainpla.f90  ainplt.f90  ainpltpa.f90   \
+	ainsetpa.f90  ainsetva.f90  ainspec.f90  ainvnorm.f90 ampfar.f90 \
+	aminmx.f90 bavdens.f90  bavgmax.f90  baviorbt.f90   \
+	bcast.f90 cfpcoefc.f90  cfpcoefn.f90  \
+	cfpcoefr.f90  cfpgamma.f90  cfpleg.f90     \
+	cfpmodbe.f90  cfpsymt.f90  coefefad.f90  coefefld.f90  coefegad.f90  \
+	coeffpad.f90  coefload.f90  coefmidt.f90  coefmidv.f90   \
+	coefrfad.f90  coefstup.f90  coefsyad.f90  coefwti.f90  \
+	coefwtj.f90  diag.f90  diagcfac.f90   \
+	diagdens.f90  diagdenz.f90  diagentr.f90  diagescl.f90  diaggnde.f90  \
+	diaggnde2.f90  diagimpd.f90  diagscal.f90  diagwrng.f90  diagxswt.f90   \
+	diagxswx.f90  dsk_gr.f90 dskout.f90  efield.f90  eflditer.f90 eqalloc.f90   \
+	eqcoord.f90  eqelpse.f90  eqflxavg.f90  eqfn.f90  \
+	eqfndpsi.f90  eqfninv.f90  eqfpsi.f90   \
+	eqindflt.f90  eqinitl.f90  eqjac.f90  eqonovrp.f90  \
+	eqorbit.f90  eqrhs.f90   \
+	eqtopeol.f90  eqvolpsi.f90  eqwrng.f90  \
+	esefld.f90  exlin.f90  exsweep.f90  exsweept.f90   \
+	exsweepx.f90  finit.f90  firstdrv.f90  fle.f90 flxfn.f90  \
 	freya.f  freyasou.f  frhexdrv.f   \
 	frinitl.f  frinitz.f  frnbdep2.f  frnfreya.f  \
 	frset.f frsmooth.f  frsplft.f   \
 	frstup.f  frsubs.f  frsuppor.f  frwrong.f  \
-	ilut.f  impchk.f  impnorm.f  it3dalloc.f  \
-	lookup.f  losscone.f  lossegy.f  lossorbm.f  \
-	losstor.f  micgetr.f   \
-	micgmbnd.f  micgnbnd.f  micxinil.f  micxinim.f  micxinit.f  \
-	micxiniz.f  netcdfrf.f  netcdfrw2.f ntdstore.f   \
-	ntloop.f  pack21.f pltcont.f  pltcycl.f \
-	pltdnz.f  pltelec.f  pltendn.f   \
-	pltends.f  pltfluxs.f pltfofvv.f pltfvsv.f  pltinit.f  pltlosc.f  \
-	pltpower.f  pltprppr.f   \
-	pltrstv.f  pltrun.f pltstrml.f  pltvec.f  pltvectr.f  \
-	pltvflux.f  profaxis.f  profiles.f prppr.f   \
-	prpprctr.f  psif.f  psifp.f  psifppy.f  psifpy.f  psiinv.f  \
-	r8lsode.f  rdc_multi.f rdc_bplt.f restcon.f resthks.f  \
-	restvty.f  rf.f  sigalloc.f  siggy.f  sigmax.f  sigsetup.f  \
-	sigv5d.f sigfn.f sigie.f  sigmaxwl.f   sigv.f  \
-	soucrit.f sounorm.f  soup.f  soup0.f  souplt.f   \
-	sourc0.f  sourcee.f  sourcef.f  sourceko.f sourcpwr.f   \
-	synchrad.f  tdbootst.f tdboothi.f  tdchief.f  tddiag.f  \
-	tddsig.f  tdfinterp.f  tdinitl.f  tdinlegw.f  \
-	tdinterp.f  tdnflxs.f  tdnpa.f  tdnpadiag.f  tdnpa0.f  \
-	tdnpacxcs.f  tdnpalam.f  tdnpabscs.f  tdoutput.f   \
-	tdplteq.f  tdpltjop.f  tdpltmne.f  tdpro.f  \
-	tdreadf.f  tdrmshst.f  tdsetnpa.f  tdsetsxr.f   \
-	tdstin.f  tdsxr.f  tdsxr0.f  tdsxray.f  tdsxrplt.f  \
-	tdtloop.f  tdtoarad.f   tdtranspn.f  \
-	tdtoaray.f  tdtraloc.f  tdtransp.f  tdtravct.f\
-	tdtrchk.f  tdtrchkd.f  tdtrcon.f   \
-	tdtrdfus.f  tdtrfcop.f  tdtrflg.f  tdtrflx.f  \
-	tdtrmuy.f  tdtrrsou.f  tdtrrtov.f   \
-	tdtrrtov2.f  tdtrsavf.f  tdtrsym.f  tdtrvint.f  \
-	tdtrvsou.f  tdtrvtor.f  tdtrvtor2.f   \
-	tdtrvtor3.f  tdtrwtl.f  tdtry.f  tdtscinp.f  tdtscout.f  \
-	tdwrng.f  tdwritef.f  tdxin13d.f   \
-	tdxin23d.f  tdxin33d.f  tdxinitl.f  urfalloc.f  \
-	urfavg.f  urfb0.f  urfbes.f   \
-	urfbplt.f  urfchief.f  urfdamp0.f  urfdamp1.f  \
-	urfdamp2.f  urfdampa.f urfdout.f  urfedge.f   \
-	urffflx.f  urfindfl.f  urfinitl.f  urfmidv.f  \
-	urfpack.f  urfpackm.f  urfrays.f  urfread.f   \
-	urfread_.f  urfsetup.f  urfwrite.f  urfwrite_.f  \
-	urfwrong.f  urfwr0.f  urfwr0c.f \
-	vlf.f vlfalloc.f vlfbplt.f vlfsetup.f vlh.f  vlhbplt.f vlhd.f  \
-	wpalloc.f  wparsou.f  wpavg.f  wpbdry.f  \
-	wpcheck.f  wpchgdy.f wpcthta.f  wpelecf.f   \
-	wpinitl.f  wploweq.f  wpsavf.f  wptrafx.f  wptramu.f  \
-	wptrmuy.f  wpvptb.f  wpwrng.f  wpmshchk.f \
-	zblock.f  zcunix.f  zfreya.f    znonsym.f
+	ilut.f90  impchk.f90  impnorm.f90  it3dalloc.f90  \
+	lookup.f90  losscone.f90  lossegy.f90  lossorbm.f90  \
+	losstor.f90  micgetr.f90   \
+	micgmbnd.f90  micgnbnd.f90  micxinil.f90  micxinim.f90  micxinit.f90  \
+	micxiniz.f90  \
+	netcdfrf.f  netcdfrw2.f \
+	ntdstore.f90   \
+	ntloop.f90  pack21.f90 pltcont.f90  pltcycl.f90 \
+	pltdnz.f90  pltelec.f90  pltendn.f90   \
+	pltends.f90  pltfluxs.f90 pltfofvv.f90 pltfvsv.f90  pltinit.f90  pltlosc.f90  \
+	pltpower.f90  pltprppr.f90   \
+	pltrstv.f90  pltrun.f90 pltstrml.f90  pltvec.f90  pltvectr.f90  \
+	pltvflux.f90  profaxis.f90  profiles.f90 prppr.f90   \
+	prpprctr.f90  psif.f90  psifp.f90  psifppy.f90  psifpy.f90  psiinv.f90  \
+	r8lsode.f  \
+	rdc_multi.f90 rdc_bplt.f90 restcon.f90 resthks.f90  \
+	restvty.f90  rf.f90  sigalloc.f90  siggy.f90  sigmax.f90  sigsetup.f90  \
+	sigv5d.f90 sigfn.f90 sigie.f90  sigmaxwl.f90   sigv.f90  \
+	soucrit.f90 sounorm.f90  soup.f90  soup0.f90  souplt.f90   \
+	sourc0.f90  sourcee.f90  sourcef.f90  sourceko.f90 sourcpwr.f90   \
+	synchrad.f90  tdbootst.f90 tdboothi.f90  tdchief.f90  tddiag.f90  \
+	tddsig.f90  tdfinterp.f90  tdinitl.f90  tdinlegw.f90  \
+	tdinterp.f90  tdnflxs.f90  tdnpa.f90  tdnpadiag.f90  tdnpa0.f90  \
+	tdnpacxcs.f90  tdnpalam.f90  tdnpabscs.f90  tdoutput.f90   \
+	tdplteq.f90  tdpltjop.f90  tdpltmne.f90  tdpro.f90  \
+	tdreadf.f90  tdrmshst.f90  tdsetnpa.f90  tdsetsxr.f90   \
+	tdstin.f90  tdsxr.f90  tdsxr0.f90  tdsxray.f90  tdsxrplt.f90  \
+	tdtloop.f90  tdtoarad.f90   tdtranspn.f90  \
+	tdtoaray.f90  tdtraloc.f90  tdtransp.f90  tdtravct.f90 \
+	tdtrchk.f90  tdtrchkd.f90  tdtrcon.f90   \
+	tdtrdfus.f90  tdtrfcop.f90  tdtrflg.f90  tdtrflx.f90  \
+	tdtrmuy.f90  tdtrrsou.f90  tdtrrtov.f90   \
+	tdtrrtov2.f90  tdtrsavf.f90  tdtrsym.f90  tdtrvint.f90  \
+	tdtrvsou.f90  tdtrvtor.f90  tdtrvtor2.f90   \
+	tdtrvtor3.f90  tdtrwtl.f90  tdtry.f90  tdtscinp.f90  tdtscout.f90  \
+	tdwrng.f90  tdwritef.f90  tdxin13d.f90   \
+	tdxin23d.f90  tdxin33d.f90  tdxinitl.f90  urfalloc.f90  \
+	urfavg.f90  urfb0.f90  urfbes.f90   \
+	urfbplt.f90  urfchief.f90  urfdamp0.f90  urfdamp1.f90  \
+	urfdamp2.f90  urfdampa.f90 urfdout.f90  urfedge.f90   \
+	urffflx.f90  urfindfl.f90  urfinitl.f90  urfmidv.f90  \
+	urfpack.f90  urfpackm.f90  urfrays.f90  urfread.f90   \
+	urfread_.f90  urfsetup.f90  urfwrite.f90  urfwrite_.f90  \
+	urfwrong.f90  urfwr0.f90  urfwr0c.f90 \
+	vlf.f90 vlfalloc.f90 vlfbplt.f90 vlfsetup.f90 vlh.f90  vlhbplt.f90 vlhd.f90  \
+	wpalloc.f90  wparsou.f90  wpavg.f90  wpbdry.f90  \
+	wpcheck.f90  wpchgdy.f90 wpcthta.f90  wpelecf.f90   \
+	wpinitl.f90  wploweq.f90  wpsavf.f90  wptrafx.f90  wptramu.f90  \
+	wptrmuy.f90  wpvptb.f90  wpwrng.f90  wpmshchk.f90 \
+	zblock.f90  zcunix.f90  zfreya.f   znonsym.f90
 
 F90OBJECTS = $(filter %.o,$(SOURCES:.f90=.o))
 OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
@@ -91,7 +96,7 @@ INCLUDE   =/usr/local/include
 
 DEBUG     = -g 
 OPTIMIZE  = -O1
-CSPECIAL  = 
+CSPECIAL  = -Wall
 LDSPECIAL =
 COMPILE   =  $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE) 
 LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG) # Remove -m for optimize
@@ -125,7 +130,13 @@ $(SOURCES):        $(INCLUDES)
 # Do not fret, they're not so bad.
 DAGOBJS = param.o comm.o r8subs.o advnce.o pltmain.o \
           pltdf.o eqrhopsi.o equilib.o \
-          impavnc0.o  frplteq.o tdeqdsk.o bsu.o bsl.o
+          impavnc0.o  frplteq.o tdeqdsk.o bsl.o bsu.o \
+          a_cqlp.f90   achief1.f90  aclear.f90   ainalloc.f90 \
+          aindflt1.f90 aingeom.f90  ainpla.f90   ainpltpa.f90 \
+          ainsetva.f90 ainvnorm.f90 ampfar.f90 abchief.f90  \
+          achiefn.f90  advnce.f90   aindflt.f90  aindfpa.f90 \
+          ainitial.f90 ainplt.f90   ainsetpa.f90 ainspec.f90  \
+          aminmx.f90
 # And this describes their dag...
 comm.o: comm.f90 param.o
 r8subs.o: r8subs.f90 comm.o
@@ -134,16 +145,40 @@ bsu.o: bsu.f90 param.o comm.o
 advnce.o: advnce.f90 comm.o r8subs.o bsu.o bsl.o
 pltdf.o: pltdf.f90 param.o comm.o r8subs.o
 pltmain.o: pltmain.f90 param.o comm.o pltdf.o
-eqrhopsi.o: eqrhopsi.f90 param.o comm.o
+eqrhopsi.o: eqrhopsi.f90 param.o comm.o aminmx.o
 equilib.o: equilib.f90 param.o comm.o r8subs.o
 impavnc0.o: impavnc0.f90 param.o comm.o advnce.o r8subs.o bsu.o bsl.o
 frplteq.o: frplteq.f90 param.o comm.o r8subs.o
 tdeqdsk.o: tdeqdsk.f90 param.o comm.o equilib.o r8subs.o
 
+# a is for awful
+a_cqlp.o : a_cqlp.f90 abchief.o
+abchief.o: abchief.f90 param.o comm.o
+achief1.o: achief1.f90 param.o comm.o pltmain.o aingeom.o ainvnorm.o \
+ ainspec.o ainsetva.o ainpla.o ainitial.o aindflt.o aindflt1.o ainalloc.o aindfpa.o achiefn.o
+achiefn.o: achiefn.f90 param.o comm.o impavnc0.o pltmain.o
+aclear.o: aclear.f90 param.o comm.o
+ainalloc.o: ainalloc.f90 param.o comm.o
+aindflt.o: aindflt.f90 param.o comm.o
+aindflt1.o: aindflt1.f90 param.o comm.o
+aindfpa.o: aindfpa.f90 param.o comm.o 
+aingeom.o: aingeom.f90 equilib.o param.o comm.o
+ainitial.o: ainitial.f90 param.o comm.o pltmain.o
+ainpla.o: ainpla.f90 param.o comm.o
+ainplt.o: ainplt.f90 param.o comm.o
+ainpltpa.o: ainpltpa.f90 param.o comm.o
+ainsetpa.o: ainsetpa.f90 param.o comm.o
+ainsetva.o: ainsetva.f90 param.o comm.o
+ainspec.o: ainspec.f90 param.o comm.o
+ainvnorm.o: ainvnorm.f90 param.o comm.o
+ampfar.o: ampfar.f90 param.o comm.o r8subs.o
+rdc_multi.o: rdc_multi.f90 param.o comm.o r8subs.o netcdfrf.o
+
+
 #----
 # From here we will assume that all deps to build
 # remaining files have been met.
-# (Other words, we assume remaining .f files 
+# (Other words, we assume remaining .f90 files 
 #  require all DAGOBJS.
 # That is overkill, but simple.
 # As files migrate or evolve, we add small rules for each file.
