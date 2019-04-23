@@ -38,13 +38,17 @@ contains
       enddo
       write(*,*)'urfbes:  Before allocation, nharmx=',nharmx
       allocate(besl(nharmx+2),STAT=istat) !-YuP->added
-      call bcast(besl,0.0,SIZE(besl))     !-YuP->added
+      !XXXcall bcast(besl,0.0,SIZE(besl))     !-YuP->added
+      besl = 0
       allocate(jbm1(nbssltbl,mrfn),STAT=istat) !-YuP->added
-      call bcast(jbm1,0.0,SIZE(jbm1))          !-YuP->added
+      !XXXcall bcast(jbm1,0.0,SIZE(jbm1))          !-YuP->added
+      jbm1 = 0
       allocate(jb0(nbssltbl,mrfn),STAT=istat)  !-YuP->added
-      call bcast(jb0,0.0,SIZE(jbm1))           !-YuP->added
+      !XXXcall bcast(jb0,0.0,SIZE(jbm1))           !-YuP->added
+      jb0 = 0
       allocate(jbp1(nbssltbl,mrfn),STAT=istat) !-YuP->added
-      call bcast(jbp1,0.0,SIZE(jbm1))          !-YuP->added
+      !XXXcall bcast(jbp1,0.0,SIZE(jbm1))          !-YuP->added
+      jbp1 = 0
       write(*,*)'urfbes:  After allocation'
 
 !..................................................................

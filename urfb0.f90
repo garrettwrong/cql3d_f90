@@ -4,8 +4,11 @@ module urfb0_mod
 
   use bcast_mod, only : bcast
   use tdnflxs_mod, only : tdnflxs
-  use urfpackm_mod, only : unpack
-  use urfpackm_mod, only : unpack16
+  !XXXXXXXXXXX
+  !use urfpackm_mod, only : unpack
+  !use urfpackm_mod, only : unpack16
+  external unpack
+  external unpack16
 
   !---END USE
 
@@ -45,8 +48,8 @@ contains
 !..................................................................
 !     Zero out the coefficients: all flux surfaces
 !..................................................................
-      call bcast(urfb(1,1,1,1),zero,iyjx*lrz*mrfn)
-      call bcast(urfc(1,1,1,1),zero,iyjx*lrz*mrfn)
+      call bcast(urfb(1:iyjx*lrz*mrfn,1,1,1),zero,iyjx*lrz*mrfn)
+      call bcast(urfc(1:iyjx*lrz*mrfn,1,1,1),zero,iyjx*lrz*mrfn)
       !call bcast(urfe(1,1,1,1),zero,iyjx*lrz*mrfn)
       !call bcast(urff(1,1,1,1),zero,iyjx*lrz*mrfn)
 !YuP[03/18/2015] urfe,urff are expressed through urfb,urfc
@@ -220,6 +223,7 @@ contains
                ! in the compressed arrays
                !if(urfb_version.eq.1)then ! 2 is the new version developed by YuP
                  ! if 1, it will use the original version
+                 !XXX I hope you guys really know what you are doing...!
                  call unpack(ilowp(locatn,krf),8,ilim1(1),jjx)
                  call unpack(iupp(locatn,krf),8,ilim2(1),jjx)
                  call unpack16(ifct1_(locatn16,krf),8,ifct1(1),jjx)

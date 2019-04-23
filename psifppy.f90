@@ -54,7 +54,7 @@ contains
           else
             call diagwrng(6)
           endif
-          call terp1(lorbit(lr_),es(1,lr_),bpsi(1,lr_),d2bpsi(1,lr_), &
+          call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),bpsi(1:lorbit(lr_),lr_),d2bpsi(1:lorbit(lr_),lr_), &
             xz,1,tab,itab)
           psifppy=tab(3)
         endif
@@ -85,7 +85,7 @@ contains
           else
             call diagwrng(6)
           endif
-          call terp1(lorbit(lr_),es(1,lr_),bpsi(1,lr_),d2bpsi(1,lr_), &
+          call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),bpsi(1:lorbit(lr_),lr_),d2bpsi(1:lorbit(lr_),lr_), &
             xz,1,tab,itab)
           psifppy=tab(3)
         endif

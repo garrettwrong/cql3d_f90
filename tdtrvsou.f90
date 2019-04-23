@@ -107,7 +107,7 @@ contains
 !.......................................................................
 
       if (cqlpmod .ne. "enabled") &
-        call tdtrvtor3(velsou(0,0,1,1),velsou(0,0,1,1),cynt2,cynt2_,2,k)
+        call tdtrvtor3(velsou(0:iyp1,0:jxp1,1,1),velsou(0:iyp1,0:jxp1,1,1),cynt2,cynt2_,2,k)
 
       return
       end

@@ -29,7 +29,7 @@ contains
 
       logical trnsfm
       ipxjpx=jpxy*ipxy
-      call bcast(fpn(1,1),zero,ipxjpx)
+      call bcast(fpn(1:ipxjpx,1),zero,ipxjpx)
       trnsfm=(target.eq."velocity".and. relativ .ne. "disabled")
 
 !     ipxy refers to xperp,

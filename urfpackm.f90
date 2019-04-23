@@ -9,7 +9,7 @@ module urfpackm_mod
 
 contains
 
-	subroutine pack(ip, nbits, iu, nw)
+        subroutine pack(ip, nbits, iu, nw)
 !
 !       PACK - Compresses stored data
 !       This version prepared for Absoft compiled data
@@ -33,21 +33,21 @@ contains
 !           For alignment, it will be best to take nw to
 !           be an integral multiple of 8, for 64-bit words.
 
-	integer iu(nw),iu0,iu255
-	integer*1 ip(nw),ip0,ip255
+        integer iu(nw),iu0,iu255
+        integer*1 ip(nw),ip0,ip255
 
-	do i=1,nw
-	   ip(i)=iu(i)-128
-	enddo
+        do i=1,nw
+           ip(i)=iu(i)-128
+        enddo
 
-	return
-	end
+        return
+        end
 
 
 
 !
 !
-	subroutine unpack(ip, nbits, iu, nw)
+        subroutine unpack(ip, nbits, iu, nw)
 !       NAME
 !           UNPACK - Compresses stored data
 !      SYNOPSIS
@@ -64,20 +64,20 @@ contains
 !           For alignment, it will be best to take nw to
 !           be an integral multiple of 8, for 64-bit words.
 
-	integer iu(nw)
-	integer*1 ip(nw)
+        integer iu(nw)
+        integer*1 :: ip(nw)
 
-	do i=1,nw
-	   iu(i)=ip(i)+128
-	enddo
+        do i=1,nw
+           iu(i)=ip(i)+128
+        enddo
 
-	return
-	end
+        return
+        end
 
 
 !
 !
-	subroutine pack16(ip, nbits, iu, nw)
+        subroutine pack16(ip, nbits, iu, nw)
 !
 !       PACK - Compresses stored data
 !       This version prepared for Absoft compiled data
@@ -101,21 +101,21 @@ contains
 !           For alignment, it will be best to take nw to
 !           be an integral multiple of 8, for 64-bit words.
 
-	integer iu(nw),iu0,iu255
-	integer*2 ip(nw),ip0,ip255
+        integer iu(nw),iu0,iu255
+        integer*2 ip(nw),ip0,ip255
 
-	do i=1,nw
-	   ip(i)=iu(i)-32768
-	enddo
+        do i=1,nw
+           ip(i)=iu(i)-32768
+        enddo
 
-	return
-	end
+        return
+        end
 
 
 
 !
 !
-	subroutine unpack16(ip, nbits, iu, nw)
+        subroutine unpack16(ip, nbits, iu, nw)
 !       NAME
 !           UNPACK - Compresses stored data
 !      SYNOPSIS
@@ -132,15 +132,15 @@ contains
 !           For alignment, it will be best to take nw to
 !           be an integral multiple of 8, for 64-bit words.
 
-	integer iu(nw)
-	integer*2 ip(nw)
+        integer iu(nw)
+        integer*2 ip(nw)
 
-	do i=1,nw
-	   iu(i)=ip(i)+32768
-	enddo
+        do i=1,nw
+           iu(i)=ip(i)+32768
+        enddo
 
-	return
-	end
+        return
+        end
 
 
 end module urfpackm_mod

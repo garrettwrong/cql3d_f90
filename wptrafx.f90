@@ -195,7 +195,7 @@ contains
 !     j=1 => zeroth order eq. to be solved, assuming velsou(j=1)=0
 !     => f_n+1(j=1)=f_n+1/2(j=1)
         do 221 ll=0,ls+1
-          call bcast(fnp1(0,1,k,ll),f(1,1,k,ll),iyp1+1)
+          call bcast(fnp1(0:iyp1,1,k,ll),f(1,1,k,ll),iyp1+1)
  221    continue
 
 !.......................................................................
@@ -353,8 +353,7 @@ contains
               rhspar(l,i,1)=0.0
  2333       continue
             zerr=1.0e-08
-            call nonsym(zmat,zxdumy,rhspar(1,i,1),ilslen,ileft,iright &
-              ,zerr,icond)
+            call nonsym(zmat,zxdumy,rhspar(1:ilslen,i,1),ilslen,ileft,iright,zerr,icond)
             if (icond .ne. 0) write(6,'(/," WARNING: bad condition in", &
               " nonsym: icond = ",i4)') icond
 

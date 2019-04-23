@@ -155,7 +155,7 @@ contains
 !  Form the parallel distribution function, for a given pol. angle lp
 !  and radial bin l_:
 
-      call bcast(fl(0),zero,jfl+1)
+      call bcast(fl(0:jfl),zero,jfl+1)
       do j=1,jx
          do i=1,min(imax(lp,ll)+1,iyh_(ll))
             itemc1(i)=jflbin(i,j,lp)
@@ -342,7 +342,7 @@ contains
 
 !  Form the parallel distribution function, for a given radius l_:
 
-      call bcast(fl(0),zero,jfl+1)
+      call bcast(fl(0:jfl),zero,jfl+1)
       do j=1,jx
          do i=1,iy_(l_)
             itemc1(i)=jflbin(i,j,l_)
@@ -464,8 +464,8 @@ contains
 !        enddo
 
 
-      call bcast(fl1(0),zero,jfl+1)
-      call bcast(fl2(0),zero,jfl+1)
+      call bcast(fl1(0:jfl),zero,jfl+1)
+      call bcast(fl2(0:jfl),zero,jfl+1)
       iii=min(imax(lp,lr_)+1,iyh_(l_))
       do jf=1,jfl
          if(jf.le.jx) then

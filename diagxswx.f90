@@ -56,7 +56,7 @@ contains
       call bcast(tam5,zero,jx)
       call bcast(tam6,zero,jx)
       call bcast(tam7,zero,jx)
-      call bcast(vflux(1,k,l_),zero,jx)
+      call bcast(vflux(1:jx,k,l_),zero,jx)
 
 !..................................................................
 !     Collect contributions from various pieces of the Krook operator.

@@ -32,7 +32,7 @@ contains
           if (soucoord .ne. "disabled") then
         do 800 m=1,nso
           if (n .lt. nonso(k,m) .or. n .gt. noffso(k,m)) go to 800
-          call bcast(temp2(0,0),zero,iyjx2)
+          call bcast(temp2(0:iyjx2-1,0),zero,iyjx2)
           do 700 l=1,lz
 
 !..................................................................

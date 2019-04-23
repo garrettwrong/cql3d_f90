@@ -39,7 +39,7 @@ contains
       if (n .eq. 0) return
 !%OS
 
-      call bcast(spasou(0,0,1,1),zero,iyjx2*ngen*lrors)
+      call bcast(spasou(0:iyjx2*ngen*lrors-1,0,1,1),zero,iyjx2*ngen*lrors)
       call bcast(zdns,zero,lrors)
       call bcast(zdnspa,zero,lrors)
       call bcast(zdnvel,zero,lrors)

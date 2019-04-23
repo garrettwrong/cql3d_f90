@@ -1551,11 +1551,12 @@ module comm_mod
   !common/params/ &
   integer :: jjx
 
-  integer, pointer :: jbm1(:,:)
+  !XXX rules are for breaking amiright
+  real(c_double), pointer :: jbm1(:,:)
   !common jbm1
-  integer, pointer :: jb0(:,:)
+  real(c_double), pointer :: jb0(:,:)
   !common jb0
-  integer, pointer :: jbp1(:,:)
+  real(c_double), pointer :: jbp1(:,:)
   !common jbp1
 
   ! bug

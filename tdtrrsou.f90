@@ -34,8 +34,8 @@ contains
 !     interpolate f_ on the transport velocity mesh, such that:
 !     int(vptp*f_*d3u0) is constant
 !.......................................................................
-
-      call tdtrvtor2(f(0,0,1,1),frn(0,0,1,1),vpint,vpint_,1)
+      !XXX
+      call tdtrvtor2(f(0:iyp1,0:jxp1,1,1),frn(0:iyp1,0:jxp1,1,1),vpint,vpint_,1)
 
 !.......................................................................
 !     compute advective term

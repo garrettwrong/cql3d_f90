@@ -111,7 +111,7 @@ contains
         zcoef=vnorm**3*reden(kelec,lr_)/ &
           (2.*pi*temp(kelec,lr_)*ergtkev/fmass(kelec))**1.5
         do 7 m=0,msxr
-          call bcast(feta(1,m),zero,jx)
+          call bcast(feta(1:jx,m),zero,jx)
  7      continue
 !     Legendre-coefficient of Maxwellian is the Maxwellian for m=0
         do 4 j=jval_(ien),jx
@@ -157,8 +157,8 @@ contains
       call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
 
       do 20 m=0,msxr
-        call bcast(feta(1,m),zero,jx)
-        call bcast(fetb(1,m),zero,jx)
+        call bcast(feta(1:jx,m),zero,jx)
+        call bcast(fetb(1:jx,m),zero,jx)
 
 !.......................................................................
 !     Obtain Legendre coefficients (in tam1, from cfpleg)  at z(lll,lr_)

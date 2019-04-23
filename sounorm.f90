@@ -37,7 +37,7 @@ contains
       isounor=1
       do 200 l=1,lz
         do 100 k=1,ngen
-          call bcast(temp1(0,0),zero,iyjx2)
+          call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)
           do 50 m=1,nso
 
 !..................................................................

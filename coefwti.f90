@@ -33,7 +33,7 @@ contains
 
 
 !-YuP      call bcast(di(0,1,k,l_),half,(iy+1)*jx) ! could it be error?
-      call bcast(di(0,0,k,l_),half,(iy+1)*(jx+2))
+      call bcast(di(0:(iy+1)*(jx+2)-1,0,k,l_),half,(iy+1)*(jx+2))
       !Note: di(0:iy,0:jx+1,1:ngen,lrors)
 
       if (chang .ne. "disabled") then

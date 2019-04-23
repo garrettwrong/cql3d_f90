@@ -97,7 +97,7 @@ contains
 !     to sounorm
 !..................................................................
 
-        call bcast(sounor(1,1,1,lr_),one,lz*ngen*nsoa)
+        call bcast(sounor(1:lz*ngen*nsoa,1,1,lr_),one,lz*ngen*nsoa)
         if (soucoord .ne. "disabled") then
         call sounorm
         do 40 k=1,ngen
@@ -112,14 +112,14 @@ contains
 !     Initialize the source profile to zero.
 !..................................................................
 
-      call bcast(source(0,0,1,indxlr_),zero,iyjx2*ngen)
+      call bcast(source(0:iyjx2*ngen-1,0,1,indxlr_),zero,iyjx2*ngen)
 
 !..................................................................
 !     xlncur will contain the source current (/cm**2/sec).
 !     In general asor*zmaxpsi(lr_)=xlncur  (asor in units particles/cc)
 !..................................................................
 
-      call bcast(xlncur(1,lr_),zero,ngen)
+      call bcast(xlncur(1:ngen,lr_),zero,ngen)
 
 !..................................................................
 !     Determine Guassian+knock-on  source(i,j,k,indxlr_) array

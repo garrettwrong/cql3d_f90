@@ -52,19 +52,20 @@ contains
 !yup      character*8 ifirst
 !yup      data ifirst/"first"/
 
-      call bcast(powrft(1),zero,lrzmax)
-      call bcast(powurf(0),zero,nmodsa+1)
-      call bcast(powurfc(0),zero,nmodsa+1)
-      call bcast(powurfl(0),zero,nmodsa+1)
-      call bcast(powrf(1,1),zero,lrza*nmodsa)
-      call bcast(powrfc(1,1),zero,lrza*nmodsa)
-      call bcast(powrfl(1,1),zero,lrza*nmodsa)
-      call bcast(powurfi(0,0),zero,(lrza+1)*(nmodsa+1))
+      call bcast(powrft(1:lrzmax),zero,lrzmax)
+      call bcast(powurf(0:nmodsa),zero,nmodsa+1)
+      call bcast(powurfc(0:nmodsa),zero,nmodsa+1)
+      call bcast(powurfl(0:nmodsa),zero,nmodsa+1)
+      !XXXX
+      call bcast(powrf(1:lrza, 1:nmodsa),zero,lrza*nmodsa)
+      call bcast(powrfc(1:lrza, 1:nmodsa),zero,lrza*nmodsa)
+      call bcast(powrfl(1:lrza, 1:nmodsa),zero,lrza*nmodsa)
+      call bcast(powurfi(0:lrza,0:nmodsa),zero,(lrza+1)*(nmodsa+1))
 
-      call bcast(urfpwr(1,1,1),zero,nrayelts*nrayn*mrfn)
+      call bcast(urfpwr,zero,nrayelts*nrayn*mrfn)
 !yup      if (ifirst.eq."first") then
-         call bcast(urfpwrc(1,1,1),zero,nrayelts*nrayn*mrfn)
-         call bcast(urfpwrl(1,1,1),zero,nrayelts*nrayn*mrfn)
+         call bcast(urfpwrc(1:nrayelts*nrayn*mrfn,1,1),zero,nrayelts*nrayn*mrfn)
+         call bcast(urfpwrl(1:nrayelts*nrayn*mrfn,1,1),zero,nrayelts*nrayn*mrfn)
 !yup      endif
       call bcast(scalurf,one, nrayelts*nrayn*mrfn)
 !BH120815      call bcast(salphac,zero,nrayelts*nrayn*mrfn)

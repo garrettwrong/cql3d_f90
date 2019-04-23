@@ -19,6 +19,8 @@ contains
       use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       character*(*) action
+      !XXXX BUG, integer array expected, not real8
+      integer :: cqlb_size
       save
 
 !.................................................................

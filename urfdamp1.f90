@@ -3,8 +3,11 @@ module urfdamp1_mod
   !---BEGIN USE
 
   use tdnflxs_mod, only : tdnflxs
-  use urfpackm_mod, only : unpack
-  use urfpackm_mod, only : unpack16
+  !XXXXXXXXX these require disbaling TKR checks !!
+  !use urfpackm_mod, only : unpack
+  !use urfpackm_mod, only : unpack16
+  external unpack
+  external unpack16
 
   !---END USE
 

@@ -320,12 +320,12 @@ contains
       endif
       mmxp1=mmx+1
 
-      call bcast(ss(1,1,0,lr_),zero,iy*lz*(mmxp1+1))
-      call bcast(ssy(1,1,0,lr_),zero,iy*lz*mxp1)
-      call bcast(ssyi(1,1,0,lr_),zero,iy*lz*mxp1)
-      call bcast(ssyy(1,1,0,lr_),zero,iy*lz*mxp1)
-      call bcast(ssyyy(1,1,0,lr_),zero,iy*lz*mxp1)   !Not used?
-      call bcast(dpcosz(1,1,0,lr_),zero,iy*lz*mmxp1)
+      call bcast(ss(1:iy*lz*(mmxp1+1),1,0,lr_),zero,iy*lz*(mmxp1+1))
+      call bcast(ssy(1:iy*lz*mxp1,1,0,lr_),zero,iy*lz*mxp1)
+      call bcast(ssyi(1:iy*lz*mxp1,1,0,lr_),zero,iy*lz*mxp1)
+      call bcast(ssyy(1:iy*lz*mxp1,1,0,lr_),zero,iy*lz*mxp1)
+      call bcast(ssyyy(1:iy*lz*mxp1,1,0,lr_),zero,iy*lz*mxp1)   !Not used?
+      call bcast(dpcosz(1:iy*lz*mmxp1,1,0,lr_),zero,iy*lz*mmxp1)
 
       do 270 l=1,lz
 !     test if l in lsindx(i) => ilcqlp=1

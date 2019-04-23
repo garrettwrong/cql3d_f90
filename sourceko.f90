@@ -312,7 +312,8 @@ contains
 !    (default soffpr=0.0)
 
       xsoffpr=soffpr*xvte3
-      call lookup(xsoffpr,xl(jflh),jfl,wtu,wtl,lement)
+      ! XXX
+      call lookup(xsoffpr,xl,jfl,wtu,wtl,lement)
       jsoffpr=min(lement,jfl)
 
 

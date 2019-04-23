@@ -37,7 +37,7 @@ contains
         if (psimodel.eq."axitorus") then
           psif=(1.+eps(lr_))/(1.+eps(lr_)*cos(pi*xz*zmaxi(lr_)))
         else if (psimodel.eq."spline") then
-          call terp1(lorbit(lr_),es(1,lr_),bpsi(1,lr_),d2bpsi(1,lr_), &
+          call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),bpsi(1:lorbit(lr_),lr_),d2bpsi(1:lorbit(lr_),lr_), &
             xz,1,tabl,itabl)
           psif=tabl(1)
         endif
@@ -49,7 +49,7 @@ contains
           gsexp=exp(-((xz+gszb)/gslb)**2)
           psif=(1.+(xz/gsla)**2+gsb*(gsexm+gsexp))/gsnm
         else if (psimodel.eq."spline") then
-          call terp1(lorbit(lr_),es(1,lr_),bpsi(1,lr_),d2bpsi(1,lr_), &
+          call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),bpsi(1:lorbit(lr_),lr_),d2bpsi(1:lorbit(lr_),lr_), &
             xz,1,tabl,itabl)
           psif=tabl(1)
         endif

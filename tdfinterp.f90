@@ -85,8 +85,8 @@ contains
       if (eqsym.ne."none" .and. polang.gt.pi) &
            polang=2*pi-polang   !assumes up-down symm
 
-      call lookup(polang,pol(1,lr-1),lz,pweightu1,pweightl1,lt1)
-      call lookup(polang,pol(1,lr),lz,pweightu2,pweightl2,lt2)
+      call lookup(polang,pol(1:lz,lr-1),lz,pweightu1,pweightl1,lt1)
+      call lookup(polang,pol(1:lz,lr),lz,pweightu2,pweightl2,lt2)
       bdb01=pweightl1*bbpsi(lt1,lr-1)+pweightu1*bbpsi(lt1,lr-1)
       bdb02=pweightl2*bbpsi(lt2,lr)+pweightu2*bbpsi(lt2,lr)
       bdb0=rweightl*bdb01+rweightu*bdb02
@@ -146,8 +146,8 @@ contains
 
 !     lookup pitch0 on y-grid corresponding to neighboring f()
       lrm=lrindx(ll-1)
-      call lookup(pitch0,y(1,lr),iy_(lr),pweightu,pweightl,iyy)
-      call lookup(pitch0,y(1,lrm),iy_(lrm),pweightum,pweightlm,iyym)
+      call lookup(pitch0,y(1:iy_(lr),lr),iy_(lr),pweightu,pweightl,iyy)
+      call lookup(pitch0,y(1:iy_(lrm),lrm),iy_(lrm),pweightum,pweightlm,iyym)
       call lookup(xvel,x,jx,xweightu,xweightl,jxx)
 
 !     Tri-linear interpolate (Eliminate f<0 values).

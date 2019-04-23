@@ -158,8 +158,7 @@ contains
 
         i1p(1)=4
         i1p(2)=4
-        call coeff1(lorbit(lr_),es(1,lr_),thtpol(1,lr_),d2thtpol(1,lr_), &
-          i1p,1,work)
+        call coeff1(lorbit(lr_),es(1:lorbit(lr_),lr_),thtpol(1:lorbit(lr_),lr_),d2thtpol(1:lorbit(lr_),lr_),i1p,1,work)
         itab(1)=1
         itab(2)=0
         itab(3)=0
@@ -209,7 +208,7 @@ contains
            pol(lz,lr_)=pi
         endif
         do 22 l=2,lz-1
-          call terp1(lorbit(lr_),es(1,lr_),thtpol(1,lr_),d2thtpol(1,lr_) &
+          call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),thtpol(1:lorbit(lr_),lr_),d2thtpol(1:lorbit(lr_),lr_) &
             ,z(l,lr_),1,tab,itab)
           pol(l,lr_)=tab(1)
  22     continue
@@ -227,10 +226,10 @@ contains
            d2solrz(1,lr_)=0.0
            d2solrz(lorbit(lr_),lr_)=0.0
         endif
-        call coeff1(lorbit(lr_),es(1,lr_),solr(1,lr_),d2solrz(1,lr_), &
+        call coeff1(lorbit(lr_),es(1:lorbit(lr_),lr_),solr(1:lorbit(lr_),lr_),d2solrz(1:lorbit(lr_),lr_), &
           i1p,1,work)
         do 221 l=1,lz
-           call terp1(lorbit(lr_),es(1,lr_),solr(1,lr_),d2solrz(1,lr_), &
+           call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),solr(1:lorbit(lr_),lr_),d2solrz(1:lorbit(lr_),lr_), &
                 z(l,lr_),1,tab,itab)
            solrz(l,lr_)=tab(1)
  221    continue
@@ -244,10 +243,10 @@ contains
            d2solzz(1,lr_)=0.0
            d2solzz(lorbit(lr_),lr_)=0.0
         endif
-        call coeff1(lorbit(lr_),es(1,lr_),solz(1,lr_),d2solzz(1,lr_), &
+        call coeff1(lorbit(lr_),es(1:lorbit(lr_),lr_),solz(1:lorbit(lr_),lr_),d2solzz(1:lorbit(lr_),lr_), &
              i1p,1,work)
         do 223 l=1,lz
-           call terp1(lorbit(lr_),es(1,lr_),solz(1,lr_),d2solzz(1,lr_), &
+           call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),solz(1:lorbit(lr_),lr_),d2solzz(1:lorbit(lr_),lr_), &
                 z(l,lr_),1,tab,itab)
            solzz(l,lr_)=tab(1)
  223    continue
@@ -310,17 +309,17 @@ contains
       i1p(2)=2
       zd2bpol(1)=0.0
       zd2bpol(lorbit(lr_))=0.0
-      call coeff1(lorbit(lr_),es(1,lr_),eqbpol(1,lr_),zd2bpol(1), &
+      call coeff1(lorbit(lr_),es(1:lorbit(lr_),lr_),eqbpol(1:lorbit(lr_),lr_),zd2bpol(1:lorbit(lr_)), &
         i1p,1,work)
       i1p(1)=2
       i1p(2)=2
       zd2solr(1)=0.0
       zd2solr(lorbit(lr_))=0.0
-      call coeff1(lorbit(lr_),es(1,lr_),solr(1,lr_),zd2solr(1), &
+      call coeff1(lorbit(lr_),es(1:lorbit(lr_),lr_),solr(1:lorbit(lr_),lr_),zd2solr(1:lorbit(lr_)), &
         i1p,1,work)
       i1p(1)=4
       i1p(2)=4
-      call coeff1(lorbit(lr_),es(1,lr_),solz(1,lr_),zd2solz(1), &
+      call coeff1(lorbit(lr_),es(1:lorbit(lr_),lr_),solz(1:lorbit(lr_),lr_),zd2solz(1:lorbit(lr_)), &
         i1p,1,work)
 
       itab(1)=1
@@ -328,13 +327,13 @@ contains
       itab(3)=0
 
       do 311 l=1,ls
-        call terp1(lorbit(lr_),es(1,lr_),eqbpol(1,lr_),zd2bpol(1) &
+        call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),eqbpol(1:lorbit(lr_),lr_),zd2bpol(1:lorbit(lr_)) &
           ,sz(l),1,tab,itab)
         psipols(l)=tab(1)/bmidplne(lr_)
-        call terp1(lorbit(lr_),es(1,lr_),solr(1,lr_),zd2solr(1) &
+        call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),solr(1:lorbit(lr_),lr_),zd2solr(1:lorbit(lr_)) &
           ,sz(l),1,tab,itab)
         solrs(l)=tab(1)
-        call terp1(lorbit(lr_),es(1,lr_),solz(1,lr_),zd2solz(1) &
+        call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),solz(1:lorbit(lr_),lr_),zd2solz(1:lorbit(lr_)) &
           ,sz(l),1,tab,itab)
         solzs(l)=tab(1)
  311  continue

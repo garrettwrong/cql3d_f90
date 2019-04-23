@@ -94,7 +94,7 @@ contains
       call bcast(tam5,zero,jx)
       call bcast(tam6,zero,jx)
 !BH081125:  Added zeroing of vflux.  Otherwise, compiler dep results?
-      call bcast(vflux(1,k,l_),zero,jx)
+      call bcast(vflux(1:jx,k,l_),zero,jx)
 
 !..................................................................
 !     Krook operator terms are integrated over velocity space.

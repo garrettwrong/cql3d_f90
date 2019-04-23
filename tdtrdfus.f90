@@ -21,6 +21,7 @@ contains
       use comm_mod, only : enerkev
       use comm_mod, only : ryain
       use comm_mod, only : difin
+      use comm_mod, only : y
 
       implicit integer (i-n), real*8 (a-h,o-z)
 
@@ -334,7 +335,7 @@ contains
       lr=lrindx(l)
       l_autocorr=pi*qsafety(lr)*radmaj
 
-      call bcast(temp1(0,0),zero,iyjx2)
+      call bcast(temp1(0:iyjx2,0),zero,iyjx2)
 !      write(*,*)'tdtrdfus:difus_vshape',difus_vshape
       do  j=1,jx
          vel=x(j)*vnorm/gamma(j)
@@ -463,7 +464,8 @@ contains
       subroutine diffus_io(kopt)
       use param_mod
       use comm_mod, only : difus_io, d_rr, d_r, rya, rpconz, lrindx
-      use comm_mod, only : temp1, difus_io_file, mnemonic, t_, iy, iy_
+      use comm_mod, only : temp1, difus_io_file, mnemonic, t_, iy, iy_, y
+      use comm_mod, only : tem1
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

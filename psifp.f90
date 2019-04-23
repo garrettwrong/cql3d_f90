@@ -35,7 +35,7 @@ contains
         if (psimodel.eq."axitorus") then
           psifp=psifpy(psif(xz))
         else if (psimodel.eq."spline") then
-          call terp1(lorbit(lr_),es(1,lr_),bpsi(1,lr_),d2bpsi(1,lr_), &
+          call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),bpsi(1:lorbit(lr_),lr_),d2bpsi(1:lorbit(lr_),lr_), &
             xz,1,tab,itab)
           psifp=tab(2)
           if (trapmod.eq."enabled") then
@@ -54,7 +54,7 @@ contains
             gsexp=exp(-gszxp**2/gslb2)
             psifp=2.*(xz/gsla2-gsb*(gszxm*gsexm+gszxp*gsexp)/gslb2)/gsnm
          else if (psimodel.eq."spline") then
-            call terp1(lorbit(lr_),es(1,lr_),bpsi(1,lr_),d2bpsi(1,lr_), &
+            call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),bpsi(1:lorbit(lr_),lr_),d2bpsi(1:lorbit(lr_),lr_), &
                  xz,1,tab,itab)
             psifp=tab(2)
             if (trapmod.eq."enabled") then

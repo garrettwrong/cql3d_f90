@@ -175,7 +175,7 @@ contains
         call coefmidt(dd,1)
         call coefmidt(de,2)
         call coefmidt(df,3)
-        call bcast(temp5(0,0),zero,iyjx2)
+        call bcast(temp5(0:iyjx2,0),zero,iyjx2)
 !
 !     In the case implct .eq. "disabled" copy the former values
 !     of the distribution function into temporary arrays.

@@ -208,8 +208,8 @@ contains
 
 
          if (lefct .eq. 3 .and. xrf .eq. 0) go to 190
-         call bcast(temp5(0,0),zero,iyjx2)
-         call bcast(temp4(0,0),zero,iyjx2)
+         call bcast(temp5(0:iyjx2-1,0),zero,iyjx2)
+         call bcast(temp4(0:iyjx2-1,0),zero,iyjx2)
 !        In the following, tam2 and tam3 are the code fluxes Gamma_x and
 !          sin(theta)*Gamma_theta interpolated onto the code mesh
 !          x,theta.  temp5 and temp4 are the parallel and perpendicular

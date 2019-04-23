@@ -7,8 +7,11 @@ module urfdamp2_mod
   use tdnflxs_mod, only : tdnflxs
   use urfmidv_mod, only : urfmidv_db
   use urfmidv_mod, only : urfmidv_dc
-  use urfpackm_mod, only : unpack
-  use urfpackm_mod, only : unpack16
+  !XXXXXXXXXXXXXXX these require disabling TKR checks!
+  !use urfpackm_mod, only : unpack
+  !use urfpackm_mod, only : unpack16
+  external unpack
+  external unpack16
 
   !---END USE
 
@@ -144,8 +147,8 @@ contains
 
           locatn=(jjx*(is-1)+jjx*nrayelts*(iray-1))/ibytes+1
           locatn16=(jjx*(is-1)+jjx*nrayelts*(iray-1))/ibytes16+1
-          call bcast(db(1,0),zero,iyjxp1)
-          call bcast(dc(1,0),zero,iyjxp1)
+          call bcast(db(1:iyjxp1,0),zero,iyjxp1)
+          call bcast(dc(1:iyjxp1,0),zero,iyjxp1)
           call ibcast(ilim1d,0,jx)
           call ibcast(ilim2d,0,jx)
 
@@ -293,7 +296,7 @@ contains
             ilim1dd(j)=min0(ilim1dd(j),iy)
  7        continue
 
-          call bcast(temp1(0,0),zero,iyjx2)
+          call bcast(temp1(0:iyjx2,0),zero,iyjx2)
           call urfmidv_db(jmin,jmax)
 !cc          call bcast(temp1(0,0),zero,iyjx2) ! Not really necessary
           call urfmidv_dc(jmin,jmax)

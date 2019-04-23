@@ -60,7 +60,8 @@ contains
 !
 !      common/temp_imax_old/ imax_old(lza)   ;for checking taunew.
 
-
+      !XXX see below XXX
+      integer :: cqlb_size
       complex*16 cwz,cwxyp,cwxym,cei
 
 
@@ -88,7 +89,7 @@ contains
         allocate(cqlc(iy,jx,lrz,mrfn),STAT=istat)
         allocate(cqle(iy,jx,lrz,mrfn),STAT=istat)
         allocate(cqlf(iy,jx,lrz,mrfn),STAT=istat)
-        cqlb_size=size(cqlb)
+        cqlb_size=size(cqlb) !XXXXXX BUG, was real8 type, you wanted integer
         call bcast(cqlb,zero,cqlb_size)
         call bcast(cqlc,zero,cqlb_size)
         call bcast(cqle,zero,cqlb_size)
@@ -194,10 +195,10 @@ contains
       do 20 l=1,lz
 
         if (cqlpmod.eq."enabled")then !should be one surface: indxlr_=1
-           call bcast (cqlb(1,1,indxlr_,krfmode),zero,iyjx)
-           call bcast (cqlc(1,1,indxlr_,krfmode),zero,iyjx)
-           call bcast (cqle(1,1,indxlr_,krfmode),zero,iyjx)
-           call bcast (cqlf(1,1,indxlr_,krfmode),zero,iyjx)
+           call bcast (cqlb(1:iyjx,1,indxlr_,krfmode),zero,iyjx)
+           call bcast (cqlc(1:iyjx,1,indxlr_,krfmode),zero,iyjx)
+           call bcast (cqle(1:iyjx,1,indxlr_,krfmode),zero,iyjx)
+           call bcast (cqlf(1:iyjx,1,indxlr_,krfmode),zero,iyjx)
         endif
 
         tap1=taper(pol(l,lr_),vlfpol(krfmode), &

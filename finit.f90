@@ -132,8 +132,8 @@ contains
          call bcast(tam3,zero,jx)
 !
 !  Put constant distribution in temp1, zero temp2
-         call bcast(temp1(0,0),one,iyjx2)
-         call bcast(temp2(0,0),zero,iyjx2)
+         call bcast(temp1(0:iyjx2,0),one,iyjx2)
+         call bcast(temp2(0:iyjx2,0),zero,iyjx2)
 !
 ! If fpld(2,k).ne.0., then set up the equatorial plane
 ! shifted "Maxwellian" in temp2.

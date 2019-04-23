@@ -375,7 +375,9 @@ contains
             call tdnflxs(ll)
             call achiefn(kopt) ! achiefn(2) here (cqlpmod="enabled")
          enddo
-         call efld_cd(dz(1,lr_),lrors,vnorm,flux1,flux2,elparnw,flux0)
+         ! XXX this looks like an indexing bug to me
+         ! xxx but i used what is defined by  esefld::efld_cd code
+         call efld_cd(dz(1:lrors+2,lr_),lrors,vnorm,flux1,flux2,elparnw,flux0)
       endif
 
 !.......................................................................

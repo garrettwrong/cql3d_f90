@@ -4,11 +4,14 @@ module urfpack_mod
 
   use tdnflxs_mod, only : tdnflxs
   use urfedge_mod, only : urfedge
-  use urfpackm_mod, only : pack
-  use urfpackm_mod, only : pack16
+  !XXXXX these require disabling TKR checks
+  !XXXuse urfpackm_mod, only : pack
+  !XXXuse urfpackm_mod, only : pack16
   use urfwrong_mod, only : urfwrong
 
   !---END USE
+  external pack
+  external pack16
 
 
 contains

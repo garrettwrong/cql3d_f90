@@ -47,7 +47,7 @@ contains
 
       do 200 k=1,ngen
 
-         call bcast(egylosa(0,0,k,indxlr_),zero,(iy+2)*(jx+2))
+         call bcast(egylosa(0:(iy+2)*(jx+2)-1,0,k,indxlr_),zero,(iy+2)*(jx+2))
 
 !     Phenomenological:
 

@@ -40,7 +40,8 @@ contains
 !     accomplished in a density conserving manner.
 !..............................................................
       if (nonadi .eq. 6) then
-        call tdtrvtor2(fvn(0,0,1,1),frn(0,0,1,1),vpint,vpint_,1)
+         !XXX
+        call tdtrvtor2(fvn(0:iyp1,0:jxp1,1,1),frn(0:iyp1,0:jxp1,1,1),vpint,vpint_,1)
       else
         call tdtrvtor(fvn,frn)
       endif
@@ -217,7 +218,7 @@ contains
 !     mesh - interpolate onto the velocity mesh, returning it in frn.
 !......................................................................
       if (nonadi .eq. 6) then
-        call tdtrrtov2(frn(0,0,1,1),frn(0,0,1,1),vpint,vpint_,1)
+        call tdtrrtov2(frn(0:ipy1,0:jxp1,1,1),frn(0:ipy1,0:jxp1,1,1),vpint,vpint_,1)
       else
         call tdtrrtov(frn)
       endif

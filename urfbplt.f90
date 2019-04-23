@@ -52,7 +52,7 @@ contains
         !UrfB(all modes) at a given surface (and for each k-species).
         do k=1,ngen ! YuP[10-2016] scan general species: can be more than one
            !initialize for each species: one plot for each k
-           call bcast(temp1(0,0),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
+           call bcast(temp1(0:iyjx2,0),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
            do 560 krf=1,mrfn
              if (nrfspecies(krfn(krf)) .eq.k) then
                !sum-up modes for a given species only

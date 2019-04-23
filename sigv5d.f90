@@ -42,8 +42,8 @@ contains
 
       !YuP[06-2016] Moved outside of if[] below.
       !Both arrays should be initialized to 0.
-      call bcast(sigf(1,lr_),zero,4)
-      call bcast(sigm(1,lr_),zero,4)
+      call bcast(sigf(1:4,lr_),zero,4)
+      call bcast(sigm(1:4,lr_),zero,4)
 
       if (isigsgv1 .eq. 0) then
         mmx1=mmsv
@@ -75,7 +75,7 @@ contains
 !BH120314:      if (k .ne. 0 .and. isigsgv2 .eq. 1) call sigmaxwl(k,kk)
 !BH120314:      call dcopy(iyjx2,temp3(0,0),1,temp1(0,0),1)
 
-      call bcast(temp3(0,0),zero,iyjx2)
+      call bcast(temp3(0:iyjx2-1,0),zero,iyjx2)
       if (kk .eq. 0) then  !No species 'a' general distrn.  Use maxwl.
             !write(*,*)'sigv5d:Reactant#1: Use Maxwellian with k=',k
          bn1=reden(k,lr_)
@@ -108,7 +108,7 @@ contains
          if(k.eq.0 .and. kk.eq.0) go to 90 !-> next reaction type
          !write(*,*)'sigv5d:Reactant#2: knumb,igenrl,imaxwln=',knumb,kk,k
 
-         call bcast(temp3(0,0),zero,iyjx2)
+         call bcast(temp3(0:iyjx2-1,0),zero,iyjx2)
          if (kk.eq.0) then
                !write(*,*)'sigv5d:Reactant#2: Use Maxwellian with k=',k
             bn2=reden(k,lr_)
@@ -159,8 +159,8 @@ contains
 !     Loop over Legendre polynomials
       do l1=0,mmx1
 
-      call bcast(fetb(1,l1),zero,jx)
-      call bcast(feta(1,l1),zero,jx)
+      call bcast(fetb(1:jx,l1),zero,jx)
+      call bcast(feta(1:jx,l1),zero,jx)
 !     Copy distribution a into temp3, for cfpleg:
 !%bh      call dcopy(iyjx2,temp4,1,temp3,1)
       call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)

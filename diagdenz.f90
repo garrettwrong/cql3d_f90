@@ -74,7 +74,7 @@ contains
           if (jegy(ny,1,k,lr_) .ge. jegy(ny,2,k,lr_)) jegy(ny,1,k,lr_)=0
  100    continue
  103  continue
-      call bcast(xlndnz(1,1),zero,(ngen+1)*negyrga)
+      call bcast(xlndnz(1:(ngen+1)*negyrga,1),zero,(ngen+1)*negyrga)
 
 !..................................................................
 !     xlndnz(k,ny) will eventually hold the line integrated density
