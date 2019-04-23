@@ -28,8 +28,8 @@ contains
 !..................................................................
 
 
-      call bcast(dbb(1,0),zero,iyjxp1)
-      call bcast(dff(0,1),zero,iyp1jx)
+      call bcast(dbb(1:iyjxp1,0),zero,iyjxp1)
+      call bcast(dff(0:iyp1jx-1,1),zero,iyp1jx)
 
       if (cqlpmod.ne."enabled") then
       if (vlhmod.eq."enabled" .or. vlfmod.eq."enabled") then

@@ -141,7 +141,7 @@ contains
  220    continue
       endif
 
-        call bcast(temp1(0,0),zero,iyjx2)
+        call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)
 
       return
       end

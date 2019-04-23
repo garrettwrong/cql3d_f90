@@ -88,14 +88,15 @@ contains
       endif
       impcoef=1
       nccoef=nccoef+1
-      call bcast(cal(1,1,1,l_),zero,iyjx*ngen)
-      call bcast(cbl(1,1,1,l_),zero,iyjx*ngen)
-      call bcast(ccl(1,1,1,l_),zero,iyjx*ngen)
-      call bcast(cdl(1,1,1,l_),zero,iyjx*ngen)
-      call bcast(cel(1,1,1,l_),zero,iyjx*ngen)
-      call bcast(cfl(1,1,1,l_),zero,iyjx*ngen)
-      call bcast(eal(1,1,1,1,l_),zero,iyjx*ngen*2)
-      call bcast(ebl(1,1,1,1,l_),zero,iyjx*ngen*2)
+      call bcast(cal(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
+      call bcast(cbl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
+      call bcast(ccl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
+      call bcast(cdl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
+      call bcast(cel(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
+      call bcast(cfl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
+      call bcast(eal(1,1,1:,zero,iyjx*ngen*2,1,l_),zero,iyjx*ngen*2)
+      call bcast(ebl(1,1,1:,zero,iyjx*ngen*2,1,l_),zero,iyjx*ngen*2)
+
 !..................................................................
 !     if only gen. species contributions are desired execute jump..
 !..................................................................
@@ -127,7 +128,8 @@ contains
           call cfpmodbe(reltmp,ebk1,ebk2)
         endif
         rnorm=reltmp/(4.*pi*cnorm3*ebk2)
-        call bcast(temp1(0,0),zero,iyjx2)
+        call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)
+
 !..................................................................
 !     Need extra mesh points to represent ions on a mesh meant to
 !     support electrons. Need more resolution near zero.

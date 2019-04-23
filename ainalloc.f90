@@ -165,31 +165,39 @@ contains
       istat_tot=0
       allocate(f(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(f(0,0,1,1),zero,SIZE(f))
+      !XXXcall bcast(f(0,0,1,1),zero,SIZE(f))
+      f = 0
       allocate(fxsp(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(fxsp(0,0,1,1),zero,SIZE(fxsp))
+      !XXXcall bcast(fxsp(0,0,1,1),zero,SIZE(fxsp))
+      fxsp = 0
       allocate(f_(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(f_(0,0,1,1),zero,SIZE(f_))
+      !XXXcall bcast(f_(0,0,1,1),zero,SIZE(f_))
+      f_ = 0
 
       allocate(spasou(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(spasou(0,0,1,1),zero,SIZE(spasou))
+      !XXXcall bcast(spasou(0,0,1,1),zero,SIZE(spasou))
+      spasou = 0
       allocate(velsou(0:iy+1,0:jx+1,ngen,0:lrors+1),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(velsou(0,0,1,0),zero,SIZE(velsou))
+      !XXXcall bcast(velsou(0,0,1,0),zero,SIZE(velsou))
+      velsou = 0
       allocate(velsou2(0:iy+1,0:jx+1,ngen,0:lrors+1),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(velsou2(0,0,1,0),zero,SIZE(velsou2))
+      !XXXcall bcast(velsou2(0,0,1,0),zero,SIZE(velsou2))
+      velsou2 = 0
 
       allocate(source(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(source(0,0,1,1),zero,SIZE(source))
+      !XXXcall bcast(source(0,0,1,1),zero,SIZE(source))
+      source = 0
 
       allocate(gone(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(gone(0,0,1,1),zero,SIZE(gone))
+      !XXXcall bcast(gone(0,0,1,1),zero,SIZE(gone))
+      gone = 0
 
       allocate(egylosa(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
@@ -873,7 +881,8 @@ contains
 
       allocate(gon(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(gon(0,0),zero,SIZE(gon))
+      !XXXcall bcast(gon(0,0),zero,SIZE(gon))
+      gon = 0
 
       allocate(so(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
@@ -1085,12 +1094,18 @@ contains
       istat_tot=istat_tot+istat
       allocate(temp6(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(temp1(0,0),zero,SIZE(temp1))
-      call bcast(temp2(0,0),zero,SIZE(temp2))
-      call bcast(temp3(0,0),zero,SIZE(temp3))
-      call bcast(temp4(0,0),zero,SIZE(temp4))
-      call bcast(temp5(0,0),zero,SIZE(temp5))
-      call bcast(temp6(0,0),zero,SIZE(temp6))
+      !XXXcall bcast(temp1(0,0),zero,SIZE(temp1))
+      temp1 = 0
+      !XXXcall bcast(temp2(0,0),zero,SIZE(temp2))
+      temp2 = 0
+      !XXXcall bcast(temp3(0,0),zero,SIZE(temp3))
+      temp3 = 0
+      !XXXcall bcast(temp4(0,0),zero,SIZE(temp4))
+      temp4 = 0
+      !XXXcall bcast(temp5(0,0),zero,SIZE(temp5))
+      temp5 = 0
+      !XXXcall bcast(temp6(0,0),zero,SIZE(temp6))
+      temp6 = 0
 
       allocate(xllji(jpxy,ipxy),STAT=istat)
       istat_tot=istat_tot+istat
@@ -1134,12 +1149,14 @@ contains
       if (tavg.ne."disabled") then
          allocate(favg(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
          istat_tot=istat_tot+istat
-         call bcast(favg(0,0,1,1),zero,SIZE(f))
+         !XXXcall bcast(favg(0,0,1,1),zero,SIZE(f))
+         favg = 0
       endif
 
       allocate(pentr(nonch,ngen,-1:15,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(pentr(1,1,-1,1),zero,SIZE(pentr))
+      !XXXcall bcast(pentr(1,1,-1,1),zero,SIZE(pentr))
+      pentr = 0
 
       allocate(constp(nonch,lrors),STAT=istat)
       istat_tot=istat_tot+istat
@@ -1153,7 +1170,8 @@ contains
       allocate(sgaint(8,ngen,lrors),STAT=istat)
       call bcast(sgaint,zero,8*ngen*lrors)
       allocate(entr(ngen,-1:15,lrors),STAT=istat)
-      call bcast(entr(1,-1,1),zero,ngen*17*lrors)
+      !XXXcall bcast(entr(1,-1,1),zero,ngen*17*lrors)
+      entr = 0
 
       allocate(xlndnz(ngen+1,negyrga),STAT=istat)
       call bcast(xlndnz,zero,(ngen+1)*negyrga)

@@ -23,14 +23,15 @@ contains
 
 
       if (n .ge. 2) return
-      call bcast(psiiv(1,lr_),zero,iy)
-      call bcast(psiba(1,lr_),zero,iy)
-      call bcast(psisq(1,lr_),zero,iy)
-      call bcast(psiir(1,lr_),zero,iy)
-      call bcast(vderb(1,lr_),zero,iy)
-      call bcast(psicu(1,lr_),zero,iy)
-      call bcast(psiqu(1,lr_),zero,iy)
-      call bcast(sincosba(1,1,lr_),zero,iy*ngen)
+      call bcast(psiiv(1:iy,lr_),zero,iy)
+      call bcast(psiba(1:iy,lr_),zero,iy)
+      call bcast(psisq(1:iy,lr_),zero,iy)
+      call bcast(psiir(1:iy,lr_),zero,iy)
+      call bcast(vderb(1:iy,lr_),zero,iy)
+      call bcast(psicu(1:iy,lr_),zero,iy)
+      call bcast(psiqu(1:iy,lr_),zero,iy)
+      call bcast(sincosba(1:iy*ngen,1,lr_),zero,iy*ngen)
+
 
       lrange=lz
       if (numclas .eq. 1) lrange=lz/2+1 !!! YuP: needs to check ?

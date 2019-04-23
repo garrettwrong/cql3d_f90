@@ -3,9 +3,12 @@
 module impavnc0_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
+  use bsu_mod, only : bsu
+  use bsl_mod, only : bsl
   use coefmidt_mod, only : coefmidt
   use coefmidv_mod, only : coefmidv
   use coefstup_mod, only : coefstup
@@ -25,11 +28,9 @@ module impavnc0_mod
   use tdtrvsou_mod, only : tdtrvsou
 
   !---END USE
-  use iso_c_binding, only : c_double
   ! XXX this is probably a bug in the original code.
   use advnce_mod, only :  k => advnce_k ! use advnce_mod's advnce_k
-  use bsu_mod, only : bsu
-  use bsl_mod, only : bsl
+
   ! gauss_, these are used outside module in it3dalloc.f
   integer, public ::  inewjmax, ialloc      
   ! XXX this was an integer somewhere?
@@ -1996,8 +1997,9 @@ contains
                 lowd=ml+mu+1
                 ml_a=ml
                 mu_a=mu
+                ! XXX , changed  a(1),ja(1),ia(1) ~~> i,ja,ia
                 call bndcsr(n_rows_A,abd_lapack(1:nabd,1),nabd,lowd,ml_a,mu_a, &
-                     a_csr(1),ja_csr(1),ia_csr(1),icsrij,ierr_csr)
+                     a_csr,ja_csr,ia_csr,icsrij,ierr_csr)
                 if (ierr_csr.ne.0) then
                    WRITE(*,*)'impavnc0/bndcsr: STOP ierr_csr=',ierr_csr
                    stop
@@ -2070,9 +2072,10 @@ contains
                 ! 
                 
                 if ( soln_method.eq."itsol" .or. soln_method.eq."itsol1" ) then
-                   call ilut (n_rows_A,a_csr(1),ja_csr(1),ia_csr(1),lfil0, &
-                        droptol,alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1), &
-                        jw_ilu(1),ierr)
+                   !XXX again, now passing by array, was passing elem
+                   call ilut (n_rows_A,a_csr,ja_csr,ia_csr,lfil0, &
+                        droptol,alu,jlu,ju,iwk_ilu,w_ilu, &
+                        jw_ilu,ierr)
                    !Setup up above, since vv size dependency
                    do i=1,n_rows_A
                       rhs0(i)=rhs(i)    !Copy rhs, for input to pgmres since
@@ -2081,9 +2084,10 @@ contains
                 elseif(soln_method.eq.'it3dv') then
                    ! perform soln only at last flux surface (l_=lrz)
                    if ( ilast_lr.eq.1 ) then
-                      call ilut (n_rows_A,a_csr(1),ja_csr(1),ia_csr(1),lfil0, &
-                           droptol,alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1), &
-                           jw_ilu(1),ierr)
+                      ! XXX passing array
+                      call ilut (n_rows_A,a_csr,ja_csr,ia_csr,lfil0, &
+                           droptol,alu,jlu,ju,iwk_ilu,w_ilu, &
+                           jw_ilu,ierr)
                       !              call ilutp(n_rows_A,a_csr(1),ja_csr(1),ia_csr(1),
                       !     +             lfil0,droptol,permtol,mbloc,
                       !     +             alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1),jw_ilu(1),
@@ -2099,9 +2103,9 @@ contains
                 elseif(soln_method.eq.'it3drv') then
                    ! perform soln only at last flux surface (l_=lrz)
                    if ( ilast_lr.eq.1 ) then
-                      call ilut (n_rows_A,ac_csr(1),jac_csr(1),iac_csr(1),lfil0, &
-                           droptol,alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1), &
-                           jw_ilu(1),ierr)
+                      call ilut (n_rows_A,ac_csr,jac_csr,iac_csr,lfil0, &
+                           droptol,alu,jlu,ju,iwk_ilu,w_ilu, &
+                           jw_ilu,ierr)
                       !              call ilutp(n_rows_A,ac_csr(1),jac_csr(1),iac_csr(1),
                       !     +             lfil0,droptol,permtol,mbloc,
                       !     +             alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1),jw_ilu(1),
@@ -2241,9 +2245,10 @@ contains
                 !--------------------------------------------------------------
                 !     Put sol into rhs vector (i.e., as in soln from direct solve)
                 if ( soln_method.eq."itsol" .or. soln_method.eq."itsol1" ) then
-                   call pgmres(n_rows_A,krylov1,rhs0(1),sol(1),vv(1),epsilon, &
-                        maxits,iout,a_csr(1),ja_csr(1),ia_csr(1),alu(1), &
-                        jlu(1),ju(1),ierr)
+                   !XXXX
+                   call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
+                        maxits,iout,a_csr,ja_csr,ia_csr,alu, &
+                        jlu,ju,ierr)
                    rhs(1:n_rows_A)=sol(1:n_rows_A)
                 elseif(soln_method.eq.'it3dv') then
                    ! perform soln 
@@ -2252,9 +2257,10 @@ contains
                       !MPIINSERT_IF_RANK_EQ_0
                       !       WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
                       !MPIINSERT_ENDIF_RANK
-                      call pgmres(n_rows_A,krylov1,rhs0(1),sol(1),vv(1),epsilon, &
-                           maxits,iout,a_csr(1),ja_csr(1),ia_csr(1),alu(1), &
-                           jlu(1),ju(1),ierr)
+                      !XXX
+                      call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
+                           maxits,iout,a_csr,ja_csr,ia_csr,alu, &
+                           jlu,ju,ierr)
                       !MPIINSERT_IF_RANK_EQ_0
                       !       WRITE(*,*)'impavnc0  after pgmres:  ierr',ierr
                       !MPIINSERT_ENDIF_RANK
@@ -2271,9 +2277,10 @@ contains
                       !MPIINSERT_IF_RANK_EQ_0
                       !       WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
                       !MPIINSERT_ENDIF_RANK
-                      call pgmres(n_rows_A,krylov1,rhs0(1),sol(1),vv(1),epsilon, &
-                           maxits,iout,ac_csr(1),jac_csr(1),iac_csr(1),alu(1), &
-                           jlu(1),ju(1),ierr)
+                      !XXX
+                      call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
+                           maxits,iout,ac_csr,jac_csr,iac_csr,alu, &
+                           jlu,ju,ierr)
                       !MPIINSERT_IF_RANK_EQ_0
                       !       WRITE(*,*)'impavnc0  after pgmres:  ierr',ierr
                       !MPIINSERT_ENDIF_RANK
