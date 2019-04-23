@@ -1,5 +1,17 @@
 module diagxswx_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use coefmidt_mod, only : coefmidt
+  use coefmidv_mod, only : coefmidv
+  use coefstup_mod, only : coefstup
+  use diagdens_mod, only : diagdens
+  use diagentr_mod, only : diagentr
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

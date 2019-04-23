@@ -1,5 +1,12 @@
 module tddiag_mod
 
+  !---BEGIN USE
+
+  use tdboothi_mod, only : tdboothi
+  use tdbootst_mod, only : tdbootst
+
+  !---END USE
+
 !
 !
 

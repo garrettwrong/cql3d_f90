@@ -1,5 +1,11 @@
 module exsweept_mod
 
+  !---BEGIN USE
+
+  use diagwrng_mod, only : diagwrng
+
+  !---END USE
+
 !
 !
 

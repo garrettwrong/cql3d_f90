@@ -1,5 +1,11 @@
 module tdfinterp_mod
 
+  !---BEGIN USE
+
+  use lookup_mod, only : lookup
+
+  !---END USE
+
 !
 !
 

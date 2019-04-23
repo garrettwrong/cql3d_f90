@@ -1,5 +1,13 @@
 module sourcef_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dscal
+  use soup_mod, only : soup
+
+  !---END USE
+
 !
 !
 

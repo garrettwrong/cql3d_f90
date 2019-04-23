@@ -1,5 +1,12 @@
 module ainsetva_mod
 
+  !---BEGIN USE
+
+  use diagwrng_mod, only : diagwrng
+  use wpwrng_mod, only : wpwrng
+
+  !---END USE
+
 !
 
 contains

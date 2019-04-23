@@ -1,5 +1,11 @@
 module eqfninv_mod
 
+  !---BEGIN USE
+
+  use eqwrng_mod, only : eqwrng
+
+  !---END USE
+
 
 !
 !

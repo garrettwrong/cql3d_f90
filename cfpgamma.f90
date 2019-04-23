@@ -1,5 +1,9 @@
 module cfpgamma_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

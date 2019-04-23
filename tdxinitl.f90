@@ -1,5 +1,19 @@
 module tdxinitl_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use micgetr_mod, only : micgetr
+  use profaxis_mod, only : profaxis
+  use tdinterp_mod, only : tdinterp
+  use tdtscinp_mod, only : tdtscinp
+  use tdwrng_mod, only : tdwrng
+  use tdxin13d_mod, only : tdxin13d
+  use tdxin23d_mod, only : tdxin23d
+  use tdxin33d_mod, only : tdxin33d
+
+  !---END USE
+
 !
 !
 

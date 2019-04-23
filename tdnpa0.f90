@@ -1,5 +1,16 @@
 module tdnpa0_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use eqfpsi_mod, only : eqfpsi
+  use tdnpa_mod, only : tdnpa
+  use tdsetnpa_mod, only : tdsetnpa
+  use tdsxrplt_mod, only : tdsxrplt
+  use tdsxrplt_mod, only : tdsxrvw
+
+  !---END USE
+
 !
 !
 

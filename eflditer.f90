@@ -1,5 +1,16 @@
 module eflditer_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use coefefad_mod, only : coefefad
+  use r8subs_mod, only : dscal
+  use restcon_mod, only : restcon
+  use resthks_mod, only : resthks
+  use soucrit_mod, only : soucrit
+
+  !---END USE
+
 !
 !
 

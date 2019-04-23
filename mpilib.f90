@@ -1,5 +1,11 @@
 module mpilib_mod
 
+  !---BEGIN USE
+
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 
 contains
 

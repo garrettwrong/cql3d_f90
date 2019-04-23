@@ -1,5 +1,20 @@
 module exsweep_mod
 
+  !---BEGIN USE
+
+  use coefmidt_mod, only : coefmidt
+  use coefmidv_mod, only : coefmidv
+  use coefstup_mod, only : coefstup
+  use coefwti_mod, only : coefwti
+  use coefwtj_mod, only : coefwtj
+  use diagxswt_mod, only : diagxswt
+  use diagxswx_mod, only : diagxswx
+  use exsweept_mod, only : exsweept
+  use exsweepx_mod, only : exsweepx
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

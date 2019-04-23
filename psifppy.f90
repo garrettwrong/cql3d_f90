@@ -1,5 +1,12 @@
 module psifppy_mod
 
+  !---BEGIN USE
+
+  use diagwrng_mod, only : diagwrng
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 
 contains

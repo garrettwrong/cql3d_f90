@@ -1,5 +1,9 @@
 module cfpsymt_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

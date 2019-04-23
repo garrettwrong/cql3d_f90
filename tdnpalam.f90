@@ -1,5 +1,11 @@
 module tdnpalam_mod
 
+  !---BEGIN USE
+
+  use tdnpabscs_mod, only : bscs
+
+  !---END USE
+
 
 contains
 

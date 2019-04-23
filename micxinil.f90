@@ -1,5 +1,14 @@
 module micxinil_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dscal
+  use tdinlegw_mod, only : tdinlegw
+  use wpwrng_mod, only : wpwrng
+
+  !---END USE
+
 !
 !
 

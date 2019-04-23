@@ -2,6 +2,13 @@
 !
 module pltdf_mod
 
+  !---BEGIN USE
+
+  use pltcont_mod, only : pltcont
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
   use iso_c_binding, only : c_double
   integer, parameter, public :: nconta=100
   ! these are shared with other routines (outside the contains)

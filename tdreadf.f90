@@ -1,5 +1,17 @@
 module tdreadf_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ibcast
+  use pack21_mod, only : unpack21
+  use tdnflxs_mod, only : tdnflxs
+  use zcunix_mod, only : allocate_error
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 !
 !      module tdreadf_mod

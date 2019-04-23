@@ -1,5 +1,13 @@
 module vlfalloc_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ccast
+  use bcast_mod, only : ibcast
+
+  !---END USE
+
 !
 !
 

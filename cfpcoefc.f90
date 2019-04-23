@@ -1,5 +1,12 @@
 module cfpcoefc_mod
 
+  !---BEGIN USE
+
+  use cfpcoefn_mod, only : cfpcoefn
+  use cfpcoefr_mod, only : cfpcoefr
+
+  !---END USE
+
 !
 !
 

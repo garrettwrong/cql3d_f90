@@ -1,5 +1,11 @@
 module ainpla_mod
 
+  !---BEGIN USE
+
+  use cfpmodbe_mod, only : cfpmodbe
+
+  !---END USE
+
 !
 !
 !

@@ -1,5 +1,16 @@
 module vlf_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dcopy
+  use urfedge_mod, only : urfedge
+  use urfwrong_mod, only : urfwrong
+  use vlfbplt_mod, only : vlfbplt
+  use vlfsetup_mod, only : vlfsetup
+
+  !---END USE
+
 !
 !
 

@@ -1,5 +1,14 @@
 module tdtranspn_mod
 
+  !---BEGIN USE
+
+  use r8subs_mod, only : dcopy
+  use tdtravct_mod, only : tdtravct
+  use tdtrvtor_mod, only : tdtrvtor
+  use tdtrwtl_mod, only : tdtrwtl
+
+  !---END USE
+
 
 contains
 

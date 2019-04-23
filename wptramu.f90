@@ -1,5 +1,15 @@
 module wptramu_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dcopy
+  use wpbdry_mod, only : wpbdry
+  use wpcheck_mod, only : wpcheck
+  use znonsym_mod, only : nonsym
+
+  !---END USE
+
 !
 !
 

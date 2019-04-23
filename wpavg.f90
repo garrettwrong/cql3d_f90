@@ -1,5 +1,9 @@
 module wpavg_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

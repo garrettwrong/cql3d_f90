@@ -65,6 +65,10 @@
 !
 
 module r8subs_mod
+
+  !---BEGIN USE
+
+  !---END USE
   ! CLAENV
   use comm_mod
   integer, private :: IPARMS(100)

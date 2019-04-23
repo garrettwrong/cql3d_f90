@@ -1,5 +1,18 @@
 module tdtravct_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dcopy
+  use tdtrrtov2_mod, only : tdtrrtov2
+  use tdtrrtov_mod, only : tdtrrtov
+  use tdtrsym_mod, only : tdtrsym
+  use tdtrvtor2_mod, only : tdtrvtor2
+  use tdtrvtor_mod, only : tdtrvtor
+  use tdtrwtl_mod, only : tdtrwtl
+
+  !---END USE
+
 !
 !
 

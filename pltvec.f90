@@ -1,5 +1,21 @@
 module pltvec_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use bcast_mod, only : bcast
+  use coefefad_mod, only : coefefad
+  use coeffpad_mod, only : coeffpad
+  use coefmidt_mod, only : coefmidt
+  use coefmidv_mod, only : coefmidv
+  use coefrfad_mod, only : coefrfad
+  use coefstup_mod, only : coefstup
+  use pltvectr_mod, only : pltvectr
+  use prppr_mod, only : prppr
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 
 !
 !

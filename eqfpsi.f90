@@ -1,5 +1,12 @@
 module eqfpsi_mod
 
+  !---BEGIN USE
+
+  use eqwrng_mod, only : eqwrng
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 !
 

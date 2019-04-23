@@ -1,5 +1,13 @@
 module vlfsetup_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use vlfalloc_mod, only : vlfalloc
+  use zcunix_mod, only : zzbeslri
+
+  !---END USE
+
 !
 !
 

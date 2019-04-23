@@ -1,5 +1,12 @@
 module tdtrchk_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use diagwrng_mod, only : diagwrng
+
+  !---END USE
+
 !
 !
 

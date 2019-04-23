@@ -1,5 +1,15 @@
 module rdc_multi_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dcopy
+  use rdc_bplt_mod, only : rdc_bplt
+  use tdnflxs_mod, only : tdnflxs
+  use zcunix_mod, only : allocate_error
+
+  !---END USE
+
 !
 !
 

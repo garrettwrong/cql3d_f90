@@ -1,5 +1,25 @@
 module achiefn_mod
 
+  !---BEGIN USE
+
+  use cfpcoefc_mod, only : cfpcoefc
+  use cfpgamma_mod, only : cfpgamma
+  use diag_mod, only : diag
+  use diaggnde_mod, only : diaggnde
+  use dskout_mod, only : dskout
+  use efield_mod, only : efield
+  use exsweep_mod, only : exsweep
+  use finit_mod, only : finit
+  use impavnc0_mod, only : impavnc0
+  use ntdstore_mod, only : ntdstore
+  use ntloop_mod, only : ntloop
+  use pltmain_mod, only : pltmain
+  use pltrun_mod, only : pltrun
+  use restvty_mod, only : restvty
+  use sourcee_mod, only : sourcee
+
+  !---END USE
+
 !
 !
 

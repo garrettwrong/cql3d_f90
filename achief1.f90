@@ -1,5 +1,39 @@
 module achief1_mod
 
+  !---BEGIN USE
+
+  use achiefn_mod, only : achiefn
+  use ainalloc_mod, only : ainalloc
+  use aindflt1_mod, only : aindflt1
+  use aindflt_mod, only : aindflt
+  use aindfpa_mod, only : ain_transcribe
+  use aingeom_mod, only : aingeom
+  use ainitial_mod, only : ainitial
+  use ainpla_mod, only : ainpla
+  use ainsetva_mod, only : ainsetva
+  use ainspec_mod, only : ainspec
+  use ainvnorm_mod, only : ainvnorm
+  use cfpgamma_mod, only : cfpgamma
+  use coefmidt_mod, only : coefmidt
+  use coefmidv_mod, only : coefmidv
+  use coefstup_mod, only : coefstup
+  use coefwti_mod, only : coefwti
+  use coefwtj_mod, only : coefwtj
+  use diagimpd_mod, only : diagimpd
+  use diagscal_mod, only : diagscal
+  use eqindflt_mod, only : eqindflt
+  use eqinitl_mod, only : eqinitl
+  use micxinit_mod, only : micxinit
+  use micxiniz_mod, only : micxiniz
+  use ntloop_mod, only : ntloop
+  use pltmain_mod, only : pltmain
+  use profiles_mod, only : profiles
+  use r8subs_mod, only : dcopy
+  use tdnflxs_mod, only : tdnflxs
+  use wploweq_mod, only : wploweq
+
+  !---END USE
+
 !
 !
 

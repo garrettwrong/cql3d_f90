@@ -1,5 +1,9 @@
 module wpmshchk_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

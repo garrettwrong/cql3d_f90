@@ -38,6 +38,10 @@
 !.......................................................................
 
 module comm_mod
+
+  !---BEGIN USE
+
+  !---END USE
   use iso_c_binding, only : c_float             !REAL*4
   use iso_c_binding, only : c_double            !REAL*8
   use iso_c_binding, only : c_double_complex    !COMPLEX*16

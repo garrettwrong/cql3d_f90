@@ -1,5 +1,20 @@
 module urfchief_mod
 
+  !---BEGIN USE
+
+  use tdnflxs_mod, only : tdnflxs
+  use urfavg_mod, only : urfavg
+  use urfb0_mod, only : urfb0
+  use urfbes_mod, only : urfbes
+  use urfbplt_mod, only : urfbplt
+  use urfdamp0_mod, only : urfdamp0
+  use urffflx_mod, only : urffflx
+  use urfpack_mod, only : urfpack
+  use urfrays_mod, only : urfrays
+  use urfread_mod, only : urfread
+
+  !---END USE
+
 
 !
 !

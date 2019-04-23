@@ -1,5 +1,15 @@
 module urfpack_mod
 
+  !---BEGIN USE
+
+  use tdnflxs_mod, only : tdnflxs
+  use urfedge_mod, only : urfedge
+  use urfpackm_mod, only : pack
+  use urfpackm_mod, only : pack16
+  use urfwrong_mod, only : urfwrong
+
+  !---END USE
+
 
 contains
 

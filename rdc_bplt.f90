@@ -1,5 +1,12 @@
 module rdc_bplt_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use pltcont_mod, only : pltcont
+
+  !---END USE
+
 
 contains
 

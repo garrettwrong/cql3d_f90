@@ -1,5 +1,12 @@
 module coefwtj_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use coefmidv_mod, only : coefmidv
+
+  !---END USE
+
 !
 !
 

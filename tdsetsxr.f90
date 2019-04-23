@@ -1,5 +1,11 @@
 module tdsetsxr_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+
+  !---END USE
+
 !
 !
 

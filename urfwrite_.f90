@@ -1,5 +1,12 @@
 module urfwrite__mod
 
+  !---BEGIN USE
+
+  use urfwr0_mod, only : urfwr0
+  use urfwr0c_mod, only : urfwr0c
+
+  !---END USE
+
 !
 !
 

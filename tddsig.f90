@@ -1,5 +1,9 @@
 module tddsig_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

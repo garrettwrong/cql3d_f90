@@ -1,5 +1,13 @@
 module efield_mod
 
+  !---BEGIN USE
+
+  use cfpgamma_mod, only : cfpgamma
+  use restcon_mod, only : restcon
+  use resthks_mod, only : resthks
+
+  !---END USE
+
 !
 !
 

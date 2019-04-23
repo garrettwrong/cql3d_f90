@@ -1,5 +1,13 @@
 module micxinit_mod
 
+  !---BEGIN USE
+
+  use diagwrng_mod, only : diagwrng
+  use micgetr_mod, only : micgetr
+  use tdtry_mod, only : tdtry
+
+  !---END USE
+
 !
 !
 

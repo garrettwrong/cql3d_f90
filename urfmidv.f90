@@ -1,5 +1,12 @@
 module urfmidv_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

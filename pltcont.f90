@@ -1,5 +1,11 @@
 module pltcont_mod
 
+  !---BEGIN USE
+
+  use lookup_mod, only : lookup_tdf
+
+  !---END USE
+
 !
 !
 

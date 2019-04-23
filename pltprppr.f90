@@ -1,5 +1,17 @@
 module pltprppr_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use fle_mod, only : fle_fsa
+  use fle_mod, only : fle_pol
+  use pltmain_mod, only : gpcv2d
+  use pltmain_mod, only : gsvp2d
+  use pltmain_mod, only : gswd2d
+  use pltmain_mod, only : gxglfr
+
+  !---END USE
+
 !
 !
 

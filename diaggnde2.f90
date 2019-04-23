@@ -1,5 +1,16 @@
 module diaggnde2_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use cfpleg_mod, only : cfpleg
+  use diagdenz_mod, only : diagdenz
+  use diagwrng_mod, only : diagwrng
+  use r8subs_mod, only : dcopy
+  use r8subs_mod, only : dscal
+
+  !---END USE
+
 !
 !
 

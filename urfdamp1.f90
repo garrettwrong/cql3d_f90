@@ -1,5 +1,13 @@
 module urfdamp1_mod
 
+  !---BEGIN USE
+
+  use tdnflxs_mod, only : tdnflxs
+  use urfpackm_mod, only : unpack
+  use urfpackm_mod, only : unpack16
+
+  !---END USE
+
 !
 !
 

@@ -1,6 +1,30 @@
 !
 !
 module impavnc0_mod
+
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ibcast
+  use coefmidt_mod, only : coefmidt
+  use coefmidv_mod, only : coefmidv
+  use coefstup_mod, only : coefstup
+  use coefwti_mod, only : coefwti
+  use coefwtj_mod, only : coefwtj
+  use ilut_mod, only : aplb
+  use ilut_mod, only : bndcsr
+  use ilut_mod, only : ilut
+  use ilut_mod, only : pgmres
+  use impchk_mod, only : impchk
+  use impnorm_mod, only : impnorm
+  use it3dalloc_mod, only : it3dalloc
+  use r8subs_mod, only : dcopy
+  use r8subs_mod, only : dgbtrf
+  use r8subs_mod, only : dgbtrs
+  use tdtranspn_mod, only : tdtranspn
+  use tdtrvsou_mod, only : tdtrvsou
+
+  !---END USE
   use iso_c_binding, only : c_double
   ! XXX this is probably a bug in the original code.
   use advnce_mod, only :  k => advnce_k ! use advnce_mod's advnce_k

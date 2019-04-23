@@ -1,5 +1,13 @@
 module eqcoord_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use eqfndpsi_mod, only : eqfndpsi
+  use eqrhopsi_mod, only : eqrhopsi
+
+  !---END USE
+
 
 
 contains

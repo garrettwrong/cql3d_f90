@@ -1,5 +1,15 @@
 module micxiniz_mod
 
+  !---BEGIN USE
+
+  use diagwrng_mod, only : diagwrng
+  use micgetr_mod, only : micgetr
+  use tdxin13d_mod, only : tdxin13d
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 !
 

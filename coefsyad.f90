@@ -1,5 +1,9 @@
 module coefsyad_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

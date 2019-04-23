@@ -1,5 +1,16 @@
 module tdsxr0_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use eqfpsi_mod, only : eqfpsi
+  use tdsetsxr_mod, only : tdsetsxr
+  use tdsxr_mod, only : tdsxr
+  use tdsxrplt_mod, only : tdsxrplt
+  use tdsxrplt_mod, only : tdsxrvw
+
+  !---END USE
+
 !
 !
 

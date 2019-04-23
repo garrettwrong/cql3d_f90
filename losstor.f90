@@ -1,5 +1,9 @@
 module losstor_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 
 
 contains

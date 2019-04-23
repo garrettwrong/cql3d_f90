@@ -1,5 +1,13 @@
 module urfbes_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use bcast_mod, only : bcast
+  use zcunix_mod, only : zzbeslri
+
+  !---END USE
+
 
 !
 !

@@ -1,5 +1,11 @@
 module pltvectr_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+
+  !---END USE
+
 !
 !
 

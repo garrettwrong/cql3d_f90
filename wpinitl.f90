@@ -1,5 +1,14 @@
 module wpinitl_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ibcast
+  use r8subs_mod, only : dcopy
+  use wpwrng_mod, only : wpwrng
+
+  !---END USE
+
 !
 !
 

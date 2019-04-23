@@ -1,5 +1,11 @@
 module tdtry_mod
 
+  !---BEGIN USE
+
+  use tdwrng_mod, only : tdwrng
+
+  !---END USE
+
 !
 !
 

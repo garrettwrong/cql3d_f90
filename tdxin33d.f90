@@ -1,5 +1,11 @@
 module tdxin33d_mod
 
+  !---BEGIN USE
+
+  use profaxis_mod, only : profaxis
+
+  !---END USE
+
 !
 !
 

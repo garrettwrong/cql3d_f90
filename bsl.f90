@@ -1,5 +1,12 @@
 
 module bsl_mod
+
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use lookup_mod, only : lookup
+
+  !---END USE
   use iso_c_binding, only : c_double
 
 contains

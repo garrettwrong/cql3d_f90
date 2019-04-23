@@ -1,5 +1,9 @@
 module soup0_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

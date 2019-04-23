@@ -1,5 +1,15 @@
 module urfdamp0_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dcopy
+  use urfdamp1_mod, only : urfdamp1
+  use urfdamp2_mod, only : urfdamp2
+  use urfdampa_mod, only : urfdampa
+
+  !---END USE
+
 !
 !
 

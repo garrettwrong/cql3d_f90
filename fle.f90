@@ -1,5 +1,14 @@
 module fle_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use diagwrng_mod, only : diagwrng
+  use micgetr_mod, only : micgetr
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

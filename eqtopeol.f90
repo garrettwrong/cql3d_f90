@@ -1,5 +1,13 @@
 module eqtopeol_mod
 
+  !---BEGIN USE
+
+  use r8subs_mod, only : dscal
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 !
 

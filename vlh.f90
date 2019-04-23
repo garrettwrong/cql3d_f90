@@ -1,5 +1,12 @@
 module vlh_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use vlhbplt_mod, only : vlhbplt
+
+  !---END USE
+
 
 
 

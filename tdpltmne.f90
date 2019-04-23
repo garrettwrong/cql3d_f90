@@ -1,5 +1,12 @@
 module tdpltmne_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use tdpltjop_mod, only : tdpltjop
+
+  !---END USE
+
 !
 !
 

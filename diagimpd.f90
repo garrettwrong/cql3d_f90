@@ -1,5 +1,15 @@
 module diagimpd_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use bcast_mod, only : bcast
+  use diagdens_mod, only : diagdens
+  use diagentr_mod, only : diagentr
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

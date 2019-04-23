@@ -1,5 +1,11 @@
 module eqflxavg_mod
 
+  !---BEGIN USE
+
+  use eqorbit_mod, only : eqorbit
+
+  !---END USE
+
 !
 !
 

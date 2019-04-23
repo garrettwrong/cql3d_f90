@@ -1,5 +1,11 @@
 module tdtrvtor3_mod
 
+  !---BEGIN USE
+
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

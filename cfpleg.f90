@@ -1,5 +1,12 @@
 module cfpleg_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use r8subs_mod, only : dscal
+
+  !---END USE
+
 !
 !
 

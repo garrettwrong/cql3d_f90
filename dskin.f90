@@ -1,8 +1,20 @@
 module dskin_mod
 
+  !---BEGIN USE
+
+  use lookup_mod, only : lookup
+
+  !---END USE
+
 !
 !
       module dskin_mod
+
+  !---BEGIN USE
+
+  use lookup_mod, only : lookup
+
+  !---END USE
 
       public ! please limit some of this
       ! XXX itl, itu

@@ -1,5 +1,9 @@
 module diagwrng_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

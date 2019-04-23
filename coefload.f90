@@ -1,5 +1,11 @@
 module coefload_mod
 
+  !---BEGIN USE
+
+  use losstor_mod, only : losstor
+
+  !---END USE
+
 !
 !
 

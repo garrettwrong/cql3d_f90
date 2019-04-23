@@ -1,5 +1,19 @@
 module diagentr_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use coefefad_mod, only : coefefad
+  use coefegad_mod, only : coefegad
+  use coefload_mod, only : coefload
+  use coefmidv_mod, only : coefmidv
+  use coefrfad_mod, only : coefrfad
+  use coefsyad_mod, only : coefsyad
+  use diagwrng_mod, only : diagwrng
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

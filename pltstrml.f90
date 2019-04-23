@@ -1,5 +1,17 @@
 module pltstrml_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use bcast_mod, only : bcast
+  use coefmidt_mod, only : coefmidt
+  use coefstup_mod, only : coefstup
+  use pack21_mod, only : pack21
+  use pltmain_mod, only : gxglfr
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

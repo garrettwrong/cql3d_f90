@@ -1,5 +1,12 @@
 module urfread_mod
 
+  !---BEGIN USE
+
+  use r8subs_mod, only : dcopy
+  use urfread__mod, only : urfread_
+
+  !---END USE
+
 !
 !
 

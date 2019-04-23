@@ -1,5 +1,13 @@
 module vlfbplt_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use pltcont_mod, only : pltcont
+  use urfwrong_mod, only : urfwrong
+
+  !---END USE
+
 
 contains
 

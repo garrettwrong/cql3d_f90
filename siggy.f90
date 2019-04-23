@@ -1,5 +1,9 @@
 module siggy_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

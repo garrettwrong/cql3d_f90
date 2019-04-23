@@ -1,5 +1,62 @@
 module tdchief_mod
 
+  !---BEGIN USE
+
+  use achief1_mod, only : achief1
+  use achiefn_mod, only : achiefn
+  use aclear_mod, only : aclear
+  use aindfpa_mod, only : ainadjnl
+  use aindfpa_mod, only : ainadjnl_fsetup_setup0
+  use aindfpa_mod, only : aindfpa
+  use ainplt_mod, only : ainplt
+  use ainpltpa_mod, only : ainpltpa
+  use ainsetpa_mod, only : ainsetpa
+  use ampfar_mod, only : ampfdiff
+  use ampfar_mod, only : ampfefldb
+  use cfpgamma_mod, only : cfpgamma
+  use coefmidt_mod, only : coefmidt
+  use coefmidv_mod, only : coefmidv
+  use coefstup_mod, only : coefstup
+  use coefwti_mod, only : coefwti
+  use coefwtj_mod, only : coefwtj
+  use diag_mod, only : diag
+  use diagentr_mod, only : diagentr_vol
+  use diaggnde_mod, only : diaggnde
+  use diagimpd_mod, only : diagimpd
+  use diagscal_mod, only : diagscal
+  use eflditer_mod, only : eflditer
+  use esefld_mod, only : efld_cd
+  use ntdstore_mod, only : ntdstore
+  use pltendn_mod, only : plt_fow_cons
+  use pltinit_mod, only : pltinit
+  use pltmain_mod, only : pltmain
+  use pltrun_mod, only : pltrun
+  use profiles_mod, only : profiles
+  use r8subs_mod, only : dcopy
+  use restvty_mod, only : restvty
+  use tddiag_mod, only : tddiag
+  use tdnflxs_mod, only : tdnflxs
+  use tdoutput_mod, only : tdoutput
+  use tdplteq_mod, only : tdplteq
+  use tdpltmne_mod, only : tdpltmne
+  use tdtloop_mod, only : tdtloop
+  use tdtoaray_mod, only : tdtoaray
+  use tdtransp_mod, only : tdtransp
+  use tdtrcon_mod, only : tdtrcon
+  use tdtrdfus_mod, only : diffus_io
+  use tdtrfcop_mod, only : tdtrfcop
+  use tdtrrsou_mod, only : tdtrrsou
+  use tdtrsavf_mod, only : tdtrsavf
+  use urfchief_mod, only : urfchief
+  use wparsou_mod, only : wparsou
+  use wpavg_mod, only : wpavg
+  use wpelecf_mod, only : wpelecf
+  use wpsavf_mod, only : wpsavf
+  use wptrafx_mod, only : wptrafx
+  use wptramu_mod, only : wptramu
+
+  !---END USE
+
 !
 !
 

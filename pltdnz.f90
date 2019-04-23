@@ -1,5 +1,12 @@
 module pltdnz_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use pltelec_mod, only : pltelec
+
+  !---END USE
+
 !
 !
 

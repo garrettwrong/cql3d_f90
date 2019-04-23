@@ -1,5 +1,9 @@
 module bcast_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 ! XXX every thing in this file and related to it should be deleted
 
 !

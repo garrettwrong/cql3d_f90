@@ -1,5 +1,11 @@
 module psifp_mod
 
+  !---BEGIN USE
+
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 
 
 contains

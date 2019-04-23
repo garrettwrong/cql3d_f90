@@ -1,5 +1,17 @@
 module urfdamp2_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ibcast
+  use tdnflxs_mod, only : tdnflxs
+  use urfmidv_mod, only : urfmidv_db
+  use urfmidv_mod, only : urfmidv_dc
+  use urfpackm_mod, only : unpack
+  use urfpackm_mod, only : unpack16
+
+  !---END USE
+
 !
 !
 

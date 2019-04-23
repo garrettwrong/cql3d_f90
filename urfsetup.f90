@@ -1,5 +1,14 @@
 module urfsetup_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ibcast
+  use urfalloc_mod, only : urfalloc
+  use urfread__mod, only : urfread_i
+
+  !---END USE
+
 !
 !
 

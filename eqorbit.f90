@@ -1,5 +1,16 @@
 module eqorbit_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use bcast_mod, only : bcast
+  use eqfpsi_mod, only : eqfpsi
+  use eqwrng_mod, only : eqwrng
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 !
 

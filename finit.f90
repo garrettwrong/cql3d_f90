@@ -1,5 +1,13 @@
 module finit_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use lossorbm_mod, only : lossorbm
+  use tdreadf_mod, only : tdreadf
+
+  !---END USE
+
 !
 !
 

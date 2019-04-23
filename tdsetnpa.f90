@@ -1,5 +1,13 @@
 module tdsetnpa_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 !
 

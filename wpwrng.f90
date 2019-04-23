@@ -1,5 +1,9 @@
 module wpwrng_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

@@ -1,5 +1,11 @@
 module ntdstore_mod
 
+  !---BEGIN USE
+
+  use restvty_mod, only : restvty
+
+  !---END USE
+
 !
 !
 

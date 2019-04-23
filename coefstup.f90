@@ -1,5 +1,18 @@
 module coefstup_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use coefefad_mod, only : coefefad
+  use coefegad_mod, only : coefegad
+  use coeffpad_mod, only : coeffpad
+  use coefload_mod, only : coefload
+  use coefrfad_mod, only : coefrfad
+  use coefsyad_mod, only : coefsyad
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

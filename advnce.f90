@@ -6,6 +6,10 @@
 !..................................................................
 
 module advnce_mod
+
+  !---BEGIN USE
+
+  !---END USE
   use comm_mod
   use r8subs_mod, only : cvmgt
   use bsu_mod, only : bsu

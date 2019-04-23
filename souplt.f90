@@ -1,5 +1,14 @@
 module souplt_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use pltcont_mod, only : pltcont
+  use pltfofvv_mod, only : fofv
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

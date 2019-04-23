@@ -1,5 +1,11 @@
 module micgnbnd_mod
 
+  !---BEGIN USE
+
+  use micgmbnd_mod, only : micgmbnd
+
+  !---END USE
+
 !
 !
 

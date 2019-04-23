@@ -1,5 +1,11 @@
 module tdtrmuy_mod
 
+  !---BEGIN USE
+
+  use micgetr_mod, only : micgetr
+
+  !---END USE
+
 !
 !
 

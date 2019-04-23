@@ -1,5 +1,16 @@
 module tdoutput_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use cfpgamma_mod, only : cfpgamma
+  use restcon_mod, only : restcon
+  use resthks_mod, only : resthks
+  use tdnflxs_mod, only : tdnflxs
+  use tdtrflx_mod, only : tdtrflx
+
+  !---END USE
+
 !
 !
 

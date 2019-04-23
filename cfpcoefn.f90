@@ -1,5 +1,19 @@
 module cfpcoefn_mod
 
+  !---BEGIN USE
+
+  use bavdens_mod, only : bavdens
+  use bcast_mod, only : bcast
+  use cfpleg_mod, only : cfpleg
+  use cfpmodbe_mod, only : cfpmodbe
+  use cfpsymt_mod, only : cfpsymt
+  use diagescl_mod, only : diagescl
+  use r8subs_mod, only : daxpy
+  use r8subs_mod, only : dcopy
+  use r8subs_mod, only : dscal
+
+  !---END USE
+
 !
 !
 

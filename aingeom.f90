@@ -1,5 +1,16 @@
 module aingeom_mod
 
+  !---BEGIN USE
+
+  use diagwrng_mod, only : diagwrng
+  use eqalloc_mod, only : eqalloc
+  use eqcoord_mod, only : eqcoord
+  use eqelpse_mod, only : eqelpse
+  use equilib_mod, only : equilib
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 !
 

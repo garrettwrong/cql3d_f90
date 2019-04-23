@@ -1,5 +1,12 @@
 module diagcfac_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use zcunix_mod, only : coeff2
+
+  !---END USE
+
 !
 !
 

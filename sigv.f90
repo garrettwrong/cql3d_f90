@@ -1,5 +1,15 @@
 module sigv_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use sigalloc_mod, only : sigalloc
+  use sigsetup_mod, only : sigsetup
+  use sigv5d_mod, only : sigv5d
+  use tdnflxs_mod, only : tdnflxs
+
+  !---END USE
+
 !
 !
 

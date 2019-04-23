@@ -1,5 +1,9 @@
 module urfwr0c_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

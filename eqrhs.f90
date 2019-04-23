@@ -1,5 +1,9 @@
 module eqrhs_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

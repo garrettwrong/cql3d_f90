@@ -1,5 +1,11 @@
 module tdtrrtov_mod
 
+  !---BEGIN USE
+
+  use tdtrchkd_mod, only : tdtrchkd
+
+  !---END USE
+
 !
 !
 

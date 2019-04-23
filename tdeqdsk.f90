@@ -1,6 +1,15 @@
 !
 !
 module tdeqdsk_mod
+
+  !---BEGIN USE
+
+  use firstdrv_mod, only : firstdrv
+  use r8subs_mod, only : dcopy
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : terp1
+
+  !---END USE
   
   use iso_c_binding, only : c_double
   !     used by tdtscinp

@@ -1,6 +1,13 @@
 
 !
 module frplteq_mod
+
+  !---BEGIN USE
+
+  use r8subs_mod, only : dcopy
+  use tdnflxs_mod, only : tdnflxs
+
+  !---END USE
   character(len=8), public :: textt(200)
 
   save

@@ -1,6 +1,25 @@
 !
 !
 module pltmain_mod
+
+  !---BEGIN USE
+
+  use pltdf_mod, only : pltdf
+  use pltdnz_mod, only : pltdnz
+  use pltendn_mod, only : pltendn
+  use pltends_mod, only : pltends
+  use pltfluxs_mod, only : pltfluxs
+  use pltfvsv_mod, only : pltfvsv
+  use pltlosc_mod, only : pltlosc
+  use pltpower_mod, only : pltpower
+  use pltprppr_mod, only : pltprppr
+  use pltrstv_mod, only : pltrstv
+  use pltstrml_mod, only : pltstrml
+  use pltvec_mod, only : pltvec
+  use pltvflux_mod, only : pltvflux
+  use souplt_mod, only : souplt
+
+  !---END USE
   use iso_c_binding, only : c_float
   character*7, private :: scale
   real(c_float), private ::  X, Y, ANGLE, FJUST

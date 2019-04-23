@@ -1,5 +1,29 @@
 module ainitial_mod
 
+  !---BEGIN USE
+
+  use bavgmax_mod, only : bavgmax
+  use coefefld_mod, only : coefefld
+  use diag_mod, only : diag
+  use diagentr_mod, only : diagentr
+  use diaggnde_mod, only : diaggnde
+  use efield_mod, only : efield
+  use finit_mod, only : finit
+  use losscone_mod, only : losscone
+  use lossegy_mod, only : lossegy
+  use micxinim_mod, only : micxinim
+  use ntdstore_mod, only : ntdstore
+  use pltmain_mod, only : pltmain
+  use restvty_mod, only : restvty
+  use sourcee_mod, only : sourcee
+  use synchrad_mod, only : synchrad
+  use tdoutput_mod, only : tdoutput
+  use vlf_mod, only : vlf
+  use vlh_mod, only : vlh
+  use wpvptb_mod, only : wpvptb
+
+  !---END USE
+
 
 
 

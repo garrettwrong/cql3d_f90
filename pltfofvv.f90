@@ -1,5 +1,16 @@
 module pltfofvv_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use pltmain_mod, only : gpcv2d
+  use pltmain_mod, only : gsvp2d
+  use pltmain_mod, only : gswd2d
+  use pltmain_mod, only : gxglfr
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

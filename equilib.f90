@@ -1,6 +1,17 @@
 !
 !
 module equilib_mod
+
+  !---BEGIN USE
+
+  use eqtopeol_mod, only : eqtopeol
+  use eqwrng_mod, only : eqwrng
+  use r8subs_mod, only : dcopy
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : coeff2
+  use zcunix_mod, only : terp1e
+
+  !---END USE
   use iso_c_binding, only : c_double
   use r8subs_mod, only : dcopy
   ! these are used outside the module in tdeqdisk

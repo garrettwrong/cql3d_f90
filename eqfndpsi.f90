@@ -1,5 +1,17 @@
 module eqfndpsi_mod
 
+  !---BEGIN USE
+
+  use eqflxavg_mod, only : eqflxavg
+  use eqfpsi_mod, only : eqfpsi
+  use eqfpsi_mod, only : eqppsi
+  use eqonovrp_mod, only : eqonovrp
+  use eqorbit_mod, only : eqorbit
+  use eqvolpsi_mod, only : eqvolpsi
+  use eqwrng_mod, only : eqwrng
+
+  !---END USE
+
 !
 !
 

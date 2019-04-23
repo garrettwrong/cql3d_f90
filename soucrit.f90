@@ -1,5 +1,11 @@
 module soucrit_mod
 
+  !---BEGIN USE
+
+  use cfpgamma_mod, only : cfpgamma
+
+  !---END USE
+
 !
 !
 

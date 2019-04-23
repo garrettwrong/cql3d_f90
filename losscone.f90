@@ -1,5 +1,14 @@
 module losscone_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ibcast
+  use lossorbm_mod, only : lossorbm
+  use zcunix_mod, only : allocate_error
+
+  !---END USE
+
 !
 !
 

@@ -1,4 +1,10 @@
 module abchief_mod
+
+  !---BEGIN USE
+
+  use tdchief_mod, only : tdchief
+
+  !---END USE
   !
   !
 

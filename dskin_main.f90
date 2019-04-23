@@ -1,5 +1,11 @@
 module dskin_main_mod
 
+  !---BEGIN USE
+
+  use dskin_mod, only : dskin
+
+  !---END USE
+
 
 
       program diskin_main

@@ -1,5 +1,16 @@
 module diaggnde_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use diagdenz_mod, only : diagdenz
+  use diaggnde2_mod, only : diaggnde2
+  use diagwrng_mod, only : diagwrng
+  use r8subs_mod, only : dscal
+  use soucrit_mod, only : soucrit
+
+  !---END USE
+
 !
 !
 

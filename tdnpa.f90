@@ -1,5 +1,12 @@
 module tdnpa_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use tdfinterp_mod, only : tdfinterp
+
+  !---END USE
+
 !
 !
 

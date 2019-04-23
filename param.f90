@@ -55,6 +55,10 @@
   !     PARAMETERS CHOSEN BY USER FOLLOW
 
 module param_mod
+
+  !---BEGIN USE
+
+  !---END USE
   
   character version*64
   parameter(version="cql3d_git_190309.0")

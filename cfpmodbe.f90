@@ -1,5 +1,9 @@
 module cfpmodbe_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

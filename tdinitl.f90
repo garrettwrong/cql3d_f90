@@ -1,5 +1,61 @@
 module tdinitl_mod
 
+  !---BEGIN USE
+
+  use ainalloc_mod, only : ainalloc
+  use aindflt1_mod, only : aindflt1
+  use aindflt_mod, only : aindflt
+  use aindfpa_mod, only : ain_transcribe
+  use aingeom_mod, only : aingeom
+  use ainitial_mod, only : ainitial
+  use ainpla_mod, only : ainpla
+  use ainsetva_mod, only : ainsetva
+  use ainspec_mod, only : ainspec
+  use ainvnorm_mod, only : ainvnorm
+  use ampfar_mod, only : ampfalloc
+  use baviorbt_mod, only : baviorbt
+  use baviorbt_mod, only : baviorbto
+  use baviorbt_mod, only : deltar
+  use diagwrng_mod, only : diagwrng
+  use eqindflt_mod, only : eqindflt
+  use eqinitl_mod, only : eqinitl
+  use micxinil_mod, only : micxinil
+  use micxinit_mod, only : micxinit
+  use micxiniz_mod, only : micxiniz
+  use profiles_mod, only : profiles
+  use rdc_multi_mod, only : rdc_multi
+  use tddiag_mod, only : tddiag
+  use tdeqdsk_mod, only : tdeqdsk
+  use tdnflxs_mod, only : tdnflxs
+  use tdoutput_mod, only : tdoutput
+  use tdplteq_mod, only : tdplteq
+  use tdpltmne_mod, only : tdpltmne
+  use tdreadf_mod, only : tdreadf
+  use tdrmshst_mod, only : tdrmshst
+  use tdstin_mod, only : tdstin
+  use tdtoarad_mod, only : tdtoarad
+  use tdtoaray_mod, only : tdtoaray
+  use tdtraloc_mod, only : tdtraloc
+  use tdtrdfus_mod, only : diffus_io
+  use tdtrdfus_mod, only : tdtrdfus
+  use tdtrflg_mod, only : tdtrflg
+  use tdtrmuy_mod, only : tdtrmuy
+  use tdtrvint_mod, only : tdtrvint
+  use tdtrwtl_mod, only : tdtrwtl
+  use tdwrng_mod, only : tdwrng
+  use tdxinitl_mod, only : tdxinitl
+  use urfindfl_mod, only : urfindfl
+  use urfinitl_mod, only : urfinitl
+  use urfsetup_mod, only : urfsetup
+  use wpalloc_mod, only : wpalloc
+  use wpchgdy_mod, only : wpchgdy
+  use wpinitl_mod, only : wpinitl
+  use wploweq_mod, only : wploweq
+  use wpmshchk_mod, only : wpmshchk
+  use wptrmuy_mod, only : wptrmuy
+
+  !---END USE
+
 !
 !
 

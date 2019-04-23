@@ -1,5 +1,13 @@
 module diagxswt_mod
 
+  !---BEGIN USE
+
+  use diagdens_mod, only : diagdens
+  use diagentr_mod, only : diagentr
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
 

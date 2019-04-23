@@ -1,5 +1,15 @@
 module sourcee_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use sounorm_mod, only : sounorm
+  use sourc0_mod, only : sourc0
+  use sourcef_mod, only : sourcef
+  use sourcpwr_mod, only : sourcpwr
+
+  !---END USE
+
 !
 !
 

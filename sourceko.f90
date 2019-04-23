@@ -1,5 +1,18 @@
 module sourceko_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ibcast
+  use fle_mod, only : fle
+  use lookup_mod, only : lookup
+  use r8subs_mod, only : dcopy
+  use r8subs_mod, only : dscal
+  use soucrit_mod, only : soucrit
+  use tdoutput_mod, only : tdoutput
+
+  !---END USE
+
 !
 !
 

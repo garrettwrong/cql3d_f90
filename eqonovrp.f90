@@ -1,5 +1,12 @@
 module eqonovrp_mod
 
+  !---BEGIN USE
+
+  use eqflxavg_mod, only : eqflxavg
+  use eqorbit_mod, only : eqorbit
+
+  !---END USE
+
 !
 !
 

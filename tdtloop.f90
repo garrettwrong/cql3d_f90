@@ -1,5 +1,14 @@
 module tdtloop_mod
 
+  !---BEGIN USE
+
+  use aindfpa_mod, only : ainadjnl
+  use aindfpa_mod, only : ainadjnl_fsetup_setup0
+  use tdeqdsk_mod, only : tdeqdsk
+  use tdtscout_mod, only : tdtscout
+
+  !---END USE
+
 !
 !
 

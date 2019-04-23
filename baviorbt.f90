@@ -1,5 +1,15 @@
 module baviorbt_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use bcast_mod, only : ibcast
+  use lookup_mod, only : lookup
+  use micgnbnd_mod, only : micgnbnd
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 !
 !
 

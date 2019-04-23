@@ -1,5 +1,11 @@
 module tdtrcon_mod
 
+  !---BEGIN USE
+
+  use tdtrflx_mod, only : tdtrflx
+
+  !---END USE
+
 !
 !
 

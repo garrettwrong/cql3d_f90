@@ -1,5 +1,12 @@
 module coefwti_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use coefmidt_mod, only : coefmidt
+
+  !---END USE
+
 !
 !
 

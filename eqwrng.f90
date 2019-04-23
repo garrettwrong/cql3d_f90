@@ -1,5 +1,9 @@
 module eqwrng_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

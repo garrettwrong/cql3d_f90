@@ -1,5 +1,9 @@
 module tdnpacxcs_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 contains
 
        REAL FUNCTION cxcs(enin)

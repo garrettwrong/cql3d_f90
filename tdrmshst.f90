@@ -1,5 +1,14 @@
 module tdrmshst_mod
 
+  !---BEGIN USE
+
+  use eqorbit_mod, only : eqorbit
+  use eqvolpsi_mod, only : eqvolpsi
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : terp1
+
+  !---END USE
+
 
 !
 !

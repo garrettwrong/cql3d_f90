@@ -1,5 +1,11 @@
 module pltlosc_mod
 
+  !---BEGIN USE
+
+  use pltcont_mod, only : pltcont
+
+  !---END USE
+
 !
 !
 

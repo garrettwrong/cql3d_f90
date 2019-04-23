@@ -1,5 +1,25 @@
 module pltfluxs_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use bcast_mod, only : bcast
+  use coefefad_mod, only : coefefad
+  use coefegad_mod, only : coefegad
+  use coeffpad_mod, only : coeffpad
+  use coefload_mod, only : coefload
+  use coefmidt_mod, only : coefmidt
+  use coefmidv_mod, only : coefmidv
+  use coefrfad_mod, only : coefrfad
+  use coefstup_mod, only : coefstup
+  use coefsyad_mod, only : coefsyad
+  use pltmain_mod, only : gpcv2d
+  use pltmain_mod, only : gsvp2d
+  use pltmain_mod, only : gswd2d
+  use pltmain_mod, only : gxglfr
+
+  !---END USE
+
 
 !
 !

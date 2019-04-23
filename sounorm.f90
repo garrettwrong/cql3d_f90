@@ -1,5 +1,12 @@
 module sounorm_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : bcast
+  use soup_mod, only : soup
+
+  !---END USE
+
 
 !*****************************************************************
 

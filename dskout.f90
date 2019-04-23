@@ -1,5 +1,9 @@
 module dskout_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

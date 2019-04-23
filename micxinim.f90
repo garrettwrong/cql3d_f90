@@ -1,5 +1,9 @@
 module micxinim_mod
 
+  !---BEGIN USE
+
+  !---END USE
+
 !
 !
 

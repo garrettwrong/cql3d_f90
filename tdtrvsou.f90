@@ -1,5 +1,11 @@
 module tdtrvsou_mod
 
+  !---BEGIN USE
+
+  use tdtrvtor3_mod, only : tdtrvtor3
+
+  !---END USE
+
 !
 !
 

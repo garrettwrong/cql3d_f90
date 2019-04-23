@@ -1,5 +1,11 @@
 module tdplteq_mod
 
+  !---BEGIN USE
+
+  use frplteq_mod, only : micfrplt
+
+  !---END USE
+
 !
 !
 

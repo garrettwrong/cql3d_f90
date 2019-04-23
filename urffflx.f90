@@ -1,5 +1,11 @@
 module urffflx_mod
 
+  !---BEGIN USE
+
+  use bcast_mod, only : ibcast
+
+  !---END USE
+
 !
 !
 

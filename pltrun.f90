@@ -1,5 +1,12 @@
 module pltrun_mod
 
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use tdnflxs_mod, only : tdnflxs
+
+  !---END USE
+
 !
 !
 

@@ -1,5 +1,11 @@
 module wpelecf_mod
 
+  !---BEGIN USE
+
+  use r8subs_mod, only : dcopy
+
+  !---END USE
+
 !
 !
       ! follow compiler default real

@@ -1,5 +1,11 @@
 module tdtscout_mod
 
+  !---BEGIN USE
+
+  use tdinterp_mod, only : tdinterp
+
+  !---END USE
+
 !
 !
 

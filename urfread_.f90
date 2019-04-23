@@ -1,5 +1,11 @@
 module urfread__mod
 
+  !---BEGIN USE
+
+  use urfwrong_mod, only : urfwrong
+
+  !---END USE
+
 !
 !
 

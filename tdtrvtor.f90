@@ -1,5 +1,12 @@
 module tdtrvtor_mod
 
+  !---BEGIN USE
+
+  use r8subs_mod, only : dcopy
+  use tdtrchkd_mod, only : tdtrchkd
+
+  !---END USE
+
 !
 !
 

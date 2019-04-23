@@ -1,5 +1,14 @@
 module profiles_mod
 
+  !---BEGIN USE
+
+  use cfpmodbe_mod, only : cfpmodbe
+  use profaxis_mod, only : profaxis
+  use tdinterp_mod, only : tdinterp
+  use tdxin13d_mod, only : tdxin13d
+
+  !---END USE
+
 !
 !
 

@@ -1,6 +1,20 @@
 !
 !
 module eqrhopsi_mod
+
+  !---BEGIN USE
+
+  use aminmx_mod, only : aminmx
+  use eqflxavg_mod, only : eqflxavg
+  use eqfpsi_mod, only : eqfpsi
+  use eqonovrp_mod, only : eqonovrp
+  use eqorbit_mod, only : eqorbit
+  use eqvolpsi_mod, only : eqvolpsi
+  use eqwrng_mod, only : eqwrng
+  use zcunix_mod, only : coeff1
+  use zcunix_mod, only : coeff2
+
+  !---END USE
   use param_mod
   use comm_mod
   use iso_c_binding, only : c_double
