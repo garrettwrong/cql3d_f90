@@ -127,15 +127,15 @@ $(SOURCES):        $(INCLUDES)
 # Now that we have modules and scope,
 #   we unfortunately do have dependencies.
 # Do not fret, they're not so bad.
-# DAGOBJS = param.o comm.o r8subs.o advnce.o pltmain.o \
-#           pltdf.o eqrhopsi.o equilib.o \
-#           impavnc0.o  frplteq.o tdeqdsk.o bsl.o bsu.o \
-#           a_cqlp.f90   achief1.f90  aclear.f90   ainalloc.f90 \
-#           aindflt1.f90 aingeom.f90  ainpla.f90   ainpltpa.f90 \
-#           ainsetva.f90 ainvnorm.f90 ampfar.f90 abchief.f90  \
-#           achiefn.f90  advnce.f90   aindflt.f90  aindfpa.f90 \
-#           ainitial.f90 ainplt.f90   ainsetpa.f90 ainspec.f90  \
-#           aminmx.f90
+DAGOBJS = param.o comm.o r8subs.o advnce.o pltmain.o \
+           pltdf.o eqrhopsi.o equilib.o \
+           impavnc0.o  frplteq.o tdeqdsk.o bsl.o bsu.o \
+           a_cqlp.f90   achief1.f90  aclear.f90   ainalloc.f90 \
+           aindflt1.f90 aingeom.f90  ainpla.f90   ainpltpa.f90 \
+           ainsetva.f90 ainvnorm.f90 ampfar.f90 abchief.f90  \
+           achiefn.f90  advnce.f90   aindflt.f90  aindfpa.f90 \
+           ainitial.f90 ainplt.f90   ainsetpa.f90 ainspec.f90  \
+           aminmx.f90
 
 #------ Module generated dependencies
 a_cqlp.o: abchief.o impavnc0.o 
@@ -493,7 +493,7 @@ wpwrng.o: comm.o param.o
 $(filter %.o,$(F90OBJECTS)): %.o: %.f90 $(INCLUDES)
 	$(COMPILE) $< -o $@ 
 
-$(filter %.o,$(OBJECTS)): %.o: %.f $(F90OBJS) $(INCLUDES)
+$(filter %.o,$(OBJECTS)): %.o: %.f $(DAGOBJS) $(INCLUDES)
 	$(COMPILE) $< -o $@
 
 rebuild:
