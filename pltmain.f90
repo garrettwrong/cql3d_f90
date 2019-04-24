@@ -17,6 +17,7 @@ module pltmain_mod
   use fle_mod, only : fle_fsa
   use fle_mod, only : fle_pol
   !XXXX use pack21_mod, only : pack21
+  use pltdf_mod, only : pltcont
   use pltdf_mod, only : pltdf
   use pltdf_mod, only : pgfunc1
   use pltdnz_mod, only : pltdnz

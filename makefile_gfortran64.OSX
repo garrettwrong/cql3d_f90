@@ -272,7 +272,7 @@ lossorbm.o: comm.o param.o r8subs.o
 losstor.o: comm.o param.o 
 micgmbnd.o: comm.o param.o psif.o 
 micgnbnd.o: comm.o micgmbnd.o param.o 
-micxinil.o: bcast.o comm.o param.o psiinv.o r8subs.o tdinlegw.o \
+micxinil.o: bcast.o comm.o param.o psif.o r8subs.o tdinlegw.o \
 	wpwrng.o 
 micxinim.o: comm.o param.o 
 micxinit.o: comm.o diagwrng.o micgetr.o param.o tdtry.o zcunix.o 
