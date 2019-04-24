@@ -1622,8 +1622,7 @@ contains
                             rhs(ieq)=zrhsj1
                             call impnorm(xnorm,zavarj1,rhs(ieq),nvar)
                             do jcont=1,nvar
-                               abd(ibandpieq-ijaj1(jcont),ijaj1(jcont))= &
-                                    zavarj1(jcont)
+                               abd(ibandpieq-ijaj1(jcont),ijaj1(jcont))= zavarj1(jcont)
                             end do
                          endif  ! on ieq.lt.new/else
 
@@ -2325,6 +2324,8 @@ contains
                    !          call sgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
                    !          write(*,*)'impavnc0 before dgbtrf, l_,inewjx,ml=',l_,inewjx,ml
                    ! XXX
+                   ! ARGGGGG, ABD HAS NANS!!!
+                   print *, 'YYY', isnan(abd)!, md1abd, ipivot, info
                    call dgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
                    if (info .ne. 0) then
                       print *,' warning after sgbtrf in impavnc0: info = ',info
