@@ -3,7 +3,7 @@ module micxinil_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
-  use psiinv_mod, only : psiinv
+  use psif_mod, only : psiinv
   use r8subs_mod, only : dscal
   use tdinlegw_mod, only : tdinlegw
   use wpwrng_mod, only : wpwrng

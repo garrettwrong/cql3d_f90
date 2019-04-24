@@ -2,9 +2,9 @@
 program a_cql3d
 !***********************************************************************
   use abchief_mod, only : abchief
-  use it3dalloc_mod, only : de_alloc
-  use it3dalloc_mod, only : it3dalloc
-  use it3dalloc_mod, only : it3ddalloc
+  use impavnc0_mod, only : de_alloc
+  use impavnc0_mod, only : it3dalloc
+  use impavnc0_mod, only : it3ddalloc
 !***********************************************************************
 !
 !   Copyright R.W. Harvey and Yu. V Petrov
