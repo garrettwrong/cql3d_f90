@@ -2409,7 +2409,7 @@ C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER*2          NAME(3)
 C                                  SPECIFICATIONS FOR LOCAL VARIABLES
       INTEGER*2          NAMSET(3),NAMEQ(3)
-	integer*4 ieq, i, ieqdf, levold, level
+        integer*4 ieq, i, ieqdf, levold, level
       DATA               NAMSET/2HUE,2HRS,2HET/
       DATA               NAMEQ/2H  ,2H  ,2H  /
 C                                  FIRST EXECUTABLE STATEMENT

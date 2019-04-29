@@ -672,9 +672,9 @@ contains
 !-----------------------------------------------------------------------
        end
 !-----------------------------------------------------------------------
-	subroutine lusol(n, y, x, alu, jlu, ju)
+        subroutine lusol(n, y, x, alu, jlu, ju)
         real*8 x(n), y(n), alu(*)
-	integer n, jlu(*), ju(*)
+        integer n, jlu(*), ju(*)
 !-----------------------------------------------------------------------
 !
 ! This routine solves the system (LU) x = y,
@@ -711,17 +711,17 @@ contains
 !
 !     backward solve.
 !
-	do 90 i = n, 1, -1
-	   do 91 k=ju(i),jlu(i+1)-1
+        do 90 i = n, 1, -1
+           do 91 k=ju(i),jlu(i+1)-1
               x(i) = x(i) - alu(k)*x(jlu(k))
- 91	   continue
+ 91        continue
            x(i) = alu(i)*x(i)
  90     continue
 !
-  	return
+        return
 !----------------end of lusol ------------------------------------------
 !-----------------------------------------------------------------------
-	end
+        end
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
         subroutine qsplit(a,ind,n,ncut)
@@ -898,7 +898,7 @@ contains
 !-----------------------------------------------------------------------
 ! on entry:
 ! ---------
-! nrow	= integer. The row dimension of A and B
+! nrow  = integer. The row dimension of A and B
 ! ncol  = integer. The column dimension of A and B.
 ! job   = integer. Job indicator. When job = 0, only the structure
 !                  (i.e. the arrays jc, ic) is computed and the
@@ -910,9 +910,9 @@ contains
 !
 ! b,
 ! jb,
-! ib	=  Matrix B in compressed sparse row format.
+! ib    =  Matrix B in compressed sparse row format.
 !
-! nzmax	= integer. The  length of the arrays c and jc.
+! nzmax = integer. The  length of the arrays c and jc.
 !         amub will stop if the result matrix C  has a number
 !         of elements that exceeds exceeds nzmax. See ierr.
 !
@@ -920,9 +920,9 @@ contains
 !----------
 ! c,
 ! jc,
-! ic	= resulting matrix C in compressed sparse row sparse format.
+! ic    = resulting matrix C in compressed sparse row sparse format.
 !
-! ierr	= integer. serving as error message.
+! ierr  = integer. serving as error message.
 !         ierr = 0 means normal return,
 !         ierr .gt. 0 means that amub stopped while computing the
 !         i-th row  of C with i=ierr, because the number
@@ -930,7 +930,7 @@ contains
 !
 ! work arrays:
 !------------
-! iw	= integer work array of length equal to the number of
+! iw    = integer work array of length equal to the number of
 !         columns in A.
 !
 !-----------------------------------------------------------------------
@@ -968,7 +968,7 @@ contains
             endif
  300     continue
          do 301 k=ic(ii), len
-	    iw(jc(k)) = 0
+            iw(jc(k)) = 0
  301     continue
          ic(ii+1) = len+1
  500  continue
@@ -998,7 +998,7 @@ contains
 !-----------------------------------------------------------------------
 ! on entry:
 !----------
-! n	= integer,the actual row dimension of the matrix.
+! n     = integer,the actual row dimension of the matrix.
 !
 ! nabd  = first dimension of array abd.
 !
@@ -1013,8 +1013,8 @@ contains
 !         lowd should be s.t.  ( 1  .le.  lowd  .le. nabd).
 !         The subroutines dgbco, ... of linpack use lowd=2*ml+mu+1.
 !
-! ml	= integer. equal to the bandwidth of the strict lower part of A
-! mu	= integer. equal to the bandwidth of the strict upper part of A
+! ml    = integer. equal to the bandwidth of the strict lower part of A
+! mu    = integer. equal to the bandwidth of the strict upper part of A
 !         thus the total bandwidth of A is ml+mu+1.
 !         if ml+mu+1 is found to be larger than nabd then an error
 !         message is set. see ierr.
@@ -1035,7 +1035,7 @@ contains
 ! ierr  = integer. used for error message output.
 !         ierr .eq. 0 :means normal return
 !         ierr .eq. -1 : means invalid value for lowd.
-!	  ierr .gt. 0 : means that there was not enough storage in a and ja
+!         ierr .gt. 0 : means that there was not enough storage in a and ja
 !         for storing the ourput matrix. The process ran out of space
 !         (as indicated by len) while trying to fill row number ierr.
 !         This should give an idea of much more storage might be required.

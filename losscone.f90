@@ -121,7 +121,7 @@ contains
 
          elseif (     lossmode(k).eq."simplban" &
                  .or. lossmode(k).eq."simplbn1" &
-      	         .or. lossmode(k).eq."simplbn2") then
+                 .or. lossmode(k).eq."simplbn2") then
 !$$$            if (ionce.eq.0) then
 !$$$                 ionce=1
 !$$$                 write(*,*)'losscone:bthr(ll),ll=1,lrzmax',
@@ -260,7 +260,7 @@ contains
 !BH170708  For backward compatibility, reset  gyrorad and delb_deltarho
                     gyrorad=x(j)*abs(sinn(i,indxlr_))/(omcnst*bmod0edge)
                      delb_deltarho=x(j)*abs(coss(i,indxlr_))/(omcnst* &
-       		                   bthr0avg)
+                                   bthr0avg)
                      if (lossmode(k).eq.'simplban') then
                         if (delb_deltarho+gyrorad .gt. r_loss) then
                            gone(i,j,k,indxlr_)=-1.

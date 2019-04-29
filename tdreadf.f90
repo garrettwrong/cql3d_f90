@@ -746,9 +746,9 @@ contains
 !                  write(*,*)'f_rstrt(1,j=1:10,31)=',
 !     1              (f_rstrt(i,j,31),j=1,10)
 !               endif
-	       do j=1,jx_rstrt-1
-               	  if (f_rstrt(i,j,ll).lt.fof_fj0) go to 10
-               	  jf_rstrt(i)=jf_rstrt(i)+1
+               do j=1,jx_rstrt-1
+                  if (f_rstrt(i,j,ll).lt.fof_fj0) go to 10
+                  jf_rstrt(i)=jf_rstrt(i)+1
                enddo
  10            continue
                if (jf_rstrt(i).lt.10) then

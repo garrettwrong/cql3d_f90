@@ -1202,20 +1202,20 @@ c
 
  
 ![101] Made a few modifications, principally in tdxinitl.f and profiles.f     
-![101] to enable iprozeff='parabola' or 'spline' to work with two ion	       
-![101] species with same bnumb() (e.g., H+,D+, and/or T+).		       
-![101] Did a ngen=2 (D+,H+) test run (with ngena=2) in 		       
+![101] to enable iprozeff='parabola' or 'spline' to work with two ion          
+![101] species with same bnumb() (e.g., H+,D+, and/or T+).                     
+![101] Did a ngen=2 (D+,H+) test run (with ngena=2) in                 
 ![101] /home/bobh/cql3d/aorsa/D3D_test_case/122080.0/116MHZ/8th.1/tmp_ngen2   
-![101] Density H+ is 10**-4 of D+.					       
+![101] Density H+ is 10**-4 of D+.                                             
 ![101] Uses makefile_lf95.  Results differ in 4th sig fig from previous       
-![101] ngen=1 D+ run, as expected.					       
+![101] ngen=1 D+ run, as expected.                                             
 ![101] Adjusted ainsetva.f to account for iprozeff=1 option for
 ![101] calc of ion densities from ene/zeff so treat different ions
 ![101] with same charge (e.g., H+,D+ and/or T+). [bobh, 060819].
-![101] 								       
-![101] Execution time increased from approx 8 minutes to 20, but	       
-![101] addition of the 2nd general species.  There is no QL diffusion	       
-![101] yet on the 2nd species.	  [bobh, Aug 19-21, 2006]		       
+![101]                                                                 
+![101] Execution time increased from approx 8 minutes to 20, but               
+![101] addition of the 2nd general species.  There is no QL diffusion          
+![101] yet on the 2nd species.    [bobh, Aug 19-21, 2006]                      
 
 ![100] First results from new soln_method="it3drv" option using
 ![100] sparskit2 to iteratively solve full 3d (2V-1R)
@@ -1286,7 +1286,7 @@ c
 ![92] as alternate to the standard Cray pointered version obtained
 ![92] with makefile_lf95.  Comparison of these two makefiles shows the    
 ![92] only differences are in four lines referring to doptr.py    
-![92] and tmpptr.f.					       
+![92] and tmpptr.f.                                            
 ![92] The source code modifications are carried out with the      
 ![92] python script doptr.py in ./ptr, and additional files       
 ![92] in that subdirectory.

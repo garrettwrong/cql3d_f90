@@ -89,12 +89,12 @@ contains
         psi2=eqpsi(jval)
         rho2=eqrho(jval)
         psi1=eqpsi(jval-1)
-	  rho1=eqrho(jval-1)
+          rho1=eqrho(jval-1)
 !MPIINSERT_IF_RANK_EQ_0
         !WRITE(*,*)
         !WRITE(*,*)'eqfndpsi: (psi2-psimag)/psimag',(psi2-psimag)/psimag
 !MPIINSERT_ENDIF_RANK
-	  !psimag=0 in a mirror machine.
+          !psimag=0 in a mirror machine.
         if(jval.le.2) then !-YuP: for better convergence near m.axis
            psi1=psimag
            rho1=0.d0

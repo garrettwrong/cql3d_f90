@@ -1983,16 +1983,16 @@ contains
                 !      subroutine aplb (nrow,ncol,job,a,ja,ia,b,jb,ib,
                 !     *     c,jc,ic,nzmax,iw,ierr)
                 ! Computes matrix sum:    C = A+B, in CSR format
-                ! nzmax	= integer. The  length of the arrays c and jc.
+                ! nzmax = integer. The  length of the arrays c and jc.
                 !         aplb will stop if the result matrix C  has a number 
                 !         of elements that exceeds nzmax. See ierr.
-                ! ierr	= integer. serving as error message. 
+                ! ierr  = integer. serving as error message. 
                 !         ierr = 0 means normal return,
                 !         ierr .gt. 0 means that aplb stopped while computing the
                 !         i-th row  of C with i=ierr, because the number 
                 !         of elements in C exceeds nzmax.
                 ! work arrays:
-                ! iw	= integer work array of length equal to the number of
+                ! iw    = integer work array of length equal to the number of
                 !         columns in A.
                 
                 ieqp=54
@@ -2560,7 +2560,7 @@ contains
                 
                 
                 iii=iii+inewjx_(ll)  !update index to point to end of eqn/soln 
-                !number for ll-flux surface.	
+                !number for ll-flux surface.    
                 
              enddo  !  On ll ; finished with updating f
              

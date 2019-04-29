@@ -623,7 +623,7 @@ c     Determine aperature designators.
 c     If nsourc=1, treat source axis centered aperatures equivalent
 c     to beam axis centered.
 cBH130915: Not sure of effect of this change. Reverting:do 40  i=1,naptr
-	 do 40  i=1,nap
+         do 40  i=1,nap
             if (nsourc.eq.1) then
                if(ashape(i,ib).eq.'s-circ')  iatype(i,ib)=5
                if(ashape(i,ib).eq.'s-rect')  iatype(i,ib)=6

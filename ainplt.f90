@@ -271,7 +271,7 @@ contains
 
       result=date(1:4)//'/'//date(5:6)//'/'//date(7:8) &
            //' '//time(1:2)//':'//time(3:4)//' '//time(5:10) &
-      	   //'s'
+           //'s'
 
       return
       end

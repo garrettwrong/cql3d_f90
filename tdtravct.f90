@@ -978,7 +978,7 @@ contains
 
       INTEGER i
       REAL*8 a,alam,alam2,alamin,b,disc,f2,fold2,rhs1,rhs2,slope, &
-      	       sum,temp,test,tmplam
+               sum,temp,test,tmplam
       REAL*8 zero,one
       zero=0.d0
       one=1.d0

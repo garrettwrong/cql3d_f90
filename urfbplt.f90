@@ -67,7 +67,7 @@ contains
  560       continue ! krf mode (usually = harmonic number)
            if( MAXVAL(temp1)-MINVAL(temp1) .gt. 0.d0 ) then
              CALL PGPAGE ! new page for each k
-	       itype=4 ! means: plots are made for urfb
+               itype=4 ! means: plots are made for urfb
              call pltcont(k,1,'Contours of UrfB vs. v_parallel,v_perp', &
                itype) !YuP:summed-up
              write(t_,552)

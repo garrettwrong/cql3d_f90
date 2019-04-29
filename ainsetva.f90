@@ -749,7 +749,7 @@ contains
          ! on the initial density, so it does not include particles from NBI.
          ! And the value of runden (or sden) does include all sources.
          ! In such a case, it is better to use lbdry(k)="conserv"
-	 ! (Then the density of species k will increase.)
+         ! (Then the density of species k will increase.)
       do k=1,ngen
          if (lbdry(k).eq."scale")  lbdry(k)="consscal"
 !MPIINSERT_IF_RANK_EQ_0

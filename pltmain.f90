@@ -1452,7 +1452,7 @@ contains
 !         elseif (pltlim.eq.'energy') then
 !            pltlimmm=sqrt((1.+pltlimm/restmkev)**2-1.)*cnorm
 !         endif
-!	 xmaxq=pltlimmm
+!        xmaxq=pltlimmm
 !      endif
 
       write(t_,5000)

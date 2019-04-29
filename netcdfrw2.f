@@ -1558,7 +1558,7 @@ c     mrfn=number of modes =1, in subroutine rdc_multi.
 c
 c... new Freya stuff
 c
-	WRITE(*,*) frmodp
+        WRITE(*,*) frmodp
       if (frmodp.eq."enabled") then
 
            vid=ncvdef2(ncid,'hibrz',NCDOUBLE,3,hibr_dims,istatus)
@@ -1578,8 +1578,8 @@ c
      +         'Watts',istatus)
           !YuP[06-2016] Now the corresponding arrays contain
           ! a COMBINED NBI+FUSproduct source.  
-	  ! But the netcdf names like 'sorpw_nbi' are not changed 
-	  ! because Python plotting script must be changed in such case.
+          ! But the netcdf names like 'sorpw_nbi' are not changed 
+          ! because Python plotting script must be changed in such case.
 
       endif
 c
@@ -2923,7 +2923,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
          enddo
          istatus= NF_INQ_VARID(ncid,'energym',vid)
          call ncvpt_doubl2(ncid,vid,start_r0k,count_r0k,tem1,istatus)
-	 
+         
       endif ! ngen>1
 
 

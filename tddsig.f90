@@ -110,37 +110,37 @@ contains
 
 !      function [seHC,seH,fee,ec,e,t] = haugyp(ec,e,t)
 !
-!	Differential electron-electron bremstrahlung cross-section
+!       Differential electron-electron bremstrahlung cross-section
 !         (dsigma/dk.domega)
-!	Haug model including Coulomb correction factor.
+!       Haug model including Coulomb correction factor.
 !
-!	Input:
+!       Input:
 !
-!	  - ec: kinetic energy of the incoming electron (mec2)
+!         - ec: kinetic energy of the incoming electron (mec2)
 !               [n,p] if m=1 or [p,m] if n=1, or [n,m] if p=1.
 !               (keV)
-!	  - e: photon energy (mec2)  [n,p] if m=1 or [p,m]
+!         - e: photon energy (mec2)  [n,p] if m=1 or [p,m]
 !              if n=1, or [n,m] if p=1.
 !               (keV)
-!	  - t: angle between the direction of displacement of the
+!         - t: angle between the direction of displacement of the
 !              incoming electron and the photon emitted by
 !              bremsstrahlung (radian) [n,p] if m=1
-!	       or [p,m] if n=1, or [n,m] if p=1.
+!              or [p,m] if n=1, or [n,m] if p=1.
 !              (radians).
 !
-!	Output:
+!       Output:
 !
-!	  - haugyp function value = seHC,
+!         - haugyp function value = seHC,
 !           seHC: Haug + Coulomb factor bremstrahlung
 !                 cross-section (cm**2) [n,m]
-!	  - seH: Haug bremstrahlung cross-section (cm**2) [n,m]
-!	  - fee: Elwert correction factor [n,m]
+!         - seH: Haug bremstrahlung cross-section (cm**2) [n,m]
+!         - fee: Elwert correction factor [n,m]
 !
-!	Warning: Cross-section units : cm**2 but energies are
+!       Warning: Cross-section units : cm**2 but energies are
 !                                      in relativistic units.
 !                To get cross-sections in standard cm**2/keV units,
 !                seH or seHC must be divided
-!	         by 511 keV.
+!                by 511 keV.
 !
 !
 !by Y.PEYSSON CEA-DRFC 15/05/1991 <peysson@fedv09.cad.cea.fr>

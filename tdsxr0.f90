@@ -682,8 +682,8 @@ contains
 !BH160507     if(eflux(ien,nn).eq.eflux(ien+1,nn))  go to 401
 !BH160507 Allowing for possible increase in eflux_npa with en.
 !BH160507 Could modify to fork with eflux_npa(i:i+1) are too close
-	  if(eflux(ien,nn).le.eflux(ien+1,nn))  go to 401
-	  if(eflux(ien+1,nn).eq.zero)  go to 401
+          if(eflux(ien,nn).le.eflux(ien+1,nn))  go to 401
+          if(eflux(ien+1,nn).eq.zero)  go to 401
 
 !990131          t=(en_(ien+1)-en_(ien))/alog(eflux(ien,nn)/eflux(ien+1,nn))
           t=(en_(ien+1)-en_(ien))/log(eflux(ien,nn)/eflux(ien+1,nn))
@@ -692,7 +692,7 @@ contains
 !BH160507     +                         i,t,c,eflux_npa(i,nn)
 !BH160507          efluxt(nn)=efluxt(nn)+c*t*
 !BH160507     +      (exp(-en_(ien)/t)-exp(-en_(ien+1)/t))*1.e3
-	  efluxt(nn)=efluxt(nn)+t*(eflux(ien,nn)-eflux(ien+1,nn))*1.e3
+          efluxt(nn)=efluxt(nn)+t*(eflux(ien,nn)-eflux(ien+1,nn))*1.e3
           go to 400
  401      efluxt(nn)=efluxt(nn)+eflux(ien,nn)*(en_(ien+1)-en_(ien))*1.e3
  400    continue !   ien=1,nen

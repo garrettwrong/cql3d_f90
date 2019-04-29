@@ -295,7 +295,7 @@ contains
             enddo
          elseif (iprozeff.eq."prbola-t".or.iprozeff.eq."spline-t") then
             !scaled in profiles
-	    continue
+            continue
          endif
 
 !MPIINSERT_IF_RANK_EQ_0

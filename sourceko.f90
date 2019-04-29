@@ -213,10 +213,10 @@ contains
 !BH180416: Temporarily reverting this fix dsinth=1.0/(i0param-1.) !This is corrected value
 !BH180416:         dsinth=0.5*pi/(i0param-1.)
          dsinth=1.0d0/(i0param-1)
-!BH180416:	 write(*,*)
-!BH180416:	 write(*,*) 'souceko: Temporary reversion of dsinth=. NEEDS'
-!BH180416:	 write(*,*) '         INVESTIGATION, 180416 !!!!'
-!BH180416:	 write(*,*)
+!BH180416:       write(*,*)
+!BH180416:       write(*,*) 'souceko: Temporary reversion of dsinth=. NEEDS'
+!BH180416:       write(*,*) '         INVESTIGATION, 180416 !!!!'
+!BH180416:       write(*,*)
          dsinthi=1./dsinth
          do ir=1,lrz
             do il=1,lz
@@ -429,7 +429,7 @@ contains
          do  i=itl,iyh
             ii=iy+1-i
             source(i,j,k,indxlr_)=0.5*(source(i,j,k,indxlr_) &
-        	+source(ii,j,k,indxlr_)) ! for k=kelecg
+                +source(ii,j,k,indxlr_)) ! for k=kelecg
             source(ii,j,k,indxlr_)=source(i,j,k,indxlr_)
          enddo
       enddo
