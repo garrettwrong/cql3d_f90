@@ -21,9 +21,9 @@
 
       ztr(i,l)=cosovb(idx(i,l),l)/dvol(lrindx(l))*4.*pi**2*radmaj
       ztrp(i,l)=cosovb(idx(i,l),l)/dvol(lrindx(l))*4.*pi**2*radmaj* &
-                zmaxpsi(lrindx(l))
+		zmaxpsi(lrindx(l))
       ytr(i,l)=h_r(lrindx(l))*drrt(k)*d_rr(idx(i,l),j,k,indxlr(l))/ &
-        drp5(lrindx(l))*bovcos(idx(i,l),l)
+	drp5(lrindx(l))*bovcos(idx(i,l),l)
 ! BH080410:  Changing sign of xtr (compatible with usual positive
 ! BH080410:  radial drift in the positive radial direction.
 !            Need to check have changed sign for
@@ -31,46 +31,46 @@
 !     The drt(k) scale factor is only applied for difus_io(k).eq.
 !     "drrdrin"; else d_r is calculated from the scaled d_rr.
       xtr(i,l)=cvmgt(-h_r(lrindx(l))*drt(k)*d_r(idx(i,l),j,k,indxlr(l))* &
-        bovcos(idx(i,l),l),-h_r(lrindx(l))*d_r(idx(i,l),j,k,indxlr(l))* &
-        bovcos(idx(i,l),l),difus_io(k).eq."drrdrin")
+	bovcos(idx(i,l),l),-h_r(lrindx(l))*d_r(idx(i,l),j,k,indxlr(l))* &
+	bovcos(idx(i,l),l),difus_io(k).eq."drrdrin")
 
       alpr(i,l)=ztr(i,l)*(ytr(i,l)+xtr(i,l)*(1.-dl(idx(i,l),j,k,l)))
       alprp(i,l)=ztrp(i,l)*(ytr(i,l)+xtr(i,l)*(1.-dl(idx(i,l),j,k,l)))* &
-        vptb_(idx(i,l+1),lrindx(l+1))*zmaxpsii(lrindx(l+1))
+	vptb_(idx(i,l+1),lrindx(l+1))*zmaxpsii(lrindx(l+1))
       betr(i,l)=ztr(i,l)*(ytr(i,l)-xtr(i,l)*dl(idx(i,l),j,k,l)+ &
-        ytr(i,l-1)+xtr(i,l-1)*(1.-dl(idx(i,l-1),j,k,l-1)))+1./dttr
+	ytr(i,l-1)+xtr(i,l-1)*(1.-dl(idx(i,l-1),j,k,l-1)))+1./dttr
 ! BH071109:  Removing 1./dttr for soln_method="it3drv"
       betrp(i,l)=ztrp(i,l)*(ytr(i,l)-xtr(i,l)*dl(idx(i,l),j,k,l)+ &
-        ytr(i,l-1)+xtr(i,l-1)*(1.-dl(idx(i,l-1),j,k,l-1)))* &
-        vptb_(idx(i,l),lrindx(l))*zmaxpsii(lrindx(l))
+	ytr(i,l-1)+xtr(i,l-1)*(1.-dl(idx(i,l-1),j,k,l-1)))* &
+	vptb_(idx(i,l),lrindx(l))*zmaxpsii(lrindx(l))
       gamr(i,l)=ztr(i,l)*(ytr(i,l-1)-xtr(i,l-1)*dl(idx(i,l-1),j,k,l-1))
       gamrp(i,l)=ztrp(i,l)*(ytr(i,l-1)-xtr(i,l-1)* &
-        dl(idx(i,l-1),j,k,l-1))* &
-        vptb_(idx(i,l-1),lrindx(l-1))*zmaxpsii(lrindx(l-1))
+	dl(idx(i,l-1),j,k,l-1))* &
+	vptb_(idx(i,l-1),lrindx(l-1))*zmaxpsii(lrindx(l-1))
       delr(i,l)=frn(idx(i,l),j,k,l)/dttr*vptb_(idx(i,l),lrindx(l))* &
-        zmaxpsii(lrindx(l)) + velsou(idx(i,l),j,k,l)* &
-        zmaxpsii(lrindx(l))
+	zmaxpsii(lrindx(l)) + velsou(idx(i,l),j,k,l)* &
+	zmaxpsii(lrindx(l))
 
       f1l(i,j,k,l)=frn(idx(i,l),j,k,l)*vptb_(idx(i,l),lrindx(l))* &
-        zmaxpsii(lrindx(l))*dl(idx(i,l),j,k,l)+ &
-        frn(idx(i,l+1),j,k,l+1)*vptb_(idx(i,l+1),lrindx(l)+1) &
-        *zmaxpsii(lrindx(l)+1)*(1.-dl(idx(i,l),j,k,l))
+	zmaxpsii(lrindx(l))*dl(idx(i,l),j,k,l)+ &
+	frn(idx(i,l+1),j,k,l+1)*vptb_(idx(i,l+1),lrindx(l)+1) &
+	*zmaxpsii(lrindx(l)+1)*(1.-dl(idx(i,l),j,k,l))
 
       sfu(i,j,k,l)=drrt(k)*d_rr(idx(i,l),j,k,indxlr(l)) &
-        *(frn(idx(i,l+1),j,k,l+1) &
-        *vptb_(idx(i,l+1),lrindx(l)+1)*zmaxpsii(lrindx(l)+1)- &
-        frn(idx(i,l),j,k,l)* &
-        vptb_(idx(i,l),lrindx(l))*zmaxpsii(lrindx(l)))/drp5(lrindx(l))+ &
-        cvmgt(drt(k)*d_r(idx(i,l),j,k,indxlr(l))*f1l(i,j,k,l), &
-        d_r(idx(i,l),j,k,indxlr(l))*f1l(i,j,k,l), &
-        difus_io(k).eq."drrdrin")
+	*(frn(idx(i,l+1),j,k,l+1) &
+	*vptb_(idx(i,l+1),lrindx(l)+1)*zmaxpsii(lrindx(l)+1)- &
+	frn(idx(i,l),j,k,l)* &
+	vptb_(idx(i,l),lrindx(l))*zmaxpsii(lrindx(l)))/drp5(lrindx(l))+ &
+	cvmgt(drt(k)*d_r(idx(i,l),j,k,indxlr(l))*f1l(i,j,k,l), &
+	d_r(idx(i,l),j,k,indxlr(l))*f1l(i,j,k,l), &
+	difus_io(k).eq."drrdrin")
 
 !BH080425:  Changed sign on d_r, consistent above BH080410
       sfup(i,j,k,l)=drrt(k)*d_rr(idx(i,l),j,k,indxlr(l))* &
-        (frn(idx(i,l+1),j,k,l+1)*vptb_(idx(i,l+1),lrindx(l)+1)* &
-        zmaxpsii(lrindx(l)+1)-frn(idx(i,l),j,k,l)* &
-        vptb_(idx(i,l),lrindx(l))*zmaxpsii(lrindx(l)))/drp5(lrindx(l))- &
-        cvmgt(drt(k)*d_r(idx(i,l),j,k,indxlr(l))*f1l(i,j,k,l), &
-        d_r(idx(i,l),j,k,indxlr(l))*f1l(i,j,k,l), &
-        difus_io(k).eq."drrdrin")
+	(frn(idx(i,l+1),j,k,l+1)*vptb_(idx(i,l+1),lrindx(l)+1)* &
+	zmaxpsii(lrindx(l)+1)-frn(idx(i,l),j,k,l)* &
+	vptb_(idx(i,l),lrindx(l))*zmaxpsii(lrindx(l)))/drp5(lrindx(l))- &
+	cvmgt(drt(k)*d_r(idx(i,l),j,k,indxlr(l))*f1l(i,j,k,l), &
+	d_r(idx(i,l),j,k,indxlr(l))*f1l(i,j,k,l), &
+	difus_io(k).eq."drrdrin")
 !*************************************************************

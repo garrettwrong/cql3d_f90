@@ -13,25 +13,25 @@
 !     freya.f,frhexdrv.f,frinitl.f,frnfreya.f
 !................................................................
       namelist/frsetup/ timbplt,beamon,btime,nameb,relnub &
-        ,anglev,angleh,ashape,aheigh,awidth,bcur,bptor,blenp,bshape &
-        ,bleni,bheigh,bwidth,bhfoc,bvfoc,bhdiv,bvdiv,ebkev,fbcur,nbeams &
-        ,naptr,alen,bvofset,bhofset,nsourc,sfrac1,mf,npart,npskip &
-        ,rpivot,zpivot,ranseed,fionx,nbinject &
-        ,xdebug &
-        ,a1rf,a2rf,wrfe,wrfi,nrfzon,rfzone,ichmod,betalm &
-        ,beamplse,beampon,beampoff &
+	,anglev,angleh,ashape,aheigh,awidth,bcur,bptor,blenp,bshape &
+	,bleni,bheigh,bwidth,bhfoc,bvfoc,bhdiv,bvdiv,ebkev,fbcur,nbeams &
+	,naptr,alen,bvofset,bhofset,nsourc,sfrac1,mf,npart,npskip &
+	,rpivot,zpivot,ranseed,fionx,nbinject &
+	,xdebug &
+	,a1rf,a2rf,wrfe,wrfi,nrfzon,rfzone,ichmod,betalm &
+	,beamplse,beampon,beampoff &
 !     ONETWO DIVERGENCE
-        ,nimp,nprim,frmod,fr_gyro,smooth,multiply,multiplyn,bmsprd &
-        ,frplt,nfrplt,inubpat,npat &
-        ,ibcur,ibcx,ibslow,iborb,iyoka,ishot,itime &
-        ,itrapfi &
-        ,iexcit,ilorent,mstate,izstrp,kdene &
-        ,kdeni,kdenz,ksvi,ksvz,ksve,krad,ngh,ngl,nouthx &
-        ,hdepsmth &
-        ,birth_pts_files,nbirth_pts_files,nbirth_pts,read_birth_pts &
-        ,ne_tk,ds_tk,fe_tk &
+	,nimp,nprim,frmod,fr_gyro,smooth,multiply,multiplyn,bmsprd &
+	,frplt,nfrplt,inubpat,npat &
+	,ibcur,ibcx,ibslow,iborb,iyoka,ishot,itime &
+	,itrapfi &
+	,iexcit,ilorent,mstate,izstrp,kdene &
+	,kdeni,kdenz,ksvi,ksvz,ksve,krad,ngh,ngl,nouthx &
+	,hdepsmth &
+	,birth_pts_files,nbirth_pts_files,nbirth_pts,read_birth_pts &
+	,ne_tk,ds_tk,fe_tk &
 !     Remove NBI source at psi outside of psicutoff:
-        ,psicutoff
+	,psicutoff
 
 
 !Removed namelist, not used, BH070308:
