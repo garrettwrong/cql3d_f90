@@ -25,7 +25,7 @@ contains
       use comm_mod
       use r8subs_mod
       use advnce_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     This routine computes the FSA energy transfer diagnostics
@@ -371,7 +371,7 @@ contains
       subroutine diagentr_vol
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     Integrate the FSA power densities over volume.
 
@@ -416,14 +416,14 @@ contains
 !=====================================================================
 !
 !
-      real*8 function gfi(i,j,k)
+      real(c_double) function gfi(i,j,k)
       use param_mod
       use comm_mod
       use advnce_mod, only : cl, fpj0, fpj, fpjp
 !..................................................................
 !     Express the velocity flux at (i,j+1/2)
 !..................................................................
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
       if((i.ne.itl .and. i.ne.itu) .or. symtrap.ne."enabled") then
        gfii= dc(i,j)*0.5*dyi(i,l_)*(fpjp(i,j,k)-fpj0(i-1,j,k))
@@ -444,7 +444,7 @@ contains
 !=====================================================================
 !
 !
-      real*8 function gfu(i,j,k)
+      real(c_double) function gfu(i,j,k)
       use param_mod
       use comm_mod
       use advnce_mod, only : cdf, f1j, f2j
@@ -452,7 +452,7 @@ contains
 !     Define the flux related quantities G ( H not needed for
 !     the power calculation) used in the r.h.s. of the FP eqn.
 !..................................................................
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
       if(i .ne. itl  .and. i .ne. itu) then
         gfuu=dc(i,j)*(f1j(i+1,j)-f1j(i-1,j))*0.5*dyi(i,l_)

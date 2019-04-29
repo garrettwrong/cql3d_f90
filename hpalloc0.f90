@@ -11,7 +11,7 @@ contains
 
       subroutine hpalloc0(iptr,ln)
       use param_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     NO_OP:  Not needed after 081216, after changing from
 !             CRAY pointers to f90 pointers.

@@ -1073,9 +1073,9 @@ c
 ![121] relativ='enabled' approximation is quite sufficient, see
 ![121] report CompX-2009-1_Fully-Rel.pdf  [Yuri Petrov, 091016].
 
-![120] The Intel ifort compiler on viz.pppl.gov differed in compiling
-![120] a comparison between a real*8 variable and 0.0, so changed all
-![120] .ne.0. and .eq.0. in the code to be comparisons with real*8
+![120] The Intel ifort compiler on viz.pppl.gov differed in compiling 
+![120] a comparison between a real(c_double) variable and 0.0, so changed all
+![120] .ne.0. and .eq.0. in the code to be comparisons with real(c_double)
 ![120] zero=0.d0  (in about 35 source files). [BH090904].
 
 ![119] Found error in velocity theta flux expression in advnce.h,
@@ -1152,7 +1152,7 @@ c
 ![107] a general species [BH081031].
 
 ![106] Fixed bug (gfortran compiler?) wherein xpts(1) and rx(1), etc.,
-![106] were offset by one real*8 memory position, contrary to equivalence
+![106] were offset by one real(c_double) memory position, contrary to equivalence
 ![106] statement in freya.f, by adding dummy integer in frcomm.h
 ![106] after npts.  The problem was causing freyasou bomb [BH,081029].
 

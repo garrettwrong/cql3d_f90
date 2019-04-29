@@ -16,7 +16,7 @@ contains
       subroutine tdsetnpa(sigmanpa)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     This routine returns the Charge Exchange cross-section (cm**2)
@@ -28,10 +28,10 @@ contains
 !     cross-section, assuming zero-velocity background neutrals.
 !.......................................................................
 
-      real*8,dimension(nen_npa,npaproc)::sigmanpa
-      real*8,dimension(11)::pcf
-      real*8,dimension(6)::en_b,cx_b,w
-      real*8,dimension(19):: wk  !Dimension 3*6+1
+      real(c_double),dimension(nen_npa,npaproc)::sigmanpa
+      real(c_double),dimension(11)::pcf
+      real(c_double),dimension(6)::en_b,cx_b,w
+      real(c_double),dimension(19):: wk  !Dimension 3*6+1
       dimension iop(2)
 
 

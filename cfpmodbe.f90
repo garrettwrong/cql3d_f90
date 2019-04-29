@@ -10,7 +10,7 @@ module cfpmodbe_mod
 contains
 
       subroutine cfpmodbe(x,bk1,bk2)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     Evaluate Bessel functions for relativistic calculations

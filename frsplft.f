@@ -4,7 +4,7 @@ c
       use param_mod
       use zcunix_mod, only : coeff1
       use zcunix_mod, only : terp1
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 c..................................................................
 c     Interpolates with splines between cql3d radial mesh and the

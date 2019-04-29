@@ -17,9 +17,9 @@ contains
       subroutine vlh(action)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       character*(*) action
-      !XXXX BUG, integer array expected, not real8
+      !XXXX BUG, integer array expected, not real(c_double)
       integer :: cqlb_size
       save
 

@@ -20,7 +20,7 @@ contains
       use comm_mod
       use r8subs_mod, only : cvmgt, dcopy
 
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !..............................................................
 !     Time advancement for parallel transport. (meshy="fixed_mu" case)
 !     Assume non-constant total number of y mesh points vs. l: iy_(l).ne.cst

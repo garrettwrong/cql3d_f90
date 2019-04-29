@@ -16,7 +16,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : dcopy
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !..................................................................
 !     This routine redefines the velocity mesh points at the
@@ -86,7 +86,7 @@ contains
       subroutine urfmidv_dc(jmin,jmax)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !..................................................................
 !     This routine redefines the velocity mesh points at the

@@ -13,7 +13,7 @@ contains
 
       subroutine tdxin33d(a,rya,klrz,expn1,expm1)
       use param_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................

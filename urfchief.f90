@@ -24,7 +24,7 @@ contains
       subroutine urfchief
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................

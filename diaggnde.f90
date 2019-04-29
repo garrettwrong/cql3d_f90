@@ -18,7 +18,7 @@ module diaggnde_mod
 contains
 
   subroutine diaggnde
-    !implicit integer (i-n), real*8 (a-h,o-z)
+    !implicit integer (i-n), real(c_double) (a-h,o-z)
     implicit none
     real(c_double) :: areaovol
     real(c_double) :: cn

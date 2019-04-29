@@ -12,9 +12,9 @@ contains
       subroutine coeffpad(k)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
-!      real*8,dimension(iy):: prnt1,prnt2,prnt3
-!      real*8,dimension(iy):: prnt4,prnt5,prnt6
+      implicit integer (i-n), real(c_double) (a-h,o-z)
+!      real(c_double),dimension(iy):: prnt1,prnt2,prnt3
+!      real(c_double),dimension(iy):: prnt4,prnt5,prnt6
 
 !..................................................................
 !     This routine adds in the collisional contribution to the

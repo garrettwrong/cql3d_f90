@@ -9,10 +9,10 @@ module siggy_mod
 
 contains
 
-      real*8 function siggy(ee)
+      real(c_double) function siggy(ee)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !---------------------------------------------------------------------
 !    this routine is used in conjunction with array svtab defined
 !    in subroutine sigsetup. it is the table look-up.

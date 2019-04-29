@@ -14,7 +14,7 @@ contains
       real(c_double) function ampfarl(distn,ll)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     Returns result of an integral of the distribution function
 !     distn, arising in the Ampere-Faraday eqns.
@@ -73,7 +73,7 @@ contains
       subroutine ampfalloc
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..............................................................
 !     Allocates arrays used in Ampere-Faraday routines.
@@ -130,7 +130,7 @@ contains
       use comm_mod
       ! n is not updated yet, n=0,1,...,nstop-1
       ! Called from tdchief when n+1.eq.nonampf
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..............................................................
 !     Initialize arrays used in Ampere-Faraday routines.
@@ -221,7 +221,7 @@ contains
       ! n is not updated yet, n=0,1,...,nstop-1
       ! Called from tdchief when n+1.eq.nonampf, as ampfefldb(n+1,time+dtr)
       ! So, nn= nonampf,nonampf+1,...,nstop
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     Get specified time-advanced boundary toroidal electric field.
@@ -335,7 +335,7 @@ contains
       subroutine ampfdiff(iflag)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     No real test here, to start with.
 !     Future: based on (elecfldn(ll,nn,it+1)-elecfldn(ll,nn,it+1))/
@@ -358,7 +358,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : dgesv
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       integer, allocatable:: ipiv(:)
 
 !.......................................................................

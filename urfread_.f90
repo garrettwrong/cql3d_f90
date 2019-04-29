@@ -14,7 +14,7 @@ contains
       subroutine urfread_(krf,i_)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 
 !..................................................................
@@ -428,10 +428,10 @@ contains
       subroutine urfread_i(krf,i_)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
       ! working array for dummy read
-      real*8, allocatable, dimension(:) :: urfwk
+      real(c_double), allocatable, dimension(:) :: urfwk
 
 !===> YuP 101122: A simplified version of urfread_ above.
 !     Called by urfsetup
@@ -487,7 +487,7 @@ contains
         endif
 
         nrayelti= nrayelt(iray,krf)
-        allocate(urfwk(nrayelti),STAT=istat) ! real*8
+        allocate(urfwk(nrayelti),STAT=istat) ! real(c_double)
         ! dummy read for iformat2=0:
         read(i_,2) (urfwk(is),is=1,nrayelti) ! #1
         read(i_,2) (urfwk(is),is=1,nrayelti) ! #2
@@ -547,7 +547,7 @@ contains
         endif
 
         nrayelti= nrayelt(iray,krf)
-        allocate(urfwk(nrayelti),STAT=istat) ! real*8
+        allocate(urfwk(nrayelti),STAT=istat) ! real(c_double)
         ! dummy read for iformat2=1:
         read(i_,2) (urfwk(is),is=1,nrayelti) ! #1
         read(i_,2) (urfwk(is),is=1,nrayelti) ! #2

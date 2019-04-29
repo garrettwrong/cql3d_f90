@@ -4,7 +4,7 @@ c     ONETWO DIVERGENCE
       subroutine frnbdep2(psi,mi,mj,r,z,potsid,mf,rzpat,nrpat,nzpat,me,
      &  mb,sgxn,vbeam,hxfrac,iopt)
       use param_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 c-----------------------------------------------------------------------
 c     calculates neutral beam deposition on (r,z) grid.  grid size
 c     determined by nrpat and nzpat, the number of equally spaced

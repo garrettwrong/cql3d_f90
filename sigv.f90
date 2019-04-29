@@ -18,7 +18,7 @@ contains
       subroutine sigv(icall)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     sets up calls to sigma-v calculator
@@ -27,7 +27,7 @@ contains
 !MPIINSERT_INCLUDE
 
       character*8 icall
-      real*8 buff(16) ! local buffer array for mpi
+      real(c_double) buff(16) ! local buffer array for mpi
 
       if (icall.eq."first") then
         call sigalloc

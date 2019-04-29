@@ -20,7 +20,7 @@ contains
       use comm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use aindfpa_mod, only : aindfpa, ainadjnl_fsetup_setup0, ainadjnl
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................

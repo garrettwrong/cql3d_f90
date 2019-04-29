@@ -9,10 +9,10 @@ module vlhd_mod
 
 contains
 
-      real*8 function vlhd(vll,vprp,thp,nmod)
+      real(c_double) function vlhd(vll,vprp,thp,nmod)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     Determine the local phenomenological lower hybrid
 !     diffusion coefficient as a function of local (in z)

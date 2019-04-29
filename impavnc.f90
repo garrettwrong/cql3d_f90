@@ -28,7 +28,7 @@ contains
       use param_mod
       use comm_mod
       use advnce_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.................................................................
 !     This routine advances the Fokker-Planck equation one time step
@@ -1316,10 +1316,10 @@ contains
 
 !      CONTAINS !removed this construct for franklin.nerc.gov: pg compiler
 
-         real*8 function z00(i,j,k)
+         real(c_double) function z00(i,j,k)
          use param_mod
       use comm_mod
-         implicit integer (i-n), real*8 (a-h,o-z)
+         implicit integer (i-n), real(c_double) (a-h,o-z)
          save
 
 

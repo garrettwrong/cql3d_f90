@@ -10,13 +10,13 @@ module urfwr0_mod
 contains
 
       subroutine urfwr0(x,nrayelt,nray,nrayelts)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension x(nrayelts,*),nrayelt(*)
       save em300
       data em300 /1.d-300/
 !....................................................................
 !     For formatted o/p purposes, values of abs(x) .lt. 1.e-300
-!     are set equal to 0. (Formats ok to 1.e-999, but real*8
+!     are set equal to 0. (Formats ok to 1.e-999, but real(c_double)
 !     restricted to .gt. 1.e-327 in some fortrans).
 !....................................................................
 

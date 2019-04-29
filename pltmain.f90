@@ -46,7 +46,7 @@ contains
     use param_mod
     use comm_mod
     use pltdf_mod, only: pltdf
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !
     !     This routine controls driver plots
@@ -284,7 +284,7 @@ contains
   subroutine gswd2d(scales,xmin,xmax,ymin,ymax) ! NOT USED ANYMORE?
     use r8subs_mod, only : rbound
     ! xmin,... defines the user coordinate system.
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     REAL*4 PGxmin,PGxmax,PGymin,PGymax, RPG1,RPG2 ! PGPLOT uses REAL*4
     !REAL*4 RBOUND
     character*7 scales ! = "linlin$" or "linlog$","loglin$","loglog$"
@@ -326,8 +326,8 @@ contains
   !---------------------------------------------------------------------
   subroutine gpcv2d(xarray,yarray,length)
     ! Plot a line (xarray,yarray) of length n.
-    implicit integer (i-n), real*8 (a-h,o-z)
-    real*8 xarray(length),yarray(length)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
+    real(c_double) xarray(length),yarray(length)
     integer length
     REAL*4 PGxarray(length),PGyarray(length)
     small_p = EPSILON(1.0) !a positive number that is almost negligible
@@ -375,7 +375,7 @@ contains
   subroutine gpln2d(x1, x2, y1, y2)
     ! draw line between two points.
     ! x1,x2,y1,y2 defines the two points to draw a line between.
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     REAL*4 PGx1, PGy1, PGx2, PGy2
     PGx1 = x1 ! Convert to REAL*4
     PGx2 = x2 ! Convert to REAL*4
@@ -408,7 +408,7 @@ contains
   !---------------------------------------------------------------------
   subroutine gslnst(LS)
     ! sets line style: 1-solid, 2-dashed, 3-dotted, 4-dash-dotted, etc.
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     INTEGER  LS
             CALL PGSLS(LS)
     ! Set the line style attribute for subsequent plotting. This
@@ -492,7 +492,7 @@ contains
       use param_mod
       use comm_mod
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !     Plot energy, density, parallel current and density conservation
 !     constant vs. time., at a given s, distance along the magnetic field.
@@ -727,7 +727,7 @@ contains
       use pltdf_mod, only : JXQ
       use r8subs_mod, only : luf
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !...................................................................
 !     Plots velocity (momentum-per-mass)  fluxes versus u,
@@ -743,7 +743,7 @@ contains
 
 
       REAL RILIN !-> For PGPLOT (text output positioning)
-      real*8 wkd(jx)
+      real(c_double) wkd(jx)
       CHARACTER*64 TX_
 
 !     pltflux1(1)=1. ==> sum of fluxes
@@ -1080,7 +1080,7 @@ contains
       use param_mod
       use comm_mod
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !...
 !mnt  This routine plots the parallel distribution function.
 !...
@@ -1216,7 +1216,7 @@ contains
       use param_mod
       use comm_mod
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !     Plot electron resistivity and related quantities.
 !
@@ -1388,7 +1388,7 @@ contains
       use pltdf_mod, only : wx, wy, IIY, JXQ
       use r8subs_mod, only : luf, dcopy
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 
 !     This routine plots streamlines of the steady state phase
@@ -1866,7 +1866,7 @@ contains
       use comm_mod
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !**SCC10/7/94
 !   prppru calculates the pitch angle integrated distribution function
@@ -1958,7 +1958,7 @@ contains
       subroutine fofv(target,action)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       character*(*) target,action
       save
 
@@ -1995,7 +1995,7 @@ contains
       use comm_mod
       use pltdf_mod, only : cont, tempcntr, nconta, JXQ
       use r8subs_mod, only : dcopy
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     contour plots the ion source.
@@ -2075,7 +2075,7 @@ contains
       use r8subs_mod, only : luf
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !     Calculates the pitch angle integrated source
 !**********************
@@ -2084,7 +2084,7 @@ contains
       REAL RILIN, RXMAXQ
       REAL RTAM1(jx),RTAM2(jx), wk_tam(jx)
       REAL REMAX,REMIN
-      real*8 wkd(jx)
+      real(c_double) wkd(jx)
 
       character*8 target
       character*8 tx_
@@ -2261,7 +2261,7 @@ contains
       use comm_mod
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !     YuP[06-2016]
 !     Calculates and plots the speed-integrated source,
 !     as a function of pitch angle theta0 at the midplane
@@ -2273,7 +2273,7 @@ contains
       REAL RILIN
       REAL RTAM1(iy),RTAM2(iy)
       REAL REMAX,REMIN
-      real*8 wk_so(iy)
+      real(c_double) wk_so(iy)
       character*8 vert_scale ! 'log10' or 'lin'
 
       vert_scale='log10' !'lin'

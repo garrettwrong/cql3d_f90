@@ -20,20 +20,20 @@ contains
     use comm_mod
     use netcdfrf_mod, only : netcdf_rdcb
     use r8subs_mod, only : dcopy
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     save
 !
 !MPIINSERT_INCLUDE
 
     !     Pointers for dynamic memory allocation, local usage:
-    real*8, dimension(:), pointer :: upar,uprp,rho_a
-    real*8, dimension(:,:), pointer :: tmpb,tmpc,tmpe,tmpf
-    real*8, dimension(:,:,:), pointer :: rdc_cqlb,rdc_cqlc
-    real*8, dimension(:,:,:), pointer :: rdc_cqle,rdc_cqlf
-    real*8, dimension(:,:,:), pointer :: ddd
-    real*8, dimension(:), allocatable:: rin_med
+    real(c_double), dimension(:), pointer :: upar,uprp,rho_a
+    real(c_double), dimension(:,:), pointer :: tmpb,tmpc,tmpe,tmpf
+    real(c_double), dimension(:,:,:), pointer :: rdc_cqlb,rdc_cqlc
+    real(c_double), dimension(:,:,:), pointer :: rdc_cqle,rdc_cqlf
+    real(c_double), dimension(:,:,:), pointer :: ddd
+    real(c_double), dimension(:), allocatable:: rin_med
 
-    real*8, dimension(:), allocatable:: dd_in,dd_out  ! for debugger
+    real(c_double), dimension(:), allocatable:: dd_in,dd_out  ! for debugger
 
     !-YuP-> to form file name containing i_psi-number, for "format2"
     !-YuP-> diffusion coeffs, one file for one radii, e.g., from DC code.
@@ -985,8 +985,8 @@ contains
  end subroutine rdc_multi
 
 
- real*8 function r8median(k,n,arr)
-   implicit integer (i-n), real*8 (a-h,o-z)
+ real(c_double) function r8median(k,n,arr)
+   implicit integer (i-n), real(c_double) (a-h,o-z)
    !
    !     Returns the kth smallest value in the array arr(1:n).
    !     The input array will be rearranged to have this value

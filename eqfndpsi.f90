@@ -20,7 +20,7 @@ contains
       subroutine eqfndpsi(psides,areades,volum)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
 
 !     Set parameter for trapped particle frac calc (150 in ONETWO).

@@ -15,7 +15,7 @@ contains
       subroutine urfwrite_(krf,i_)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !..................................................................
 !     Write total number of rays.
 !     Write first harmonic number (used in damping).

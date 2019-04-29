@@ -16,7 +16,7 @@ contains
       subroutine urfalloc
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
 
       complex*16 czero
@@ -73,7 +73,7 @@ contains
 
 !...................................................................
 !     Note three complex*16 arrays, cosz1, sinz1, sinz2
-!     must be 2x longer than real*8 arrays.
+!     must be 2x longer than real(c_double) arrays.
 !     Same for cwexde,cweyde and cwezde.
 !     lnurfdum is length of urfdum measured in 8 byte words.
 !...................................................................

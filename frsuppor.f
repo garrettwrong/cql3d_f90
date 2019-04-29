@@ -4,7 +4,7 @@ c
 c     ONETWO DIVERGENCE
       subroutine frsuppor(a,ni,nj,nk,nl,isupp,ifail)
       use param_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 c-----------------------------------------------------------------------
 c     determines crude 2d support of four-dimensional array
 c     a(i,j,k,l)   array searched for support approximation

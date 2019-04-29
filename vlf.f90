@@ -21,7 +21,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : luf, dcopy
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       character*(*) action
       save
 
@@ -90,7 +90,7 @@ contains
         allocate(cqlc(iy,jx,lrz,mrfn),STAT=istat)
         allocate(cqle(iy,jx,lrz,mrfn),STAT=istat)
         allocate(cqlf(iy,jx,lrz,mrfn),STAT=istat)
-        cqlb_size=size(cqlb) !XXXXXX BUG, was real8 type, you wanted integer
+        cqlb_size=size(cqlb) !XXXXXX BUG, was real(c_double) type, you wanted integer
         call bcast(cqlb,zero,cqlb_size)
         call bcast(cqlc,zero,cqlb_size)
         call bcast(cqle,zero,cqlb_size)

@@ -36,10 +36,10 @@ contains
       subroutine send_data
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       include 'mpilib.h'
 
-      real*8, allocatable :: &
+      real(c_double), allocatable :: &
               buff(:) ! (mpifsz+10*mpicsz) Buffer for 11 arrays below
 
       mpifsz= iyjx2*ngen !For send/recv of f(0:iy+1,0:jx+1,1:ngen,lr_),
@@ -111,7 +111,7 @@ contains
       use param_mod
       use comm_mod
       !send/recv entr(k,lefct,l_),pwrrf(1:jx,k,l_),pwrrfs(1:jx,k,l_)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       include 'mpilib.h'
       dimension buff(1+jx)
 

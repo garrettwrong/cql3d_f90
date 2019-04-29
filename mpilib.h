@@ -4,7 +4,7 @@
       integer mpicmd, mpimode, mpiworker, mpill, mpil_
       integer mpistatus(MPI_STATUS_SIZE)
 
-      real*8 mpitime, mpitime1
+      real(c_double) mpitime, mpitime1
 
       common /mpi/ mpirank, mpisrc, mpisize, mpiierr, mpistatus
       common /mpi/ mpicmd, mpimode, mpiworker, mpill

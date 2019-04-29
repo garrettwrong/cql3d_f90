@@ -16,7 +16,7 @@ end module pack21_mod
       subroutine pack21(a,ibot,itop,jbot,jtop,b,iy,jx)
         use bcast_mod, only : bcast
         use r8subs_mod, only : dcopy
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     It sometimes becomes necessary to take a
@@ -41,7 +41,7 @@ end module pack21_mod
       subroutine unpack21(a,ibot,itop,jbot,jtop,b,iy,jx)
         use bcast_mod, only : bcast
         use r8subs_mod, only : dcopy
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     This is the inverse of subroutine pack21.
@@ -67,7 +67,7 @@ end module pack21_mod
 !
 !
       subroutine ipack21(ia,ibot,itop,jbot,jtop,ib,iy,jx)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     It sometimes becomes necessary to take a

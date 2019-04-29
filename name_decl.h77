@@ -83,7 +83,7 @@ c.......................................................................
      1  veclnth,
      1  vnorm
 
-      real*8 mpwr,npwr,megy,negy,mtorloss,ntorloss,
+      real(c_double) mpwr,npwr,megy,negy,mtorloss,ntorloss,
      1  mpwrzeff,npwrzeff,mpwrvphi,npwrvphi,
      1  mpwrelec,npwrelec,mpwrxj,npwrxj
 
@@ -194,7 +194,7 @@ c*****************************************************************
 c     BEGIN arrays for analytic ion source (sou..) routines
 c*****************************************************************
 
-      real*8 mpwrsou,npwrsou
+      real(c_double) mpwrsou,npwrsou
 
       common /diskx/
      1  mpwrsou(0:ngena),npwrsou(0:ngena)

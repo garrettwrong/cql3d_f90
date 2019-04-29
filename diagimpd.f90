@@ -22,7 +22,7 @@ contains
       use advnce_mod
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !..................................................................
 
 !     This routine computes the density gain (loss) due to particle

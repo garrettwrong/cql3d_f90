@@ -25,7 +25,7 @@ contains
     use param_mod
     use comm_mod
     use r8subs_mod, only : dcopy
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
 
     !..................................................................
     !     if (pltd.eq."enabled" or pltd.eq."color") then
@@ -125,7 +125,7 @@ contains
       !      =6 for vlhb
       !      =7 for rdcb
       !      =8 for loss region (from pltlosc)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !MPIINSERT_INCLUDE
 
@@ -133,7 +133,7 @@ contains
       character*(*) tt_
       character*64 tx_,ty_
       REAL wk_tam(jx)
-      real*8 wkd(jx)
+      real(c_double) wkd(jx)
 !...
 !mnt  This routine performs contour plots of distributions
 !mnt  given in temp1(0:iyp1,0,jxp1) as a function of v,theta,
@@ -155,8 +155,8 @@ contains
 
       !YuP[2018-01-27] Local, for PGPLOT:
       parameter(npar=200, nprp=100)
-      real*8 vpar(npar),vprp(nprp) ! rectangular grid for plots
-      real*8 fparprp(npar,nprp) !f(i,j) will be interpolated to this grid
+      real(c_double) vpar(npar),vprp(nprp) ! rectangular grid for plots
+      real(c_double) fparprp(npar,nprp) !f(i,j) will be interpolated to this grid
       real*4 BRIGHT,CONTRA,FMIN,FMAX,RVMIN,RVMAX, &
              TRPG(6),RTEMP2(npar,nprp)
       REAL*4 RCONTLOG(NCONTA),FLOGMIN,FLOGMAX

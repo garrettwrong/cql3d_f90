@@ -17,7 +17,7 @@ contains
       subroutine profiles
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !
 !.......................................................................
@@ -27,7 +27,7 @@ contains
 
 !MPIINSERT_INCLUDE
 
-      real*8:: tmpt(njene)  !Temporary array
+      real(c_double):: tmpt(njene)  !Temporary array
       dimension ztr(lrza)   !For tdoutput-like printout
       dimension rban_vth(lrzmax) ! for print-out
       character*8 ztext
@@ -949,8 +949,8 @@ contains
       end
 !
 !
-      real*8 function tdprof(timet,y,t)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function tdprof(timet,y,t)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !
 !     computes value of tdprof according to:

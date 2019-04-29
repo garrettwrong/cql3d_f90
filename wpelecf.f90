@@ -14,7 +14,7 @@ module wpelecf_mod
 
 contains
 
-      real*8 function ghelec(i,j,k)
+      real(c_double) function ghelec(i,j,k)
       use param_mod
       use comm_mod
       use advnce_mod
@@ -29,7 +29,7 @@ contains
       use comm_mod
       use advnce_mod
       use r8subs_mod, only : dcopy
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..............................................................
 !     Computes the parallel component of the poloidal electric field due

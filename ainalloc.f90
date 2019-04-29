@@ -15,7 +15,7 @@ contains
       subroutine ainalloc
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
 
 !dir$ nobounds
@@ -802,7 +802,7 @@ contains
       call ibcast(lpt,0,SIZE(lpt))
       allocate(mun(iy),STAT=istat)
       istat_tot=istat_tot+istat
-      call bcast(mun,zero,SIZE(mun)) !real*8
+      call bcast(mun,zero,SIZE(mun)) !real(c_double)
       allocate(fll(jpxy),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(fll,zero,SIZE(fll))

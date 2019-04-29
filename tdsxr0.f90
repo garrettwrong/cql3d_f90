@@ -20,7 +20,7 @@ contains
       subroutine tdsxr0(rb,ene,icall,iplotsxr)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 
 !.......................................................................
@@ -91,7 +91,7 @@ contains
       character*8 icall,iplotsxr,icalls
       dimension rb(0:lrzmax),ene(lrzmax)
       dimension efluxwk(nen,lrzmax) ! local working array
-      real*8, allocatable, dimension(:):: tempp4,tempp5,tempp6
+      real(c_double), allocatable, dimension(:):: tempp4,tempp5,tempp6
 
       if(nv.gt.nva) stop 'nv.gt.nva in tdsxr0'
 

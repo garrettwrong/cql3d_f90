@@ -10,7 +10,7 @@ module pltcycl_mod
 contains
 
       subroutine pltcycl(iymn,iymx,ymn,ymx)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !-------------------------
 !  find the minimum and maximum log-cycle for ymn,ymx
 !-----------------------------

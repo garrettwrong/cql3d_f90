@@ -12,7 +12,7 @@ contains
       subroutine aindfpa
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     Set defaults for input of variables in first namelist setup,
@@ -72,7 +72,7 @@ contains
 
 
       subroutine ainadjnl(kopt)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
       Save inlmod
 
@@ -209,7 +209,7 @@ contains
 
       subroutine ainadjnl_fsetup_setup0(kopt)
       !YuP[2017]
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
       Save inlmod
 
@@ -346,7 +346,7 @@ contains
 
 
       subroutine ain_transcribe(filename)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
 
 !..................................................................

@@ -13,10 +13,10 @@ module psif_mod
 
 contains
 
-  real*8 function psif(xz)
+  real(c_double) function psif(xz)
     use param_mod
     use comm_mod
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !-------------------------------------------------------------------
     !
@@ -63,10 +63,10 @@ contains
     return
   end function psif
 
-  real*8 function psifp(xz)
+  real(c_double) function psifp(xz)
     use param_mod
     use comm_mod
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !-------------------------------------------------------------------
     !
@@ -120,10 +120,10 @@ contains
     return
   end function psifp
 
-  real*8 function psiinv(yval,iupdown)
+  real(c_double) function psiinv(yval,iupdown)
     use param_mod
     use comm_mod
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !---------------------------------------------------------------------
     !
@@ -211,10 +211,10 @@ contains
 
   end function psiinv
 
-  real*8 function psifpy(yval)
+  real(c_double) function psifpy(yval)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
       !------------------------------------------------------------
@@ -253,10 +253,10 @@ contains
       return
   end function psifpy
 
-  real*8 function psifppy(yval,iupdown)
+  real(c_double) function psifppy(yval,iupdown)
     use param_mod
     use comm_mod
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     save
 
     !------------------------------------------------------------

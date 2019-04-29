@@ -12,7 +12,7 @@ module lookup_mod
 contains
 
       subroutine lookup(x,xarray,length,weightu,weightl,lement)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     This routine uses luf_bin to do a table look up.
@@ -74,7 +74,7 @@ contains
 !
 !
       subroutine lookup_tdf(x,xarray,length,weightu,weightl,lement)
-      !implicit integer (i-n), real*8 (a-h,o-z)
+      !implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !        lookup_tdf is special version of subroutine lookup, with
 !        printout of warning about exceeding table limits turned
@@ -95,8 +95,8 @@ contains
 
       !save
       integer length,lement
-      real*8 x,weightu,weightl
-      real*8 xarray(length)
+      real(c_double) x,weightu,weightl
+      real(c_double) xarray(length)
 
       if(x.lt.xarray(1)) then
          ! YuP: this case happens quite often:

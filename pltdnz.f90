@@ -16,7 +16,7 @@ contains
       use param_mod
       use comm_mod
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !     plot the density as a function of poloidal angle for a given
 !     set of energy ranges.

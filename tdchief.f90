@@ -86,7 +86,7 @@ contains
       use achiefn_mod, only : achiefn
       use achief1_mod, only : achief1
 
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................

@@ -12,7 +12,7 @@ module bcast_mod
 contains
 
       subroutine bcast(a,val,n)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     Temporary bcast routine until I can find UNICOS equivalent
@@ -27,7 +27,7 @@ contains
 !
 !
       subroutine ibcast(ia,ival,n)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     Temporary bcast routine until I can find UNICOS equivalent

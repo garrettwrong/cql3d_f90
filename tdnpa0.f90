@@ -22,7 +22,7 @@ contains
       subroutine tdnpa0(rb,ene,icall,iplotnbi)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !VT....V.Tang, NPA diagnostic 9-25-05.............................
 !VT    Currently, I have only made changes to the non-circular section
@@ -102,17 +102,17 @@ contains
 
       character*8 icall,icalls,iplotnbi
 
-      real*8,dimension(lrzmax)::ene
-      real*8,dimension(0:lrzmax)::rb
-      real*8,dimension(lrzmax,4,nen_npa)::atten
-      real*8,dimension(lrzmax,nen_npa)::stoplamda
-      real*8,dimension(nen_npa)::vel
-      real*8,dimension(nen_npa,npaproc)::sigmanpa,emitnpa
-      real*8,dimension(nen_npa,nv_npa)::eflux_npa
+      real(c_double),dimension(lrzmax)::ene
+      real(c_double),dimension(0:lrzmax)::rb
+      real(c_double),dimension(lrzmax,4,nen_npa)::atten
+      real(c_double),dimension(lrzmax,nen_npa)::stoplamda
+      real(c_double),dimension(nen_npa)::vel
+      real(c_double),dimension(nen_npa,npaproc)::sigmanpa,emitnpa
+      real(c_double),dimension(nen_npa,nv_npa)::eflux_npa
       dimension efluxwk(nen_npa,lrzmax) ! local working array
 
       integer::jj
-      real*8, allocatable, dimension(:):: tempp4,tempp5,tempp6
+      real(c_double), allocatable, dimension(:):: tempp4,tempp5,tempp6
 
       print*, 'tdnpa0::Doing NPA diagnostic, CQL at step', n
       eflux_npa(:,:)=0.

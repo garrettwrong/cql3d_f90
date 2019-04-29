@@ -11,7 +11,7 @@ contains
 
       subroutine eqwrng(kerr)
       use param_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
 
 ! print error messages - on mpirank.eq.0 only

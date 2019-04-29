@@ -10,7 +10,7 @@ module urfwr0c_mod
 contains
 
       subroutine urfwr0c(x,nrayelt,nray,nrayelts)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       complex*16 x,c16i
       dimension x(nrayelts,*),nrayelt(*)
 !....................................................................

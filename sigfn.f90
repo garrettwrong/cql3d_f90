@@ -9,8 +9,8 @@ module sigfn_mod
 
 contains
 
-      real*8 function sigfn(ec,kn)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function sigfn(ec,kn)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !---------------------------------------------------------------------
 !    This routine computes  reaction cross sections.

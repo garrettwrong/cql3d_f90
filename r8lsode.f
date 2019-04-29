@@ -1543,7 +1543,7 @@ c   lunit  = default value of logical unit number for printing of error
 c            messages.
 c-----------------------------------------------------------------------
       integer illin, iduma, ntrep, idumb, iowns, icomm, mesflg, lunit
-      real*8 rowns, rcomm
+      real(c_double) rowns, rcomm
       common /ls_lsode/ rowns(209), rcomm(9),
      1   illin, iduma(10), ntrep, idumb(2), iowns(6), icomm(19)
       common /eh_lsode/ mesflg, lunit

@@ -12,10 +12,10 @@ module eqfninv_mod
 
 contains
 
-      real*8 function eqfninv(psival,scalfct)
+      real(c_double) function eqfninv(psival,scalfct)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 
 

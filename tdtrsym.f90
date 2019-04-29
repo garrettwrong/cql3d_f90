@@ -12,7 +12,7 @@ contains
       subroutine tdtrsym
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
       do 5 k=1,ngen
         do 10 l=1,lrors-1

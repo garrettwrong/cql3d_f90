@@ -27,7 +27,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EBALAF (A,N,IA,D,K,L)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -172,7 +172,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EBBCKF (D,Z,K,L,MM,N,IZ)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER            K,L,MM,N,IZ
@@ -246,7 +246,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EHBCKF (Z,H,D,N,MM,IZH,K,L)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -316,7 +316,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EHESSF (A,K,L,N,IA,D)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -411,7 +411,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EQRH3F (H,N,IH,K,L,WR,WI,Z,IZ,IER)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -853,7 +853,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EIGRF  (A,N,IA,IJOB,W,Z,IZ,WK,IER)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -1043,7 +1043,7 @@ C                                  COMPUTE PERFORMANCE INDEX
       END
 
       subroutine leqt1fl(a, m, n, ia, b, idgt, wkarea, ier)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 c
 c-leqt1f--------s/d-----library 2--------------------------------------
@@ -1119,7 +1119,7 @@ c
 
       subroutine ludatf1 (a, lu, n, ia, idgt, d1, d2, ipvt,
      .                    equil, wa, ier)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 c
 c-ludatf1--------s/d-----library 2--------------------------------------
 c
@@ -1187,7 +1187,7 @@ c
 c   latest revision     - march 22,1974 (dec)
 c
       dimension a(ia,*), lu(ia,*), ipvt(*), equil(*)
-      real*8    lu
+      real(c_double)    lu
       data      zero, one, four, sixtn, sixth
      .         /0.0 , 1.0, 4.0 , 16.0 , 0.0625/
 c
@@ -1346,7 +1346,7 @@ c
       end
 
       subroutine luelmf1 (a, b, ipvt, n, ia, x)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 c
 c
 c-luelmf1--------s/d-----library 2--------------------------------------
@@ -1409,7 +1409,7 @@ c
 
 
       subroutine uertst1 (ier, obsolete)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 c
 c --- changed name from UERTST to UERTST1 so that only IMSL routines
@@ -1493,7 +1493,7 @@ c
 c
 c
       subroutine icsevu1 (x, y, nx, c, ic, u, s, m, ier)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 c
 c --- modified version of IMSL subroutine named ICSEVU
@@ -1578,12 +1578,12 @@ c
 c     specifications for arguments
 c
       integer            nx,ic,m,ier
-      real*8             x(nx),y(nx),c(ic,3),u(m),s(m)
+      real(c_double)             x(nx),y(nx),c(ic,3),u(m),s(m)
 c
 c     specifications for local variables
 c
       integer            i,jer,ker,nxm1,k
-      real*8             d,dd,zero
+      real(c_double)             d,dd,zero
       data               i/1/, zero/0.0/
 c
 c     first executable statement
@@ -1645,7 +1645,7 @@ c
 c
 c
       subroutine icsicu1 (x, y, nx, bpar, c, ic, ier)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 c
 c --- modified version of IMSL subroutine named ICSICU
@@ -1713,12 +1713,12 @@ c
 c     specifications for arguments
 c
       integer            nx,ic,ier
-      real*8             x(nx),y(nx),bpar(4),c(ic,3)
+      real(c_double)             x(nx),y(nx),bpar(4),c(ic,3)
 c
 c     specifications for local variables
 c
       integer            i,j,nxm1
-      real*8             dx,dxj,dxjp1,dxp,dyj,dyjp1,half,one,pj,
+      real(c_double)             dx,dxj,dxjp1,dxp,dyj,dyjp1,half,one,pj,
      .                   six,sixi,two,yppa,yppb,zero
       equivalence        (dxj,yppb),(pj,sixi),(dxjp1,yppa)
       data               zero/0.0/,half/0.5/,one/1.0/,
@@ -1800,7 +1800,7 @@ c
       end
 
 c***** SUBROUTINE IBCIEU1 (F,IFD,X,NX,Y,NY,XL,NXL,YL,NYL,FL,IFLD,WK,IER)
-C   IMSL ROUTINE NAME   - IBCIEU  - Modified for real*8
+C   IMSL ROUTINE NAME   - IBCIEU  - Modified for real(c_double)
 C
 C-----------------------------------------------------------------------
 C
@@ -1890,7 +1890,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE IBCIEU1 (F,IFD,X,NX,Y,NY,XL,NXL,YL,NYL,FL,IFLD,WK,IER)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER            IFD,NX,NY,NXL,NYL,IFLD,IER
       REAL*8               F(IFD,NY),X(NX),Y(NY),XL(NXL),YL(NYL),
@@ -2020,7 +2020,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE UGETIO1(IOPT,NIN,NOUT)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER            IOPT,NIN,NOUT
@@ -2086,7 +2086,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE UERSET1 (LEVEL,LEVOLD)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER            LEVEL,LEVOLD
 C                                  FIRST EXECUTABLE STATEMENT
@@ -2096,16 +2096,16 @@ C                                  FIRST EXECUTABLE STATEMENT
       END
 c
 c
-      real*8 function asimp (a1, b, ep, m, n, FUN)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function asimp (a1, b, ep, m, n, FUN)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 c
 c --- author:  k. hillstrom (argonne national laboratory, chicago, illinois)
 c
       external FUN
 c
-      real*8    a1, b, ep, FUN, a, eps, absar, est, fa, fm, fb, dx, sx,
+      real(c_double)    a1, b, ep, FUN, a, eps, absar, est, fa, fm, fb, dx, sx,
      .          f1, f2, fbp, est2, nrtr, est1, sum, daft, esum, tsum, da
-      real*8    aest2, ftst, fmax, aest1, delta, aest
+      real(c_double)    aest2, ftst, fmax, aest1, delta, aest
       dimension f2(30), fbp(30), est2(30), nrtr(30), aest2(30), ftst(3)
 c
 c     the parameter setup for the initial call

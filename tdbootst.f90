@@ -16,11 +16,11 @@ contains
       subroutine tdbootst
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
       parameter(itlrza=3*lrza+1)
 
-      real*8 nedrv,k13,k23
+      real(c_double) nedrv,k13,k23
       dimension workk(itlrza),d2ne(lrza),d2te(lrza),d2ti(lrza), &
         nedrv(lrza),tedrv(lrza),tidrv(lrza),tidst(lrza),tedst(lrza), &
         a(lrza,3),dndst(lrza),bpo(lrza),avms(lrza),pe(lrza),xi13(lrza) &

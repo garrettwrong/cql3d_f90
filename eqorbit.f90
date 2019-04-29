@@ -24,7 +24,7 @@ contains
       use param_mod
       use comm_mod
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
       dimension slrz(2),rwork(80),iwork(30),epsierr(lfielda)

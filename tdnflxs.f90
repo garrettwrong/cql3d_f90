@@ -10,8 +10,8 @@ module tdnflxs_mod
 contains
 
   subroutine tdnflxs(ll)
-    !implicit integer (i-n), real*8 (a-h,o-z)
-    implicit none
+    !implicit integer (i-n), real(c_double) (a-h,o-z)
+    implicit none    
     save
 
     integer :: ll

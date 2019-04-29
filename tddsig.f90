@@ -9,10 +9,10 @@ module tddsig_mod
 
 contains
 
-      real*8 function tddsig(k,p0,thet0,z)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function tddsig(k,p0,thet0,z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
-      real*8 k,l,k2
+      real(c_double) k,l,k2
 !
 !     Bremsstrahlung differential cross-section in photon energy and angle.
 !     Formula 2BN of Koch and Motz, Rev. of Mod Phys., vol. 31, no. 4, pp.
@@ -101,10 +101,10 @@ contains
       end
 !
 !
-      real*8 function haugyp(ec,e,t)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function haugyp(ec,e,t)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
-      real*8 mec2
+      real(c_double) mec2
 
 
 

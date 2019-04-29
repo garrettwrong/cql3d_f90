@@ -13,7 +13,7 @@ module tdinterp_mod
 contains
 
       subroutine tdinterp(ilow,iup,x,y,nold,xnew,ynew,nnew)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     This subroutine uses the NCAR cubic spline routines to calculate

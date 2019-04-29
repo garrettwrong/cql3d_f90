@@ -16,7 +16,7 @@ contains
       use comm_mod
       use r8subs_mod, only : rbound, luf
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !
 !     Plot energy, density, electric field, parallel current,
@@ -30,7 +30,7 @@ contains
       REAL*4 RNONCHA1(nonch),RNONCHA2(nonch)
       REAL*4 RJXA1(jx),RJXA2(jx),RJXA3(jx)
       dimension wk_nch(nonch)
-      real*8 wkd(jx)
+      real(c_double) wkd(jx)
       CHARACTER*64 TX_
 
 !CH090220      data em33/1.d-35/
@@ -451,7 +451,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : rbound
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
       ! Plot the change in Total N of ptcles as a func of time.
       ! Calculations are done in sub. fow_cons()
@@ -466,7 +466,7 @@ contains
       REAL*4 RLRZAP11(0:LRZA) ! vertical axis: conservation of ptcl
 
       REAL*4 RNONCHA1(nonch),RNONCHA2(nonch)
-      real*8 wk_cons(nonch)
+      real(c_double) wk_cons(nonch)
 
       character*16 t_horiz
 

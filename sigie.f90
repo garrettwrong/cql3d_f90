@@ -9,8 +9,8 @@ module sigie_mod
 
 contains
 
-      real*8 function sigie(en)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function sigie(en)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !
       data a1/-3.17385e+01/

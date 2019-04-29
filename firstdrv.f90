@@ -10,7 +10,7 @@ module firstdrv_mod
 contains
 
       subroutine firstdrv(x,f,fprim,n)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension x(n),f(n),fprim(n)
 
 !..................................................................

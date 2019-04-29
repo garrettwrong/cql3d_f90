@@ -9,8 +9,8 @@ module tdpro_mod
 
 contains
 
-      real*8 function tdpro(psi,rplasm,acoef)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function tdpro(psi,rplasm,acoef)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !..................................................................
 !     Calculate ASDEX YAG1 type profiles.
 !     acoef(i),i=1,4  must be specified.

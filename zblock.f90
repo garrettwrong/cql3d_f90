@@ -8,7 +8,7 @@ module zblock_mod
 contains
 
       subroutine block(limits,abd,lda,lm,m,k)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension abd(lda,1), tmpsww1(65),tmpsww2(65)
       integer limits(3)
 

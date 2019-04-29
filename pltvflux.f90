@@ -16,7 +16,7 @@ contains
       use comm_mod
       use r8subs_mod, only : luf
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !     Plot the fraction of the total particle density that is fluxing
 !     up in velocity vs. v.  Mark the v=vth(k,lr_) position.
@@ -28,7 +28,7 @@ contains
 
       REAL RTAM1(jx),RTAM2(jx), vth_mark
       REAL REMAX,REMIN,RILIN, RXMAXQ
-      real*8 wkd(jx)
+      real(c_double) wkd(jx)
       character*64 tx_
 !
       if (noplots.eq."enabled1") return

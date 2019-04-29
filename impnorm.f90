@@ -9,7 +9,7 @@ module impnorm_mod
 contains
 
   subroutine impnorm(xnorm,a,rhs,nn)
-    !implicit integer (i-n), real*8 (a-h,o-z)
+    !implicit integer (i-n), real(c_double) (a-h,o-z)
     implicit none
 
     !..................................................................

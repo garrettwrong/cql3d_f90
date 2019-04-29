@@ -12,7 +12,7 @@ contains
       subroutine ainsetpa
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................
@@ -31,7 +31,7 @@ contains
 !     lrindx(2:ls)=lrindx(1), indxlr(lrindx(1))=1
 !
 !     Also sets values of some physical constants,
-!     and some real*8 numbers used in subroutine arguments.
+!     and some real(c_double) numbers used in subroutine arguments.
 !..................................................................
 
 
@@ -137,7 +137,7 @@ contains
 
 !.......................................................................
 !l    Set some physical, numerical and normalization constants.
-!l    Numerical constants set to help maintain real*8 arithmetic.
+!l    Numerical constants set to help maintain real(c_double) arithmetic.
 !.......................................................................
       zero=0.d0
       one=1.d0

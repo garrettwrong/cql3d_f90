@@ -11,7 +11,7 @@ module znonsym_mod
 contains
 
       subroutine nonsym(A,X,C,N,MLEFT,MRIGHT,EPS,NCOND)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !     *************************************************
 !
 !     5.3  SOLVES A REAL VALUED NONSYMMETRIC LINEAR SYSTEM  A . X  =  C

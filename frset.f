@@ -3,7 +3,7 @@ c
       subroutine frset(lrz,noplots,nmlstout)
       use bcast_mod, only : bcast
       use param_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       include 'frcomm.h77'
       include 'frname.h77'
 CMPIINSERT_INCLUDE
@@ -153,7 +153,7 @@ CMPIINSERT_ENDIF_RANK
 
 
 c..................................................................
-c     Set constants (for real*8)
+c     Set constants (for real(c_double))
 c..................................................................
  300  continue
 

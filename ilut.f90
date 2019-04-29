@@ -52,10 +52,10 @@ contains
       implicit none
       integer n
 !BH070419
-      real*8 a(*),alu(*),w(n+1),droptol
+      real(c_double) a(*),alu(*),w(n+1),droptol
 !BH070419
       integer ja(*),ia(n+1),jlu(*),ju(n),jw(2*n),lfil,iwk,ierr
-!yup      real*8 a(*),alu(*),w(*),droptol
+!yup      real(c_double) a(*),alu(*),w(*),droptol
 !yup      integer ja(*),ia(*),jlu(*),ju(*),jw(*),lfil,iwk,ierr
 !----------------------------------------------------------------------*
 !                      *** ILUT preconditioner ***                     *
@@ -78,7 +78,7 @@ contains
 !           ** WARNING: THE MEANING OF LFIL HAS CHANGED WITH RESPECT TO
 !           EARLIER VERSIONS.
 !
-! droptol = real*8. Sets the threshold for dropping small terms in the
+! droptol = real(c_double). Sets the threshold for dropping small terms in the
 !           factorization. See below for details on dropping strategy.
 !
 !
@@ -141,7 +141,7 @@ contains
 !----------------------------------------------------------------------*
 !     locals
       integer ju0,k,j1,j2,j,ii,i,lenl,lenu,jj,jrow,jpos,len
-      real*8 tnorm, t, abs, s, fact
+      real(c_double) tnorm, t, abs, s, fact
       if (lfil .lt. 0) goto 998
 !-----------------------------------------------------------------------
 !     initialize ju0 (points to next element to be added to alu,jlu)
@@ -406,13 +406,13 @@ contains
                           aa, ja, ia, alu, jlu, ju, ierr)
 !-----------------------------------------------------------------------
        use r8subs_mod, only : ddot, daxpy
-       implicit real*8 (a-h,o-z)
+       implicit real(c_double) (a-h,o-z)
 !BH070419
        integer n, im, maxits, iout, ierr, ja(*), ia(n+1), jlu(*), ju(n)
 !BH070419
-       real*8 vv(n,*), rhs(n), sol(n), aa(*), alu(*), eps
+       real(c_double) vv(n,*), rhs(n), sol(n), aa(*), alu(*), eps
 !yup       integer n, im, maxits, iout, ierr, ja(*), ia(*), jlu(*), ju(*)
-!yup       real*8 vv(n,*), rhs(*), sol(*), aa(*), alu(*), eps
+!yup       real(c_double) vv(n,*), rhs(*), sol(*), aa(*), alu(*), eps
 !----------------------------------------------------------------------*
 !                                                                      *
 !                 *** ILUT - Preconditioned GMRES ***                  *
@@ -497,7 +497,7 @@ contains
 ! BLAS1  routines.                                                     *
 !----------------------------------------------------------------------*
        parameter (kmax=50)
-       real*8 hh(kmax+1,kmax), c(kmax), s(kmax), rs(kmax+1),t
+       real(c_double) hh(kmax+1,kmax), c(kmax), s(kmax), rs(kmax+1),t
 !-------------------------------------------------------------
 ! arnoldi size should not exceed kmax=50 in this version..
 ! to reset modify paramter kmax accordingly.
@@ -674,8 +674,9 @@ contains
        end
 !-----------------------------------------------------------------------
         subroutine lusol(n, y, x, alu, jlu, ju)
-        real*8 x(n), y(n), alu(*)
+        real(c_double) x(n), y(n), alu(*)
         integer n, jlu(*), ju(*)
+
 !-----------------------------------------------------------------------
 !
 ! This routine solves the system (LU) x = y,
@@ -726,7 +727,7 @@ contains
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
         subroutine qsplit(a,ind,n,ncut)
-        real*8 a(n)
+        real(c_double) a(n)
         integer ind(n), n, ncut
 !-----------------------------------------------------------------------
 !     does a quick-sort split of a real array.
@@ -738,7 +739,7 @@ contains
 !
 !     ind(1:n) is an integer array which permuted in the same way as a(*).
 !-----------------------------------------------------------------------
-        real*8 tmp, abskey
+        real(c_double) tmp, abskey
         integer itmp, first, last
 !-----
         first = 1
@@ -820,7 +821,7 @@ contains
 ! 1)     M A T R I X    B Y    V E C T O R     P R O D U C T S         c
 !----------------------------------------------------------------------c
       subroutine amux (n, x, y, a,ja,ia)
-      real*8  x(*), y(*), a(*)
+      real(c_double)  x(*), y(*), a(*)
       integer n, ja(*), ia(*)
 !-----------------------------------------------------------------------
 !         A times a vector
@@ -843,7 +844,7 @@ contains
 !-----------------------------------------------------------------------
 ! local variables
 !
-      real*8 t
+      real(c_double) t
       integer i, k
 !-----------------------------------------------------------------------
       do 100 i = 1,n
@@ -891,7 +892,7 @@ contains
 !-----------------------------------------------------------------------
       subroutine aplb (nrow,ncol,job,a,ja,ia,b,jb,ib, &
            c,jc,ic,nzmax,iw,ierr)
-      real*8 a(*), b(*), c(*)
+      real(c_double) a(*), b(*), c(*)
       integer ja(*),jb(*),jc(*),ia(nrow+1),ib(nrow+1),ic(nrow+1), &
            iw(ncol)
 !-----------------------------------------------------------------------
@@ -992,7 +993,7 @@ contains
 
 !-----------------------------------------------------------------------
       subroutine bndcsr (n,abd,nabd,lowd,ml,mu,a,ja,ia,len,ierr)
-      real*8 a(*),abd(nabd,*), t
+      real(c_double) a(*),abd(nabd,*), t
       integer ia(n+1),ja(*)
 !-----------------------------------------------------------------------
 ! Banded (Linpack ) format   to    Compressed Sparse Row  format.

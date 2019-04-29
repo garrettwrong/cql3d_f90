@@ -22,10 +22,10 @@ contains
       subroutine cfpcoefn
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
-!cc      real*8,dimension(iy):: prnt1,prnt2,prnt3
-!cc      real*8,dimension(iy):: prnt4,prnt5,prnt6
+!cc      real(c_double),dimension(iy):: prnt1,prnt2,prnt3
+!cc      real(c_double),dimension(iy):: prnt4,prnt5,prnt6
 !..................................................................
 !     Subroutine to calculate bounce-averaged Fokker-Planck collision
 !     coefficients (relativistic corrections added by MARK FRANZ--

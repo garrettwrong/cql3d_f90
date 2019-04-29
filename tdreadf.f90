@@ -33,7 +33,7 @@ module tdreadf_mod
 contains
 
       subroutine tdreadf(kopt)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !.......................................................................
@@ -68,13 +68,13 @@ contains
       character*128 name
 
 !     Pointers for dynamic memory allocation, local usage:
-      real*8, dimension(:), pointer :: x_rstrt,v_rstrt,v_rstrt2,y_rstrt
-      real*8, dimension(:), pointer :: f_rstrt_ln,v,v2,aa,bb,d2fparr
-      real*8, dimension(:), pointer :: workk,tam2r,cint2r
-      real*8, dimension(:,:,:), pointer :: f_rstrt
+      real(c_double), dimension(:), pointer :: x_rstrt,v_rstrt,v_rstrt2,y_rstrt
+      real(c_double), dimension(:), pointer :: f_rstrt_ln,v,v2,aa,bb,d2fparr
+      real(c_double), dimension(:), pointer :: workk,tam2r,cint2r
+      real(c_double), dimension(:,:,:), pointer :: f_rstrt
       integer, dimension(:), pointer :: jf_rstrt
-      real*8, allocatable :: wkpack(:) !local working array for pack21 YuP[2019]
-      real*8, allocatable :: temp_rstrt(:,:) !(0:iy_rstrt+1,0:jx_rstrt+1)
+      real(c_double), allocatable :: wkpack(:) !local working array for pack21 YuP[2019]
+      real(c_double), allocatable :: temp_rstrt(:,:) !(0:iy_rstrt+1,0:jx_rstrt+1)
 !      save foverf,renorm_f,k,iy_rstrt,jx_rstrt,lrz_rstrt
 
 !.......................................................................

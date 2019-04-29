@@ -20,7 +20,7 @@ contains
       subroutine urfb0
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !
@@ -486,7 +486,7 @@ contains
 
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 ! YuP-2011
 !..................................................................
 !     Add in the contribution to urfb,urfc  QL coeffs.
@@ -501,8 +501,8 @@ contains
 !..................................................................
 
       complex*16 cwz,cwxyp,cwxym,cei
-      real*8 sum_dth(iy,lrz)
-      real*8 urfb_i(iy,lrz),urfc_i(iy,lrz),prf_rayel_i(iy,lrz)
+      real(c_double) sum_dth(iy,lrz)
+      real(c_double) urfb_i(iy,lrz),urfc_i(iy,lrz),prf_rayel_i(iy,lrz)
 
       cei=(0.,1.)
       vnorm2i= one/vnorm2
@@ -980,7 +980,7 @@ contains
 
 
       integer function luf_bin(px,parray)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 ! YuP-2011
 !     LUF_BIN() is similar to LUF(), but with a BINARY SEARCH (faster).
 !     luf_bin(px,table,kn)  is a function returning the index
@@ -988,7 +988,7 @@ contains
 !
 !     Elements in parray must be strictly increasing !!!
 !
-      real*8 :: parray(:)
+      real(c_double) :: parray(:)
       integer :: kn
       kn = size(parray)
 !

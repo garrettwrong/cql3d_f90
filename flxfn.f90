@@ -11,10 +11,10 @@ module flxfn_mod
 
 contains
 
-      real*8 function flxfn(ra)
+      real(c_double) function flxfn(ra)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !mnt  This routine calculates the poloidal magnetic field and the

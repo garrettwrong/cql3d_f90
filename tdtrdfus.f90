@@ -29,7 +29,7 @@ contains
       use comm_mod, only : difin
       use comm_mod, only : y
 
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..............................................................
 !     This routine computes the radial diffusion coefficients as
@@ -215,11 +215,11 @@ contains
       end
 !
 !
-      real*8 function tdtrrshape(lr)
+      real(c_double) function tdtrrshape(lr)
       use param_mod
       use comm_mod, only : zeff, temp, reden, rrz
       use comm_mod, only : difus_rshape
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     This routine computes additional radial shape function for
@@ -268,10 +268,10 @@ contains
       end
 !
 !
-      real*8 function tdtrrshape1(lr)
+      real(c_double) function tdtrrshape1(lr)
       use param_mod
       use comm_mod, only : rya, difus_rshape
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     This routine computes a radial shape function for
@@ -320,7 +320,7 @@ contains
       subroutine tdtrvshape(k,l)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     This routine computes a velocity-space shape function
@@ -336,7 +336,7 @@ contains
 !.......................................................................
 
 
-      real*8 l_autocorr,lambda_mfp
+      real(c_double) l_autocorr,lambda_mfp
 
       lr=lrindx(l)
       l_autocorr=pi*qsafety(lr)*radmaj
@@ -373,10 +373,10 @@ contains
 
 !
 !
-      real*8 function coll_freq(vel,k,lr)
+      real(c_double) function coll_freq(vel,k,lr)
       use param_mod
       use comm_mod, only : bnumb, zeff, temp, reden, fmass
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     This routine computes
@@ -389,7 +389,7 @@ contains
 !.......................................................................
 
 
-      real*8 lnlambda
+      real(c_double) lnlambda
 
 !     Approx. electron or ion collision freq from NRL
 !     perp. deflection time
@@ -438,7 +438,7 @@ contains
       use param_mod
       !XXXXXXXXX  dim for work() did not match, used comm
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     This routine interpolates difin vector in oldx, given in ryain
@@ -476,7 +476,7 @@ contains
       use comm_mod, only : difus_io, d_rr, d_r, rya, rpconz, lrindx
       use comm_mod, only : temp1, difus_io_file, mnemonic, t_, iy, iy_, y
       use comm_mod, only : tem1
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !.......................................................................
@@ -501,7 +501,7 @@ contains
       integer dimsg(4),countg(4),startg(4)  !for ngen.gt.1 case
       integer y_dims(2),y_count(2)
 
-      real*8, allocatable :: wkpack(:) ! local working array for pack21
+      real(c_double), allocatable :: wkpack(:) ! local working array for pack21
 
       data start1/1,1,1/
       data startg/1,1,1,1/
@@ -1001,11 +1001,11 @@ contains
       end
 !
 !
-      real*8 function difus_io_scale(k,iopt)
+      real(c_double) function difus_io_scale(k,iopt)
       use param_mod
       use comm_mod, only : difus_io_drrscale, difus_io_drscale
       use comm_mod, only : difus_io_t
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !......................................................................
 !     Returns t-dependent scale factor for radial diffusion drr

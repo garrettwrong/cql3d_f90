@@ -9,8 +9,8 @@ module exlin_mod
 
 contains
 
-      real*8 function exlin(y1,y2,x1,x2,xx)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function exlin(y1,y2,x1,x2,xx)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !
 !mnt  linear interpolation.

@@ -80,7 +80,7 @@ contains
       use aindflt1_mod, only : aindflt1
       use ainalloc_mod, only : ainalloc
       use aindfpa_mod , only : ain_transcribe
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................
@@ -95,7 +95,7 @@ contains
 
       character*8 icall,iplotsxr
       character*128 filenm ! template for file name with data
-      real*8 a_new(njene)  ! working array
+      real(c_double) a_new(njene)  ! working array
 
       if (n.gt.0) return
 

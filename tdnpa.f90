@@ -16,7 +16,7 @@ contains
       subroutine tdnpa(vel,pitch,ibinn,thpol,sigmanpa,emitnpa)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !vt....Modified from SRX routine tdsxr for NPA calculations.......
 !vt....V. Tang, 9/29/05...................
@@ -52,10 +52,10 @@ contains
 !.......................................................................
 
 
-      real*8,dimension(nen_npa)::vel
-      real*8,dimension(nen_npa,npaproc)::sigmanpa,emitnpa
+      real(c_double),dimension(nen_npa)::vel
+      real(c_double),dimension(nen_npa,npaproc)::sigmanpa,emitnpa
 
-      real*8,dimension(nen_npa)::EH,E_old   !debug purposes
+      real(c_double),dimension(nen_npa)::EH,E_old   !debug purposes
 
 !     Calculate the emittance array: #/(sec*vol*steradian*eV)
 !     (Need to multiply by ergtkev/1e3 to convert from cgs (/erg) to /eV.

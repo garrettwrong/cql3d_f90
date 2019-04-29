@@ -17,7 +17,7 @@ contains
       use param_mod
       use comm_mod
       use advnce_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     This routine computes the density gain (from dF/dt) and compares i

@@ -1,5 +1,5 @@
 !***********************************************************************
-!       Define some Cray-like functions and real*8 related functions:
+!       Define some Cray-like functions and real(c_double) related functions:
 !         cvmgm, cfmgn, cvmgp, cvmgt, cvmgz
 !         luf,lug
 !         daxpy,dcopy,ddot,dscal,idamax
@@ -77,23 +77,23 @@ module r8subs_mod
   save
 
 contains
-
-  real*8 function cvmgm(x,y,z)
-    implicit integer (i-n), real*8 (a-h,o-z)
+  
+  real(c_double) function cvmgm(x,y,z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     cvmgm=y
     if (z .lt. 0.d0) cvmgm=x
     return
   end function cvmgm
 
-  real*8 function cvmgp(x,y,z)
-    implicit integer (i-n), real*8 (a-h,o-z)
+  real(c_double) function cvmgp(x,y,z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     cvmgp=y
     if (z .gt. 0.d0) cvmgp=x
     return
   end function cvmgp
 
-  real*8 function cvmgt(x,y,z)
-    implicit integer (i-n), real*8 (a-h,o-z)
+  real(c_double) function cvmgt(x,y,z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     logical z
     cvmgt=y
     if (z) cvmgt=x
@@ -101,7 +101,7 @@ contains
   end function cvmgt
 
   integer function luf(px,parray,kn)
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     !
     !     THIS ROUTINE SHOULD BE A BINARY SEARCH.  IT NEEDS WORK!!!
     !     luf(x,table,n) (MATHLIB) which is a function returning the index
@@ -138,7 +138,7 @@ contains
 
 
   integer function lug(px,parray,kn,iguess)
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     !
     !     IGUESS is dummy.  THIS NEEDS WORK.
     !     lug(x,table,n,iguess) (MATHLIB) same as luf,
@@ -176,14 +176,14 @@ contains
 
 
 
-!$$$      real*8 function D1MACH (item)
+!$$$      real(c_double) function D1MACH (item)
 !$$$c
 !$$$c --- return machine-dependent floating point constants ----------------
 !$$$c
 !$$$      implicit none
 !$$$c
 !$$$      integer  item
-!$$$      real*8   rmach(5)
+!$$$      real(c_double)   rmach(5)
 !$$$      save     rmach
 !$$$c
 !$$$c990131      data     rmach(1) / 200034000000000000000b /,
@@ -210,13 +210,13 @@ contains
 !    David Gay and Eric Grosse,  Summary written by Bo Einarsson
 !DECK D1MACH
 
-  real*8 FUNCTION D1MACH (I)
+  real(c_double) FUNCTION D1MACH (I)
     IMPLICIT NONE
     INTEGER :: I
     INTEGER :: IFIRST
 
-    real*8 :: B, X
-    real*8, DIMENSION(5) :: DMACH
+    real(c_double) :: B, X
+    real(c_double), DIMENSION(5) :: DMACH
     SAVE
 
     DATA IFIRST /1/
@@ -322,7 +322,7 @@ contains
     !     jack dongarra, linpack, 3/11/78.
     !     modified 12/3/93, array(1) declarations changed to array(*)
     !
-    real*8 dx(*),dy(*),da
+    real(c_double) dx(*),dy(*),da
     integer i,incx,incy,ix,iy,m,mp1,n
     !
     if(n.le.0)return
@@ -371,7 +371,7 @@ contains
 !     jack dongarra, linpack, 3/11/78.
 !     modified 12/3/93, array(1) declarations changed to array(*)
 !
-    real*8 dx(*),dy(*)
+    real(c_double) dx(*),dy(*)
     integer i,incx,incy,ix,iy,m,mp1,n
     !
     if(n.le.0)return
@@ -415,14 +415,14 @@ contains
     return
   end subroutine dcopy
 !
-  real*8 function ddot(n,dx,incx,dy,incy)
+  real(c_double) function ddot(n,dx,incx,dy,incy)
 !
 !     forms the dot product of two vectors.
 !     uses unrolled loops for increments equal to one.
 !     jack dongarra, linpack, 3/11/78.
 !     modified 12/3/93, array(1) declarations changed to array(*)
 !
-      real*8 dx(*),dy(*),dtemp
+      real(c_double) dx(*),dy(*),dtemp
       integer i,incx,incy,ix,iy,m,mp1,n
 !
       ddot = 0.0d0
@@ -474,7 +474,7 @@ contains
 !     modified 3/93 to return if incx .le. 0.
 !     modified 12/3/93, array(1) declarations changed to array(*)
 !
-      real*8 da,dx(*)
+      real(c_double) da,dx(*)
       integer i,incx,m,mp1,n,nincx
 !
       if( n.le.0 .or. incx.le.0 )return
@@ -519,7 +519,7 @@ contains
 !     modified 12/3/93, array(1) declarations changed to array(*)
 !     dabs() ==> generic abs(), BobH, 990620
 !
-      real*8 dx(*),dmax
+      real(c_double) dx(*),dmax
       integer i,incx,ix,n
 !
       idamax = 0
@@ -556,10 +556,10 @@ contains
       real*4 function rbound(r8)
       !why? save
 !
-!     Converts a real*8 argument to a real number,
+!     Converts a real(c_double) argument to a real number,
 !     equal to 0. (if r8=0.) or,
 !     bounded in absolute value by 1.e-33 and 1.e+33.
-!     This can be used to convert real*8 numbers to
+!     This can be used to convert real(c_double) numbers to
 !     real numbers, and to keep the resulting numbers
 !     within the specified bounds.  This is necessary
 !     for the PGPLOT library running on a 32-bit machine.
@@ -569,8 +569,8 @@ contains
 !     adjustment of em33/ep33.
 !
 !BH090905      real*4 rbound
-      real*8 r8,r8sign,r8abs
-      real*8 em33,ep33,zero,one
+      real(c_double) r8,r8sign,r8abs
+      real(c_double) em33,ep33,zero,one
       data em33/1.d-33/, ep33/1.d+33/, zero/0.d0/, one/1.d0/
 
       r8abs=abs(r8)
@@ -3485,18 +3485,18 @@ contains
 !$$$c     Alternatively, these blas routines are in r8subs.f.
 !$$$
 !$$$      parameter(NN=2)
-!$$$      real*8 a(NN,NN)
-!$$$c      real*8 AF(2,2)  !Output for FACT='E'
-!$$$c      real*8 R(2)
-!$$$c      real*8 C(2)  !Output
-!$$$c      real*8 B(2,1)  ! (LDB,NRHS)
-!$$$      real*8 B(NN)  ! (LDB)
-!$$$c      real*8 X(NN)
-!$$$c      real*8 RCOND,RPVGRW
-!$$$c      real*8 BERR(1)  ! dimension (NRHS)
-!$$$c      real*8 ERR_BNDS_NORM(1,3),ERR_BNDS_COMP(1,3) !(NRHS, N_ERR_BNDS)
-!$$$c      real*8 PARAMS(0)
-!$$$c      real*8 WORK(8)   !(4*N)
+!$$$      real(c_double) a(NN,NN)
+!$$$c      real(c_double) AF(2,2)  !Output for FACT='E'
+!$$$c      real(c_double) R(2)
+!$$$c      real(c_double) C(2)  !Output
+!$$$c      real(c_double) B(2,1)  ! (LDB,NRHS)
+!$$$      real(c_double) B(NN)  ! (LDB)
+!$$$c      real(c_double) X(NN)
+!$$$c      real(c_double) RCOND,RPVGRW
+!$$$c      real(c_double) BERR(1)  ! dimension (NRHS)
+!$$$c      real(c_double) ERR_BNDS_NORM(1,3),ERR_BNDS_COMP(1,3) !(NRHS, N_ERR_BNDS)
+!$$$c      real(c_double) PARAMS(0)
+!$$$c      real(c_double) WORK(8)   !(4*N)
 !$$$      integer IPIV(NN)  !Output for FACT='E'
 !$$$c      integer N,NRHS,LDA,LDAF,LDB,LDX,N_ERR_BNDS,NPARAMS,INFO
 !$$$      integer N,NRHS,LDA,LDB,INFO

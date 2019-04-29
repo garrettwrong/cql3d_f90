@@ -9,7 +9,7 @@ contains
 
       subroutine aminmx(array,ifirst,ilast,istride,amin,amax, &
         indmin,indmax)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     compute max and min with indices
 

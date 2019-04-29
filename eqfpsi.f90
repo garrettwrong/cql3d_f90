@@ -15,7 +15,7 @@ contains
       subroutine eqfpsi(psval,fpsi__,fppsi__)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     This routine provides f(psi) to model the toroidal
@@ -51,7 +51,7 @@ contains
       subroutine eqppsi(psval,ppsi__,pppsi__)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     This routine provides p(psi) to model the plasma

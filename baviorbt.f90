@@ -18,7 +18,7 @@ module baviorbt_mod
 contains
 
   subroutine baviorbt
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     real(c_double) ::wk_lug(nstps) ! YuP[2019-04-22] working array for lug()
     save
 
@@ -64,8 +64,8 @@ contains
 
 !cc      dimension lmax_old(iy) ! for tests/debug only
 
-!cc      real*8, dimension(iy):: prnt1,prnt2,prnt3,prnt4 !For gdb printing
-!cc      real*8, dimension(iy):: prnt5,prnt6             !For gdb printing
+!cc      real(c_double), dimension(iy):: prnt1,prnt2,prnt3,prnt4 !For gdb printing
+!cc      real(c_double), dimension(iy):: prnt5,prnt6             !For gdb printing
 
 !...................................................................
 !     ERROR CONTROL - change nstps if bigger than iy*jx, because
@@ -519,7 +519,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : luf
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !...................................................................
 !     This routine computes the quantity equal to the product of the
@@ -542,8 +542,8 @@ contains
 !     Refer to p. 96-7, Killeen, Kerbel, Mccoy, Mirin book.
 !...................................................................
 
-!cc      real*8, dimension(iy):: prnt1,prnt2,prnt3,prnt4  !For gdb printing
-!cc      real*8, dimension(iy,lrzmax):: prnt5   !For gdb printing
+!cc      real(c_double), dimension(iy):: prnt1,prnt2,prnt3,prnt4  !For gdb printing
+!cc      real(c_double), dimension(iy,lrzmax):: prnt5   !For gdb printing
 
 
       character*8 bnc
@@ -725,7 +725,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : luf
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 
@@ -1154,10 +1154,10 @@ contains
       end subroutine deltar
 
 
-      real*8 function deltarz_interp(rr,zz,thet,v)
+      real(c_double) function deltarz_interp(rr,zz,thet,v)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 

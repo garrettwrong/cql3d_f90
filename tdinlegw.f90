@@ -13,7 +13,7 @@ contains
       subroutine tdinlegw(klpar,klrad,klindxr,klmesh)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !     Prepares weights for computing the Legendre coefficients:
 !     V_m=int[f*P_m(cos(th))*sin(th)*dth]
@@ -280,7 +280,7 @@ contains
 !=======================================================================
       subroutine lagrng(pxnodes,ktotnod,kgaus,pxg,kint,kistrt,kiend,pli &
         ,klidim)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !.......................................................................
 !
 !     Lagrangian interpolation with kmode points
@@ -330,7 +330,7 @@ contains
       return
       end
       subroutine congau(py,pyg,pygh,kpts,kgau)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
       dimension py(kpts),pyg(kpts*kgau),pygh(kpts*kgau)
       dimension zgx(20),zgh(20)
@@ -349,7 +349,7 @@ contains
       return
       end
       subroutine gauss(kpts,pgausx,pgaush)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !     ------------------------------------
 !
 !     Define points and weights for gaussian and other quadratures

@@ -13,7 +13,7 @@ module esefld_mod
 contains
 
       subroutine efld_cd(dz,ls,vnorm,flux1,flux2,elparnw,flux0)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     Calculates the electric field (V/cm) and flux0 (1/(cm**2*sec)),
@@ -56,7 +56,7 @@ contains
 !
       real(c_double) function fluxpar &
            (kopt,x,coss,cynt2,cint2,f,iy,jx)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
 !     Compute the parallel flux ---
@@ -69,7 +69,7 @@ contains
 !     kopt=3 the flux from half of f  at v_par <0
 !..................................................................
 
-      real*8 x(jx),coss(iy),cynt2(iy),cint2(jx), &
+      real(c_double) x(jx),coss(iy),cynt2(iy),cint2(jx), &
                        f(0:iy+1,0:jx+1)
 
       fluxpar=0.d0

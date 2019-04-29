@@ -23,11 +23,11 @@ contains
 ! Version 1.0
 ! Outputs checked and looks reasonable.
 !..............V.Tang 9-25-05...............................................
-       implicit integer (i-n), real*8 (a-h,o-z)
-       real*8,dimension(lrzmax,nen_npa)::stoplamda
-       real*8,dimension(nen_npa)::en_m
-       real*8::stopcs
-       real*8,dimension(lrzmax)::ene
+       implicit integer (i-n), real(c_double) (a-h,o-z)
+       real(c_double),dimension(lrzmax,nen_npa)::stoplamda
+       real(c_double),dimension(nen_npa)::en_m
+       real(c_double)::stopcs
+       real(c_double),dimension(lrzmax)::ene
 
 !       print*, "lam called"
        print*,lrzmax, nen_npa

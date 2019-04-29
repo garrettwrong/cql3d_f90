@@ -15,7 +15,7 @@ contains
       use param_mod
       use comm_mod
       use frplteq_mod, only : micfrplt, textt
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
 
       character*8 pltrays

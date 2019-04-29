@@ -23,8 +23,8 @@ contains
     use comm_mod
     use equilib_mod, only : ncoila, nccoila, pcvac, ccoil, ncoil
     use r8subs_mod, only : dcopy
-
-    implicit integer (i-n), real*8 (a-h,o-z)
+    
+    implicit integer (i-n), real(c_double) (a-h,o-z)
     save
 
     parameter (niterate=20)

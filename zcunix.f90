@@ -9,8 +9,8 @@ module zcunix_mod
 
 contains
 
-      real*8 function taper(x,x0,x1,x2)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function taper(x,x0,x1,x2)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     A multiplication factor between 0.and 1., giving a tapered
 !     (i.e., smoothed) box function.
@@ -676,7 +676,7 @@ contains
 !     is independent of n.
 !***********************************************************************
       subroutine coeff1 (n,x,f,w,iop,int,wk)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(n)       ,f(n*int)       ,w(n*int)      ,iop(2), &
         wk(n,*)
 !dir$ nobounds
@@ -835,7 +835,7 @@ contains
       return
       end
       subroutine coeff2 (nx,x,ny,y,f,fxx,fyy,fxxyy,idm,ibd,wk)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !BH070805      dimension       x(nx)       ,y(ny)       ,f(idm,ny)  ,fxx(idm,ny),
 !BH070805     1  fyy(idm,ny) ,fxxyy(idm,ny)           ,ibd(4)     ,
@@ -907,7 +907,7 @@ contains
       return
       end
       subroutine intrp (n,x,f,w,y,i,int,tab,itab)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(i+1)    ,f(i*int+1)    ,w(i*int+1)  ,tab(3) &
         ,itab(3)
 !
@@ -958,7 +958,7 @@ contains
       return
       end
       subroutine search (xbar,x,n,i)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(n)
       save b
       data b/.69314718/
@@ -995,7 +995,7 @@ contains
       go to 103
       end
       subroutine terp1 (n,x,f,w,y,int,tab,itab)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
       dimension       x(n)       ,f(n*int)       ,w(n*int)    ,tab(3), &
         itab(3)
@@ -1018,9 +1018,9 @@ contains
       end
 
 
-      real*8 function terp2 &
+      real(c_double) function terp2 &
            (xb,yb,nx,x,ny,y,f,fxx,fyy,fxxyy,idm,ixd,iyd)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
       dimension       x(nx)      ,y(ny)      ,f(idm,ny)  ,fxx(idm,ny), &
         fyy(idm,ny) ,fxxyy(idm,ny)           ,ff(2)      , &
@@ -1080,7 +1080,7 @@ contains
 !-----------------------------------------------------------------------
       end
       subroutine searche (xbar,x,n,i,dx)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(n)
       save b
       data b/.69314718/
@@ -1104,7 +1104,7 @@ contains
       return
       end
       subroutine terp1e (n,x,f,w,y,int,tab,itab,dx)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
       dimension       x(n)       ,f(n*int)   ,w(n*int)    ,tab(3)     , &
         itab(3)
@@ -1130,9 +1130,9 @@ contains
 !..................................................................
 !     This version knows data is evenly spaced with spacing dx
 !..................................................................
-      real*8 function t2 &
+      real(c_double) function t2 &
            (dx,dy,xb,yb,nx,x,ny,y,f,fxx,fyy,fxxyy,idm,ixd,iyd)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 !
       dimension       x(nx)     ,y(ny)     ,f(idm,ny)  ,fxx(idm,ny) , &
         fyy(idm,ny)  ,fxxyy(idm,ny)        ,ff(2)      , &
@@ -1192,7 +1192,7 @@ contains
 !-----------------------------------------------------------------------
       end
       subroutine trip (n,a,b,c,y,z,int)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       a(n)       ,b(n)       ,c(n)       ,y(n)       , &
         z(n*int)
 !
@@ -1247,14 +1247,14 @@ contains
 !
 !
 
-!!XXXXXX
-!       real*8 function erf(xxx)
-!       implicit integer (i-n), real*8 (a-h,o-z)
+!!XXXXXX 
+!       real(c_double) function erf(xxx)
+!       implicit integer (i-n), real(c_double) (a-h,o-z)
 !       save
 ! !------------------------------------------------------
 ! !     This routine computes the ERROR FUNCTION.
 ! !------------------------------------------------------
-!       real*8 tusqpi
+!       real(c_double) tusqpi
 !       dimension a(5)
 !       sign=1.
 !       if (xxx .lt. 0.) sign=-1.
@@ -1291,9 +1291,9 @@ contains
 
 !######date01jan1984     copyright ukaea, harwell.
 !######aliasim01ad
-      real*8 function im01ad(la,a,inc)
-      implicit integer (i-n), real*8 (a-h,o-z)
-      real*8 a(la*inc)
+      real(c_double) function im01ad(la,a,inc)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
+      real(c_double) a(la*inc)
       zero=0.d0
       kount = 0
       do 100 k=1,la
@@ -1308,7 +1308,7 @@ contains
 !
 !**********************************************************
       subroutine zzbeslri(x,nb,ize,b,ncalc)
-      implicit integer (i-n), real*8 (a-h,o-z) ! DOUBLE NOW !
+      implicit integer (i-n), real(c_double) (a-h,o-z) ! DOUBLE NOW !
 !mnt  this routine calculates Bessel functions I and J of real
 !mnt  argument and integer order.
 
@@ -1554,7 +1554,7 @@ contains
 
 !***********************************************************************
 !$$$      subroutine zzechk(nchars,narray)
-!$$$      implicit integer (i-n), real*8 (a-h,o-z)
+!$$$      implicit integer (i-n), real(c_double) (a-h,o-z)
 !$$$      save
 !$$$
 !$$$cmnt  abstract
@@ -1597,7 +1597,7 @@ contains
 
 !***********************************************************************
       subroutine zzrchk(nchars,narray)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !mnt  sandia mathematical program library
@@ -1678,7 +1678,7 @@ contains
 
 !***********************************************************************
       subroutine zzrget(nfatal,ntrace)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !mnt  abstract
@@ -1698,7 +1698,7 @@ contains
 
 !***********************************************************************
       subroutine zzrprt(nchars,narray)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !mnt  utility routine to simply print the hollerith message in narray,
@@ -1722,7 +1722,7 @@ contains
 
 !***********************************************************************
       subroutine zzstgt(k,nfatal,ntrace)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !mnt  this routine is a slave to zzrget and errset which keeps
@@ -1743,7 +1743,7 @@ contains
 
 !***********************************************************************
       subroutine zzxset(nfatal,ntrace)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !mnt  abstract

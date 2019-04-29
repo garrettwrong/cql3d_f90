@@ -18,13 +18,13 @@ contains
       use r8subs_mod, only : luf
       use pltdf_mod, only : JXQ
       use aminmx_mod, only : aminmx
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
       REAL RTAM1(jx),RTAM2(jx)
       REAL REMAX,REMIN
       CHARACTER*64 TX_
-      real*8 wkd(jx)
+      real(c_double) wkd(jx)
 
 !...
 !mnt  This routine plots f as a function of velocity or energy

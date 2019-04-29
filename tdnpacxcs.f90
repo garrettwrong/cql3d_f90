@@ -9,7 +9,7 @@ module tdnpacxcs_mod
 contains
 
        REAL FUNCTION cxcs(enin)
-       IMPLICIT integer (i-n), real*8 (a-h,o-z)
+       IMPLICIT integer (i-n), real(c_double) (a-h,o-z)
        REAL*8,DIMENSION(9)::a
        REAL*8::enmin,enmax,x,t1,t2,t3,t4,t5,t6,t7,t8,en
 !vt    use this function to get CX cross sections, V. Tang 9-25-05

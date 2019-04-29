@@ -10,7 +10,7 @@ module micgetr_mod
 contains
 
       subroutine micgetr(jx,xmax,h,r,ksingul)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................

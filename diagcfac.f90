@@ -14,8 +14,8 @@ module diagcfac_mod
 
 contains
 
-      real*8 function diagcfac(epsil,zeff)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      real(c_double) function diagcfac(epsil,zeff)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................

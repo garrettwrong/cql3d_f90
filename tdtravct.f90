@@ -22,7 +22,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : cvmgt
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..............................................................
 !     This routine calculates the advective radial transport
@@ -511,8 +511,8 @@ contains
       use comm_mod, only: lrindx,tam2, frn, cynt2, coss, tau
       use comm_mod, only: cint2, zmaxpsi, iy_
       use comm_mod, only: dentarget, reden, reden_norm
-      implicit integer (i-n), real*8 (a-h,o-z)
-      real*8 :: ffvec(nn)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
+      real(c_double) :: ffvec(nn)
 
 !.......................................................................
 !     This user input subroutine is used by newt, giving the function
@@ -596,7 +596,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : cvmgt, dcopy
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..............................................................
 !     Time advancement splitting step for transport.

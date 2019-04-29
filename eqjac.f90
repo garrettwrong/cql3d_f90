@@ -15,7 +15,7 @@ contains
       subroutine eqjac(neq,t,yv,ml,mu,pd,nrowpd)
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
 
       dimension yv(neq),pd(nrowpd,neq)
 !..................................................................

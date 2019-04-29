@@ -18,7 +18,7 @@ contains
       use param_mod
       use comm_mod
       use r8subs_mod, only : luf
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................
@@ -48,9 +48,9 @@ contains
 
 
 !     Pointers for dynamic memory allocation, local usage:
-      real*8, dimension(:), pointer :: upar,uprp,rho_a
+      real(c_double), dimension(:), pointer :: upar,uprp,rho_a
       integer, dimension(:,:,:), pointer :: notlost
-      real*8, dimension(:,:,:), pointer :: dnotlost
+      real(c_double), dimension(:,:,:), pointer :: dnotlost
 
       do 100 k=1,ngen  !Loops down to end of the subroutine
 

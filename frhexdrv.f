@@ -5,7 +5,7 @@ c$$$c
 c$$$c
 c$$$c     ONETWO DIVERGENCE
 c$$$      subroutine frhexdrv(mb,sgxn,sgxnmi,hxfrac)
-c$$$      implicit integer (i-n), real*8 (a-h,o-z)
+c$$$      implicit integer (i-n), real(c_double) (a-h,o-z)
 c$$$c     write statements commented out
 c$$$c
 c$$$c---hexdrv is a driver for routine hexnb.
