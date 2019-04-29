@@ -67,10 +67,12 @@
 module r8subs_mod
 
   !---BEGIN USE
+  use comm_mod
+  use iso_c_binding, only : c_double
 
   !---END USE
   ! CLAENV
-  use comm_mod
+
   integer, private :: IPARMS(100)
   save
 
@@ -552,7 +554,7 @@ contains
 
 
       real*4 function rbound(r8)
-      save
+      !why? save
 !
 !     Converts a real*8 argument to a real number,
 !     equal to 0. (if r8=0.) or,
@@ -593,7 +595,7 @@ contains
 !*     ..
 !*     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   AB( LDAB, * )
+      REAL(C_DOUBLE)   AB( LDAB, * )
 !*     ..
 !*
 !*  Purpose
@@ -670,7 +672,7 @@ contains
 !*  =====================================================================
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
+      REAL(C_DOUBLE)   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 !*     ..
 !*     .. Local Scalars ..
@@ -792,7 +794,7 @@ contains
 !*     ..
 !*     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   AB( LDAB, * )
+      REAL(C_DOUBLE)   AB( LDAB, * )
 !*     ..
 !*
 !*  Purpose
@@ -868,7 +870,7 @@ contains
 !*  =====================================================================
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
+      REAL(C_DOUBLE)   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NBMAX, LDWORK
       PARAMETER          ( NBMAX = 64, LDWORK = NBMAX+1 )
@@ -876,10 +878,10 @@ contains
 !*     .. Local Scalars ..
       INTEGER            I, I2, I3, II, IP, J, J2, J3, JB, JJ, JM, JP, &
                          JU, K2, KM, KV, NB, NW
-      DOUBLE PRECISION   TEMP
+      REAL(C_DOUBLE)   TEMP
 !*     ..
 !*     .. Local Arrays ..
-      DOUBLE PRECISION   WORK13( LDWORK, NBMAX ), &
+      REAL(C_DOUBLE)   WORK13( LDWORK, NBMAX ), &
                          WORK31( LDWORK, NBMAX )
 !*     ..
 !*     .. External Functions ..
@@ -1220,7 +1222,7 @@ contains
    END subroutine
       SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, &
                          INFO )
-        use iso_c_binding, only : c_double
+        implicit none
 !*
 !*  -- LAPACK routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -1293,7 +1295,7 @@ contains
 !*  =====================================================================
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION   ONE
+      REAL(C_DOUBLE)   ONE
       PARAMETER          ( ONE = 1.0D+0 )
 !*     ..
 !*     .. Local Scalars ..
@@ -1405,12 +1407,12 @@ contains
 
       SUBROUTINE DGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 !*     .. Scalar Arguments ..
-      DOUBLE PRECISION ALPHA,BETA
+      REAL(C_DOUBLE) ALPHA,BETA
       INTEGER K,LDA,LDB,LDC,M,N
       CHARACTER TRANSA,TRANSB
 !*     ..
 !*     .. Array Arguments ..
-      DOUBLE PRECISION A(LDA,*),B(LDB,*),C(LDC,*)
+      REAL(C_DOUBLE) A(LDA,*),B(LDB,*),C(LDC,*)
 !*     ..
 !*
 !*  Purpose
@@ -1541,12 +1543,12 @@ contains
       INTRINSIC MAX
 !*     ..
 !*     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
+      REAL(C_DOUBLE) TEMP
       INTEGER I,INFO,J,L,NCOLA,NROWA,NROWB
       LOGICAL NOTA,NOTB
 !*     ..
 !*     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
+      REAL(C_DOUBLE) ONE,ZERO
       PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
 !*     ..
 !*
@@ -1716,12 +1718,12 @@ contains
 
       SUBROUTINE DGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 !*     .. Scalar Arguments ..
-      DOUBLE PRECISION ALPHA,BETA
+      REAL(C_DOUBLE) ALPHA,BETA
       INTEGER INCX,INCY,LDA,M,N
       CHARACTER TRANS
 !*     ..
 !*     .. Array Arguments ..
-      DOUBLE PRECISION A(LDA,*),X(*),Y(*)
+      REAL(C_DOUBLE) A(LDA,*),X(*),Y(*)
 !*     ..
 !*
 !*  Purpose
@@ -1816,11 +1818,11 @@ contains
 !*
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
+      REAL(C_DOUBLE) ONE,ZERO
       PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
 !*     ..
 !*     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
+      REAL(C_DOUBLE) TEMP
       INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY,LENX,LENY
 !*     ..
 !*     .. External Functions ..
@@ -1975,11 +1977,11 @@ contains
 
       SUBROUTINE DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 !*     .. Scalar Arguments ..
-      DOUBLE PRECISION ALPHA
+      REAL(C_DOUBLE) ALPHA
       INTEGER INCX,INCY,LDA,M,N
 !*     ..
 !*     .. Array Arguments ..
-      DOUBLE PRECISION A(LDA,*),X(*),Y(*)
+      REAL(C_DOUBLE) A(LDA,*),X(*),Y(*)
 !*     ..
 !*
 !*  Purpose
@@ -2053,11 +2055,11 @@ contains
 !*
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION ZERO
+      REAL(C_DOUBLE) ZERO
       PARAMETER (ZERO=0.0D+0)
 !*     ..
 !*     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
+      REAL(C_DOUBLE) TEMP
       INTEGER I,INFO,IX,J,JY,KX
 !*     ..
 !*     .. External Subroutines ..
@@ -2143,7 +2145,7 @@ contains
 !*     ..
 !*     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * )
+      REAL(C_DOUBLE)   A( LDA, * )
 !*     ..
 !*
 !*  Purpose
@@ -2193,7 +2195,7 @@ contains
 !*
 !*     .. Local Scalars ..
       INTEGER            I, I1, I2, INC, IP, IX, IX0, J, K, N32
-      DOUBLE PRECISION   TEMP
+      REAL(C_DOUBLE)   TEMP
 !*     ..
 !*     .. Executable Statements ..
 !*
@@ -2257,7 +2259,7 @@ contains
       INTEGER INCX,INCY,N
 !*     ..
 !*     .. Array Arguments ..
-      DOUBLE PRECISION DX(*),DY(*)
+      REAL(C_DOUBLE) DX(*),DY(*)
 !*     ..
 !*
 !*  Purpose
@@ -2270,7 +2272,7 @@ contains
 !*
 !*
 !*     .. Local Scalars ..
-      DOUBLE PRECISION DTEMP
+      REAL(C_DOUBLE) DTEMP
       INTEGER I,IX,IY,M,MP1
 !*     ..
 !*     .. Intrinsic Functions ..
@@ -2329,7 +2331,7 @@ contains
       CHARACTER DIAG,TRANS,UPLO
 !*     ..
 !*     .. Array Arguments ..
-      DOUBLE PRECISION A(LDA,*),X(*)
+      REAL(C_DOUBLE) A(LDA,*),X(*)
 !*     ..
 !*
 !*  Purpose
@@ -2465,11 +2467,11 @@ contains
 !*
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION ZERO
+      REAL(C_DOUBLE) ZERO
       PARAMETER (ZERO=0.0D+0)
 !*     ..
 !*     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
+      REAL(C_DOUBLE) TEMP
       INTEGER I,INFO,IX,J,JX,KPLUS1,KX,L
       LOGICAL NOUNIT
 !*     ..
@@ -2659,12 +2661,12 @@ contains
 
       SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
 !*     .. Scalar Arguments ..
-      DOUBLE PRECISION ALPHA
+      REAL(C_DOUBLE) ALPHA
       INTEGER LDA,LDB,M,N
       CHARACTER DIAG,SIDE,TRANSA,UPLO
 !*     ..
 !*     .. Array Arguments ..
-      DOUBLE PRECISION A(LDA,*),B(LDB,*)
+      REAL(C_DOUBLE) A(LDA,*),B(LDB,*)
 !*     ..
 !*
 !*  Purpose
@@ -2794,12 +2796,12 @@ contains
       INTRINSIC MAX
 !*     ..
 !*     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
+      REAL(C_DOUBLE) TEMP
       INTEGER I,INFO,J,K,NROWA
       LOGICAL LSIDE,NOUNIT,UPPER
 !*     ..
 !*     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
+      REAL(C_DOUBLE) ONE,ZERO
       PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
 !*     ..
 !*
@@ -3548,7 +3550,7 @@ contains
 !*     ..
 !*     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * ), B( LDB, * )
+      REAL(C_DOUBLE)   A( LDA, * ), B( LDB, * )
 !*     ..
 !*
 !*  Purpose
@@ -3655,7 +3657,7 @@ contains
 !*     ..
 !*     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * )
+      REAL(C_DOUBLE)   A( LDA, * )
 !*     ..
 !*
 !*  Purpose
@@ -3704,11 +3706,11 @@ contains
 !*  =====================================================================
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
+      REAL(C_DOUBLE)   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 !*     ..
 !*     .. Local Scalars ..
-      DOUBLE PRECISION   SFMIN
+      REAL(C_DOUBLE)   SFMIN
       INTEGER            I, J, JP
 !*     ..
 !*     .. External Functions ..
@@ -3798,7 +3800,7 @@ contains
 !*     ..
 !*     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * )
+      REAL(C_DOUBLE)   A( LDA, * )
 !*     ..
 !*
 !*  Purpose
@@ -3847,7 +3849,7 @@ contains
 !*  =====================================================================
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION   ONE
+      REAL(C_DOUBLE)   ONE
       PARAMETER          ( ONE = 1.0D+0 )
 !*     ..
 !*     .. Local Scalars ..
@@ -3955,7 +3957,7 @@ contains
 !*     ..
 !*     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * ), B( LDB, * )
+      REAL(C_DOUBLE)   A( LDA, * ), B( LDB, * )
 !*     ..
 !*
 !*  Purpose
@@ -4007,7 +4009,7 @@ contains
 !*  =====================================================================
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION   ONE
+      REAL(C_DOUBLE)   ONE
       PARAMETER          ( ONE = 1.0D+0 )
 !*     ..
 !*     .. Local Scalars ..
@@ -4151,7 +4153,7 @@ contains
 !*> \ingroup auxOTHERauxiliary
 !*
 !*  =====================================================================
-      DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
+      REAL(C_DOUBLE) FUNCTION DLAMCH( CMACH )
 !*
 !*  -- LAPACK auxiliary routine (version 3.4.0) --
 !*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -4163,17 +4165,17 @@ contains
 !*     ..
 !*
 !*     .. Scalar Arguments ..
-      DOUBLE PRECISION   A, B
+      REAL(C_DOUBLE)   A, B
 !*     ..
 !*
 !* =====================================================================
 !*
 !*     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
+      REAL(C_DOUBLE)   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 !*     ..
 !*     .. Local Scalars ..
-      DOUBLE PRECISION   RND, EPS, SFMIN, SMALL, RMACH
+      REAL(C_DOUBLE)   RND, EPS, SFMIN, SMALL, RMACH
 !*     ..
 !*     .. External Functions ..
 !*     ..
@@ -4257,14 +4259,14 @@ contains
 !*>          The values A and B.
 !*> \endverbatim
 !*>
-      DOUBLE PRECISION FUNCTION DLAMC3( A, B )
+      REAL(C_DOUBLE) FUNCTION DLAMC3( A, B )
 !*
 !*  -- LAPACK auxiliary routine (version 3.4.0) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 !*     November 2010
 !*
 !*     .. Scalar Arguments ..
-      DOUBLE PRECISION   A, B
+      REAL(C_DOUBLE)   A, B
 !*     ..
 !* =====================================================================
 !*

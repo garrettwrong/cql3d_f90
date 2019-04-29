@@ -312,11 +312,11 @@ contains
 
             ztrders=vnorm*coss(i,l)/(ipshft2*dszp5(l)-ipshft1*dszm5(l))
             do 23110 j=2,jx
-              bndmats(j,ilsrow,ism1(l),1)=dfloat(ipshft1)* &
+              bndmats(j,ilsrow,ism1(l),1)=DBLE(ipshft1)* &
                 (x(j)*ztrders+lmidvel*zip1p2*ztrdrt)
               bndmats(j,ilsrow,isdiag(l),1)=(2.-lmidvel)*ztrdrt- &
                 zip1p2*x(j)*ztrders
-              bndmats(j,ilsrow,isp1(l),1)=dfloat(ipshft2)* &
+              bndmats(j,ilsrow,isp1(l),1)=DBLE(ipshft2)* &
                 (x(j)*ztrders+lmidvel*zip1p2*ztrdrt)
               rhspar(ilsrow,j,1)=cvmgt( &
                 wprhsmd(ilpm1ef(i,l,ip1t1m2),j,k,lpm1eff(l,ip1t1m2)) &
@@ -338,11 +338,11 @@ contains
             ztrders=vnorm*coss(iieff,l) &
               /(imshft2*dszp5(l)-imshft1*dszm5(l))
             do 23120 j=2,jx
-              bndmats(j,ilsrow,ism1(l),2)=dfloat(imshft1)* &
+              bndmats(j,ilsrow,ism1(l),2)=DBLE(imshft1)* &
                 (x(j)*ztrders+lmidvel*zim1p2*ztrdrt)
               bndmats(j,ilsrow,isdiag(l),2)=(2.-lmidvel)*ztrdrt- &
                 zim1p2*x(j)*ztrders
-              bndmats(j,ilsrow,isp1(l),2)=dfloat(imshft2)* &
+              bndmats(j,ilsrow,isp1(l),2)=DBLE(imshft2)* &
                 (x(j)*ztrders+lmidvel*zim1p2*ztrdrt)
               rhspar(ilsrow,j,2)=cvmgt(wprhsmd(iieff12,j,k,l+im1t1m2) &
                 ,wprhs(iieff12,j,k,l+im1t1m2) &
@@ -370,11 +370,11 @@ contains
             ztrders=vnorm*coss(i,ll) &
               /(ipshft2*dszp5(ll)-ipshft1*dszm5(ll))
             do 23131 j=2,jx
-              bndmats(j,ilsrow,ism1(ll),1)=dfloat(ipshft1)* &
+              bndmats(j,ilsrow,ism1(ll),1)=DBLE(ipshft1)* &
                 (x(j)*ztrders+lmidvel*zip1p2*ztrdrt)
               bndmats(j,ilsrow,isdiag(ll),1)=(2.-lmidvel)*ztrdrt- &
                 zip1p2*x(j)*ztrders
-              bndmats(j,ilsrow,isp1(ll),1)=dfloat(ipshft2)* &
+              bndmats(j,ilsrow,isp1(ll),1)=DBLE(ipshft2)* &
                 (x(j)*ztrders+lmidvel*zip1p2*ztrdrt)
               rhspar(ilsrow,j,1)=cvmgt(wprhsmd(i,j,k,ll+ip1t1m2) &
                 ,wprhs  (i,j,k,ll+ip1t1m2) &
@@ -393,11 +393,11 @@ contains
             ztrders=vnorm*coss(iieff,ll)/(imshft2*dszp5(ll)- &
               imshft1*dszm5(ll))
             do 23132 j=2,jx
-              bndmats(j,ilsrow,ism1(ll),2)=dfloat(imshft1)* &
+              bndmats(j,ilsrow,ism1(ll),2)=DBLE(imshft1)* &
                 (x(j)*ztrders+lmidvel*zim1p2*ztrdrt)
               bndmats(j,ilsrow,isdiag(ll),2)=(2.-lmidvel)*ztrdrt- &
                 zim1p2*x(j)*ztrders
-              bndmats(j,ilsrow,isp1(ll),2)=dfloat(imshft2)* &
+              bndmats(j,ilsrow,isp1(ll),2)=DBLE(imshft2)* &
                 (x(j)*ztrders+lmidvel*zim1p2*ztrdrt)
               rhspar(ilsrow,j,2)=cvmgt(wprhsmd(iieff12,j,k,ll+im1t1m2) &
                 ,wprhs(iieff12,j,k,ll+im1t1m2) &

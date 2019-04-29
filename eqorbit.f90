@@ -266,7 +266,7 @@ contains
          if (nn.gt.lfield/2) then
             go to 40
          else
-            xrat=dfloat(nn)/dfloat(lfield)
+            xrat=DBLE(nn)/DBLE(lfield)
             zstep=xrat*zstep
             slrz(1)=rcon
             slrz(2)=zmag

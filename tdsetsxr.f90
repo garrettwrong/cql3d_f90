@@ -49,7 +49,7 @@ contains
       if (ien .gt. 1) go to 70
       temc1(1)=0.
       temc1(iy)=pi
-      hy2=temc1(iy)/dfloat(iy-1)
+      hy2=temc1(iy)/DBLE(iy-1)
       do 20 i=2,iy-1
         temc1(i)=temc1(i-1)+hy2
  20   continue

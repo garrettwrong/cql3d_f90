@@ -246,14 +246,14 @@ contains
 
 !     cos(theta)>0 schemes
             ztrders=ztra1/(ipshft2*dszp5(l)-ipshft1*dszm5(l))
-            ztrdert=ztra2*dfloat(ipshft2-ipshft1)
+            ztrdert=ztra2*DBLE(ipshft2-ipshft1)
             do 23121 i=1,iyh_(l)
               bndmats(i,ilsrow,ism1,1)= &
-                dfloat(ipshft1)*(coss(i,l)*ztrders+zip1p2*ztrdert)
+                DBLE(ipshft1)*(coss(i,l)*ztrders+zip1p2*ztrdert)
               bndmats(i,ilsrow,isdiag,1)=ztrdert-zip1p2*coss(i,l) &
                 *ztrders
               bndmats(i,ilsrow,isp1,1)= &
-                dfloat(ipshft2)*(coss(i,l)*ztrders+zip1p2*ztrdert)
+                DBLE(ipshft2)*(coss(i,l)*ztrders+zip1p2*ztrdert)
               rhspar(ilsrow,i,1)=cvmgt( &
                 wprhsmd(i,j,k,l+ipshft1*(1-ipshft2)) &
                 ,wprhs  (i,j,k,l+ipshft1*(1-ipshft2)) &
@@ -266,14 +266,14 @@ contains
 !     cos(theta)<0 schemes
 23120       continue
             ztrders=ztra1/(imshft2*dszp5(l)-imshft1*dszm5(l))
-            ztrdert=ztra2*dfloat(imshft2-imshft1)
+            ztrdert=ztra2*DBLE(imshft2-imshft1)
             do 23123 i=iyh_(l)+1,iy_(l)
               bndmats(i,ilsrow,ism1,1)= &
-                dfloat(imshft1)*(coss(i,l)*ztrders+zim1p2*ztrdert)
+                DBLE(imshft1)*(coss(i,l)*ztrders+zim1p2*ztrdert)
               bndmats(i,ilsrow,isdiag,1)=ztrdert-zim1p2*coss(i,l) &
                 *ztrders
               bndmats(i,ilsrow,isp1,1)= &
-                dfloat(imshft2)*(coss(i,l)*ztrders+zim1p2*ztrdert)
+                DBLE(imshft2)*(coss(i,l)*ztrders+zim1p2*ztrdert)
               rhspar(ilsrow,i,1)=cvmgt( &
                 wprhsmd(i,j,k,l+imshft1*(1-imshft2)) &
                 ,wprhs(i,j,k,l+imshft1*(1-imshft2)) &

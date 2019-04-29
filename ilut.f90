@@ -2,6 +2,7 @@ module ilut_mod
 
   !---BEGIN USE
 
+  use iso_c_binding, only : c_double
   use r8subs_mod, only : daxpy
 
   !---END USE
@@ -169,7 +170,7 @@ contains
                                           ii,ia(ii),ia(ii+1),a(j1:j2)
             goto 999
          endif
-         tnorm = tnorm/real(j2-j1+1)
+         tnorm = tnorm/DBLE(j2-j1+1)
 !
 !     unpack L-part and U-part of row of A in arrays w
 !
@@ -1082,10 +1083,10 @@ contains
       end
 !-----------------------------------------------------------------------
 
-      double precision function dnrm2 ( n, dx, incx)
+      real(c_double) function dnrm2 ( n, dx, incx)
       integer          next
 !BH100826  double precision   dx(1), cutlo, cuthi, hitest, sum, xmax,zero,one
-      double precision   dx(*), cutlo, cuthi, hitest, sum, xmax,zero,one
+      real(c_double)   dx(*), cutlo, cuthi, hitest, sum, xmax,zero,one
       data   zero, one /0.0d0, 1.0d0/
 !
 !     euclidean norm of the n-vector stored in dx() with storage

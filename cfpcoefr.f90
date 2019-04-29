@@ -145,7 +145,7 @@ contains
           if(i.eq.1 .or. i.eq.nintg) sfac=1.
           sfac=sfac/3.
           do 11 j=2,jx
-            delx=dxm5(j)/dfloat(nintg-1)
+            delx=dxm5(j)/DBLE(nintg-1)
             xx=x(j)-(i-1)*delx
             xxc=xx/cnorm
             xxc2=xxc*xxc
@@ -480,7 +480,7 @@ contains
                   if(i.eq.1 .or. i.eq.nintg) sfac=1.
                   sfac=sfac/3.
                   do 306 j=2,jthov2
-                    xx=x(j)-(i-1)*dxm5(j)/dfloat(nintg-1)
+                    xx=x(j)-(i-1)*dxm5(j)/DBLE(nintg-1)
                     xxc=xx/cnorm
                     xxc2=xxc*xxc
                     if(cnorm2i-em8 .gt. 0.d0) then
@@ -496,7 +496,7 @@ contains
                       expon=.5*xx2/cnorm2
                     endif
                     fff=cnorm2*sfac*tam7(j-1)*exp(-expon*tam6(j-1))* &
-                      dxm5(j)/dfloat(nintg-1)
+                      dxm5(j)/DBLE(nintg-1)
                     tam8(j)=tam8(j)+gg**(l1-1)*xxc**(-l2+2)*fff
                     tam9(j)=tam9(j)+gg**(l1-1)*xxc**(-l2+2)*asalp*fff
  306              continue
@@ -558,7 +558,7 @@ contains
 !     Do the j+1 and j+2 terms first
 !..................................................................
                 do 317 l3=0,l2+2
-                  cons3=cons1*choose(l2+2,l3)/dfloat(l2+2)
+                  cons3=cons1*choose(l2+2,l3)/DBLE(l2+2)
                   ig0=m-2*l1-l3+1
                   ig1=ig0+1
                   ia0=m-2*l1-l3+1
@@ -570,7 +570,7 @@ contains
 !     Psi3:  Sigma2(j+1,m-2k-j,m-2k+1)
 !..................................................................
                   if(l3.le.l2+1) then
-                    cons2=cons1*choose(l2+1,l3)/dfloat(l2+1)
+                    cons2=cons1*choose(l2+1,l3)/DBLE(l2+1)
                     do 318 j=2,jx
                       tam1(j)=tam1(j)+cons2*gman(ig0,ia0,j)* &
                         ( gamman(j,1)*tamt1(ivn,j,ia1,ig0)+ &
@@ -616,10 +616,10 @@ contains
 !.......................................................................:
                 if(mod(l2,2).eq.1) then
                   cons21=cons1*(fctrl(l2+1)*(l2+2)*.5**(l2+1))/ &
-                    (dfloat(l2+1)*fctrl((l2+1)/2)**2)
+                    (DBLE(l2+1)*fctrl((l2+1)/2)**2)
                   cons22=cons1*fctrl((l2+1)/2)**2*2.**(l2+1)/ &
-                    (dfloat(l2+2)*fctrl(l2+2))
-                  cons23=cons22*(l2+3)/dfloat(2*(l2+1))
+                    (DBLE(l2+2)*fctrl(l2+2))
+                  cons23=cons22*(l2+3)/DBLE(2*(l2+1))
 !..................................................................
 !     Psi3:  Sigma3(j+1,m-2k-j,m-2k+1)=>Sigma2(0,m-2k-j,m-2k+1) term
 !..................................................................
@@ -694,10 +694,10 @@ contains
 !     Case 2:  l2 even
 !.......................................................................:
                   cons21=cons1*(fctrl(l2+2)*.5**(l2+2))/ &
-                    (dfloat(l2+2)*fctrl((l2+2)/2)**2)
-                  cons22=cons21*(l2+3)/dfloat(2*(l2+1))
+                    (DBLE(l2+2)*fctrl((l2+2)/2)**2)
+                  cons22=cons21*(l2+3)/DBLE(2*(l2+1))
                   cons23=cons1*(l2+2)*fctrl(l2/2)**2*2.**l2/ &
-                    (dfloat(l2+1)*fctrl(l2+1))
+                    (DBLE(l2+1)*fctrl(l2+1))
 !..................................................................
 !     Psi1:  Sigma3(j+2,m-2k-j,m-2k+1)=>Sigma2(0,m-2k-j,m-2k+1) term
 !     Psi2:  Sigma3(j+2,m-2k-j,m-2k+1)=>Sigma2(0,m-2k-j,m-2k+1) term

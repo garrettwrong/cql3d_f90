@@ -343,7 +343,7 @@ contains
             smin=log(contrmin*dmax)
             if (admin/dmax .gt. contrmin) smin=log(admin)
             smax=log(dmax)
-            dcont=(smax-smin)/dfloat(ncont)
+            dcont=(smax-smin)/DBLE(ncont)
             cont(1)=smin+.5*dcont
             do 20 kc=2,ncont
                cont(kc)=cont(kc-1)+dcont
@@ -362,7 +362,7 @@ contains
             gammax=1.+emax/restmkev
             uocmax=sqrt(gammax**2-1.)
             do j=1,ncont
-               cont(j)=j/dfloat(ncont)*uocmax
+               cont(j)=j/DBLE(ncont)*uocmax
             enddo
             do j=1,ncont
                cont(j)=dmax* &
@@ -385,8 +385,8 @@ contains
         sminm=log(-contrmin*dmin)
         if (dmax/dmin.gt.contrmin) sminm=log(-dmax)
         smaxm=log(-dmin)
-        dcontp=(smaxp-sminp)/dfloat(ncontp)
-        dcontm=(smaxm-sminm)/dfloat(ncontm)
+        dcontp=(smaxp-sminp)/DBLE(ncontp)
+        dcontm=(smaxm-sminm)/DBLE(ncontm)
         cont(1)=smaxm-.5*dcontm
         do 40 kc=2,ncontm
           cont(kc)=cont(kc-1)-dcontm

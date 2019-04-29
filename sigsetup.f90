@@ -46,7 +46,7 @@ contains
       temc1(1) = 0.
       temc1(iy)=pi
       iym1=iy-1
-      hy2 = temc1(iy)/dfloat(iym1)
+      hy2 = temc1(iy)/DBLE(iym1)
       do 20 i = 2,iym1
       temc1(i) = temc1(i-1)+hy2
    20 continue
@@ -239,7 +239,7 @@ contains
 
       engymax=4.*fi*xsq(jx)
       elmin=fi*xsq(2)
-      delegy=(engymax-elmin)/dfloat(mtabm1)
+      delegy=(engymax-elmin)/DBLE(mtabm1)
 
       if (iq .gt. msig) go to 120  !Shouldn't be possible?
       els=elmin-delegy

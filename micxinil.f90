@@ -131,7 +131,7 @@ contains
       fctrl(0)=1.
 !BH_YP090809   do 131 l=1,mx+2
       do 131 l=1,2*mx+2
-        fctrl(l)=fctrl(l-1)*dfloat(l)
+        fctrl(l)=fctrl(l-1)*DBLE(l)
  131  continue
 !BH_YP090809      do 132 l=0,mx+2
 !BH_YP090809        do 133 m=0,l

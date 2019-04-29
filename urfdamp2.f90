@@ -242,8 +242,8 @@ contains
             do i=i2,i1
               temc2(i)=1.
             enddo
-            temc2(i2)=dfloat(ifct2(j))*o65535
-            temc2(i1)=dfloat(ifct1(j))*o65535
+            temc2(i2)=DBLE(ifct2(j))*o65535
+            temc2(i1)=DBLE(ifct1(j))*o65535
             tem=wcen_omega/(gamma(j)*bbpsi(ll,lr_))
             do 50 i=i2,i1
               thtf1i=1.

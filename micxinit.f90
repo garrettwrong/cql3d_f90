@@ -55,7 +55,7 @@ contains
         iota(i)=i
  1    continue
       do 2 i=0,iotalim
-        realiota(i)=dfloat(i)
+        realiota(i)=DBLE(i)
  2    continue
 
 !..................................................................
@@ -201,7 +201,7 @@ contains
         zdy=pi/(iy-1)
         iyh=iy/2
         do 650 i=1,iy
-          y(i,l_)=dfloat(i-1)*zdy !equidistant grid that includes 0 & pi
+          y(i,l_)=DBLE(i-1)*zdy !equidistant grid that includes 0 & pi
  650    continue
         thb(l_)=asin(sqrt(psis(l_)/bbpsi(ilzhfs,lr_)))
         do 651 i=1,iyh

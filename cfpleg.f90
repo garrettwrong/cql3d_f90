@@ -86,7 +86,7 @@ contains
  120  continue
 
  200  continue
-      sa=dfloat(2*m+1)*0.5  !Per Eq. 3.1.63 in Killeen book for V_m
+      sa=DBLE(2*m+1)*0.5  !Per Eq. 3.1.63 in Killeen book for V_m
       call dscal(jx,sa,tam1,1)
 
       return

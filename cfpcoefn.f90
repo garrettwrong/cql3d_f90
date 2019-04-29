@@ -111,7 +111,7 @@ contains
           if (i.eq.1 .or. i.eq.nintg) sfac=1.
           sfac=sfac/3.
           do 11 j=2,jx
-            xx=x(j)-(i-1)*dxm5(j)/dfloat(nintg-1)
+            xx=x(j)-(i-1)*dxm5(j)/DBLE(nintg-1)
             xx2=xx**2
             gg=sqrt(1.+xx2*cnorm2i)
             gg2=gg**2
@@ -121,7 +121,7 @@ contains
             else
                expon=.5*xx2/cnorm2
             endif
-            fff=sfac*rnorm*exp(-expon*reltmp)*dxm5(j)/dfloat(nintg-1)
+            fff=sfac*rnorm*exp(-expon*reltmp)*dxm5(j)/DBLE(nintg-1)
             temp1(1,j)=temp1(1,j)+xx*gg*fff
             temp1(2,j)=temp1(2,j)+xx*fff
             temp1(3,j)=temp1(3,j)+xx2*fff
@@ -457,7 +457,7 @@ contains
               if (i.eq.1 .or. i.eq.nintg) sfac=1.
               sfac=sfac/3.
               do 306 j=2,jthov2
-                xx=x(j)-(i-1)*dxm5(j)/dfloat(nintg-1)
+                xx=x(j)-(i-1)*dxm5(j)/DBLE(nintg-1)
                 xx2=xx**2
                 gg=sqrt(1.+xx2*cnorm2i)
                 gg2=gg**2
@@ -468,7 +468,7 @@ contains
                    expon=.5*xx2/cnorm2
                 endif
                 fff=sfac*tam22(j-1)*exp(-expon*tam21(j-1))*dxm5(j) &
-                  /dfloat(nintg-1)
+                  /DBLE(nintg-1)
                 tam30(j)=tam30(j)+ &
                   gg2*(xx/gg)**ix1(m)*fff
                 tam23(j)=tam23(j)+ &

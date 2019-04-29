@@ -321,8 +321,8 @@ contains
                      !-> So, these factors for i1 and i2
                      !-> are only important when there is just
                      !-> one or two i-points within resonance strip.
-                     temc2(i2)=dfloat(ifct2(j))*o65535
-                     temc2(i1)=dfloat(ifct1(j))*o65535
+                     temc2(i2)=DBLE(ifct2(j))*o65535
+                     temc2(i1)=DBLE(ifct1(j))*o65535
                      !endif
                      !if temc2(i2) & temc2(i1) are set to 0 => no RF pwr
                      uloc3=xcu(j)*vnorm3

@@ -585,7 +585,7 @@ c..................................................................
 
       do 300 ll=1,lrz
         call tdnflxs(ll)
-        curbrth(ll)=dfloat(llbrth(ll))/dvol(lr_)*scalfact
+        curbrth(ll)=DBLE(llbrth(ll))/dvol(lr_)*scalfact
         call dscal(iyjx2,scalfact*tr3(ll),source(0:iyjx2-1,0,k,ll),1)
         asor(k,1,lr_)=asorz(k,1,lr_)*scalfact*tr3(ll)
         xlncur(k,lr_)=asor(k,1,lr_)*zmaxpsi(lr_)

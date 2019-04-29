@@ -378,7 +378,7 @@ contains
 !.......................................................................
 !     lrza arrays
 !.......................................................................
-      drya=1.d0/dfloat(lrza)
+      drya=1.d0/DBLE(lrza)
       do 100 ll=1,lrza
         rovera(ll)=.1
         rya(ll)=(ll-0.5)*drya
@@ -589,7 +589,7 @@ contains
             tempc(i,k)=0.d0
             tempb(i,k)=0.d0
  31      continue
-         bctime(i)=dfloat(i-1)
+         bctime(i)=DBLE(i-1)
          zeffc(i)=0.d0
          zeffb(i)=0.d0
          elecc(i)=0.d0

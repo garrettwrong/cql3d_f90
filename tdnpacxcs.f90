@@ -2,6 +2,8 @@ module tdnpacxcs_mod
 
   !---BEGIN USE
 
+  use iso_c_binding, only : c_double
+
   !---END USE
 
 contains
@@ -93,9 +95,9 @@ contains
 !
 !------------------------------------------------------------------------
 !
-      double precision pet, pcf, pfit
-      double precision emin, emax, cheb, eminl, emaxl, enl, xnorm
-      double precision twox, prev, prev2
+      real(c_double) pet, pcf, pfit
+      real(c_double) emin, emax, cheb, eminl, emaxl, enl, xnorm
+      real(c_double) twox, prev, prev2
       dimension pcf(11)
       character*(*) kermsg
       emin = pcf(10)

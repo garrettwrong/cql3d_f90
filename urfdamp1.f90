@@ -294,8 +294,8 @@ contains
             do i=i2,i1
                temc2(i)=1.
             enddo
-            temc2(i2)=dfloat(ifct2(j))*o65535
-            temc2(i1)=dfloat(ifct1(j))*o65535
+            temc2(i2)=DBLE(ifct2(j))*o65535
+            temc2(i1)=DBLE(ifct1(j))*o65535
             uloc3=xcu(j)*vnorm3
             uloc=x(j)*vnorm
             tem=wcn_w/(gamma(j)*bbpsi(ll,lr_))

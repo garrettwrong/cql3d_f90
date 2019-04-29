@@ -1265,8 +1265,8 @@ contains
 !       term=xcg
 !       kmax=6
 !       do 10 k=1,kmax
-!         t1=dfloat(k)
-!         t2=dfloat(2*k+1)/dfloat(2*k-1)
+!         t1=DBLE(k)
+!         t2=DBLE(2*k+1)/DBLE(2*k-1)
 !         term=-term*x2/(t1*t2)
 !         sum=sum+term
 !  10   continue

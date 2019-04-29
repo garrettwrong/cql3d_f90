@@ -682,8 +682,8 @@ contains
               do 71 i=i2,i1
                 temc2(i)=1.
  71           continue
-              temc2(i2)=dfloat(ifct2(j))/65535.d0
-              temc2(i1)=dfloat(ifct1(j))/65535.d0
+              temc2(i2)=DBLE(ifct2(j))/65535.d0
+              temc2(i1)=DBLE(ifct1(j))/65535.d0
 
               do 75 i=i2,i1
 

@@ -70,22 +70,22 @@ contains
  117    continue
       endif
 
-      zrat=iyhtr*(1.-zmunod(1))/dfloat(itrap)
+      zrat=iyhtr*(1.-zmunod(1))/DBLE(itrap)
 
       if (zrat .le. 1.5) then
         iypass=iyhtr-ilshalf+1
-        zdmupas=zmunod(1)/dfloat(iypass)
+        zdmupas=zmunod(1)/DBLE(iypass)
         do 120 i=1,iypass
-          mun(i)=dfloat(i-1)*zdmupas
+          mun(i)=DBLE(i-1)*zdmupas
  120    continue
         do 121 l=1,itrap
           mun(iypass+l)=zmunod(l)
  121    continue
       else
         iypass=int(iyhtr*zmunod(1))
-        zdmupas=zmunod(1)/dfloat(iypass)
+        zdmupas=zmunod(1)/DBLE(iypass)
         do 122 i=1,iypass+1
-          mun(i)=dfloat(i-1)*zdmupas
+          mun(i)=DBLE(i-1)*zdmupas
  122    continue
         iextra=iyhtr-iypass-itrap
         do 123 ii=1,iextra

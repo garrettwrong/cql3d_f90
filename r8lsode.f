@@ -950,7 +950,7 @@ c note..  vnorm_lsode, idamax, ddot, and d1mach are function routines.
 c all the others are subroutines.
 c
 c the intrinsic and external routines used by lsode are..
-c dabs, dmax1, dmin1, dfloat, max0, min0, mod, dsign, dsqrt, and write.
+c dabs, dmax1, dmin1, DBLE, max0, min0, mod, dsign, dsqrt, and write.
 c
 c a block data subprogram is also included with the package,
 c for loading some of the variables in internal common.
@@ -1607,9 +1607,9 @@ c     p(x) = (x+1)*(x+2)*...*(x+nq-1).
 c initially, p(x) = 1.
 c-----------------------------------------------------------------------
         rq1fac = rqfac
-        rqfac = rqfac/dfloat(nq)
+        rqfac = rqfac/DBLE(nq)
         nqm1 = nq - 1
-        fnqm1 = dfloat(nqm1)
+        fnqm1 = DBLE(nqm1)
         nqp1 = nq + 1
 c form coefficients of p(x)*(x+nq-1). ----------------------------------
         pc(nq) = 0.0d0
@@ -1623,17 +1623,17 @@ c compute integral, -1 to 0, of p(x) and x*p(x). -----------------------
         tsign = 1.0d0
         do 120 i = 2,nq
           tsign = -tsign
-          pint = pint + tsign*pc(i)/dfloat(i)
- 120      xpin = xpin + tsign*pc(i)/dfloat(i+1)
+          pint = pint + tsign*pc(i)/DBLE(i)
+ 120      xpin = xpin + tsign*pc(i)/DBLE(i+1)
 c store coefficients in elco and tesco. --------------------------------
         elco(1,nq) = pint*rq1fac
         elco(2,nq) = 1.0d0
         do 130 i = 2,nq
- 130      elco(i+1,nq) = rq1fac*pc(i)/dfloat(i)
+ 130      elco(i+1,nq) = rq1fac*pc(i)/DBLE(i)
         agamq = rqfac*xpin
         ragq = 1.0d0/agamq
         tesco(2,nq) = ragq
-        if (nq .lt. 12) tesco(1,nqp1) = ragq*rqfac/dfloat(nqp1)
+        if (nq .lt. 12) tesco(1,nqp1) = ragq*rqfac/DBLE(nqp1)
         tesco(3,nqm1) = ragq
  140    continue
       return
@@ -1646,7 +1646,7 @@ c the pc array will contain the coefficients of the polynomial
 c     p(x) = (x+1)*(x+2)*...*(x+nq).
 c initially, p(x) = 1.
 c-----------------------------------------------------------------------
-        fnq = dfloat(nq)
+        fnq = DBLE(nq)
         nqp1 = nq + 1
 c form coefficients of p(x)*(x+nq). ------------------------------------
         pc(nqp1) = 0.0d0
@@ -1659,8 +1659,8 @@ c store coefficients in elco and tesco. --------------------------------
  220      elco(i,nq) = pc(i)/pc(2)
         elco(2,nq) = 1.0d0
         tesco(1,nq) = rq1fac
-        tesco(2,nq) = dfloat(nqp1)/elco(1,nq)
-        tesco(3,nq) = dfloat(nq+2)/elco(1,nq)
+        tesco(2,nq) = DBLE(nqp1)/elco(1,nq)
+        tesco(3,nq) = DBLE(nq+2)/elco(1,nq)
         rq1fac = rq1fac/fnq
  230    continue
       return
@@ -1749,7 +1749,7 @@ c
       jj1 = l - k
       do 10 jj = jj1,nq
  10     ic = ic*jj
- 15   c = dfloat(ic)
+ 15   c = DBLE(ic)
       do 20 i = 1,n
  20     dky(i) = c*yh(i,l)
       if (k .eq. nq) go to 55
@@ -1762,7 +1762,7 @@ c
         jj1 = jp1 - k
         do 30 jj = jj1,j
  30       ic = ic*jj
- 35     c = dfloat(ic)
+ 35     c = DBLE(ic)
         do 40 i = 1,n
  40       dky(i) = c*yh(i,jp1) + s*dky(i)
  50     continue
@@ -1858,7 +1858,7 @@ c if miter = 1, call jac and multiply by scalar. -----------------------
       go to 240
 c if miter = 2, make n calls to f to approximate j. --------------------
  200  fac = vnorm_lsode(n, savf, ewt)
-      r0 = 1000.0d0*dabs(h)*uround*dfloat(n)*fac
+      r0 = 1000.0d0*dabs(h)*uround*DBLE(n)*fac
       if (r0 .eq. 0.0d0) r0 = 1.0d0
       srur = wm(1)
       j1 = 2
@@ -1925,7 +1925,7 @@ c if miter = 5, make mband calls to f to approximate j. ----------------
       meb1 = meband - 1
       srur = wm(1)
       fac = vnorm_lsode(n, savf, ewt)
-      r0 = 1000.0d0*dabs(h)*uround*dfloat(n)*fac
+      r0 = 1000.0d0*dabs(h)*uround*DBLE(n)*fac
       if (r0 .eq. 0.0d0) r0 = 1.0d0
       do 560 j = 1,mba
         do 530 i = j,n,mband
@@ -2228,9 +2228,9 @@ c-----------------------------------------------------------------------
       nqnyh = nq*nyh
       rc = rc*el(1)/el0
       el0 = el(1)
-      conit = 0.5d0/dfloat(nq+2)
+      conit = 0.5d0/DBLE(nq+2)
       ddn = vnorm_lsode(n, savf, ewt)/tesco(1,l)
-      exdn = 1.0d0/dfloat(l)
+      exdn = 1.0d0/DBLE(l)
       rhdn = 1.0d0/(1.3d0*ddn**exdn + 0.0000013d0)
       rh = dmin1(rhdn,1.0d0)
       iredo = 3
@@ -2249,7 +2249,7 @@ c-----------------------------------------------------------------------
       nqnyh = nq*nyh
       rc = rc*el(1)/el0
       el0 = el(1)
-      conit = 0.5d0/dfloat(nq+2)
+      conit = 0.5d0/DBLE(nq+2)
       go to (160, 170, 200), iret
 c-----------------------------------------------------------------------
 c if h is being changed, the h ratio rh is checked against
@@ -2458,14 +2458,14 @@ c-----------------------------------------------------------------------
       do 530 i = 1,n
  530    savf(i) = acor(i) - yh(i,lmax)
       dup = vnorm_lsode(n, savf, ewt)/tesco(3,nq)
-      exup = 1.0d0/dfloat(l+1)
+      exup = 1.0d0/DBLE(l+1)
       rhup = 1.0d0/(1.4d0*dup**exup + 0.0000014d0)
- 540  exsm = 1.0d0/dfloat(l)
+ 540  exsm = 1.0d0/DBLE(l)
       rhsm = 1.0d0/(1.2d0*dsm**exsm + 0.0000012d0)
       rhdn = 0.0d0
       if (nq .eq. 1) go to 560
       ddn = vnorm_lsode(n, yh(1,l), ewt)/tesco(1,nq)
-      exdn = 1.0d0/dfloat(nq)
+      exdn = 1.0d0/DBLE(nq)
       rhdn = 1.0d0/(1.3d0*ddn**exdn + 0.0000013d0)
  560  if (rhsm .ge. rhup) go to 570
       if (rhup .gt. rhdn) go to 590
@@ -2481,7 +2481,7 @@ c-----------------------------------------------------------------------
  590  newq = l
       rh = rhup
       if (rh .lt. 1.1d0) go to 610
-      r = el(l)/dfloat(l)
+      r = el(l)/DBLE(l)
       do 600 i = 1,n
  600    yh(i,newq+1) = acor(i)*r
       go to 630
@@ -2559,7 +2559,7 @@ c-----------------------------------------------------------------------
       sum = 0.0d0
       do 10 i = 1,n
  10     sum = sum + (v(i)*w(i))**2
-      vnorm_lsode = dsqrt(sum/dfloat(n))
+      vnorm_lsode = dsqrt(sum/DBLE(n))
       return
 c----------------------- end of function vnorm_lsode -------------------------
       end

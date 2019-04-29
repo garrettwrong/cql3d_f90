@@ -173,11 +173,11 @@ c
      *  de1(ms,mc),de2(ms,mc),ge1(ms,mc),ge2(ms,mc)
       data ryd/13.6/
       ceef1(ni,nj,te)=1.6e-7*sqrt(te)
-     *  *exp(-(ryd/te)*(1./dfloat(ni)**2-1./dfloat(nj)**2))
+     *  *exp(-(ryd/te)*(1./DBLE(ni)**2-1./DBLE(nj)**2))
 c990131     *  *(ae(ni,nj)*alog(.3*te/ryd+de2(ni,nj))+be(ni,nj))
      *  *(ae(ni,nj)*log(.3*te/ryd+de2(ni,nj))+be(ni,nj))
-c990131     *  /(te+ge2(ni,nj)*alog(1.+(dfloat(ni)**3)*te/ryd))
-     *  /(te+ge2(ni,nj)*log(1.+(dfloat(ni)**3)*te/ryd))
+c990131     *  /(te+ge2(ni,nj)*alog(1.+(DBLE(ni)**3)*te/ryd))
+     *  /(te+ge2(ni,nj)*log(1.+(DBLE(ni)**3)*te/ryd))
 c
       if((i.ge.j) .or. (j.le.3)) then
         ihxbug = 8
@@ -356,7 +356,7 @@ c$$$      do 112 ib=1,mb
 c$$$        do 111 j=1,3
 c$$$          sigeff1=7.e-19*(dzemax+.2)**.65
 c$$$          sigeff2=(3.*dnemax/(2.*dtemax+1.))**.118
-c$$$          tem=dfloat(j)*atw(ibion)
+c$$$          tem=DBLE(j)*atw(ibion)
 c$$$          tem1=-(.7+.02*dzemax)
 c$$$          sigeff3=(ebkev(ib)/(1000.*tem))**tem1
 c$$$          sigeff=sigeff1*sigeff2*sigeff3
@@ -516,7 +516,7 @@ c
         do 211 j=1,3
           sigeff1=7.e-19*(dzemax+.2)**.65
           sigeff2=(3.*dnemax/(2.*dtemax+1.))**.118
-          tem=dfloat(j)*atw(ibion)
+          tem=DBLE(j)*atw(ibion)
           tem1=-(.7+.02*dzemax)
           sigeff3=(ebkev(ib)/(1000.*tem))**tem1
           sigeff=sigeff1*sigeff2*sigeff3
@@ -1000,7 +1000,7 @@ c
 c990131      a=10.*alog10(beta1)+8.
       a=10.*log10(beta1)+8.
       ia=min0(37,int(a))
-      dfhx=dd(ia)+(a-dfloat(ia))*(dd(ia+1)-dd(ia))
+      dfhx=dd(ia)+(a-DBLE(ia))*(dd(ia+1)-dd(ia))
       return
  110  dfhx=.5*beta*(1.-1./(8.*beta*sqrt(beta)))*exp(-sqrt(2.*beta))
       return
@@ -1805,7 +1805,7 @@ c*****************************************************************
       g1(r)=-(.6282-.5598/r+.5299/(r*r))/r
       g2(r)=(.3887-1.181/r+1.470/(r*r))/(r*r)
 c
-      rn=dfloat(n)
+      rn=DBLE(n)
       if(n.eq.1)goto 11
       if(n.eq.2)goto 12
       hxgf=g0(rn)+g1(rn)/y+g2(rn)/(y*y)
@@ -1835,8 +1835,8 @@ c*****************************************************************
       data ryd/13.6/
 c
 c--   total radiation rate from level n2 to level n1:
-      rrate(n2,n1)=(8.0323e9)*(((1./dfloat(n1))**2-(1./dfloat(n2))**2)
-     *  *(dfloat(n1)/dfloat(n2)))**2*f(n1,n2)
+      rrate(n2,n1)=(8.0323e9)*(((1./DBLE(n1))**2-(1./DBLE(n2))**2)
+     *  *(DBLE(n1)/DBLE(n2)))**2*f(n1,n2)
 c
 cBH080118      call second(cpua)
 c
@@ -1850,22 +1850,22 @@ c
       en(2)=ryd/4.
       en(3)=ryd/4.
       do 7 i=4,mc+1
-        dg(i)=(dfloat(i-1))**2
+        dg(i)=(DBLE(i-1))**2
         en(i)=ryd/dg(i)
     7 continue
 c
       do 8 n1=1,mc
-        an1=dfloat(n1)
+        an1=DBLE(n1)
 c990131        be1(n1)=1.4*alog(an1)/an1-.7/an1-.51/(an1*an1)+1.16/(an1**3)
         be1(n1)=1.4*log(an1)/an1-.7/an1-.51/(an1*an1)+1.16/(an1**3)
      *    -.55/(an1**4)
     8 continue
 c
       do 9 n1=1,mstate
-        an1=dfloat(n1)
+        an1=DBLE(n1)
         en1=ryd/(an1*an1)
         do 10 n2=n1+1,mc
-          an2=dfloat(n2)
+          an2=DBLE(n2)
           en12=en1-ryd/(an2*an2)
           ae(n1,n2)=2.*ryd*f(n1,n2)/en12
           be(n1,n2)=4.*ryd*ryd*(1./(en12*en12)+4.*en1/(3.*en12**3)
@@ -1908,7 +1908,7 @@ c--   2p to 2s:
 c
       do 220 j=4,mstate+1
         nj=j-1
-        ajsq=(dfloat(nj))**2
+        ajsq=(DBLE(nj))**2
 c
 c--   total radiation to 2s+2p:
         tot=rrate(nj,2)
@@ -1945,9 +1945,9 @@ c      pi=acos(-one)
       const=32./(sqrt(27.)*pi)
 c
       do 10 i=1,mstate
-        ai=dfloat(i)
+        ai=DBLE(i)
         do 11 j=i+1,mc
-          aj=dfloat(j)
+          aj=DBLE(j)
           y=1.-(ai/aj)**2
           f(i,j)=(const*ai/((aj*y)**3))*hxgf(i,y)
  11     continue
@@ -2692,7 +2692,7 @@ c990131 12     al(i)=fl(2,8.,ep)*.5
         al(i)=fl(2,eight,ep)*.5
         goto 10
  13     ni=i-1
-        ani3=(dfloat(ni))**3
+        ani3=(DBLE(ni))**3
         al(i)=fl(ni,ani3,ep)*sl(ni)
  10   continue
 c
@@ -3615,7 +3615,7 @@ c
       id=2
       if(ni.eq.1)id=1
 c
-      ansq=(dfloat(ni))**2
+      ansq=(DBLE(ni))**2
       xtilda = ansq*er/(31250.*z)
       scxzf = 0.
       if(xtilda.lt.1.) scxzf=1.465e-11*xtilda*(ansq*z*z/er)
@@ -3632,7 +3632,7 @@ c
       parameter (ms=21,mc=35)
       common/b3/f(ms,mc),ar(ms+1,ms+1)
 c
-      omega=.5*(1./((dfloat(ni))**2)-1./((dfloat(nj))**2))
+      omega=.5*(1./((DBLE(ni))**2)-1./((DBLE(nj))**2))
       alam=sqrt(f(ni,nj)/(2.*omega))
       beta=z*alam*omega/(er/24982.)
       sdaccf=(1.7595e-16)*(z*alam/omega)*dfhx(beta)
@@ -3981,7 +3981,7 @@ c--   2s:
 c
 c--   2p and higher:
  130  continue
-      ansq=(dfloat(i-1))**2
+      ansq=(DBLE(i-1))**2
       if(er .le. ryd/ansq)return
       sief=sbea(ansq,er/ryd)
       return
@@ -4081,7 +4081,7 @@ c
       id=2
       if(ni.eq.1)id=1
 c
-      ansq=(dfloat(ni))**2
+      ansq=(DBLE(ni))**2
       sizf=(1.465e-11)*(ansq*z*z/er)*(1.-exp(-ansq*er/(31250.*z)))
       return
       end

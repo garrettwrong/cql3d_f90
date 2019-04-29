@@ -2,6 +2,9 @@ module esefld_mod
 
   !---BEGIN USE
 
+  use iso_c_binding, only : c_double
+  use param_mod
+
   !---END USE
 
 !
@@ -10,7 +13,6 @@ module esefld_mod
 contains
 
       subroutine efld_cd(dz,ls,vnorm,flux1,flux2,elparnw,flux0)
-      use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 !.......................................................................
@@ -52,7 +54,7 @@ contains
       end
 !
 !
-      double precision function fluxpar &
+      real(c_double) function fluxpar &
            (kopt,x,coss,cynt2,cint2,f,iy,jx)
       implicit integer (i-n), real*8 (a-h,o-z)
 
