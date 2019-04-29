@@ -36,25 +36,24 @@ SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	frinitl.f  frinitz.f  frnbdep2.f  frnfreya.f  \
 	frset.f frsmooth.f  frsplft.f   \
 	frstup.f  frsubs.f  frsuppor.f  frwrong.f  \
-	ilut.f90  impchk.f90  impnorm.f90  it3dalloc.f90  \
+	ilut.f90  impchk.f90  impnorm.f90  \
 	lookup.f90  losscone.f90  lossegy.f90  lossorbm.f90  \
 	losstor.f90  micgetr.f90   \
 	micgmbnd.f90  micgnbnd.f90  micxinil.f90  micxinim.f90  micxinit.f90  \
 	micxiniz.f90  \
 	netcdfrf.f  netcdfrw2.f \
 	ntdstore.f90   \
-	ntloop.f90  pack21.f90 pltcont.f90  pltcycl.f90 \
+	ntloop.f90  pack21.f90 pltcycl.f90 \
 	pltdnz.f90  pltelec.f90  pltendn.f90   \
-	pltends.f90  pltfluxs.f90 pltfofvv.f90 pltfvsv.f90  pltinit.f90  pltlosc.f90  \
-	pltpower.f90  pltprppr.f90   \
-	pltrstv.f90  pltrun.f90 pltstrml.f90  pltvec.f90  pltvectr.f90  \
+	pltfvsv.f90  pltinit.f90  pltlosc.f90  \
+	pltpower.f90  \
+	pltrun.f90  pltvec.f90  pltvectr.f90  \
 	pltvflux.f90  profaxis.f90  profiles.f90 prppr.f90   \
-	prpprctr.f90  psif.f90  psifp.f90  psifppy.f90  psifpy.f90  psiinv.f90  \
-	r8lsode.f  \
+	prpprctr.f90  psif.f90 r8lsode.f  \
 	rdc_multi.f90 rdc_bplt.f90 restcon.f90 resthks.f90  \
 	restvty.f90  rf.f90  sigalloc.f90  siggy.f90  sigmax.f90  sigsetup.f90  \
 	sigv5d.f90 sigfn.f90 sigie.f90  sigmaxwl.f90   sigv.f90  \
-	soucrit.f90 sounorm.f90  soup.f90  soup0.f90  souplt.f90   \
+	soucrit.f90 sounorm.f90  soup.f90  soup0.f90  \
 	sourc0.f90  sourcee.f90  sourcef.f90  sourceko.f90 sourcpwr.f90   \
 	synchrad.f90  tdbootst.f90 tdboothi.f90  tdchief.f90  tddiag.f90  \
 	tddsig.f90  tdfinterp.f90  tdinitl.f90  tdinlegw.f90  \
@@ -94,11 +93,13 @@ LOCATION  =   -L /usr/lib -L/usr/local/lib
 LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
 INCLUDE   =/usr/local/include
 
-DEBUG     = -g 
+DEBUG     = -g -fbacktrace
+#common gfortran dbg flags
+#-g -Wall -Wextra -Warray-temporaries -Wconversion -fimplicit-none -fbacktrace -ffree-line-length-0 -fcheck=all -ffpe-trap=zero,overflow,underflow -finit-real=nan
 OPTIMIZE  = -O1
-CSPECIAL  = -Wall
+CSPECIAL  =
 LDSPECIAL =
-COMPILE   =  $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE) 
+COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE) 
 LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG) # Remove -m for optimize
 PROTECT   = chmod 755
 DELETE    = rm -f
@@ -129,58 +130,24 @@ $(SOURCES):        $(INCLUDES)
 #   we unfortunately do have dependencies.
 # Do not fret, they're not so bad.
 DAGOBJS = param.o comm.o r8subs.o advnce.o pltmain.o \
-          pltdf.o eqrhopsi.o equilib.o \
-          impavnc0.o  frplteq.o tdeqdsk.o bsl.o bsu.o \
-          a_cqlp.f90   achief1.f90  aclear.f90   ainalloc.f90 \
-          aindflt1.f90 aingeom.f90  ainpla.f90   ainpltpa.f90 \
-          ainsetva.f90 ainvnorm.f90 ampfar.f90 abchief.f90  \
-          achiefn.f90  advnce.f90   aindflt.f90  aindfpa.f90 \
-          ainitial.f90 ainplt.f90   ainsetpa.f90 ainspec.f90  \
-          aminmx.f90
-# And this describes their dag...
-comm.o: comm.f90 param.o
-r8subs.o: r8subs.f90 comm.o
-bsl.o: bsl.f90 param.o comm.o
-bsu.o: bsu.f90 param.o comm.o
-advnce.o: advnce.f90 comm.o r8subs.o bsu.o bsl.o
-pltdf.o: pltdf.f90 param.o comm.o r8subs.o
-pltmain.o: pltmain.f90 param.o comm.o pltdf.o
-eqrhopsi.o: eqrhopsi.f90 param.o comm.o aminmx.o
-equilib.o: equilib.f90 param.o comm.o r8subs.o
-impavnc0.o: impavnc0.f90 param.o comm.o advnce.o r8subs.o bsu.o bsl.o
-frplteq.o: frplteq.f90 param.o comm.o r8subs.o
-tdeqdsk.o: tdeqdsk.f90 param.o comm.o equilib.o r8subs.o
+           pltdf.o eqrhopsi.o equilib.o \
+           impavnc0.o  frplteq.o tdeqdsk.o bsl.o bsu.o \
+           a_cqlp.f90   achief1.f90  aclear.f90   ainalloc.f90 \
+           aindflt1.f90 aingeom.f90  ainpla.f90   ainpltpa.f90 \
+           ainsetva.f90 ainvnorm.f90 ampfar.f90 abchief.f90  \
+           achiefn.f90  advnce.f90   aindflt.f90  aindfpa.f90 \
+           ainitial.f90 ainplt.f90   ainsetpa.f90 ainspec.f90  \
+           aminmx.f90
 
-# a is for awful
-a_cqlp.o : a_cqlp.f90 abchief.o
-abchief.o: abchief.f90 param.o comm.o
-achief1.o: achief1.f90 param.o comm.o pltmain.o aingeom.o ainvnorm.o \
- ainspec.o ainsetva.o ainpla.o ainitial.o aindflt.o aindflt1.o ainalloc.o aindfpa.o achiefn.o
-achiefn.o: achiefn.f90 param.o comm.o impavnc0.o pltmain.o
-aclear.o: aclear.f90 param.o comm.o
-ainalloc.o: ainalloc.f90 param.o comm.o
-aindflt.o: aindflt.f90 param.o comm.o
-aindflt1.o: aindflt1.f90 param.o comm.o
-aindfpa.o: aindfpa.f90 param.o comm.o 
-aingeom.o: aingeom.f90 equilib.o param.o comm.o
-ainitial.o: ainitial.f90 param.o comm.o pltmain.o
-ainpla.o: ainpla.f90 param.o comm.o
-ainplt.o: ainplt.f90 param.o comm.o
-ainpltpa.o: ainpltpa.f90 param.o comm.o
-ainsetpa.o: ainsetpa.f90 param.o comm.o
-ainsetva.o: ainsetva.f90 param.o comm.o
-ainspec.o: ainspec.f90 param.o comm.o
-ainvnorm.o: ainvnorm.f90 param.o comm.o
-ampfar.o: ampfar.f90 param.o comm.o r8subs.o
-rdc_multi.o: rdc_multi.f90 param.o comm.o r8subs.o netcdfrf.o
 
+#------ Module generated dependencies
+include module_dependency.mk
 
 #----
 # From here we will assume that all deps to build
 # remaining files have been met.
-# (Other words, we assume remaining .f90 files 
-#  require all DAGOBJS.
-# That is overkill, but simple.
+# (Other words, we assume remaining .f files 
+#  require all f90 files.
 # As files migrate or evolve, we add small rules for each file.
 # This will also document how the code is structured in practice.
 
@@ -199,6 +166,5 @@ rebuild:
 	$(LOAD) $(OBJECTS) $(F90OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS) *.lst$(DELETE)
+	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
 	$(DELETE) *.mod
-
