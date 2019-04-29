@@ -4,8 +4,8 @@ c
       use bcast_mod, only : bcast
       use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'frcomm.h'
-      include 'frname.h'
+      include 'frcomm.h77'
+      include 'frname.h77'
 CMPIINSERT_INCLUDE
 
       character*1024 t_

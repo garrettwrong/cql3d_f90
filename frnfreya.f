@@ -7,7 +7,7 @@ c
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.................................................................
-      include 'frcomm.h'
+      include 'frcomm.h77'
 c     ONETWO DIVERGENCE: SEE COMMENTS AT BEGINNING OF FREYA
       character*8 frmod_,fr_gyro_,beamplse_,noplots,codeid
       real*8, intent(out) :: hibrz_(kz,ke,kb)
@@ -17,7 +17,7 @@ c     ONETWO DIVERGENCE: SEE COMMENTS AT BEGINNING OF FREYA
       save ifirst
       data ifirst/"first"/
 
-c     To pass these freya namelist in frcomm.h to comm.h
+c     To pass these freya namelist in frcomm.h77 to comm.h
       frmod_=frmod
       fr_gyro_=fr_gyro
       beamplse_=beamplse

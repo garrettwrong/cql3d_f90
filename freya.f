@@ -256,10 +256,10 @@ c     (i.e. ang. momtm. deposited in shell per second /volume of she
 c     angmpz contains only the toroidal component of ang momentum.
 c---------------------------------------------------------------------
 c     ONETWO DIVERGENCE
-      include 'frcomm.h'
+      include 'frcomm.h77'
 
 c     Automatic arrays for local dynamic mem, for case where NUBEAM
-c     particle birth point list is used. nbirth_pts from frcomm.h
+c     particle birth point list is used. nbirth_pts from frcomm.h77
       real*8, allocatable :: x_nub(:),y_nub(:),z_nub(:)
       real*8, allocatable :: vx_nub(:),vy_nub(:),vz_nub(:)
       real*8, allocatable :: v_nub(:),en_nub(:)

@@ -13,12 +13,12 @@ c     This routine communicates between common blocks of CQL3D and the
 c     segregated CRAY32 (NFREYA ONETWO version) common blocks,
 c     by passing subroutine arguments.
 c
-c     smooth in comm.h and frcomm.h is passed from frcomm to comm,
+c     smooth in comm.h and frcomm.h77 is passed from frcomm to comm,
 c       through argument smth.
 c     fd specified in frinitl passed here to give dt mixture ratio.
-c     nprim,nimp,nion,ibion,namep,namei,atw are in frcomm.h, not comm.h.
+c     nprim,nimp,nion,ibion,namep,namei,atw are in frcomm.h77, not comm.h.
 c     These variables are determined from comm.h data, passed to 
-c     frcomm.h through the arguments of frinitz.
+c     frcomm.h77 through the arguments of frinitz.
 c       
 c..................................................................
 

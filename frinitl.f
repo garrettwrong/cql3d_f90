@@ -3,7 +3,7 @@ c
       subroutine frinitl
       use param_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-      include 'frname_decl.h'
+      include 'frname_decl.h77'
       character*8 machinei
 
       REAL RILIN
