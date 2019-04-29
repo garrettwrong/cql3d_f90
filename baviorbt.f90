@@ -19,6 +19,7 @@ contains
 
   subroutine baviorbt
     implicit integer (i-n), real*8 (a-h,o-z)
+    real(c_double) ::wk_lug(nstps) ! YuP[2019-04-22] working array for lug()
     save
 
 !  *** NOTE: Bunch of write(*,*) statements related to checking
@@ -194,8 +195,10 @@ contains
 !            step back to the first nonzero tem2).
             do ii=1,nii
               iguess=1  ! YuP: ??? what for? doesn't work in lug()
-              itemc1(ii)=lug(zero,tem2(1+(ii-1)*nsteps: &
-                    1+(ii-1)*nsteps+nsteps),nsteps,iguess)-1
+              ii0= 1+(ii-1)*nsteps
+              ii2= ii0+nsteps-1 !YuP[2019-04-22]should be nsteps elements
+              wk_lug(1:nsteps)= tem2(ii0:ii2)
+              itemc1(ii)=lug(zero,wk_lug,nsteps,iguess)-1
                !write(*,*)'b1 after LUG itemc1=',lr_,l,itemc1(ii)
                if (itemc1(ii).ge.1) then
                   if (tem2(itemc1(ii)+(ii-1)*nsteps).eq.zero) then
@@ -356,8 +359,9 @@ contains
 !            step back to the first nonzero tem2).
             do ii=1,nii
               iguess=1
-              itemc1(ii)=lug(zero,tem2(1+(ii-1)*nsteps: &
-                  1+(ii-1)*nsteps+nsteps),nsteps,iguess)-1
+              ii2= ii0+nsteps-1 !YuP[2019-04-22]should be nsteps elements
+              wk_lug(1:nsteps)= tem2(ii0:ii2)
+              itemc1(ii)=lug(zero,wk_lug,nsteps,iguess)-1
                !write(*,*)'b2 after LUG itemc1=',lr_,l,itemc1(ii)
                if (itemc1(ii).ge.1) then
                   if (tem2(itemc1(ii)+(ii-1)*nsteps).eq.zero) then
