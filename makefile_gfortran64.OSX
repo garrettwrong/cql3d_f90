@@ -93,7 +93,8 @@ LOCATION  =   -L /usr/lib -L/usr/local/lib
 LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
 INCLUDE   =/usr/local/include
 
-DEBUG     = -g -fbacktrace -Wuninitialized
+DEBUG     = -g -fbacktrace
+#common gfortran dbg flags
 #-g -Wall -Wextra -Warray-temporaries -Wconversion -fimplicit-none -fbacktrace -ffree-line-length-0 -fcheck=all -ffpe-trap=zero,overflow,underflow -finit-real=nan
 OPTIMIZE  = -O1
 CSPECIAL  = -fdefault-real-8  -fdefault-double-8
