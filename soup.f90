@@ -1,6 +1,10 @@
 module soup_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use psif_mod, only : psif
   use r8subs_mod, only : dcopy

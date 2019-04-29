@@ -4,6 +4,10 @@ module impavnc0_mod
 
   !---BEGIN USE
   use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
@@ -142,7 +146,7 @@ contains
 
     !MPIINSERT_INCLUDE
 
-    !BH080303    real*4 etime,tm1,tm(2) !Dclrtns for lf95 ETIME(). See man etime.
+    !BH080303    real(c_float) etime,tm1,tm(2) !Dclrtns for lf95 ETIME(). See man etime.
     !BH080303    Using f95 intrinsic subroutine, cpu_time
     real(c_float) :: tm1,tm(2)    !Dclrtns for lf95 ETIME(). See man etime.
 

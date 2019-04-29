@@ -2,6 +2,9 @@ module pack21_mod
 
   !---BEGIN USE
 
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_float
+
   !---END USE
 
 !
@@ -14,6 +17,8 @@ end module pack21_mod
 
 !XXXX this is a mess (relates to netcdf files)
       subroutine pack21(a,ibot,itop,jbot,jtop,b,iy,jx)
+        use iso_c_binding, only : c_double
+        use iso_c_binding, only : c_float
         use bcast_mod, only : bcast
         use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -39,6 +44,8 @@ end module pack21_mod
 !
 !
       subroutine unpack21(a,ibot,itop,jbot,jtop,b,iy,jx)
+        use iso_c_binding, only : c_double
+        use iso_c_binding, only : c_float
         use bcast_mod, only : bcast
         use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -67,7 +74,9 @@ end module pack21_mod
 !
 !
       subroutine ipack21(ia,ibot,itop,jbot,jtop,ib,iy,jx)
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+        use iso_c_binding, only : c_double
+        use iso_c_binding, only : c_float
+        implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
 !     It sometimes becomes necessary to take a

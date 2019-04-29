@@ -5,6 +5,9 @@ program a_cql3d
   use impavnc0_mod, only : de_alloc
   use impavnc0_mod, only : it3dalloc
   use impavnc0_mod, only : it3ddalloc
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_float
+
 !***********************************************************************
 !
 !   Copyright R.W. Harvey and Yu. V Petrov
@@ -247,7 +250,7 @@ program a_cql3d
 !
 !..................................................................
 
-real*4 tarray(2)
+real(c_float) tarray(2)
 
 !MPIINSERT_INCLUDE
 

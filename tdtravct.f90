@@ -1,6 +1,10 @@
 module tdtravct_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
   use r8subs_mod, only : dcopy
@@ -854,7 +858,7 @@ contains
 !
       INTEGER n,MAXITS, iters
       LOGICAL check
-      REAL*8 x(n),TOLF,TOLMIN,TOLX,STPMX
+      real(c_double) x(n),TOLF,TOLMIN,TOLX,STPMX
 !     Choose following TOLX to match value in lnsrch.
 !     Choose following NP to match value in fffmin.
 !BH091214      PARAMETER (NP=100,MAXITS=25,TOLF=1.e-2,TOLMIN=1.e-5,TOLX=1.e-3,
@@ -865,8 +869,8 @@ contains
 
 
       INTEGER i,its,j,indx(NP)
-      REAL*8 :: d,den,f,fold,stpmax,sum,temp,test,fjac(NP,NP),g(NP),p(NP),xold(NP)
-      REAL*8 fn,fnp5,one
+      real(c_double) :: d,den,f,fold,stpmax,sum,temp,test,fjac(NP,NP),g(NP),p(NP),xold(NP)
+      real(c_double) fn,fnp5,one
 
       one=1.d0
       iters=0
@@ -970,16 +974,16 @@ contains
 !                                                                      !
       INTEGER n
       LOGICAL check
-      REAL*8 f,fold,stpmax,g(n),p(n),x(n),xold(n),func,ALF,TOLX
+      real(c_double) f,fold,stpmax,g(n),p(n),x(n),xold(n),func,ALF,TOLX
 !BH091214      PARAMETER (ALF=1.e-4,TOLX=1.e-3)
       PARAMETER (ALF=1.e-5,TOLX=1.e-10)
       EXTERNAL func
 !     USES func
 
       INTEGER i
-      REAL*8 a,alam,alam2,alamin,b,disc,f2,fold2,rhs1,rhs2,slope, &
-               sum,temp,test,tmplam
-      REAL*8 zero,one
+      real(c_double) a,alam,alam2,alamin,b,disc,f2,fold2,rhs1,rhs2,slope, &
+           sum,temp,test,tmplam
+      real(c_double) zero,one
       zero=0.d0
       one=1.d0
       check=.false.
@@ -1049,11 +1053,11 @@ contains
 !=======================================================================
       subroutine fdjac(n,x,fvec,NP,df)
       INTEGER n,NP
-      REAL*8 df(NP,NP), fvec(n),x(n),EPS
+      real(c_double) df(NP,NP), fvec(n),x(n),EPS
       PARAMETER (EPS=1.e-7)
 !     USES funcv
       INTEGER i,j
-      REAL*8 h,temp,f(NP)
+      real(c_double) h,temp,f(NP)
       do   j=1,n
          temp=x(j)
          h=EPS*abs(temp)
@@ -1071,12 +1075,12 @@ contains
 
 !=======================================================================
 !=======================================================================
-      REAL*8 function fffmin(x)
+      real(c_double) function fffmin(x)
       use comm_mod, only : NP, fvec, newtv_nn
-      REAL*8 x(*)
+      real(c_double) x(*)
 !     USES funcv
       INTEGER i
-      REAL*8 sum
+      real(c_double) sum
       call funcv (newtv_nn,x,fvec)
       sum=0.
       do   i=1,newtv_nn
@@ -1090,11 +1094,11 @@ contains
 !=======================================================================
       subroutine ludcmp(a,n,NP,indx,d)
       INTEGER n,NP,indx(n)
-      REAL*8 d,a(np,np),TINY
+      real(c_double) d,a(np,np),TINY
       PARAMETER (TINY=1.0e-20)
 
       INTEGER i,imax,j,k
-      REAL*8 aamax,dum,sum,vv(NP),zero
+      real(c_double) aamax,dum,sum,vv(NP),zero
       save icall_count !-YuP Counting calls to subroutine
 
 
@@ -1160,9 +1164,9 @@ contains
 !=======================================================================
       subroutine lubksb(a,n,np,indx,b)
       INTEGER n,np,indx(n)
-      REAL*8 a(np,np),b(n)
+      real(c_double) a(np,np),b(n)
       INTEGER i,ii,j,ll
-      REAL*8 sum,zero
+      real(c_double) sum,zero
       zero=0.d0
       ii=0
       do   i=1,n

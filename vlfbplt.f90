@@ -1,6 +1,10 @@
 module vlfbplt_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
   use pltdf_mod, only : pltcont
@@ -25,7 +29,7 @@ contains
 
       character*8 pltvlfb
       character*8 pltovlp
-      real*4 RTAB1(iy),RTAB2(iy) ! local, for PGPLOT
+      real(c_float) RTAB1(iy),RTAB2(iy) ! local, for PGPLOT
 
       save pltvlfb,pltovlp
       data pltvlfb /'enabled'/

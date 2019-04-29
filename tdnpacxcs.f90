@@ -1,6 +1,10 @@
 module tdnpacxcs_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use iso_c_binding, only : c_double
 
@@ -10,8 +14,8 @@ contains
 
        REAL FUNCTION cxcs(enin)
        IMPLICIT integer (i-n), real(c_double) (a-h,o-z)
-       REAL*8,DIMENSION(9)::a
-       REAL*8::enmin,enmax,x,t1,t2,t3,t4,t5,t6,t7,t8,en
+       real(c_double),DIMENSION(9)::a
+       real(c_double)::enmin,enmax,x,t1,t2,t3,t4,t5,t6,t7,t8,en
 !vt    use this function to get CX cross sections, V. Tang 9-25-05
 !vt    Version 1.0, originally finalized 10/14/06, tested and compared
 !vt    with plots from Redbook.

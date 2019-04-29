@@ -1,6 +1,10 @@
 module pltvec_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
   use bcast_mod, only : bcast
@@ -39,9 +43,9 @@ contains
       save
 
       character*8 target
-      REAL*4 RILIN
-      REAL*4 RPG1
-      REAL*4 RPGX(2),RPGY(2)
+      real(c_float) RILIN
+      real(c_float) RPG1
+      real(c_float) RPGX(2),RPGY(2)
 
 
 !...................................................................

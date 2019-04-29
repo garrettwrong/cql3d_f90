@@ -1,6 +1,10 @@
 module eqtopeol_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use r8subs_mod, only : dscal
   use zcunix_mod, only : coeff1

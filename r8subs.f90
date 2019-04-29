@@ -68,6 +68,7 @@ module r8subs_mod
 
   !---BEGIN USE
   use comm_mod
+  use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
   !---END USE
@@ -77,7 +78,7 @@ module r8subs_mod
   save
 
 contains
-  
+
   real(c_double) function cvmgm(x,y,z)
     implicit integer (i-n), real(c_double) (a-h,o-z)
     cvmgm=y
@@ -554,7 +555,8 @@ contains
 
 
       real*4 function rbound(r8)
-      !why? save
+      real(c_float) function rbound(r8)
+      save !XXXX why?
 !
 !     Converts a real(c_double) argument to a real number,
 !     equal to 0. (if r8=0.) or,
@@ -568,7 +570,7 @@ contains
 !     For a 64-bit machine, one might consider appropriate
 !     adjustment of em33/ep33.
 !
-!BH090905      real*4 rbound
+!BH090905      real(c_float) rbound
       real(c_double) r8,r8sign,r8abs
       real(c_double) em33,ep33,zero,one
       data em33/1.d-33/, ep33/1.d+33/, zero/0.d0/, one/1.d0/
@@ -3710,7 +3712,9 @@ contains
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 !*     ..
 !*     .. Local Scalars ..
+
       REAL(C_DOUBLE)   SFMIN
+
       INTEGER            I, J, JP
 !*     ..
 !*     .. External Functions ..

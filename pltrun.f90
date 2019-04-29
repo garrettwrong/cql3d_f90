@@ -1,6 +1,10 @@
 module pltrun_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
   use tdnflxs_mod, only : tdnflxs
@@ -21,9 +25,9 @@ contains
       dimension yg(nonch),xg(nonch)
 
 !     PGPLOT REAL Variables:
-      REAL*4 RPG1,RPG2
-      REAL*4 RNONCHA1(nonch),RNONCHA2(nonch)
-      !XXX REAL*4 RBOUND
+      real(c_float) RPG1,RPG2
+      real(c_float) RNONCHA1(nonch),RNONCHA2(nonch)
+      !XXX real(c_float) RBOUND
 !-----------------
 !   This subroutine writes and plots runaway population and current
 !------------------

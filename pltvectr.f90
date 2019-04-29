@@ -1,6 +1,10 @@
 module pltvectr_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
 
@@ -29,9 +33,9 @@ contains
       dimension xh(jpxy,ipxy),yh(jpxy,ipxy)
       dimension rheads(*)
 !
-      REAL*4 RPX1,RPY1,RPX2,RPY2
-      REAL*4 ANGLE,BARB,SIZE
-      !XXX REAL*4 RBOUND
+      real(c_float) RPX1,RPY1,RPX2,RPY2
+      real(c_float) ANGLE,BARB,SIZE
+      !XXX real(c_float) RBOUND
 !BH011228 Modifications for plotting with PGPLOT,  011228.
 
       ep90=1.d+90

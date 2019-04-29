@@ -1,6 +1,10 @@
 module pltmain_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
   use bcast_mod, only : bcast
@@ -266,7 +270,7 @@ contains
   subroutine gsvp2d(xmin,xmax,ymin,ymax)
     ! xmin,...defines where on the frame the data is plotted.
     REAL xmin,xmax,ymin,ymax ! let these take the compiler default...
-    REAL*4 PGxmin,PGxmax,PGymin,PGymax ! PGPLOT uses REAL*4
+    real(c_float) PGxmin,PGxmax,PGymin,PGymax ! PGPLOT uses real(c_float)
     PGxmin = xmin
     PGxmax = xmax
     PGymin = ymin
@@ -285,8 +289,8 @@ contains
     use r8subs_mod, only : rbound
     ! xmin,... defines the user coordinate system.
     implicit integer (i-n), real(c_double) (a-h,o-z)
-    REAL*4 PGxmin,PGxmax,PGymin,PGymax, RPG1,RPG2 ! PGPLOT uses REAL*4
-    !REAL*4 RBOUND
+    real(c_float) PGxmin,PGxmax,PGymin,PGymax, RPG1,RPG2 ! PGPLOT uses real(c_float)
+    !real(c_float) RBOUND
     character*7 scales ! = "linlin$" or "linlog$","loglin$","loglog$"
     scale  = scales ! To gpcv2d -> PGLINE
     PGxmin = RBOUND(xmin)
@@ -329,24 +333,24 @@ contains
     implicit integer (i-n), real(c_double) (a-h,o-z)
     real(c_double) xarray(length),yarray(length)
     integer length
-    REAL*4 PGxarray(length),PGyarray(length)
+    real(c_float) PGxarray(length),PGyarray(length)
     small_p = EPSILON(1.0) !a positive number that is almost negligible
     if(scale.eq."linlin$") then
        do n=1,length
-          PGxarray(n)= xarray(n) ! Convert to REAL*4 for PGPLOT
-          PGyarray(n)= yarray(n) ! Convert to REAL*4 for PGPLOT
+          PGxarray(n)= xarray(n) ! Convert to real(c_float) for PGPLOT
+          PGyarray(n)= yarray(n) ! Convert to real(c_float) for PGPLOT
        enddo
     endif
     if(scale.eq."linlog$") then
        do n=1,length
-          PGxarray(n)= xarray(n) ! Convert to REAL*4 for PGPLOT
+          PGxarray(n)= xarray(n) ! Convert to real(c_float) for PGPLOT
           PGyarray(n)= log10( max(small_p,abs(yarray(n))) )
        enddo
     endif
     if(scale.eq."loglin$") then
        do n=1,length
           PGxarray(n)= log10( max(small_p,abs(xarray(n))) )
-          PGyarray(n)= yarray(n) ! Convert to REAL*4 for PGPLOT
+          PGyarray(n)= yarray(n) ! Convert to real(c_float) for PGPLOT
        enddo
     end if
     if(scale.eq."loglog$") then
@@ -376,11 +380,11 @@ contains
     ! draw line between two points.
     ! x1,x2,y1,y2 defines the two points to draw a line between.
     implicit integer (i-n), real(c_double) (a-h,o-z)
-    REAL*4 PGx1, PGy1, PGx2, PGy2
-    PGx1 = x1 ! Convert to REAL*4
-    PGx2 = x2 ! Convert to REAL*4
-    PGy1 = y1 ! Convert to REAL*4
-    PGy2 = y2 ! Convert to REAL*4
+    real(c_float) PGx1, PGy1, PGx2, PGy2
+    PGx1 = x1 ! Convert to real(c_float)
+    PGx2 = x2 ! Convert to real(c_float)
+    PGy1 = y1 ! Convert to real(c_float)
+    PGy2 = y2 ! Convert to real(c_float)
             CALL PGMOVE (PGx1, PGy1)
     ! Move the "pen" to the point with world
     ! coordinates (X,Y). No line is drawn.
@@ -391,7 +395,7 @@ contains
     return
   end subroutine gpln2d
   !---------------------------------------------------------------------
-  subroutine gslnsz(size) ! called explicitly with real*4 args
+  subroutine gslnsz(size) ! called explicitly with real(c_float) args
     ! set line size (width), where 0. is the default.
     real size ! take the compiler default
     INTEGER  LW
@@ -420,17 +424,17 @@ contains
     return
   end subroutine gslnst
   !---------------------------------------------------------------------
-  subroutine  gscpvs(gl_x,gl_y) ! called explicitly with real*4 args
+  subroutine  gscpvs(gl_x,gl_y) ! called explicitly with real(c_float) args
     ! set current position for text
-    real*4 gl_x,gl_y
+    real(c_float) gl_x,gl_y
     X = gl_x  ! To PGPTXT(X,Y,ANGLE,FJUST,TEXT)
     Y = gl_y
     return
   end subroutine gscpvs
   !---------------------------------------------------------------------
-  subroutine  gstxan(gl_angle) ! called explicitly with real*4 args
+  subroutine  gstxan(gl_angle) ! called explicitly with real(c_float) args
     ! set angle to plot text
-    real*4 gl_angle
+    real(c_float) gl_angle
     ANGLE = gl_angle ! To PGPTXT(X,Y,ANGLE,FJUST,TEXT)
     return
   end subroutine gstxan
@@ -448,12 +452,12 @@ contains
     return
   end subroutine gstxjf
   !---------------------------------------------------------------------
-  subroutine  gstxno(size) ! called explicitly with real*4 args
+  subroutine  gstxno(size) ! called explicitly with real(c_float) args
     ! set number of characters per line, i.e., character width.
     ! Default: size=90.  (not sure)
-    real*4 size
-    REAL*4 PGsize
-    PGsize = size ! Convert to REAL*4
+    real(c_float) size
+    real(c_float) PGsize
+    PGsize = size ! Convert to real(c_float)
              CALL PGSCH(90./PGsize) ! set character size; default is 1.
     return
   end subroutine gstxno
@@ -1421,7 +1425,7 @@ contains
       REAL RCONT,RXMAXQ,RTEMP1,RXPTS,RYPTS
       DIMENSION RCONT(NCONTA),RTEMP1(iy,jx),RXPTS(2),RYPTS(2)
 !     wx IS V-NORM ARRAY, wy IS THETA ARRAY.  TYPE REAL.
-      real*4 RTAB1(iy),RTAB2(iy) ! local
+      real(c_float) RTAB1(iy),RTAB2(iy) ! local
 
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only

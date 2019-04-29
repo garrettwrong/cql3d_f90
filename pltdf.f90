@@ -3,6 +3,10 @@
 module pltdf_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use lookup_mod, only : lookup_tdf
   use r8subs_mod, only : dcopy
@@ -151,15 +155,15 @@ contains
       REAL RCONT,RXMAXQ,RTEMP1,RXPTS,RYPTS
       DIMENSION RCONT(NCONTA),RTEMP1(iy,jx),RXPTS(2),RYPTS(2)
 !     wx IS V-NORM ARRAY, wy IS THETA ARRAY.  TYPE REAL.
-      real*4 RTAB1(iy),RTAB2(iy) ! local
+      real(c_float) RTAB1(iy),RTAB2(iy) ! local
 
       !YuP[2018-01-27] Local, for PGPLOT:
       parameter(npar=200, nprp=100)
       real(c_double) vpar(npar),vprp(nprp) ! rectangular grid for plots
       real(c_double) fparprp(npar,nprp) !f(i,j) will be interpolated to this grid
-      real*4 BRIGHT,CONTRA,FMIN,FMAX,RVMIN,RVMAX, &
+      real(c_float) BRIGHT,CONTRA,FMIN,FMAX,RVMIN,RVMAX, &
              TRPG(6),RTEMP2(npar,nprp)
-      REAL*4 RCONTLOG(NCONTA),FLOGMIN,FLOGMAX
+      real(c_float) RCONTLOG(NCONTA),FLOGMIN,FLOGMAX
 
 
 
@@ -491,7 +495,7 @@ contains
       !FLOGMIN=FLOGMAX
       do ipar=1,npar
       do iprp=1,nprp
-         RTEMP2(ipar,iprp)=log10(fparprp(ipar,iprp)) ! to REAL*4
+         RTEMP2(ipar,iprp)=log10(fparprp(ipar,iprp)) ! to real(c_float)
          ! LOG scale - better for color plots?
          !FLOGMIN=MIN(FLOGMIN,RTEMP2(ipar,iprp))
       enddo

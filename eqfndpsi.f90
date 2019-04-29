@@ -1,6 +1,10 @@
 module eqfndpsi_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use eqflxavg_mod, only : eqflxavg
   use eqfpsi_mod, only : eqfpsi

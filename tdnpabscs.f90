@@ -1,6 +1,10 @@
 module tdnpabscs_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   !---END USE
 
@@ -22,10 +26,10 @@ contains
 ! BH100423:  Problem a low temperature.  NEED TO REPLACE.
 !......................................................
        IMPLICIT NONE
-       REAL*8,INTENT(IN)::eng,ne,te,zeff
-       REAL*8,INTENT(OUT)::stopcs
-       REAL*8,DIMENSION(3,3,3)::a,b
-       REAL*8::si,sz,i1,j1,k1,ne2,no
+       real(c_double),INTENT(IN)::eng,ne,te,zeff
+       real(c_double),INTENT(OUT)::stopcs
+       real(c_double),DIMENSION(3,3,3)::a,b
+       real(c_double)::si,sz,i1,j1,k1,ne2,no
        INTEGER::i,j,k
 !       print*,eng,ne,te,zeff,stopcs
 !       ne2=ne/1e6 !converts electron density to 1/cm3

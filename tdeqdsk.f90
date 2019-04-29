@@ -3,6 +3,10 @@
 module tdeqdsk_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use firstdrv_mod, only : firstdrv
   use r8subs_mod, only : dcopy
@@ -23,7 +27,7 @@ contains
     use comm_mod
     use equilib_mod, only : ncoila, nccoila, pcvac, ccoil, ncoil
     use r8subs_mod, only : dcopy
-    
+
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
 

@@ -1,6 +1,10 @@
 module tdtloop_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aindfpa_mod, only : ainadjnl
   use aindfpa_mod, only : ainadjnl_fsetup_setup0

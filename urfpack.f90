@@ -1,6 +1,10 @@
 module urfpack_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use tdnflxs_mod, only : tdnflxs
   use urfedge_mod, only : urfedge

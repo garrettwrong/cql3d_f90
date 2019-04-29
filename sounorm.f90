@@ -1,6 +1,10 @@
 module sounorm_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
   use soup_mod, only : soup

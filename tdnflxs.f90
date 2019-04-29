@@ -1,6 +1,10 @@
 module tdnflxs_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use comm_mod
   use diagwrng_mod, only : diagwrng
@@ -11,7 +15,7 @@ contains
 
   subroutine tdnflxs(ll)
     !implicit integer (i-n), real(c_double) (a-h,o-z)
-    implicit none    
+    implicit none
     save
 
     integer :: ll

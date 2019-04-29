@@ -1,6 +1,10 @@
 module pltendn_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
 
@@ -23,12 +27,12 @@ contains
 !     and density conservation constant vs. time.
 !
 !     Conversion to real function for PGPLOT
-      !XXX REAL*4 RBOUND
+      !XXX real(c_float) RBOUND
 !     PGPLOT REAL Variables:
-      REAL*4 RILIN
-      REAL*4 RPG1,RPG2
-      REAL*4 RNONCHA1(nonch),RNONCHA2(nonch)
-      REAL*4 RJXA1(jx),RJXA2(jx),RJXA3(jx)
+      real(c_float) RILIN
+      real(c_float) RPG1,RPG2
+      real(c_float) RNONCHA1(nonch),RNONCHA2(nonch)
+      real(c_float) RJXA1(jx),RJXA2(jx),RJXA3(jx)
       dimension wk_nch(nonch)
       real(c_double) wkd(jx)
       CHARACTER*64 TX_
@@ -457,15 +461,15 @@ contains
       ! Calculations are done in sub. fow_cons()
 !MPIINSERT_INCLUDE
 !     Conversion to real function for PGPLOT
-      !XXX REAL*4 RBOUND
+      !XXX real(c_float) RBOUND
 !     PGPLOT REAL Variables:
-      REAL*4 RILIN
-      REAL*4 RPG1,RPG2, RPGmin, RPGmax
-      REAL*4 RLRZAP1(0:LRZA) ! for rho coord.
-      REAL*4 RLRZAP(0:LRZA)  ! for R coord.
-      REAL*4 RLRZAP11(0:LRZA) ! vertical axis: conservation of ptcl
+      real(c_float) RILIN
+      real(c_float) RPG1,RPG2, RPGmin, RPGmax
+      real(c_float) RLRZAP1(0:LRZA) ! for rho coord.
+      real(c_float) RLRZAP(0:LRZA)  ! for R coord.
+      real(c_float) RLRZAP11(0:LRZA) ! vertical axis: conservation of ptcl
 
-      REAL*4 RNONCHA1(nonch),RNONCHA2(nonch)
+      real(c_float) RNONCHA1(nonch),RNONCHA2(nonch)
       real(c_double) wk_cons(nonch)
 
       character*16 t_horiz

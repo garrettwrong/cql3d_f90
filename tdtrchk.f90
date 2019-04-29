@@ -1,6 +1,10 @@
 module tdtrchk_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
   use diagwrng_mod, only : diagwrng

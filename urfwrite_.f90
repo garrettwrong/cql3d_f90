@@ -1,6 +1,10 @@
 module urfwrite__mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use urfwr0_mod, only : urfwr0
   use urfwr0c_mod, only : urfwr0c

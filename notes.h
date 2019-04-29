@@ -56,7 +56,7 @@
 !      -note on netcdf: the NCDOUBLE designation for storage
 !       of netcdf variables is netCDF based, rather than on
 !       the architecture of the computer.
-!       Thus, REAL*8 is NCDOUBLE, regardless.
+!       Thus, real(c_double) is NCDOUBLE, regardless.
 !
 !
 !.......................................................................

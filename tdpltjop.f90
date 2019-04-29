@@ -1,6 +1,10 @@
 module tdpltjop_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
 
@@ -23,7 +27,7 @@ contains
       REAL RPG1,RPG2, RPGmin, RPGmax
       REAL RLRZAP1(0:LRZA),RLRZAP11(0:LRZA),RLRZAP12(0:LRZA), &
            RLRZAP13(0:LRZA),RLRZAP14(0:LRZA)
-      REAL*4 RLRZAP(0:LRZA)
+      real(c_float) RLRZAP(0:LRZA)
       character*16 t_horiz
 
 !..................................................................

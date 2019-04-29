@@ -1,6 +1,10 @@
 module zcunix_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   !---END USE
 
@@ -1247,7 +1251,7 @@ contains
 !
 !
 
-!!XXXXXX 
+!!XXXXXX
 !       real(c_double) function erf(xxx)
 !       implicit integer (i-n), real(c_double) (a-h,o-z)
 !       save

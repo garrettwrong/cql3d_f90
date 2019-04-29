@@ -1,6 +1,10 @@
 module achief1_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use achiefn_mod, only : achiefn
   use ainalloc_mod, only : ainalloc
@@ -268,8 +272,9 @@ contains
        call diagimpd(k)
     enddo ! k
     call achiefn(1)  !Compute plasma energy, density and energy transfer
-
-
+    
+    
     return
-  end subroutine achief1
+ end if
+ 
 end module achief1_mod

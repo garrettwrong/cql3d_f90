@@ -1,6 +1,10 @@
 module znonsym_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   !---END USE
 
@@ -22,7 +26,7 @@ contains
 !-----------------------------------------------------------------------
       DIMENSION   A((MLEFT+MRIGHT+1)*N),    X(N),    C(N)
 !MPLX COMPLEX     A,       X,       C,        ZPIVOT,   ZSUM,     ZTOP
-      REAL*8        A,       X,       C,        ZPIVOT,   ZSUM,     ZTOP
+      real(c_double)        A,       X,       C,        ZPIVOT,   ZSUM,     ZTOP
       DATA        IMESS  / 0 /
 !-----------------------------------------------------------------------
 !

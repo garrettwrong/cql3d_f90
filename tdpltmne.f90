@@ -1,6 +1,10 @@
 module tdpltmne_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
   use tdpltjop_mod, only : tdpltjop
@@ -25,14 +29,14 @@ contains
 !
 !MPIINSERT_INCLUDE
       dimension trilr(lrza),tr1s(lrorsa),tr2s(lrorsa)
-!     real*4 variables (and function rbound) for pgplot:
-      REAL*4 RPG1,RPG2, RPGmin, RPGmax
-      REAL*4 RLRZAP1(0:LRZA),RLRZAP11(0:LRZA),RLRZAP12(0:LRZA), &
+!     real(c_float) variables (and function rbound) for pgplot:
+      real(c_float) RPG1,RPG2, RPGmin, RPGmax
+      real(c_float) RLRZAP1(0:LRZA),RLRZAP11(0:LRZA),RLRZAP12(0:LRZA), &
            RLRZAP13(0:LRZA)
-      REAL*4 RLRZAP(0:LRZA)
-      REAL*4 RLRORSA(LRORSA),RLRORSA1(LRORSA),RLRORSA2(LRORSA)
-      REAL*4 RNONCHA1(nonch),RNONCHA2(nonch)
-      !XXX REAL*4 RBOUND
+      real(c_float) RLRZAP(0:LRZA)
+      real(c_float) RLRORSA(LRORSA),RLRORSA1(LRORSA),RLRORSA2(LRORSA)
+      real(c_float) RNONCHA1(nonch),RNONCHA2(nonch)
+      !XXX real(c_float) RBOUND
       character*16 t_horiz
 
       data em33/1.d-33/

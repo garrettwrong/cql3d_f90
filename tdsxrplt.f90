@@ -1,6 +1,10 @@
 module tdsxrplt_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
 
@@ -22,10 +26,10 @@ contains
 
 !MPIINSERT_INCLUDE
 
-      REAL*4 RTAM1(nena),RTAM2(nena)
-      REAL*4 REMAX,REMIN
+      real(c_float) RTAM1(nena),RTAM2(nena)
+      real(c_float) REMAX,REMIN
 !BH092022: XXX
-      !REAL*4 RBOUND
+      !real(c_float) RBOUND
 
 !..................................................................
 !mnt  this routine plots SXR/NPA energy/particle flux spectra
@@ -168,11 +172,11 @@ contains
 
       character*8  pltsxrvw
 
-      REAL*4 ZTOP
-      REAL*4 RTAB1(LFIELDA),RTAB2(LFIELDA)
-      REAL*4 PGER1,PGERNNR,PGEZNNZ
+      real(c_float) ZTOP
+      real(c_float) RTAB1(LFIELDA),RTAB2(LFIELDA)
+      real(c_float) PGER1,PGERNNR,PGEZNNZ
 
-      REAL*4 RRTAB1,RRTAB2
+      real(c_float) RRTAB1,RRTAB2
       dimension rrtab1(:), rrtab2(:)
       dimension tempp4(*),tempp5(*),tempp6(*)
       pointer rrtab1, rrtab2

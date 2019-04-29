@@ -40,10 +40,14 @@
 module comm_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   !---END USE
-  use iso_c_binding, only : c_float             !REAL*4
-  use iso_c_binding, only : c_double            !REAL*8
+  use iso_c_binding, only : c_float             !real(c_float)
+  use iso_c_binding, only : c_double            !real(c_double)
   use iso_c_binding, only : c_double_complex    !COMPLEX*16
   use param_mod
   implicit none
@@ -1933,7 +1937,7 @@ module comm_mod
   !$$$     +           com_cp1,com_cp2,com_cp3,com_cp4
   !$$$
   !$$$
-  !$$$      REAL*8 mcq_drdt
+  !$$$      real(c_double) mcq_drdt
   !$$$      common/orb/ nstp_orb,lostorb,not_complete,
   !$$$     +            cmuorb,vpar_ini,vprp_ini,mcq_drdt,renv,dtorb
   !$$$C---> nstp_orb= number of steps along orbit; found after orbit is traced

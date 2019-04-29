@@ -3,6 +3,10 @@
 module equilib_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use eqtopeol_mod, only : eqtopeol
   use eqwrng_mod, only : eqwrng
@@ -28,7 +32,7 @@ contains
     use param_mod
     use comm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
-    
+
     !  Call with index=0 for setup,
     !            index=1 for PSI,BR,BPHI,BZ return (cgs units)
     !                    for a given Requil,Zequil coordinate.

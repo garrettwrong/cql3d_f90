@@ -730,7 +730,7 @@ c
 ![167] Alternatively, could set bsl and bsu to zero for jj=0 and jx+1.
 ![167] Almost no effect on results, but prevents out-of-bounds error. YuP
 
-![166] Fixed a bug in reading of Complex*16 array into a Real*8
+![166] Fixed a bug in reading of Complex*16 array into a real(c_double)
 ![166] dummy array in urfread_i.  YuP
 
 ![165] Possible bug in reading ray##/text data file.
@@ -1073,7 +1073,7 @@ c
 ![121] relativ='enabled' approximation is quite sufficient, see
 ![121] report CompX-2009-1_Fully-Rel.pdf  [Yuri Petrov, 091016].
 
-![120] The Intel ifort compiler on viz.pppl.gov differed in compiling 
+![120] The Intel ifort compiler on viz.pppl.gov differed in compiling
 ![120] a comparison between a real(c_double) variable and 0.0, so changed all
 ![120] .ne.0. and .eq.0. in the code to be comparisons with real(c_double)
 ![120] zero=0.d0  (in about 35 source files). [BH090904].
@@ -1220,7 +1220,11 @@ c
 ![101]
 ![101] Execution time increased from approx 8 minutes to 20, but
 ![101] addition of the 2nd general species.  There is no QL diffusion
+<<<<<<< HEAD
 ![101] yet on the 2nd species.    [bobh, Aug 19-21, 2006]
+=======
+![101] yet on the 2nd species.	  [bobh, Aug 19-21, 2006]
+>>>>>>> bulk type convertion
 
 ![100] First results from new soln_method="it3drv" option using
 ![100] sparskit2 to iteratively solve full 3d (2V-1R)

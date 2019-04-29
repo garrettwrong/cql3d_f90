@@ -1527,6 +1527,7 @@ c
 c----------------------- end of subroutine lsode -----------------------
       end
       block data for_lsode
+      use iso_c_binding, only : c_double
 c-----------------------------------------------------------------------
 c this data subprogram loads variables into the internal common
 c blocks used by the odepack solvers.  the variables are

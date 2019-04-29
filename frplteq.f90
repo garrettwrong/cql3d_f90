@@ -2,6 +2,10 @@
 module frplteq_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use r8subs_mod, only : dcopy
   use tdnflxs_mod, only : tdnflxs
@@ -26,9 +30,9 @@ contains
 
     dimension xpts(*),ypts(*),zpts(*),rpts(*),vx(*),vy(*),vz(*)
 
-    REAL*4 RBOT,RTOP,ZBOT,ZTOP
-    REAL*4 RTAB1(LFIELDA),RTAB2(LFIELDA)
-    REAL*4 RPG1,RPG2, xyplotmax
+    real(c_float) RBOT,RTOP,ZBOT,ZTOP
+    real(c_float) RTAB1(LFIELDA),RTAB2(LFIELDA)
+    real(c_float) RPG1,RPG2, xyplotmax
 
     data nconskp /2/
 

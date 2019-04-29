@@ -1,6 +1,10 @@
 module urfdamp1_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   use tdnflxs_mod, only : tdnflxs
   !XXXXXXXXX these require disbaling TKR checks !!

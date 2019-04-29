@@ -57,8 +57,13 @@
 module param_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
+  use iso_c_binding, only : c_double
 
   !---END USE
+
 
   character(len=64), parameter :: version="cql3d_git_190309.0_GW"
   character(len=64), parameter :: precursr="cql3d_git_190309.0"

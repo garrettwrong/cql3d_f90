@@ -269,7 +269,7 @@ c       returns varid.
 c     Note: Unlimited dimension must be last
 c     Refer to p. 77, netcdf-2 manual
 
-c     NCDOUBLE for REAL*8.  This is independent of the
+c     NCDOUBLE for real(c_double).  This is independent of the
 c       internal representation of data on a particular
 c       machine, e.g., 32- or 64-bit based calculations.
 
