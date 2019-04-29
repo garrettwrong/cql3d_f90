@@ -554,7 +554,6 @@ contains
       end function
 
 
-      real*4 function rbound(r8)
       real(c_float) function rbound(r8)
       save !XXXX why?
 !
