@@ -6,6 +6,6 @@
 
       real*8 mpitime, mpitime1
 
-      common /mpi/ mpirank, mpisrc, mpisize, mpiierr, mpistatus, 
-     +  mpicmd, mpimode, mpiworker, mpill,
-     +  mpitime, mpitime1
+      common /mpi/ mpirank, mpisrc, mpisize, mpiierr, mpistatus
+      common /mpi/ mpicmd, mpimode, mpiworker, mpill
+      common /mpi/ mpitime, mpitime1
