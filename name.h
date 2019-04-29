@@ -137,24 +137,24 @@
 !..................................................................
 
       namelist/rfsetup/ &
-        call_lh,call_ech,call_fw,ieqbrurf,urfncoef, &
-        dlndau, &
-        lh, &
-        ech, &
-        fw, &
-        rftype, &
-        rffile,rdcfile,rfread, &
-        nharms,nharm1,nrfspecies,iurfcoll,iurfl, &
-        nbssltbl,nondamp,nrfstep1,nrfstep2, &
-        nrfpwr,nrfitr1,nrfitr2,nrfitr3, &
-        nonrf,noffrf,nrf, &
-        scaleurf,pwrscale,wdscale,urfrstrt,urfwrray, &
-        nurftime,urftime,pwrscale1, &
-        urfdmp,urfmult,urfmod, &
-        vlhmod,vlhmodes,vparmin,vparmax,vprprop,vdalp,vlh_karney, &
-        vlhprprp,vlhplse,vlhpon,vlhpoff,vprpmin,vprpmax,vlhpolmn, &
-        vlhpolmx,vlfmod,vlfmodes,vlffreq,vlfnp,vlfdnp,vlfddnp, &
-        vlfeplus,vlfemin,vlfpol,vlfdpol,vlfddpol,vlfbes,vlfnpvar, &
-        vlfharms,vlfharm1,vlfnperp,vlfdnorm, &
-        vlfparmn,vlfparmx,vlfprpmn,vlfprpmx,rdc_upar_sign,nrdc, &
-        rdcmod,rdc_clipping,nrdcspecies,rdcscale,rdc_netcdf
+	call_lh,call_ech,call_fw,ieqbrurf,urfncoef, &
+	dlndau, &
+	lh, &
+	ech, &
+	fw, &
+	rftype, &
+	rffile,rdcfile,rfread, &
+	nharms,nharm1,nrfspecies,iurfcoll,iurfl, &
+	nbssltbl,nondamp,nrfstep1,nrfstep2, &
+	nrfpwr,nrfitr1,nrfitr2,nrfitr3, &
+	nonrf,noffrf,nrf, &
+	scaleurf,pwrscale,wdscale,urfrstrt,urfwrray, &
+	nurftime,urftime,pwrscale1, &
+	urfdmp,urfmult,urfmod, &
+	vlhmod,vlhmodes,vparmin,vparmax,vprprop,vdalp,vlh_karney, &
+	vlhprprp,vlhplse,vlhpon,vlhpoff,vprpmin,vprpmax,vlhpolmn, &
+	vlhpolmx,vlfmod,vlfmodes,vlffreq,vlfnp,vlfdnp,vlfddnp, &
+	vlfeplus,vlfemin,vlfpol,vlfdpol,vlfddpol,vlfbes,vlfnpvar, &
+	vlfharms,vlfharm1,vlfnperp,vlfdnorm, &
+	vlfparmn,vlfparmx,vlfprpmn,vlfprpmx,rdc_upar_sign,nrdc, &
+	rdcmod,rdc_clipping,nrdcspecies,rdcscale,rdc_netcdf

@@ -272,9 +272,9 @@ contains
        call diagimpd(k)
     enddo ! k
     call achiefn(1)  !Compute plasma energy, density and energy transfer
-    
-    
+
+
     return
  end if
- 
+
 end module achief1_mod
