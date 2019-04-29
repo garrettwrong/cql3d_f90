@@ -162,7 +162,7 @@ contains
 !
       subroutine tdsxrvw(tempp4,tempp5,tempp6)
       use param_mod
-      use comm_mod, only : eqsym, softxry, ez, er
+      use comm_mod, only : eqsym, softxry, ez, er, iyjx
       implicit integer (i-n), real*8 (a-h,o-z)
 !MPIINSERT_INCLUDE
 

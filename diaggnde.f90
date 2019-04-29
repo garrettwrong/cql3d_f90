@@ -3,26 +3,48 @@ module diaggnde_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
+  use comm_mod
   use diagdenz_mod, only : diagdenz
   use diagcfac_mod, only : diagcfac
   use diaggnde2_mod, only : diaggnde2
   use diagwrng_mod, only : diagwrng
+  use iso_c_binding, only : c_double
+  use param_mod
   use r8subs_mod, only : dscal
   use soucrit_mod, only : soucrit
 
   !---END USE
 
-!
-!
-
 contains
+  
+  subroutine diaggnde
+    !implicit integer (i-n), real*8 (a-h,o-z)
+    implicit none
+    real(c_double) :: areaovol
+    real(c_double) :: cn
+    real(c_double) :: en
+    real(c_double) :: faccur
+    real(c_double) :: facpsi
+    real(c_double) :: factor
+    real(c_double) :: fgni
+    real(c_double) :: gn
+    real(c_double) :: gni
+    real(c_double) :: hn
+    real(c_double) :: hni
+    real(c_double) :: psifct
+    real(c_double) :: s
+    real(c_double) :: sn
+    real(c_double) :: wpar_
+    real(c_double) :: wperp_
+    real(c_double) :: xq
+    real(c_double) :: zeff1
+    real(c_double) :: zfact
 
-      subroutine diaggnde
-      use param_mod
-      use comm_mod
-      use r8subs_mod, only : dscal
-      implicit integer (i-n), real*8 (a-h,o-z)
-      save
+    integer :: i
+    integer :: j
+    integer :: k
+    integer :: kk
+    save
 
 !..................................................................
 !     Main diagnostic routine; computes densities, currents,
@@ -82,6 +104,8 @@ contains
                ! can become unstable in such case.
                ! So, keep f() non-zero in the loss cone,
                ! but do not add such f() to the integrals/sums over d3v.
+!GGGG      tam2(follows tam2) f=0 tau=0
+print *,'GGGGG NRG tam2', j, tam2(j),f(i,j,k,l_),cynt2(i,l_),abs(coss(i,lmdpln_)),tau(i,lr_)
               tam1(j)=tam1(j)+f(i,j,k,l_)*cynt2(i,l_)
               tam3(j)=tam3(j)+f(i,j,k,l_)*cynt2(i,l_)*coss(i,l_)
 !     include vptb=|cos(th0)| * tau
@@ -152,13 +176,13 @@ contains
 !     Re eqsym: tam2 has tau factor, to be divided below by zmaxpsi.
 !     tau is v*tau_B, and it's over 1/2 orbit if eqsym.ne.none
 !..................................................................
-
+          print *,'GGGG NRG hn', hn, tam2(j), cint2(j)
           hn=hn+tam2(j)*cint2(j) !actually 1/2 line-density if eqsym.ne.none
 
 !..................................................................
 !     Flux surface averaged energy (per particle)
 !..................................................................
-
+          !print *,'GGG NRG SN', sn, tam2(j), cint2(j), tcsgm1(j)
           sn=sn+tam2(j)*cint2(j)*tcsgm1(j)
 
 !..................................................................
@@ -202,21 +226,24 @@ contains
         energym(k,l_)=en/gn*fions(k)  ! at midplane
         enrgypa(k,ls_)=en/gn*fions(k) ! at midplane
         if (l_ .eq. lmdpln_) then
+           print *, 'GGGG NRG',sn,hn,fions(k) ! sn, hn arr zero
           energy(k,lr_)=sn/hn*fions(k) ! FSA for ZOW only
           ! at n>0, this definition will be over-written by FOW/ZOW
           ! universal procedure: through reconstruction of local f(R,Z).
 !BH080502          wpar(k,lr_)=wpar_*fions(k)/zmaxpsi(lr_)*ergtkev
 !BH080502          wperp(k,lr_)=wperp_*fions(k)/zmaxpsi(lr_)*ergtkev
 !BH180531:  Following wpar/wperp (diaggnde2 also) needs clarification..
+          if (ISNAN(energy(k,lr_))) call abort
           wpar(k,lr_)=wpar_*fions(k)/hn
           wperp(k,lr_)=wperp_*fions(k)/hn
         endif
+IF (ANY(ISNAN(energy))) call abort
 !CMPIINSERT_IF_RANK_EQ_0
 !        write(*,*)
 !     + 'diaggnde: k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)',
 !     +            k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)
 !CMPIINSERT_ENDIF_RANK
-
+        
 !..................................................................
 !     At timet=0. scale the
 !     distribution function to desired initial density.
@@ -237,6 +264,7 @@ contains
 !%OS
           gni=1./gn
           hni=0.0
+          !XXXXXX infinity?
           if (l_ .eq. lmdpln_) hni=1./hn
           if (l_ .eq. lmdpln_) hnis(k,lr_)=hni
 
@@ -259,6 +287,8 @@ contains
              continue
           else
              call dscal(iyjx2,zfact,f(0:iyjx2-1,0,k,l_),1)
+             !XXXX, why not ?
+             !f(:,0,k,l_) = f(:,0,k,l_)*zfact
           endif
 !          write(*,*)'diaggnde: k,lr_,zfact,reden(k,lr_)=',
 !     +                         k,lr_,zfact,reden(k,lr_)

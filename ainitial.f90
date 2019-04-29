@@ -24,9 +24,6 @@ module ainitial_mod
 
   !---END USE
 
-
-
-
 contains
 
       subroutine ainitial

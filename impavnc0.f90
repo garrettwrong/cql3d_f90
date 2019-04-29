@@ -3,6 +3,7 @@
 module impavnc0_mod
 
   !---BEGIN USE
+  use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
@@ -14,6 +15,7 @@ module impavnc0_mod
   use coefstup_mod, only : coefstup
   use coefwti_mod, only : coefwti
   use coefwtj_mod, only : coefwtj
+  use comm_mod
   use esefld_mod, only : fluxpar
   use ilut_mod, only : aplb
   use ilut_mod, only : bndcsr
@@ -29,16 +31,19 @@ module impavnc0_mod
 
   !---END USE
   ! XXX this is probably a bug in the original code.
-  use advnce_mod, only :  k => advnce_k ! use advnce_mod's advnce_k
+  !use advnce_mod, only :  k => advnce_k ! use advnce_mod's advnce_k
+  use advnce_mod
+  integer,pointer  :: k => advnce_k
 
   ! gauss_, these are used in it3dalloc
   integer, public ::  inewjmax, ialloc      
   ! XXX this was an integer somewhere?
   ! XXXvnc vs vnc0 abd etc?
-  real(c_double), pointer, public ::  abd(:,:)
-  integer, pointer, public :: ipivot(:)
+  real(c_double), pointer, private ::  abd(:,:)
+  integer, pointer, private :: ipivot(:)
   ! ampf, these are used in it3dalloc
-  real(c_double), pointer, public :: ampfda(:,:), ampfdd(:,:)      
+  real(c_double), pointer, private :: ampfda(:,:)
+  real(c_double), pointer, private :: ampfdd(:,:)
   save
 
 contains
@@ -48,7 +53,78 @@ contains
     use comm_mod
     use advnce_mod
     use r8subs_mod, only : dgbtrf, dgbtrs, dcopy
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit none
+
+    real(c_double) :: alambda
+    real(c_double) :: cnst
+    real(c_double) :: dfdvz
+    real(c_double) :: epsilon
+    real(c_double) :: fh0m
+    real(c_double) :: fh0p
+    real(c_double) :: fhm0
+    real(c_double) :: fhp0
+    integer :: i
+    integer :: i1
+    integer :: i2
+    integer :: ibandpieq
+    integer :: ibandto
+    integer :: icntsww
+    integer :: icon
+    integer :: icount
+    integer :: icount_ampf
+    integer :: icount_ese
+    integer :: idist_itl
+    integer :: idist_itu
+    integer :: idistl
+    integer :: idistr
+    integer :: ieqp
+    integer :: ierr
+    integer :: ierr_csr
+    integer :: ifirst_lr
+    integer :: ihalf
+    integer :: ii
+    integer :: iii
+    integer :: ilast_lr
+    integer :: impchg
+    integer :: inbrhs
+    integer :: indexsww
+    integer :: inew
+    integer :: inew1
+    integer :: inewjx
+    integer :: info
+    integer :: iout
+    integer :: istat
+    integer :: inr
+    integer :: ipassbnd
+    integer :: iunit
+    integer :: j
+    integer :: jcont
+    integer :: jstart
+    integer :: kku
+    integer :: kopt
+    integer :: krylov1
+    integer :: l1
+    integer :: l2
+    integer :: lenabd
+    integer :: lfil0
+    integer :: ll
+    integer :: lowd
+    integer :: maxit
+    integer :: maxits
+    integer :: mbloc
+    integer :: md1abd
+    integer :: ml
+    integer :: ml_a
+    integer :: mu
+    integer :: mu_a
+    integer :: n_rows_A
+    integer :: nabd
+    integer :: nadjoint
+    integer :: neq
+    integer :: nvar
+    real(c_double) :: permtol
+    real(c_double) :: xnorm = 1.  !XXXX should this be initialized?
+    real(c_double) :: zrhsj1
 
     !.................................................................
     !     Impose unicity point at u=0 as boundary condition
@@ -68,19 +144,21 @@ contains
 
     !BH080303    real*4 etime,tm1,tm(2) !Dclrtns for lf95 ETIME(). See man etime.
     !BH080303    Using f95 intrinsic subroutine, cpu_time
-    real*4 tm1,tm(2)    !Dclrtns for lf95 ETIME(). See man etime.
+    real(c_float) :: tm1,tm(2)    !Dclrtns for lf95 ETIME(). See man etime.
 
-    character*8 alloc, factor, dalloc
-    dimension zavarj1(iy+4),ijaj1(iy+4)
-    dimension  zmatcont(12), janelt(12)
-    character*1 transpose
+    character(len=8) ::  alloc, factor, dalloc
+    real(c_double) :: zavarj1(iy+4)
+    integer :: ijaj1(iy+4)
+    real(c_double) :: zmatcont(12) !XXXX should this be init 0?
+    integer :: janelt(12)
+    character(len=1) :: transpose
 
-    integer icount_imp   !Counter for calls to impavnc0
-    data icount_imp/0/
-    save inewmax, mlmax, mumax, icount_imp, icoeff, ieq, &
+    integer, save :: icount_imp=0
+    integer, save :: inewmax, mlmax, mumax, icoeff, ieq, &
          ieq_tot, icoeff_est, icoeff_est_tot
 
-    twopi2=twopi*twopi
+    real(c_double) :: twopi2
+    twopi2 = twopi*twopi
     !.......................................................................
     !     Indicate progress of code
     !.......................................................................
@@ -371,8 +449,7 @@ contains
           write(*,*)'impavnc0 Before allocate; Size req. for abd:',lenabd
           allocate(abd(md1abd,inewjmax),STAT=istat) !Big size ~3*jx*iy^2
           write(*,*)'impavnc0 abd: Allocate/istat=',istat
-          !XXXcall bcast(abd,0,lenabd)
-          abd = 0.
+          call bcast(abd,zero,lenabd)
           allocate(ipivot(iyjx),STAT=istat)
           call ibcast(ipivot,0,iyjx)
           ! will preset the values to zero in loop k=1,ngen
@@ -454,6 +531,30 @@ contains
 
        !     first the velocity flux..
        !.................................................................
+
+! if (ANY(ISNAN(da))) then
+!    !call abort
+!    da = 0.
+! else
+!    print *,'da was not junk yet'
+! end if
+! if (ANY(ISNAN(db))) then
+!    !call abort
+!    db = 0.
+! else
+!    print *,'db as not junk yet'
+! end if
+!XXXXXX
+da =0.
+db =0.
+dc =0.
+dd =0.
+de =0.
+df =0.
+dbb =0.
+dff = 0.
+cthta = 0.
+!xxxx^
 
        call coefmidv(da,1)
        call coefmidv(db,2)
@@ -759,8 +860,8 @@ contains
           !
           !          write(*,*)'impavnc0:size(rhs) ',size(rhs)
           if (soln_method.eq.'direct' .or. soln_method.eq.'itsol1') then
-             !XXX call bcast(abd,0,lenabd)
-             abd = 0.
+             call bcast(abd,zero,lenabd)
+             !xxxabd = 0.
              do i=1,inewjx_(l_)
                 rhs(i)=0.0
                 ipivot(i)=0
@@ -966,7 +1067,7 @@ contains
                 zmatcont(7)=xmp(i,j)
                 zmatcont(8)=x0p(i,j)
                 zmatcont(9)=xpp(i,j)                          
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 !     Normalize equation
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
@@ -991,9 +1092,13 @@ contains
                 janelt(6)=ieq+inew
                 nvar=6
 
+!if (ANY(ISNAN(zmatcont))) call abort
                 zmatcont(1)=xmm(i,j)
+!if (ANY(ISNAN(zmatcont))) call abort
                 zmatcont(2)=x0m(i,j)+xpm(i,j)
+!if (ANY(ISNAN(zmatcont))) call abort
                 zmatcont(3)=xm0(i,j)
+!if (ANY(ISNAN(zmatcont))) call abort
                 zmatcont(4)=x00(i,j)+xp0(i,j)
                 zmatcont(5)=xmp(i,j)
                 zmatcont(6)=x0p(i,j)+xpp(i,j)
@@ -1083,7 +1188,7 @@ contains
                    zmatcont(2)=xp0(i,j)
                    zmatcont(3)=x0p(i,j)
                    zmatcont(4)=xpp(i,j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.1: i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1106,7 +1211,7 @@ contains
                    zmatcont(2)=x00(i,j)
                    zmatcont(3)=xmp(i,j)
                    zmatcont(4)=x0p(i,j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.2:i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1137,14 +1242,22 @@ contains
                    nvar=8
                    !
                    zmatcont(1)=tm0(j)
+!if (ISNAN(tm0(j))) call abort
                    zmatcont(2)=tmp(j)
+!if (ISNAN(tmp(j))) call abort
                    zmatcont(3)=t00(j)
+!if (ISNAN(t00(j))) call abort
                    zmatcont(4)=t0p(j)
+!if (ISNAN(t0p(j))) call abort
                    zmatcont(5)=tp0(j)
+!if (ISNAN(tp0(j))) call abort
                    zmatcont(6)=tpp(j)
+!if (ISNAN(tpp(j))) call abort
                    zmatcont(7)=tu0(j)
+!if (ISNAN(tu0(j))) call abort
                    zmatcont(8)=tup(j)
-
+!if (ISNAN(tup(j))) call abort
+!if (ANY(ISNAN(zmatcont(1:8)))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.3: i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1164,10 +1277,48 @@ contains
                    nvar=4
                    !
                    zmatcont(1)=xm0(i,j)
+                   ! nan @50,1
+! if (ISNAN(xm0(i,j))) then
+!    print *, 'xm0 is junk', i,j,k, advnce_k
+!    !call abort
+! else
+!     print *, 'not junk',i,j
+! end if
                    zmatcont(2)=x00(i,j)+xp0(i,j)
+! if (ISNAN(x00(i,j))) then
+!    print *, 'x00 is junk',i,j
+!    !call abort
+! else
+!     print *, 'not junk',i,j
+! end if
+! if (ISNAN(xp0(i,j))) then
+!    print *, 'xp0 is junk',i,j
+!    !call abort
+! else
+!     print *, 'not junk',i,j
+! end if
                    zmatcont(3)=xmp(i,j)
+! if (ISNAN(xmp(i,j))) then
+!    print *, 'xmp is junk',i,j
+!    !call abort
+! else
+!     print *, 'not junk',i,j
+! end if
                    zmatcont(4)=x0p(i,j)+xpp(i,j)
+! if (ISNAN(x0p(i,j))) then
+!    print *, 'x0p is junk',i,j
+!    !call abort
+! else
+!     print *, 'not junk',i,j
+! end if
+! if (ISNAN(xpp(i,j))) then
+!    print *,'xpp is junk',i,j
+!    !call abort
+! else
+!     print *, 'not junk',i,j
+! end if
 
+! if (ANY(ISNAN(zmatcont))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.4: i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1194,6 +1345,7 @@ contains
                    zmatcont(4)=xmp(i,j)
                    zmatcont(5)=x0p(i,j)
                    zmatcont(6)=xpp(i,j)
+!if (ANY(ISNAN(zmatcont))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.5: i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1221,7 +1373,7 @@ contains
                 zmatcont(4)=xp0(i,j)
                 zmatcont(5)=x0p(i,j)
                 zmatcont(6)=xpp(i,j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1247,7 +1399,7 @@ contains
                 zmatcont(4)=x00(i,j)
                 zmatcont(5)=xmp(i,j)
                 zmatcont(6)=x0p(i,j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1294,7 +1446,7 @@ contains
                 zmatcont(10)=tum(j)
                 zmatcont(11)=tu0(j)
                 zmatcont(12)=tup(j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1336,7 +1488,7 @@ contains
                 zmatcont(4)=x00(i,j)
                 zmatcont(5)=xpm(i,j)
                 zmatcont(6)=xp0(i,j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1358,7 +1510,7 @@ contains
                 zmatcont(2)=xm0(i,j)
                 zmatcont(3)=x0m(i,j)+xpm(i,j)
                 zmatcont(4)=x00(i,j)+xp0(i,j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1397,7 +1549,7 @@ contains
                 zmatcont(6)=tp0(jx)
                 zmatcont(7)=tum(jx)
                 zmatcont(8)=tu0(jx)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1420,7 +1572,7 @@ contains
                 zmatcont(2)=xm0(i,j)
                 zmatcont(3)=x0m(i,j)
                 zmatcont(4)=xmm(i,j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1443,7 +1595,7 @@ contains
                 zmatcont(2)=xp0(i,j)
                 zmatcont(3)=xpm(i,j)
                 zmatcont(4)=x0m(i,j)
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1535,7 +1687,7 @@ contains
                    zmatcont(12)=tmp(j)
 
                 endif
-
+!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1564,12 +1716,11 @@ contains
 
 
                       if (j .ne. 1) then
-
+!                         if (ANY(ISNAN(abd))) STOP 'YYYNANHERE2'
                          do jcont=1,nvar
                             abd(ibandpieq-janelt(jcont),janelt(jcont))= &
                                  zmatcont(jcont)
                          end do
-
                          !BH050804 bugfix:              else
                          !BH070419:             elseif (lbdry(k).eq."conserv") then
                          !BH070419: Wonder what I was thinking?
@@ -1579,7 +1730,12 @@ contains
                          !.......................................................................
                          !     for j=1 impose f(i)=cst condition
                          !.......................................................................
-
+!if ((ISNAN(xnorm))) then
+!   print *, 'XXXX xnorm was nan'
+!   call backtrace
+!end if
+!if (ANY(ISNAN(zmatcont))) call abort
+!if (ANY(ISNAN(zavarj1))) call abort
                          do 5100 icon=1,nvar
                             if (janelt(icon) .le. inew) then
                                !     (i,j=1) contributions -> (iy,1) point
@@ -1620,9 +1776,11 @@ contains
                             !   Bug fix, Olivier Sauter, 030509:     nvar=mu + 1
                             nvar=inew + 1
                             rhs(ieq)=zrhsj1
+!if (ANY(ISNAN(zmatcont))) call abort
                             call impnorm(xnorm,zavarj1,rhs(ieq),nvar)
                             do jcont=1,nvar
                                abd(ibandpieq-ijaj1(jcont),ijaj1(jcont))= zavarj1(jcont)
+!if (ANY(ISNAN(abd))) STOP 'YYYNANHERE1'
                             end do
                          endif  ! on ieq.lt.new/else
 
@@ -1998,7 +2156,7 @@ contains
                 ml_a=ml
                 mu_a=mu
                 ! XXX , changed  a(1),ja(1),ia(1) ~~> i,ja,ia
-                call bndcsr(n_rows_A,abd_lapack(1:nabd,1),nabd,lowd,ml_a,mu_a, &
+                call bndcsr(n_rows_A,abd_lapack,nabd,lowd,ml_a,mu_a, &
                      a_csr,ja_csr,ia_csr,icsrij,ierr_csr)
                 if (ierr_csr.ne.0) then
                    WRITE(*,*)'impavnc0/bndcsr: STOP ierr_csr=',ierr_csr
@@ -2325,7 +2483,7 @@ contains
                    !          write(*,*)'impavnc0 before dgbtrf, l_,inewjx,ml=',l_,inewjx,ml
                    ! XXX
                    ! ARGGGGG, ABD HAS NANS!!!
-                   print *, 'YYY', isnan(abd)!, md1abd, ipivot, info
+                   !print *, 'YYY', isnan(abd)!, md1abd ipivot, info
                    call dgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
                    if (info .ne. 0) then
                       print *,' warning after sgbtrf in impavnc0: info = ',info
@@ -2627,11 +2785,22 @@ contains
   
   !=======================================================================
   !=======================================================================      
-  real*8 function z00(i,j,k)
+  real(c_double) function z00(i,j,k)
     use param_mod
     use comm_mod
     use advnce_mod
-    implicit integer (i-n), real*8 (a-h,o-z)
+    implicit none
+    integer :: i
+    integer :: j
+    integer :: k !XXX example why k is terrible global var name
+    integer :: istat0
+    integer :: iboot
+    real(c_double) :: z00f
+    real(c_double) :: z00t
+    real(c_double) :: z00itl
+    real(c_double) :: z00itl1
+    real(c_double) :: z00itu1
+
     !cc         save  ! YuP: Not really needed
 
     !      CONTAINS     PG90 at GA couldn't accept this construct,
@@ -2663,11 +2832,13 @@ contains
 
     !     statement functions for itl or itu [depracated in f95] 
 
+    real(c_double) :: t0ml_
     t0ml_(j)=qz(j)*( &
          cl(itl-1,j-1)*dj(itl,j-1,k,l_)*eym5(itl,l_)) &
          +r2y(j)*(-de(itl-1,j)*(1.-di(itl-1,j-1,k,l_))) &
          /(2.*dx(j))
 
+    real(c_double) :: t00l_
     t00l_(j)= &
          +qz(j)*( &
          -cl(itl-1,j)*dj(itl,j,k,l_)*eym5(itl,l_) &
@@ -2675,16 +2846,18 @@ contains
          +r2y(j)*(dd(itl-1,j)*(1.-di(itl-1,j,k,l_)) &
          +df(itl-1,j)*eym5(itl,l_))
 
+    real(c_double) :: t0pl_
     t0pl_(j)=qz(j)*( &
          -cl(itl-1,j)*eym5(itl,l_)*(1.-dj(itl,j,k,l_))) &
          +r2y(j)*de(itl-1,j)/(2.*dx(j))*(1.-di(itl-1,j+1,k,l_))
 
-
+    real(c_double) :: t0mu_
     t0mu_(j)=qz(j)*( &
          -cl(itu+1,j-1)*dj(itu,j-1,k,l_)*eyp5(itu,l_)) &
          +r2y(j)*( &
          +de(itu,j)*di(itu,j-1,k,l_))/(2.*dx(j))
 
+    real(c_double) :: t00u_
     t00u_(j)= &
          +qz(j)*( &
          +cl(itu+1,j)*dj(itu,j,k,l_)*eyp5(itu,l_) &
@@ -2694,6 +2867,7 @@ contains
          *di(itu,j,k,l_) &
          +df(itu,j)*eyp5(itu,l_))
 
+    real(c_double) :: t0pu_
     t0pu_(j)=qz(j)*( &
          +cl(itu+1,j)*(1.-dj(itu,j,k,l_))*eyp5(itu,l_)) &
          +r2y(j)*( &
@@ -2744,10 +2918,13 @@ contains
   subroutine it3dalloc
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
+      integer :: i
+      integer :: i2
+      integer :: istat(18)
+      integer :: istat0
 !MPIINSERT_INCLUDE
 
-      dimension istat(18)
 !dir$ nobounds
 
 !.................................................................
@@ -2864,7 +3041,8 @@ contains
    subroutine it3ddalloc
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
+      integer :: istat
 !MPIINSERT_INCLUDE
 
 !MPIINSERT_IF_RANK_EQ_0
@@ -2896,7 +3074,8 @@ contains
    subroutine de_alloc ! YuP[11-2017] more deallocation
       use param_mod
       use comm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
+      integer :: istat
 !MPIINSERT_INCLUDE
 
 !  The purpose of this subroutine is to ensure deallocation of variables

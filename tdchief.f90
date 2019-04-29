@@ -385,6 +385,7 @@ contains
          enddo
          ! XXX this looks like an indexing bug to me
          ! xxx but i used what is defined by  esefld::efld_cd code
+         print *, 'XXXCHECK'
          call efld_cd(dz(1:lrors+2,lr_),lrors,vnorm,flux1,flux2,elparnw,flux0)
       endif
 

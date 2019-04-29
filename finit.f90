@@ -3,8 +3,12 @@ module finit_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
+  use comm_mod  
   use lossorbm_mod, only : lossorbm
+  use param_mod
   use tdreadf_mod, only : tdreadf
+
+  
 
   !---END USE
 
@@ -14,8 +18,6 @@ module finit_mod
 contains
 
       subroutine finit
-      use param_mod
-      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
@@ -84,6 +86,7 @@ contains
         if (cqlpmod .eq. "enabled") &
           thta=fmass(k)*clite2/(temppar(k,ls_)*ergtkev)
         do 2 j=1,jx
+           !XXXXXXXXX whole lotta underflow here, right out of the gate...
           swwtemp=exp(-gamm1(j)*thta)
           do 3 i=1,iy
             f(i,j,k,l_)=swwtemp

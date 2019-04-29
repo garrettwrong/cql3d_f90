@@ -137,9 +137,11 @@ module comm_mod
   character(len=256) :: lossfile(ngena)
 
   !common /readvec/ &
+  integer :: ioutput(2),isigmas(6)
+  integer :: nplot(nplota),nsave(nsavea)
   real(c_double) :: bnumb(ntotala), &
        fmass(ntotala), &
-       ioutput(2),isigmas(6),pltflux1(7), &
+       pltflux1(7), &
        enloss(ngena), &
        gamegy(ngena), &
        paregy(ngena),peregy(ngena),pegy(ngena), &
@@ -151,7 +153,6 @@ module comm_mod
        vphic(nbctimea),vphib(nbctimea), &
        xjc(nbctimea),xjb(nbctimea), &
        totcrt(nbctimea), &
-       nplot(nplota),nsave(nsavea), &
        tavg1(ntavga),tavg2(ntavga)
   ! XXX bug
   integer :: nondtr1(ndtr1a)

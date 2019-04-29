@@ -3,8 +3,10 @@ module tdtrdfus_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
+  use comm_mod
   !XXXXX use pack21_mod, only : pack21
   !XXXXX use pack21_mod, only : unpack21
+  use r8subs_mod, only : luf
   use tdnflxs_mod, only : tdnflxs
 
   !---END USE
@@ -317,7 +319,7 @@ contains
 !
       subroutine tdtrvshape(k,l)
       use param_mod
-      use comm_mod, only : gamma, temp1, qsafety, lrindx
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 !.......................................................................
@@ -434,7 +436,8 @@ contains
 
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
-      !XXXXXXXXX use comm_mod
+      !XXXXXXXXX  dim for work() did not match, used comm
+      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 !.......................................................................
@@ -448,8 +451,11 @@ contains
 !.......................................................................
 
       parameter (nwka=3*lrza+1)
-      dimension work(nwka),oldx(1),oldf(1),ynewx(1),ynewf(1),i1p(2), &
-        secondd(lrza),itab(3),tab(3)
+      !XXXXX potentially did not match comm dimension: work(nwka)
+      dimension oldx(1),oldf(1),ynewx(1),ynewf(1)
+      !XXXX matched, but cannot redefine:  dimension i1p(2)
+      dimension secondd(lrza)
+      !XXXX matched, but cannot redifine:  itab(3), tab(3)
 
       do jj = 1,npts_in-1
         do ll = 0,npts

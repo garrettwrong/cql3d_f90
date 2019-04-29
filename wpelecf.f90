@@ -2,13 +2,15 @@ module wpelecf_mod
 
   !---BEGIN USE
 
+  use iso_c_binding, only : c_double
   use r8subs_mod, only : dcopy
 
   !---END USE
 
-!
-!
-      ! follow compiler default real
+  real(c_double) :: zdaij
+  real(c_double) :: zdaijm1
+  real(c_double) :: zddij
+  real(c_double) :: zddim1j
 
 contains
 

@@ -16,6 +16,7 @@ module diagentr_mod
 
 !
 !
+!XXX GBW, i may have messed up the dcopy bounds here, try 0:end-1
 
 contains
 

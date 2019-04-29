@@ -686,8 +686,7 @@ contains
                  DBLE(mpwrsou(k)))
 
 !     Allow for possiblity to intialize asorz(k,kk,1:lrzmax) directly
-            ! XXX good chance this int/real was a bug by f77 rules
-            !  (no checks), sometimes means, no casts.... so unless was always 0....
+            ! XXX exp vars are expected to be reals
             if(asorz(k,kk,0).ne.-1.) then
                call tdxin23d(asorz,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(0)), &
                     DBLE(mpwrsou(0)))

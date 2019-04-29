@@ -9,14 +9,17 @@ module advnce_mod
 
   !---BEGIN USE
 
-  !---END USE
-  use comm_mod
-  use r8subs_mod, only : cvmgt
   use bsu_mod, only : bsu
   use bsl_mod, only : bsl
+  use comm_mod
+  use r8subs_mod, only : cvmgt
 
+  !---END USE
+
+  implicit none
   save
-  integer, public ::  advnce_k 
+
+  integer, public, target ::  advnce_k 
 
 contains
 
@@ -24,23 +27,29 @@ contains
   !     Define some integration coefficients.
   !..................................................................
 
-  function qz(j)
+  real(c_double) function qz(j)
+    integer :: j
     qz = 1./cint2(j)
   end function qz
 
-  function ry(i,j)
+  real(c_double) function ry(i,j)
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     ry = dx(j)*twopi/(cynt2(i,l_)*cint2(j))
   end function ry
 
-  function cl(i,j)
+  real(c_double)function cl(i,j)
+    integer :: i,j
     cl = .25*vptb(itl,lr_)/vptb(i,lr_)*dc(i,j)
   end function cl
 
-  function r2y(j)
+  real(c_double) function r2y(j)
+    integer :: j
     r2y = ry(itl,j)*.5
   end function r2y
 
-  function dithta(i,j,l_)
+  real(c_double) function dithta(i,j,l_)
+    integer :: i,j, l_
     dithta = 0.5-0.5*(1/(i+1))+0.5*(1/(iy_(l_)+1-i))
   end function dithta
 
@@ -60,19 +69,27 @@ contains
   !     f1i(i,j)=temp1(i+1,j)*(1.-di(i,j,k,l_))+temp1(i,j)*di(i,j,k,l_)
   !     f2i(i,j)=temp2(i+1,j)*(1.-di(i,j,k,l_))+temp2(i,j)*di(i,j,k,l_)
   ! YuP-101228: same as above, but re-arranged to have one '*'
-  function f1j(i,j)
+  real(c_double) function f1j(i,j)
+    integer :: i,j
+  !  integer, parameter :: l_=1 !XXXXXX
     f1j = temp1(i,j+1) + (temp1(i,j)-temp1(i,j+1))*dj(i,j,advnce_k,l_)
   end function f1j
 
-  function f2j(i,j)
+  real(c_double) function f2j(i,j)
+    integer :: i,j
+  !  integer, parameter :: l_=1 !XXXXXX
     f2j = temp2(i,j+1) + (temp2(i,j)-temp2(i,j+1))*dj(i,j,advnce_k,l_)
   end function f2j
 
-  function f1i(i,j)
+  real(c_double) function f1i(i,j)
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     f1i = temp1(i+1,j) + (temp1(i,j)-temp1(i+1,j))*di(i,j,advnce_k,l_)
   end function f1i
 
-  function f2i(i,j)
+  real(c_double) function f2i(i,j)
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     f2i = temp2(i+1,j) + (temp2(i,j)-temp2(i+1,j))*di(i,j,advnce_k,l_)
   end function f2i
 
@@ -90,11 +107,15 @@ contains
   !     automatically force gamx(i,1) (alpx(i,jx)) to be zero.
   !..................................................................
   
-  function alpx(i,j) 
+  real(c_double) function alpx(i,j) 
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     alpx =  (da(i,j)*(1.-dj(i,j,advnce_k,l_))+db(i,j)*exp5(j)) * qz(j)
   end function alpx
 
-  function betx(i,j) 
+  real(c_double) function betx(i,j) 
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     betx =  (db(i,j)*exp5(j)+db(i,j-1)*exm5(j)-da(i,j) &
          *dj(i,j,advnce_k,l_)+da(i,j-1) &
          *(1.-dj(i,j-1,advnce_k,l_))) &
@@ -102,7 +123,9 @@ contains
          *cah(i,j)+vptb(i,lr_)*rbgn
   end function betx
 
-  function gamx(i,j) 
+  real(c_double) function gamx(i,j) 
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     gamx =  (-da(i,j-1)*dj(i,j-1,advnce_k,l_)+db(i,j-1)*exm5(j)) * qz(j)
   end function gamx
 
@@ -113,16 +136,20 @@ contains
   !     Define the appropriate average at the p/t boundary
   !..................................................................
   
-  function cdf(j) 
+  real(c_double) function cdf(j) 
+    integer :: j
+!  integer, parameter :: l_=1 !XXXXXX
     cdf =  (cl(itl-1,j)*(f1j(itl,j)-f1j(itl-1,j)) &
          *eyp5(itl-1,l_)+2. &
          *cl(itl+1,j)*(f1j(itl+1,j)-f1j(itl,j))*eyp5(itl,l_) &
          +cl(itu+1,j)*(f1j(itu+1,j)-f1j(itu,j))*eyp5(itu,l_))
   end function cdf
 
-  function delx(i,j) 
+  real(c_double) function delx(i,j) 
     use iso_c_binding, only : c_double
-    real(c_double) :: delx
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
+    !XXXX 
     delx = cvmgt( DBLE(&
          (dc(i,j)*(f1j(i+1,j)-f1j(i-1,j))*0.5*dyi(i,l_) &
          -dc(i,j-1)*(f1j(i+1,j-1)-f1j(i-1,j-1))*0.5*dyi(i,l_)) *qz(j)), &
@@ -144,11 +171,15 @@ contains
   !     and alpy(iy,j) to be equal to zero.
   !..................................................................
   
-  function alpy(i,j) 
+  real(c_double) function alpy(i,j) 
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     alpy =  (dd(i,j)*(1.-di(i,j,advnce_k,l_))+df(i,j)*eyp5(i,l_)) *ry(i,j)
   end function alpy
 
-  function bety(i,j) 
+  real(c_double) function bety(i,j) 
+!  integer, parameter :: l_=1 !XXXXXX
+    integer :: i,j
     bety =  (-dd(i,j)*di(i,j,advnce_k,l_) & 
          +df(i,j)*eyp5(i,l_) &
          +dd(i-1,j)*(1.-di(i-1,j,advnce_k,l_)) &
@@ -156,11 +187,14 @@ contains
          +vptb(i,lr_)*rbgn
   end function bety
 
-  function gamy(i,j) 
+  real(c_double) function gamy(i,j) 
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     gamy =  -ry(i,j)*(dd(i-1,j)*di(i-1,j,advnce_k,l_) - df(i-1,j)*eym5(i,l_))
   end function gamy
 
-  function dely(i,j) 
+  real(c_double) function dely(i,j) 
+    integer :: i,j
     dely =  ry(i,j)*0.5*dxi(j)*(de(i,j)*(f1i(i,ifp(j))-f1i(i,j-1)) &
          -de(i-1,j)*(f1i(i-1,ifp(j))-f1i(i-1,j-1))) & 
          +vptb(i,lr_)*rbgn*temp1(i,j) &
@@ -178,7 +212,9 @@ contains
   !     1  cdf(j),
   !     1  i .ne. itl  .and. i .ne. itu)
   
-  function hfu(i,j)
+  real(c_double) function hfu(i,j)
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     hfu = dd(i,j)*f2i(i,j) &
          +de(i,j)*(f1i(i,ifp(j))-f1i(i,j-1))*0.5*dxi(j) &
          +df(i,j)*(temp2(i+1,j)-temp2(i,j))*eyp5(i,l_)
@@ -221,23 +257,53 @@ contains
   !
   !.......................................................................
   
-  function xmm(i,j)
+  real(c_double) function xmm(i,j)
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
+! print *, 'XMM(',i,j, ')'
+! print *, qz(j)
+! print *, dc(i,j-1)
+! print *, dj(i-1,j-1,advnce_k,l_)
+! print *, dyi(i,l_)
+! print *, -ry(i,j)
+! print *, de(i-1,j)
+! print *, di(i-1,j-1,advnce_k,l_)
+! print *, dxi(j)
+
     xmm = (-qz(j)*dc(i,j-1)*dj(i-1,j-1,advnce_k,l_)*dyi(i,l_) &
          -ry(i,j)*de(i-1,j)*di(i-1,j-1,advnce_k,l_)*dxi(j))*.5
   end function xmm
 
-  function x0m(i,j)
+  real(c_double) function x0m(i,j)
+    integer :: i,j
+!  integer, parameter :: l_=1 !XXXXXX
     x0m = qz(j)*da(i,j-1)*dj(i,j-1,advnce_k,l_)+ry(i,j)*(de(i,j)* & 
           di(i,j-1,advnce_k,l_)-de(i-1,j)*(1.-di(i-1,j-1,advnce_k,l_)))*0.5*dxi(j) &
           -qz(j)*db(i,j-1)*exm5(j)
   end function x0m
 
-  function xpm(i,j)
+  real(c_double) function xpm(i,j)
+!  integer, parameter :: l_=1 !XXXXXX
+    integer :: i,j
     xpm = (qz(j)*dc(i,j-1)*dj(i+1,j-1,advnce_k,l_)*dyi(i,l_)+ &
          ry(i,j)*de(i,j)*(1.-di(i,j-1,advnce_k,l_))*dxi(j))*.5
   end function xpm
 
-  function xm0(i,j)
+  real(c_double) function xm0(i,j)
+    integer :: i,j
+  !  integer, parameter :: l_=1 !XXXXXX
+!     print *, 'XM0(', i , j ,')'
+!     print *, qz(j)
+!     print *, dc(i,j) !
+!     print *, 'dj(',i-1,j,advnce_k,l_,')', dj(i-1,j,advnce_k,l_)
+!     print *, dyi(i,l_)
+!     print *, ry(i,j)
+!     print *, dd(i-1,j) !
+!     print *, di(i-1,j,advnce_k,l_)
+!     print *, df(i-1,j) !
+!     print *, eym5(i,l_)
+!     print *, cthta(i,j)
+!     print *, dithta(i-1,j,l_)
     xm0 = qz(j)*(dc(i,j)*dj(i-1,j,advnce_k,l_) & 
          -dc(i,j-1)*(1.-dj(i-1,j-1,advnce_k,l_))) &
          *0.5*dyi(i,l_)+ry(i,j)*(dd(i-1,j)*di(i-1,j,advnce_k,l_) &
@@ -245,7 +311,35 @@ contains
          +cthta(i,j)*dithta(i-1,j,l_) !Added since 1992
   end function xm0
 
-  function x00(i,j)
+  real(c_double) function x00(i,j)
+    integer :: i,j
+  !  integer, parameter :: l_=1 !XXXXXX
+!     print *, 'X00(', i,j, ')'
+!     print *, qz(j) 
+!     print *, -da(i,j) !nan @50,1
+!     !if (isnan(da(i,j))) da(i,j) = 0.
+!     print *, dj(i,j,advnce_k,l_)
+!     print *, da(i,j-1)
+!     print *, (1.-dj(i,j-1,advnce_k,l_)) 
+!     print *, db(i,j) !nan @50,1
+!     !if (isnan(db(i,j))) db(i,j) = 0.
+!     print *, exp5(j) 
+!     print *, db(i,j-1)
+!     print *, exm5(j)
+!     print *, ry(i,j)
+!     print *, -dd(i,j)
+!     print *, di(i,j,advnce_k,l_)
+!     print *, dd(i-1,j)
+!     print *, (1.-di(i-1,j,advnce_k,l_))
+!     print *, df(i,j)
+!     print *, eyp5(i,l_)
+!     print *, df(i-1,j)
+!     print *, eym5(i,l_) 
+!     print *, vptb(i,lr_)
+!     print *, (cah(i,j)-1./dtreff)
+!     print *, cthta(i,j)
+!     print *, (1.-dithta(i-1,j,l_)-dithta(i,j,l_)) !Added since 1992
+    
     x00 = qz(j)* &
          (-da(i,j)*dj(i,j,advnce_k,l_)+da(i,j-1)*(1.-dj(i,j-1,advnce_k,l_)) &
          +db(i,j)*exp5(j)+db(i,j-1)*exm5(j)) &
@@ -256,7 +350,9 @@ contains
          +cthta(i,j)*(1.-dithta(i-1,j,l_)-dithta(i,j,l_)) !Added since 1992
   end function x00
 
-  function xp0(i,j)
+  real(c_double) function xp0(i,j)
+  !  integer, parameter :: l_=1 !XXXXXX
+    integer :: i,j
     xp0 = qz(j)*(-dc(i,j)*dj(i+1,j,advnce_k,l_) &
          +dc(i,j-1)*(1.-dj(i+1,j-1,advnce_k,l_)))*0.5*dyi(i,l_) &
          -ry(i,j)*(dd(i,j) &
@@ -264,18 +360,24 @@ contains
          -cthta(i,j)*(1.-dithta(i,j,l_)) !Added since 1992
   end function xp0
 
-  function xmp(i,j)
+  real(c_double) function xmp(i,j)
+    integer :: i,j
+  !  integer, parameter :: l_=1 !XXXXXX
     xmp = qz(j)*dc(i,j)*(1.-dj(i-1,j,advnce_k,l_))*.5*dyi(i,l_)+ &
          ry(i,j)*de(i-1,j)*.5*dxi(j)*di(i-1,j+1,advnce_k,l_)
   end function xmp
 
-  function x0p(i,j)
+  real(c_double) function x0p(i,j)
+    integer :: i,j
+  !  integer, parameter :: l_=1 !XXXXXX
     x0p = qz(j)*(-da(i,j)*(1.-dj(i,j,advnce_k,l_))-db(i,j)*exp5(j)) &
          +ry(i,j)*(-de(i,j)*di(i,j+1,advnce_k,l_) &
          +de(i-1,j)*(1.-di(i-1,j+1,advnce_k,l_)))*0.5*dxi(j) 
   end function x0p
 
-  function xpp(i,j)
+  real(c_double) function xpp(i,j)
+    integer :: i,j
+  !  integer, parameter :: l_=1 !XXXXXX
     xpp = -qz(j)*dc(i,j)*(1.-dj(i+1,j,advnce_k,l_))*0.5*dyi(i,l_) &
          -ry(i,j)*de(i,j)*(1.-di(i,j+1,advnce_k,l_))*0.5*dxi(j)
   end function xpp
@@ -371,24 +473,32 @@ contains
   !.......................................................................
   
 
-  function tmm(j)
+  real(c_double) function tmm(j)
+    integer :: j
+    integer, parameter :: l_=1
     tmm = -qz(j)*cl(itl-1,j-1)*dj(itl-1,j-1,advnce_k,l_)*eym5(itl,l_) &
          -r2y(j)*di(itl-1,j-1,advnce_k,l_)*de(itl-1,j)*0.5*dxi(j)
   end function tmm
 
-  function tm0(j)
+  real(c_double) function tm0(j)
+    integer :: i,j
+    integer, parameter :: l_=1
     tm0 = qz(j)*cl(itl-1,j)*dj(itl-1,j,advnce_k,l_)*eym5(itl,l_) &
          -qz(j)*cl(itl-1,j-1)*(1.-dj(itl-1,j-1,advnce_k,l_))*eym5(itl,l_) &
          +r2y(j)*(dd(itl-1,j)*di(itl-1,j,advnce_k,l_) &
          -df(itl-1,j)*eym5(itl,l_))
   end function tm0
 
-  function tmp(j)
+  real(c_double) function tmp(j)
+    integer :: j
+    integer, parameter :: l_=1
     tmp = qz(j)*cl(itl-1,j)*(1.-dj(itl-1,j,advnce_k,l_))*eym5(itl,l_) &
          +r2y(j)*di(itl-1,j+1,advnce_k,l_)*de(itl-1,j)*0.5*dxi(j)
   end function tmp
 
-  function t0m(j)
+  real(c_double) function t0m(j)
+    integer :: j
+    integer, parameter :: l_=1
     t0m = qz(j)*(da(itl,j-1)*dj(itl,j-1,advnce_k,l_)-db(itl,j-1)*exm5(j)+ &
          cl(itl-1,j-1)*dj(itl,j-1,advnce_k,l_)*eym5(itl,l_)-2.*cl(itl+1,j-1)* &
          dj(itl,j-1,advnce_k,l_)*eyp5(itl,l_) &
@@ -397,7 +507,9 @@ contains
          *di(itl,j-1,advnce_k,l_)+de(itu,j)*di(itu,j-1,advnce_k,l_))*0.5*dxi(j) 
   end function t0m
 
-  function t00(j)
+  real(c_double) function t00(j)
+    integer :: j
+    integer, parameter :: l_=1
     t00 = vptb(itl,lr_)/dtreff &
          +qz(j)*(-da(itl,j)*dj(itl,j,advnce_k,l_)+db(itl,j)* &
          exp5(j)-cl(itl-1,j)*dj(itl,j,advnce_k,l_)*eym5(itl,l_) &
@@ -414,10 +526,13 @@ contains
          -2.*dd(itl,j)*di(itl,j,advnce_k,l_) &
          +2.*df(itl,j)*eyp5(itl,l_)-dd(itu,j) &
          *di(itu,j,advnce_k,l_) &
-         +df(itu,j)*eyp5(itu,l_))-vptb(i,lr_)*cah(itl,j)
+         !XXXXXXXXXXXXXXXXXXXXXXx bug? +df(itu,j)*eyp5(itu,l_))-vptb(i,lr_)*cah(itl,j)
+         +df(itu,j)*eyp5(itu,l_))-vptb(itl,lr_)*cah(itl,j)
   end function t00
 
-  function t0p(j)
+  real(c_double) function t0p(j)
+    integer :: j
+    integer, parameter :: l_=1
     t0p = qz(j)*(-da(itl,j)*(1.-dj(itl,j,advnce_k,l_))-db(itl,j)*exp5(j) &
          -cl(itl-1,j)*eym5(itl,l_)*(1.-dj(itl,j,advnce_k,l_))+2.*cl(itl+1,j) &
          *eyp5(itl,l_)*(1.-dj(itl,j,advnce_k,l_)) &
@@ -427,36 +542,48 @@ contains
          -de(itu,j)*di(itu,j+1,advnce_k,l_)*0.5*dxi(j) )
   end function t0p
 
-  function tpm(j)
+  real(c_double) function tpm(j)
+    integer :: j
+    integer, parameter :: l_=1
     tpm = 2.*qz(j)*cl(itl+1,j-1)*eyp5(itl,l_)*dj(itl+1,j-1,advnce_k,l_) &
           +2.*r2y(j)*de(itl,j)*(1.-di(itl,j-1,advnce_k,l_))*0.5*dxi(j)
   end function tpm
 
-  function tp0(j)
+  real(c_double) function tp0(j)
+    integer :: j
+    integer, parameter :: l_=1
     tp0 = -2.*qz(j)*(cl(itl+1,j)*dj(itl+1,j,advnce_k,l_)*eyp5(itl,l_)- &
          cl(itl+1,j-1)*(1.-dj(itl+1,j-1,advnce_k,l_))*eyp5(itl,l_)) &
          -2.*r2y(j)*df(itl,j)*eyp5(itl,l_) &
          -2.*r2y(j)*dd(itl,j)*(1.-di(itl,j,advnce_k,l_))
   end function tp0
 
-  function tpp(j)
+  real(c_double) function tpp(j)
+    integer :: j
+    integer, parameter :: l_=1
     tpp = -2*qz(j)*cl(itl+1,j)*eyp5(itl,l_)*(1.-dj(itl+1,j,advnce_k,l_)) &
          -2.*r2y(j)*de(itl,j)*0.5*dxi(j)*(1.-di(itl,j+1,advnce_k,l_))
   end function tpp
 
-  function tum(j)
+  real(c_double) function tum(j)
+    integer :: j
+    integer, parameter :: l_=1
     tum = qz(j)*cl(itu+1,j-1)*eyp5(itu,l_)*dj(itu+1,j-1,advnce_k,l_) &
          +r2y(j)*de(itu,j)*0.5*dxi(j)*(1.-di(itu,j-1,advnce_k,l_))
   end function tum
 
-  function tu0(j)
+  real(c_double) function tu0(j)
+    integer :: j
+    integer, parameter :: l_=1
     tu0 = -qz(j)*cl(itu+1,j)*dj(itu+1,j,advnce_k,l_)*eyp5(itu,l_) & 
          +qz(j)*cl(itu+1,j-1)*eyp5(itu,l_)*(1.-dj(itu+1,j-1,advnce_k,l_)) &
          -r2y(j)*(dd(itu,j)*(1.-di(itu,j,advnce_k,l_)) &
          +df(itu,j)*eyp5(itu,l_))
   end function tu0
 
-  function tup(j)
+  real(c_double) function tup(j)
+    integer :: j
+    integer, parameter :: l_=1
     tup = -qz(j)*cl(itu+1,j)*eyp5(itu,l_)*(1.-dj(itu+1,j,advnce_k,l_)) &
          -r2y(j)*de(itu,j)*(1.-di(itu,j+1,advnce_k,l_))*0.5*dxi(j)
   end function tup
@@ -465,17 +592,23 @@ contains
   !     Express the Chang-Cooper weighted average f(i,j+1/2,l_): fpj
   !..................................................................
 
-  function fpj(i,j,k)
+  real(c_double) function fpj(i,j,k)
+    integer :: i,j, k
+    integer, parameter :: l_=1
     !k bug
     fpj = f(i,j+1,k,l_)+ (f(i,j,k,l_)-f(i,j+1,k,l_))*dj(i,j,advnce_k,l_)
   end function fpj
 
-  function fpjp(i,j, k)
+  real(c_double) function fpjp(i,j, k)
+    integer :: i,j, k
+    integer, parameter :: l_=1
     ! k bug
     fpjp = fpj(i+1,j,k) + cvmgt(bsl(j,k,l_),zero,(i+1).eq.itl)
   end function fpjp
 
-  function fpj0(i,j,k)
+  real(c_double) function fpj0(i,j,k)
+    integer :: i,j, k
+    integer, parameter :: l_=1
     ! k bug
     fpj0 = fpj(i,j,k) + cvmgt(bsu(j,k,l_),zero,i.eq.itu)
   end function fpj0
@@ -502,19 +635,25 @@ contains
   !     Express the Chang-Cooper weighted average f(i+1/2,j,l_): fpi
   !..................................................................
 
-  function fpip(i,j)
+  real(c_double) function fpip(i,j)
     !XXX integer :: k=1, l_=1
+    integer :: i,j
+    integer, parameter :: l_=1
     fpip = f(i+1,j,advnce_k,l_) + cvmgt(bsl(j,advnce_k,l_),zero,(i+1).eq.itl)
   end function fpip
 
-  function fpi0(i,j)
+  real(c_double) function fpi0(i,j)
+    integer :: i,j
+    integer, parameter :: l_=1
     fpi0 = f(i,j,advnce_k,l_) + cvmgt(bsu(j,advnce_k,l_),zero,i.eq.itu)
   end function fpi0
 
   !     Note: no need to check bootcalc="disabled" or not,
   !     because when bootcalc="disabled",  bsl==0 and bsu==0.
 
-  function fpi(i,j)
+  real(c_double) function fpi(i,j)
+    integer :: i,j
+    integer, parameter :: l_=1
     fpi = fpip(i,j)*(1.-di(i,j,advnce_k,l_)) + fpi0(i,j)*di(i,j,advnce_k,l_)
   end function fpi
 
@@ -522,7 +661,9 @@ contains
   !     Express the theta flux at (i+1/2,j)
   !..................................................................
 
-  function hfi(i,j)
+  real(c_double) function hfi(i,j)
+    integer :: i,j
+    integer, parameter :: l_=1
     hfi = dd(i,j)*fpi(i,j) &
          +de(i,j)*0.5*dxi(j)*(fpi(i,ifp(j))-fpi(i,j-1)) &
          +df(i,j)*eyp5(i,l_)*(fpip(i,j)-fpi0(i,j)) 
