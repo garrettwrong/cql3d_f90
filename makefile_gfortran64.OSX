@@ -218,9 +218,6 @@ diagxswt.o: comm.o diagdens.o diagentr.o param.o r8subs.o
 diagxswx.o: advnce.o bcast.o coefmidt.o coefmidv.o coefstup.o \
 	comm.o diagdens.o diagentr.o param.o r8subs.o 
 dsk_gr.o: comm.o param.o 
-dskin.o: lookup.o 
-dskin_idl.o: dskin.o 
-dskin_main.o: dskin.o 
 dskout.o: comm.o param.o 
 efield.o: cfpgamma.o comm.o param.o restcon.o resthks.o 
 eflditer.o: bcast.o coefefad.o comm.o param.o r8subs.o restcon.o \
