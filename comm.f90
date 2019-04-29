@@ -41,14 +41,11 @@ module comm_mod
 
   !---BEGIN USE
   use iso_c_binding, only : c_float
-  use iso_c_binding, only : c_float
-  use iso_c_binding, only : c_double
   use iso_c_binding, only : c_double
 
   !---END USE
   use iso_c_binding, only : c_float             !real(c_float)
   use iso_c_binding, only : c_double            !real(c_double)
-  use iso_c_binding, only : c_double_complex    !COMPLEX*16
   use param_mod
   implicit none
   public

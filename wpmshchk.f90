@@ -2,8 +2,6 @@ module wpmshchk_mod
 
   !---BEGIN USE
   use iso_c_binding, only : c_float
-  use iso_c_binding, only : c_float
-  use iso_c_binding, only : c_double
   use iso_c_binding, only : c_double
 
   !---END USE
