@@ -8,6 +8,11 @@ c
 !
 !***********************************************************************
 
+![291] version="cql3d_cswim_190309.0_GW"
+![291] Garrett Wright(PPPL) refactoring code towards moderization,
+![291] integration with the PPPL TRANSP transport code, and development
+![291] of a system of in-code communication between CQL3D and TRANSP.
+![291] [190418, Garrett Wright, with YuP/BH.]
 
 ![290] Added namelist variable bctimescal, which scales the bctime(),
 ![290] for background plasma time-variation.  [BH190102, YuP190309].
