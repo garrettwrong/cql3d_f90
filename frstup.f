@@ -11,7 +11,7 @@ c
       implicit integer (i-n), real*8 (a-h,o-z)
 
 
-      character*8 codeid 
+      character*8 codeid
       dimension psivol(*),potsid(*),frpsi(nnra,*),
      1  zne(kz,*),zni(kz,*),zte(*),zzi(kz,*),xxx(*),yyy(*),
      1  zti(*),zeffctv(*)
@@ -42,7 +42,7 @@ c     eqpsi(1:nconteqn) is set up in cql3d routine eqrhopsi.f.
 c     It is used to give the flux zones for freya returned in the
 c     izone argument of subroutine inject (now inject_old and inject1),
 c     called in subroutine freya.
-c     Change the sign of (positive) eqpsi array to get it in ascending 
+c     Change the sign of (positive) eqpsi array to get it in ascending
 c     order for splines.  (Changed back at end of subroutine).
 c.....................................................................
 
@@ -62,7 +62,7 @@ c..................................................................
       write(*,*)
 
 c..................................................................
-c     Interpolate densities, temperatures etc over to the 
+c     Interpolate densities, temperatures etc over to the
 c     (high resolution?) mesh utilized by FREYA.
 c
 c..................................................................
@@ -83,7 +83,7 @@ c..................................................................
  30   continue
 
 c..................................................................
-c     Call spline interpolation routine to get values on FREYA 
+c     Call spline interpolation routine to get values on FREYA
 c     eqspi mesh
 c     (which is same as intemediary radial mesh used in CQL3D proper).
 c..................................................................

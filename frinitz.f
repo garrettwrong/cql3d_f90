@@ -17,9 +17,9 @@ c     smooth in comm.h and frcomm.h77 is passed from frcomm to comm,
 c       through argument smth.
 c     fd specified in frinitl passed here to give dt mixture ratio.
 c     nprim,nimp,nion,ibion,namep,namei,atw are in frcomm.h77, not comm.h.
-c     These variables are determined from comm.h data, passed to 
+c     These variables are determined from comm.h data, passed to
 c     frcomm.h77 through the arguments of frinitz.
-c       
+c
 c..................................................................
 
       character*8 namep,namei
@@ -32,7 +32,7 @@ c     Determine the index of the general species electrons, the
 c     background Maxwellian species electrons, and the first ionic
 c     species. There must be at least one electron species and at least
 c     one ionic species because the code forces quasineutrality.
-c   
+c
 c     NOTE: Check for overlap with ainspec.f  (BobH, 990704).
 c.....................................................................
 
@@ -97,7 +97,7 @@ c..................................................................
       kk=0
       do 500 k=1,ntotal
         ! exclude e for the stopping cross-section:
-        if (k.eq.kelecg .or. k.eq.kelecm) go to 500 
+        if (k.eq.kelecg .or. k.eq.kelecm) go to 500
         kk=kk+1
         if (kk.gt.nprim) go to 500
         if (k.eq.kfrsou) ibion=kk
@@ -131,8 +131,8 @@ c BH081022:  Add code here, if need nimp.gt.1.
             endif
          enddo
       enddo
-               
-               
+
+
 
       write(*,*) 'frinitz:namep(1),namep(2),namei(1),ibion   ',
      +            namep(1),namep(2),namei(1),ibion
@@ -143,24 +143,24 @@ c     determine atomic weights of primary ions
 c----------------------------------------------------------------
       do 3410 i=1,nprim
         atw(i) = 0.
-        if(trim(namep(i)).eq.'h'  .or. 
+        if(trim(namep(i)).eq.'h'  .or.
      +     trim(namep(i)).eq.'H') atw(i)=1.
-     
-        if(trim(namep(i)).eq.'d'  .or. 
+
+        if(trim(namep(i)).eq.'d'  .or.
      +     trim(namep(i)).eq.'D') atw(i)=2.
-     
-        if(trim(namep(i)).eq.'t'  .or. 
+
+        if(trim(namep(i)).eq.'t'  .or.
      +     trim(namep(i)).eq.'T') atw(i)=3.
-     
-        if(trim(namep(i)).eq.'dt' .or. 
-     +     trim(namep(i)).eq.'DT' .or. 
-     +     trim(namep(i)).eq.'Dt' .or. 
+
+        if(trim(namep(i)).eq.'dt' .or.
+     +     trim(namep(i)).eq.'DT' .or.
+     +     trim(namep(i)).eq.'Dt' .or.
      +     trim(namep(i)).eq.'dT') atw(i) = fd*2. + (1.-fd)*3.
-     
-        if(trim(namep(i)).eq.'he' .or. 
-     +     trim(namep(i)).eq.'HE' .or. 
+
+        if(trim(namep(i)).eq.'he' .or.
+     +     trim(namep(i)).eq.'HE' .or.
      +     trim(namep(i)).eq.'He') atw(i)=4.
-     
+
         write(*,*) 'frinitz: i, trim(namep(i)), atw(i)',
      +                       i, trim(namep(i)), atw(i)
         if(atw(i).eq.zero) call frwrong(1)
@@ -174,53 +174,53 @@ c----------------------------------------------------------------
       do 3420 i=1,nimp
         k = nprim + i
         atw(k) = 0.
-        if(trim(namei(i)).eq.'he' .or. 
-     +     trim(namei(i)).eq.'HE' .or. 
+        if(trim(namei(i)).eq.'he' .or.
+     +     trim(namei(i)).eq.'HE' .or.
      +     trim(namei(i)).eq.'He') atw(k)= 4.
-     
-        if(trim(namei(i)).eq.'b' .or. 
+
+        if(trim(namei(i)).eq.'b' .or.
      +     trim(namei(i)).eq.'B' ) atw(k)= 11.  ! YuP added [2015]
 
-        if(trim(namei(i)).eq.'c' .or. 
+        if(trim(namei(i)).eq.'c' .or.
      +     trim(namei(i)).eq.'C' ) atw(k)= 12.
-     
-        if(trim(namei(i)).eq.'o' .or. 
+
+        if(trim(namei(i)).eq.'o' .or.
      +     trim(namei(i)).eq.'O' ) atw(k)= 16.
-        
-        if(trim(namei(i)).eq.'si' .or. 
-     +     trim(namei(i)).eq.'SI' .or. 
+
+        if(trim(namei(i)).eq.'si' .or.
+     +     trim(namei(i)).eq.'SI' .or.
      +     trim(namei(i)).eq.'Si') atw(k)= 28.
-     
-        if(trim(namei(i)).eq.'ar' .or. 
-     +     trim(namei(i)).eq.'AR' .or. 
+
+        if(trim(namei(i)).eq.'ar' .or.
+     +     trim(namei(i)).eq.'AR' .or.
      +     trim(namei(i)).eq.'Ar') atw(k)= 40.
-     
-        if(trim(namei(i)).eq.'cr' .or. 
-     +     trim(namei(i)).eq.'CR' .or. 
+
+        if(trim(namei(i)).eq.'cr' .or.
+     +     trim(namei(i)).eq.'CR' .or.
      +     trim(namei(i)).eq.'Cr') atw(k)= 52.
-     
-        if(trim(namei(i)).eq.'fe' .or. 
-     +     trim(namei(i)).eq.'FE' .or. 
+
+        if(trim(namei(i)).eq.'fe' .or.
+     +     trim(namei(i)).eq.'FE' .or.
      +     trim(namei(i)).eq.'Fe') atw(k)= 56.
-        
-        if(trim(namei(i)).eq.'ni' .or. 
-     +     trim(namei(i)).eq.'NI' .or. 
+
+        if(trim(namei(i)).eq.'ni' .or.
+     +     trim(namei(i)).eq.'NI' .or.
      +     trim(namei(i)).eq.'Ni') atw(k)= 59.
-        
-        if(trim(namei(i)).eq.'kr' .or. 
-     +     trim(namei(i)).eq.'KR' .or. 
+
+        if(trim(namei(i)).eq.'kr' .or.
+     +     trim(namei(i)).eq.'KR' .or.
      +     trim(namei(i)).eq.'Kr') atw(k)= 84.
-        
-        if(trim(namei(i)).eq.'mo' .or. 
-     +     trim(namei(i)).eq.'MO' .or. 
+
+        if(trim(namei(i)).eq.'mo' .or.
+     +     trim(namei(i)).eq.'MO' .or.
      +     trim(namei(i)).eq.'Mo') atw(k)= 96.
-        
-        if(trim(namei(i)).eq.'w' .or. 
+
+        if(trim(namei(i)).eq.'w' .or.
      +     trim(namei(i)).eq.'W' ) atw(k)= 184.
-        
+
         if(trim(namei(i)).eq.'mixt') atw(k)= 20.
-        
-        if(trim(namei(i)).eq.'a' .or. 
+
+        if(trim(namei(i)).eq.'a' .or.
      +     trim(namei(i)).eq.'A' ) atw(k)=int(fmass(ksave)/proton +0.1)
                                             !Compatible with cql3d added
                                             !impurity, for given zeff.

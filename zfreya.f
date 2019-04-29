@@ -74,16 +74,16 @@ c
       dimension atw(*),ebkev(*),ene(*),en(kj,*),te(kj)
       dimension sb(kj,ke,*),sbcx(kj,2),sbion(*)
       dimension z(kj,*)
-ccc   
+ccc
       dimension cfione(7),cfionp(7),rpathcxn(2)
-ccc   
+ccc
       data cfione/-3.173850e+01,1.143818e+01,
      1  -3.833998,7.046692e-01,-7.431486e-02,4.153749e-03,
      2  -9.486967e-05/
       data cfionp/-4.203309e+01,3.557321,
      1  -1.045134,3.139238e-01,-7.454475e-02,8.459113e-03,
      2  -3.495444e-04/
-ccc   
+ccc
       do 5000 j=1,nj
         sbcx(j,1)=0.
         sbcx(j,2)=0.
@@ -99,7 +99,7 @@ c990131        if(teev.gt.1.) alogt=alog(teev)
           expo=expo*alogt+cfione(if7)
  2000   continue
         sgvxne=exp(expo)*ene(j)
-ccc   
+ccc
         do 4000 ib=1,mb
           do 4001 ic=1,3
             ebev=1.e3* ebkev(ib)/(ic*atw(ibion))
@@ -128,7 +128,7 @@ c990131              aloge=alog10(e)
  2220         continue
               sigi=0.
  2240         continue
-ccc   
+ccc
               rpathcx = sigcx*en(j,k)
               rpathii = sigi*en(j,k)
               go to 3000
@@ -154,7 +154,7 @@ c------------------------------------------------------------
  4001     continue
  4000   continue
  5000 continue
-ccc   
+ccc
       return
       end
 c
@@ -252,16 +252,16 @@ c$$$c
 c$$$      dimension atw(*), ebkev(*), vbeam(ke,*),
 c$$$     *  zne(*), zni(kz,*), zte(*), zzi(kz,*),
 c$$$     *  sgvxne(*), sgxn(kz,ke,*), sgxnmi(ke,*)
-c$$$ccc   
+c$$$ccc
 c$$$      dimension cfione(7),cfionp(7)
-c$$$ccc   
+c$$$ccc
 c$$$      data cfione/-3.173850e+01,1.143818e+01,
 c$$$     1  -3.833998,7.046692e-01,-7.431486e-02,4.153749e-03,
 c$$$     2  -9.486967e-05/
 c$$$      data cfionp/-4.203309e+01,3.557321,
 c$$$     1  -1.045134,3.139238e-01,-7.454475e-02,8.459113e-03,
 c$$$     2  -3.495444e-04/
-c$$$ccc 
+c$$$ccc
 c$$$c      write(*,*) 'cfione(1),cfione(2),cfionp(1),cfionp(1)',
 c$$$c     +            cfione(1),cfione(2),cfionp(1),cfionp(1)
 c$$$c     ONETWO DIVERGENCE
@@ -279,7 +279,7 @@ c$$$          expo=expo*alogt+cfione(if7)
 c$$$ 11     continue
 c$$$        sgvxne(i)=exp(expo)*zne(i)
 c$$$ 10   continue
-c$$$ccc   
+c$$$ccc
 c$$$      do 120 ib=1,mb
 c$$$        do 121 j=1,3
 c$$$          veli=1./vbeam(j,ib)
@@ -309,7 +309,7 @@ c$$$            go to 23
 c$$$ 21         continue
 c$$$            sigi=0.
 c$$$ 23         continue
-c$$$ccc   
+c$$$ccc
 c$$$            do 24 i=1,mfm1
 c$$$              sgxncx = sigcx*zni(i,ion)
 c$$$              sgxni  = sigi*zni(i,ion)
@@ -329,7 +329,7 @@ c$$$c------------------------------------------------------------
 c$$$ 27       continue
 c$$$ 281    continue
 c$$$ 280  continue
-c$$$ccc   
+c$$$ccc
 c$$$      do 38 ib=1,mb
 c$$$        if(ib.gt.1 .and. ebkev(ib).eq.ebkev(1)) go to 36
 c$$$        do 35 j=1,3
@@ -344,7 +344,7 @@ c$$$ 36     do 37 j=1,3
 c$$$ 37     sgxnmi(j,ib) = sgxnmi(j,1)
 c$$$ 38   continue
 c$$$      return
-c$$$ccc   
+c$$$ccc
 c$$$c     ONETWO DIVERGENCE
 c$$$
 c$$$c..................................................................
@@ -391,7 +391,7 @@ c      real*8 sgxn(kcmp1,kz,ke,kb), sgxnmi(ke,kb)
 c
       real*8  cfione(7), cfionp(7)
 c
-      data cfione / -3.173850D+01, 1.143818D+01, -3.833998D0, 
+      data cfione / -3.173850D+01, 1.143818D+01, -3.833998D0,
      .    7.046692D-01, -7.431486D-02, 4.153749D-03, -9.486967D-05/
       data cfionp / -4.203309D+01, 3.557321D0, -1.045134D0,
      .    3.139238D-01, -7.454475D-02, 8.459113D-03, -3.495444D-04/
@@ -470,8 +470,8 @@ c  r.e. olson et al., phys. rev. lett. 41, 163 (1978)
 c------------------------------------------------------------
               ebi = ebkev(ib) / (j*atw(ibion))
               do 80 i = 1, mfm1
-                rpath = 1.0e-17 * zni(i,ion) * 46.D0 * zzi(i,ion) * 
-     .             (32.D0*zzi(i,ion)/ebi) * 
+                rpath = 1.0e-17 * zni(i,ion) * 46.D0 * zzi(i,ion) *
+     .             (32.D0*zzi(i,ion)/ebi) *
      .             (1.D0-dexp(-ebi/(32.D0*zzi(i,ion))))
                 sgxn(4,i,j,ib) = sgxn(4,i,j,ib) + rpath
    80         continue
@@ -1132,9 +1132,9 @@ c...  apply initial condition constraint
      >    (12x, 1pe15.7,' * exp(',1pe15.7,' * x)') )
  1340 continue
 c
-c%OS  
+c%OS
       print *,' WARNING: xtest not defined in EIGEN'
-c%OS  
+c%OS
       do 1330 j = 1,ns
         in(j) = 0.
         do 1345 i = 1, ns
@@ -1165,7 +1165,7 @@ c
 c
 c     This routine evaluates the function N, which is related to the
 c      rate at which fast ions slow down on electrons and thermal ions.
-c       This function is defined by Callen et al., IAEA Tokyo, 
+c       This function is defined by Callen et al., IAEA Tokyo,
 c       Vol. I, 645(1974).
 c
       v3 = vcvo**3
@@ -1286,7 +1286,7 @@ c
       go to 115
  110  call inter(drutpi,1,mfm1,psiax,rotsid,psii,ra)
  115  ra = ra + 2.
-      
+
       call scalit(ra, rp, zero, onep5, 1, 1, itp, 10,onem5,onem3,one,0,
      *  c1, c2, c3, droti, mfm1, psip, potsid, rmajor)
       if(rp.lt.ri-0.01 .or. rp.lt.rmajor .or. itp.lt.0) flagp = '*'
@@ -2084,8 +2084,8 @@ c     e-impact thresholds (temp.)
 c
       ifail=0
       typent = 'gl'
-CMG  changed 11/13/2017         call d01bbf(typent,ngl,wgl,xgl,ifail) 
-      call d01bbf_cql3d(typent,ngl,wgl,xgl,ifail) 
+CMG  changed 11/13/2017         call d01bbf(typent,ngl,wgl,xgl,ifail)
+      call d01bbf_cql3d(typent,ngl,wgl,xgl,ifail)
 c@    call d01bbf(d01bax,0.,1.,0,ngl,wgl,xgl,ifail)
       if(ifail.eq.0)goto 5
       if(nouthx.gt.0) write(nouthx,3939) ifail
@@ -2429,9 +2429,9 @@ c$$$      data       seed0    /0.0d0/
 c$$$
 c$$$c      iflag=0
 c$$$c
-c$$$c%OS  
+c$$$c%OS
 c$$$cbh   (930920) print *,' WARNING: isol not defined in inject'
-c$$$c%OS  
+c$$$c%OS
 c$$$cbh   (930920) if(newpar.eq.0 .and. isol.eq.0) go to 140
 c$$$      if(newpar.eq.0) go to 100
 c$$$c
@@ -2472,7 +2472,7 @@ c$$$      dfac=-log(RANDOM_my(seed0))
 c$$$      tstep=dfac*sgxnmi(ie,ib)/vbeam(ie,ib)
 c$$$      tt=tt+tstep
 c$$$c      write(*,*) 'dfac,ie,ib,sgxnmi(ie,ib),vbeam(ie,ib),tstep',
-c$$$c     +             dfac,ie,ib,sgxnmi(ie,ib),vbeam(ie,ib),tstep  
+c$$$c     +             dfac,ie,ib,sgxnmi(ie,ib),vbeam(ie,ib),tstep
 c$$$      if(tt.ge.texit) go to 140
 c$$$      xpos=xpos+vx0*tstep
 c$$$      ypos=ypos+vy0*tstep
@@ -2568,17 +2568,17 @@ c
       subroutine logint(x,y)
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-ccc   
+ccc
 ccc   interpolates y(x) quadratically and logarithmically
-ccc   
+ccc
       dimension xdat(15),ydat(15)
-ccc   
+ccc
       data xdat/4.,6.,8.,10.,20.,30.,40.,60.,80.,100.,
      1  200.,300.,400.,600.,800./
       data ydat/8.95e-01,8.75e-01,8.70e-01,8.65e-01,8.20e-01,
      1  7.25e-01,6.25e-01,4.40e-01,2.90e-01,1.90e-01,2.40e-02,
      2  5.25e-03,1.20e-03,1.60e-04,5.40e-05/
-ccc   
+ccc
       mdat=15
       mdatm=mdat-1
       do 10 i0=2,mdatm
@@ -2607,7 +2607,7 @@ c990131      ylogm=alog(ydat(im))
       facp=dm*d0/(dpm*dp0)
       ylog=facm*ylogm+fac0*ylog0+facp*ylogp
       y=exp(ylog)
-ccc   
+ccc
       return
       end
 c
@@ -3196,7 +3196,7 @@ c
      *  nsourc, sangv, sangh, rpivot, zpivot,
      *  mlost, x0, y0, z0, vx0, vy0, vz0)
       implicit integer (i-n), real*8 (a-h,o-z)
-ccc   
+ccc
 c     this subroutine advances a particle from source to the pivot point,
 c     and transforms coordinates.
 c
@@ -3337,7 +3337,7 @@ c
       x0=0.0
       y0=y0+vy0*tpvt
       z0=z0+vz0*tpvt
-ccc   
+ccc
       if(sangv(ib).eq.zero) go to 30
       zcos=cangv(ib)
       zsin=sangv(ib)
@@ -3348,7 +3348,7 @@ ccc
       vz0=-vx0*zsin+vz0*zcos
       vx0=temp
  30   continue
-ccc   
+ccc
       if(sangh(ib).eq.0.) go to 40
       zcos=cangh(ib)
       zsin=sangh(ib)
@@ -3359,10 +3359,10 @@ ccc
       vy0=-vx0*zsin+vy0*zcos
       vx0=temp
  40   continue
-ccc   
+ccc
       x0 = x0 + rpivot(ib)
       z0 = z0 + zpivot(ib)
-ccc   
+ccc
       return
       end
 c
@@ -4338,12 +4338,12 @@ c$$$     *  nsourc, sfrac1, vbeam,
 c$$$     *  x0, y0, z0, vx0, vy0, vz0)
 c$$$      implicit integer (i-n), real*8 (a-h,o-z)
 c$$$      save
-c$$$ccc   
+c$$$ccc
 c$$$ccc   generates a particle at the injector surface with
 c$$$ccc   coordinates and velocities x0,y0,z0,vx0,vy0,vz0
 c$$$ccc   These coordinates are attached to the source center, with the
 c$$$ccc   x-direction perp to the source along the source centerline.
-c$$$ccc   
+c$$$ccc
 c$$$      character*8 bshape
 c$$$      dimension bshape(*), bheigh(*), bwidth(*), bhfoc(*), bvfoc(*),
 c$$$     *  bhdiv(*), bvdiv(*), sfrac1(*), vbeam(ke,*)
@@ -4357,7 +4357,7 @@ c$$$      data rt2/1.414213562/
 c$$$      data       seed0 /0.0d0/
 c$$$ccc
 c$$$
-c$$$  
+c$$$
 c$$$      x0=0.
 c$$$      isourc=1
 c$$$      if(nsourc.eq.1)  go to 10
@@ -4370,7 +4370,7 @@ c$$$c000114*Not portable*      if(RANDOM_my(seed0).gt.sfrac1(ib))  isourc=-1
 c$$$      rv=RANDOM_my(seed0)
 c$$$      if(rv.gt.sfrac1(ib))  isourc=-1
 c$$$ 10   if(bshape(ib).ne."circ") go to 20
-c$$$ccc   
+c$$$ccc
 c$$$c990131 12   y0=ranf()-0.5
 c$$$c990131      z0=ranf()-0.5
 c$$$
@@ -4388,7 +4388,7 @@ c$$$      y0=y0*bwidth(ib)
 c$$$      z0=z0*bwidth(ib)
 c$$$c      write(*,*)'sorspt: rv,ib,bwidth(ib)',rv,ib,bwidth(ib)
 c$$$      go to 30
-c$$$ccc   
+c$$$ccc
 c$$$ 20   continue
 c$$$c990131      y0=bwidth(ib)*(ranf()-0.5)
 c$$$c990131      z0=bheigh(ib)*(ranf()-0.5)
@@ -4399,10 +4399,10 @@ c$$$      y0=bwidth(ib)*(rv-0.5)
 c$$$      rv=RANDOM_my(seed0)
 c$$$      z0=bheigh(ib)*(rv-0.5)
 c$$$
-c$$$ccc   
-c$$$ccc   
-c$$$ccc   
-c$$$ccc   
+c$$$ccc
+c$$$ccc
+c$$$ccc
+c$$$ccc
 c$$$ 30   continue
 c$$$c
 c$$$c     Special coding for DIII-D Long Pulse Sources.
@@ -4428,7 +4428,7 @@ c$$$ 33   vsqrt=1./sqrt(vdx**2+vdy**2+vdz**2)
 c$$$      vx0=vbeam(ie,ib)*vdx*vsqrt
 c$$$      vy0=vbeam(ie,ib)*vdy*vsqrt
 c$$$      vz0=vbeam(ie,ib)*vdz*vsqrt
-c$$$ccc   
+c$$$ccc
 c$$$      thz=ranorm(1)*bvdiv(ib)/rt2
 c$$$      thy=ranorm(1)*bhdiv(ib)/rt2
 c$$$      vz0=vz0+thz*pio180*vx0
@@ -4713,7 +4713,7 @@ c      include 'params.inc'
 c      save
 c
 cBH131015      external  RANDOM_my             ! random number generator
-      real*8 psi(ki,kj), sgxn(kcmp1,kz,kbe,ksge), sgxnmi(ke,kb), 
+      real*8 psi(ki,kj), sgxn(kcmp1,kz,kbe,ksge), sgxnmi(ke,kb),
      .     r(ki), z(kj), vbeam(ke,kb)
       real*8 atw(kion), rin, rmax, zax, zmin, zmax
       character*8 codeid
@@ -4836,7 +4836,7 @@ c    If particle has real collision, return
 c
           if (izone.gt.mfm1) go to 10
 c          if (ranf().gt.sgxn(izone,ie,ib)*sgxnmi(ie,ib)) go to 10
-          if (RANDOM_my(seed0) .gt. 
+          if (RANDOM_my(seed0) .gt.
      .       sgxn(4,izone,ie,ib)*sgxnmi(ie,ib))  go to 10
           return
 c
@@ -4898,7 +4898,7 @@ c
       parameter (ktk = 100)
       character*8  codeid
       integer i1(ktk)
-      real*8 sgxn(4,kz,kbe,ksge), sgxnloc(kbe), 
+      real*8 sgxn(4,kz,kbe,ksge), sgxnloc(kbe),
      .       sgxnmi(ke,kb), vbeam(ke,kb)
       dimension r(*), z(*), psi(ki,*)
       real*8 zangrot(kz), e1(ktk), sgxntab(ktk)
@@ -5148,7 +5148,7 @@ c
          call pfit(psi(1,j-1), r(1), z(j-1), rpos, zpos, ki, pzone,
      *   dum, dum)
          endif
-     
+
         endif
         pzone =  MAX (pzone,psiax)
         izone = SQRT (pzone-psiax)*drutpi + 1.0
@@ -5203,7 +5203,7 @@ c
 c  this subroutine calculates the neutral beam attenuation array, sgxn.
 c
 c     input:
-c          iexcit         - atomic excitation model 
+c          iexcit         - atomic excitation model
 c                           0=Freeman-Jones, 5=ADAS, 6=Boley parameterization
 c          namei          - name of ith impurity ion species
 c          nprim, nimp
@@ -5324,7 +5324,7 @@ c
 c        do ib = 1, mb
 c          do j = 1, 3
 c            do i=1,mfm1
-c             write(*,'(3i4,2x,1p1e10.4,a16)') 
+c             write(*,'(3i4,2x,1p1e10.4,a16)')
 c     .         i,j,ib,sgxn(4,i,j,ib), ' sgxn-nbsgxn'
 c            enddo
 c          enddo
@@ -5366,48 +5366,48 @@ c
 c       get atomic number of impurities
 c
         do i=1,nimp
-          if(trim(namei(i)).eq.'he' .or. 
-     +       trim(namei(i)).eq.'HE' .or. 
+          if(trim(namei(i)).eq.'he' .or.
+     +       trim(namei(i)).eq.'HE' .or.
      +       trim(namei(i)).eq.'He')  iz(i) =  2
-     
-          if(trim(namei(i)).eq.'b' .or. 
+
+          if(trim(namei(i)).eq.'b' .or.
      +       trim(namei(i)).eq.'B' )  iz(i) =  5  ! YuP added [2015]
-          
-          if(trim(namei(i)).eq.'c' .or. 
+
+          if(trim(namei(i)).eq.'c' .or.
      +       trim(namei(i)).eq.'C' )  iz(i) =  6
-          
-          if(trim(namei(i)).eq.'o' .or. 
+
+          if(trim(namei(i)).eq.'o' .or.
      +       trim(namei(i)).eq.'O' )  iz(i) =  8
-          
-          if(trim(namei(i)).eq.'si' .or. 
-     +       trim(namei(i)).eq.'SI' .or. 
+
+          if(trim(namei(i)).eq.'si' .or.
+     +       trim(namei(i)).eq.'SI' .or.
      +       trim(namei(i)).eq.'Si')  iz(i) = 14
-          
-          if(trim(namei(i)).eq.'ar' .or. 
-     +       trim(namei(i)).eq.'AR' .or. 
+
+          if(trim(namei(i)).eq.'ar' .or.
+     +       trim(namei(i)).eq.'AR' .or.
      +       trim(namei(i)).eq.'Ar')  iz(i) = 18
-          
-          if(trim(namei(i)).eq.'cr' .or. 
-     +       trim(namei(i)).eq.'CR' .or. 
+
+          if(trim(namei(i)).eq.'cr' .or.
+     +       trim(namei(i)).eq.'CR' .or.
      +       trim(namei(i)).eq.'Cr')  iz(i) = 24
-          
-          if(trim(namei(i)).eq.'fe' .or. 
-     +       trim(namei(i)).eq.'FE' .or. 
+
+          if(trim(namei(i)).eq.'fe' .or.
+     +       trim(namei(i)).eq.'FE' .or.
      +       trim(namei(i)).eq.'Fe')  iz(i) = 26
-          
-          if(trim(namei(i)).eq.'ni' .or. 
-     +       trim(namei(i)).eq.'NI' .or. 
+
+          if(trim(namei(i)).eq.'ni' .or.
+     +       trim(namei(i)).eq.'NI' .or.
      +       trim(namei(i)).eq.'Ni')  iz(i) = 28
-          
-          if(trim(namei(i)).eq.'kr' .or. 
-     +       trim(namei(i)).eq.'KR' .or. 
+
+          if(trim(namei(i)).eq.'kr' .or.
+     +       trim(namei(i)).eq.'KR' .or.
      +       trim(namei(i)).eq.'Kr')  iz(i) = 36
-          
-          if(trim(namei(i)).eq.'mo' .or. 
-     +       trim(namei(i)).eq.'MO' .or. 
+
+          if(trim(namei(i)).eq.'mo' .or.
+     +       trim(namei(i)).eq.'MO' .or.
      +       trim(namei(i)).eq.'Mo')  iz(i) = 42
-          
-          if(trim(namei(i)).eq.'w' .or. 
+
+          if(trim(namei(i)).eq.'w' .or.
      +       trim(namei(i)).eq.'W' )  iz(i) = 74
         enddo
 c
@@ -5714,7 +5714,7 @@ c ----------------------------------------------------------------------
 c
       real*8 e(ktk), sgxn(4,kz,kbe,ksge), sgxnloc(kbe)  ! stand alone code
       integer iz(ktk), imaxa(200)
-      integer,save :: imax 
+      integer,save :: imax
 c
       ncrt = 6
 c
@@ -5727,7 +5727,7 @@ c
           sgxnloc(i) = sgxn (4, iz(i), ind, ibin)
         end do
         imax = maxaf (imaxa, 1, ns)
-      else       
+      else
         ibin       = e(1) / debin + 1.0
         imax       = MAX0 (ibin, imax )
         ibin       = MIN0 (ibin, nbins)
@@ -5895,8 +5895,8 @@ c ----------------------------------------------------------------------
 c
       do i=1,nprim
         izatom(i) = 1 ! for H,D,T
-        if (trim(namep(i)).eq.'he'   .or. 
-     +      trim(namep(i)).eq.'HE'   .or. 
+        if (trim(namep(i)).eq.'he'   .or.
+     +      trim(namep(i)).eq.'HE'   .or.
      +      trim(namep(i)).eq.'He') izatom(i) = 2
       enddo
 c
@@ -5908,48 +5908,48 @@ c
       do i=1,nimp
         k = nprim + i
         izatom(k) = 0
-        if(trim(namei(i)).eq.'he' .or. 
-     +     trim(namei(i)).eq.'HE' .or. 
+        if(trim(namei(i)).eq.'he' .or.
+     +     trim(namei(i)).eq.'HE' .or.
      +     trim(namei(i)).eq.'He')  izatom(k) =  2
-     
-        if(trim(namei(i)).eq.'b' .or. 
+
+        if(trim(namei(i)).eq.'b' .or.
      +     trim(namei(i)).eq.'B' )  izatom(k) =  5  ! YuP added [2015]
-        
-        if(trim(namei(i)).eq.'c' .or. 
+
+        if(trim(namei(i)).eq.'c' .or.
      +     trim(namei(i)).eq.'C' )  izatom(k) =  6
-        
-        if(trim(namei(i)).eq.'o' .or. 
+
+        if(trim(namei(i)).eq.'o' .or.
      +     trim(namei(i)).eq.'O' )  izatom(k) =  8
-        
-        if(trim(namei(i)).eq.'si' .or. 
-     +     trim(namei(i)).eq.'SI' .or. 
+
+        if(trim(namei(i)).eq.'si' .or.
+     +     trim(namei(i)).eq.'SI' .or.
      +     trim(namei(i)).eq.'Si')  izatom(k) = 14
-        
-        if(trim(namei(i)).eq.'ar' .or. 
-     +     trim(namei(i)).eq.'AR' .or. 
+
+        if(trim(namei(i)).eq.'ar' .or.
+     +     trim(namei(i)).eq.'AR' .or.
      +     trim(namei(i)).eq.'Ar')  izatom(k) = 18
-        
-        if(trim(namei(i)).eq.'cr' .or. 
-     +     trim(namei(i)).eq.'CR' .or. 
+
+        if(trim(namei(i)).eq.'cr' .or.
+     +     trim(namei(i)).eq.'CR' .or.
      +     trim(namei(i)).eq.'Cr')  izatom(k) = 24
-        
-        if(trim(namei(i)).eq.'fe' .or. 
-     +     trim(namei(i)).eq.'FE' .or. 
+
+        if(trim(namei(i)).eq.'fe' .or.
+     +     trim(namei(i)).eq.'FE' .or.
      +     trim(namei(i)).eq.'Fe')  izatom(k) = 26
-        
-        if(trim(namei(i)).eq.'ni' .or. 
-     +     trim(namei(i)).eq.'NI' .or. 
+
+        if(trim(namei(i)).eq.'ni' .or.
+     +     trim(namei(i)).eq.'NI' .or.
      +     trim(namei(i)).eq.'Ni')  izatom(k) = 28
-        
-        if(trim(namei(i)).eq.'kr' .or. 
-     +     trim(namei(i)).eq.'KR' .or. 
+
+        if(trim(namei(i)).eq.'kr' .or.
+     +     trim(namei(i)).eq.'KR' .or.
      +     trim(namei(i)).eq.'Kr')  izatom(k) = 36
-        
-        if(trim(namei(i)).eq.'mo' .or. 
-     +     trim(namei(i)).eq.'MO' .or. 
+
+        if(trim(namei(i)).eq.'mo' .or.
+     +     trim(namei(i)).eq.'MO' .or.
      +     trim(namei(i)).eq.'Mo')  izatom(k) = 42
-        
-        if(trim(namei(i)).eq.'w' .or. 
+
+        if(trim(namei(i)).eq.'w' .or.
      +     trim(namei(i)).eq.'W' )  izatom(k) = 74
       enddo
 c
@@ -6191,7 +6191,7 @@ c                      and third energy beam components
 c
 c
 c      USE param
-c      USE io 
+c      USE io
 c      USE ext_prog_info, only : nchars_12,onetwo_xsct
 c
       implicit  integer (i-n), real*8 (a-h, o-z)
@@ -6552,7 +6552,7 @@ c          debin
 c                 - width of energy bins (keV/amu)
 c ----------------------------------------------------------------------
 c
-c 
+c
       implicit  integer (i-n), real*8 (a-h, o-z)
 c      include 'params.inc'   ! for stand alone code
 c
@@ -6741,7 +6741,7 @@ c  Depending on freeus_cql3d, unitret either = input variable unitreq or is outp
       return
       end
 c
-      subroutine freeus_cql3d(unitno) 
+      subroutine freeus_cql3d(unitno)
       !YuP[2017] renamed to avoid conflicts with TRANSP
 c
 c     $Id: dummies.f,v 1.4 2000/05/31 21:10:41 freemanj Exp $
@@ -6921,7 +6921,7 @@ c  The above two rules are not acceptible in the context in which
 c  this routine is used in the ONETWO code. (actually they are not
 c  acceptable in any context in my opinion.
 c  Interpolating outside the cubic spline fit is totally bogus.)
-c  I have changed the rules to read  
+c  I have changed the rules to read
 c   if u .gt. x(n) then use Y(n) as the most reasonable
 c   approximation if you dont actually want to stop the code.
 c   similarly if u .lt. x(1) then use y(1) as the returned value.
@@ -6956,7 +6956,7 @@ c
       !You can set extend_seval=1 in the first namelist
       !in inone if you want to ignore this problem
       !subroutine SEVAL: Bad Interpolation
-c   
+c
 c
 c  added  1/29/98  HSJ
 c
@@ -7124,5 +7124,3 @@ c
       end
 c
 c
-
-

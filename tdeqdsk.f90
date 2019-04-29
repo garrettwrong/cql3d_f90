@@ -10,7 +10,7 @@ module tdeqdsk_mod
   use zcunix_mod, only : terp1
 
   !---END USE
-  
+
   use iso_c_binding, only : c_double
   !     used by tdtscinp
   real(c_double),public  :: psimago,psilimo
@@ -23,12 +23,12 @@ contains
     use comm_mod
     use equilib_mod, only : ncoila, nccoila, pcvac, ccoil, ncoil
     use r8subs_mod, only : dcopy
-    
+
     implicit integer (i-n), real*8 (a-h,o-z)
     save
-    
+
     parameter (niterate=20)
-    
+
     dimension fpsiareq(nnra),ffpareq(nnra),prareq(nnra), &
    ppareq(nnra),q(nnra),eqpsi_(nconteqa),d2q_(nconteqa)
       parameter(itlrza=3*lrza+1+3*nrada+3*nconteqa)
@@ -83,7 +83,7 @@ contains
 !     Compute the bootstrap effect too, <JbsB>. The bootstrap
 !     current (bscurm) is assumed to be area averaged.
 !
-!     Presently, only electron bootstrap contribution included 
+!     Presently, only electron bootstrap contribution included
 !                for jhirsh=88/99. (BobH, 990823).
 !
 !     Input currents are in Amps/cm**2
@@ -240,7 +240,7 @@ contains
         fpsiareq(i)=fpsiareq(i)/1.e+6
         ffpareq(i)=ffpar(i)*1.e+2   !Previously 1e-4, so check if
                                     !using partner='selene', BH010226.
-        prareq(i)=prareq(i)/10.   
+        prareq(i)=prareq(i)/10.
         ppareq(i)=ppareq(i)*1.e+7
 200  end do
 
@@ -336,7 +336,7 @@ contains
 305  end do
 
 !..................................................................
-     !     Continue conversion to end 
+     !     Continue conversion to end
 !..................................................................
 
       psilim=-psilim/1.e+8

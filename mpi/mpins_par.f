@@ -7,7 +7,7 @@ CMPIINSERT_FINISH
 CMPIINSERT_MPIWORKER
       if(soln_method.eq.'direct' .and. lrzmax.gt.1
      +     ) then
-         ! Parallelization for the impavnc0 solver is limited 
+         ! Parallelization for the impavnc0 solver is limited
          ! for soln_method='direct' (for now)
          if(mpisize.gt.1) then
             mpiworker= MOD(ll-1,mpisize-1)+1  !1...(mpisize-1)
@@ -16,7 +16,7 @@ CMPIINSERT_MPIWORKER
             mpiworker=0
          endif
       else
-         ! In all other cases, perform calculations 
+         ! In all other cases, perform calculations
          ! for all flux surfaces on mpirank=0, then broadcast results
          mpiworker=0
       endif
@@ -31,7 +31,7 @@ CMPIINSERT_MPIWORKER_KRF
             mpiworker=0
          endif
 CMPIINSERT_MPIWORKER_IRAYKRF
-      iraykrf= iray + nrayn*(krf-1) 
+      iraykrf= iray + nrayn*(krf-1)
          if(mpisize.gt.1) then
             mpiworker= MOD(iraykrf-1,mpisize-1)+1
          else
@@ -77,7 +77,7 @@ CMPIINSERT_MPIWORKER_IV
             mpiworker=0
          endif
 CMPIINSERT_MPIWORKER_IJ
-         !ij= j + jx*(i-1) 
+         !ij= j + jx*(i-1)
          ij= i + iy*(j-1)
          if(mpisize.gt.1) then
             mpiworker= MOD(ij-1,mpisize-1)+1
@@ -252,16 +252,16 @@ CMPIINSERT_BCAST_ENTR
       call MPI_BCAST(pwrrf(1,k,l_),jx,
      +     MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 CMPIINSERT_IF_RANK_NE_0_RETURN
-      if(mpirank.ne.0) return 
+      if(mpirank.ne.0) return
 CMPIINSERT_IF_RANK_EQ_0
-      if(mpirank.eq.0) then 
+      if(mpirank.eq.0) then
 CMPIINSERT_IF_RANK_EQ_MPIWORKER
       if(mpirank.eq.mpiworker) then
 CMPIINSERT_ENDIF_RANK
       endif  ! for if(mpirank.eq.***)
 CMPIINSERT_SEND_RECV
       if(soln_method.eq.'direct' .and. lrzmax.gt.1) then
-      ! Parallelization for the impavnc0 solver is limited 
+      ! Parallelization for the impavnc0 solver is limited
       ! for soln_method='direct' (for now)
       if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
          call send_data ! send or recv data on f and coll.coeffs.
@@ -269,20 +269,20 @@ CMPIINSERT_SEND_RECV
       endif
 CMPIINSERT_SEND_RECV_ENTR
       if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
-         call send_entr(k,lefct) 
+         call send_entr(k,lefct)
          !send/recv entr(k,:,l_),pwrrf,pwrrfs(:,k,l_)
       endif
-      
+
 CMPIINSERT_SEND_URFPWR
 c         PRINT*,'SEND_urfpwr: mpirank,krf,iray=',mpirank,krf,iray
          ! Count number of elements for this ray
-         irayis=0 
+         irayis=0
          do is=1,nrayelt(iray,krf)! Loop over ray elements
             if(ipwr(is).eq.1) irayis=irayis+1 ! incremented up to nrayis
          enddo
          nrayis=irayis
-         mpisz=nrayis ! number of elements 
-         irayis=0 
+         mpisz=nrayis ! number of elements
+         irayis=0
          do is=1,nrayelt(iray,krf)! Loop over ray elements
            if(ipwr(is).eq.1)  then
              irayis=irayis+1 ! incremented up to nrayis
@@ -296,48 +296,48 @@ c         PRINT*,'SEND_urfpwr: mpirank,krf,iray=',mpirank,krf,iray
          mpitag= iray + nrayn*(krf-1) ! combined: ray-number + wave-mode
          call MPI_SEND(ipwr, nrayelts,
      +        MPI_INTEGER1,
-     +        0, mpitag, 
+     +        0, mpitag,
      +        MPI_COMM_WORLD,mpiierr)
          call MPI_SEND(urftmp, 5*mpisz,
      +        MPI_DOUBLE_PRECISION,
-     +        0, mpitag, 
+     +        0, mpitag,
      +        MPI_COMM_WORLD,mpiierr)
 c         PRINT*,'SEND_urfpwr: krf,iray,mpirank=',krf,iray,mpirank
       !-----------------------------------------------------------
-      
+
 CMPIINSERT_RECV_URFPWR
       if(mpirank.eq.0) then !-------------------------------------------
 c         PRINT*,'recv_urfpwr: mpirank,krf,iray=',mpirank,krf,iray
          call MPI_RECV(ipwr, nrayelts,
      +        MPI_INTEGER1,
-     +        MPI_ANY_SOURCE, MPI_ANY_TAG, 
+     +        MPI_ANY_SOURCE, MPI_ANY_TAG,
      +        MPI_COMM_WORLD,mpistatus,mpiierr)
-         mpitag=mpistatus(MPI_TAG) 
+         mpitag=mpistatus(MPI_TAG)
          call MPI_RECV(urftmp, nrayelts*5,
      +        MPI_DOUBLE_PRECISION,
-     +        MPI_ANY_SOURCE, mpitag, 
+     +        MPI_ANY_SOURCE, mpitag,
      +        MPI_COMM_WORLD,mpistatus,mpiierr)
          mpiray=MOD(mpitag-1,nrayn)+1  ! determine which ray
          mpikrf=(mpitag-mpiray)/nrayn +1 ! determine which krf wave mode
          ! Get mpisz5 (Number of elements received)
-         call MPI_GET_COUNT(mpistatus, 
-     +        MPI_DOUBLE_PRECISION,mpisz5,mpiierr) 
+         call MPI_GET_COUNT(mpistatus,
+     +        MPI_DOUBLE_PRECISION,mpisz5,mpiierr)
          mpisz= mpisz5/5 ! urftmp contains 5 arrays
-         irayis=0 
+         irayis=0
          do is=1,nrayelt(mpiray,mpikrf)! Loop over ray elements
            if(ipwr(is).eq.1)  then
              irayis=irayis+1 ! incremented up to nrayis==mpisz
              urfpwr(is,mpiray,mpikrf)=  urftmp(0*mpisz+irayis)
-             urfpwrc(is,mpiray,mpikrf)= urftmp(1*mpisz+irayis) 
-             urfpwrl(is,mpiray,mpikrf)= urftmp(2*mpisz+irayis) 
-             scalurf(is,mpiray,mpikrf)= urftmp(3*mpisz+irayis) 
+             urfpwrc(is,mpiray,mpikrf)= urftmp(1*mpisz+irayis)
+             urfpwrl(is,mpiray,mpikrf)= urftmp(2*mpisz+irayis)
+             scalurf(is,mpiray,mpikrf)= urftmp(3*mpisz+irayis)
              salphac(is,mpiray,mpikrf)= urftmp(4*mpisz+irayis)
            endif
          enddo
 c         PRINT*,'recv_urfpwr: mpikrf,mpiray,mpisz=',
 c     +                        mpikrf,mpiray,mpisz
       endif !-----------------------------------------------------------
-      
+
 CMPIINSERT_BCAST_URFPWR
       call MPI_BCAST(urfpwr,nrayelts*nrayn*mrfn,
      +     MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
@@ -349,7 +349,7 @@ CMPIINSERT_BCAST_URFPWR
      +     MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(salphac,nrayelts*nrayn*mrfn,
      +     MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-     
+
 CMPIINSERT_SEND_URFB0
       if(mpirank.eq.mpiworker) then !-----------------------------------
         mpisz=iyjx*lrz ! number of elements in urfb(i,j,lr)
@@ -361,7 +361,7 @@ CMPIINSERT_SEND_URFB0
         mpitag= krf ! wave-mode
         call MPI_SEND(urfbwk, mpisz3+2*lrz,
      +       MPI_DOUBLE_PRECISION,
-     +       0, mpitag, 
+     +       0, mpitag,
      +       MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
 CMPIINSERT_RECV_URFB0
@@ -370,16 +370,16 @@ CMPIINSERT_RECV_URFB0
         mpisz3=2*mpisz ! storage size for urfb,urfc
         call MPI_RECV(urfbwk, mpisz3+2*lrz,
      +       MPI_DOUBLE_PRECISION,
-     +       MPI_ANY_SOURCE, MPI_ANY_TAG, 
+     +       MPI_ANY_SOURCE, MPI_ANY_TAG,
      +       MPI_COMM_WORLD,mpistatus,mpiierr)
-        mpitag=mpistatus(MPI_TAG) 
+        mpitag=mpistatus(MPI_TAG)
         mpikrf=mpitag ! determine which krf wave mode
-        ij=0 
+        ij=0
         do ll=1,lrz
         call tdnflxs(lmdpln(ll))
         do j=1,jx
         do i=1,iy
-           ij=ij+1 
+           ij=ij+1
            urfb(i,j,indxlr_,mpikrf)=urfb(i,j,indxlr_,mpikrf)
      +                             +urfbwk(0*mpisz+ij)
            urfc(i,j,indxlr_,mpikrf)=urfc(i,j,indxlr_,mpikrf)
@@ -402,20 +402,20 @@ CMPIINSERT_SEND_EFLUXWK
         mpitag= i ! i=1,lrzmax
         call MPI_SEND(tem2, mpisz,
      +       MPI_DOUBLE_PRECISION,
-     +       0, mpitag, 
+     +       0, mpitag,
      +       MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
 CMPIINSERT_RECV_EFLUXWK
       if(mpirank.eq.0) then !-------------------------------------------
         call MPI_RECV(tem2, mpisz,
      +       MPI_DOUBLE_PRECISION,
-     +       MPI_ANY_SOURCE, MPI_ANY_TAG, 
+     +       MPI_ANY_SOURCE, MPI_ANY_TAG,
      +       MPI_COMM_WORLD,mpistatus,mpiierr)
-        mpitag=mpistatus(MPI_TAG) 
+        mpitag=mpistatus(MPI_TAG)
         mpil_=mpitag ! determine which radial surface sent the data
         call dcopy(mpisz,tem2(1),1,efluxwk(1,mpil_),1)
       endif !-----------------------------------------------------------
-      
+
 CMPIINSERT_SEND_FUS
       if(mpirank.eq.mpiworker) then !-----------------------------------
         mpisz=4
@@ -426,7 +426,7 @@ CMPIINSERT_SEND_FUS
         mpitag= lr_ ! over flux surfaces =1,lrz
         call MPI_SEND(buff, mpisz*4,
      +       MPI_DOUBLE_PRECISION,
-     +       0, mpitag, 
+     +       0, mpitag,
      +       MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
 CMPIINSERT_RECV_FUS
@@ -434,9 +434,9 @@ CMPIINSERT_RECV_FUS
         mpisz=4
         call MPI_RECV(buff, mpisz*4,
      +       MPI_DOUBLE_PRECISION,
-     +       MPI_ANY_SOURCE, MPI_ANY_TAG, 
+     +       MPI_ANY_SOURCE, MPI_ANY_TAG,
      +       MPI_COMM_WORLD,mpistatus,mpiierr)
-        mpitag=mpistatus(MPI_TAG) 
+        mpitag=mpistatus(MPI_TAG)
         mpil_=mpitag ! determine which radial surface sent the data
         call dcopy(mpisz, buff(0*mpisz+1),1, fuspwrv(1,mpil_),1)
         call dcopy(mpisz, buff(1*mpisz+1),1, fuspwrm(1,mpil_),1)
@@ -461,7 +461,7 @@ CMPIINSERT_BCAST_FUS
      +     MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(sigm(1,1),4*lrorsa,
      +     MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-     
+
 CMPIINSERT_STARTTIME
       if(mpirank.eq.0) then
          mpitime = MPI_WTIME()

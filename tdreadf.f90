@@ -489,7 +489,7 @@ contains
 !        for nlrestrt.eq.'ncregrid', jx_rstrt can be different from jx
 !        Also enforce that ngen is .le. gen_species_dim.
          if (iy_rstrt.ne.iy .or. lrz_rstrt.ne.lrz .or. ngen_rstrt.ne.ngen) then
-!     1        .or. jx_rstrt.ne.jx 
+!     1        .or. jx_rstrt.ne.jx
 
 !MPIINSERT_IF_RANK_EQ_0
             WRITE(*,*)'Problem with distrfunc.nc file'

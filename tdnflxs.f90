@@ -11,7 +11,7 @@ contains
 
   subroutine tdnflxs(ll)
     !implicit integer (i-n), real*8 (a-h,o-z)
-    implicit none    
+    implicit none
     save
 
     integer :: ll

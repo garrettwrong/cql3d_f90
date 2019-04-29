@@ -3,7 +3,7 @@ module finit_mod
   !---BEGIN USE
 
   use bcast_mod, only : bcast
-  use comm_mod  
+  use comm_mod
   use lossorbm_mod, only : lossorbm
   use param_mod
   use tdreadf_mod, only : tdreadf

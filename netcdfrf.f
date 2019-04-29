@@ -10,7 +10,7 @@ c
       external pack21
       external unpack21
       integer, private ::  numrec(nmodsa) !-YuP-> added: as a function of krf
-      
+
       save
 
       contains
@@ -22,28 +22,28 @@ c
       save
 
 
-c     This subroutine uses netCDF-2 subroutines. 
+c     This subroutine uses netCDF-2 subroutines.
 c     http://www.unidata.ucar.edu/packages/netcdf/index.html
 c     (Had a problem with linking to netCDF-3 subroutines
-c      on account of embedded underscores in their names). 
+c      on account of embedded underscores in their names).
 c
 c     This subroutine either reads an rf data file (see below),
 c       or creates/writes a netCDF file with name "mnemonic"_rf.nc,
 c       for RF data from cql3d.
-c      (Additional standard netCDF output is given 
+c      (Additional standard netCDF output is given
 c       in file "mnemonic".nc).
 c
-c     Action of the subroutine is controlled by kopt,krf, 
+c     Action of the subroutine is controlled by kopt,krf,
 c       time step counter n:
 c       kopt=0, n=0, initialize "mnemonic"_rf.nc and write data
 c       kopt=1, n.gt.0, write data (only time-dep data, unless n.eq.nstop)
 c       kopt=2, read basic ray data from file rffile(krf)
-c       kopt=3 is a limited part of kopt=2, 
+c       kopt=3 is a limited part of kopt=2,
 c            to only read the values of nray(krf),nharm(krf),freqcy(krf)
 c       kopt=4 is a limited part of kopt=2
       ! kopt=2 part is called by urfread with krf=1:mrf to read all data.
-      ! BUT if kopt=3 or 4, this part is called by urfsetup 
-      ! to only read the values of nray(krf),nharm(krf),freqcy(krf), 
+      ! BUT if kopt=3 or 4, this part is called by urfsetup
+      ! to only read the values of nray(krf),nharm(krf),freqcy(krf),
       ! and also nrayelt(:,krf) (when kopt=4).
 c
 c     krf= wave-type number, presently for reading input files
@@ -58,7 +58,7 @@ c
 c     YuP-100404: writing output ray data is now set up for all krf=1:mrf.
 c     The data is saved into files "mnemonic"_krf###.nc, for each krf.
 
-c     Data written consists of  ray data and ql diffusion 
+c     Data written consists of  ray data and ql diffusion
 c     coefficient urfb (if netcdfshort.ne.'enabled' .and. .ne.'longer_b'
 c     .and. .ne. 'long_urf'),
 c     in which case urfb will be stored on the last step.
@@ -77,14 +77,14 @@ c            fragments used in this code construction.
 c            Take them with a grain of salt.
 c
 c
-c --- include file for netCDF declarations 
+c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
       include 'netcdf.inc'
 CMPIINSERT_INCLUDE
-      
+
 c --- some stuff for netCDF file ---
       character*128 name
-      character*3  krf_index               !-YuP-> to form file name 
+      character*3  krf_index               !-YuP-> to form file name
       integer ncid,vid,istatus
       integer xdim,ydim,rdim,r0dim,twodim,tdim
       integer nraydim,neltdim
@@ -100,7 +100,7 @@ c --- some stuff for netCDF file ---
       complex*16 cei
 
       data start/1,1,1,1/, start1/1,1,1,1/
-      
+
 CMPIINSERT_IF_RANK_NE_0_RETURN
 c This subroutine is only called from MPI rank=0.
 
@@ -111,22 +111,22 @@ c This subroutine is only called from MPI rank=0.
       WRITE(*,*)'Begin of netcdfrf, kopt,krf,n:',kopt,krf,n
 
       if(n.eq.0) call ibcast(numrec,1,SIZE(numrec)) ! counter for data recording
-      
-      
-      
+
+
+
 c --- begin if ---
-      if ((kopt.eq.0 .or. kopt.eq.1) .and. 
+      if ((kopt.eq.0 .or. kopt.eq.1) .and.
      +    (irffile(krf).ne."combine2"))  then         !To line 1076
 
       !---- Form file name for each krf:
       WRITE(krf_index(1:3),'(3I1)') 0,0,0
       IF(                 krf.LE.9  ) WRITE(krf_index(3:3),'(I1)') krf
       IF(krf.GE.10  .AND. krf.LE.99 ) WRITE(krf_index(2:3),'(I2)') krf
-      IF(krf.GE.100 .AND. krf.LE.999) WRITE(krf_index(1:3),'(I3)') krf 
+      IF(krf.GE.100 .AND. krf.LE.999) WRITE(krf_index(1:3),'(I3)') krf
       if(krf.GE.1000) stop "Not setup for krf>999"
       t_= mnemonic(1:length_char(mnemonic))//'_krf'//krf_index//'.nc'
-      !---- This file is created-then-closed at n=0, 
-      !---- opened-then-closed for writing data at n>0, 
+      !---- This file is created-then-closed at n=0,
+      !---- opened-then-closed for writing data at n>0,
       !---- and opened-then-closed at n=nstop
 
 C-----------------------------------------------------------------------
@@ -148,7 +148,7 @@ c     Maximum number of ray elements per ray, for this specific krf (wave type):
       do iray=1,nray(krf)  !-YuP: nray(1) -> nray(krf)
          neltmax=max(neltmax,nrayelt(iray,krf)) ! nrayelt(*,1)->nrayelt(*,krf)
       enddo
-      
+
 c     Following counting vectors set up to facilitate writing
 c     of the various arrays. Set up here to ensure initialization
 c     in each call to the subroutine.
@@ -190,7 +190,7 @@ c --- begin if ---
 
 C-----------------------------------------------------------------------
 c
-cl     1.1 create netCDF file and define dimensions,variables 
+cl     1.1 create netCDF file and define dimensions,variables
 c          and attributes
 c
 
@@ -446,12 +446,12 @@ c--------------------------
       call ncaptc2(ncid,vid,'long_name',NCCHAR,27,
      +            'momentum-per-mass dimension',istatus)
       call check_err(istatus)
-      
+
       vid=ncvdef2(ncid,'mrf',NCLONG,0,0,istatus) !-YuP: added
       call ncaptc2(ncid,vid,'long_name',NCCHAR,23,
      +            'number of rf wave types',istatus)
       call check_err(istatus)
-      
+
       vid=ncvdef2(ncid,'mrfn',NCLONG,0,0,istatus) !-YuP[2017]added
       call ncaptc2(ncid,vid,'long_name',NCCHAR,59,
      + 'number of rf modes (sum over all wave types and all nharms)',
@@ -572,10 +572,10 @@ c.......................................................................
 
 cl    1.2 Write data
 c
-      start(4)=numrec(krf) ! counter for data recording: initially 1 
+      start(4)=numrec(krf) ! counter for data recording: initially 1
 
 c --- initialize data file ---
-c     First get variable_id: 
+c     First get variable_id:
 c        integer function ncvid(ncid,variable_name,error_code)
 c        returns varid
 c     Then write data with nc variable_put:
@@ -653,7 +653,7 @@ c-YuP:      vid=ncvid(ncid,'itl',istatus)
 c-YuP:      vid=ncvid(ncid,'itu',istatus)
       istatus= NF_INQ_VARID(ncid,'itu',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_int2(ncid,vid,1,count(3),itu_,istatus)
-      
+
       call pack21(tau,1,iy,1,lrzmax,tem1,iy,lrzmax)
 c-YuP:      vid=ncvid(ncid,'tau',istatus)
       istatus= NF_INQ_VARID(ncid,'tau',vid)  !-YuP: NetCDF-f77 get vid
@@ -666,9 +666,9 @@ c     Time-Dependent data:   (for  kopt=0,1 and all n.gte.0)
 c-----------------------------------------------------------
 
 c-YuP:      vid=ncvid(ncid,'time',istatus)
-      istatus= NF_INQ_VARID(ncid,'time',vid)  !-YuP: NetCDF-f77 get vid 
+      istatus= NF_INQ_VARID(ncid,'time',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(4),1,timet,istatus)
-      
+
       if ( netcdfshort.eq.'longer_b' ) then
 c-YuP:          vid=ncvid(ncid,'urfb',istatus)
          istatus= NF_INQ_VARID(ncid,'urfb',vid)  !-YuP: NetCDF-f77 get vid
@@ -692,7 +692,7 @@ c$$$c          hflux_a,hflux_b,pdens0
 c$$$c
 c$$$
 c$$$c --- begin if ---
-c$$$      if ((kopt.ne.0) .and. (n.eq.0)) then 
+c$$$      if ((kopt.ne.0) .and. (n.eq.0)) then
 c$$$
 c$$$c.......................................................................
 c$$$cl    2.1 Open previous netCDF file
@@ -762,7 +762,7 @@ c --- begin if ---
       istatus = NF_OPEN(t_, NF_WRITE, ncid) !-YuP: NetCDF-f77
 c.......................................................................
 cl    3.1 increment the counter for data recording:
-      numrec(krf)=numrec(krf)+1 
+      numrec(krf)=numrec(krf)+1
       start(4)=numrec(krf)
       start1(4)=numrec(krf)
 c.......................................................................
@@ -771,7 +771,7 @@ cl    3.2 Variables saved at each time-step
 c-YuP:      vid=ncvid(ncid,'time',istatus)
       istatus= NF_INQ_VARID(ncid,'time',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(4),1,timet,istatus)
-      
+
       if ( netcdfshort.eq.'longer_b' ) then
 c-YuP:          vid=ncvid(ncid,'urfb',istatus)
          istatus= NF_INQ_VARID(ncid,'urfb',vid)  !-YuP: NetCDF-f77 get vid
@@ -794,12 +794,12 @@ c --- begin if ---
       istatus = NF_OPEN(t_, NF_WRITE, ncid) !-YuP: NetCDF-f77
 
 c.....................................................................
-c     Adjust data to standard external format specified in urfread_.f. 
+c     Adjust data to standard external format specified in urfread_.f.
 c     (See urfread_.f. Perform inverse transformation)
 c.....................................................................
 c
         do iray=1,nray(krf)
- 
+
         do  is=1,nrayelt(iray,krf)
            wdnpar(is,iray,krf)=abs(wdnpar(is,iray,krf))/wdscale(krf)
         enddo
@@ -815,7 +815,7 @@ c     (see urfwrite_.f and cqlinput_help)
               cweyde(is,iray,krf)=sbsign*cweyde(is,iray,krf)
            enddo
         endif
-        
+
 c     fluxn is renormalized:
         do is=1,nrayelt(iray,krf)
            fluxn(is,iray,krf)=fluxn(is,iray,krf)*(8.*pi)/clight
@@ -1022,7 +1022,7 @@ c --- full update of data file (last time-step only) ---
             call ncvpt_doubl2(ncid,vid,start1,count1,
      +           urfb(1,1,lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
          enddo
-         
+
          if (netcdfshort.eq.'long_urf') then
             istatus= NF_INQ_VARID(ncid,'urfc',vid) !-YuP: NetCDF-f77 get vid
             do ll=1,lrz
@@ -1048,8 +1048,8 @@ c            enddo
       endif  !On netcdfshort
 
 c..................................................................
-c     Re-Adjust data to internal format, 
-c     in case this is not last step. 
+c     Re-Adjust data to internal format,
+c     in case this is not last step.
 c     (See urfread_.f)
 c..................................................................
 c
@@ -1065,7 +1065,7 @@ c     (see cqlinput_help)
            sbsign=sign(one,bsign)
            do is=1,nrayelt(iray,krf)
               sbtot(is,iray,krf)=bsign1(krf)*sbtot(is,iray,krf)
-              if (sbtot(is,iray,krf).lt.0.) 
+              if (sbtot(is,iray,krf).lt.0.)
      1           WRITE(*,*)'urfread: Sign Problem with sbtot:is,iray=',
      2           is,iray
               wnpar(is,iray,krf)=sbsign*wnpar(is,iray,krf)
@@ -1073,7 +1073,7 @@ c     (see cqlinput_help)
               cweyde(is,iray,krf)=sbsign*cweyde(is,iray,krf)
            enddo
         endif
-        
+
 c     fluxn is renormalized to be as in Stix or Bekefi:
         do is=1,nrayelt(iray,krf)
            fluxn(is,iray,krf)=fluxn(is,iray,krf)*clight/(8.*pi)
@@ -1089,7 +1089,7 @@ c     vertically shifted in subroutine equilib:
 
       enddo  !  iray
 
- 
+
 c..................................................................
       istatus = NF_CLOSE(ncid) !-YuP: NetCDF-f77
       call check_err(istatus)
@@ -1116,8 +1116,8 @@ c --- begin if ---
       if (kopt.eq.2  .or.  kopt.eq.3  .or.  kopt.eq.4) then !Down to 1443
       ! read data;
       ! This part is called by urfread with krf=1:mrf to read all data.
-      ! BUT if kopt=3 or 4, this part is called by urfsetup 
-      ! to only read the values of nray(krf),nharm(krf),freqcy(krf), 
+      ! BUT if kopt=3 or 4, this part is called by urfsetup
+      ! to only read the values of nray(krf),nharm(krf),freqcy(krf),
       ! and also nrayelt(:,krf) (when kopt=4).
 
 c     Open existing netCDF file
@@ -1127,18 +1127,18 @@ c-YuP      write(*,*)'after ncopn ncid=',ncid,'istatus',istatus
 c-YuP      if (istatus.ne.0) then
 c-YuP         write(*,*)'   ***   Problem opening rf .nc data file   ***'
 c-YuP         Stop
-c-YuP      endif      
+c-YuP      endif
       istatus = NF_OPEN(rffile(krf), 0, ncid) !-YuP: NetCDF-f77
       if (istatus .NE. NF_NOERR) then         !-YuP: NetCDF-f77
          WRITE(*,*)'   ***   Problem opening rf .nc data file   ***'
          Stop
       endif                                   !-YuP: NetCDF-f77
-               
+
 c     Get dimension ID from dimension name
 c-YuP:      neltdim=ncdid(ncid,'neltmax',istatus)
 c-YuP:      nraydim=ncdid(ncid,'nrays',istatus)
 c-YuP:      twodim=ncdid(ncid,'two',istatus)
-      istatus= NF_INQ_DIMID(ncid,'neltmax',neltdim) ! dep. on krf 
+      istatus= NF_INQ_DIMID(ncid,'neltmax',neltdim) ! dep. on krf
       istatus= NF_INQ_DIMID(ncid,'nrays',  nraydim) ! dep. on krf
       istatus= NF_INQ_DIMID(ncid,'two',    twodim)  !-YuP: NetCDF-f77 get twodim
 
@@ -1146,7 +1146,7 @@ c     Query netcdf file for dimensions:
 c-YuP:      call ncdinq(ncid,neltdim,name,neltmax,istatus)
 c-YuP:      call ncdinq(ncid,nraydim,name,nrays,istatus)
 c-YuP:      call ncdinq(ncid,twodim,name,ntwo,istatus)
-      istatus= NF_INQ_DIM(ncid,neltdim,name,neltmax)  ! dep. on krf 
+      istatus= NF_INQ_DIM(ncid,neltdim,name,neltmax)  ! dep. on krf
       istatus= NF_INQ_DIM(ncid,nraydim,name,nrays)    ! dep. on krf
       istatus= NF_INQ_DIM(ncid,twodim,name,ntwo)     !-YuP: NetCDF-f77 get ntwo
 
@@ -1162,14 +1162,14 @@ cBH110329      endif
 c     Read data:
 c     The following presupposes that the rank (number of dimensions)
 c     is known for the input data. That is, the data conforms
-c     to the above output data format. 
+c     to the above output data format.
 c     (Checks could be placed in the code.)
 
 c-YuP:      vid=ncvid(ncid,'nray',istatus)
       istatus= NF_INQ_VARID(ncid,'nray',vid)  !-YuP: NetCDF-f77 get vid
 c-YuP:      call ncvgt(ncid,vid,1,1,nray(krf),istatus)
       istatus= NF_GET_VAR1_INT(ncid,vid,(1),nray(krf)) !-YuP: NetCDF-f77
-      
+
 c     Variable nharm in toray.nc and 3d.nc, is called nharm1 in
 c     the cql3d mnemonic_rf.nc file.  Allow for this.
       !!!-YuP       call NCPOPT(NCVERBOSL)
@@ -1193,7 +1193,7 @@ c-YuP:      call ncvgt(ncid,vid,1,1,freqcy(krf),istatus)
 
       if(kopt.eq.3) goto 300 !-> Finish reading (for urfsetup)
                              !   Close file. ----------------------
-                             
+
 c..................................................................
 c     Check code dimensions are sufficient for given ray data
 c     Send message if nray.gt.nrayn
@@ -1219,11 +1219,11 @@ c-YuP:      vid=ncvid(ncid,'nrayelt',istatus)
 c-YuP:      call ncvgt(ncid,vid,1,ray_count(2),nrayelt(1,krf),istatus)
       istatus= NF_GET_VARA_INT(ncid,vid,(1),ray_count(2),nrayelt(:,krf))
 
-      
+
       if(kopt.eq.4) goto 300 !-> Finish reading (for urfsetup)
                              !   Close file. ----------------------
 
-      
+
       if (nrays.gt.nrayn .or. neltmax.gt.nrayelts) then
          WRITE(*,*)'netcdfrf:  nrays,neltmax= ', nrays,neltmax
          WRITE(*,*)'netcdfrf:  Need to be .le. nrayn,nrayelts'
@@ -1337,7 +1337,7 @@ c-YuP:         call ncvgt(ncid,vid,start,ray_count,urftmp,istatus)
      1        urftmp,neltmax,nray(krf)) ! depends on krf
       endif
       !!!-YuP       call NCPOPT(NCVERBOS+NCFATAL)
-      
+
 c-YuP:      vid=ncvid(ncid,'cwexde',istatus)
       istatus= NF_INQ_VARID(ncid,'cwexde',vid)  !-YuP: NetCDF-f77 get vid
 c-YuP:      call ncvgt(ncid,vid,start,ray_count,urftmp,istatus)
@@ -1415,7 +1415,7 @@ c-YuP:      call ncvgt(ncid,vid,start,ray_count,urftmp,istatus)
      1     urftmp,neltmax,nray(krf)) ! depends on krf
 
 c..................................................................
-c     Adjust data to internal cql3d format. 
+c     Adjust data to internal cql3d format.
 c     (See urfread_.f)
 c..................................................................
 c
@@ -1436,7 +1436,7 @@ c     (see cqlinput_help and further explanation in urfread_.f)
            endif
            do is=1,nrayelt(iray,krf)
               sbtot(is,iray,krf)=bsign1(krf)*sbtot(is,iray,krf)
-              if (sbtot(is,iray,krf).lt.0.) 
+              if (sbtot(is,iray,krf).lt.0.)
      1          WRITE(*,*)'urfread: Sign Problem with sbtot, is,iray=',
      2          is,iray
               wnpar(is,iray,krf)=sbsign*wnpar(is,iray,krf)
@@ -1444,7 +1444,7 @@ c     (see cqlinput_help and further explanation in urfread_.f)
               cweyde(is,iray,krf)=sbsign*cweyde(is,iray,krf)
            enddo
         endif
-        
+
 c     fluxn is renormalized to be as in Stix or Bekefi:
         do is=1,nrayelt(iray,krf)
            fluxn(is,iray,krf)=fluxn(is,iray,krf)*clight/(8.*pi)
@@ -1486,16 +1486,16 @@ C==========================================================================
 
 CMPIINSERT_INCLUDE
 
-c     This subroutine uses netCDF-2 subroutines. 
+c     This subroutine uses netCDF-2 subroutines.
 c     http://www.unidata.ucar.edu/packages/netcdf/index.html
 c     (Had a problem with linking to netCDF-3 subroutines
-c      on account of embedded underscores in their names). 
+c      on account of embedded underscores in their names).
 c
 c     This subroutine writes an DC file of urfb0 diffusion coeffs.
 c       into a netCDF file with name "mnemonic"_rdc."krf".nc,
 c       where "krf" is numeric value of krf.
 c
-c --- include file for netCDF declarations 
+c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
       include 'netcdf.inc'
 
@@ -1509,7 +1509,7 @@ c --- some stuff for netCDF file ---
       integer tau_dims(2),tau_count(2)
 
       data start/1,1,1,1/, start1/1,1,1/
-      
+
 CMPIINSERT_IF_RANK_NE_0_RETURN
 
       WRITE(*,*)'Begin of netcdf_rdc, krf=',krf
@@ -1730,7 +1730,7 @@ c --- set the time-step counter ==> numrec_rdcb
       start(4)=numrec_rdcb
 
 c --- initialize data file ---
-c     First get variable_id: 
+c     First get variable_id:
 c        integer function ncvid(ncid,variable_name,error_code)
 c        returns varid
 c     Then write data with nc variable_put:
@@ -1804,7 +1804,7 @@ c-YuP:      vid=ncvid(ncid,'itl',istatus)
 c-YuP:      vid=ncvid(ncid,'itu',istatus)
       istatus= NF_INQ_VARID(ncid,'itu',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_int2(ncid,vid,1,lrz,itu_,istatus)
-      
+
       call pack21(tau,1,iy,1,lrzmax,tem1,iy,lrzmax)
 c-YuP:      vid=ncvid(ncid,'tau',istatus)
       istatus= NF_INQ_VARID(ncid,'tau',vid)  !-YuP: NetCDF-f77 get vid
@@ -1858,7 +1858,7 @@ c     Additional rfc.... coefficients write
 c     Close netcdf file
 c-YuP:      call ncclos(ncid,istatus)
       istatus = NF_CLOSE(ncid) !-YuP: NetCDF-f77
-      
+
       call check_err(istatus)
 
       return

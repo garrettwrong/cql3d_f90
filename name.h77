@@ -140,7 +140,7 @@ c..................................................................
      1  call_lh,call_ech,call_fw,ieqbrurf,urfncoef,
      1  dlndau,
      1  lh,
-     1  ech, 
+     1  ech,
      1  fw,
      1  rftype,
      1  rffile,rdcfile,rfread,
@@ -160,5 +160,5 @@ c..................................................................
      1  rdcmod,rdc_clipping,nrdcspecies,rdcscale,rdc_netcdf
 
 
-     
-                       
+
+

@@ -2708,7 +2708,7 @@ c----------------------- end of subroutine xsetun ----------------------
 
 
 c=====================================================================
-c----------STUB-ROUTINES: Full versions need to be brought in from 
+c----------STUB-ROUTINES: Full versions need to be brought in from
 c----------LINPACK, if they are to be called.  [BH, 100622]
 
       subroutine dgesl(dum,idum1,idum2,idum3,ddum,idum4)

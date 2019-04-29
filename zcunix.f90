@@ -1247,7 +1247,7 @@ contains
 !
 !
 
-!!XXXXXX 
+!!XXXXXX
 !       real*8 function erf(xxx)
 !       implicit integer (i-n), real*8 (a-h,o-z)
 !       save
@@ -1466,7 +1466,7 @@ contains
       tempc=.5e0*tempb
       tempb=plast/pold
       if (tempb+1.e0/tempb.gt.2.e0*tempc) tempb = tempc + sqrt(tempc**2-one)
-!990131     1  (tempc**2-1.e0) 
+!990131     1  (tempc**2-1.e0)
 !mnt  calculate backward test, and find ncalc, the highest n
 !mnt  such that the test is passed.
 !990131 60   test=.5e0*pold*plast*(1.e0-1.e0/tempb**2)/1.e1**nsig

@@ -124,7 +124,7 @@ c     See comments in freyasou.f/subroutine frnnoa.
 c990131      call ranset(ranseed)
 
 cBH131015: ranseed is initialized in frinitl to 7**7
-cBH131015: This call to RANDOM_my initialized a RN sequence.      
+cBH131015: This call to RANDOM_my initialized a RN sequence.
       dummy=RANDOM_my(ranseed)
 
 c     Reset npart, for nubeam list case
@@ -139,7 +139,7 @@ CMPIINSERT_IF_RANK_EQ_0
       RILIN=11.
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
-      write(t_,1001) 
+      write(t_,1001)
  1001 format("npart is the number of ions launched")
       RILIN=12.
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
@@ -167,23 +167,23 @@ c      pi=4.d0*atan2(one,one)
       allocate(rpts(npart),STAT=istat)
       write(*,*)'frset  rpts: istat=',istat
       if(istat.eq.0) call bcast(rpts,zero,npart)
-      
+
       allocate(xpts(npart),STAT=istat)
       write(*,*)'frset  xpts: istat=',istat
       if(istat.eq.0) call bcast(xpts,zero,npart)
-      
+
       allocate(ypts(npart),STAT=istat)
       write(*,*)'frset  ypts: istat=',istat
       if(istat.eq.0) call bcast(ypts,zero,npart)
-      
+
       allocate(zpts(npart),STAT=istat)
       write(*,*)'frset  zpts: istat=',istat
       if(istat.eq.0) call bcast(zpts,zero,npart)
-      
+
       allocate(vx(npart),STAT=istat)
       write(*,*)'frset  vx: istat=',istat
       if(istat.eq.0) call bcast(vx,zero,npart)
-      
+
       allocate(vy(npart),STAT=istat)
       write(*,*)'frset  vy: istat=',istat
       if(istat.eq.0) call bcast(vy,zero,npart)
@@ -194,4 +194,3 @@ c      pi=4.d0*atan2(one,one)
 
       return
       end
-

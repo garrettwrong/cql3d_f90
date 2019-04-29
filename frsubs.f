@@ -2226,26 +2226,26 @@ c frsubs.f(1922):  CALL ICSCCU1 (X,F(1,IY),NX,WK(1),NXM1,JER)
 c frsubs.f(1938):  CALL ICSCCU1 (Y,WK(KYLP1),NY,WK(1),NYM1,JER)
 
 C----------------------------------------------------------------------
-C   IMSL ROUTINE NAME   - ICSCCU                                        
+C   IMSL ROUTINE NAME   - ICSCCU
 c   CUBIC SPLINE INTERPOLATION (EASY-TO-USE VERSION)
 C-----------------------------------------------------------------------
-C                                                                       
-C   COMPUTER            - VAX/SINGLE                                    
-C                                                                       
-C   LATEST REVISION     - JUNE 1, 1980                                  
-C                                                                       
-C   PURPOSE             - CUBIC SPLINE INTERPOLATION                    
-C                           (EASY-TO-USE VERSION)                       
-C                                                                       
-C   USAGE               - CALL ICSCCU (X,Y,NX,C,IC,IER)                 
-C                                                                       
-C   ARGUMENTS    X      - VECTOR OF LENGTH NX CONTAINING THE ABSCISSAE  
-C                           OF THE NX DATA POINTS (X(I),Y(I)) I=1,...,  
-C                           NX. (INPUT) X MUST BE ORDERED SO THAT       
-C                           X(I) .LT. X(I+1).                           
-C                Y      - VECTOR OF LENGTH NX CONTAINING THE ORDINATES  
-C                           (OR FUNCTION VALUES) OF THE NX DATA POINTS. 
-C                           (INPUT)                                     
+C
+C   COMPUTER            - VAX/SINGLE
+C
+C   LATEST REVISION     - JUNE 1, 1980
+C
+C   PURPOSE             - CUBIC SPLINE INTERPOLATION
+C                           (EASY-TO-USE VERSION)
+C
+C   USAGE               - CALL ICSCCU (X,Y,NX,C,IC,IER)
+C
+C   ARGUMENTS    X      - VECTOR OF LENGTH NX CONTAINING THE ABSCISSAE
+C                           OF THE NX DATA POINTS (X(I),Y(I)) I=1,...,
+C                           NX. (INPUT) X MUST BE ORDERED SO THAT
+C                           X(I) .LT. X(I+1).
+C                Y      - VECTOR OF LENGTH NX CONTAINING THE ORDINATES
+C                           (OR FUNCTION VALUES) OF THE NX DATA POINTS.
+C                           (INPUT)
 C                NX     - NUMBER OF ELEMENTS IN X AND Y. (INPUT) NX     !210
 C                           MUST BE .GE. 2.                             !220
 C                C      - SPLINE COEFFICIENTS. (OUTPUT) C IS AN NX-1 BY !230
@@ -2280,7 +2280,7 @@ C                           APPLIED TO THIS CODE. NO OTHER WARRANTY,    !510
 C                           EXPRESSED OR IMPLIED, IS APPLICABLE.        !520
 C                                                                       !530
 C-----------------------------------------------------------------------!540
-C                                                                      
+C
       SUBROUTINE ICSCCU1 (X,Y,NX,C,IC,IER)
 C                                  SPECIFICATIONS FOR ARGUMENTS         !570
       INTEGER            NX,IC,IER                                      !580
@@ -2372,7 +2372,7 @@ C                                  COMPUTE NOT-A-KNOT SPLINE            !710
 
 
 
-c---IMSL---UERTST------------------------------------------------IMSL---UERTST--    
+c---IMSL---UERTST------------------------------------------------IMSL---UERTST--
 C   USAGE               - CALL UERTST (IER,NAME)
 C   ARGUMENTS    IER    - ERROR PARAMETER. (INPUT)
 C                           IER = I+J WHERE
@@ -2468,5 +2468,3 @@ C                                    R IS THE ROUTINE NAME
    60 NAMEQ(I) = NAME(I)
    65 RETURN
       END
-
-    

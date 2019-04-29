@@ -29,7 +29,7 @@ contains
     integer :: j
     integer :: k
     integer :: km
-    
+
 
     !.......................................................................
     !     calculate the Coulomb logarithm and an energy dependent factor.
@@ -64,7 +64,7 @@ contains
     !..................................................................
     !     If two electron species exist - do an average for deby calc.
     !..................................................................
-    
+
     if (colmodl.eq.1 .or. (colmodl.eq.3 .and. kelecm.ne.0)) then
        dense=reden(kelecm,lr_)
        energ=reden(kelecm,lr_)*energy(kelecm,lr_)*ergtkev/dense
@@ -93,7 +93,7 @@ contains
           if (cqlpmod .eq. "enabled") sk=enrgypa(k,ls_)/fmass(k)
           !990131          sf=amax1(si,sk)
           sf=max(si,sk)
-          vikf=sqrt(sf*ergtkev*2.)          
+          vikf=sqrt(sf*ergtkev*2.)
           gam3=gamt(i,k)*deby*vikf
           !990131          gama(i,k)=(alog(gam3)-.5)
           gama(i,k)=(log(gam3)-.5)
@@ -123,17 +123,17 @@ contains
     !       Debye length) [Rosenbluth, personal comm. 1996].
     !       (BH, 980505)
     !..................................................................
-    
+
     do 14 j=1,jx
        gamefac(j)=1.0
 14  end do
 
     if (kelecg.eq.1 .and. ngen.eq.1 .and. gamafac.eq."enabled") then
-       
+
        flamcql=exp(gama(1,1))
        omegape=5.64e4*sqrt(reden(1,lr_))
        flamrp1=(2**.25)*fmass(1)*clite2/(1.0546e-27*omegape)
-       
+
        do  j=1,jx
           !990131            flam=flamcql+min(sqrt(gamma(j)-1.),1.)*
           flam=flamcql+min(sqrt(gamma(j)-1.),one)* &
@@ -142,8 +142,8 @@ contains
           gamefac(j)=log(flam)/gama(1,1)
        enddo
     endif
-    
-    
+
+
     return
   end subroutine cfpgamma
 

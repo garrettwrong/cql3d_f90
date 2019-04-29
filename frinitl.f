@@ -242,7 +242,7 @@ cBH091020:  Simply zeroing.
       fionx = 0.0
 c      nameb = 'h'
       relnub=0.
-      
+
       nameb = 'd'
       ranseed=7**7
 c     ONETWO DIVERGENCE
@@ -390,12 +390,12 @@ c     ITER BEAM INPUT.
               alen(k,i)=0.0
            enddo
         endif
-           
+
  1705 continue
  9030 continue
-c---  
+c---
 c---following parms are used in subroutine hexnb
-c---  
+c---
       kdene=1
       kdeni=1
       kdenz=1
@@ -424,7 +424,7 @@ c     note izstrp=0 implies coronal equilibrium for impurity j in hexnb
       multiply="disabled"
       multiplyn=0
 
-      beamplse="disabled"  
+      beamplse="disabled"
       beampon=0.d0
       beampoff=0.d0
 
@@ -436,10 +436,10 @@ c     defaults for reading NUBEAM particle birth pt list
          birth_pts_files(i)="notset"
       enddo
 
-c     For removing NBI source at all psi outside of psicutoff:     
+c     For removing NBI source at all psi outside of psicutoff:
       psicutoff=0.d0 ! if 0.0, no removal is done
-      ! The value of psicutoff can be determined from  
-      ! screen output of rho and psi values. 
+      ! The value of psicutoff can be determined from
+      ! screen output of rho and psi values.
       ! Select one of psi(lr) values, set it in cqlinput.
 
 

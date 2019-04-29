@@ -279,7 +279,7 @@ contains
     ! YTOP   (input)  : y-coordinate of top  edge of viewport, in NDC.
     return
   end subroutine gsvp2d
-  
+
   !---------------------------------------------------------------------
   subroutine gswd2d(scales,xmin,xmax,ymin,ymax) ! NOT USED ANYMORE?
     use r8subs_mod, only : rbound
@@ -1210,7 +1210,7 @@ contains
       return
       end
 
-   !from pltrstv 
+   !from pltrstv
 
    subroutine pltrstv
       use param_mod

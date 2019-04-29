@@ -30,7 +30,7 @@ c     ONETWO DIVERGENCE
      &  ,hdepsmth
      &  ,birth_pts_files,nbirth_pts_files,nbirth_pts,read_birth_pts
      &  ,ne_tk,ds_tk,fe_tk
-c     Remove NBI source at psi outside of psicutoff:     
+c     Remove NBI source at psi outside of psicutoff:
      +  ,psicutoff
 
 

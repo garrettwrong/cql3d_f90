@@ -60,7 +60,7 @@ contains
     allocate (rdce(iy,jx,lrz,nrdc),STAT = istat)
     if(istat .ne. 0) call allocate_error("rdce, sub rdc_multi",0,istat)
     call bcast(rdce,zero,SIZE(rdce))
-    
+
     allocate (rdcf(iy,jx,lrz,nrdc),STAT = istat)
     if(istat .ne. 0) call allocate_error("rdcf, sub rdf_multi",0,istat)
     call bcast(rdcf,zero,SIZE(rdcf))
@@ -76,7 +76,7 @@ contains
     !=======================================================================
 
     do krf=1,nrdc  !Down to line 1020
-       
+
        IF(rdcmod.eq.'format1'  .or.  rdcmod.eq.'aorsa') THEN
 
 !MPIINSERT_IF_RANK_EQ_0
@@ -91,7 +91,7 @@ contains
           read (iunit, 309) n_uprp   !number of uprp points
           read (iunit, 309) n_upar   !number of upar points
           read (iunit, 309) n_psi    !number of radial points
-          
+
           read (iunit, 3310) vc_cgs  !Max vel (or momentum-rest-mass,
           ! if relativistic) on the grid
           read (iunit, 3310) upar_min,upar_max  !Generally, -1. +1.
@@ -365,7 +365,7 @@ contains
       !     Adjust the radial mesh to use every second one ==> 32 radial
       !     points from 64, or 64 radial points from 128.
       !.................................................................
-      
+
          n_psi=n_psi/2
          write(*,*)'rdc_multi: n_psi,lrz=',n_psi,lrz
          do i_psi=1,n_psi
@@ -394,17 +394,17 @@ contains
       endif
 
       !.................................................................
-      
-      
+
+
       !.................................................................
       !     Printing max diffusion coefficients, as check
       !.................................................................
-      
+
       !TMP
       !BH090424      vc_cgs2=vc_cgs*vc_cgs
       !BH090424      vc_cgs3=vc_cgs2*vc_cgs
       !BH090424      vc_cgs4=vc_cgs2*vc_cgs2
-      
+
       rdc_cqlbmax=0.d0
       rdc_cqlfmax=0.d0
       do i_psi=1,n_psi
@@ -432,16 +432,16 @@ contains
             do i_uprp=1,n_uprp
                rdc_cqlb(i_uprp,i_upar,i_psi) = rdc_cqlb(i_uprp,i_upar,i_psi)/vnorm4
                !TMP     &              rdc_cqlb(i_uprp,i_upar,i_psi)/vnorm4
-               !BH090424     &              rdc_cqlb(i_uprp,i_upar,i_psi)/vc_cgs4 &           
+               !BH090424     &              rdc_cqlb(i_uprp,i_upar,i_psi)/vc_cgs4 &
                rdc_cqlc(i_uprp,i_upar,i_psi) = rdc_cqlc(i_uprp,i_upar,i_psi)/vnorm3
                !TMP     &              rdc_cqlc(i_uprp,i_upar,i_psi)/vnorm3
-               !BH090424     &              rdc_cqlc(i_uprp,i_upar,i_psi)/vc_cgs3 &                    
+               !BH090424     &              rdc_cqlc(i_uprp,i_upar,i_psi)/vc_cgs3 &
                rdc_cqle(i_uprp,i_upar,i_psi) = rdc_cqle(i_uprp,i_upar,i_psi)/vnorm3
                !TMP     &              rdc_cqle(i_uprp,i_upar,i_psi)/vnorm3
                !BH090424     &              rdc_cqle(i_uprp,i_upar,i_psi)/vc_cgs3 &
                rdc_cqlf(i_uprp,i_upar,i_psi) = rdc_cqlf(i_uprp,i_upar,i_psi)/vnorm2
                !TMP     &              rdc_cqlf(i_uprp,i_upar,i_psi)/vnorm2
-               !BH090424     &              rdc_cqlf(i_uprp,i_upar,i_psi)/vc_cgs2 &                    
+               !BH090424     &              rdc_cqlf(i_uprp,i_upar,i_psi)/vc_cgs2 &
             enddo
          enddo
       enddo
@@ -458,7 +458,7 @@ contains
       !......................................................................
 
       if (rdc_clipping .eq. 'enabled') then
-         
+
          trim1=5.     ! Trimming factor Dij. Recommended: 4-5
          med_size=2  ! number of diff coeff values on either
                      ! side of the median value.
@@ -526,8 +526,8 @@ contains
                   !               dd_out(i)=ddd(j,i,kk)   !For debugger testing
                enddo
             enddo
-            
-            
+
+
             call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,1),1, &
                  rdc_cqlb(1:n_upar*n_uprp,1,i_psi),1)
             call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,2),1, &
@@ -538,10 +538,10 @@ contains
                  rdc_cqlf(1:n_upar*n_uprp,1,i_psi),1)
 
          enddo  ! On i_psi
-         
+
          deallocate(ddd,STAT=istat)
          deallocate(rin_med,STAT=istat)
-         
+
       endif  ! On rdc_clipping
 
 
@@ -553,7 +553,7 @@ contains
       !  For AORSA diffusion coeffs, evidently upar pos is in accord with
       !  with cql3d, so use rdc_upar_sign=+1., regardless of btor in eqdsk.
       !  We assume here that upar grid is symmetric about parallel vel 0.
-      
+
       if (rdc_upar_sign.lt.0.d0) then
          do i_psi=1,n_psi
             call dcopy(n_upar*n_uprp,rdc_cqlb(1:n_upar*n_uprp,1,i_psi) &
@@ -590,21 +590,21 @@ contains
       enddo
       write(*,*)'rdc_multi: rdc_cqlbmax.1 =',rdc_cqlbmax
       write(*,*)'rdc_multi: rdc_cqlfmax.1 =',rdc_cqlfmax
-      
-      
+
+
       !  The velocity grids are assumed to be equi-spaced.  Renormalize
       !  to account for possible vc_cgs.ne.vnorm
-      
+
       xpar_max=upar_max*vc_cgs/vnorm
       xpar_min=upar_min*vc_cgs/vnorm
       xprp_max=uprp_max*vc_cgs/vnorm
       xprp_min=uprp_min*vc_cgs/vnorm
-      
-      
+
+
       !  Setup arrays of initial upar,uprp, normalized momentum-per-rest-mass
       !   at the minimum B-field point.  Normalization is adjusted to vnorm.
       !   These are du0u0_input arrays.
-      
+
       !TMP      dupar=(upar_max-upar_min)/(n_upar-1)*vc_cgs/vnorm
       !BH090424      dupar=(upar_max-upar_min)/(n_upar-1)*vc_cgs/vc_cgs
       dxpar=(xpar_max-xpar_min)/(n_upar-1)
@@ -612,7 +612,7 @@ contains
          upar(i)=xpar_min+(i-1)*dxpar
          !write(*,*)'upar(i),i=1,n_upar',i,upar(i)
       enddo
-      
+
       !TMP      duprp=(uprp_max-uprp_min)/(n_uprp-1)*vc_cgs/vnorm
       !BH090424      duprp=(uprp_max-uprp_min)/(n_uprp-1)*vc_cgs/vc_cgs
       dxprp=(xprp_max-xprp_min)/(n_uprp-1)
@@ -621,10 +621,10 @@ contains
          !write(*,*)'uprp(i),i=1,n_uprp',i,uprp(i)
       enddo
       dxpdxp=dxpar*dxprp
-      
+
       !      write(*,*)'dupar,duprp,dupdup=',dupar,duprp,dupdup
-      
-      
+
+
       !.................................................................
       !     The radial mesh of data from the full-wave code is assumed
       !     to be the same as used in cql3d [it may be (slightly) different
@@ -642,8 +642,8 @@ contains
       !     consideration for diffusion coeffs. BH)
       !.................................................................
       !
-      
-      
+
+
       !if (eqsym.eq."none") then !YuP[03/26/2015] symm is set in aingeom now
       !   symm=one
       !else
@@ -674,22 +674,22 @@ contains
                           +w01*rdc_cqlb(iprp+1,ipar,ll) &
                           +w10*rdc_cqlb(iprp,ipar+1,ll) &
                           +w11*rdc_cqlb(iprp+1,ipar+1,ll))/symm
-                     
+
                      rdcc(i,j,ll,krf)=(w00*rdc_cqlc(iprp,ipar,ll) &
                           +w01*rdc_cqlc(iprp+1,ipar,ll) &
                           +w10*rdc_cqlc(iprp,ipar+1,ll) &
                           +w11*rdc_cqlc(iprp+1,ipar+1,ll))/symm
-                     
+
                      rdce(i,j,ll,krf)=(w00*rdc_cqle(iprp,ipar,ll) &
                           +w01*rdc_cqle(iprp+1,ipar,ll) &
                           +w10*rdc_cqle(iprp,ipar+1,ll) &
                           +w11*rdc_cqle(iprp+1,ipar+1,ll))/symm
-                     
+
                      rdcf(i,j,ll,krf)=(w00*rdc_cqlf(iprp,ipar,ll) &
                           +w01*rdc_cqlf(iprp+1,ipar,ll) &
                           +w10*rdc_cqlf(iprp,ipar+1,ll) &
                           +w11*rdc_cqlf(iprp+1,ipar+1,ll))/symm
-                     
+
 
                      !                  write(*,*)'diff_coeff_rd: i,j,ll,rdcb(i,j,ll)',
                      !     +                      i,j,ll,rdcb(i,j,ll)
@@ -711,11 +711,11 @@ contains
          enddo
       enddo
       write(*,*)'rdc_multi: krf=',krf,' rdcbmax.1 =',rdcbmax
-      
+
       !.................................................................
       !     Scaling diffusion coeffs
       !.................................................................
-      
+
       do ll=1,lrz
          do j=1,jx
             do i=1,iy
@@ -726,7 +726,7 @@ contains
             enddo
          enddo
       enddo
-      
+
       !.................................................................
       !     Examining degree of non-parabolic diffusion coeffs
       !     Summing pos and neg cqlb,cqlf over mesh volumes.
@@ -734,8 +734,8 @@ contains
       !      are initially Maxwln, so might not want that.]
       !
       !.................................................................
-      
-      
+
+
       sum_pos_duu=0.d0
       sum_neg_duu=0.d0
       sum_pos_dtt=0.d0
@@ -754,10 +754,10 @@ contains
             enddo
          enddo
       enddo
-      
+
       write(*,*)'rdc_multi: krf=',krf,' sum_pos_duu,sum_neg_duu', krf,sum_pos_duu,sum_neg_duu
       write(*,*)'rdc_multi: sum_pos_dtt,sum_neg_dtt', krf,sum_pos_dtt,sum_neg_dtt
-      
+
       !$$$c     Non-symmetry of rdcc,rdce  [Visual exam shows
       !$$$c       this non-symmetry is general].
       !$$$      do ll=1,lrz
@@ -770,8 +770,8 @@ contains
       !$$$         enddo
       !$$$      enddo
       !$$$      enddo
-      
-      
+
+
       !     Non-parabolic cross-coeffs
       !$$$      do ll=1,lrz
       !$$$      do j=1,jx
@@ -787,12 +787,12 @@ contains
       !$$$         enddo
       !$$$      enddo
       !$$$      enddo
-      
-      
+
+
       !..................................................................
       !     Symmetrize about pi/2 in the pass/trapped boundary.
       !..................................................................
-      
+
       do ll=1,lrz
          call tdnflxs(ll)
          do 56 j=1,jx
@@ -882,7 +882,7 @@ contains
             enddo ! i
          enddo ! j
       enddo ! ll
-      
+
 
 
 100   continue
@@ -893,7 +893,7 @@ contains
       !     Taper diffusion over last 10 points of velocity,
       !     if ineg="trunc_d"
       !..................................................................
-      
+
       rdcbmax0=0.d0
       do ll=1,lrz
          do j=1,jx
@@ -903,7 +903,7 @@ contains
          enddo
       enddo
       write(*,*)'rdc_multi: krf=',krf,' rdcbmax.2 =',rdcbmax0
-      
+
       if (ineg.eq."trunc_d") then
          if (jx.le.11) stop 'rdc_multi:  Need jx>11'
          do ll=1,lrz
@@ -929,12 +929,12 @@ contains
          enddo
       enddo
       write(*,*)'rdc_multi: krf=',krf,' rdcbmax.3 =',rdcbmax
-      
+
       !.................................................................
       !     Plotting diffusion coefficient
       !.................................................................
       mrfn=1
-      
+
       do ll=1,lrz
          call tdnflxs(ll)
          if(pltrdc.ne."disabled") then
@@ -945,12 +945,12 @@ contains
             endif
          endif
       enddo
-      
+
       !.................................................................
       !     Writing diffusion coefficient to netcdf file (comment out if
       !     don't need this any longer).
       !.................................................................
-      
+
       if(rdc_netcdf.ne."disabled") then
          if (rdc_netcdf.eq."one" .or. rdc_netcdf.eq."enabled") then
             call netcdf_rdcb(1)
@@ -958,15 +958,15 @@ contains
             call netcdf_rdcb(krf)
          endif
       endif
-      
+
       write(*,*)' END of rdc_multi'
       !      write(*,*)'STOP: END of rdc_multi'
       !      STOP
-      
+
       !.................................................................
       !     Dallocate local storage
       !.................................................................
-      
+
       deallocate(upar,uprp,rho_a,STAT=istat1)
       deallocate(rdc_cqlb,rdc_cqlc,rdc_cqle,rdc_cqlf,STAT=istat2)
       deallocate(tmpb,tmpc,tmpe,tmpf,STAT=istat3)
@@ -974,16 +974,16 @@ contains
          WRITE(*,*)'rdc_multi: dallocation error'
          STOP
       endif
-      
+
       !.................................................................
       !     enddo on krf=1,nrdc, line 66
       !.................................................................
-      
+
    enddo
-   
+
    return
  end subroutine rdc_multi
- 
+
 
  real*8 function r8median(k,n,arr)
    implicit integer (i-n), real*8 (a-h,o-z)
@@ -997,10 +997,10 @@ contains
    !     Value arr(k) is returned in r8median.
    !
    dimension arr(n)
-   
+
    l=1
    ir=n
-   
+
 1  if(ir-l .le. 1) then
       if(ir-l .eq. 1) then
          if(arr(ir) .lt. arr(l)) then
@@ -1034,11 +1034,11 @@ contains
       i=l+1
       j=ir
       a=arr(l)
-      
+
 3     continue
       i=i+1
       if(arr(i).lt.a) go to 3
-      
+
 4     continue
       j=j-1
       if(arr(j) .gt. a) go to 4
@@ -1047,14 +1047,14 @@ contains
       arr(i)=arr(j)
       arr(j)=temp
       go to 3
-      
+
 5     arr(l)=arr(j)
       arr(j)=a
       if(j .ge. k) ir=j-1
       if(j .le. k) l=i
    endif
    go to 1
-   
+
  end function r8median
 
 end module rdc_multi_mod

@@ -19,7 +19,7 @@ module pltdf_mod
 
   save
 
-contains 
+contains
 
   subroutine pltdf
     use param_mod
@@ -72,10 +72,10 @@ contains
 
 
        if (n.eq.0) goto 10
-       
+
        ! Additionally, plot f(n+1)-f(n)
        if (pltd.eq."df" .or. pltd.eq."df_color")then
-          
+
           do 20 i=1,iy
              do 21 j=1,jx
                 temp1(i,j)=f(i,j,k,l_)-f_(i,j,k,l_)
@@ -89,7 +89,7 @@ contains
           RILIN=10.
           write(t_,560)
                   CALL PGMTXT('B',RILIN,-.2,0.,t_)
-          
+
           do 12 jcs=1,ncont,4
              write(t_,570) (tempcntr(jc),jc=jcs,min(jcs+3,ncont))
              if ((ncont/4)*4.ne.ncont .and. ncont-jcs.le.2) then
@@ -101,12 +101,12 @@ contains
 12        end do
 
        endif !  pltd.eq."df" .or. pltd.eq."df_color"
-       
-       
+
+
 10  end do
 
 570 format(4(1pe16.6))
-    
+
     return
 
 !bug end do

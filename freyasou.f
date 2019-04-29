@@ -67,11 +67,11 @@ c..................................................................
       method="meth1"
 
       twopi2=twopi*twopi
-      
+
       k=kfrsou
-        
+
       ! q/mc for source particles:
-      qmc= charge*bnumb(k)/(fmass(k)*clight) 
+      qmc= charge*bnumb(k)/(fmass(k)*clight)
       qmca=abs(qmc)
       do 10 l=1,lrz
         tr(l)=psimag-psivalm(l)
@@ -79,7 +79,7 @@ c..................................................................
       tr(lrz)=psimag-psilim
 
 c..................................................................
-c     If variable multiply.ne."disabled" and multiplyn.ge.1, 
+c     If variable multiply.ne."disabled" and multiplyn.ge.1,
 c     we assume that each particle birth
 c     point represents the mean value of a normally distributed
 c     beamlet with standard deviation equal to beamsprd. If multiply
@@ -114,7 +114,7 @@ c..................................................................
 
 
 c..................................................................
-c     Call random number generator - scale to obtain desired  
+c     Call random number generator - scale to obtain desired
 c     standard deviation
 c..................................................................
 
@@ -148,7 +148,7 @@ c..................................................................
 
 c      write(*,*)
 c      write(*,*)'freyasou:i,qx(i),qy(i),qz(i),qr(i),vx(i),vy(i),vz(i):'
-c      do i=1,5    
+c      do i=1,5
 c         write(*,*) i,qx(i),qy(i),qz(i),qr(i),vx(i),vy(i),vz(i)
 c      enddo
 
@@ -158,7 +158,7 @@ c     lbrth(ipar) is the label of the relevant flux surface.
 c..................................................................
 
       do 60 ipar=1,ipts
-      
+
         rbrth2= px(ipar)**2 +py(ipar)**2
         rbrth=sqrt(rbrth2)
         pr(ipar)=rbrth
@@ -197,14 +197,14 @@ c..................................................................
            !===> This part is to add gyro-correction
            !    (to find g.c. position from a local position of an ion)
            one_wcb= 1.d0/(qmc*bmag2) ! = 1/(omega_c*B)
-           ! Components of rho_gyro are found 
-           ! from  rho_gyro= (1/omega_c)[v x B]/|B|  
+           ! Components of rho_gyro are found
+           ! from  rho_gyro= (1/omega_c)[v x B]/|B|
            rhox_gyro= one_wcb*(vy(jpar)*bzcomp - vz(jpar)*bycomp)
            rhoy_gyro= one_wcb*(vz(jpar)*bxcomp - vx(jpar)*bzcomp)
            rhoz_gyro= one_wcb*(vx(jpar)*bycomp - vy(jpar)*bxcomp)
-           ! The vector rho_gyro is directed from ion position 
+           ! The vector rho_gyro is directed from ion position
            ! towards the gyro-center (for a positive charge q)
-           !-> Gyro-radius correction: 
+           !-> Gyro-radius correction:
            px(ipar)= px(ipar) +rhox_gyro ! Now px is at g.c.
            py(ipar)= py(ipar) +rhoy_gyro ! Now py is at g.c.
            pz(ipar)= pz(ipar) +rhoz_gyro ! Now pz is at g.c.
@@ -227,10 +227,10 @@ c..................................................................
            qy(ipar)=py(ipar)
            qz(ipar)=pz(ipar)  ! Need to check multiply.eq."enabled" case
         endif ! fr_gyro
-          
+
  60   continue
 
-      
+
 c      do ipar=1,10
 c         write(*,*)'freyasou: ipar,psipt(ipar),lbrth(ipar)'//
 c     +        'vx(ipar),vy(ipar),vz(ipar)=,',
@@ -241,7 +241,7 @@ c      enddo
 
 
 c..................................................................
-c     Subtract rotation velocity vphipl from the toroidal 
+c     Subtract rotation velocity vphipl from the toroidal
 c     velocity of the particles, if n.ge.nonvphi .and. n.lt.noffvphi.
 c..................................................................
 
@@ -353,7 +353,7 @@ c..................................................................
 c..................................................................
 c     Determine components of B.
 c..................................................................
-          if(rbrth.gt.1.d-8)then 
+          if(rbrth.gt.1.d-8)then
 cBHandYuP110715: Account for bsign/cursign
 
           bxcomp=(-cursign*dpsidz*px(ipar)-bsign*fpsi_*py(ipar))/rbrth2
@@ -461,7 +461,7 @@ cBH990429                         nnz,ez,epsi,epsirr,epsizz,
 
           bratio=bmag/bzero
 c         bratio, physically, is .ge.1.  Due to inaccuracies, it can
-c         numerically get .lt.1.   
+c         numerically get .lt.1.
 c         Allowing for some tolerance, these cases are adjusted.
           if (bratio.lt.1.) then
             bratio=1.0
@@ -500,9 +500,9 @@ c..................................................................
 cVickieLynch060824 found this should be before do 100:          k=kfrsou
           aa=bmdplne(lr_)/(cynt2(i,l_)*cint2(j)
      1      *dpsi(lr_)*twopi*vptb(i,lr_)*one_*symm)
-          !YuP[03/27/2015] Changed 2.0->symm,  
+          !YuP[03/27/2015] Changed 2.0->symm,
           !which is symm=2 in case of up-dn symmetrical equilibrium.
-          !In this case,   
+          !In this case,
           !for passing particles vptb*symm corresponds to the whole orbit;
           !for trapped: vptb*symm corresponds to half orbit (from tip to tip)
 
@@ -513,15 +513,15 @@ c..................................................................
           if (i.ge.itl_(l_) .and. i.le.itu_(l_)) then   !trapped
             source(i,j,k,ll)=source(i,j,k,ll)+aa/2. ! ZOW
             ! Factor 1/2 because vptb for trapped - over 1/4 physical orbit
-            !(in case of up-dn symmetrical equil) 
+            !(in case of up-dn symmetrical equil)
             source(iy+1-i,j,k,ll)=source(i,j,k,ll)  ! ZOW
           else
             source(i,j,k,ll)=source(i,j,k,ll)+aa    ! ZOW
           endif
  100   continue ! ipar=1,ipts
-c=========================================== Done LOOP IN PARTICLES 
+c=========================================== Done LOOP IN PARTICLES
 
- 
+
         s=0.
         do 150 j=1,jx
           do 160 i=1,iy
@@ -545,7 +545,7 @@ c_cray    call hpdeallc(pzptr,ier,0)
 c_cray    call hpdeallc(prptr,ier,0)
 c_cray    call hpdeallc(lbrthptr,ier,0)
 c_cray    call hpdeallc(psiptptr,ier,0)
-c_pc      Using unix library libU77.a.  
+c_pc      Using unix library libU77.a.
 c_pc      call free(pxptr)
 c_pc      call free(pyptr)
 c_pc      call free(pzptr)
@@ -566,7 +566,7 @@ c_pc      call free(psiptptr)
 c..................................................................
 c     Smooth the source if input variable smooth .ge. .001
 c..................................................................
-     
+
       call frsmooth(k,curnorm)
 
 c..................................................................
@@ -626,7 +626,7 @@ c990131      iseed=123457
 c990131      call  ranset(iseed)
 c     drand() is a unix library function (see Absoft f77 manual).
 c     drand(0) returns next real*8 random number of the
-c     sequence.  The input parameter must be integer. 
+c     sequence.  The input parameter must be integer.
 c     Presumably each realization of the
 c     sequence is the same.  Rand(iflag.ne.0) could be
 c     used to start a different sequence.

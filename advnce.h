@@ -224,20 +224,20 @@ c.......................................................................
      1  -ry(i,j)*de(i,j)*(1.-di(i,j+1,k,l_))*0.5*dxi(j)
 
 c.......................................................................
-c     z00 is the right hand side of the equation, and holds the 
+c     z00 is the right hand side of the equation, and holds the
 c     explicit-in-time rhs of the FP difference equations.
 c
-c     The terms involving the factors bsl, bsu , x**_ and t0**_ 
+c     The terms involving the factors bsl, bsu , x**_ and t0**_
 c     are related to calculation of the bootstrap effect.
 c     We assume virtually that the distribution is skewed asymetrically
-c     in the trapped region...that is we assume (virtually) that 
+c     in the trapped region...that is we assume (virtually) that
 c     f(itl).ne.f(itu) and that the difference is driven by
 c     a df/dr term through bsl and bsu. Since this term involves f at
-c     different radial positions, it cannot figure into the solution 
-c     implicitly, that is, it is differenced explicitly. The resulting 
-c     contributions appear below. There will be contributions from 
+c     different radial positions, it cannot figure into the solution
+c     implicitly, that is, it is differenced explicitly. The resulting
+c     contributions appear below. There will be contributions from
 c     i=itl-1, itu+1, itl and itu only.
-c     All contributions are zero elsewhere, and are zero everywhere 
+c     All contributions are zero elsewhere, and are zero everywhere
 c     if bootcalc= "disabled".   (Refer to Harvey et al, 1993 Sherwood
 c     Theory Mtg; E. Westerhof and A.G. Peters, Computer Physics Comm.,
 c     Vol. 95, p. 131-138 (1996).)
@@ -389,11 +389,11 @@ c..................................................................
       fpjp(i,j)=fpj(i+1,j)
      1          +cvmgt(bsl(j,k,l_),zero,(i+1).eq.itl)
       fpj0(i,j)=fpj(i,j)
-     1          +cvmgt(bsu(j,k,l_),zero,i.eq.itu) 
-                 !YuP-110106: error corrected:  l_
-     
+     1          +cvmgt(bsu(j,k,l_),zero,i.eq.itu)
+		 !YuP-110106: error corrected:  l_
+
 c  Note: no need to check bootcalc="disabled" or not,
-c  because when bootcalc="disabled",  bsl==0 and bsu==0.     
+c  because when bootcalc="disabled",  bsl==0 and bsu==0.
 
 c..................................................................
 c     Express the velocity flux at (i,j+1/2)
@@ -420,7 +420,7 @@ c..................................................................
      1          +cvmgt(bsu(j,k,l_),zero,i.eq.itu)
 
 c  Note: no need to check bootcalc="disabled" or not,
-c  because when bootcalc="disabled",  bsl==0 and bsu==0.     
+c  because when bootcalc="disabled",  bsl==0 and bsu==0.
 
       fpi(i,j)=fpip(i,j)*(1.-di(i,j,k,l_)) + fpi0(i,j)*di(i,j,k,l_)
 

@@ -21,21 +21,21 @@ module equilib_mod
   real(c_double), public :: ccoil(nccoila,ncoila)
   integer,  public :: ncoil(ncoila)
   save
-  
+
 contains
-  
+
   subroutine equilib(Requil,Zequil,index,PSIequil,BReq,BPHIeq,BZeq)
     use param_mod
     use comm_mod
     implicit integer (i-n), real*8 (a-h,o-z)
-    
+
     !  Call with index=0 for setup,
     !            index=1 for PSI,BR,BPHI,BZ return (cgs units)
     !                    for a given Requil,Zequil coordinate.
-    
-    
+
+
     parameter(nworka=3*nnra+1)
-    
+
     character*8 ntitle,dat   ! Added for g95 compiler, Urban 110708
     dimension ntitle(5),workk(nworka)
     !..................................................................
@@ -53,8 +53,8 @@ contains
     !     If eqsource="tsc", data has already been read in from file
     !     tscinp. It is a matter only of changing data to cgs.
     !..................................................................
-    
-    
+
+
     !..................................................................
     !   EQDSK Description
     !..................................................................
@@ -105,7 +105,7 @@ contains
     ! epsi(nnr,nnz) are the psi values on the nnr * nnz
     !               equispaced grid.
     ! qar(nnr)  gives safety factor q on the equispaced psi grid.
-    
+
     ! The following quantities are given in some eqdsks, but are not
     ! presently used in cql3d:
     ! nlimit,nves  are the numbers of point at limiters and
@@ -122,13 +122,13 @@ contains
     ! contain the qar(), although is can be derived from the
     ! preceding data.
     !..................................................................
-    
+
 
     if (index .eq. 0) then !==========================================
-       
+
        if(lr_.ne.lrzmax) return ! equilib is called from aingeom in lr loop
        ! starting at lr_=lrzmax. Only calc once.
-       
+
        if (eqsource.eq."tsc") then
           do j=1,nnz
              do i=1,nnr
@@ -152,7 +152,7 @@ contains
        !BH020822  The standard EQDSK does not incorporate this feature,
        !BH020822  although is is available in cql3d.
        !BH020822  Bonoli uses it for ACCOME eqdsk output.
-       
+
        open(unit=10,file=eqdskin,status='old')
        read(10,110,iostat=io1)(ntitle(i),i=1,5),dat,ipestg,nnr,nnz,nnv
        if (io1.ne.0) then
@@ -168,7 +168,7 @@ contains
        read(10,120) toteqd,psimx1,psimx2,xax1,xax2
        read(10,120) zax1,zax2,psisep,xsep,zsep
        read(10,120) (fpsiar(i),i=1,nnv)
-       
+
        read(10,120) (prar(i),i=1,nnv)
        read(10,120) (ffpar(i),i=1,nnv)
        read(10,120) (ppar(i),i=1,nnv)
@@ -178,16 +178,16 @@ contains
        read (10, 8210)   ncontr, nlimiter
 8210   format (2i5)
        !write(*,*)'ncontr, nconmax ',ncontr, nlimiter
-       
+
        if (ncontr.gt.0) then  !-> LCFS
-          allocate(rcontr(ncontr),STAT=istat) 
-          allocate(zcontr(ncontr),STAT=istat) 
+          allocate(rcontr(ncontr),STAT=istat)
+          allocate(zcontr(ncontr),STAT=istat)
           read (10, 8200) (rcontr(i), zcontr(i),i = 1,ncontr) ! [m]
-       else 
+       else
           !-YuP: Set LCFS = outer boundary of equilibrium grid
           ncontr=5
-          allocate(rcontr(ncontr),STAT=istat) 
-          allocate(zcontr(ncontr),STAT=istat) 
+          allocate(rcontr(ncontr),STAT=istat)
+          allocate(zcontr(ncontr),STAT=istat)
           rcontr(1) = rboxdst
           zcontr(1) = -0.5*zbox
           rcontr(2) = rboxdst
@@ -199,16 +199,16 @@ contains
           rcontr(5) = rcontr(1)
           zcontr(5) = zcontr(1)
        endif
-         
+
        if (nlimiter.gt.0) then !-> Limiter
-          allocate(rlimiter(nlimiter),STAT=istat) 
-          allocate(zlimiter(nlimiter),STAT=istat) 
+          allocate(rlimiter(nlimiter),STAT=istat)
+          allocate(zlimiter(nlimiter),STAT=istat)
           read (10, 8200) (rlimiter(i), zlimiter(i), i = 1,nlimiter) ![m]
-       else 
+       else
           !-YuP: Set limiter = outer boundary of equilibrium grid
           nlimiter=5
-          allocate(rlimiter(nlimiter),STAT=istat) 
-          allocate(zlimiter(nlimiter),STAT=istat) 
+          allocate(rlimiter(nlimiter),STAT=istat)
+          allocate(zlimiter(nlimiter),STAT=istat)
           rlimiter(1) = rboxdst
           zlimiter(1) = -0.5*zbox
           rlimiter(2) = rboxdst
@@ -220,13 +220,13 @@ contains
           rlimiter(5) = rlimiter(1)
           zlimiter(5) = zlimiter(1)
        endif
-         
+
 8200   format(5e16.9)
 110    format(6a8,4i4)
 120    format(5e16.9)
 250    format( (5(e21.14)) )
 251    format(5i5)
-       
+
        write(*,*)
        write(*,98) raxis,zaxis,psimag,psilim,qar(1),qar(nnv)
        write(*,99) rbox,zbox,rboxdst,ymideqd
@@ -246,13 +246,13 @@ contains
        endif
        if (btor.lt.0.) then
           if (rdcmod.ne."disabled") then
-             write(*,*) " " 
-             write(*,*) " " 
+             write(*,*) " "
+             write(*,*) " "
              write(*,*) "   *******************************************"
              write(*,*) "   **BTOR .lt.0, Check RDC_UPAR_SIGN,      ***"
              write(*,*) "   **when using rdcmod.  DC coeffs use  -1.***"
              write(*,*) "   *******************************************"
-             write(*,*) " " 
+             write(*,*) " "
              write(*,*) " "
           endif
           if ( bsign.lt.0. ) then
@@ -262,18 +262,18 @@ contains
              enddo
              write(*,*)'equilib: Sign of btor and fpsiar is reversed'
           else
-             write(*,*) " " 
-             write(*,*) " " 
+             write(*,*) " "
+             write(*,*) " "
              write(*,*) "   *******************************************"
              write(*,*) "   ****BTOR .lt.0, Check BSIGN if using urf***"
              write(*,*) "   *******************************************"
-             write(*,*) " " 
-             write(*,*) " " 
+             write(*,*) " "
+             write(*,*) " "
              stop "BTOR .lt.0, Check BSIGN"
           endif
        endif
        !
-       !$$$C%OS  
+       !$$$C%OS
        !$$$C%OS  not used and creates error when ncoil not defined properly
        !$$$        read(10,251,END=299) (ncoil(i),i=1,5)
        !$$$        do 230 i=1,5
@@ -291,9 +291,9 @@ contains
        !     The convention we expect for the read in epsi from eqdsk
        !     within the plasma
        !     is that it will have a minimum at the magnetic axis.
-       !     This is in conformity with usual eqdsk convention. 
-       !     If psimag.gt.psilim (from an off-brand eqdsk), 
-       !         we reverse the sign of epsi,psilim,psimag. 
+       !     This is in conformity with usual eqdsk convention.
+       !     If psimag.gt.psilim (from an off-brand eqdsk),
+       !         we reverse the sign of epsi,psilim,psimag.
        !     The sign of the current, toteqd, will be used
        !     to specify the current  and poloidal B-field directions.
        !     (Positive is CCW, viewed from above.)
@@ -308,11 +308,11 @@ contains
        !     and the sign of Bphi is maintained through bsign.
        !
        !     We have:
-       !        vector-B = 
+       !        vector-B =
        !        bsign*fpsi_cql*grad(phi) - cursign*grad(phi) X grad(epsi_cql)
        !
        !.......................................................................
-       
+
        if (psimag.gt.psilim) then ! reverse to make minimum at m.axis
           do j=1,nnz
              do i=1,nnr
@@ -321,24 +321,24 @@ contains
           enddo
           psimag=-psimag
           psilim=-psilim ! now psimag < psilim
-          
+
           write(*,1000)
 1000      format(//,1x,'WARNING: Sign of epsi,psilim,psimag reversed')
-           
+
        endif
 
        cursign=sign(one,toteqd)
-         
+
        !..................................................................
        !     Create the r,z meshes..
        !     Assumes ymideqd=0.
        !..................................................................
-       
+
        !if(ymideqd.ne.zero) stop 'equilib: Consider effect ymideqd.ne.0'
        !YuP[04-2017] moved the above stop to few lines below.
        ! In case of eqsym=avg_zmag (or top, or bottom) the value of ymideqd
        ! will be redefined, so the code should not be stopped here.
-       
+
        dzz=zbox/(nnz-1)
        drr=rbox/(nnr-1)
        er(1)=rboxdst
@@ -349,14 +349,14 @@ contains
        do nn=2,nnz
           ez(nn)=ez(nn-1)+dzz
        enddo
-       
+
        !.......................................................................
-       !     Up-down symmetrize the eqdsk about z=0, as specified by  eqsym. 
-       !     (this has no effect if the equilibrium is initially 
+       !     Up-down symmetrize the eqdsk about z=0, as specified by  eqsym.
+       !     (this has no effect if the equilibrium is initially
        !     up-down symmetric about zmag=0.).
        !     New options beyond eqsym.eq."average" added (BobH: 020606).
        !.......................................................................
-       
+
        if (eqsym.eq."none") then
           if(ymideqd.ne.zero)  stop 'equilib/eqsym=none: Consider effect ymideqd.ne.0'
           zshift=0.d0
@@ -380,9 +380,9 @@ contains
           !
           !          Expand vertical height of eqdsk by amount 2*(zaxis-ymideqd),
           !          making midplane of computational grid at the magnetic axis.
-          !    
+          !
           !          Interpolate psi onto new expanded grid.
-          
+
           zshift=zaxis-ymideqd
           zaxis=0.d0
           ymideqd=0.d0
@@ -413,25 +413,25 @@ contains
           do iz=2,nnz
              dummyaz(iz)=dummyaz(iz-1)+dz_ex
           enddo
-           
+
           !          Interpolating:
           kz1=1
           kz2=2
           do 350  j=1,nnz
              zval=dummyaz(j)
 360          if (zval.le.ez(kz2).or.kz2.eq.nnz) go to 365
-             
+
              kz1=kz1+1
              kz2=kz1+1
              go to 360
-             !     
+             !
 365       continue
           kr1=1
           kr2=2
           do 370  i=1,nnr
              rval=dummyar(i)
 380          if (rval.le.er(kr2).or.kr2.eq.nnr) go to 385
-             
+
              kr1=kr1+1
              kr2=kr1+1
              go to 380
@@ -439,12 +439,12 @@ contains
 385       continue
           f1eq=epsi(kr1,kz1)+(rval-er(kr1))*(epsi(kr2,kz1)-epsi(kr1,kz1))/(er(kr2)-er(kr1))
           f2eq=epsi(kr1,kz2)+(rval-er(kr1))*(epsi(kr2,kz2)-epsi(kr1,kz2))/(er(kr2)-er(kr1))
-          !     
+          !
           val=f1eq+(zval-ez(kz1))*(f2eq-f1eq)/(ez(kz2)-ez(kz1))
           dummypsi(i,j)=val
 370    continue
 350    continue
-                
+
           !BH031010:  Following changes do nothing, since xma_ex,rdim_ex
           !BH031010:    not used.
           !BH031010           xma_ex=xma
@@ -453,13 +453,13 @@ contains
           rdim_ex=rbox
           zmid_ex=0.d0
           zma_ex=0.d0
-          
+
           !     Redefine the dummyaz-grid so midplane at z=0.:
           dummyaz(1)=-zdim_ex/2.
           do i=2,nnz
              dummyaz(i)=dummyaz(i-1)+dz_ex
           enddo
-          
+
           !          Redefine the eqdsk quantities:
           zbox=zdim_ex
           zaxis=0.d0
@@ -468,7 +468,7 @@ contains
           do i=1,nnz
              ez(i)=dummyaz(i)
           enddo
-          
+
           if (eqsym.eq."avg_zmag") then
              !          Up-down symmetrize
              do i=1,nnr
@@ -485,10 +485,10 @@ contains
                    epsi(i,j)=epsi(i,nnz+1-j)
                 enddo
              enddo
-             
+
           else if (eqsym.eq."top") then
              STOP 'Need to fix eqsym=top'
-             !          Reflect top to bottom    
+             !          Reflect top to bottom
              do i=1,nnr
                 j=nnz/2+1
                 epsi(i,j)=dummypsi(i,j)
@@ -503,7 +503,7 @@ contains
                    epsi(i,j)=dummypsi(i,nnz-(j-1))
                 enddo
              enddo
-             
+
           else if (eqsym.eq."bottom") then
              STOP 'Need to fix eqsym=bottom'
              !          Reflect bottom to top
@@ -521,20 +521,20 @@ contains
                    epsi(i,j)=dummypsi(i,nnz-(j-1))
                 enddo
              enddo
-             
+
           endif
-          
+
        endif  !On eqsym
-        
-        
-                 
+
+
+
        !.......................................................................
        !     Determine the equally spaced psi array.
        !     Note: psilim, psimag and epsi will have their sign changed below.
        !     psiar is ordered from edge to magnetic axis.
        !.......................................................................
-       
-       nfp=nnv 
+
+       nfp=nnv
        ! Up to now, psimag < psilim;  epsi has min. at m.axis
        delpsi=1.e+8*(psilim-psimag)/(nnv-1)  ! positive
        do 10 ix=1,nnv
@@ -542,17 +542,17 @@ contains
           !%OS  psiar(ix)=1.e+8*psilim+(ix-1)*delpsi
           psiar(ix)=-1.e+8*psilim+(ix-1)*delpsi ! reversed, and mks->cgs
 10        continue
-          
+
        endif  !On eqsource
-       
+
        if (eqsource.eq."eqdsk" .or. eqsource.eq."tsc") then
-          
+
           !.......................................................................
           !    Convert to cgs, re-order fpsiar,prar,ppar,qar from edge to mag axis
           !    Reverse sign of epsi,psilim,psimag in the code, so max psi will
           !    occur on axis.
           !.......................................................................
-          
+
           do i=1,nnv
              fpsiar(i)=fpsiar(i)*1.e+6
              ffpar(i)=ffpar(i)/1.e+2
@@ -588,7 +588,7 @@ contains
 5         continue
           write(*,1000)
           ! 1000      format(//,1x,'WARNING: Sign of epsi,psilim,psimag reversed')
-          
+
           btor=btor*1.e+4
           rbox=rbox*1.e+2
           zbox=zbox*1.e+2
@@ -596,12 +596,12 @@ contains
           radmaj=radmaj*1.e+2
           toteqd=toteqd*3.e9
           zshift=zshift*1.e+2
-          
+
           psi_lim = psilim ! cgs
           psi_mag = psimag ! cgs
           R_axis  = raxis*1.e+2 ! cgs
           Z_axis  = zaxis*1.e+2 ! cgs
-          
+
           do ilim = 1,nlimiter
              rlimiter(ilim)= rlimiter(ilim)*1.d2
              zlimiter(ilim)= zlimiter(ilim)*1.d2
@@ -610,20 +610,20 @@ contains
              rcontr(ilim)= rcontr(ilim)*1.d2
              zcontr(ilim)= zcontr(ilim)*1.d2
           enddo
-          
+
           !..................................................................
-          !        Set initial values of rmag,zmag 
+          !        Set initial values of rmag,zmag
           !        (to be refined in eqrhopsi for bicubic splines of epsi).
           !..................................................................
-          
+
           rmag=raxis*1.e+2
           zmag=zaxis*1.e+2
-          
+
           !..................................................................
           !     Re-Create the z,r meshes..
           !     Assumes ymideqd=0.
           !..................................................................
-          
+
           if(ymideqd.ne.zero) stop 'equilib:Consider effect ymideqd.ne.0'
           dzz=zbox/(nnz-1) ! cgs
           drr=rbox/(nnr-1) ! cgs
@@ -635,16 +635,16 @@ contains
           do nn=2,nnz
              ez(nn)=ez(nn-1)+dzz
           enddo
-          
+
           ezmin=ez(1)   ! cgs
           ezmax=ez(nnz)
           ermin=er(1)
           ermax=er(nnr)
-          
+
           !..................................................................
           !     Set up spline array for the f =(R*BTOR) subroutine,etc.
           !..................................................................
-          
+
           i1p(1)=4
           i1p(2)=4
           call coeff1(nnv,psiar,fpsiar,d2fpsiar,i1p,1,workk)
@@ -652,18 +652,18 @@ contains
           call coeff1(nnv,psiar,prar,d2prar,i1p,1,workk)
           call coeff1(nnv,psiar,ppar,d2ppar,i1p,1,workk)
           call coeff1(nnv,psiar,qar,d2qar,i1p,1,workk)
-          
-          
+
+
           ibd(1)=4
           ibd(2)=4
           ibd(3)=4
           ibd(4)=4
           call coeff2(nnr,er,nnz,ez,epsi,epsirr,epsizz,epsirz,nnra,ibd,wkepsi)
-          
+
           !..................................................................
           !     Adjust z-height of diagnostics, if have shifted eqdsk array
           !..................................................................
-          
+
           if (zshift.ne.zero) then
              !           X-ray detector height
              do 500 nn=1,nv
@@ -678,7 +678,7 @@ contains
       else
          call eqwrng(10)
       endif
-      
+
       write(*,*)
       write(*,598) rmag,zmag,psimag,psilim,qar(1),qar(nnv)
 598   format('ADJUSTED (possible sign change; rescaled) [cgs]: &
@@ -688,15 +688,15 @@ contains
       !pause
 
 
-       
+
    else                      ! index.ne.0 !==========================
-      
+
       !..................................................................
       !     Find  BR, BPHI, BZ for a given Requil,Zequil on equil. grid
       !..................................................................
       der=er(2)-er(1) ! cgs
       dez=ez(2)-ez(1) ! cgs
-      
+
       PSIequil=t2(der,dez,Requil,Zequil,nnr,er,nnz,ez,epsi, &
            epsirr,epsizz,epsirz,nnra,0,0)           ! cgs
       dpsidr=  t2(der,dez,Requil,Zequil,nnr,er,nnz,ez,epsi, &
@@ -706,7 +706,7 @@ contains
       !..................................................................
       !     Determine f(psi)
       !..................................................................
-      
+
       itab(1)=1
       itab(2)=0
       itab(3)=0
@@ -714,21 +714,21 @@ contains
       call terp1e(nfp,psiar,fpsiar,d2fpsiar,PSIequil, &
            1,tab,itab,dpsiar)
       ! YuP Note: The sign of fpsiar was adjusted
-      ! during setup by using bsign (see line ~237 above) 
+      ! during setup by using bsign (see line ~237 above)
       fpsieq=tab(1)
-      
+
       !..................................................................
       !     Determine components of B.
       !..................................................................
-         
+
       BReq=  -cursign*dpsidz/Requil     ! cgs
       BPHIeq= bsign*fpsieq/Requil ! change to original sign of Bphi
       BZeq=   cursign*dpsidr/Requil
-      
+
       !         if(abs(Zequil+0.8).le.1.e-2) then
       !          write(*,'(a,4e12.4)')'equilib',Requil,Zequil,PSIequil,BZeq
       !         endif
-         
+
    endif                     ! endif on index !======================
 
    return

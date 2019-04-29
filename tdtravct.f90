@@ -627,7 +627,7 @@ contains
 !%OS
 !      write(*,*) 'f(i,3,1,1),i=1,iy',(f(i,3,1,1),i=1,iy)
       if (nonadi .eq. 6) then
-         !XXX 
+         !XXX
         call tdtrvtor2(fvn(0:iyp1,0:jxp1,1,1),frn(0:iyp1,0:jxp1,1,1),vpint,vpint_,1)
       else
         call tdtrvtor(fvn,frn)

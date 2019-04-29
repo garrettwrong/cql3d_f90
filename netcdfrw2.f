@@ -1,4 +1,3 @@
-
 c
 c
       subroutine netcdfrw2(kopt)
@@ -15,7 +14,7 @@ c
 
 CMPIINSERT_INCLUDE
 
-c     This subroutine is only called from MPI rank=0.      
+c     This subroutine is only called from MPI rank=0.
 
 c     This subroutine uses netCDF-3 subroutines.
 
@@ -27,7 +26,7 @@ c     netCDF file ID ==> ncid
 c     time-step counter ==> numrec1
 c
 c     While moments of distn f and the electric field are saved after
-c     each time-step, the distribution function itself is saved 
+c     each time-step, the distribution function itself is saved
 c     only after the last time-step [netcdfshort='disabled'],
 c     for n.eq.nsave() [if netcdfshort='lngshrtf'], or
 c     after every time step [netcdfshort='longer_f']
@@ -37,7 +36,7 @@ c       kopt=0, n=0, initialize "mnemonic".nc and write data
 c       kopt=1, n.gt.0, write data
 c
 
-c --- include file for netCDF declarations 
+c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
       include 'netcdf.inc'
 
@@ -54,13 +53,13 @@ c --- some stuff for netCDF file ---
       integer nendim,nvdim,nmodsdim,ntavgdim,mrfnp1_dim,mrfnp3_dim
       integer nt_deltadim,nr_deltadim,nz_deltadim
       integer start2(2), start3(3), start4(4)
-      
+
       integer nv_fusdim, nrho_fusdim !!!
       integer start_fusn(3), count_fusn(3), fusn_dims(3) !!!
       ! other fusion diagn: for sigftt and other diagn.  !!!
       integer start_fus(3),  count_fus(3),  fus_dims(3)  !!!
       !------
-      
+
       integer nen_npadim,nv_npadim,npaproc_dim
       integer nena_dim, nva_dim, nrho_npadim
       integer npaproc_dims(2)
@@ -114,9 +113,9 @@ c
       character*100 ltitle
 
       character*8 ndelta_op
-           
+
       real*8, allocatable :: wkpack(:) ! local working array for pack21
-      
+
 c      character(len=8), dimension(npaproc) :: npa_proc  !automatic var
 
       data start/1,1,1,1/, start1/1,1,1,1/
@@ -140,7 +139,7 @@ c      character(len=8), dimension(npaproc) :: npa_proc  !automatic var
       data start2/1,1/
       data start3/1,1,1/
       data start4/1,1,1,1/
-   
+
 Cdeltarhop      data deltap_start/1,1,1/
 c
 CMPIINSERT_IF_RANK_NE_0_RETURN
@@ -164,31 +163,31 @@ c     Maximum iy as function of radius:
       do l=1,lrz
          iyy=max(iyy,iy_(l))
       enddo
-      if(iyy.gt.iy) stop 'netcdfrw2: iy_(l) should not exceed iy' 
+      if(iyy.gt.iy) stop 'netcdfrw2: iy_(l) should not exceed iy'
 
       if (.NOT.ALLOCATED(wkpack)) then ! allocate working array for pack21
-         nwkpack=max(iyjx2, iy*lrors, ntotala*(lrza+1), 
-     +               lza*lrzmax, iy*lz, nena*nva, 
+         nwkpack=max(iyjx2, iy*lrors, ntotala*(lrza+1),
+     +               lza*lrzmax, iy*lz, nena*nva,
      +               iy*lrzmax, lrza*npaproca) +10 ! +10 just in case
          allocate(wkpack(nwkpack),STAT=istat)
          call bcast(wkpack,zero,SIZE(wkpack))
       endif
 
 c     Ensure that tem1-2 has sufficient dim for (pack21) equivalences:
-c      if (iy*lrors.gt.iyjx2) 
+c      if (iy*lrors.gt.iyjx2)
 c     +    stop '1: in netcdfrw2: Need to set jx>lrza'
-c      if (ntotala*(lrza+1).gt.iyjx2) 
+c      if (ntotala*(lrza+1).gt.iyjx2)
 c     +    stop '2: in netcdfrw2: Need ntotala*(lrza+1)<(iy+2)*(jx+2)'
-c      if (lza*lrzmax.gt.iyjx2) 
+c      if (lza*lrzmax.gt.iyjx2)
 c     +    stop '3: in netcdfrw2: Need lza*lrza<(iy+2)*(jx+2)'
 c      if (iy*lz.gt.iyjx2)
 c     +    stop '4: in netcdfrw2: Need iy*lz<(iy+2)*(jx+2)'
 c      if (nena*nva.gt.iyjx2)
 c     +    stop '5: in netcdfrw2: Need nena*nva<(iy+2)*(jx+2)'
 c
-c      if (iy*lrzmax.gt.iyjx2) 
+c      if (iy*lrzmax.gt.iyjx2)
 c     +    stop '6: in netcdfrw2: Need iy*lrza<(iy+2)*(jx+2)'
-c      if (lrza*npaproca.gt.iyjx2) 
+c      if (lrza*npaproca.gt.iyjx2)
 c     +    stop '7: in netcdfrw2: Need lrza*npaproca<(iy+2)*(jx+2)'
 
 
@@ -319,7 +318,7 @@ c --- begin if ---
 
 C-----------------------------------------------------------------------
 c
-cl     1.1 create netCDF file and define dimensions,variables 
+cl     1.1 create netCDF file and define dimensions,variables
 c          and attributes
 c
 
@@ -336,7 +335,7 @@ c-YuP:      ncid=nccre(t_,NCCLOB,istatus)
 c.......................................................................
 cl    1.1.2 define dimensions
 c     p. 43 of netcdf-3 manual
-      
+
       istatus= NF_DEF_DIM(ncid, 'xdim',     jx,       xdim)  !-YuP: NetCDF-f77
       istatus= NF_DEF_DIM(ncid, 'ydim',     iy,       ydim)
       istatus= NF_DEF_DIM(ncid, 'rdim',     lrz,      rdim)
@@ -355,7 +354,7 @@ c      stop
       istatus= NF_DEF_DIM(ncid, 'r00dim',   lrzmax+1, r00dim)
       istatus= NF_DEF_DIM(ncid, 'zdim',     lz,       zdim)
       istatus= NF_DEF_DIM(ncid, 'nendim',   nen,      nendim)
-      istatus= NF_DEF_DIM(ncid, 'nvdim',    nv,       nvdim)      
+      istatus= NF_DEF_DIM(ncid, 'nvdim',    nv,       nvdim)
       istatus= NF_DEF_DIM(ncid, 'nen_npadim',   nen_npa,  nen_npadim)
       istatus= NF_DEF_DIM(ncid, 'nv_npadim',    nv_npa,    nv_npadim)
       istatus= NF_DEF_DIM(ncid, 'npaproc_dim',  npaproc, npaproc_dim)
@@ -363,10 +362,10 @@ c      stop
       istatus= NF_DEF_DIM(ncid, 'mrfnp3_dim', mrfn+3,   mrfnp3_dim)
       istatus= NF_DEF_DIM(ncid, 'nmodsdim', nmodsa,    nmodsdim)
       istatus= NF_DEF_DIM(ncid, 'ntavgdim', ntavga,    ntavgdim)
-      
+
       istatus= NF_DEF_DIM(ncid, 'gen_species_dim', ngen,   gdim)
       istatus= NF_DEF_DIM(ncid, 'species_dim',     ntotal, kdim)
-      
+
       istatus= NF_DEF_DIM(ncid,'nt_deltadim', nt_delta, nt_deltadim)
       istatus= NF_DEF_DIM(ncid,'nr_deltadim', nr_delta, nr_deltadim)
       istatus= NF_DEF_DIM(ncid,'nz_deltadim', nz_delta, nz_deltadim)
@@ -384,18 +383,18 @@ c      stop
       count_elecfldn(3)=nampfmax+1
       print*,'count_elecfldn(1:3)=',count_elecfldn
       istatus= NF_DEF_DIM(ncid,'nampfmax_dim',nampfmax+1,nampfmax_dim)
-      istatus= NF_DEF_DIM(ncid,'nonch_dim',   nstop+1,   nonch_dim) 
-      istatus= NF_DEF_DIM(ncid,'nrho_dim',    lrz+1,     nrho_dim) 
-      istatus= NF_DEF_DIM(ncid,'nrho_dim1',    lrz+2,     nrho_dim1) 
+      istatus= NF_DEF_DIM(ncid,'nonch_dim',   nstop+1,   nonch_dim)
+      istatus= NF_DEF_DIM(ncid,'nrho_dim',    lrz+1,     nrho_dim)
+      istatus= NF_DEF_DIM(ncid,'nrho_dim1',    lrz+2,     nrho_dim1)
       endif
 
 c     unlimited dimension for time, dimension name= 'tdim'
-      !istatus= NF_DEF_DIM(ncid, 'tdim',NF_UNLIMITED,tdim) 
+      !istatus= NF_DEF_DIM(ncid, 'tdim',NF_UNLIMITED,tdim)
       !YuP: why NF_UNLIMITED needed?
       istatus= NF_DEF_DIM(ncid, 'tdim',nstop+1,tdim) !YuP[2018-09-28]
       !changed to nstop+1, to accomodate dimsf() logic, see below.
-      
-      !YuP[2018-09-28] Added 'tsavedim' to save timet 
+
+      !YuP[2018-09-28] Added 'tsavedim' to save timet
       ! at selected t steps (corr. to nsave(i)=n steps)
       ! Can have only one NF_UNLIMITED ?
       !istatus=NF_DEF_DIM(ncid,'tsavedim',NF_UNLIMITED,tsavedim) ! failed
@@ -428,11 +427,11 @@ c     define vector of dimensions, unlimited last
             dimsf(4)=tdim
             if(netcdfshort.eq.'lngshrtf') dimsf(4)=tsavedim
          else  !ngen.ge.2
-            !to be set below: vid=ncvdef2(ncid,'f',NCDOUBLE,5,dimsg,istatus) 
+            !to be set below: vid=ncvdef2(ncid,'f',NCDOUBLE,5,dimsg,istatus)
             !Additional dim included for ngen.gt.1 cases
             dimsg(4)=gdim ! to contain 'k' index
             dimsg(5)=tdim !
-            if(netcdfshort.eq.'lngshrtf') dimsg(5)=tsavedim 
+            if(netcdfshort.eq.'lngshrtf') dimsg(5)=tsavedim
          endif  !on ngen
       else     !disabled, Standard o/p: f at last time step
          if (ngen.eq.1) then    !maintaining backwards compatability
@@ -557,7 +556,7 @@ Cdeltarhop      deltap_dims(3)=r0dim
       elecfldn_dims(2)= nonch_dim ! corr. to nstop+1   (0:nstop)
       elecfldn_dims(3)= nampfmax_dim                 ! (0:nampfmax)
       endif
-      
+
 c.......................................................................
 cl    1.1.3 define variables
 
@@ -579,7 +578,7 @@ c     NF_DOUBLE for REAL*8:
 c--------------------------
 c     Time-independent data
 c--------------------------
-      
+
       ltitle='Main netcdf output from CQL3D version: '//version
       if( length_char(ltitle).gt.100 ) stop 'Adjust ltitle in netcdfrw2'
       call ncaptc2(ncid,NCGLOBAL,'title',NCCHAR,length_char(ltitle),
@@ -624,7 +623,7 @@ c--------------------------
      +          'in which case favg is o/p in place of f,',istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,35,
      +          'except in netcdfshort=longer_f case',istatus)
-      
+
 c.......................................................................
 
       vid=ncvdef2(ncid,'f4d_out',NCCHAR,1,chardim,istatus)
@@ -653,28 +652,28 @@ c     +          'Indicates output for 3D distn/ separate file',istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,26,
      +           'Number of species: gen+max',istatus)
       call check_err(istatus)
-      
+
       vid=ncvdef2(ncid,'kspeci',NCCHAR,3,kspeci_dims,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,44,
      +          'Name of species and spec as general or maxwl',istatus)
-      
+
       vid=ncvdef2(ncid,'bnumb',NCDOUBLE,1,kdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,29,
      +           'atomic number or each species',istatus)
       call check_err(istatus)
-      
+
       vid=ncvdef2(ncid,'fmass',NCDOUBLE,1,kdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,20,
      +           'mass of each species',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,5,
      +                     'grams',istatus)
       call check_err(istatus)
-      
+
       vid=ncvdef2(ncid,'lrzmax',NCLONG,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,38,
      +          'Number of radial bins(=r0dim, .ge.lrz)',istatus)
       call check_err(istatus)
-      
+
       vid=ncvdef2(ncid,'radcoord',NCCHAR,1,chardim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,45,
      +          'Radial coordinate is proportional to radcoord',istatus)
@@ -682,7 +681,7 @@ c     +          'Indicates output for 3D distn/ separate file',istatus)
       vid=ncvdef2(ncid,'rya',NCDOUBLE,1,r0dim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,37,
      +           'Normalized radial mesh at bin centers',istatus)
-     
+
       vid=ncvdef2(ncid,'Rp',NCDOUBLE,1,r0dim,istatus)   ! rpcon(lrz) array
       call check_err(istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
@@ -726,7 +725,7 @@ c     +          'Indicates output for 3D distn/ separate file',istatus)
      +           'Tor equilibrium plasma current',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,4,
      +           'Amps',istatus)
-      
+
       vid=ncvdef2(ncid,'rgeomp',NCDOUBLE,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,29,
      +           '0.5*(max-min) of major radius',istatus)
@@ -1036,7 +1035,7 @@ c     Output current calculated from eqdsk:
       vid=ncvdef2(ncid,'ndeltarho',NCCHAR,1,chardim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +          'Indicates first order-orbit shift options',istatus)
-      
+
 c.......................................................................
 
       ndelta_op="enabled"
@@ -1150,7 +1149,7 @@ c     X-ray data:
       call check_err(istatus)
 
       if (softxry .ne. "disabled") then
- 
+
          if (x_sxr(1).ne.zero  .or. z_sxr(1).ne.zero) then
 
       vid=ncvdef2(ncid,'x_sxr',NCDOUBLE,1,nvdim,istatus)
@@ -1185,12 +1184,12 @@ c     X-ray data:
          call ncaptc2(ncid,vid,'long_name',NCCHAR,29,
      +        'Number of X-ray viewing cords',istatus)
          call check_err(istatus)
- 
+
       vid=ncvdef2(ncid,'nen',NCLONG,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,40,
      +        'Number of equispaced energies in spectra',istatus)
          call check_err(istatus)
- 
+
       vid=ncvdef2(ncid,'msxr',NCLONG,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,47,
      +        'Highest order of Legendre poly in f expr for XR',istatus)
@@ -1207,19 +1206,19 @@ c     X-ray data:
      +        'X-ray maximum energy in spectra',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,3,
      +           'keV',istatus)
-         
+
       vid=ncvdef2(ncid,'en_',NCDOUBLE,1,nendim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,13,
      +        'Photon Energy',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,3,
      +        'keV',istatus)
-         
+
       vid=ncvdef2(ncid,'eflux',NCDOUBLE,3,xray_dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,17,
      +        'X-ray energy flux',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,22,
      +        'ergs/cm**2/sec/ster/eV',istatus)
-         
+
       vid=ncvdef2(ncid,'efluxt',NCDOUBLE,2,xray_dims(2),istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,28,
      +        'Integrated X-ray energy flux',istatus)
@@ -1241,7 +1240,7 @@ c     NPA data:
      +      'or, ncdf_all: data for all steps for ncdf_all' ,istatus)
 
       if (npa_diag .ne. "disabled") then
- 
+
          if (x_npa(1).ne.zero  .or. z_npa(1).ne.zero) then
 
             vid=ncvdef2(ncid,'x_npa',NCDOUBLE,1,nv_npadim,istatus)
@@ -1278,12 +1277,12 @@ c     NPA data:
             call ncaptc2(ncid,vid,'long_name',NCCHAR,27,
      +        'Number of NPA viewing cords',istatus)
             call check_err(istatus)
- 
+
             vid=ncvdef2(ncid,'nen_npa',NCLONG,0,0,istatus)
             call ncaptc2(ncid,vid,'long_name',NCCHAR,40,
      +        'Number of equispaced energies in spectra',istatus)
             call check_err(istatus)
- 
+
             vid=ncvdef2(ncid,'npaproc',NCLONG,0,0,istatus)
             call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +        'Maximum number of CX processes considered',istatus)
@@ -1324,13 +1323,13 @@ c     NPA data:
          call ncaptc2(ncid,vid,'long_name1',NCCHAR,46,
      +   'spline, give neutral density profiles vs ryain' ,istatus)
          call check_err(istatus)
-         
+
          vid=ncvdef2(ncid,'en_',NCDOUBLE,1,nendim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,17,
      +        'CX Neutral Energy',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,3,
      +        'keV',istatus)
-         
+
          vid=ncvdef2(ncid,'ennscal',NCDOUBLE,1,npaproc_dim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,51,
      +     'Scale factor for density assoc with each CX process'
@@ -1338,19 +1337,19 @@ c     NPA data:
          call ncaptc2(ncid,vid,'long_name',NCCHAR,49,
      +     'ennscal has been used in calc of the enn profiles'
      +     ,istatus)
-         
+
       vid=ncvdef2(ncid,'enn',NCDOUBLE,2,npaenn_dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,40,
      +        'Density associated with each npa_process',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,6,
      +        '/cm**3',istatus)
-         
+
       vid=ncvdef2(ncid,'eflux_npa',NCDOUBLE,3,npa_dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,12,
      +        'Neutral flux',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,19,
      +        '#/cm**2/sec/ster/eV',istatus)
-         
+
          vid=ncvdef2(ncid,'efluxt',NCDOUBLE,2,npa_dims(2),istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,23,
      +        'Integrated neutral flux',istatus)
@@ -1394,7 +1393,7 @@ c     Fusion reaction rate data
          call check_err(istatus)
 
       endif  !  On sigmamod
-         
+
 c--------------------------
 c     Time-dependent data
 c--------------------------
@@ -1447,7 +1446,7 @@ c--------------------------
      +        'FSA Parallel Energy per particle',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,3,
      +        'keV',istatus)
-         
+
          vid=ncvdef2(ncid,'wperp',NCDOUBLE,2,r_dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,37,
      +        'FSA Perpendicular Energy per particle',istatus)
@@ -1459,7 +1458,7 @@ c--------------------------
      +        'FSA Parallel Energy per particle',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,3,
      +        'keV',istatus)
-         
+
          vid=ncvdef2(ncid,'wperp',NCDOUBLE,3,rk_dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,37,
      +        'FSA Perpendicular Energy per particle',istatus)
@@ -1518,13 +1517,13 @@ c     Knockon electron data
      +        'Elecfld/Critical knockon electric field',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,8,
      +        'Unitless',istatus)
-         
+
       vid=ncvdef2(ncid,'srckotot',NCDOUBLE,2,r_dims,istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,31,
      +        'FSA Knockon source density rate',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,11,
      +        '#/cm**3*sec',istatus)
-         
+
       vid=ncvdef2(ncid,'denfl',NCDOUBLE,2,r_dims,istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,34,
      +        'FSA Elec Density from KO Reduced Distn',istatus)
@@ -1552,7 +1551,7 @@ c     mrfn=number of modes =1, in subroutine rdc_multi.
      +        'Radially integrated: sorpwti(*,mrfn+3)=',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,37,
      +        'Watts/cm**3, except Watts for sorpwti',istatus)
-         
+
       endif  !On rdcmod
 
 c
@@ -1564,21 +1563,21 @@ c
            vid=ncvdef2(ncid,'hibrz',NCDOUBLE,3,hibr_dims,istatus)
            call ncaptc2(ncid,vid,'long_name0',NCCHAR,29,
      +         'Normalized hot ion birth rate',istatus)
-     
+
            vid=ncvdef2(ncid,'sorpw_nbi',NCDOUBLE,2,sorpw_dims,istatus)
            call ncaptc2(ncid,vid,'long_name0',NCCHAR,28,
      +         'NBI+FUS Source Power Density',istatus)
            call ncaptc2(ncid,vid,'units',NCCHAR,10,
      +         'Watts/cm^3',istatus)
-     
+
            vid=ncvdef2(ncid,'sorpw_nbii',NCDOUBLE,2,sorpw_dims,istatus)
            call ncaptc2(ncid,vid,'long_name0',NCCHAR,38,
      +         'Radially Integrated Power from NBI+FUS',istatus)
            call ncaptc2(ncid,vid,'units',NCCHAR,5,
      +         'Watts',istatus)
           !YuP[06-2016] Now the corresponding arrays contain
-          ! a COMBINED NBI+FUSproduct source.  
-          ! But the netcdf names like 'sorpw_nbi' are not changed 
+          ! a COMBINED NBI+FUSproduct source.
+          ! But the netcdf names like 'sorpw_nbi' are not changed
           ! because Python plotting script must be changed in such case.
 
       endif
@@ -1599,7 +1598,7 @@ c
      +        'powurf(mrfn+1)=power summed over modes',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,5,
      +        'Watts',istatus)
-         
+
          vid=ncvdef2(ncid,'rfpwr',NCDOUBLE,3,rfpwr_dims,istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,37,
      +        'RF power densities (powrf(*,1:mrfn)):',istatus)
@@ -1613,7 +1612,7 @@ c
      +        'Radially integrated: sorpwti(*,mrfn+3)=',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,37,
      +        'Watts/cm**3, except Watts for sorpwti',istatus)
-         
+
          vid=ncvdef2(ncid,'powrf',NCDOUBLE,3,dims_powrf,istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,47,
      +        'RF power densities due to mode (or harmonic for',istatus)
@@ -1627,7 +1626,7 @@ c
      +   'nrfspecies(nmodsa)= general species index for each wave type',
      +   istatus)
          call check_err(istatus)
-         
+
          vid=ncvdef2(ncid,'powrfl',NCDOUBLE,3,dims_powrf,istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,46,
      +        'RF power densities due to salphal(1:nmodsdim)',istatus)
@@ -1635,7 +1634,7 @@ c
      +        '(For multi-harmonic or multi-mode cases)',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,11,
      +        'Watts/cm**3',istatus)
-         
+
          vid=ncvdef2(ncid,'powurfl',NCDOUBLE,2,dims_powrf(2),istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,46,
      +        'Tot RF power absrbd due to salphal(1:nmodsdim)',istatus)
@@ -1643,7 +1642,7 @@ c
      +        '(For multi-harmonic or multi-mode cases)',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,5,
      +        'Watts',istatus)
-         
+
          vid=ncvdef2(ncid,'powrfc',NCDOUBLE,3,dims_powrf,istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,50,
      +     'Coll RF power densities due to salphac(1:nmodsdim)',istatus)
@@ -1651,7 +1650,7 @@ c
      +        '(For multi-harmonic or multi-mode cases)',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,11,
      +        'Watts/cm**3',istatus)
-         
+
          vid=ncvdef2(ncid,'powurfc',NCDOUBLE,2,dims_powrf(2),istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,49,
      +     'Tot Coll RF pwr absrbd due to salphac(1:nmodsdim)',istatus)
@@ -1659,7 +1658,7 @@ c
      +        '(For multi-harmonic or multi-mode cases)',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,5,
      +        'Watts',istatus)
-         
+
          vid=ncvdef2(ncid,'powrft',NCDOUBLE,2,dims_powrft,istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,50,
      +     'RF power densities summed over modes or harmonics,',istatus)
@@ -1667,10 +1666,10 @@ c
      +        'due to urf, collisional and add. linear abs',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,11,
      +        'Watts/cm**3',istatus)
-         
+
       endif  !On urfmod
-     
-      
+
+
       vid=ncvdef2(ncid,'curtor',NCDOUBLE,2,r0_dims,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,36,
      +           'Toroidal current density at min B pt',istatus)
@@ -1697,13 +1696,13 @@ c
       call ncaptc2(ncid,vid,'units',NCCHAR,4,
      +           'Amps',istatus)
 
-      
+
       if (kelecg.ne.0) then ! e as gen.species
          vid=ncvdef2(ncid,'currm_e',NCDOUBLE,2,r0_dims,istatus)
       else ! ion as general species
          vid=ncvdef2(ncid,'currm_i',NCDOUBLE,2,r0_dims,istatus)
       endif
-      
+
       call ncaptc2(ncid,vid,'long_name0',NCCHAR,38,
      +           'Parallel elec current density at min B',istatus)
       call ncaptc2(ncid,vid,'long_name1',NCCHAR,43,
@@ -1787,7 +1786,7 @@ c
       vid=ncvdef2(ncid,'nuestar',NCDOUBLE,2,r0_dims,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,25,
      +           'ONETWO Manual, Eq. 4.2-30',istatus)
-         
+
       vid=ncvdef2(ncid,'powers',NCDOUBLE,4,powers_dims,istatus)
       call ncaptc2(ncid,vid,'long_name0',NCCHAR,55,
      +    'Component by component FSA powers to gen species k vs t',
@@ -1820,7 +1819,7 @@ c
      +   'powers(*,13,k,t)=Total',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,11,
      +   'Watts/cm**3',istatus)
-         
+
       vid=ncvdef2(ncid,'powers_int',NCDOUBLE,3,powers_dims(2),istatus)
       call ncaptc2(ncid,vid,'long_name0',NCCHAR,58,
      +    'Vol int of FSA powers, respectively, to gen species k vs t',
@@ -1858,9 +1857,9 @@ c        Do nothing: no storage defined.
             call ncaptc2(ncid,vid,'comment',NCCHAR,44,
      +           'Additional dimension added for multi-species',istatus)
          endif  !on ngen
-         
+
       else     !disabled, Standard o/p: f at last time step
-      
+
          if (ngen.eq.1) then    !maintaining backwards compatability
             vid=ncvdef2(ncid,'f',NCDOUBLE,3,dimsf(1:3),istatus)
             ! here dimsf={ydim,xdim,rdim}
@@ -1881,7 +1880,7 @@ c        Do nothing: no storage defined.
             call ncaptc2(ncid,vid,'comment',NCCHAR,44,
      +           'Additional dimension added for multi-species',istatus)
          endif  !on ngen
-         
+
       endif  !on netcdfshort : storage defined
 
 
@@ -1957,7 +1956,7 @@ cBH100912:  Option to output specific curr and rf pwr at each time step
       call ncaptc2(ncid,vid,'comment',NCCHAR,23,
      +           'Setup for multi-species',istatus)
       endif  !on ngen
-      
+
 
       endif  !  On netcdfshort.eq.'long_jp'
 
@@ -2033,7 +2032,7 @@ c --- set the time-step counter ==> numrec1
       start_npa(3)=numrec1
 
 c --- initialize data file ---
-c     First get variable_id: 
+c     First get variable_id:
 c             nf_inq_varid(netcdf_id,variable_name,integer_info)
 c     Then write data with nc variable_put:
 c             nf_put_var... ()
@@ -2126,13 +2125,13 @@ c-YuP:      vid=ncvid(ncid,'radcoord',istatus)
 c-YuP:      vid=ncvid(ncid,'rya',istatus)
       istatus= NF_INQ_VARID(ncid,'rya',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,1,lrzmax,rya(1),istatus)
-      
+
       istatus= NF_INQ_VARID(ncid,'Rp',vid)  ! rpcon(1:lrz) array
-      call ncvpt_doubl2(ncid,vid,1,lrzmax,rpcon,istatus)      
+      call ncvpt_doubl2(ncid,vid,1,lrzmax,rpcon,istatus)
       call check_err(istatus)
 
       istatus= NF_INQ_VARID(ncid,'Rm',vid)  ! rmcon(1:lrz) array
-      call ncvpt_doubl2(ncid,vid,1,lrzmax,rmcon,istatus)      
+      call ncvpt_doubl2(ncid,vid,1,lrzmax,rmcon,istatus)
       call check_err(istatus)
 
 
@@ -2229,7 +2228,7 @@ c-YuP:      vid=ncvid(ncid,'h_r',istatus)
 c-YuP:      vid=ncvid(ncid,'qsafety',istatus)
       istatus= NF_INQ_VARID(ncid,'qsafety',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,1,lrzmax,qsafety(1),istatus)
-      
+
       if (eqmod.eq."enabled") then
 c-YuP:      vid=ncvid(ncid,'curreq',istatus)
          istatus= NF_INQ_VARID(ncid,'curreq',vid)  !-YuP: NetCDF-f77 get vid
@@ -2252,7 +2251,7 @@ c-YuP:      vid=ncvid(ncid,'x',istatus)
       istatus= NF_INQ_VARID(ncid,'x',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,1,jx,x,istatus)
 
-      istatus= NF_INQ_VARID(ncid,'enerkev',vid) 
+      istatus= NF_INQ_VARID(ncid,'enerkev',vid)
       call ncvpt_doubl2(ncid,vid,1,jx,enerkev,istatus)
 
       istatus= NF_INQ_VARID(ncid,'uoc',vid)
@@ -2348,7 +2347,7 @@ c-YuP:      vid=ncvid(ncid,'imax',istatus)
 c-YuP:      vid=ncvid(ncid,'lmax',istatus)
       istatus= NF_INQ_VARID(ncid,'lmax',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_int2(ncid,vid,start,tau_count,item1,istatus)
-      
+
       call pack21(zboun,1,iy,1,lrzmax,wkpack,iy,lrzmax)
 c-YuP:      vid=ncvid(ncid,'zboun',istatus)
       istatus= NF_INQ_VARID(ncid,'zboun',vid)  !-YuP: NetCDF-f77 get vid
@@ -2357,12 +2356,12 @@ c-YuP:      vid=ncvid(ncid,'zboun',istatus)
 c-YuP:      vid=ncvid(ncid,'zmaxpsi',istatus)
       istatus= NF_INQ_VARID(ncid,'zmaxpsi',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start,tau_count(2),zmaxpsi(1),istatus)
-      
+
       call pack21(tau,1,iy,1,lrzmax,wkpack,iy,lrzmax)
 c-YuP:      vid=ncvid(ncid,'tau',istatus)
       istatus= NF_INQ_VARID(ncid,'tau',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start,tau_count,wkpack,istatus)
-      
+
 c-YuP:      vid=ncvid(ncid,'dtau',istatus)
       istatus= NF_INQ_VARID(ncid,'dtau',vid)  !-YuP: NetCDF-f77 get vid
       do ll=1,lrzmax
@@ -2395,7 +2394,7 @@ cBH         call ncvpt_doubl2(ncid,vid,start1,z_count1,wkpack,istatus)
 
       istatus= NF_INQ_VARID(ncid,'ndeltarho',vid)
       call ncvptc2(ncid,vid,1,8,ndeltarho,8,istatus)
-      
+
       if ((ndeltarho.ne.'disabled'.or.lossmode(1).eq.'simplban').and.
      +     ndelta_op.eq."enabled") then
 cBH         vid=ncvid(ncid,'deltarho',istatus)
@@ -2415,28 +2414,28 @@ c  dimensioned to size deltarho(iy,lz,lrzmax)
 cBH         call ncvpt(ncid,vid,start,z_count,deltarho,istatus)
          call ncvpt_doubl2(ncid,vid,start,z_count,deltarho,istatus)
 
-         
+
 Cdeltarhop         WRITE(*,*)'netcdfrw2:deltap_start,deltap_count=',
 Cdeltarhop     +       deltap_start(1:3),deltap_count(1:3)
 Cdeltarhop         vid=ncvid(ncid,'deltarhop',istatus)
 Cdeltarhop         call ncvpt(ncid,vid,deltap_start,deltap_count,deltarhop,
 Cdeltarhop     +        istatus)
-        
+
 cBH         vid=ncvid(ncid,'r_delta',istatus)
 cBH         call ncvpt(ncid,vid,1,nr_delta,r_delta(1),istatus)
          istatus= NF_INQ_VARID(ncid,'r_delta',vid)
          call ncvpt_doubl2(ncid,vid,1,nr_delta,r_delta(1),istatus)
-         
+
 cBH         vid=ncvid(ncid,'z_delta',istatus)
 cBH         call ncvpt(ncid,vid,1,nz_delta,z_delta(1),istatus)
          istatus= NF_INQ_VARID(ncid,'z_delta',vid)
          call ncvpt_doubl2(ncid,vid,1,nz_delta,z_delta(1),istatus)
-         
+
 cBH         vid=ncvid(ncid,'t_delta',istatus)
 cBH         call ncvpt(ncid,vid,1,nt_delta,t_delta(1),istatus)
          istatus= NF_INQ_VARID(ncid,'t_delta',vid)
          call ncvpt_doubl2(ncid,vid,1,nt_delta,t_delta(1),istatus)
-         
+
 cBH         vid=ncvid(ncid,'deltarz',istatus)
 cBH         call ncvpt_doubl2(ncid,vid,delta_start,delta_count,deltarz,istatus)
          istatus= NF_INQ_VARID(ncid,'deltarz',vid)
@@ -2453,7 +2452,7 @@ cBH     +        istatus)
          istatus= NF_INQ_VARID(ncid,'delta_bdb0',vid)
          call ncvpt_doubl2(ncid,vid,delta_start,delta_count,delta_bdb0,
      +        istatus)
-         
+
       endif  ! On ndeltarho
 
 c-YuP:      vid=ncvid(ncid,'bthr',istatus)
@@ -2477,7 +2476,7 @@ c-YuP:      vid=ncvid(ncid,'softxry',istatus)
       call ncvptc2(ncid,vid,1,8,softxry,8,istatus)
 
       if (softxry .ne. "disabled") then
- 
+
          if (x_sxr(1).ne.zero  .or. z_sxr(1).ne.zero) then
 
 c-YuP:                vid=ncvid(ncid,'x_sxr',istatus)
@@ -2511,11 +2510,11 @@ c-YuP:      vid=ncvid(ncid,'nen',istatus)
 c-YuP:      vid=ncvid(ncid,'msxr',istatus)
          istatus= NF_INQ_VARID(ncid,'msxr',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_int2(ncid,vid,1,1,msxr,istatus)
-         
+
 c-YuP:      vid=ncvid(ncid,'enmin',istatus)
          istatus= NF_INQ_VARID(ncid,'enmin',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,1,1,enmin,istatus)
-         
+
 c-YuP:      vid=ncvid(ncid,'enmax',istatus)
          istatus= NF_INQ_VARID(ncid,'enmax',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,1,1,enmax,istatus)
@@ -2540,7 +2539,7 @@ c-YuP:      vid=ncvid(ncid,'efluxt',istatus)
       call ncvptc2(ncid,vid,1,8,npa_diag,8,istatus)
 
       if (npa_diag .ne. "disabled") then
- 
+
          if (x_npa(1).ne.zero  .or. z_npa(1).ne.zero) then
 
             istatus= NF_INQ_VARID(ncid,'x_npa',vid)
@@ -2564,13 +2563,13 @@ c-YuP:      vid=ncvid(ncid,'efluxt',istatus)
 
          istatus= NF_INQ_VARID(ncid,'nen_npa',vid)
          call ncvpt_int2(ncid,vid,1,1,nen_npa,istatus)
-         
+
          istatus= NF_INQ_VARID(ncid,'npaproc',vid)
          call ncvpt_int2(ncid,vid,1,1,npaproc,istatus)
-         
+
          istatus= NF_INQ_VARID(ncid,'enmin_npa',vid)
          call ncvpt_doubl2(ncid,vid,1,1,enmin_npa,istatus)
-         
+
          istatus= NF_INQ_VARID(ncid,'enmax_npa',vid)
          call ncvpt_doubl2(ncid,vid,1,1,enmax_npa,istatus)
 
@@ -2583,7 +2582,7 @@ c         enddo
 
          istatus= NF_INQ_VARID(ncid,'atten_npa',vid)
          call ncvptc2(ncid,vid,1,8,atten_npa,8,istatus)
-        
+
          istatus= NF_INQ_VARID(ncid,'ipronn',vid)
          call ncvptc2(ncid,vid,1,8,ipronn,8,istatus)
 
@@ -2592,12 +2591,12 @@ c         enddo
 
          istatus= NF_INQ_VARID(ncid,'en_',vid)
          call ncvpt_doubl2(ncid,vid,1,nen_npa,en_(1),istatus)
-         
+
          istatus= NF_INQ_VARID(ncid,'enn',vid)
          call pack21(enn,1,lrza,1,npaproca,wkpack,lrzmax,npaproc)
          call ncvpt_doubl2(ncid,vid,start_npaenn,count_npaenn,wkpack,
      +        istatus)
-         
+
          istatus= NF_INQ_VARID(ncid,'eflux_npa',vid)
          call pack21(eflux,1,nena,1,nva,wkpack,nen_npa,nv_npa)
          call ncvpt_doubl2(ncid,vid,start_npa,count_npa,wkpack,istatus)
@@ -2612,7 +2611,7 @@ c         enddo
       istatus= NF_INQ_VARID(ncid,'sigmamod',vid)  !-YuP: NetCDF-f77 get vid
       call ncvptc2(ncid,vid,1,8,sigmamod,8,istatus)
       call check_err(istatus)
-      
+
       call check_err(istatus)
 
       if (sigmamod .eq. "enabled") then ! n=0: save values
@@ -2641,7 +2640,7 @@ c     Time-Dependent data (numrec1=1)
 
       istatus= NF_INQ_VARID(ncid,'time',vid)
       call ncvpt_doubl2(ncid,vid,start(4),1,timet,istatus)
-      
+
       !YuP[2018-09-28] added for 'lngshrtf' option,
       !for saving f() distr.func. at selected t steps only.
       if (isave.ne.0) then  !isave/nsavet set in tdchief
@@ -2671,7 +2670,7 @@ c-YuP:      vid=ncvid(ncid,'temp',istatus)
       istatus= NF_INQ_VARID(ncid,'temp',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(2),species_count,wkpack,istatus)
 
-      call pack21(energy,1,ntotala,1,lrza,wkpack,ntotal,lrzmax) 
+      call pack21(energy,1,ntotala,1,lrza,wkpack,ntotal,lrzmax)
       istatus= NF_INQ_VARID(ncid,'energy',vid) !<..>_FSA
       call ncvpt_doubl2(ncid,vid,start(2),species_count,wkpack,istatus)
 
@@ -2743,21 +2742,21 @@ c-YuP:      vid=ncvid(ncid,'knockon',istatus)
       call ncvptc2(ncid,vid,1,8,knockon,8,istatus)
 
       if (knockon.ne."disabled") then
-         
+
       call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=eoe0(1,ll) !YuP[2018-09-24]
       enddo
          istatus= NF_INQ_VARID(ncid,'eoe0',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
-         
+
 c-YuP:      vid=ncvid(ncid,'srckotot',istatus)
          istatus= NF_INQ_VARID(ncid,'srckotot',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,start(3),r_count,srckotot,istatus)
-         
+
          istatus= NF_INQ_VARID(ncid,'denfl',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,start(3),r_count,denfl,istatus)
-         
+
       endif                     ! on knockon
 c
 c...new Freya stuff
@@ -2766,11 +2765,11 @@ c
            istatus= NF_INQ_VARID(ncid,'hibrz',vid)
            call ncvpt_doubl2(ncid,vid,start_hibr,count_hibr,
      +                 hibrzp,istatus)
-     
+
            istatus= NF_INQ_VARID(ncid,'sorpw_nbi',vid)
            call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw,
      +                 sorpw_nbi,istatus)
-     
+
            istatus= NF_INQ_VARID(ncid,'sorpw_nbii',vid)
            call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw,
      +                 sorpw_nbii,istatus)
@@ -2828,7 +2827,7 @@ c-YuP:      vid=ncvid(ncid,'rfpwr',istatus)
       call ncvpt_doubl2(ncid,vid,start_powurf,count_powurf,tem1,istatus)
 
 cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
-       
+
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
          do kk=1,nmodsa
@@ -2843,7 +2842,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2),
      +           powurfl(1),istatus)
 
-       
+
 cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
@@ -2892,7 +2891,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call ncvpt_doubl2(ncid,vid,start(3),r0_count,ccurpol(1),istatus)
 
       if (ngen.eq.1) then
-      
+
          k=1
          do ll=1,lrzmax
             tr(ll)=curr(k,ll)/3.e9  !Scaling statA/cm**2 ==> A/cm**2
@@ -2923,7 +2922,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
          enddo
          istatus= NF_INQ_VARID(ncid,'energym',vid)
          call ncvpt_doubl2(ncid,vid,start_r0k,count_r0k,tem1,istatus)
-         
+
       endif ! ngen>1
 
 
@@ -2978,7 +2977,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
 cBH110320c     Following only set up for ngen=1
 cBH110320      if (ngen.ge.2)
 cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
-      if (13*lrz*ngen .gt. iyjx2) stop 
+      if (13*lrz*ngen .gt. iyjx2) stop
      &        'netcdfrw2: Need 13*lrz*ngen<(iy+2)*(jx+2)'
       do k=1,ngen
          kkk=(k-1)*13*lrz
@@ -3015,7 +3014,7 @@ cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
 c-YuP:      vid=ncvid(ncid,'powers',istatus)
       istatus= NF_INQ_VARID(ncid,'powers',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start_powers,count_powers,tem1,istatus)
-     
+
 c     Following only set up for ngen=1
 cBH110320      if (ngen.ge.2)
 cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
@@ -3064,12 +3063,12 @@ cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
          call ncvpt_doubl2(ncid,vid,start_fus(2),count_fus(2),
      ~                     tem2,istatus)
       endif
-      
+
       if ( netcdfshort.eq.'long_jp' ) then
 
 
          if (ngen.eq.1) then
-         
+
             k=1
             do ll=1,lrz
                do j=1,jx
@@ -3079,7 +3078,7 @@ cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
             enddo
             istatus= NF_INQ_VARID(ncid,'currv',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,start(2),count(2),tem1,istatus)
-            
+
 c     -YuP:      vid=ncvid(ncid,'pwrrf',istatus)
             do ll=1,lrz
                do j=1,jx
@@ -3103,7 +3102,7 @@ c     -YuP:      vid=ncvid(ncid,'pwrrf',istatus)
             countg(3)=lrz
             istatus= NF_INQ_VARID(ncid,'currv',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,startg(2),countg(2),tem1,istatus)
-            
+
 c     -YuP:      vid=ncvid(ncid,'pwrrf',istatus)
             do ll=1,lrz
                do j=1,jx
@@ -3116,11 +3115,11 @@ c     -YuP:      vid=ncvid(ncid,'pwrrf',istatus)
             istatus= NF_INQ_VARID(ncid,'pwrrf',vid) !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,startg(2),countg(2),tem1,istatus)
          enddo  !  on k=1,ngen
-         
+
          endif  !  on ngen
          startg(4)=1 ! restored
          countg(3)=1 ! restored
-         
+
       endif  ! on netcdfshort.eq.'long_jp'
 
 
@@ -3132,7 +3131,7 @@ cyup      if ( netcdfshort.eq.'longer_f' ) then  !endif at line 3090
          !write(*,*)'netcdfrw2: netcdfshort,n,isave=',netcdfshort,n,isave
          istatus= NF_INQ_VARID(ncid,'f',vid)  !-YuP: NetCDF-f77 get vid
          if (ngen.eq.1) then
-         
+
             if(netcdfshort.eq.'lngshrtf') then
               start1(4)=numrecsave !YuP[2018-09-28]netcdfshort.eq.'lngshrtf'
             else ! 'longer_f'
@@ -3179,17 +3178,17 @@ cyup      if ( netcdfshort.eq.'longer_f' ) then  !endif at line 3090
             startg(3)=1
             startg(4)=1
             startg(5)=numrec1 ! restore (=1 here, anyway)
-            
+
          endif  ! on ngen
 
-            
+
       endif  ! on netcdfshort.eq.'longer_f'
-         
-         
-         
-         
+
+
+
+
 c --- output large arrays only if nstop=0
-      if (nstop.eq.0) then 
+      if (nstop.eq.0) then
 
 c$$$c-YuP:      vid=ncvid(ncid,'currv',istatus)
 c$$$         istatus= NF_INQ_VARID(ncid,'currv',vid)  !-YuP: NetCDF-f77 get vid
@@ -3212,23 +3211,23 @@ c$$$               tem1(i)=pwrrf(j,k,lrindx(ll))
 c$$$            enddo
 c$$$         enddo
 c$$$         call ncvpt_doubl2(ncid,vid,start(2),count(2),tem1,istatus)
-         
-         if ( (netcdfshort.ne.'enabled')  .and. 
+
+         if ( (netcdfshort.ne.'enabled')  .and.
      +        (netcdfshort.ne.'longer_f') .and.
      +        (netcdfshort.ne.'lngshrtf')       ) then ! here n=0 (nstop=0)
-     
+
             istatus= NF_INQ_VARID(ncid,'f',vid)  !-YuP: NetCDF-f77 get vid
 cBH011221: This storage is set up for constant iy as function of radius.
 cBH011221: Needs generalizing. Should we store in reg array to max(iy_)?
 cBH011221: For now, simply stop.
             do ll=1,lrz
-               if (iy_(ll).ne.iymax) 
+               if (iy_(ll).ne.iymax)
      +              stop 'netcdfrw2: Cant handle iy.ne.iymax'
             enddo
 
             if (ngen.eq.1) then
-            
-               k=1 !  
+
+               k=1 !
                if (tavg.ne."disabled") then
                  PRINT *,'netcdfrw2 WARNING: favg is saved (NOT f)'
                  PRINT *,'netcdfrw2 WARN:  but if time(nstop)<tavg1(1)'
@@ -3243,7 +3242,7 @@ cBH011221: For now, simply stop.
                      enddo
                      enddo
                   else  !On tavg = enabled
-                     ! Bob, here is the nstop=0 part, 
+                     ! Bob, here is the nstop=0 part,
                      ! so how can we have favg?
                      do j=1,jx
                      do i=1,iy
@@ -3265,9 +3264,9 @@ c                 temp1 dimensnd 0:iyp1,0,jxp1. Pack in to (1:iy,1:jx)
                !         dimsf= {ydim,xdim,rdim}
                enddo  !On ll
                start1(3)=1 !restore
-               
+
             else  !  ngen.ge.2
-            
+
                do k=1,ngen
                if (tavg.eq."disabled") then
                do ll=1,lrz
@@ -3304,13 +3303,13 @@ c                 temp1 dimensnd 0:iyp1,0,jxp1. Pack in to (1:iy,1:jx)
                endif  !On tavg
                enddo  ! on k
                startg(3)=1
-               startg(4)=1 
-               
+               startg(4)=1
+
             endif  !  on ngen
-               
+
          endif  !  on netcdfshort
       endif  ! on nstop.eq.0
-      
+
 c --- endif ((kopt.eq.0) .and. (n.eq.0)) ---
       endif
 
@@ -3332,7 +3331,7 @@ c$$$c          hflux_a,hflux_b,pdens0
 c$$$c
 c$$$
 c$$$c --- begin if ---
-c$$$      if ((kopt.ne.0) .and. (n.eq.0)) then 
+c$$$      if ((kopt.ne.0) .and. (n.eq.0)) then
 c$$$
 c$$$c.......................................................................
 c$$$cl    2.1 Open previous netCDF file
@@ -3428,7 +3427,7 @@ cl    3.1 set the time-step counter ==> numrec1
       start_npa(3)=numrec1
       start_rk(3)=numrec1
       start_r0k(3)=numrec1
-      
+
       if((netcdfshort.eq.'lngshrtf').and.(isave.ne.0))then
       !YuP[2018-09-28] Saving distr.func. at selected t steps only.
       !Increment index only for steps specified by nsave() array:
@@ -3448,7 +3447,7 @@ cl    3.2 Variables saved at each time-step (numrec1.gt.1)
 
       istatus= NF_INQ_VARID(ncid,'time',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(4),1,timet,istatus)
-      
+
 
       do ll=0,lrzmax
          tr(ll)=reden(kelec,ll)
@@ -3541,20 +3540,20 @@ c-YuP:      vid=ncvid(ncid,'edreicer',istatus)
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
 
       if (knockon.ne."disabled") then
-         
+
       call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=eoe0(1,ll) !YuP[2018-09-24]
       enddo
       istatus= NF_INQ_VARID(ncid,'eoe0',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
-         
+
       istatus= NF_INQ_VARID(ncid,'srckotot',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,start(3),r_count,srckotot,istatus)
-         
+
       istatus= NF_INQ_VARID(ncid,'denfl',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,start(3),r_count,denfl,istatus)
-         
+
       endif                     ! on knockon
 
 c
@@ -3564,11 +3563,11 @@ c
          istatus= NF_INQ_VARID(ncid,'hibrz',vid)
          call ncvpt_doubl2(ncid,vid,start_hibr,count_hibr,
      +                 hibrzp,istatus)
-     
+
          istatus= NF_INQ_VARID(ncid,'sorpw_nbi',vid)
          call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw,
      +                 sorpw_nbi,istatus)
-     
+
          istatus= NF_INQ_VARID(ncid,'sorpw_nbii',vid)
          call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw,
      +                     sorpw_nbii,istatus)
@@ -3586,14 +3585,14 @@ cBH120223:  Removed erroneous divide by dvol(ll) from powrf/powrft
                kkk=kk
                tem1(ll+(kk-1)*lrz)=sorpw_rf(kk,lrindx(ll))
             enddo
-            tem1(ll+kkk*lrz)=sorpw_rfi(1,lrindx(ll)) !For 1 gen species 
+            tem1(ll+kkk*lrz)=sorpw_rfi(1,lrindx(ll)) !For 1 gen species
             tem1(ll+(kkk+1)*lrz)=sorpwt(lrindx(ll))
             tem1(ll+(kkk+2)*lrz)=sorpwti(lrindx(ll))
          enddo
 c     -YuP:      vid=ncvid(ncid,'rfpwr',istatus)
         istatus= NF_INQ_VARID(ncid,'rfpwr',vid) !-YuP: NetCDF-f77 get vid
         call ncvpt_doubl2(ncid,vid,start_rfpwr,count_rfpwr,tem1,istatus)
-         
+
       endif  !On rdcmod
 
 
@@ -3636,7 +3635,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       istatus= NF_INQ_VARID(ncid,'powurfl',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2),
      +           powurfl(1),istatus)
-       
+
 cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
@@ -3780,7 +3779,7 @@ c-YuP:      vid=ncvid(ncid,'taueeh',istatus)
 c-YuP:      vid=ncvid(ncid,'nuestar',istatus)
       istatus= NF_INQ_VARID(ncid,'nuestar',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r0_count,starnue,istatus)
-      
+
 cBH110320c     Following only set up for ngen=1
 cBH110320      if (ngen.ge.2)
 cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
@@ -3818,10 +3817,10 @@ cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
          enddo
       enddo
 c-YuP:      vid=ncvid(ncid,'powers',istatus)
-      istatus= NF_INQ_VARID(ncid,'powers',vid)  !-YuP: NetCDF-f77 get vid      
-      
+      istatus= NF_INQ_VARID(ncid,'powers',vid)  !-YuP: NetCDF-f77 get vid
+
       call ncvpt_doubl2(ncid,vid,start_powers,count_powers,tem1,istatus)
-     
+
 cBH110320c     Following only set up for ngen=1
 cBH110320      if (ngen.ge.2)
 cBH110320    1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
@@ -3869,7 +3868,7 @@ cBH110320    1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
      ~                     tem2,istatus)
          call check_err(istatus)
       endif ! sigmamod
-      
+
 
 c      if (npa_diag .eq. "ncdf_all") then   NEED at least do first and last
       if (npa_diag .ne. "disabled" .and. numrec1.ge.2) then
@@ -3897,8 +3896,8 @@ c-YuP:      vid=ncvid(ncid,'efluxt',istatus)
      +        istatus)
 
       endif
-      
-          
+
+
       if (npa_diag .eq. "ncdf_all") then
 
          istatus= NF_INQ_VARID(ncid,'eflux_npa',vid)
@@ -3915,15 +3914,15 @@ c-YuP:      vid=ncvid(ncid,'efluxt',istatus)
 cyup      if ( netcdfshort.eq.'longer_f' ) then
       if ( (netcdfshort.eq.'longer_f').or.
      +     ((netcdfshort.eq.'lngshrtf').and.(isave.ne.0))  ) then
-     
+
          !YuP[2018-09-27] Added option to save f() only at nsave() steps,
          !rather than at every step.
          !write(*,*)'netcdfrw2: netcdfshort,n,isave=',netcdfshort,n,isave
          ! Here: n>0
          istatus= NF_INQ_VARID(ncid,'f',vid)  !-YuP: NetCDF-f77 get vid
-         
+
          if (ngen.eq.1) then
-         
+
            if(netcdfshort.eq.'lngshrtf') then
              start1(4)=numrecsave !YuP[2018-09-28]netcdfshort.eq.'lngshrtf'
            else ! 'longer_f'
@@ -3944,9 +3943,9 @@ cyup      if ( netcdfshort.eq.'longer_f' ) then
                !         dimsf= {ydim,xdim,rdim,tdim(or tsavedim)}
            enddo
            start1(4)=numrec1 ! restore
-         
+
          else ! ngen>1
-         
+
            if(netcdfshort.eq.'lngshrtf') then
              startg(5)=numrecsave !YuP[2018-09-28]netcdfshort.eq.'lngshrtf'
            else ! 'longer_f'
@@ -3971,17 +3970,17 @@ cyup      if ( netcdfshort.eq.'longer_f' ) then
            startg(3)=1
            startg(4)=1
            startg(5)=numrec1 ! restore
-         
+
          endif ! ngen
-         
+
       endif ! netcdfshort
 
 cBH131030:  Could replace above k=1 output of distn by following
 cBH131030:  output of f for all k, but for now leave it out as
 cBH131030:  the netcdf file many easily get unwieldly large.
-cYuP[2018-09-28] BUT WE MUST DO IT because 'f' was defined 
+cYuP[2018-09-28] BUT WE MUST DO IT because 'f' was defined
 cYuP             with either dims() or dimg(), depending on ngen.
-        
+
 
       if (netcdfshort.ne.'long_jp') then
 
@@ -4031,13 +4030,13 @@ cYuP             with either dims() or dimg(), depending on ngen.
          istatus= NF_INQ_VARID(ncid,'pwrrf',vid)  !-YuP: NetCDF-f77 get vid
          call ncvpt_doubl2(ncid,vid,startg(2),countg(2),tem1,istatus)
          enddo  !  on k=1,ngen
-         
+
          endif  !  on ngen
          startg(4)=1 ! restored
          countg(3)=1 ! restored
 
       endif ! 'long_jp'
-         
+
 
 
 c --- endif (n.gt.0) ---     if at l 3378
@@ -4081,24 +4080,24 @@ c --- full update of data file (last time-step only) ---
      +                              elecfldn(0:lrz+1,1,1)*300
          call ncvpt_doubl2(ncid,vid,start_elecfldn,count_elecfldn,
      +        elecfldn(0,0,0),istatus)
-      endif      
+      endif
 
-      if ( (netcdfshort.ne.'enabled')  .and. 
+      if ( (netcdfshort.ne.'enabled')  .and.
      +     (netcdfshort.ne.'longer_f') .and.
      +     (netcdfshort.ne.'lngshrtf')        ) then ! here: n=nstop
-      
+
          istatus= NF_INQ_VARID(ncid,'f',vid)  !-YuP: NetCDF-f77 get vid
 cBH011221: This storage is set up for constant iy as function of radius.
 cBH011221: Needs generalizing. Should we store in reg array to max(iy_)?
 cBH011221: For now, simply stop.
          do ll=1,lrz
-            if (iy_(ll).ne.iymax) 
+            if (iy_(ll).ne.iymax)
      +           stop 'netcdfrw2: Cant handle iy.ne.iymax'
          enddo
 
          if (ngen.eq.1) then
-         
-            k=1 !  
+
+            k=1 !
             if (tavg.ne."disabled") then
               PRINT *,'netcdfrw2 WARNING: favg is saved (NOT f)'
               PRINT *,'netcdfrw2 WARNING: but if time(nstop) < tavg1(1)'
@@ -4106,9 +4105,9 @@ cBH011221: For now, simply stop.
             endif
             WRITE(*,*)
      +        'netcdfrw2[netcdfshort=disabled]:Write f into mnemonic.nc'
-            WRITE(*,*)'netcdfrw2_4060: For checkup SUM(f),SUM(gone)=', 
+            WRITE(*,*)'netcdfrw2_4060: For checkup SUM(f),SUM(gone)=',
      +                 SUM(f),SUM(gone)
-            WRITE(*,*)'netcdfrw2_4060: For checkup MIN(f),MAX(f)=', 
+            WRITE(*,*)'netcdfrw2_4060: For checkup MIN(f),MAX(f)=',
      +                 MINVAL(f),MAXVAL(f)
             do ll=1,lrz
                if (tavg.eq."disabled") then
@@ -4123,9 +4122,9 @@ cBH011221: For now, simply stop.
                   do i=1,iy
                      temp1(i,j)=favg(i,j,k,lrindx(ll))
                      !if(gone(i,j,k,lrindx(ll)).lt.-0.1) temp1(i,j)=em90
-                     !Note: because of gone, the saved favg can be 
+                     !Note: because of gone, the saved favg can be
                      !smaller than the original favg (removed loss cone).
-                     !Comment the above if(gone...) 
+                     !Comment the above if(gone...)
                      !if you want to leave favg intact.
                   enddo
                   enddo
@@ -4142,7 +4141,7 @@ cBH011221: For now, simply stop.
                !         dimsf= {ydim,xdim,rdim}
             enddo ! ll
             start1(3)=1 ! restore
-            
+
          else  !  ngen.ge.1
 
             do k=1,ngen
@@ -4179,7 +4178,7 @@ cBH011221: For now, simply stop.
 
 
       if (softxry .ne. "disabled" .and. softxry.ne."ncdf_all") then
- 
+
          start_xr(3)=2
          istatus= NF_INQ_VARID(ncid,'eflux',vid)  !-YuP: NetCDF-f77 get vid
          call pack21(eflux,1,nena,1,nva,wkpack,nen,nv)
@@ -4200,12 +4199,12 @@ cl    4. Close netCDF file
 c
       if (n.eq.nstop) then
          istatus = NF_CLOSE(ncid) !-YuP: NetCDF-f77
-         call check_err(istatus)         
+         call check_err(istatus)
       endif
 
       return
       end
-c       
+c
 c
       subroutine check_err(iret)
       integer iret
@@ -4234,11 +4233,11 @@ CMPIINSERT_INCLUDE
 CMPIINSERT_IF_RANK_NE_0_RETURN
  ! save data on mpirank.eq.0 only
 
-      
+
       if (n.ne.nstop) return
       if ((netcdfvecs.eq."irzplt" .and. mplot(l_).eq."enabled")
      +     .or. (netcdfvecs.eq."all")) then
-        
+
          if (netcdfvecal.ne."disabled") then
             igrid=0
             if(netcdfvecal.eq."x-theta") igrid=1
@@ -4289,18 +4288,18 @@ c
 c     This subroutine writes out flux data in netCDF format.
 c     It is called if one of netcdfvecXX = .ne."disabled".
 c     igrid=1:  indicates netcdfvecXX="u-theta", then write the
-c       x,theta components of the fluxes on the code x,theta grid 
+c       x,theta components of the fluxes on the code x,theta grid
 c       (same as distribution functions).
 c     igrid=0: indicates netcdfvecXX = .ne."disabled" and .ne."u-theta",
 c       then write velocity-space fluxes suitable for
 c       vector plot in (x-par,x-perp) coordinates, on an xpar,xperp
 c       grid.
-c     
+c
 c...................................................................
 
       save
       include 'netcdf.inc'
-      
+
       dimension ll_netcdf(lrza),rya_netcdf(lrza),
      +          itl_netcdf(lrza),itu_netcdf(lrza)
 
@@ -4317,18 +4316,18 @@ c...................................................................
       integer lfirst(4)
       data lfirst/4*0/
       data fluxcmpt/"collisional flux  ","electric fld flux ",
-     +              "rf diffusion flux ","sum of fluxes     "/ 
+     +              "rf diffusion flux ","sum of fluxes     "/
 
 
       real*8, allocatable :: wkpack(:) ! local working array for pack21
-     
+
       if ((lefct.lt.1) .or. (lefct.gt.4)) stop 'pltvec:lefct'
 
 c...................................................................
 c     Set up netCDF output on last time step, if
 c     this is first call for a given value of lefct.
 c     It is assumed that lefct is an integer.ge.1, and that
-c     there are lrz (or nirzplt, if netcdfvecs="irzplt") 
+c     there are lrz (or nirzplt, if netcdfvecs="irzplt")
 c     calls to this routine (corresponding
 c     to each of the FP'd flux surfaces for each
 c     value of lefct.
@@ -4337,7 +4336,7 @@ c     lefct=1  ==> collisional flux
 c     lefct=2  ==> electric fld flux
 c     lefct=3  ==> rf diffusion flux
 c     lefct=4  ==> sum of fluxes
-c     
+c
 c     This routine can readily be adapted for
 c     cqlpmod="enabled".
 c...................................................................
@@ -4348,7 +4347,7 @@ c...................................................................
       endif
 
       if (.NOT.ALLOCATED(wkpack)) then ! allocate working array for pack21
-         nwkpack=max(iyjx2, jpxy*ipxy) + 10   ! +10 just in case 
+         nwkpack=max(iyjx2, jpxy*ipxy) + 10   ! +10 just in case
          allocate(wkpack(nwkpack),STAT=istat)
          call bcast(wkpack,zero,SIZE(wkpack))
       endif
@@ -4403,7 +4402,7 @@ c-YuP:         ipxydim=ncddef(ncid,'ipxydim',ipxy,istatus)
 c-YuP:         rdim=ncddef(ncid,'rdim',n_netcdf,istatus)
 c-YuP:         chardim=ncddef(ncid,'chardim',8,istatus)
 c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
-         
+
          istatus= NF_DEF_DIM(ncid, 'jpxydim', jpxy,     jpxydim)  !-YuP: NetCDF-f77
          istatus= NF_DEF_DIM(ncid, 'ipxydim', ipxy,     ipxydim)
          istatus= NF_DEF_DIM(ncid, 'rdim',    n_netcdf, rdim)
@@ -4454,7 +4453,7 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,45,
      +        'Number of parallel momentum points (=jpxydim)',istatus)
          call check_err(istatus)
-         
+
       vid=ncvdef2(ncid,'ipxy',NCLONG,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +     'Number of perp momentum points (=ipxydim)',istatus)
@@ -4463,15 +4462,15 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
       vid=ncvdef2(ncid,'xll',NCDOUBLE,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,32,
      +        'Lower parallel momentum-per-mass, normalized',istatus)
-         
+
       vid=ncvdef2(ncid,'xlu',NCDOUBLE,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,32,
      +        'Upper parallel momentum-per-mass, normalized',istatus)
-         
+
       vid=ncvdef2(ncid,'xpl',NCDOUBLE,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,40,
      +        'Lower perp momentum-per-mass, normalized',istatus)
-         
+
       vid=ncvdef2(ncid,'xpu',NCDOUBLE,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,40,
      +        'Upper perp momentum-per-mass, normalized',istatus)
@@ -4489,7 +4488,7 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
      +        'Generalized plasma minor radius',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,3,
      +        'cms',istatus)
-         
+
       vid=ncvdef2(ncid,'rya_netcdf',NCDOUBLE,1,rdim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,37,
      +        'Normalized radial mesh at bin centers',istatus)
@@ -4502,7 +4501,7 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
      +        'Normalized units',istatus)
          call ncaptc2(ncid,vid,'comment',NCCHAR,39,
      +        'Facility set up only for single species',istatus)
-         
+
       vid=ncvdef2(ncid,'gamma_perp',NCDOUBLE,3,dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,33,
      +        'Perpendicular momentum-space flux',istatus)
@@ -4516,7 +4515,7 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
      +        'Normalized units',istatus)
          call ncaptc2(ncid,vid,'comment',NCCHAR,39,
      +        'Facility set up for one or more species',istatus)
-         
+
       vid=ncvdef2(ncid,'gamma_perp',NCDOUBLE,4,dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,33,
      +        'Perpendicular momentum-space flux',istatus)
@@ -4535,7 +4534,7 @@ cBH021028: This storage is set up for constant iy as function of radius.
 cBH021028: Needs generalizing. Should we store in reg array to max(iy_)?
 cBH021028: For now, simply stop.
          do ll=1,lrz
-            if (iy_(ll).ne.iymax) 
+            if (iy_(ll).ne.iymax)
      +           stop 'netcdfrw2: Cant handle iy.ne.iymax'
          enddo
 
@@ -4544,7 +4543,7 @@ c-YuP:         ydim=ncddef(ncid,'ydim',iy,istatus)
 c-YuP:         rdim=ncddef(ncid,'rdim',n_netcdf,istatus)
 c-YuP:         chardim=ncddef(ncid,'chardim',8,istatus)
 c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
-         
+
          istatus= NF_DEF_DIM(ncid, 'xdim',    jx,       xdim)  !-YuP: NetCDF-f77
          istatus= NF_DEF_DIM(ncid, 'ydim',    iy,       ydim)
          istatus= NF_DEF_DIM(ncid, 'rdim',    n_netcdf, rdim)
@@ -4565,16 +4564,16 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
          count(1)=iy
          count(2)=jx
          count(3)=1
-         
+
          y_dims(1)=ydim
          y_dims(2)=rdim
 
          y_start(1)=1
          y_start(2)=1
-         
+
          y_count(1)=iy
          y_count(2)=1
-         
+
 
       vid=ncvdef2(ncid,'mnemonic',NCCHAR,1,char64dim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,23,
@@ -4603,7 +4602,7 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,35,
      +        'momentum-per-mass dimension (=xdim)',istatus)
          call check_err(istatus)
-         
+
       vid=ncvdef2(ncid,'x',NCDOUBLE,1,xdim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,28,
      +        'normalized momentum-per-mass',istatus)
@@ -4613,42 +4612,42 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
      +        'velocity (momentum-per-mass) norm',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,7,
      +        'cms/sec',istatus)
-         
+
       vid=ncvdef2(ncid,'enorm',NCDOUBLE,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,20,
      +        'Energy normalization',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,3,
      +        'keV',istatus)
-         
+
       vid=ncvdef2(ncid,'iy',NCLONG,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,33,
      +        'max Pitch angle dimension (=ydim)',istatus)
          call check_err(istatus)
-         
+
       vid=ncvdef2(ncid,'y',NCDOUBLE,2,y_dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,36,
      +        'pitch angle at n_netcdf flux surfaces',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,7,
      +        'radians',istatus)
-         
+
       vid=ncvdef2(ncid,'itl_netcdf',NCLONG,1,rdim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,32,
      +        'lower trapped-passing bndy index',istatus)
-         
+
       vid=ncvdef2(ncid,'itu_netcdf',NCLONG,1,rdim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,32,
      +        'upper trapped-passing bndy index',istatus)
-         
+
       vid=ncvdef2(ncid,'rhomax',NCDOUBLE,0,0,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,31,
      +        'Generalized plasma minor radius',istatus)
          call ncaptc2(ncid,vid,'units',NCCHAR,3,
      +        'cms',istatus)
-         
+
       vid=ncvdef2(ncid,'rya_netcdf',NCDOUBLE,1,rdim,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,37,
      +        'Normalized radial mesh at bin centers',istatus)
-         
+
       if (ngen.eq.1) then  !Maintaining backwards compatability
       vid=ncvdef2(ncid,'gamma_x',NCDOUBLE,3,dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,28,
@@ -4657,7 +4656,7 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
      +        'Normalized units',istatus)
          call ncaptc2(ncid,vid,'comment',NCCHAR,39,
      +        'Facility set up for one or more species',istatus)
-         
+
       vid=ncvdef2(ncid,'gamma_theta',NCDOUBLE,3,dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,32,
      +        'Theta-compnt momentum-space flux',istatus)
@@ -4673,7 +4672,7 @@ c-YuP:         char64dim=ncddef(ncid,'char64dim',64,istatus)
      +        'Normalized units',istatus)
          call ncaptc2(ncid,vid,'comment',NCCHAR,39,
      +        'Facility set up for one or more species',istatus)
-         
+
       vid=ncvdef2(ncid,'gamma_theta',NCDOUBLE,4,dims,istatus)
          call ncaptc2(ncid,vid,'long_name',NCCHAR,32,
      +        'Theta-compnt momentum-space flux',istatus)
@@ -4695,8 +4694,8 @@ c-YuP:         call ncclos(ncid,istatus)
          istatus = NF_CLOSE(ncid) !-YuP: NetCDF-f77
 
       endif
-      
-         
+
+
 
 c     The following calculation of velocity space fluxes is copied
 c     from subroutine pltvec.
@@ -4717,7 +4716,7 @@ c     from subroutine pltvec.
             xmaxq=xmax
             target="mainmesh"
          endif
-         
+
 c     If pltlim.ne."disabled", then plot in xpar,xprp-space up
 c     to appropriate limit:
          if (pltlim.ne."disabled") then
@@ -4734,8 +4733,8 @@ c     to appropriate limit:
             xpu=pltlimmm
             xmaxq=pltlimmm
          endif
-         
-c     
+
+c
          call bcast(da,zero,iyjxp1)
          call bcast(db,zero,iyjxp1)
          call bcast(dc,zero,iyjxp1)
@@ -4774,7 +4773,7 @@ c
 
 
  120     continue
-         
+
 c...................................................................
 c     The coefficients of the equation are currently defined on the
 c     same mesh as the distribution function f. The fluxes are best
@@ -4787,18 +4786,18 @@ c     except at the pass/trapped boundary) certain coefficients
 c     are zeroed out or suitably averaged at specific mesh points.
 c     The numbers 1,2,3 appearing in the calls below signify
 c     which coefficient is being treated.
-c     
+c
 c     first the velocity flux coefficients for gfi..
 c...................................................................
 
          call coefmidv(da,1)
          call coefmidv(db,2)
          call coefmidv(dc,3)
-         
+
 c...................................................................
 c     the theta flux coefficients for hfi..
 c...................................................................
-         
+
          call coefmidt(dd,1)
          call coefmidt(de,2)
          call coefmidt(df,3)
@@ -4808,13 +4807,13 @@ c...................................................................
 c
 c        In the following, tam2 and tam3 are u-space fluxes Gamma_x and
 c          sin(theta)*Gamma_theta (in code units)
-c          interpolated onto the code theta,x-mesh. 
-c           
-c          For igrid.eq.0, temp5 and temp4 are the 
+c          interpolated onto the code theta,x-mesh.
+c
+c          For igrid.eq.0, temp5 and temp4 are the
 c          parallel, perpendicular components of flux Gamma,
 c          respectively, on the x,theta-mesh.
 c
-c          For igrid.eq.1, temp5,temp4 are x,theta components, 
+c          For igrid.eq.1, temp5,temp4 are x,theta components,
 c          respectively, of flux Gamma on the theta,x-mesh.
 c
          if (implct .eq. "enabled") then
@@ -4872,13 +4871,13 @@ c
             temp4(itl,j)=temp4(itl-1,j)
             temp4(itu,j)=temp4(itu+1,j)
  244     continue
-         
-c     
+
+c
 c     Above gives:
-c     for igrid.eq.0, 
+c     for igrid.eq.0,
 c       flux flux_perp(u,theta) ~ temp4, flux_par ~ temp5.
 c       These are output to the netcdf file.
-c     for igrid.eq.1, 
+c     for igrid.eq.1,
 c       flux flux_u(theta,u)~temp5, flux_theta~temp4.
 c
 c
@@ -4886,43 +4885,43 @@ c
          if (igrid.eq.0) then
 
 c
-c       The following calls to prppr and dcopy put 
+c       The following calls to prppr and dcopy put
 c       flux_par into xhead, flux_perp into yhead, on an x,y-grid.
-c       (xhead(jpxy,ipxy) has temp1 ptr, 
+c       (xhead(jpxy,ipxy) has temp1 ptr,
 c        yhead(jpxy,ipxy) has temp4 ptr),
 c        and these are output to the netcdf file.
 
          call dcopy(iyjx2,temp5(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
-         
+
          call prppr(target,"norm",xll,xlu,xpl,xpu)
-         
+
          call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
-         
+
          call dcopy(iyjx2,temp4(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
-         
+
          call prppr(target,"norm",xll,xlu,xpl,xpu)
-         
+
          call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
 
          endif  !end igrid.eq.0
-         
-         
-         
-         
+
+
+
+
 c     gamma_par ~ temp1, gamma_prp ~ temp4
-c     For netcdf data:  for each l_, compress into 
+c     For netcdf data:  for each l_, compress into
 c     jpxy*ipxy array and output.
-         
-         
+
+
          if (netcdfnm.ne."disabled" .and. n.eq.nstop) then
-            
-            
+
+
             write(t_,236) mnemonic(1:length_char(mnemonic)),lefct
  236        format(a,"_flux_",i1,".nc")
 c     Open the correct netcdf file, to get ncid.
 c-YuP            ncid = ncopn(t_,NCWRITE,istatus)
             istatus = NF_OPEN(t_, NF_WRITE, ncid) !-YuP: NetCDF-f77
-            
+
 c     Write some data at head of the file:
 
             if (igrid.eq.0) then
@@ -4939,73 +4938,73 @@ c-YuP:                vid=ncvid(ncid,'grid_type',istatus)
 c-YuP:                vid=ncvid(ncid,'lrz',istatus)
             istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,lrz,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'n_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'n_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,n_netcdf,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'ll_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'ll_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,n_netcdf,ll_netcdf,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'jpxy',istatus)
             istatus= NF_INQ_VARID(ncid,'jpxy',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,jpxy,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'ipxy',istatus)
             istatus= NF_INQ_VARID(ncid,'ipxy',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,ipxy,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'xll',istatus)
             istatus= NF_INQ_VARID(ncid,'xll',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,1,xll,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'xlu',istatus)
             istatus= NF_INQ_VARID(ncid,'xlu',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,1,xlu,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'xpl',istatus)
             istatus= NF_INQ_VARID(ncid,'xpl',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,1,xpl,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'xpu',istatus)
             istatus= NF_INQ_VARID(ncid,'xpu',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,1,xpu,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'xpar',istatus)
             istatus= NF_INQ_VARID(ncid,'xpar',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,jpxy,xpar,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'xperp',istatus)
             istatus= NF_INQ_VARID(ncid,'xperp',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,ipxy,xperp,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'rhomax',istatus)
             istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,1,rhomax,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'rya_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'rya_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,n_netcdf,rya_netcdf(1),istatus)
-            
-            
-            
+
+
+
 c     Write the fluxes:
 c     (First, figure out bin number for netcdf file.)
             do ll=1,n_netcdf
                if (l_ .eq. ll_netcdf(ll)) start(3)=ll
             enddo
-            
+
             call pack21(xhead,1,jpxy,1,ipxy,wkpack,jpxy,ipxy)
 c-YuP:                vid=ncvid(ncid,'gamma_par',istatus)
             istatus= NF_INQ_VARID(ncid,'gamma_par',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,start,count,wkpack,istatus)
-            
+
             call pack21(yhead,1,jpxy,1,ipxy,wkpack,jpxy,ipxy)
 c-YuP:                vid=ncvid(ncid,'gamma_perp',istatus)
             istatus= NF_INQ_VARID(ncid,'gamma_perp',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,start,count,wkpack,istatus)
-            
+
 
 
             else   ! igrid.ne.0 case
@@ -5024,52 +5023,52 @@ c-YuP:                vid=ncvid(ncid,'grid_type',istatus)
 c-YuP:                vid=ncvid(ncid,'lrz',istatus)
             istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,lrz,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'n_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'n_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,n_netcdf,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'ll_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'ll_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,n_netcdf,ll_netcdf,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'jx',istatus)
             istatus= NF_INQ_VARID(ncid,'jx',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,jx,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'x',istatus)
             istatus= NF_INQ_VARID(ncid,'x',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,jx,x,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'vnorm',istatus)
             istatus= NF_INQ_VARID(ncid,'vnorm',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,1,vnorm,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'enorm',istatus)
             istatus= NF_INQ_VARID(ncid,'enorm',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,1,enorm,istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'iy',istatus)
             istatus= NF_INQ_VARID(ncid,'iy',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,iy,istatus)
-             
+
 c-YuP:                vid=ncvid(ncid,'itl_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'itl_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,n_netcdf,itl_netcdf(1),istatus)
-             
+
 c-YuP:                vid=ncvid(ncid,'itu_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'itu_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,n_netcdf,itu_netcdf(1),istatus)
-            
+
 c-YuP:                vid=ncvid(ncid,'rhomax',istatus)
             istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,1,rhomax,istatus)
-             
+
 c-YuP:                vid=ncvid(ncid,'rya_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'rya_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,1,n_netcdf,rya_netcdf(1),istatus)
-           
-            
+
+
 c     Write the fluxes (and the pitch angle mesh y):
 c     (First, figure out bin number for netcdf file.)
             do ll=1,n_netcdf
@@ -5079,34 +5078,34 @@ c     (First, figure out bin number for netcdf file.)
                endif
             enddo
             start(4)=k  !For ngen.ge.2 case.
-            
+
 c-YuP:                vid=ncvid(ncid,'y',istatus)
             istatus= NF_INQ_VARID(ncid,'y',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,y_start,y_count,y(1,l_),istatus)
-            
+
             call pack21(temp5,0,iyp1,0,jxp1,wkpack,iy,jx)
 c-YuP:                vid=ncvid(ncid,'gamma_x',istatus)
             istatus= NF_INQ_VARID(ncid,'gamma_x',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,start,count,wkpack,istatus)
-            
+
             call pack21(temp4,0,iyp1,0,jxp1,wkpack,iy,jx)
 c-YuP:                vid=ncvid(ncid,'gamma_theta',istatus)
             istatus= NF_INQ_VARID(ncid,'gamma_theta',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,start,count,wkpack,istatus)
-            
+
             endif   !end igrid options
 
 c-YuP:            call ncclos(ncid,istatus)
             istatus = NF_CLOSE(ncid) !-YuP: NetCDF-f77
-            
+
          endif
-         
+
  190  continue  ! on k=1,ngen
-      
+
       return
       end
-c     
-c     
+c
+c
       integer function length_char(string)
 c     Returns length of string, ignoring trailing blanks,
 c     using the fortran intrinsic len().
@@ -5140,22 +5139,22 @@ C These routines/function convert old routines:
       istatus = NF_DEF_VAR(NCID,VARNAM,XTYPE,NDIMS,VDIMS,vid)
       ncvdef2 = vid
       end
-      
+
       subroutine ncaptc2(NCID, vid, NAME, ATTYPE, LEN, TEXT, istatus)
       INCLUDE 'netcdf.inc'
       CHARACTER*(*) NAME
       CHARACTER*(*) TEXT
       INTEGER istatus,vid,NCID, LEN, ATTYPE
       istatus = NF_PUT_ATT_TEXT(NCID, vid, NAME, LEN, TEXT)
-      return 
+      return
       end
-        
+
       subroutine ncvptc2(NCID, vid, START, COUNTS, TEXT, LEN, istatus)
       INCLUDE 'netcdf.inc'
       CHARACTER*(*) TEXT
       INTEGER istatus,vid,NCID, LEN, START(*), COUNTS(*)
       istatus = NF_PUT_VARA_TEXT(NCID, vid, START, COUNTS, TEXT)
-      return 
+      return
       end
 
       subroutine ncvpt_doubl2(NCID, vid, START, COUNTS,  DVALS, istatus)
@@ -5163,7 +5162,7 @@ C These routines/function convert old routines:
       INTEGER istatus,vid,NCID, START(*), COUNTS(*)
       REAL*8 DVALS(*)
       istatus=NF_PUT_VARA_DOUBLE(NCID, vid, START, COUNTS, DVALS)
-      return 
+      return
       end
 
       subroutine ncvpt_int2(NCID, vid, START, COUNTS,  IVALS, istatus)
@@ -5171,11 +5170,11 @@ C These routines/function convert old routines:
       INTEGER istatus,vid,NCID, START(*), COUNTS(*)
       INTEGER IVALS(*)
       istatus=NF_PUT_VARA_INT(NCID, vid, START, COUNTS, IVALS)
-      return 
+      return
       end
-      
-      
-c      subroutine NCPOPT  
+
+
+c      subroutine NCPOPT
        !!!-YuP: call NCPOPT() commented in files
        ! No similar routine in NetCDF-3
 
@@ -5196,7 +5195,7 @@ c     INTEGER FUNCTION  NF_PUT_VARS_INT(NCID, VARID, START, COUNT, STRIDE, IVALS
 
 c     VARM mapped access to values not contiguous in memory:
 c     INTEGER FUNCTION  NF_PUT_VARM_INT(NCID, VARID, START, COUNT, STRIDE, IMAP, IVALS)
- 
+
 
 c======================================================================
 c======================================================================
@@ -5252,7 +5251,7 @@ c.......................................................................
       allocate(f4ddv(nv_f4d),STAT=istat5)
       allocate(f4ddt(nt_f4d),STAT=istat6)
       allocate(f4d(nr_f4d,nz_f4d,nv_f4d,nt_f4d),STAT=istat7)
-      if (istat1.ne.0 .or. istat2.ne.0 .or. istat3.ne.0 .or. 
+      if (istat1.ne.0 .or. istat2.ne.0 .or. istat3.ne.0 .or.
      +    istat4.ne.0 .or. istat5.ne.0 .or.
      +    istat6.ne.0 .or. istat7.ne.0) then
          WRITE(*,*)'f4dwrite: allocation problem'
@@ -5316,7 +5315,7 @@ c.......................................................................
 
 
       if(fow.eq.'disabled')then
-      
+
 c        Change sign of eqpsi, to get asceding order necessary
 c        for coeff1.  (Remember this when using the spline coeffs.)
          do j=1,nconteqn
@@ -5339,7 +5338,7 @@ c        for coeff1.  (Remember this when using the spline coeffs.)
                rhoin=tab(1)/rhomax
 c              If rhoin.gt.1, point is outside the LCFS.  Leave f4d=0.
                !  Poloidal angle (rmag is major radius of magnetic axis).
-               if (rhoin.lt.one) then 
+               if (rhoin.lt.one) then
                   arg1=zz
                   arg2=rr-rmag
                   if(arg1.eq.zero .and. arg2.eq.zero)  then
@@ -5365,8 +5364,8 @@ c              If rhoin.gt.1, point is outside the LCFS.  Leave f4d=0.
             enddo ! iz
             !pause
          enddo ! ir
-      
-      elseif(fow.eq.'hybrid' .or. fow.eq.'full')then 
+
+      elseif(fow.eq.'hybrid' .or. fow.eq.'full')then
 ! Not applicable in this version
 !         do ir=1,nr_f4d
 !            rloc=f4dr(ir)  ! local R
@@ -5374,7 +5373,7 @@ c              If rhoin.gt.1, point is outside the LCFS.  Leave f4d=0.
 !            zloc=f4dz(iz)  ! local Z
 !            do iv=1,nv_f4d
 !               vn=f4dv(iv)*vnorm ! local v
-!            do it=1,nt_f4d 
+!            do it=1,nt_f4d
 !               pitch=f4dt(it)    ! local pitch
 !               call fow_tdfinterp(k,vn,pitch,rloc,zloc,f4d(ir,iz,iv,it))
 !            enddo ! it
@@ -5393,22 +5392,22 @@ c.......................................................................
 c  Some printing:
 c$$$      do ir=1,nr_f4d
 c$$$         iz=33
-c$$$         WRITE(*,*) 'f4d(ir,iz,1,:), ir,iz=', ir,iz 
+c$$$         WRITE(*,*) 'f4d(ir,iz,1,:), ir,iz=', ir,iz
 c$$$         WRITE(*,100) (f4d(ir,iz,1,i),i=1,nt_f4d)
-c$$$         WRITE(*,*) 'f4d(ir,iz,2,:), ir,iz=', ir,iz 
+c$$$         WRITE(*,*) 'f4d(ir,iz,2,:), ir,iz=', ir,iz
 c$$$         WRITE(*,100) (f4d(ir,iz,2,i),i=1,nt_f4d)
-c$$$         WRITE(*,*) 'f4d(ir,iz,:,1), ir,iz=', ir,iz 
+c$$$         WRITE(*,*) 'f4d(ir,iz,:,1), ir,iz=', ir,iz
 c$$$         WRITE(*,100) (f4d(ir,iz,j,1),j=1,nv_f4d)
-c$$$         WRITE(*,*) 'f4d(ir,iz,:,nt_f4d), ir,iz=', ir,iz 
+c$$$         WRITE(*,*) 'f4d(ir,iz,:,nt_f4d), ir,iz=', ir,iz
 c$$$         WRITE(*,100) (f4d(ir,iz,j,nt_f4d),j=1,nv_f4d)
 c$$$         iz=40
-c$$$         WRITE(*,*) 'f4d(ir,iz,1,:), ir,iz=', ir,iz 
+c$$$         WRITE(*,*) 'f4d(ir,iz,1,:), ir,iz=', ir,iz
 c$$$         WRITE(*,100) (f4d(ir,iz,1,i),i=1,nt_f4d)
-c$$$         WRITE(*,*) 'f4d(ir,iz,2,:), ir,iz=', ir,iz 
+c$$$         WRITE(*,*) 'f4d(ir,iz,2,:), ir,iz=', ir,iz
 c$$$         WRITE(*,100) (f4d(ir,iz,2,i),i=1,nt_f4d)
-c$$$         WRITE(*,*) 'f4d(ir,iz,:,1), ir,iz=', ir,iz 
+c$$$         WRITE(*,*) 'f4d(ir,iz,:,1), ir,iz=', ir,iz
 c$$$         WRITE(*,100) (f4d(ir,iz,j,1),j=1,nv_f4d)
-c$$$         WRITE(*,*) 'f4d(ir,iz,:,nt_f4d), ir,iz=', ir,iz 
+c$$$         WRITE(*,*) 'f4d(ir,iz,:,nt_f4d), ir,iz=', ir,iz
 c$$$         WRITE(*,100) (f4d(ir,iz,j,nt_f4d),j=1,nv_f4d)
 c$$$      enddo  ! On ir
 c$$$ 100  format(10ES10.2)
@@ -5476,11 +5475,11 @@ c======================================================================
       use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
-c --- include file for netCDF declarations 
+c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
       include 'netcdf.inc'
 CMPIINSERT_INCLUDE
-      
+
 c     nr_f4d,nz_f4d are R,Z grid dimensions set in namelist
 c     nv_f4d,nt_f4d are dims of normalized vel and of pitch angle grids.
       real*8, dimension(:) :: f4dr(nr_f4d),f4dz(nz_f4d),
@@ -5527,7 +5526,7 @@ c     Define vector of dimensions
       dims(4)=dim_nt_f4d
 
 c     Define netCDF variables
-      
+
       ltitle='CQL3D 4D Distn Function (R,Z,v,pitch): '//version
       if( length_char(ltitle).gt.128 ) stop 'Adjust ltitle in f4dwrite'
       call ncaptc2(ncid,NCGLOBAL,'title',NCCHAR,length_char(ltitle),
@@ -5657,7 +5656,7 @@ c     Define netCDF variables
      +          '2*pi*sin(pitch)*dpitch',istatus)
       call ncaptc2(ncid,vid,'long_name2',NCCHAR,36,
      +          'vel space pitch angle volume element',istatus)
-      
+
       vid=ncvdef2(ncid,'f4d',NCDOUBLE,4,dims,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +          'Distribution function on R,Z,v,pitch grid',istatus)
@@ -5748,6 +5747,3 @@ c.......................................................................
       return
 
       end
-      
-
-

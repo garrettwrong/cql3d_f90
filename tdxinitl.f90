@@ -651,7 +651,7 @@ contains
 
 !     tauegyz, eparc, eperc   ! YuP: tauegyz or tauegy?
       do 3 k=1,ngen
-         if(tauegy(k,0).gt.0.) & ! YuP-101220: changed tauegyz to tauegy ! 
+         if(tauegy(k,0).gt.0.) & ! YuP-101220: changed tauegyz to tauegy !
               call tdxin13d(tauegy,rya,lrzmax,ngena,k,negy(k),megy(k))
          if(torloss(k).ne."disabled")  then
             call tdxin13d(eparc,rya,lrzmax,ngena,k,ntorloss(k), &

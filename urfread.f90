@@ -287,7 +287,7 @@ contains
             call dcopy(nrayelt(iray,k),ws(1:nrayelt(iray,k), &
                  iray,krfn(k)),1, &
 !BH081106     &         ws(1,iray,k),krfn(k))   Causes big bug when
-!BH081106                                krfn(k).ne.1: i.e., neg B0. 
+!BH081106                                krfn(k).ne.1: i.e., neg B0.
                  ws(1:nrayelt(iray,k),iray,k),1)
             call dcopy(nrayelt(iray,k),seikon(1:nrayelt(iray,k), &
                  iray,krfn(k)),1, &

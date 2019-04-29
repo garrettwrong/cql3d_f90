@@ -1,4 +1,3 @@
-
 !
 module frplteq_mod
 
@@ -56,7 +55,7 @@ contains
 
     call micfrplt
 
-    !---- PLOTS in (R,Z) ---------------------------------------------------   
+    !---- PLOTS in (R,Z) ---------------------------------------------------
     rmincon1=rmincon
     if(machine.eq."mirror") rmincon1=-rmaxcon
 
@@ -86,7 +85,7 @@ contains
           CALL PGSWIN(rbot,rtop,zbot,ztop)
           CALL PGWNAD(rbot,rtop,zbot,ztop)  ! limits
           CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
-          if(machine.eq."mirror") then      
+          if(machine.eq."mirror") then
           CALL PGLAB('X (cms)','Z (cms)', 'NBI Deposition')
           else
           CALL PGLAB('Major radius (cms)','Vert height (cms)', 'NBI Deposition')
@@ -177,7 +176,7 @@ contains
           RPG1=RPTS(I)
           if(machine.eq."mirror") then
              RPG1=XPTS(I)
-             !area to the left of Z-axis is included, 
+             !area to the left of Z-axis is included,
              ! so the horizontal axis is X
           endif
           RPG2=ZPTS(I)
@@ -188,7 +187,7 @@ contains
 
 
 
-    !---- PLOTS in (X,Y) (top view) -------------------------------------------   
+    !---- PLOTS in (X,Y) (top view) -------------------------------------------
     rbot=.1
     rtop=.9
           CALL PGPAGE
@@ -196,7 +195,7 @@ contains
     RBOT=-rmaxcon
     RTOP= rmaxcon
           CALL PGSWIN(rbot,rtop,rbot,rtop)
-          CALL PGWNAD(-xyplotmax,xyplotmax,-xyplotmax,xyplotmax) ! limits 
+          CALL PGWNAD(-xyplotmax,xyplotmax,-xyplotmax,xyplotmax) ! limits
           CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
           CALL PGLAB('X (cms)','Y (cms)','NBI Deposition')
     ! Plot circles for the largest and smallest FP surfaces.
@@ -215,14 +214,14 @@ contains
        RTAB2(iline)= r_surf*sin(tora)
     enddo
           CALL PGLINE(nline,RTAB1,RTAB2)
-    r_surf=rpcon(1)  ! R radius of smallest FP surf, outboard 
+    r_surf=rpcon(1)  ! R radius of smallest FP surf, outboard
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
           CALL PGLINE(nline,RTAB1,RTAB2)
-    r_surf=rmcon(1)  ! R radius of smallest FP surf, inboard 
+    r_surf=rmcon(1)  ! R radius of smallest FP surf, inboard
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
@@ -275,7 +274,7 @@ contains
 
 
 
-    !--------------------------------------------------------------------      
+    !--------------------------------------------------------------------
     !sadness
 200 continue ! to skip plots
 

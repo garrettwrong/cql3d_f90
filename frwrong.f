@@ -4,7 +4,7 @@ c
       use param_mod
       use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-CMPIINSERT_INCLUDE     
+CMPIINSERT_INCLUDE
 
 ! print error messages - on mpirank.eq.0 only
 CMPIINSERT_IF_RANK_EQ_0
@@ -20,7 +20,7 @@ CMPIINSERT_IF_RANK_EQ_0
         WRITE(*,10990)
       endif
 CMPIINSERT_ENDIF_RANK
-      
+
 10010 format("kspeci not properly input for use with fr-module")
 10030 format("subroutine freyasou - loop 110")
 10040 format("subroutine freyasou - rcon iteration -meth2")

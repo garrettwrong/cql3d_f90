@@ -23,7 +23,7 @@ c     To pass these freya namelist in frcomm.h77 to comm.h
       beamplse_=beamplse
       beampon_=beampon
       beampoff_=beampoff
-      
+
 
 c..................................................................
 c     This routine controls all of the NFREYA routines.
@@ -39,7 +39,7 @@ c..................................................................
 
 c..................................................................
 c     First initialize some (iteration or time dependent) data.
-c     [Possible dependence is on equilibrium, average temp, 
+c     [Possible dependence is on equilibrium, average temp,
 c      density, etc.   Check in frstup.]
 c..................................................................
 
@@ -48,7 +48,7 @@ c..................................................................
      1  nprim,nimp,zeffctv,zshift)
 
 c.......................................................................
-c     zshift if frstup above is passed back from comm.h data to 
+c     zshift if frstup above is passed back from comm.h data to
 c     adjust beam pivot height according to any shift in the equilibrim.
 c.......................................................................
 
@@ -71,7 +71,7 @@ c..................................................................
      +                    zax,zmin,zmax
       call freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
       write(*,*) 'Done calling freya...'
-      if (ipts.eq.0) 
+      if (ipts.eq.0)
      1       write(*,*)'frnfreya: WARNING, ipts=0, NB missed plasma?'
 
 c..................................................................
@@ -79,7 +79,7 @@ c     Compute the total number of particles/sec actually deposited in
 c     the plasma. This requires subtracting off from the neutral current
 c     the fraction that are lost at the aperture and the fraction
 c     lost at the walls. ORBIT EFFECTS ARE NOT CURRENTLY CONSIDERED.
-c     [2014-5: cql3d-fow now accounts for gc orbits and gyro-radius 
+c     [2014-5: cql3d-fow now accounts for gc orbits and gyro-radius
 c      offsets.]
 c     Note that in the event that Freya input variable bptor is
 c     used, we are specifying the total power injected into the tokamak

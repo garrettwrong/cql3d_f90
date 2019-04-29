@@ -13,7 +13,7 @@ c     ONETWO DIVERGENCE
 
 c................................................................
 
-      common /nub/ 
+      common /nub/
      &  bion(ke,kb),bneut(ke,kb)
      &  ,beamof,ebeam(ke,kb)
      &  ,ennub(k_),fap(ke,kb),fwall(ke,kb)
@@ -58,7 +58,7 @@ cYuP110316     &  ,wb01(ke,kb),wb00(ke,kb),npts,int_space1
       pointer xpts,ypts,zpts,rpts  ! (1:npart)
 c     ONETWO DIVERGENCE
       pointer vx,vy,vz  ! (1:npart)
-      dimension xpts(:),ypts(:),zpts(:),rpts(:),vx(:),vy(:),vz(:)   
+      dimension xpts(:),ypts(:),zpts(:),rpts(:),vx(:),vy(:),vz(:)
       common /xyzpts/ xpts,ypts,zpts,rpts,vx,vy,vz
 c................................................................
 
@@ -81,12 +81,12 @@ c................................................................
      &  ,ialign30,ifred,ialign31,banktime,extime,nterow
      &  ,jterow(10),ilastp,itimav,ialign32,vid,ddebug(50)
      &  ,ncorin,iotoray
-cBH070410  mplot removed since not used and possible conflict 
+cBH070410  mplot removed since not used and possible conflict
 cBH070410  with other use of this variable name.
 
 c................................................................
 
-      character*8 namep,namei 
+      character*8 namep,namei
 
       common /ions/     namep(kprim),namei(kimp),namen(2),atw(kion)
      &  ,dzdtim(k_,kimp)

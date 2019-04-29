@@ -55,7 +55,7 @@ use aindflt1_mod, only : aindflt1
 use ainalloc_mod, only : ainalloc
 use aindfpa_mod , only : ain_transcribe
 use achiefn_mod, only : achiefn
- 
+
 implicit integer (i-n), real*8 (a-h,o-z)
 save
 

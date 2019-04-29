@@ -24,17 +24,17 @@ module eqrhopsi_mod
   use iso_c_binding, only : c_double
   real(c_double), private :: btor00,bthr00,bmod00
   save
-  
+
 contains
-  
+
   subroutine eqrhopsi(generate)
     use aminmx_mod, only : aminmx
     implicit integer (i-n), real*8 (a-h,o-z)
     character*8 generate
-    
+
     parameter(nworka=3*nconteqa+1)
     dimension workk(nworka)
-    
+
     !..................................................................
     !     This routine determines an array eqrho(eqpsi(k)) where
     !     k=1,...,nconteqn, eqpsi is a value of psi (equilibrium
@@ -42,7 +42,7 @@ contains
     !     (sqrt(toroidal flux),sqrt(area), sqrt(volume),
     !     radial extent of flux surface, normalized poloidal flux,
     !     or normalized sqrt(pol flux), according to the value
-    !     of radcoord.  See cqlinput_help.) 
+    !     of radcoord.  See cqlinput_help.)
     !     The eqpsi array can be provided externally
     !     (generate="disabled") or it can be generated within
     !     this routine (generate="enabled"). [It is called with
@@ -50,14 +50,14 @@ contains
     !     Also, determines some approximate geometric quantities
     !     of the eqdsk.
     !..................................................................
-    
+
     !......................................................................
     !     General, non-circular flux-surface psi values, epsi, have been
     !     set up from eqdsk, topeol, or elliptical plasma models, depending
     !     on eqmod.ne.'disabled' and eqsource.  epsi, at this point is an
     !     decreasing function from the magnetic axis to the plasam edge.
     !     For eqmod.ne.'disabled', namelist eqsource gives the source of
-    !     equilibrium flux surface data, giving flux (epsi) on a regular 
+    !     equilibrium flux surface data, giving flux (epsi) on a regular
     !     cylindrical coordinate R,Z-grid.  Also provided is f=R*B_phi.
     !     If eqsource="ellipse", then epsi, R, Z etc are determined
     !     from a subroutine eqelpse, and f is determined arbitrarily from
@@ -65,10 +65,10 @@ contains
     !     In order to solve the orbit equations it will be necessary to
     !     know all the derivatives of epsi up to second order. A 2-D
     !     spline package will be used. Set up the NCAR spline package.
-    !     Ordinarily the pol. flux psi value associated with the flux 
+    !     Ordinarily the pol. flux psi value associated with the flux
     !     surface of interest will be labeled by common variable epsicon_.
     !
-    !     091016: Setup of 2D splines and the rmaz,zmag re-calculation 
+    !     091016: Setup of 2D splines and the rmaz,zmag re-calculation
     !             below has been moved up from subroutine eqorbit,
     !             to facilitate de-updown-symmetrization.
     !
@@ -83,7 +83,7 @@ contains
        ibd(2)=4
        ibd(3)=4
        ibd(4)=4
-       
+
        !       2D bicubic spline coeffs of poloidal flux. epsi has sign change
        !       after reading eqdsk, so psimag is max psi, psilim is less.
        call coeff2(nnr,er,nnz,ez,epsi,epsirr,epsizz,epsirz,nnra,ibd, &
@@ -94,7 +94,7 @@ contains
        !     between er(imag-1) and er(imag+1). Use Newton iteration.
        !     imag was determined in subroutine eqrhopsi.
        !..................................................................
-       
+
        !        rmag=er(imag)
        !        zmag=0.
        !        do 5 iter=1,8
@@ -108,10 +108,10 @@ contains
        !     1    epsirz,nnra,0,0)
        !        eqpsi(1)=psimag
        !      endif
-       
-       
+
+
        !     Simple search for more accurate rmag, based in bi-cubic spline
-       !     of the equilibrium data.  Above simple Newton-Raphson failed 
+       !     of the equilibrium data.  Above simple Newton-Raphson failed
        !     for high beta (shifted flux surface) equilibria (bobh, 960309).
        !     [BH091017: Maybe could be cured by better starting imag derived
        !     from the input equilibrium raxis,zaxis, as below?]
@@ -125,7 +125,7 @@ contains
        rmag_old=rmag ! From eqdsk
        zmag_old=zmag
        psimag_old=psimag
-       
+
        if (eqsym.ne."none") then  !i.e., assuming mag axis at 0.
           !BH091017           imag=nnr/2  !nnr set, e.g., by read of eqdsk
           drr=er(2)-er(1)
@@ -136,7 +136,7 @@ contains
              er1=er(imag-1)
              er2=er(imag+1)
              rmag=er(imag-1)
-          else ! imag=1 (could be for eqsource="mirror1" 
+          else ! imag=1 (could be for eqsource="mirror1"
              er1=er(1)
              er2=er(2)
              rmag=er(1)
@@ -158,14 +158,14 @@ contains
           psimag=terp2(rmag,zmag,nnr,er,nnz,ez,epsi,epsirr,epsizz, &
                epsirz,nnra,0,0)
           eqpsi(1)=psimag
-          
+
        else  !i.e.  No symmetrization: Uses entire equilibrium
           !      Perform 2D search for magnetic axis
           drr=er(2)-er(1)
           dzz=ez(2)-ez(1)
           imag=nint((rmag-er(1))/drr)+1  !nint() is nearest integer
           jmag=nint((zmag-ez(1))/dzz)+1
-          !           
+          !
           !        write(*,*)'eqrhopsi: er(imag+-1)',er(imag-1),er(imag),er(imag+1)
           !        write(*,*)'eqrhopsi: ez(jmag+-1)',ez(jmag-1),ez(jmag),ez(jmag+1)
           !        write(*,*)'epsi',
@@ -179,7 +179,7 @@ contains
              er1=er(imag-1)
              er2=er(imag+1)
              rmag=er(imag-1)
-          else ! imag=1 (could be for eqsource="mirror1" 
+          else ! imag=1 (could be for eqsource="mirror1"
              er1=er(1)
              er2=er(2)
              rmag=er(1)
@@ -209,33 +209,33 @@ contains
                epsirz,nnra,0,0)
           eqpsi(1)=psimag
        endif  !On eqsym
-       
+
        write(*,*)'eqrhopsi: psilim=',psilim
        !write(*,*)'eqrhopsi: ez(jmag+-1)',ez(jmag-1),ez(jmag),ez(jmag+1)
-       
+
        write(*,'(a,i6,2e13.4)')'eqrhopsi: imag, rmag_old/new =', &
             imag, rmag_old, rmag
        write(*,'(a,i6,2e13.4)')'eqrhopsi: jmag, zmag_old/new =', &
-            jmag, zmag_old, zmag 
+            jmag, zmag_old, zmag
        write(*,'(a,2e13.4)')'eqrhopsi: psimag_old/new', &
             psimag_old, psimag
        write(*,'(a,e13.4)')'eqrhopsi: epsi(imag,jmag)=',epsi(imag,jmag)
        write(*,'(a,e13.4)')'eqrhopsi: er(imag)=',er(imag)
        write(*,'(a,e13.4)')'eqrhopsi: ez(jmag)=',ez(jmag)
-       
+
        !      endif  !On eqcall
     endif   !On lr_.eq..rzmax
-    
-    
-    
+
+
+
     !..................................................................
-    !     This routine  is called with generate="enabled" from eqcoord 
+    !     This routine  is called with generate="enabled" from eqcoord
     !     when lr_.eq.lrzmax.  radcoord is namelist input indicating
     !     the specific definition of the radial coordinate.
     !..................................................................
-    
+
     write(*,*)'eqrhopsi: generate,radcoord: ',generate,radcoord
-    
+
     if (generate.eq."enabled") then     ! generate eqpsi
        !        nzc=(nnz-1)/2+1                   ! up-down symmetry assumed
        nzc=jmag
@@ -264,7 +264,7 @@ contains
       !
       !       Find jpsimnl such that psi~psilim (at the inboard)
       jpsimnl= jpsimnr ! will be over-written in  a tokamak machine
-      !(but in a mirror machine, the loop is skipped because nrc=1) 
+      !(but in a mirror machine, the loop is skipped because nrc=1)
       do 3 j=nrc-1,1,-1 !going from er(imag-1) to inner smaller er
          jpsimnl=j
          if(epsi(j,nzc).lt.psilim) go to 4
@@ -308,7 +308,7 @@ contains
          eqpsimin=psilim
          eqpsimax=psimag
       else if (eqsource.eq."topeol") then
-         !         Prior to moving calc of 2D spline of epsi to beginning of 
+         !         Prior to moving calc of 2D spline of epsi to beginning of
          !         this subroutine, following call appears to be a bug (BH091016).
          !         [There must have been some prior rearrangement.]
          write(*,*)'eqrhopsi: rmaxcon,zmag,rmag =',rmaxcon,zmag,rmag
@@ -340,25 +340,25 @@ contains
             ! Adjust the last point:
             !          eqpsi(nconteqn)=eqpsi(nconteqn-1)+
             !     +                    0.9*(eqpsi(nconteqn)-eqpsi(nconteqn-1))
-            !YuP: which is same as 
+            !YuP: which is same as
          eqpsi(nconteqn)=eqpsi(nconteqn-1)-0.9*delpsi
-         !So, instead of reducing by the whole delpsi, 
+         !So, instead of reducing by the whole delpsi,
          ! we reduce by 0.9*delpsi, to stay away from eqpsimin
       else ! nconteq = "psigrid"
          !         This calc of eqpsi values chooses eqpsi(nconteqn) slightly
          !         inside the psilim flux surface.
          nconteqn=0
          !for a mirror machine imag=1, so the whole range 1:nnr can be used
-         do 11 j=imag,nnr 
+         do 11 j=imag,nnr
             ! as soon as epsi(j,nzc) got outside of psilim, then:
-            if (epsi(j,nzc).le. eqpsimin) then 
+            if (epsi(j,nzc).le. eqpsimin) then
                !YuP[03-2016]  changed to .le. (was .lt.) see notes below.
                nconteqn=nconteqn+1
                ! !!eqpsi(nconteqn)=eqpsimin+(eqpsi(nconteqn-1)-eqpsimin)*.1
                !YuP[03-2016] The above line appears to have a flaw:
                !(Note: eqpsimin=psilim, and epsi(j,nzc) and eqpsi()
                ! are descending with j).
-               !It can happen that at previous step, 
+               !It can happen that at previous step,
                ! eqpsi(nconteqn-1) was exactly equal to eqpsimin.
                ! In this case, at present step, eqpsi(nconteqn)=eqpsimin
                ! and so we got two points with same value.
@@ -370,12 +370,12 @@ contains
                   !Form the new (last) point, slightly inside psilim :
                   del_psi= eqpsi(nconteqn-2)-eqpsi(nconteqn-1)
                   !Note: del_psi is positive (because eqpsi is descending)
-                  ![this was corrected on 2017-12-05; 
+                  ![this was corrected on 2017-12-05;
                   !the wrong sign got from 03-2016/cql3d-mirror-version]
                   eqpsi(nconteqn)= eqpsimin+del_psi*0.1
-               else 
+               else
                   !The previous point too close from psilim;
-                  !Do not form the new point; 
+                  !Do not form the new point;
                   !consider the previous points as the last :
                   nconteqn=nconteqn-1 ! un-do the increment done above.
                endif
@@ -387,14 +387,14 @@ contains
             !So, epsi(imag,nzc)   --> eqpsi(1)
             !    epsi(imag+1,nzc) --> eqpsi(2)
             !    epsi(imag+2,nzc) --> eqpsi(3)
-            !    ..... until epsi(j,nzc) .le. eqpsimin 
+            !    ..... until epsi(j,nzc) .le. eqpsimin
             !         (got onto or outside of LCFS)
             !          Then, eqpsi(nconteqn)= eqpsimin+del_psi*0.1
             nconteqn=j-imag+1
  11      continue
  12      continue
          endif ! nconteq .ne. "psigrid"
-        
+
          ! Check that eqpsi is strictly descending:
          do j=2,nconteqn
             write(*,'(a,i4,e16.8)')' j,eqpsi(j)-psilim=',j,eqpsi(j)-psilim
@@ -403,9 +403,9 @@ contains
                stop
             endif
          enddo
-        
+
     endif  ! On generate
-      
+
 !..................................................................
 !     Determine the volume,... of the flux surface.
 !..................................................................
@@ -425,9 +425,9 @@ contains
           eqcall="disabled"
        endif
        epsicon_=eqpsi(j)
-        
+
        call eqorbit(epsicon_)
-       
+
        eqfopsi(j)=fpsi_
        eqrpcon(j)=rpcon_
        eqrmcon(j)=rmcon_
@@ -479,7 +479,7 @@ contains
        !     BH140122:  approached.  For example, consider ONETWO type calc
        !     BH140122:  of the LCFS.
        !..................................................................
-       
+
        rmaxcon=rpcon_
        rmincon=rmcon_
        !      write(*,*)'eqrhospi: rmincon,rmaxcon',rmincon,rmaxcon
@@ -510,17 +510,17 @@ contains
           do 32 j=2,nconteqn
              eqrho(j)=sqrt(eqvol(j)/(2.*pi**2*rmag))
 32        continue
-             
+
        elseif (radcoord.eq."rminmax") then
           do 33 j=2,nconteqn
              eqrho(j)=0.5*(eqrpcon(j)-eqrmcon(j))
 33        continue
-               
+
        elseif (radcoord.eq."polflx") then
           do j=2,nconteqn
              eqrho(j)=(eqpsi(j)-psimag)/(psilim-psimag)
           enddo
-                
+
        elseif (radcoord.eq."sqpolflx") then
           do j=2,nconteqn
              eqrho(j)=(eqpsi(j)-psimag)/(psilim-psimag)
@@ -543,7 +543,7 @@ contains
        bthr00=eqbpol_(1)
        bmod00=sqrt(btor00**2+bthr00**2)
        write(*,*)'eqrhospi: rhomax = ',rhomax
-       
+
        !.................................................................
        !     Setup 1D spline coeffs for eqrho (determined according to
        !     radcoord) versus eqpsi(1:nconteqn).

@@ -9,7 +9,7 @@
 !BH180527:  have been removed (at some past time).
 !     iyjx2=(iy+2)*(jx+2)
 !     tem1(iyjx2) --> tem6(iyjx2)
-!     temp1(0:iyp1,0:jxp1) --> temp6(0:iyp1,0:jxp1), 
+!     temp1(0:iyp1,0:jxp1) --> temp6(0:iyp1,0:jxp1),
 !      "equivalenced" to tem1(iyjx2) --> tem6(iyjx2).
 !     item1(iyjx2) --> item6(iyjx2)
 !      "equivalenced" to tem1(iyjx2) --> tem6(iyjx2).
@@ -440,29 +440,29 @@ module comm_mod
   !     Setup block for finite orbit width (FOW) calculations
   !.......................................................................
   character(len=8) ::  fow
-  character(len=16) :: outorb 
+  character(len=16) :: outorb
   character(len=38) :: file_fow_plt ! for saving data on orbit to a file
   !common/fow_control/
   integer :: nmu,npfi
   integer :: nsteps_orb,nptsorb,i_orb_width,iorb2, &
        j0_ini,j0_end,inc_j0, i0_ini,i0_end,inc_i0, &
        j2_ini,j2_end,inc_j2, i2_ini,i2_end,inc_i2
-  ! fow= 'enabled' or 'disabled' 
+  ! fow= 'enabled' or 'disabled'
   ! outorb  ! 'detailed' or 'Not-detailed'
-  ! (saving/not-saving data to a file for plotting)  
-  ! nmu     ! grid sizes for ad.ivariant mu 
-  ! npfi    ! and canonical momentum Pfi; 
+  ! (saving/not-saving data to a file for plotting)
+  ! nmu     ! grid sizes for ad.ivariant mu
+  ! npfi    ! and canonical momentum Pfi;
   ! to setup COM->R lookup table.
   ! nsteps_orb ! Max.number of time steps for orbit integration.
   ! Also used to trace Pfi=const levels for COM->R table
   ! in order to find intersections with mu=const levels.
-  ! nptsorb ! Number of points on a complete orbit 
+  ! nptsorb ! Number of points on a complete orbit
   ! (ityp=0 "main" orbit)
   ! from which ityp=1 "secondary" orbits are launched.
   ! ityp=1 orbit is stopped when it reaches the midplane.
-  ! (Note: secondary orbits are not traced usually, 
+  ! (Note: secondary orbits are not traced usually,
   ! see below, iorb2=0)
-  ! i_orb_width ! 1 -> Normal finite-orbit-width calculations. 
+  ! i_orb_width ! 1 -> Normal finite-orbit-width calculations.
   ! 0 -> V_drift_perp is set to 0 (ZOW approximation)
   ! iorb2  ! set to 1 to perform Runge-Kutta integration for tracing
   ! SECONDARY orbits to midplane; 0 - no RK tracing.
@@ -1314,7 +1314,7 @@ module comm_mod
   !*****************************************************************
 
   real(c_double), pointer :: cqlb(:,:,:,:),cqlc(:,:,:,:),cqle(:,:,:,:),cqlf(:,:,:,:)
-  !common/qlcoef/cqlb,cqlc,cqle,cqlf 
+  !common/qlcoef/cqlb,cqlc,cqle,cqlf
 
   real(c_double), pointer :: bqlm(:,:)  ! (iy,jx)
   !common/qlcoef/ bqlm
@@ -1348,7 +1348,7 @@ module comm_mod
 
   ! maybe bug
   real(c_double) :: jparb(lrza),jparbt(lrza),jparbp(lrza)
-  !common/ar3d/ 
+  !common/ar3d/
   real(c_double) :: rrz(0:lrza), &
        tr(0:lrza),tr1(0:lrza),tr2(0:lrza), &
        tr3(0:lrza),tr4(0:lrza),tr5(0:lrza),drp5(0:lrza), &
@@ -1517,7 +1517,7 @@ module comm_mod
        epsizz(nnra,nnza),epsirz(nnra,nnza), &
        dummypsi(nnra,nnza),eqovrp(nconteqa,2)
 
-  !common/output/ 
+  !common/output/
   integer :: lorbit_,ialign14
   real(c_double) :: rmcon_,rpcon_,zmcon_,zpcon_, &
        bthr_,btoru_,eqdells_,fpsi_,fppsi_,zmax_,btor0_,bthr0_, &
@@ -1880,32 +1880,32 @@ module comm_mod
   ! Setup by call equilib()
 
 
-  !BH170708: Removing FOW material from ZOW code      
+  !BH170708: Removing FOW material from ZOW code
   !$$$C---> Equilibrium B is calc-ed on (R,Z)-grid == (req(ir),zeq(iz))
-  !$$$      common/Beq/ ireq,izeq,dreq,dzeq,odr,odz,req(nreqa),zeq(nzeqa), 
+  !$$$      common/Beq/ ireq,izeq,dreq,dzeq,odr,odz,req(nreqa),zeq(nzeqa),
   !$$$     +       Beqr(nreqa,nzeqa),Beqz(nreqa,nzeqa),Beqphi(nreqa,nzeqa),
   !$$$     +       Beqmod(nreqa,nzeqa), psieq(nreqa,nzeqa) ! [cgs]
   !$$$C---> dreq=(ermax-ermin)/(nreqa-1); odr=1.d0/dreq
   !$$$C---> This block is used by subroutine gc_vel()
-  !$$$C---> The fields at a given point along orbit are calculated  
+  !$$$C---> The fields at a given point along orbit are calculated
   !$$$C---> by bilinear interpolation from four nearest nodes.
-  !$$$ 
+  !$$$
   !$$$      common/border/ iborder(nreqa,nzeqa),
-  !$$$     +  Rplasma_min, Rplasma_max, 
-  !$$$     +  Bplasma_min, Bplasma_max, 
+  !$$$     +  Rplasma_min, Rplasma_max,
+  !$$$     +  Bplasma_min, Bplasma_max,
   !$$$     +  PSIplasma_min, PSIplasma_max ! min/max values within border
   !$$$C---> iborder=0 in plasma; >0 at nodes representing wall.
-  !$$$ 
+  !$$$
   !$$$C---> Unit vector of eq.field (Beq) and its derivative-dep. functions:
   !$$$      common/BeqGrad/
-  !$$$     +  bhri(nreqa,nzeqa),bhzi(nreqa,nzeqa),bhfi(nreqa,nzeqa), 
+  !$$$     +  bhri(nreqa,nzeqa),bhzi(nreqa,nzeqa),bhfi(nreqa,nzeqa),
   !$$$     +  GRr(nreqa,nzeqa), GRz(nreqa,nzeqa), GRf(nreqa,nzeqa),
   !$$$     +  Ori(nreqa,nzeqa), Ozi(nreqa,nzeqa), Ofi(nreqa,nzeqa),
   !$$$     +  GV(nreqa,nzeqa), DRbbf(nreqa,nzeqa)
-  !$$$C---> bh== B/|B|;   
+  !$$$C---> bh== B/|B|;
   !$$$C---> GR== [Bxgrad|B|]/B^2
-  !$$$C---> O == { [Bxgrad|B|]/B^2 + rot(B)/|B| - bhat(B.rotB)/B^2 }/|B| 
-  !$$$C---> GV== dreq*{B.grad|B|}/|B| 
+  !$$$C---> O == { [Bxgrad|B|]/B^2 + rot(B)/|B| - bhat(B.rotB)/B^2 }/|B|
+  !$$$C---> GV== dreq*{B.grad|B|}/|B|
   !$$$
   !$$$
   !$$$
@@ -1939,14 +1939,14 @@ module comm_mod
   !$$$C---> nstp_orb= number of steps along orbit; found after orbit is traced
   !$$$C---> lostorb=1 if orbit is lost to walls,
   !$$$C---> not_complete=1 if not enough steps to complete the orbit,
-  !$$$C---> cmuorb== 0.5(Vprpini^2/B)*(dtorb/dreq)^2, 
+  !$$$C---> cmuorb== 0.5(Vprpini^2/B)*(dtorb/dreq)^2,
   !$$$C---> mcq_drdt== (dreq/dtorb)*mc/q
   !$$$C---> renv== dreq/dtorb
   !$$$C---> Used by subroutine gc_vel()
   !$$$
-  !$$$      common/vdrift/ vdrift_r,vdrift_z,vdrift_phi 
+  !$$$      common/vdrift/ vdrift_r,vdrift_z,vdrift_phi
   !$$$C---> Drift vel.*dtorb/dreq. Saved from gc_vel()
-  !$$$      
+  !$$$
   !$$$
   !$$$C---> Values at all steps along orbit:
   !$$$      pointer t_orb,R_orb,Z_orb,phi_orb,
@@ -1987,7 +1987,7 @@ module comm_mod
   !.......................................................................
   character(len=8) :: frmodp, fr_gyrop, beamplsep
   integer :: mfm1p
-  real(c_double) :: beamponp, beampoffp  
+  real(c_double) :: beamponp, beampoffp
   real(c_double) :: hibrzp(kz,ke,kb)  !kz=nconteqa+2, from param.h
   !common /freycomm/ &
 
@@ -1996,7 +1996,7 @@ module comm_mod
   !The namelist is declared in frname.h and
   !passed to the comm.h related subroutines
   !as arguments of subroutine frnfreya
-  !Similarly, hibrzp and mfmp1 are from freya 
+  !Similarly, hibrzp and mfmp1 are from freya
   !routines through frnfreya arguments.
   !Purpose is communication with cql3d.
   !

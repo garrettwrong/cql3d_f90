@@ -16,7 +16,7 @@ module diaggnde_mod
   !---END USE
 
 contains
-  
+
   subroutine diaggnde
     !implicit integer (i-n), real*8 (a-h,o-z)
     implicit none
@@ -236,7 +236,7 @@ contains
 !     + 'diaggnde: k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)',
 !     +            k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)
 !CMPIINSERT_ENDIF_RANK
-        
+
 !..................................................................
 !     At timet=0. scale the
 !     distribution function to desired initial density.

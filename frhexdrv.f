@@ -1,4 +1,4 @@
-cBH171014: Commenting, since apparently not called, and gfortran 
+cBH171014: Commenting, since apparently not called, and gfortran
 cBH171014: is having a problem with it.
 
 c$$$c
@@ -51,48 +51,48 @@ c$$$c
 c$$$c---get atomic number of impurities
 c$$$c
 c$$$      do 180 i=1,nimp
-c$$$          if(trim(namei(i)).eq.'he' .or. 
-c$$$     +       trim(namei(i)).eq.'HE' .or. 
+c$$$          if(trim(namei(i)).eq.'he' .or.
+c$$$     +       trim(namei(i)).eq.'HE' .or.
 c$$$     +       trim(namei(i)).eq.'He')  iz(i) =  2
-c$$$     
-c$$$          if(trim(namei(i)).eq.'b' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'b' .or.
 c$$$     +       trim(namei(i)).eq.'B' )  iz(i) =  5  ! YuP added [2015]
-c$$$          
-c$$$          if(trim(namei(i)).eq.'c' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'c' .or.
 c$$$     +       trim(namei(i)).eq.'C' )  iz(i) =  6
-c$$$          
-c$$$          if(trim(namei(i)).eq.'o' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'o' .or.
 c$$$     +       trim(namei(i)).eq.'O' )  iz(i) =  8
-c$$$          
-c$$$          if(trim(namei(i)).eq.'si' .or. 
-c$$$     +       trim(namei(i)).eq.'SI' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'si' .or.
+c$$$     +       trim(namei(i)).eq.'SI' .or.
 c$$$     +       trim(namei(i)).eq.'Si')  iz(i) = 14
-c$$$          
-c$$$          if(trim(namei(i)).eq.'ar' .or. 
-c$$$     +       trim(namei(i)).eq.'AR' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'ar' .or.
+c$$$     +       trim(namei(i)).eq.'AR' .or.
 c$$$     +       trim(namei(i)).eq.'Ar')  iz(i) = 18
-c$$$          
-c$$$          if(trim(namei(i)).eq.'cr' .or. 
-c$$$     +       trim(namei(i)).eq.'CR' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'cr' .or.
+c$$$     +       trim(namei(i)).eq.'CR' .or.
 c$$$     +       trim(namei(i)).eq.'Cr')  iz(i) = 24
-c$$$          
-c$$$          if(trim(namei(i)).eq.'fe' .or. 
-c$$$     +       trim(namei(i)).eq.'FE' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'fe' .or.
+c$$$     +       trim(namei(i)).eq.'FE' .or.
 c$$$     +       trim(namei(i)).eq.'Fe')  iz(i) = 26
-c$$$          
-c$$$          if(trim(namei(i)).eq.'ni' .or. 
-c$$$     +       trim(namei(i)).eq.'NI' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'ni' .or.
+c$$$     +       trim(namei(i)).eq.'NI' .or.
 c$$$     +       trim(namei(i)).eq.'Ni')  iz(i) = 28
-c$$$          
-c$$$          if(trim(namei(i)).eq.'kr' .or. 
-c$$$     +       trim(namei(i)).eq.'KR' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'kr' .or.
+c$$$     +       trim(namei(i)).eq.'KR' .or.
 c$$$     +       trim(namei(i)).eq.'Kr')  iz(i) = 36
-c$$$          
-c$$$          if(trim(namei(i)).eq.'mo' .or. 
-c$$$     +       trim(namei(i)).eq.'MO' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'mo' .or.
+c$$$     +       trim(namei(i)).eq.'MO' .or.
 c$$$     +       trim(namei(i)).eq.'Mo')  iz(i) = 42
-c$$$          
-c$$$          if(trim(namei(i)).eq.'w' .or. 
+c$$$
+c$$$          if(trim(namei(i)).eq.'w' .or.
 c$$$     +       trim(namei(i)).eq.'W' )  iz(i) = 74
 c$$$ 180  continue
 c$$$c
@@ -137,9 +137,9 @@ c$$$            if(i.eq.1)hxfrac(j,ib)=hexfrac
 c$$$ 250      continue
 c$$$ 240    continue
 c$$$ 200  continue
-c$$$c---  
+c$$$c---
 c$$$c---get inverse of pseudo cross section
-c$$$c---  
+c$$$c---
 c$$$      do 400 ib=1,mb
 c$$$        if((ib.gt.1).and.(ebkev(ib).eq.ebkev(1)))go to 450
 c$$$        do 420 j=1,3

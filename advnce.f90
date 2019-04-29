@@ -19,7 +19,7 @@ module advnce_mod
   implicit none
   save
 
-  integer, public, target ::  advnce_k 
+  integer, public, target ::  advnce_k
 
 contains
 
@@ -101,13 +101,13 @@ contains
   !     Boundary conditions at x=0  (x=xmax)  that is j=1 (j=jx)
   !     automatically force gamx(i,1) (alpx(i,jx)) to be zero.
   !..................................................................
-  
-  real(c_double) function alpx(i,j) 
+
+  real(c_double) function alpx(i,j)
     integer :: i,j
     alpx =  (da(i,j)*(1.-dj(i,j,advnce_k,l_))+db(i,j)*exp5(j)) * qz(j)
   end function alpx
 
-  real(c_double) function betx(i,j) 
+  real(c_double) function betx(i,j)
     integer :: i,j
     betx =  (db(i,j)*exp5(j)+db(i,j-1)*exm5(j)-da(i,j) &
          *dj(i,j,advnce_k,l_)+da(i,j-1) &
@@ -116,7 +116,7 @@ contains
          *cah(i,j)+vptb(i,lr_)*rbgn
   end function betx
 
-  real(c_double) function gamx(i,j) 
+  real(c_double) function gamx(i,j)
     integer :: i,j
     gamx =  (-da(i,j-1)*dj(i,j-1,advnce_k,l_)+db(i,j-1)*exm5(j)) * qz(j)
   end function gamx
@@ -127,8 +127,8 @@ contains
   !
   !     Define the appropriate average at the p/t boundary
   !..................................................................
-  
-  real(c_double) function cdf(j) 
+
+  real(c_double) function cdf(j)
     integer :: j
     cdf =  (cl(itl-1,j)*(f1j(itl,j)-f1j(itl-1,j)) &
          *eyp5(itl-1,l_)+2. &
@@ -136,10 +136,10 @@ contains
          +cl(itu+1,j)*(f1j(itu+1,j)-f1j(itu,j))*eyp5(itu,l_))
   end function cdf
 
-  real(c_double) function delx(i,j) 
+  real(c_double) function delx(i,j)
     use iso_c_binding, only : c_double
     integer :: i,j
-    !XXXX 
+    !XXXX
     delx = cvmgt( DBLE(&
          (dc(i,j)*(f1j(i+1,j)-f1j(i-1,j))*0.5*dyi(i,l_) &
          -dc(i,j-1)*(f1j(i+1,j-1)-f1j(i-1,j-1))*0.5*dyi(i,l_)) *qz(j)), &
@@ -160,30 +160,30 @@ contains
   !     Boundary conditions at y=0 and y=pi automatically force gamy(1,j)
   !     and alpy(iy,j) to be equal to zero.
   !..................................................................
-  
-  real(c_double) function alpy(i,j) 
+
+  real(c_double) function alpy(i,j)
     integer :: i,j
     alpy =  (dd(i,j)*(1.-di(i,j,advnce_k,l_))+df(i,j)*eyp5(i,l_)) *ry(i,j)
   end function alpy
 
-  real(c_double) function bety(i,j) 
+  real(c_double) function bety(i,j)
     integer :: i,j
-    bety =  (-dd(i,j)*di(i,j,advnce_k,l_) & 
+    bety =  (-dd(i,j)*di(i,j,advnce_k,l_) &
          +df(i,j)*eyp5(i,l_) &
          +dd(i-1,j)*(1.-di(i-1,j,advnce_k,l_)) &
          +df(i-1,j)*eym5(i,l_)) *ry(i,j) &
          +vptb(i,lr_)*rbgn
   end function bety
 
-  real(c_double) function gamy(i,j) 
+  real(c_double) function gamy(i,j)
     integer :: i,j
     gamy =  -ry(i,j)*(dd(i-1,j)*di(i-1,j,advnce_k,l_) - df(i-1,j)*eym5(i,l_))
   end function gamy
 
-  real(c_double) function dely(i,j) 
+  real(c_double) function dely(i,j)
     integer :: i,j
     dely =  ry(i,j)*0.5*dxi(j)*(de(i,j)*(f1i(i,ifp(j))-f1i(i,j-1)) &
-         -de(i-1,j)*(f1i(i-1,ifp(j))-f1i(i-1,j-1))) & 
+         -de(i-1,j)*(f1i(i-1,ifp(j))-f1i(i-1,j-1))) &
          +vptb(i,lr_)*rbgn*temp1(i,j) &
           +vptb(i,lr_)*.5*so(i,j)
   end function dely
@@ -198,7 +198,7 @@ contains
   !     1  +cvmgt(  dc(i,j)*(f1j(i+1,j)-f1j(i-1,j))*0.5*dyi(i,l_),
   !     1  cdf(j),
   !     1  i .ne. itl  .and. i .ne. itu)
-  
+
   real(c_double) function hfu(i,j)
     integer :: i,j
     hfu = dd(i,j)*f2i(i,j) &
@@ -220,7 +220,7 @@ contains
   !     statements necessary to create the sparse matrix which represents
   !     the implicit set of Fokker-Planck equations. The matrix is inverted
   !     via Gaussian elimination (White routines ZSGBFA,ZSGBZL)
-  
+
   !
   !     Below are statement functions which are used to determine
   !     the matrix to be inverted. The i and j are the indices of the
@@ -242,7 +242,7 @@ contains
   !     di(i,j)=delta_i+1/2,j  dj(i,j)=delta_i,j+1/2
   !
   !.......................................................................
-  
+
   real(c_double) function xmm(i,j)
     integer :: i,j
     xmm = (-qz(j)*dc(i,j-1)*dj(i-1,j-1,advnce_k,l_)*dyi(i,l_) &
@@ -251,7 +251,7 @@ contains
 
   real(c_double) function x0m(i,j)
     integer :: i,j
-    x0m = qz(j)*da(i,j-1)*dj(i,j-1,advnce_k,l_)+ry(i,j)*(de(i,j)* & 
+    x0m = qz(j)*da(i,j-1)*dj(i,j-1,advnce_k,l_)+ry(i,j)*(de(i,j)* &
           di(i,j-1,advnce_k,l_)-de(i-1,j)*(1.-di(i-1,j-1,advnce_k,l_)))*0.5*dxi(j) &
           -qz(j)*db(i,j-1)*exm5(j)
   end function x0m
@@ -265,7 +265,7 @@ contains
   real(c_double) function xm0(i,j)
     integer :: i,j
   !  integer, parameter :: l_=1 !XXXXXX
-    xm0 = qz(j)*(dc(i,j)*dj(i-1,j,advnce_k,l_) & 
+    xm0 = qz(j)*(dc(i,j)*dj(i-1,j,advnce_k,l_) &
          -dc(i,j-1)*(1.-dj(i-1,j-1,advnce_k,l_))) &
          *0.5*dyi(i,l_)+ry(i,j)*(dd(i-1,j)*di(i-1,j,advnce_k,l_) &
          -df(i-1,j)*eym5(i,l_)) &
@@ -303,7 +303,7 @@ contains
     integer :: i,j
     x0p = qz(j)*(-da(i,j)*(1.-dj(i,j,advnce_k,l_))-db(i,j)*exp5(j)) &
          +ry(i,j)*(-de(i,j)*di(i,j+1,advnce_k,l_) &
-         +de(i-1,j)*(1.-di(i-1,j+1,advnce_k,l_)))*0.5*dxi(j) 
+         +de(i-1,j)*(1.-di(i-1,j+1,advnce_k,l_)))*0.5*dxi(j)
   end function x0p
 
   real(c_double) function xpp(i,j)
@@ -331,7 +331,7 @@ contains
   !     Theory Mtg; E. Westerhof and A.G. Peters, Computer Physics Comm.,
   !     Vol. 95, p. 131-138 (1996).)
   !.......................................................................
-  
+
 
   !cc   z00f(i,j)=vptb(i,lr_)*(f_(i,j,k,l_)/dtreff+so(i,j)) +
   !cc   +  spasou(i,j,k,l_)
@@ -341,37 +341,37 @@ contains
   !cc   z00itl1(i,j)=z00f(i,j)
   !cc   1           -xpm(i,j)*bsl(j-1,k,l_)-xp0(i,j)*bsl(j,k,l_)
   !cc   2           -xpp(i,j)*bsl(j+1,k,l_)
-  
+
   !     itu+1 case:
-  
+
   !cc   z00itu1(i,j)=z00f(i,j)
   !cc   1           -xmm(i,j)*bsu(j-1,k,l_)-xm0(i,j)*bsu(j,k,l_)
   !cc   2           -xmp(i,j)*bsu(j+1,k,l_)
-  
+
   !     itl or itu case:
-  
+
   !cc   t0ml_(j)=qz(j)*(
   !cc   1 cl(itl-1,j-1)*dj(itl,j-1,k,l_)*eym5(itl,l_))
   !cc   1 +r2y(j)*(-de(itl-1,j)*(1.-di(itl-1,j-1,k,l_)))
   !cc   1 *0.5*dxi(j)
-  
+
   !cc   t00l_(j)=
   !cc   1 +qz(j)*(
   !cc   1 -cl(itl-1,j)*dj(itl,j,k,l_)*eym5(itl,l_)
   !cc   1 +cl(itl-1,j-1)*(1.-dj(itl,j-1,k,l_))*eym5(itl,l_))
   !cc   1 +r2y(j)*(dd(itl-1,j)*(1.-di(itl-1,j,k,l_))
   !cc   1 +df(itl-1,j)*eym5(itl,l_))
-  
+
   !cc   t0pl_(j)=qz(j)*(
   !cc   1 -cl(itl-1,j)*eym5(itl,l_)*(1.-dj(itl,j,k,l_)))
   !cc   1 +r2y(j)*de(itl-1,j)*0.5*dxi(j)*(1.-di(itl-1,j+1,k,l_))
-  
-  
+
+
   !cc   t0mu_(j)=qz(j)*(
   !cc   1 -cl(itu+1,j-1)*dj(itu,j-1,k,l_)*eyp5(itu,l_))
   !cc   1 +r2y(j)*(
   !cc   1 +de(itu,j)*di(itu,j-1,k,l_))*0.5*dxi(j)
-  
+
   !cc   t00u_(j)=
   !cc   1 +qz(j)*(
   !cc   1 +cl(itu+1,j)*dj(itu,j,k,l_)*eyp5(itu,l_)
@@ -380,28 +380,28 @@ contains
   !cc   1 -dd(itu,j)
   !cc   1 *di(itu,j,k,l_)
   !cc   1 +df(itu,j)*eyp5(itu,l_))
-  
+
   !cc   t0pu_(j)=qz(j)*(
   !cc   1 +cl(itu+1,j)*(1.-dj(itu,j,k,l_))*eyp5(itu,l_))
   !cc   1 +r2y(j)*(-de(itu,j)*di(itu,j+1,k,l_)*0.5*dxi(j))
-  
+
   !cc   z00itl(i,j)=z00f(i,j)
   !cc   1           -(t0ml_(j)*bsl(j-1,k,l_)+t00l_(j)*bsl(j,k,l_)
   !cc   2           +t0pl_(j)*bsl(j+1,k,l_)+t0mu_(j)*bsu(j-1,k,l_)
   !cc   3           +t00u_(j)*bsu(j,k,l_)+t0pu_(j)*bsu(j+1,k,l_))
-  
+
   !cc   z00ff(i,j)=cvmgt(z00itu1(i,j),z00itl(i,j),i.eq.(itu+1))
-  
+
   !cc   z00t(i,j)=cvmgt(z00itl1(i,j),z00ff(i,j),i.eq.(itl-1))
-  
+
   !cc   z00(i,j)=cvmgt(z00t(i,j),z00f(i,j),bootcalc.ne."disabled".and.
   !cc   1                                  (i.eq.(itl-1).or.i.eq.itl.or.
   !cc   2                                   i.eq.itu.or.i.eq.(itu+1)))
-  
+
   !.......................................................................
   !     Pass/Trapped boundary statement functions follow..
   !.......................................................................
-  
+
 
   real(c_double) function tmm(j)
     integer :: j
@@ -430,7 +430,7 @@ contains
          dj(itl,j-1,advnce_k,l_)*eyp5(itl,l_) &
          -cl(itu+1,j-1)*dj(itu,j-1,advnce_k,l_)*eyp5(itu,l_)) &
          +r2y(j)*(-de(itl-1,j)*(1.-di(itl-1,j-1,advnce_k,l_))+2.*de(itl,j) &
-         *di(itl,j-1,advnce_k,l_)+de(itu,j)*di(itu,j-1,advnce_k,l_))*0.5*dxi(j) 
+         *di(itl,j-1,advnce_k,l_)+de(itu,j)*di(itu,j-1,advnce_k,l_))*0.5*dxi(j)
   end function t0m
 
   real(c_double) function t00(j)
@@ -494,7 +494,7 @@ contains
 
   real(c_double) function tu0(j)
     integer :: j
-    tu0 = -qz(j)*cl(itu+1,j)*dj(itu+1,j,advnce_k,l_)*eyp5(itu,l_) & 
+    tu0 = -qz(j)*cl(itu+1,j)*dj(itu+1,j,advnce_k,l_)*eyp5(itu,l_) &
          +qz(j)*cl(itu+1,j-1)*eyp5(itu,l_)*(1.-dj(itu+1,j-1,advnce_k,l_)) &
          -r2y(j)*(dd(itu,j)*(1.-di(itu,j,advnce_k,l_)) &
          +df(itu,j)*eyp5(itu,l_))
@@ -577,7 +577,7 @@ contains
     integer :: i,j
     hfi = dd(i,j)*fpi(i,j) &
          +de(i,j)*0.5*dxi(j)*(fpi(i,ifp(j))-fpi(i,j-1)) &
-         +df(i,j)*eyp5(i,l_)*(fpip(i,j)-fpi0(i,j)) 
+         +df(i,j)*eyp5(i,l_)*(fpip(i,j)-fpi0(i,j))
   end function hfi
 
 !..................................................................

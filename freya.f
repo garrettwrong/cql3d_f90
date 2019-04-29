@@ -23,7 +23,7 @@ c     due to neutral beam injection.
 c
 c---------------------------------------------------------------------
 c     BH130329:  Adding capability to read a set of birth point files
-c                from NUBEAM, to compare with results from freya 
+c                from NUBEAM, to compare with results from freya
 c                calculation.
 c                New input variables in frsetup namelist are:
 c                read_birth_pts="enabled", for use of this capability
@@ -34,13 +34,13 @@ c                               Max list length=24.  default='notset'
 c                nbirth_pts_files=number of birth point files.
 c                nbirth_pts= should be same as in all the NUBEAM files
 c
-c                A single beam is assumed, with up to three beam energy 
+c                A single beam is assumed, with up to three beam energy
 c                components.
 c
 c                The shine through, and total power is read from the
 c                files. nbirth_points is checked.  Power and shine
 c                through numbers may vary from file to file.
-c                       
+c
 c
 c---------------------------------------------------------------------
 c     the input quantities to freya are:
@@ -221,10 +221,10 @@ c
 c     the output quantities are:
 c
 c     bion(ie,ib)     intensity of ion beam (particles/s)
-c                     [BH: evidently out of the ion source, before 
+c                     [BH: evidently out of the ion source, before
 c                      neutralization]
 c     bneut(ie,ib)    intensity of neutral beam (particles/s)
-c                     [BH: Coming out of the neutralizer, 
+c                     [BH: Coming out of the neutralizer,
 c                      a fraction of bion]
 c     bpow(ie,ib)     beam power to aperture (w)
 c     ebeam(ie,ib)    particle energy (kev)
@@ -269,7 +269,7 @@ c     particle birth point list is used. nbirth_pts from frcomm.h77
       integer, dimension(3) :: nbirth_cmpts_nub
       real*8, dimension(3) :: birth_rate_cmpts_nub
 
-      character*8 codeid 
+      character*8 codeid
       dimension psi(ki,kj),r(ki),w(kj)
       dimension bpow(ke,kb),eb(ke,kb)
       equivalence(bpow,pbeam)
@@ -297,9 +297,9 @@ c
       real*8 fe_tk, de_tk
       real*8 sgxnloc(kbe)
       real*8 zangrot(kz), znis(kz,kion), zzis(kz,kion)
-c      
+c
       if (read_birth_pts.eq."enabled") then
-      if (.NOT. ALLOCATED(x_nub)) then     
+      if (.NOT. ALLOCATED(x_nub)) then
       allocate(x_nub(nbirth_pts),y_nub(nbirth_pts),z_nub(nbirth_pts))
       allocate(vx_nub(nbirth_pts),vy_nub(nbirth_pts),vz_nub(nbirth_pts))
       allocate(v_nub(nbirth_pts),en_nub(nbirth_pts))
@@ -424,7 +424,7 @@ c          beff=1.
           vbeam(ie,ib) = 1.384e6*sqrt(ebev)  !adjstd for mass, cm/sec
           bion(ie,ib)  = 0.625e19*fbcur(ie,ib)*bcur(ib) ! molecular src
                                        !rate (as I understand, BH)
-                                       !bcur need not be set 
+                                       !bcur need not be set
                                        !in nml, if bptor.ne.0.
                                        !In this case, bneut, bpow are
                                        !set for default bcur()=110.,
@@ -437,7 +437,7 @@ c     &                      ibion,atw(ibion),ie,ib,vbeam(ie,ib)
  20   continue
 c
 c.......................................................................
-cBH130329:  If read_birth_pts="enabled", then read in beam birth points 
+cBH130329:  If read_birth_pts="enabled", then read in beam birth points
 c           from a NUBEAM generated file, as described above.
 c           There may be some unnecessary freya related calculation
 c           since the NUBEAM data-read is shoe-horned in on top of freya
@@ -458,7 +458,7 @@ c        are birth points for particle guiding centers.
             write(*,*)'FREYA WARNING: Stepping back to last file'
             ncalls=ncalls-1
          else
-            write(*,*)'Freya: read_birth_pts case, ncalls=',ncalls   
+            write(*,*)'Freya: read_birth_pts case, ncalls=',ncalls
          endif
          filenm=trim(birth_pts_files(ncalls))
          call read_nubeam_data(filenm,nbirth_pts,atwb,
@@ -490,7 +490,7 @@ c        through components.  [Fix later].
       endif    ! On read_birth_pts.eq."enabled"
 
       if (read_birth_pts.ne."enabled") then  !Skip, if nubeam case
-      
+
 c     ONETWO DIVERGENCE
 c..................................................................
 c     Determine peak electron density, temp and zeff(lr_) for use with
@@ -516,7 +516,7 @@ c
 c
 c... In CQL3D, for nprim=1, nimp=1, main ions in zni(j,1), (j,2)
 c    and zzi(j,1) and zzi(j,2) with general and maxwellian
-c    distributions, respectively. The impurity ion is in 
+c    distributions, respectively. The impurity ion is in
 c    zni(j,3) and zzi(j,3). Also, Zeff has been copied into
 c    zzi(j,nion+2=4). So, for this case we slip
 c    the arrays such that (j,3) - > (j,2) for the impurity
@@ -600,7 +600,7 @@ c     calculate total plasma volume
       write(*,*)'freya: volume(sum of psivol)=',volume
       !Note: psivol is based on eqvol() which is calc-ed by subr.eqvolpsi.
       !Can be a little different from alternative definition
-      ! of flux surface volume as setup in subr.tdrmshst. 
+      ! of flux surface volume as setup in subr.tdrmshst.
 c----------------------------------------------------------------------
 c     begin loop over beams, ib
 c----------------------------------------------------------------------
@@ -609,12 +609,12 @@ c     Following statment executed in subroutine frset.
 c      if (read_birth_pts.eq."enabled") npart=nbirth_pts  !nubeam case
 
 cBH110309      iskip =       1 + (npart-1)/1500
-      maxp=1500000 !Formerly parameter giving max # of ions launched, 
+      maxp=1500000 !Formerly parameter giving max # of ions launched,
                   !according to code comment
       iskip =       1 + (npart-1)/maxp
       ic    = 0
       ipts  = 0
-         
+
       do 200 ib=1,mb  ! 386 lines down to line 989
 
       if (read_birth_pts.ne."enabled") then  !Skip, if nubeam case
@@ -643,7 +643,7 @@ cBH130915: Not sure of effect of this change. Reverting:do 40  i=1,naptr
 c        write(*,*) 'ashape(i,ib) = ',i,ib,ashape(i,ib)
 c        write(*,*) 'iatype(i,ib) before rotate = ',iatype(i,ib)
  40      continue
-c     
+c
 c     Some angles for subroutine rotate
         thetp(ib)=atan2(bvofset(ib),sqrt(bleni(ib)**2-bvofset(ib)**2))
         costp(ib)=cos(thetp(ib))
@@ -786,7 +786,7 @@ c
 c           get pzone (i.e., psi-value) and radial izone
             call zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,potsid(1),psi,
      +           r,w,xpos,ypos,zpos,pzone,izone)
-c         
+c
             vbeam(ie,ib)=v_nub(ii)
 c
           endif                  !On read_birth_pts.ne."enabled"
@@ -794,7 +794,7 @@ c
 c... skip birth data if:  particle missed plasma
 c
             if(izone.ge.mf) go to 170
-c     For removing NBI source at all psi outside of psicutoff: 
+c     For removing NBI source at all psi outside of psicutoff:
           !print*,'Rpos,Zpos, pzone,psicutoff=',rpos,zpos,pzone,psicutoff
           !pause
             if(psicutoff.ne.0.d0  .and. (-pzone).lt.psicutoff) go to 170
@@ -937,7 +937,7 @@ c
             if(xnorm.ne.zero) xnorm = 1./xnorm
  182      zetaz(i,ie,ib) = xnorm*zetaz(i,ie,ib)
 c
-c... get the fraction of trapped ions in each zone. if orbit effects are 
+c... get the fraction of trapped ions in each zone. if orbit effects are
 c    not turned on or itrapfi=0 then this effect is not included.
 c
           do 300 i=1,mfm1
@@ -1050,7 +1050,7 @@ c       to base it on the rho coordinate and rotsid,  and to
 c       fill in the rotsid() array.
       write(*,*)
       write(*,*)'freya, hot ion birth rate vs rotsid, for ib=1, ie=1:3'
-      write(*,*) (rotsid(i),i=1,mfm1) 
+      write(*,*) (rotsid(i),i=1,mfm1)
       write(*,*) (hibrz(i,1,1),i=1,mfm1)
       write(*,*) (hibrz(i,2,1),i=1,mfm1)
       write(*,*) (hibrz(i,3,1),i=1,mfm1)
@@ -1105,10 +1105,10 @@ c     pabs_nub is absorbed (Watts)
 c     en_nub/ie_nub(1:nbirth_pts) is energy/energy-component for each
 c        particle in the list
 c     birth_rate_cmpts_nub,en_avg_cmpts_nub,pabs_cmpts_nub(1:3) are the
-c        neutral particle birth rates, average energy (keV) and power 
+c        neutral particle birth rates, average energy (keV) and power
 c        absorbed for each of the three energy components.
-c 
-  
+c
+
       character*128 filenm
       real*8 atwb
       real*8, dimension(nbirth_pts) :: x_nub,y_nub,z_nub
@@ -1236,7 +1236,7 @@ c     printout birth_rates, as check for consistency
      +     xpos,ypos,zpos,pzone,izone)
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-         
+
 c      dimension psi(ki,*),r(*),z(*)
       dimension psi(ki,*),r(*),z(*)
 

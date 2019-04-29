@@ -1,4 +1,3 @@
-
 module  bsu_mod
 
   !---BEGIN USE
@@ -24,7 +23,7 @@ contains
     !     This routine is used to compute the skewing effect at the p/t bndry
     !     due to the bootstrap effect. It is not used if bootcalc="disabled",
     !     or if advnce="explicit" or if lrz=1
-    !     Subroutine bsu is for the upper theta tp-bndry at i=itu.  
+    !     Subroutine bsu is for the upper theta tp-bndry at i=itu.
     !     There is also a separate subroutine bsl for the lower itl bndry.
     !.........................................................................
 
@@ -112,7 +111,7 @@ contains
 
     endif
 
-    return     
+    return
   end function bsu
 
 end module bsu_mod

@@ -11,7 +11,7 @@
 !
 !
 !..................................................................
-!     define some intrinsic functions that exist 
+!     define some intrinsic functions that exist
 !     in CRAY FORTRAN but are not available on HPs.
 !..................................................................
 !
@@ -73,9 +73,9 @@ module r8subs_mod
   use comm_mod
   integer, private :: IPARMS(100)
   save
-  
+
 contains
-  
+
   real*8 function cvmgm(x,y,z)
     implicit integer (i-n), real*8 (a-h,o-z)
     cvmgm=y
@@ -97,7 +97,7 @@ contains
     if (z) cvmgt=x
     return
   end function cvmgt
-  
+
   integer function luf(px,parray,kn)
     implicit integer (i-n), real*8 (a-h,o-z)
     !
@@ -139,7 +139,7 @@ contains
     implicit integer (i-n), real*8 (a-h,o-z)
     !
     !     IGUESS is dummy.  THIS NEEDS WORK.
-    !     lug(x,table,n,iguess) (MATHLIB) same as luf, 
+    !     lug(x,table,n,iguess) (MATHLIB) same as luf,
     !        but with guess index iguess.
     !     IDEA of this routine is a binary search, starting
     !       at iguess
@@ -151,7 +151,7 @@ contains
     !     YuP added: check that parray(i) is increasing with i
     do i= 2,kn !max(2,iguess), kn
        if(parray(i)-parray(i-1) .lt. 0.d0) then
-          !write(*,*) 'Function LUG: parray(i)=',  parray(1:kn)       
+          !write(*,*) 'Function LUG: parray(i)=',  parray(1:kn)
           write(*,*) 'Function LUG: array/table should be increasing.',i
           goto 5
           !pause
@@ -203,7 +203,7 @@ contains
 !$$$c
 !$$$      end
 
-!Updated D1MACH by BH, 080118: see web, 
+!Updated D1MACH by BH, 080118: see web,
 !   'd1mach revisited: no more uncommenting DATA statements' 1995.
 !    David Gay and Eric Grosse,  Summary written by Bo Einarsson
 !DECK D1MACH
@@ -268,9 +268,9 @@ contains
 !***ROUTINES CALLED  XERMSG
 !***REVISION HISTORY  (YYMMDD)
 !   790101  DATE WRITTEN
-!   960329  Modified for Fortran 90 (BE after suggestions by EHG)      
+!   960329  Modified for Fortran 90 (BE after suggestions by EHG)
 !***END PROLOGUE  D1MACH
-!      
+!
     X = 1.0D0
     B = RADIX(X)
 !$$$      SELECT CASE (I)
@@ -295,7 +295,7 @@ contains
        DMACH(3) = B**(-DIGITS(X))       ! the smallest relative spacing.
        DMACH(4) = B**(1-DIGITS(X))      ! the largest relative spacing.
        DMACH(5) = LOG10(B)
-       
+
        write(*,*)'d1mach_new_f90 : dmach(1:5)=',dmach(1:5)
        ifirst=0
        d1mach=dmach(i)
@@ -2321,7 +2321,7 @@ contains
           DY(I+2) = DTEMP
    50 CONTINUE
       RETURN
-      END subroutine 
+      END subroutine
 
       SUBROUTINE DTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
 !*     .. Scalar Arguments ..
@@ -3467,12 +3467,12 @@ contains
 
 !BH140214: Downloaded dgesv.f and dependencies from Netlib, for use.
 !BH140214: by ampfsoln.  dgesv.f solves set of linear equations.
-!BH140214: Wrote simple test program (commented out below).      
+!BH140214: Wrote simple test program (commented out below).
 !BH140214: Also, commented out dependencies which are already in r8subs.f.
 !BH140214: (Had 1st tried dgesvxx which is more complicated, and as it
 !BH140214: turned out, had an unsatisfied blas routine, so moved on.)
 
-      
+
 !$$$
 !$$$      program simple_test_4_dgesv
 !$$$
@@ -3499,7 +3499,7 @@ contains
 !$$$c      integer N,NRHS,LDA,LDAF,LDB,LDX,N_ERR_BNDS,NPARAMS,INFO
 !$$$      integer N,NRHS,LDA,LDB,INFO
 !$$$c      character*1 FACT,TRANS
-!$$$c      character*1 EQUED   !Output for FACT='E' 
+!$$$c      character*1 EQUED   !Output for FACT='E'
 !$$$c     Check if any diff between 1 and 1d0, etc.
 !$$$      a(1,1)=1d0
 !$$$      a(1,2)=2d0
@@ -3535,7 +3535,7 @@ contains
 !$$$      end
 !$$$
 
- 
+
       SUBROUTINE DGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 !*
 !*  -- LAPACK driver routine (version 3.2) --
@@ -3708,7 +3708,7 @@ contains
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 !*     ..
 !*     .. Local Scalars ..
-      DOUBLE PRECISION   SFMIN 
+      DOUBLE PRECISION   SFMIN
       INTEGER            I, J, JP
 !*     ..
 !*     .. External Functions ..
@@ -3738,9 +3738,9 @@ contains
       IF( M.EQ.0 .OR. N.EQ.0 ) &
          RETURN
 !*
-!*     Compute machine safe minimum 
-!* 
-      SFMIN = DLAMCH('S')  
+!*     Compute machine safe minimum
+!*
+      SFMIN = DLAMCH('S')
 !*
       DO 10 J = 1, MIN( M, N )
 !*
@@ -3757,15 +3757,15 @@ contains
 !*
 !*           Compute elements J+1:M of J-th column.
 !*
-            IF( J.LT.M ) THEN 
-               IF( ABS(A( J, J )) .GE. SFMIN ) THEN 
-                  CALL DSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 ) 
-               ELSE 
-                 DO 20 I = 1, M-J 
-                    A( J+I, J ) = A( J+I, J ) / A( J, J ) 
-   20            CONTINUE 
-               END IF 
-            END IF 
+            IF( J.LT.M ) THEN
+               IF( ABS(A( J, J )) .GE. SFMIN ) THEN
+                  CALL DSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 )
+               ELSE
+                 DO 20 I = 1, M-J
+                    A( J+I, J ) = A( J+I, J ) / A( J, J )
+   20            CONTINUE
+               END IF
+            END IF
 !*
          ELSE IF( INFO.EQ.0 ) THEN
 !*
@@ -4092,14 +4092,14 @@ contains
 !*
 !*  =========== DOCUMENTATION ===========
 !*
-!* Online html documentation available at 
-!*            http://www.netlib.org/lapack/explore-html/ 
+!* Online html documentation available at
+!*            http://www.netlib.org/lapack/explore-html/
 !*
 !*  Definition:
 !*  ===========
 !*
 !*      DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
-!*  
+!*
 !*
 !*> \par Purpose:
 !*  =============
@@ -4141,10 +4141,10 @@ contains
 !*  Authors:
 !*  ========
 !*
-!*> \author Univ. of Tennessee 
-!*> \author Univ. of California Berkeley 
-!*> \author Univ. of Colorado Denver 
-!*> \author NAG Ltd. 
+!*> \author Univ. of Tennessee
+!*> \author Univ. of California Berkeley
+!*> \author Univ. of Colorado Denver
+!*> \author NAG Ltd.
 !*
 !*> \date November 2011
 !*
@@ -4403,29 +4403,29 @@ contains
 !*
 !*  =========== DOCUMENTATION ===========
 !*
-!* Online html documentation available at 
-!*            http://www.netlib.org/lapack/explore-html/ 
+!* Online html documentation available at
+!*            http://www.netlib.org/lapack/explore-html/
 !*
 !*> \htmlonly
-!*> Download IEEECK + dependencies 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ieeeck.f"> 
-!*> [TGZ]</a> 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ieeeck.f"> 
-!*> [ZIP]</a> 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ieeeck.f"> 
+!*> Download IEEECK + dependencies
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ieeeck.f">
+!*> [TGZ]</a>
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ieeeck.f">
+!*> [ZIP]</a>
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ieeeck.f">
 !*> [TXT]</a>
-!*> \endhtmlonly 
+!*> \endhtmlonly
 !*
 !*  Definition:
 !*  ===========
 !*
 !*       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
-!* 
+!*
 !*       .. Scalar Arguments ..
 !*       INTEGER            ISPEC
 !*       REAL               ONE, ZERO
 !*       ..
-!*  
+!*
 !*
 !*> \par Purpose:
 !*  =============
@@ -4471,10 +4471,10 @@ contains
 !*  Authors:
 !*  ========
 !*
-!*> \author Univ. of Tennessee 
-!*> \author Univ. of California Berkeley 
-!*> \author Univ. of Colorado Denver 
-!*> \author NAG Ltd. 
+!*> \author Univ. of Tennessee
+!*> \author Univ. of California Berkeley
+!*> \author Univ. of Colorado Denver
+!*> \author NAG Ltd.
 !*
 !*> \date November 2011
 !*
@@ -4606,29 +4606,29 @@ contains
 !*
 !*  =========== DOCUMENTATION ===========
 !*
-!* Online html documentation available at 
-!*            http://www.netlib.org/lapack/explore-html/ 
+!* Online html documentation available at
+!*            http://www.netlib.org/lapack/explore-html/
 !*
 !*> \htmlonly
-!*> Download ILAENV + dependencies 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaenv.f"> 
-!*> [TGZ]</a> 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaenv.f"> 
-!*> [ZIP]</a> 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaenv.f"> 
+!*> Download ILAENV + dependencies
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaenv.f">
+!*> [TGZ]</a>
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaenv.f">
+!*> [ZIP]</a>
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaenv.f">
 !*> [TXT]</a>
-!*> \endhtmlonly 
+!*> \endhtmlonly
 !*
 !*  Definition:
 !*  ===========
 !*
 !*       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
-!* 
+!*
 !*       .. Scalar Arguments ..
 !*       CHARACTER*( * )    NAME, OPTS
 !*       INTEGER            ISPEC, N1, N2, N3, N4
 !*       ..
-!*  
+!*
 !*
 !*> \par Purpose:
 !*  =============
@@ -4731,10 +4731,10 @@ contains
 !*  Authors:
 !*  ========
 !*
-!*> \author Univ. of Tennessee 
-!*> \author Univ. of California Berkeley 
-!*> \author Univ. of Colorado Denver 
-!*> \author NAG Ltd. 
+!*> \author Univ. of Tennessee
+!*> \author Univ. of California Berkeley
+!*> \author Univ. of Colorado Denver
+!*> \author NAG Ltd.
 !*
 !*> \date November 2011
 !*
@@ -5218,7 +5218,7 @@ contains
 !$$$*
 !$$$  160 CONTINUE
 !$$$*
-!$$$*     12 <= ISPEC <= 16: xHSEQR or one of its subroutines. 
+!$$$*     12 <= ISPEC <= 16: xHSEQR or one of its subroutines.
 !$$$*
 !$$$      ILAENV = IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 !$$$      RETURN
@@ -5230,28 +5230,28 @@ contains
 !*
 !*  =========== DOCUMENTATION ===========
 !*
-!* Online html documentation available at 
-!*            http://www.netlib.org/lapack/explore-html/ 
+!* Online html documentation available at
+!*            http://www.netlib.org/lapack/explore-html/
 !*
 !*> \htmlonly
-!*> Download IPARMQ + dependencies 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iparmq.f"> 
-!*> [TGZ]</a> 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iparmq.f"> 
-!*> [ZIP]</a> 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iparmq.f"> 
+!*> Download IPARMQ + dependencies
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iparmq.f">
+!*> [TGZ]</a>
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iparmq.f">
+!*> [ZIP]</a>
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iparmq.f">
 !*> [TXT]</a>
-!*> \endhtmlonly 
+!*> \endhtmlonly
 !*
 !*  Definition:
 !*  ===========
 !*
 !*       INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
-!* 
+!*
 !*       .. Scalar Arguments ..
 !*       INTEGER            IHI, ILO, ISPEC, LWORK, N
 !*       CHARACTER          NAME*( * ), OPTS*( * )
-!*  
+!*
 !*
 !*> \par Purpose:
 !*  =============
@@ -5259,7 +5259,7 @@ contains
 !*> \verbatim
 !*>
 !*>      This program sets problem and machine dependent parameters
-!*>      useful for xHSEQR and its subroutines. It is called whenever 
+!*>      useful for xHSEQR and its subroutines. It is called whenever
 !*>      ILAENV is called with 12 <= ISPEC <= 16
 !*> \endverbatim
 !*
@@ -5362,10 +5362,10 @@ contains
 !*  Authors:
 !*  ========
 !*
-!*> \author Univ. of Tennessee 
-!*> \author Univ. of California Berkeley 
-!*> \author Univ. of Colorado Denver 
-!*> \author NAG Ltd. 
+!*> \author Univ. of Tennessee
+!*> \author Univ. of California Berkeley
+!*> \author Univ. of Colorado Denver
+!*> \author NAG Ltd.
 !*
 !*> \date November 2011
 !*
@@ -5552,8 +5552,8 @@ contains
 !*
 !*  =========== DOCUMENTATION ===========
 !*
-!* Online html documentation available at 
-!*            http://www.netlib.org/lapack/explore-html/ 
+!* Online html documentation available at
+!*            http://www.netlib.org/lapack/explore-html/
 !*
 !*  Definition:
 !*  ===========
@@ -5563,7 +5563,7 @@ contains
 !*     .. Scalar Arguments ..
 !*      CHARACTER          CA, CB
 !*     ..
-!*  
+!*
 !*
 !*> \par Purpose:
 !*  =============
@@ -5589,10 +5589,10 @@ contains
 !*  Authors:
 !*  ========
 !*
-!*> \author Univ. of Tennessee 
-!*> \author Univ. of California Berkeley 
-!*> \author Univ. of Colorado Denver 
-!*> \author NAG Ltd. 
+!*> \author Univ. of Tennessee
+!*> \author Univ. of California Berkeley
+!*> \author Univ. of Colorado Denver
+!*> \author NAG Ltd.
 !*
 !*> \date November 2011
 !*
@@ -5677,29 +5677,29 @@ contains
 !*
 !*  =========== DOCUMENTATION ===========
 !*
-!* Online html documentation available at 
-!*            http://www.netlib.org/lapack/explore-html/ 
+!* Online html documentation available at
+!*            http://www.netlib.org/lapack/explore-html/
 !*
 !*> \htmlonly
-!*> Download XERBLA + dependencies 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/xerbla.f"> 
-!*> [TGZ]</a> 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/xerbla.f"> 
-!*> [ZIP]</a> 
-!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/xerbla.f"> 
+!*> Download XERBLA + dependencies
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/xerbla.f">
+!*> [TGZ]</a>
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/xerbla.f">
+!*> [ZIP]</a>
+!*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/xerbla.f">
 !*> [TXT]</a>
-!*> \endhtmlonly 
+!*> \endhtmlonly
 !*
 !*  Definition:
 !*  ===========
 !*
 !*       SUBROUTINE XERBLA( SRNAME, INFO )
-!* 
+!*
 !*       .. Scalar Arguments ..
 !*       CHARACTER*(*)      SRNAME
 !*       INTEGER            INFO
 !*       ..
-!*  
+!*
 !*
 !*> \par Purpose:
 !*  =============
@@ -5733,10 +5733,10 @@ contains
 !*  Authors:
 !*  ========
 !*
-!*> \author Univ. of Tennessee 
-!*> \author Univ. of California Berkeley 
-!*> \author Univ. of Colorado Denver 
-!*> \author NAG Ltd. 
+!*> \author Univ. of Tennessee
+!*> \author Univ. of California Berkeley
+!*> \author Univ. of Colorado Denver
+!*> \author NAG Ltd.
 !*
 !*> \date November 2011
 !*

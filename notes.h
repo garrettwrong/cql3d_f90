@@ -25,10 +25,10 @@
 !      -Check nconteq,izeff and multiply are character*8
 !       (integer values now put in through nconteqn,multiplyn).
 !      -Check fpld(,) is type real
-!      -Careful that nrfstep1(3),pwrscale(3),wdscale(3) 
+!      -Careful that nrfstep1(3),pwrscale(3),wdscale(3)
 !       not set if nmodsa.le.2,
 !       nonrf(2),noffrf(2) not set if ngena=1.
-!      -Set bsign=-1. in eqsetup namelist, if the toroidal field 
+!      -Set bsign=-1. in eqsetup namelist, if the toroidal field
 !       in the eqdsk is negative.
 !      -Need to set gamaset to nonzero value for ion simulation.
 !       (Upgrade this?).
@@ -47,7 +47,7 @@
 !      -malloc,free ==> hpalloc,hpdeallc
 !      -Reverse use of drand(iflag) and ranf()
 !      -Reverse use of call system and call ishell
-!      -Need to set environmenatal variables 
+!      -Need to set environmenatal variables
 !       PGPLOT_DIR=(pgplot directory) ,PGPLOT_DEV=/XWINDOW, e.g.
 !      -makefile:remove references to r8lsode and urfpackm.
 !      -cqlinput namelist file cannot have header of characters
@@ -66,7 +66,7 @@
 !     where  f=distribution function in particles per cm**3, and
 !              per velocity**3 (cgs).  For the relatavistic case
 !              velocity is actually (momentum/rest_mass).
-!            vnorm=maximum velocity of the grid (maximum 
+!            vnorm=maximum velocity of the grid (maximum
 !              momentum/rest_mass, for the relativistic case).
 !
 !
@@ -172,7 +172,7 @@
 !
 !  There are (at least) 2 meshes along the magnetic field line:
 !  (1)Subroutine eqfndpsi works with 2D arrays with arguments
-!     l=1:lorbit(lr_),lr_=1,lrzmax.  lorbit(lr_) takes values 
+!     l=1:lorbit(lr_),lr_=1,lrzmax.  lorbit(lr_) takes values
 !     up to lfielda (=250, presently), and gives a fine mesh of
 !     points along a flux surface:
 !        es(1:lorbit(lr_),lr_) is distance along the field line,
@@ -195,4 +195,4 @@
 !                           (psimodel.eq."spline")
 !     bbpsi(           )                     bpsi at z( , )
 !     solrz(  ,      )                       solr at z( , )
-!     
+!
