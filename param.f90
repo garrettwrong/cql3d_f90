@@ -1,9 +1,9 @@
-  !     param.f03
+  !     param.f90
   !**********************************************************************
   !**********************************************************************
-  
+
   !     PARAMETERS CHOSEN BY USER FOLLOW
-  
+
   !..................................................................
   !     version is simply a mnemonic printed out to indicate
   !     the version of the source being run.  Further below, the non-
@@ -51,7 +51,7 @@
   !     the electric field per time step (to obtain a target current).
   !
   !..................................................................
-  
+
   !     PARAMETERS CHOSEN BY USER FOLLOW
 
 module param_mod
@@ -59,15 +59,13 @@ module param_mod
   !---BEGIN USE
 
   !---END USE
-  
-  character version*64
-  parameter(version="cql3d_git_190309.0")
-  character precursr*64
-  parameter(precursr="cql3d_cswim_180101.1")
+
+  character(len=64), parameter :: version="cql3d_git_190309.0_GW"
+  character(len=64), parameter :: precursr="cql3d_git_190309.0"
   parameter(machinea=2)
   !BH081218:  Present usage, machinea=2 works with 32- and 64-bit machines
   parameter(ngena=4)
-  !BH120727:  Moved nmaxa up to 8, for SWIM Plasma State Abridged species 
+  !BH120727:  Moved nmaxa up to 8, for SWIM Plasma State Abridged species
   !BH120727:  list + elec.
   parameter(nmaxa=8)
   !        parameter(mxa=3)     YuP-101216: Not used anymore
@@ -93,7 +91,7 @@ module param_mod
   parameter (nsoa=3)
   !..................................................................
   !     jfla is maximum length of grid for the reduced parallel
-  !     distribution function used for the Besedin-Pankratov 
+  !     distribution function used for the Besedin-Pankratov
   !     knock-on source. Use odd number.
   !..................................................................
   !        parameter (jfla=jxa)    YuP-101216: Not used anymore
@@ -104,9 +102,9 @@ module param_mod
   !*******************************************************************
 
   !..................................................................
-  !     
+  !
   !     i0param is a table length in pitch angle, for translation
-  !     of sin(theta) a given poloidal position into the corresponding 
+  !     of sin(theta) a given poloidal position into the corresponding
   !     equatorial pitch angle.
   !
   !..................................................................
@@ -177,7 +175,7 @@ module param_mod
   parameter(nnra=257)
   parameter(nnza=257)
   parameter(lfielda=250)
-  !$$$P-> Grid size for storing the values 
+  !$$$P-> Grid size for storing the values
   !$$$c     of equilibrium field (Beqr,Beqz,Beqphi, etc.)
   !$$$c     on req(1:nreqa),zeq(1:nzeqa) grid
   !$$$c     for finite-orbit-width (FOW) tracing.
@@ -215,7 +213,7 @@ module param_mod
   !BH060314  or number of harmonics for a single wave mode (presently
   !BH060314  there is some hardwiring to values .le.3).(and some hardwiring
   !BH060314  to values .ge. 3. E.G., nrfstep1,powrf,powurf,powurfi).
-  !BH060314  Need to check this out before changing nmodsa.ne.3! 
+  !BH060314  Need to check this out before changing nmodsa.ne.3!
   !BH060314  (BobH, 990702).  This has been upgraded as follows.
 
   !     nmodsa is maximum of the sum over{ wave types (mrf) times
@@ -224,10 +222,10 @@ module param_mod
   !     nharma is maximum harmonic number for cyclotron interactions.
   !..................................................................
 
-  !      parameter (nraya=1) 
-  !      parameter (nrayelta=1) 
+  !      parameter (nraya=1)
+  !      parameter (nrayelta=1)
   !     YuP 101122: nraya and nrayelta are not used anymore.
-  !     YuP 101122: Instead, nrayn and nrayelts are determined 
+  !     YuP 101122: Instead, nrayn and nrayelts are determined
   !     YuP 101122: in urfsetup by reading rays\' data files.
 
   parameter (nmodsa=155)  !Suggest not using .le.3, unless check
@@ -239,7 +237,7 @@ module param_mod
   !..................................................................
   !     rdcmod related
   !..................................................................
-  parameter(nrdca=10)   !Max number of diffusion coeff files, 
+  parameter(nrdca=10)   !Max number of diffusion coeff files,
   !for rdcmod="format1"
   !
   !..................................................................
@@ -347,10 +345,10 @@ module param_mod
   !        parameter(kjp=maxp+1) YuP-101211: Not used?
 
   !     ibytes is bytes per integer word, for 64 or 32-bit integers.
-  !     (1 byte contains 8 bits).  
+  !     (1 byte contains 8 bits).
   !     It is used for packing data for urf subroutines.
   !     jjxa is 1st multiple of 8 greater than jxa.
-  parameter(ibytes=8/machinea)      
+  parameter(ibytes=8/machinea)
   !        parameter(jjxa=((jxa-1)/ibytes)*ibytes+ibytes)
   !        parameter(ipacka=jjxa/ibytes*nrayelta*nraya) !moved to urfalloc
 
