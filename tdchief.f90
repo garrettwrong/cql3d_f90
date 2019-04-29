@@ -95,7 +95,7 @@ contains
 !     main loops over radius of the toroidal device.
 !..................................................................
 
-      include 'name.h90'
+      include 'name.h'
 !MPIINSERT_INCLUDE
 
       character*8 icall,iplotsxr

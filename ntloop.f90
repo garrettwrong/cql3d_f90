@@ -17,7 +17,7 @@ contains
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 
-      include 'name.h90'
+      include 'name.h'
 
       zdttot=1.0
       if (adimeth.eq."enabled" .and. transp.eq."enabled" &

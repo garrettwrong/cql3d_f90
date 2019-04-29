@@ -90,7 +90,7 @@ contains
 !..................................................................
 
 
-      include 'name.h90'
+      include 'name.h'
 !MPIINSERT_INCLUDE
 
       character*8 icall,iplotsxr

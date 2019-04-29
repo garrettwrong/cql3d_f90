@@ -1,4 +1,4 @@
-!     frname_decl.h90
+!     frname_decl.h
 !
 !.......................................................................
 !     This file will hold all declarations of the namelist variables

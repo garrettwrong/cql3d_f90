@@ -49,9 +49,9 @@ contains
 
       character*1 blank
       character*8 ilrestrt
-      include 'name.h90'
-      include 'frname_decl.h90'
-      include 'frname.h90'
+      include 'name.h'
+      include 'frname_decl.h'
+      include 'frname.h'
 !
 ! --- include file for netCDF declarations
 ! --- (obtained from NetCDF distribution)

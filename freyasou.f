@@ -2,12 +2,12 @@ c
 c
       subroutine freyasou(qx,qy,qz,qr,vx,vy,vz,iqts,curdep,
      1  bmsprd,multiply,multiplyn)
-      use param_mod
       use bcast_mod, only : bcast
       use bcast_mod, only : ibcast
       use comm_mod
       use eqfpsi_mod, only : eqppsi
       use eqfpsi_mod, only : eqfpsi
+      use param_mod
       use r8subs_mod, only : dscal
       use sourcpwr_mod, only :sourcpwr
       use tdnflxs_mod, only : tdnflxs

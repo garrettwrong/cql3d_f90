@@ -111,6 +111,13 @@ exsweep.o: advnce.o coefmidt.o coefmidv.o coefstup.o coefwti.o \
 exsweept.o: advnce.o comm.o diagwrng.o param.o 
 exsweepx.o: advnce.o comm.o diagentr.o diagwrng.o param.o 
 finit.o: bcast.o comm.o lossorbm.o param.o tdreadf.o 
+freyasou.o: bcast.o comm.o eqfpsi.o param.o r8subs.o sourcpwr.o tdnflxs.o \
+	tdtoaray.o urfb0.o zcunix.o
+frinitz.o: comm.o param.o
+frnfreya.o: comm.o frplteq.o param.o
+frsmooth.o: comm.o param.o
+frstup.o: bcast.o comm.o param.o
+frwrong.o: comm.o param.o
 fle.o: bcast.o comm.o diagwrng.o micgetr.o param.o r8subs.o 
 flxfn.o: comm.o diagwrng.o param.o 
 frplteq.o: comm.o param.o r8subs.o tdnflxs.o 
@@ -136,6 +143,8 @@ micxinim.o: comm.o param.o
 micxinit.o: comm.o diagwrng.o micgetr.o param.o tdtry.o zcunix.o 
 micxiniz.o: comm.o diagwrng.o micgetr.o param.o psif.o tdxin13d.o zcunix.o 
 mpilib.o: comm.o param.o r8subs.o 
+netcdfrf.o: bcast.o comm.o pack21.o param.o
+netcdfrw2.o: advnce.o bcast.o comm.o diagentr.o param.o prppr.o r8subs.o zcunix.o
 ntdstore.o: comm.o param.o restvty.o 
 ntloop.o: comm.o param.o 
 pack21.o: bcast.o r8subs.o 
@@ -164,6 +173,7 @@ profiles.o: cfpmodbe.o comm.o param.o profaxis.o tdinterp.o \
 prppr.o: bcast.o comm.o diagwrng.o param.o r8subs.o 
 prpprctr.o: aminmx.o comm.o param.o pltdf.o pltmain.o 
 psif.o: comm.o diagwrng.o param.o zcunix.o 
+r8lsode.o: r8subs.o
 r8subs.o: comm.o 
 rdc_bplt.o: bcast.o comm.o param.o pltdf.o 
 rdc_multi.o: bcast.o comm.o netcdfrf.o param.o r8subs.o rdc_bplt.o \

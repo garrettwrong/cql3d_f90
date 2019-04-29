@@ -28,7 +28,7 @@ contains
 !     that int(R(f_)*d3u0) is constant.
 !.......................................................................
 
-      include 'trans.h90'
+      include 'trans.h'
 
 !.......................................................................
 !     interpolate f_ on the transport velocity mesh, such that:

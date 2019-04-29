@@ -34,7 +34,7 @@ contains
       dimension ism1(0:lsa+1), isdiag(0:lsa+1), isp1(0:lsa+1)
       dimension imaxper(0:lsa+1), iymxper(0:lsa+1), iyhper(0:lsa+1)
 
-      include 'wpadvnc.h90'
+      include 'wpadvnc.h'
       dithta(i,j,l)=0.5-0.5*(1/(i+1))+0.5*(1/(iy_(l)+1-i))
       fpithta(i,j,k,l)=fnhalf(i+1,j,k,l)*(1.-dithta(i,j,l)) + &
         fnhalf(i  ,j,k,l)*dithta(i,j,l)

@@ -1,4 +1,4 @@
-!     name.h90
+!     name.h
 
 !..................................................................
 !     NAMELIST (SETUP0) DECLARATION FOR INPUT

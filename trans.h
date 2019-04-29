@@ -1,4 +1,4 @@
-!     trans.h90
+!     trans.h
 
 !..............................................................
 !     If the transport model is utilized, define the alpha, beta

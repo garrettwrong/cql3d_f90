@@ -18,9 +18,9 @@ contains
 !     to enable complete restart of run
 !.......................................................................
 
-      include 'frname_decl.h90'
-      include 'name.h90'
-      include 'frname.h90'
+      include 'frname_decl.h'
+      include 'name.h'
+      include 'frname.h'
 !MPIINSERT_INCLUDE
 !.......................................................................
 

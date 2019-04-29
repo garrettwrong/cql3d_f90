@@ -34,7 +34,7 @@ contains
       dimension zdn2th(iy),zdn2thb(iy)
       dimension zdnsth(iy),zdnsthb(iy)
 
-      include 'wpadvnc.h90'
+      include 'wpadvnc.h'
 !.......................................................................
 
       call bcast(fxsp(0:iyjx2*ngen*lrors,0,1,1),zero,iyjx2*ngen*lrors)

@@ -27,7 +27,7 @@ contains
 !..............................................................
 
 
-      include 'trans.h90'
+      include 'trans.h'
 
       call bcast(fxsp,zero,iyjx2*ngen*lrors)  !BH080428, why?
       flxout=0.
