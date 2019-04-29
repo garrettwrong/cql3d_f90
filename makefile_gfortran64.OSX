@@ -77,4 +77,3 @@ rebuild:
 clean:
 	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
 	$(DELETE) *.mod
-
