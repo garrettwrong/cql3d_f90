@@ -54,7 +54,6 @@ contains
     endif
 
 
-IF (ANY(ISNAN(energy))) call abort
     energ=ergtkev*energy(kelec,lr_)
     dense=reden(kelec,lr_)
     if (cqlpmod .eq. "enabled") then
@@ -86,10 +85,7 @@ IF (ANY(ISNAN(energy))) call abort
        endif
     endif
     deby=sqrt(energ/(dense*6.*pi*charge**2))
-    print *, 'GGGTRACE'
     do 10 i=1,ntotal
-       !GGG fmass seems okay
-       if (isnan(energy(i,lr_))) call abort
        si=energy(i,lr_)/fmass(i)
        if (cqlpmod .eq. "enabled") si=enrgypa(i,ls_)/fmass(i)
        do 11 k=1,ntotal
@@ -97,7 +93,6 @@ IF (ANY(ISNAN(energy))) call abort
           if (cqlpmod .eq. "enabled") sk=enrgypa(k,ls_)/fmass(k)
           !990131          sf=amax1(si,sk)
           sf=max(si,sk)
-          !print *, 'GGG', i,k,lr_,ls_,si,sk
           vikf=sqrt(sf*ergtkev*2.)          
           gam3=gamt(i,k)*deby*vikf
           !990131          gama(i,k)=(alog(gam3)-.5)

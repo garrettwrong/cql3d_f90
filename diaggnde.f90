@@ -104,8 +104,6 @@ contains
                ! can become unstable in such case.
                ! So, keep f() non-zero in the loss cone,
                ! but do not add such f() to the integrals/sums over d3v.
-!GGGG      tam2(follows tam2) f=0 tau=0
-print *,'GGGGG NRG tam2', j, tam2(j),f(i,j,k,l_),cynt2(i,l_),abs(coss(i,lmdpln_)),tau(i,lr_)
               tam1(j)=tam1(j)+f(i,j,k,l_)*cynt2(i,l_)
               tam3(j)=tam3(j)+f(i,j,k,l_)*cynt2(i,l_)*coss(i,l_)
 !     include vptb=|cos(th0)| * tau
@@ -176,13 +174,11 @@ print *,'GGGGG NRG tam2', j, tam2(j),f(i,j,k,l_),cynt2(i,l_),abs(coss(i,lmdpln_)
 !     Re eqsym: tam2 has tau factor, to be divided below by zmaxpsi.
 !     tau is v*tau_B, and it's over 1/2 orbit if eqsym.ne.none
 !..................................................................
-          print *,'GGGG NRG hn', hn, tam2(j), cint2(j)
           hn=hn+tam2(j)*cint2(j) !actually 1/2 line-density if eqsym.ne.none
 
 !..................................................................
 !     Flux surface averaged energy (per particle)
 !..................................................................
-          !print *,'GGG NRG SN', sn, tam2(j), cint2(j), tcsgm1(j)
           sn=sn+tam2(j)*cint2(j)*tcsgm1(j)
 
 !..................................................................
@@ -226,18 +222,15 @@ print *,'GGGGG NRG tam2', j, tam2(j),f(i,j,k,l_),cynt2(i,l_),abs(coss(i,lmdpln_)
         energym(k,l_)=en/gn*fions(k)  ! at midplane
         enrgypa(k,ls_)=en/gn*fions(k) ! at midplane
         if (l_ .eq. lmdpln_) then
-           print *, 'GGGG NRG',sn,hn,fions(k) ! sn, hn arr zero
           energy(k,lr_)=sn/hn*fions(k) ! FSA for ZOW only
           ! at n>0, this definition will be over-written by FOW/ZOW
           ! universal procedure: through reconstruction of local f(R,Z).
 !BH080502          wpar(k,lr_)=wpar_*fions(k)/zmaxpsi(lr_)*ergtkev
 !BH080502          wperp(k,lr_)=wperp_*fions(k)/zmaxpsi(lr_)*ergtkev
 !BH180531:  Following wpar/wperp (diaggnde2 also) needs clarification..
-          if (ISNAN(energy(k,lr_))) call abort
           wpar(k,lr_)=wpar_*fions(k)/hn
           wperp(k,lr_)=wperp_*fions(k)/hn
         endif
-IF (ANY(ISNAN(energy))) call abort
 !CMPIINSERT_IF_RANK_EQ_0
 !        write(*,*)
 !     + 'diaggnde: k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)',

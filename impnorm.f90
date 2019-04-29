@@ -27,7 +27,6 @@ contains
     do i=1,nn
        xnorm=xnorm+dabs(a(i))
     end do
-!if (ANY(ISNAN(a))) call abort
     if (xnorm.gt.0.d0) then
        rhs=rhs/xnorm
        do i=1,nn

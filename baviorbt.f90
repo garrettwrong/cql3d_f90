@@ -4,25 +4,22 @@ module baviorbt_mod
 
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
+  use comm_mod
   use lookup_mod, only : lookup
   use micgnbnd_mod, only : micgnbnd
+  use param_mod
   use psif_mod, only : psif
+  use r8subs_mod, only : lug, luf
   use zcunix_mod, only : terp1
   use zcunix_mod, only : terp2
 
   !---END USE
 
-!
-!
-
 contains
 
-      subroutine baviorbt
-      use param_mod
-      use comm_mod
-      use r8subs_mod, only : lug, luf
-      implicit integer (i-n), real*8 (a-h,o-z)
-      save
+  subroutine baviorbt
+    implicit integer (i-n), real*8 (a-h,o-z)
+    save
 
 !  *** NOTE: Bunch of write(*,*) statements related to checking
 !            out effect of taunew.  For now, might use taunew="disabled".
@@ -561,9 +558,9 @@ contains
 
       zboun(itl,lr_)=zstar
       call bcast(tau(1:iyh,lr_),zero,iyh)
-      tau = 0
+      !tau = 0
       call bcast(dtau(1:iy*lz,1,lr_),zero,iy*lz)
-      dtau = 0
+      !dtau = 0
 
 !...................................................................
 !     Begin loop over the particle orbit
@@ -798,7 +795,7 @@ contains
 !     Use temp1 storage, so check lz.le.jx+1
       if (lz.gt.jx+1) STOP 'In baviorbt: Check lz versus jx+1'
       call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
-      temp1 = 0
+      !temp1 = 0
       do i=1,itl
          temp1(i,1)=dtau(i,1,lr)
          do l=2,lz
@@ -808,7 +805,7 @@ contains
 
       call bcast(temp2(0:iyjx2-1,0),zero,iyjx2)
       call bcast(temp3(0:iyjx2-1,0),zero,iyjx2)
-      temp3 = 0
+      !temp3 = 0
       do i=1,iyh
 
          if (i.le.itl) then !transiting

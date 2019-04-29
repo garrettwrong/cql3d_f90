@@ -8,12 +8,7 @@ module finit_mod
   use param_mod
   use tdreadf_mod, only : tdreadf
 
-  
-
   !---END USE
-
-!
-!
 
 contains
 
@@ -86,7 +81,7 @@ contains
         if (cqlpmod .eq. "enabled") &
           thta=fmass(k)*clite2/(temppar(k,ls_)*ergtkev)
         do 2 j=1,jx
-           !XXXXXXXXX whole lotta underflow here, right out of the gate...
+           !XXXXXXXXX whole lotta underflow here
           swwtemp=exp(-gamm1(j)*thta)
           do 3 i=1,iy
             f(i,j,k,l_)=swwtemp

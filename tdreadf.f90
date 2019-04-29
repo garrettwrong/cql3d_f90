@@ -4,7 +4,9 @@ module tdreadf_mod
 
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
+  use comm_mod
   !XXXXuse pack21_mod, only : unpack21
+  use param_mod
   use tdnflxs_mod, only : tdnflxs
   use zcunix_mod, only : allocate_error
   use zcunix_mod, only : coeff1
@@ -31,8 +33,6 @@ module tdreadf_mod
 contains
 
       subroutine tdreadf(kopt)
-      use param_mod
-      use comm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
       save
 

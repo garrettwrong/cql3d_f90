@@ -123,7 +123,7 @@ contains
     integer :: neq
     integer :: nvar
     real(c_double) :: permtol
-    real(c_double) :: xnorm = 1.  !XXXX should this be initialized?
+    real(c_double) :: xnorm != 1.  !XXXX should this be initialized?
     real(c_double) :: zrhsj1
 
     !.................................................................
@@ -531,30 +531,6 @@ contains
 
        !     first the velocity flux..
        !.................................................................
-
-! if (ANY(ISNAN(da))) then
-!    !call abort
-!    da = 0.
-! else
-!    print *,'da was not junk yet'
-! end if
-! if (ANY(ISNAN(db))) then
-!    !call abort
-!    db = 0.
-! else
-!    print *,'db as not junk yet'
-! end if
-!XXXXXX
-da =0.
-db =0.
-dc =0.
-dd =0.
-de =0.
-df =0.
-dbb =0.
-dff = 0.
-cthta = 0.
-!xxxx^
 
        call coefmidv(da,1)
        call coefmidv(db,2)
@@ -1067,7 +1043,6 @@ cthta = 0.
                 zmatcont(7)=xmp(i,j)
                 zmatcont(8)=x0p(i,j)
                 zmatcont(9)=xpp(i,j)                          
-!if (ANY(ISNAN(zmatcont))) call abort
                 !     Normalize equation
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
@@ -1092,13 +1067,9 @@ cthta = 0.
                 janelt(6)=ieq+inew
                 nvar=6
 
-!if (ANY(ISNAN(zmatcont))) call abort
                 zmatcont(1)=xmm(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 zmatcont(2)=x0m(i,j)+xpm(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 zmatcont(3)=xm0(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 zmatcont(4)=x00(i,j)+xp0(i,j)
                 zmatcont(5)=xmp(i,j)
                 zmatcont(6)=x0p(i,j)+xpp(i,j)
@@ -1188,7 +1159,6 @@ cthta = 0.
                    zmatcont(2)=xp0(i,j)
                    zmatcont(3)=x0p(i,j)
                    zmatcont(4)=xpp(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.1: i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1211,7 +1181,6 @@ cthta = 0.
                    zmatcont(2)=x00(i,j)
                    zmatcont(3)=xmp(i,j)
                    zmatcont(4)=x0p(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.2:i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1242,22 +1211,13 @@ cthta = 0.
                    nvar=8
                    !
                    zmatcont(1)=tm0(j)
-!if (ISNAN(tm0(j))) call abort
                    zmatcont(2)=tmp(j)
-!if (ISNAN(tmp(j))) call abort
                    zmatcont(3)=t00(j)
-!if (ISNAN(t00(j))) call abort
                    zmatcont(4)=t0p(j)
-!if (ISNAN(t0p(j))) call abort
                    zmatcont(5)=tp0(j)
-!if (ISNAN(tp0(j))) call abort
                    zmatcont(6)=tpp(j)
-!if (ISNAN(tpp(j))) call abort
                    zmatcont(7)=tu0(j)
-!if (ISNAN(tu0(j))) call abort
                    zmatcont(8)=tup(j)
-!if (ISNAN(tup(j))) call abort
-!if (ANY(ISNAN(zmatcont(1:8)))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.3: i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1277,48 +1237,10 @@ cthta = 0.
                    nvar=4
                    !
                    zmatcont(1)=xm0(i,j)
-                   ! nan @50,1
-! if (ISNAN(xm0(i,j))) then
-!    print *, 'xm0 is junk', i,j,k, advnce_k
-!    !call abort
-! else
-!     print *, 'not junk',i,j
-! end if
                    zmatcont(2)=x00(i,j)+xp0(i,j)
-! if (ISNAN(x00(i,j))) then
-!    print *, 'x00 is junk',i,j
-!    !call abort
-! else
-!     print *, 'not junk',i,j
-! end if
-! if (ISNAN(xp0(i,j))) then
-!    print *, 'xp0 is junk',i,j
-!    !call abort
-! else
-!     print *, 'not junk',i,j
-! end if
                    zmatcont(3)=xmp(i,j)
-! if (ISNAN(xmp(i,j))) then
-!    print *, 'xmp is junk',i,j
-!    !call abort
-! else
-!     print *, 'not junk',i,j
-! end if
                    zmatcont(4)=x0p(i,j)+xpp(i,j)
-! if (ISNAN(x0p(i,j))) then
-!    print *, 'x0p is junk',i,j
-!    !call abort
-! else
-!     print *, 'not junk',i,j
-! end if
-! if (ISNAN(xpp(i,j))) then
-!    print *,'xpp is junk',i,j
-!    !call abort
-! else
-!     print *, 'not junk',i,j
-! end if
 
-! if (ANY(ISNAN(zmatcont))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.4: i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1345,7 +1267,6 @@ cthta = 0.
                    zmatcont(4)=xmp(i,j)
                    zmatcont(5)=x0p(i,j)
                    zmatcont(6)=xpp(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
                    !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
                    !                write(*,*)'HERE0.5: i,j,icntsww,xnorm',i,j,icntsww,xnorm
@@ -1373,7 +1294,6 @@ cthta = 0.
                 zmatcont(4)=xp0(i,j)
                 zmatcont(5)=x0p(i,j)
                 zmatcont(6)=xpp(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1399,7 +1319,6 @@ cthta = 0.
                 zmatcont(4)=x00(i,j)
                 zmatcont(5)=xmp(i,j)
                 zmatcont(6)=x0p(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1446,7 +1365,6 @@ cthta = 0.
                 zmatcont(10)=tum(j)
                 zmatcont(11)=tu0(j)
                 zmatcont(12)=tup(j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1488,7 +1406,6 @@ cthta = 0.
                 zmatcont(4)=x00(i,j)
                 zmatcont(5)=xpm(i,j)
                 zmatcont(6)=xp0(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1510,7 +1427,6 @@ cthta = 0.
                 zmatcont(2)=xm0(i,j)
                 zmatcont(3)=x0m(i,j)+xpm(i,j)
                 zmatcont(4)=x00(i,j)+xp0(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1549,7 +1465,6 @@ cthta = 0.
                 zmatcont(6)=tp0(jx)
                 zmatcont(7)=tum(jx)
                 zmatcont(8)=tu0(jx)
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1572,7 +1487,6 @@ cthta = 0.
                 zmatcont(2)=xm0(i,j)
                 zmatcont(3)=x0m(i,j)
                 zmatcont(4)=xmm(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1595,7 +1509,6 @@ cthta = 0.
                 zmatcont(2)=xp0(i,j)
                 zmatcont(3)=xpm(i,j)
                 zmatcont(4)=x0m(i,j)
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1687,7 +1600,6 @@ cthta = 0.
                    zmatcont(12)=tmp(j)
 
                 endif
-!if (ANY(ISNAN(zmatcont))) call abort
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1716,7 +1628,6 @@ cthta = 0.
 
 
                       if (j .ne. 1) then
-!                         if (ANY(ISNAN(abd))) STOP 'YYYNANHERE2'
                          do jcont=1,nvar
                             abd(ibandpieq-janelt(jcont),janelt(jcont))= &
                                  zmatcont(jcont)
@@ -1730,12 +1641,6 @@ cthta = 0.
                          !.......................................................................
                          !     for j=1 impose f(i)=cst condition
                          !.......................................................................
-!if ((ISNAN(xnorm))) then
-!   print *, 'XXXX xnorm was nan'
-!   call backtrace
-!end if
-!if (ANY(ISNAN(zmatcont))) call abort
-!if (ANY(ISNAN(zavarj1))) call abort
                          do 5100 icon=1,nvar
                             if (janelt(icon) .le. inew) then
                                !     (i,j=1) contributions -> (iy,1) point
@@ -1776,11 +1681,9 @@ cthta = 0.
                             !   Bug fix, Olivier Sauter, 030509:     nvar=mu + 1
                             nvar=inew + 1
                             rhs(ieq)=zrhsj1
-!if (ANY(ISNAN(zmatcont))) call abort
                             call impnorm(xnorm,zavarj1,rhs(ieq),nvar)
                             do jcont=1,nvar
                                abd(ibandpieq-ijaj1(jcont),ijaj1(jcont))= zavarj1(jcont)
-!if (ANY(ISNAN(abd))) STOP 'YYYNANHERE1'
                             end do
                          endif  ! on ieq.lt.new/else
 
@@ -2482,8 +2385,6 @@ cthta = 0.
                    !          call sgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
                    !          write(*,*)'impavnc0 before dgbtrf, l_,inewjx,ml=',l_,inewjx,ml
                    ! XXX
-                   ! ARGGGGG, ABD HAS NANS!!!
-                   !print *, 'YYY', isnan(abd)!, md1abd ipivot, info
                    call dgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
                    if (info .ne. 0) then
                       print *,' warning after sgbtrf in impavnc0: info = ',info

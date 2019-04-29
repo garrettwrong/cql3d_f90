@@ -5,7 +5,6 @@ module tdnflxs_mod
   use comm_mod
   use diagwrng_mod, only : diagwrng
   use param_mod
-  save
   !---END USE
 
 contains
