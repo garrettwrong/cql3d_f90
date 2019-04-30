@@ -15,7 +15,7 @@ contains
 
       real(c_double) function ampfarl(distn,ll)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     Returns result of an integral of the distribution function
@@ -74,7 +74,7 @@ contains
 
       subroutine ampfalloc
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..............................................................
@@ -129,7 +129,7 @@ contains
 
       subroutine ampfinit
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       ! n is not updated yet, n=0,1,...,nstop-1
       ! Called from tdchief when n+1.eq.nonampf
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -219,7 +219,7 @@ contains
 
       subroutine ampfefldb(nn,timett)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       ! n is not updated yet, n=0,1,...,nstop-1
       ! Called from tdchief when n+1.eq.nonampf, as ampfefldb(n+1,time+dtr)
       ! So, nn= nonampf,nonampf+1,...,nstop
@@ -336,7 +336,7 @@ contains
 
       subroutine ampfdiff(iflag)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     No real test here, to start with.
@@ -358,7 +358,7 @@ contains
                                  ! here nn=nonampf,...,nstop
                                  ! it=1,nampfmax
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : dgesv
       implicit integer (i-n), real(c_double) (a-h,o-z)
       integer, allocatable:: ipiv(:)

@@ -46,7 +46,7 @@ contains
 
   subroutine pltmain
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     use pltdf_mod, only: pltdf
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
@@ -492,7 +492,7 @@ contains
 
       subroutine pltends
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -724,7 +724,7 @@ contains
   !From pltfluxs
       subroutine pltfluxs
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use advnce_mod
       use pltdf_mod, only : JXQ
       use r8subs_mod, only : luf
@@ -1080,7 +1080,7 @@ contains
 
   subroutine pltprppr
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !...
@@ -1216,7 +1216,7 @@ contains
 
    subroutine pltrstv
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -1384,7 +1384,7 @@ contains
   ! pltstrml
       subroutine pltstrml
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use advnce_mod
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
@@ -1865,7 +1865,7 @@ contains
   ! from pltfofvv
   subroutine pltfofvv
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -1959,7 +1959,7 @@ contains
 !
       subroutine fofv(target,action)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       character*(*) target,action
       save
@@ -1994,7 +1994,7 @@ contains
   ! from souplt
       subroutine souplt
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use pltdf_mod, only : cont, tempcntr, nconta, JXQ
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -2073,7 +2073,7 @@ contains
 !=======================================================================
       subroutine pltsofvv
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : luf
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
@@ -2260,7 +2260,7 @@ contains
 !=======================================================================
       subroutine pltso_theta
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)

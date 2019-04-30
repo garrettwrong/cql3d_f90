@@ -3,7 +3,7 @@ c
       subroutine netcdfrw2(kopt)
       use advnce_mod
       use bcast_mod, only : bcast
-      use comm_mod
+      use cqlcomm_mod
       use diagentr_mod, only : gfu
       use param_mod
       use prppr_mod, only : prppr
@@ -4220,7 +4220,7 @@ c
 c
       subroutine netcdfmain
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c.......................................................................
@@ -4274,7 +4274,7 @@ c
       use coefmidv_mod, only : coefmidv
       use coefrfad_mod, only : coefrfad
       use coefstup_mod, only : coefstup
-      use comm_mod
+      use cqlcomm_mod
       use diagentr_mod, only : gfi
       use diagentr_mod, only : gfu
       use param_mod
@@ -5202,7 +5202,7 @@ c======================================================================
 
       subroutine f4dwrite
       use bcast_mod, only : bcast
-      use comm_mod
+      use cqlcomm_mod
       use param_mod
       use tdfinterp_mod, only : tdfinterp
       use zcunix_mod, only : terp1
@@ -5472,7 +5472,7 @@ c======================================================================
 
       subroutine ncwritef4d(f4dr,f4dz,f4dv,f4dt,f4ddv,f4ddt,f4d)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 
 c --- include file for netCDF declarations

@@ -17,7 +17,7 @@ module impavnc0_mod
   use coefstup_mod, only : coefstup
   use coefwti_mod, only : coefwti
   use coefwtj_mod, only : coefwtj
-  use comm_mod
+  use cqlcomm_mod
   use esefld_mod, only : fluxpar
   use ilut_mod, only : aplb
   use ilut_mod, only : bndcsr
@@ -52,7 +52,7 @@ contains
 
   subroutine impavnc0(kopt)
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     use advnce_mod
     use r8subs_mod, only : dgbtrf, dgbtrs, dcopy
     implicit none
@@ -2690,7 +2690,7 @@ contains
   !=======================================================================
   real(c_double) function z00(i,j,k)
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     use advnce_mod
     implicit none
     integer :: i
@@ -2820,7 +2820,7 @@ contains
 
   subroutine it3dalloc
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit none
       integer :: i
       integer :: i2
@@ -2943,7 +2943,7 @@ contains
 
    subroutine it3ddalloc
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit none
       integer :: istat
 !MPIINSERT_INCLUDE
@@ -2976,7 +2976,7 @@ contains
 
    subroutine de_alloc ! YuP[11-2017] more deallocation
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit none
       integer :: istat
 !MPIINSERT_INCLUDE

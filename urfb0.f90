@@ -21,7 +21,7 @@ contains
 
       subroutine urfb0
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
@@ -487,7 +487,7 @@ contains
                  iurfb,prf_rayel)
 
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 ! YuP-2011
 !..................................................................

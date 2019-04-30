@@ -5,7 +5,7 @@ module finit_mod
   use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
-  use comm_mod
+  use cqlcomm_mod
   use lossorbm_mod, only : lossorbm
   use param_mod
   use tdreadf_mod, only : tdreadf

@@ -5,7 +5,7 @@ module tdtrdfus_mod
   use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
-  use comm_mod
+  use cqlcomm_mod
   !XXXXX use pack21_mod, only : pack21
   !XXXXX use pack21_mod, only : unpack21
   use r8subs_mod, only : luf
@@ -24,12 +24,12 @@ contains
 
       subroutine tdtrdfus
       use param_mod
-      use comm_mod, only : d_rr, mnemonic, lrz
-      use comm_mod, only : transp, difus_io, difus_type
-      use comm_mod, only : enerkev
-      use comm_mod, only : ryain
-      use comm_mod, only : difin
-      use comm_mod, only : y
+      use cqlcomm_mod, only : d_rr, mnemonic, lrz
+      use cqlcomm_mod, only : transp, difus_io, difus_type
+      use cqlcomm_mod, only : enerkev
+      use cqlcomm_mod, only : ryain
+      use cqlcomm_mod, only : difin
+      use cqlcomm_mod, only : y
 
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
@@ -219,8 +219,8 @@ contains
 !
       real(c_double) function tdtrrshape(lr)
       use param_mod
-      use comm_mod, only : zeff, temp, reden, rrz
-      use comm_mod, only : difus_rshape
+      use cqlcomm_mod, only : zeff, temp, reden, rrz
+      use cqlcomm_mod, only : difus_rshape
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
@@ -272,7 +272,7 @@ contains
 !
       real(c_double) function tdtrrshape1(lr)
       use param_mod
-      use comm_mod, only : rya, difus_rshape
+      use cqlcomm_mod, only : rya, difus_rshape
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
@@ -321,7 +321,7 @@ contains
 !
       subroutine tdtrvshape(k,l)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
@@ -377,7 +377,7 @@ contains
 !
       real(c_double) function coll_freq(vel,k,lr)
       use param_mod
-      use comm_mod, only : bnumb, zeff, temp, reden, fmass
+      use cqlcomm_mod, only : bnumb, zeff, temp, reden, fmass
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
@@ -439,7 +439,7 @@ contains
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
       !XXXXXXXXX  dim for work() did not match, used comm
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
@@ -475,9 +475,9 @@ contains
 
       subroutine diffus_io(kopt)
       use param_mod
-      use comm_mod, only : difus_io, d_rr, d_r, rya, rpconz, lrindx
-      use comm_mod, only : temp1, difus_io_file, mnemonic, t_, iy, iy_, y
-      use comm_mod, only : tem1
+      use cqlcomm_mod, only : difus_io, d_rr, d_r, rya, rpconz, lrindx
+      use cqlcomm_mod, only : temp1, difus_io_file, mnemonic, t_, iy, iy_, y
+      use cqlcomm_mod, only : tem1
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
@@ -1005,8 +1005,8 @@ contains
 !
       real(c_double) function difus_io_scale(k,iopt)
       use param_mod
-      use comm_mod, only : difus_io_drrscale, difus_io_drscale
-      use comm_mod, only : difus_io_t
+      use cqlcomm_mod, only : difus_io_drrscale, difus_io_drscale
+      use cqlcomm_mod, only : difus_io_t
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !......................................................................

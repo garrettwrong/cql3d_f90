@@ -15,7 +15,7 @@ contains
 
       subroutine urfread_(krf,i_)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 
@@ -429,7 +429,7 @@ contains
 !=======================================================================
       subroutine urfread_i(krf,i_)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
       ! working array for dummy read

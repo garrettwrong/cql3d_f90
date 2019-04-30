@@ -1,5 +1,5 @@
 # Source line to be included in makefiles
-SOURCES  =   param.f90 comm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
+SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	pltdf.f90 eqrhopsi.f90 equilib.f90 \
 	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \
 	bsl.f90  bsu.f90 \

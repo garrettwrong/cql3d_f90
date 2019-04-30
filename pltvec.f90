@@ -28,7 +28,7 @@ contains
 
       subroutine pltvec(lefct)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use advnce_mod
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx

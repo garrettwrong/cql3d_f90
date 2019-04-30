@@ -18,7 +18,7 @@ contains
 
       subroutine urfsetup
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use netcdfrf_mod, only : netcdfrf
       implicit integer (i-n), real(c_double) (a-h,o-z)
 

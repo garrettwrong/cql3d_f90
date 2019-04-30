@@ -5,7 +5,7 @@ c
      1  xxx,yyy,nprim,nimp,zeffctv,zshift1)
 
       use bcast_mod, only : bcast
-      use comm_mod
+      use cqlcomm_mod
       use param_mod
 
       implicit integer (i-n), real(c_double) (a-h,o-z)

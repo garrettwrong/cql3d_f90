@@ -13,7 +13,7 @@ contains
 
       subroutine tdtrsym
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
       do 5 k=1,ngen

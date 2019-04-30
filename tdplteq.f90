@@ -15,7 +15,7 @@ contains
 
       subroutine tdplteq(krf)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use frplteq_mod, only : micfrplt, textt
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE

@@ -14,7 +14,7 @@ contains
 
       subroutine tdtscinp
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use tdeqdsk_mod, only: psimago, psilimo
       implicit integer (i-n), real(c_double) (a-h,o-z)
 

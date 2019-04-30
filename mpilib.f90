@@ -37,7 +37,7 @@ contains
 
       subroutine send_data
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       include 'mpilib.h'
 
@@ -111,7 +111,7 @@ contains
 !-------------------------------------------------------
       subroutine send_entr(k,lefct)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       !send/recv entr(k,lefct,l_),pwrrf(1:jx,k,l_),pwrrfs(1:jx,k,l_)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       include 'mpilib.h'

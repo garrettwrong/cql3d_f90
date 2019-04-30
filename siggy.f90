@@ -13,7 +13,7 @@ contains
 
       real(c_double) function siggy(ee)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !---------------------------------------------------------------------
 !    this routine is used in conjunction with array svtab defined

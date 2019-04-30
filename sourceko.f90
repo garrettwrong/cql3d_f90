@@ -22,7 +22,7 @@ contains
 
       subroutine sourceko ! must be called for k=kelecg only
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only: lug, luf, dscal, dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save

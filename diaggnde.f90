@@ -5,7 +5,7 @@ module diaggnde_mod
   use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
-  use comm_mod
+  use cqlcomm_mod
   use diagdenz_mod, only : diagdenz
   use diagcfac_mod, only : diagcfac
   use diaggnde2_mod, only : diaggnde2

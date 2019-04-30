@@ -24,7 +24,7 @@ contains
 
       subroutine diagentr(lefct,k)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod
       use advnce_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -372,7 +372,7 @@ contains
 !
       subroutine diagentr_vol
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     Integrate the FSA power densities over volume.
@@ -420,7 +420,7 @@ contains
 !
       real(c_double) function gfi(i,j,k)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use advnce_mod, only : cl, fpj0, fpj, fpjp
 !..................................................................
 !     Express the velocity flux at (i,j+1/2)
@@ -448,7 +448,7 @@ contains
 !
       real(c_double) function gfu(i,j,k)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use advnce_mod, only : cdf, f1j, f2j
 !..................................................................
 !     Define the flux related quantities G ( H not needed for

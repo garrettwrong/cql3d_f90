@@ -14,7 +14,7 @@ contains
       subroutine resthks(kl_,klr_,klmdpln,preshin,preskim,pressau1, &
         pressau2)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !     ------------------------------------------------------------------
 !

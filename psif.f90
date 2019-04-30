@@ -17,7 +17,7 @@ contains
 
   real(c_double) function psif(xz)
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !-------------------------------------------------------------------
@@ -67,7 +67,7 @@ contains
 
   real(c_double) function psifp(xz)
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !-------------------------------------------------------------------
@@ -124,7 +124,7 @@ contains
 
   real(c_double) function psiinv(yval,iupdown)
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !---------------------------------------------------------------------
@@ -215,7 +215,7 @@ contains
 
   real(c_double) function psifpy(yval)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
@@ -257,7 +257,7 @@ contains
 
   real(c_double) function psifppy(yval,iupdown)
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
 

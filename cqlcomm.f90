@@ -37,7 +37,7 @@
 !     SWIM project Integrated Plasma Simulation (IPS) modules.
 !.......................................................................
 
-module comm_mod
+module cqlcomm_mod
 
   !---BEGIN USE
 
@@ -2020,4 +2020,4 @@ module comm_mod
   save
 contains
   ! lolz
-end module comm_mod
+end module cqlcomm_mod

@@ -22,7 +22,7 @@ contains
 
       subroutine tdtravct(f1,kprofile,ktransp)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : cvmgt
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
@@ -508,11 +508,11 @@ contains
 !=======================================================================
       subroutine funcv(nn,xx,ffvec)
       use param_mod
-      use comm_mod, only: lrz, ngen, pinch
-      use comm_mod, only: adv, adv_norm, d_r, drrt, d_rr
-      use comm_mod, only: lrindx,tam2, frn, cynt2, coss, tau
-      use comm_mod, only: cint2, zmaxpsi, iy_
-      use comm_mod, only: dentarget, reden, reden_norm
+      use cqlcomm_mod, only: lrz, ngen, pinch
+      use cqlcomm_mod, only: adv, adv_norm, d_r, drrt, d_rr
+      use cqlcomm_mod, only: lrindx,tam2, frn, cynt2, coss, tau
+      use cqlcomm_mod, only: cint2, zmaxpsi, iy_
+      use cqlcomm_mod, only: dentarget, reden, reden_norm
       implicit integer (i-n), real(c_double) (a-h,o-z)
       real(c_double) :: ffvec(nn)
 
@@ -596,7 +596,7 @@ contains
 !=======================================================================
       subroutine tdtransp1
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : cvmgt, dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
@@ -836,7 +836,7 @@ contains
 !=======================================================================
 !=======================================================================
       subroutine newt(x,n,iters,check)
-      use comm_mod, only : NP, fvec, newtv_nn
+      use cqlcomm_mod, only : NP, fvec, newtv_nn
 !
 !..................................................................
 !     A Newton-Raphson iteration, here used with subroutine funcv
@@ -1074,7 +1074,7 @@ contains
 !=======================================================================
 !=======================================================================
       real(c_double) function fffmin(x)
-      use comm_mod, only : NP, fvec, newtv_nn
+      use cqlcomm_mod, only : NP, fvec, newtv_nn
       real(c_double) x(*)
 !     USES funcv
       INTEGER i

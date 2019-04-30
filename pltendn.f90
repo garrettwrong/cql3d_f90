@@ -15,7 +15,7 @@ contains
 
       subroutine pltendn
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : rbound, luf
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -451,7 +451,7 @@ contains
 
       subroutine plt_fow_cons ! developed for FOW, but can also be used for ZOW
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : rbound
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save

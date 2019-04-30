@@ -4,7 +4,7 @@ module ainpla_mod
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
-  use comm_mod
+  use cqlcomm_mod
   use cfpmodbe_mod, only : cfpmodbe
   use param_mod
 

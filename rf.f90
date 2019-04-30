@@ -17,7 +17,7 @@ contains
 
       subroutine rf(action)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
       character*8 action

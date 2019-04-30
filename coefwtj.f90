@@ -16,7 +16,7 @@ contains
 
       subroutine coefwtj(k)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use advnce_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 

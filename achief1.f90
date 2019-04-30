@@ -43,7 +43,7 @@ contains
 
   subroutine achief1
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     use pltmain_mod, only : pltmain
     use r8subs_mod, only : dcopy
     use ainvnorm_mod, only : ainvnorm

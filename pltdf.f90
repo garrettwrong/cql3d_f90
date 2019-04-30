@@ -25,7 +25,7 @@ contains
 
   subroutine pltdf
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     use r8subs_mod, only : dcopy
     implicit integer (i-n), real(c_double) (a-h,o-z)
 
@@ -116,7 +116,7 @@ contains
 
       subroutine pltcont(k,pltcase,tt_,itype)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : luf
       !YuP[2018-02-07] added input itype, to identify what is plotted.
       ! itype=1 for plots of f(),
@@ -600,7 +600,7 @@ contains
 !
       subroutine PGFUNC1(VISBLE,yplt,xplt,zplt)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       INTEGER VISBLE
       REAL xplt,yplt,zplt
 

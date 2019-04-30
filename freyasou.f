@@ -4,7 +4,7 @@ c
      1  bmsprd,multiply,multiplyn)
       use bcast_mod, only : bcast
       use bcast_mod, only : ibcast
-      use comm_mod
+      use cqlcomm_mod
       use eqfpsi_mod, only : eqppsi
       use eqfpsi_mod, only : eqfpsi
       use param_mod

@@ -15,7 +15,7 @@ contains
 
       subroutine tdnpadiag(icall)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       character*8 icall
 

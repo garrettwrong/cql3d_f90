@@ -24,7 +24,7 @@ contains
 
       subroutine eqorbit(epsicon_)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save

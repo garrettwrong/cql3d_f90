@@ -13,7 +13,7 @@ module bsl_mod
 contains
   real(c_double) function bsl(jj,kk,ll)
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !      dimension f_(0:iy+1,0:jx+1,ngen,lrz)

@@ -69,7 +69,7 @@ contains
 
       subroutine tdinitl ! called only at n=0
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use ampfar_mod, only : ampfalloc
       use ainvnorm_mod, only : ainvnorm

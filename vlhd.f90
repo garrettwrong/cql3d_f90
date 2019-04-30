@@ -13,7 +13,7 @@ contains
 
       real(c_double) function vlhd(vll,vprp,thp,nmod)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !     Determine the local phenomenological lower hybrid

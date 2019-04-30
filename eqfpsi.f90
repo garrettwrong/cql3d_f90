@@ -16,7 +16,7 @@ contains
 
       subroutine eqfpsi(psval,fpsi__,fppsi__)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
@@ -52,7 +52,7 @@ contains
 !
       subroutine eqppsi(psval,ppsi__,pppsi__)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................

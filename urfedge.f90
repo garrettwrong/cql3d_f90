@@ -13,7 +13,7 @@ contains
 
       subroutine urfedge(i1,i2,c1,c2,lp,lrad,jval)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..........................................................

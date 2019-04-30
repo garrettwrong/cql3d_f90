@@ -13,7 +13,7 @@ module advnce_mod
 
   use bsu_mod, only : bsu
   use bsl_mod, only : bsl
-  use comm_mod
+  use cqlcomm_mod
   use r8subs_mod, only : cvmgt
 
   !---END USE

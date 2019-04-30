@@ -28,7 +28,7 @@ contains
 
   subroutine equilib(Requil,Zequil,index,PSIequil,BReq,BPHIeq,BZeq)
     use param_mod
-    use comm_mod
+    use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
 
     !  Call with index=0 for setup,

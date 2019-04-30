@@ -16,7 +16,7 @@ contains
 
       subroutine urfread
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use netcdfrf_mod, only : netcdfrf
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)

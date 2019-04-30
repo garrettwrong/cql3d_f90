@@ -16,7 +16,7 @@ contains
 
       subroutine urfmidv_db(jmin,jmax)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
@@ -87,7 +87,7 @@ contains
 !====================================================================
       subroutine urfmidv_dc(jmin,jmax)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !..................................................................

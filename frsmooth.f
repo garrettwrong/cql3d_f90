@@ -2,7 +2,7 @@ c
 c
       subroutine frsmooth(k,curnorm)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
       if (smooth_ .lt. .005) return

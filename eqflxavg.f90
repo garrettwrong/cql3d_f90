@@ -15,7 +15,7 @@ contains
 
       subroutine eqflxavg(epsicon_,a,flxavg_,flxavgd_)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
       dimension a(*)

@@ -6,7 +6,7 @@ module tdreadf_mod
 
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
-  use comm_mod
+  use cqlcomm_mod
   !XXXXuse pack21_mod, only : unpack21
   use param_mod
   use tdnflxs_mod, only : tdnflxs

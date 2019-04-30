@@ -17,7 +17,7 @@ contains
 
       subroutine diagscal(k)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : dscal, dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
 

@@ -14,7 +14,7 @@ contains
 
       subroutine tdinlegw(klpar,klrad,klindxr,klmesh)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 !     Prepares weights for computing the Legendre coefficients:

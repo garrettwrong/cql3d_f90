@@ -19,7 +19,7 @@ contains
 
       subroutine urfdamp0(irfpwr,kopt)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !yup      save

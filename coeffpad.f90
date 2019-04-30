@@ -13,7 +13,7 @@ contains
 
       subroutine coeffpad(k)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !      real(c_double),dimension(iy):: prnt1,prnt2,prnt3
 !      real(c_double),dimension(iy):: prnt4,prnt5,prnt6

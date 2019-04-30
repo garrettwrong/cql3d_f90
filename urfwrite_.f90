@@ -16,7 +16,7 @@ contains
 
       subroutine urfwrite_(krf,i_)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !..................................................................
 !     Write total number of rays.

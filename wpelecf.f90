@@ -18,7 +18,7 @@ contains
 
       real(c_double) function ghelec(i,j,k)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use advnce_mod
 
       ghelec = qz(j)*(zdaij*fpj(i,j,k)-zdaijm1*fpj(i,j-1,k)) &
@@ -28,7 +28,7 @@ contains
 !
       subroutine wpelecf(kopt)
       use param_mod
-      use comm_mod
+      use cqlcomm_mod
       use advnce_mod
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
