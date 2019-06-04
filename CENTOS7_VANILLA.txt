@@ -7,23 +7,28 @@ sudo yum upgrade -y
 sudo  yum group install "Development Tools" -y
 # install X
 sudo yum groupinstall "X Window System" -y
-
 # install more dev tools
 sudo yum install gcc-gfortran netcdf netcdf-fortran netcdf-devel netcdf-fortran-devel emacs libX11-devel -y
 
-# pgplot, sigh
+# PGPLOT, sigh
 mkdir -p ~/local/src
 pushd ~/local/src
 curl -o pgplot522.tar.gz ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot522.tar.gz
 tar -xvzf pgplot522.tar.gz
 cd pgplot
-./makemake $PWD linux g77_gcc
-# LOL g77 doesnt exist anymore
+mv drivers.list drivers.list.bak
+echo """  NUDRIV 0 /NULL      Null device (no output)                           Std F77 
+  PSDRIV 1 /PS        PostScript printers, monochrome, landscape        Std F77 
+  PSDRIV 2 /VPS       Postscript printers, monochrome, portrait         Std F77 
+  PSDRIV 3 /CPS       PostScript printers, color, landscape             Std F77 
+  PSDRIV 4 /VCPS      PostScript printers, color, portrait              Std F77 
+  XWDRIV 1 /XWINDOW   Workstations running X Window System               C """ > drivers.list
+ ./makemake $PWD linux g77_gcc
+# g77 doesnt exist anymore
 sed -i 's/=g77/=gfortran/g'  makefile
-make
-# sigh, I know like basic graphics were state of the art back then,
-# but software has changed a lot
 sed -i 's#/usr/X11R6/lib#/usr/lib64/#g' makefile
+sed -i 's#/usr/X11R6/include#/usr/include#g' makefile
+make
 cmd="export PGPLOT_DIR=$HOME/local/pgplot"
 $cmd
 echo $cmd >> ~/.bashrc
@@ -31,6 +36,8 @@ mkdir -p $PGPLOT_DIR
 cp  libpgplot.a libpgplot.so grfont.dat rgb.txt $PGPLOT_DIR
 popd
 
+
+# actually make cql3d
 mkdir -p ~/src
 pushd ~/src
 #sets up ssh key
@@ -38,4 +45,3 @@ git clone git@github.com:garrettwrong/cql3d_f90.git
 cd cql3d_f90
 make -f  makefile_gfortran64.CentOS7 -j2 |& tee make.oe
 
-# runs, but halts on complaints about pgplot. I didn't have time to debug that /again/.
