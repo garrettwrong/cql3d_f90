@@ -144,7 +144,9 @@ micxinit.o: cqlcomm.o diagwrng.o micgetr.o param.o tdtry.o zcunix.o
 micxiniz.o: cqlcomm.o diagwrng.o micgetr.o param.o psif.o tdxin13d.o zcunix.o 
 mpilib.o: cqlcomm.o param.o r8subs.o 
 netcdfrf.o: bcast.o cqlcomm.o pack21.o param.o
-netcdfrw2.o: advnce.o bcast.o cqlcomm.o diagentr.o param.o prppr.o r8subs.o zcunix.o
+netcdfrw2.o: advnce.o bcast.o cqlcomm.o coefefad.o coeffpad.o \
+        coefmidt.o coefmidv.o coefrfad.o coefstup.o diagentr.o \
+        param.o prppr.o r8subs.o tdfinterp.o zcunix.o
 ntdstore.o: cqlcomm.o param.o restvty.o 
 ntloop.o: cqlcomm.o param.o 
 pack21.o: bcast.o r8subs.o 
@@ -344,3 +346,4 @@ wptramu.o: bcast.o cqlcomm.o param.o r8subs.o wpbdry.o wpcheck.o \
 wptrmuy.o: cqlcomm.o param.o 
 wpvptb.o: cqlcomm.o param.o 
 wpwrng.o: cqlcomm.o param.o 
+freya.o: aminmx.o bcast.o param.o
