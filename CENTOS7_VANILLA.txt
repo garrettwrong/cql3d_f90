@@ -34,6 +34,9 @@ $cmd
 echo $cmd >> ~/.bashrc
 mkdir -p $PGPLOT_DIR
 cp  libpgplot.a libpgplot.so grfont.dat rgb.txt $PGPLOT_DIR
+cmd="export LD_LIBRARY_PATH=$PGPLOT_DIR:$LD_LIBRARY_PATH"
+$cmd
+echo $cmd >> ~/.bashrc
 popd
 
 
