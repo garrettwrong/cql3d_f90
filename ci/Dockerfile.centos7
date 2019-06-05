@@ -1,10 +1,11 @@
 FROM centos:7
 
 #setup the base sysem
-RUN yum upgrade -y && \
-    yum group install "Development Tools" "X Window System" -y && \
-    yum-config-manager --enable epel -y && \
-    yum install gcc-gfortran netcdf netcdf-fortran netcdf-devel netcdf-fortran-devel emacs libX11-devel -y
+RUN yum upgrade -y
+RUN yum group install "Development Tools" -y
+RUN yum group install "X Window System" -y
+RUN yum -y install epel-release
+RUN yum install gcc-gfortran netcdf netcdf-fortran netcdf-devel netcdf-fortran-devel emacs libX11-devel -y
 
 # setup enough PGPLOT to work with cql3d
 RUN curl -o pgplot522.tar.gz ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot522.tar.gz && \
