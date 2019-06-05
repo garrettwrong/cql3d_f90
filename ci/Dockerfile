@@ -3,6 +3,7 @@ FROM centos:7
 #setup the base sysem
 RUN yum upgrade -y && \
     yum group install "Development Tools" "X Window System" -y && \
+    yum-config-manager --enable epel -y && \
     yum install gcc-gfortran netcdf netcdf-fortran netcdf-devel netcdf-fortran-devel emacs libX11-devel -y
 
 # setup enough PGPLOT to work with cql3d
