@@ -14,7 +14,7 @@ include source_dependency.mk
 F90OBJECTS = $(filter %.o,$(SOURCES:.f90=.o))
 OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
 
-LOCATION  =   -L /usr/lib -L/usr/local/lib  
+LOCATION  =   -L /usr/lib -L/usr/local/lib
 LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
 INCLUDE   =/usr/local/include
 
@@ -22,11 +22,11 @@ DEBUG     = -g -fbacktrace
 #common gfortran dbg flags
 #-g -Wall -Wextra -Warray-temporaries -Wconversion -fimplicit-none -fbacktrace -ffree-line-length-0 -fcheck=all -ffpe-trap=zero,overflow,underflow -finit-real=nan
 OPTIMIZE  = -O1
-CSPECIAL  = 
+CSPECIAL  =
 #force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL =
-COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE) 
-LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG) # Remove -m for optimize
+COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
+LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
 DELETE    = rm -f
 
@@ -34,7 +34,7 @@ DELETE    = rm -f
 # Written without dependencies, it may be useful to turn of such checking?
 .SUFFIXES:
 
-$(NAME):           $(F90OBJECTS) $(OBJECTS) 
+$(NAME):           $(F90OBJECTS) $(OBJECTS)
 	$(LOAD)    $(F90OBJECTS) $(OBJECTS)  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
 
@@ -42,7 +42,7 @@ $(NAME):           $(F90OBJECTS) $(OBJECTS)
 $(SOURCES):        $(INCLUDES)
 
 
-# Following use of pattern matching works; 
+# Following use of pattern matching works;
 # it is based on statements in Sect. 10.7 of gmake Manual
 # by Stallman and McGrath.
 # However, the two rules following this seem clearer to me (BobH).
