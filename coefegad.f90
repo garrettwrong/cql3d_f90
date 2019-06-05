@@ -32,5 +32,5 @@ contains
  10   continue
       return
       end subroutine coefegad
-      
+
 end module coefegad_mod

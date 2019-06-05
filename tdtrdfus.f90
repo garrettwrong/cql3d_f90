@@ -435,7 +435,7 @@ contains
 
       return
       end function coll_freq
-      
+
 
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
@@ -1060,6 +1060,6 @@ contains
       return
 
       end function difus_io_scale
-      
-      
+
+
 end module tdtrdfus_mod

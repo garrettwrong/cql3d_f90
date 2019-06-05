@@ -1,5 +1,5 @@
 ###########################################################################
-## This is just a text file that contains lines 
+## This is just a text file that contains lines
 ## for converting CQL3D source files into parallel form,
 ## using doparallel.py script.
 ## The lines between "!MPII***" and next "!MPII***"
@@ -16,18 +16,18 @@
 !MPIINSERT_
 
 !MPIINSERT_IF_RANK_NE_0_RETURN
-      if(mpirank.ne.0) return 
+      if(mpirank.ne.0) return
 !MPIINSERT_
 
 !MPIINSERT_IF_RANK_EQ_0
-      if(mpirank.eq.0) then 
+      if(mpirank.eq.0) then
 !MPIINSERT_
 
 !MPIINSERT_ENDIF_RANK
       endif  ! for if(mpirank.eq.***)
 !MPIINSERT_
-  
-      
+
+
 !MPIINSERT_START
       call init_mpi
 !MPIINSERT_FINISH
@@ -201,7 +201,7 @@
       call MPI_BCAST(entr(k,11,l_),1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(entr(k,12,l_),1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(pwrrf(1,k,l_),jx,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-     
+
 
 !MPIINSERT_IF_RANK_EQ_MPIWORKER
       if(mpirank.eq.mpiworker) then

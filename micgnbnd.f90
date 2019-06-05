@@ -90,6 +90,6 @@ contains
  40   continue
       return
       end subroutine micgnbnd
-      
-      
+
+
 end module micgnbnd_mod

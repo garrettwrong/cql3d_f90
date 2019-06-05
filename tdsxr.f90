@@ -262,6 +262,6 @@ contains
 
       return
       end subroutine tdsxr
-      
-      
+
+
 end module tdsxr_mod

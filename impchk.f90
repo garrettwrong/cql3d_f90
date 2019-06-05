@@ -191,6 +191,6 @@ contains
 !%OS
       return
       end subroutine impchk
-      
-      
+
+
 end module impchk_mod

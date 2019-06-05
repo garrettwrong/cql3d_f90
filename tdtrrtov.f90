@@ -62,5 +62,5 @@ contains
       call tdtrchkd(f1,vpint,denvel)
       return
       end subroutine tdtrrtov
-      
+
 end module tdtrrtov_mod

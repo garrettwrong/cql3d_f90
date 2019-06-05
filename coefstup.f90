@@ -130,6 +130,6 @@ contains
 
       return
       end subroutine coefstup
-      
-      
+
+
 end module coefstup_mod

@@ -32,5 +32,5 @@ contains
       sigie=exp(zlog)
       return
       end function sigie
-      
+
 end module sigie_mod

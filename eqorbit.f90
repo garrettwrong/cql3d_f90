@@ -810,6 +810,6 @@ contains
 
       return
       end subroutine eqorbit
-      
-      
+
+
 end module eqorbit_mod

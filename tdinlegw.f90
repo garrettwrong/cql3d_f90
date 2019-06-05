@@ -108,7 +108,7 @@ contains
       call congau(  y( 1:ipoints,klmesh), &
                   zxg( 1:ipoints*ngauss), &
                   zxgh(1:ipoints*ngauss, 0), ipoints,ngauss)
-      if (iparts .eq. 2) & 
+      if (iparts .eq. 2) &
       call congau(  y( iistart: iistart+ipoints-1, klmesh), &
                   zxg( iigstrt: iigstrt+ipoints*ngauss-1),  &
                   zxgh(iigstrt: iigstrt+ipoints*ngauss-1, 0), ipoints,ngauss)
@@ -335,8 +335,8 @@ contains
 
       return
       end subroutine lagrng
-      
-      
+
+
       subroutine congau(py,pyg,pygh,kpts,kgau)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -356,8 +356,8 @@ contains
 
       return
       end subroutine congau
-      
-      
+
+
       subroutine gauss(kpts,pgausx,pgaush)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !     ------------------------------------
@@ -544,5 +544,5 @@ contains
       return
 !
       end subroutine gauss
-      
+
 end module tdinlegw_mod

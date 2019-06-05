@@ -117,5 +117,5 @@ contains
 
       return
       end function vlhd
-      
+
 end module vlhd_mod

@@ -150,5 +150,5 @@ contains
 
       return
       end subroutine diagscal
-      
+
 end module diagscal_mod

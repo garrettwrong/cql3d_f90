@@ -47,6 +47,6 @@ contains
 
       return
       end subroutine eqalloc
-      
-      
+
+
 end module eqalloc_mod

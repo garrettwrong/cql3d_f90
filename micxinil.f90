@@ -675,6 +675,6 @@ contains
 
       return
       end subroutine micxinil
-      
-      
+
+
 end module micxinil_mod

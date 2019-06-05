@@ -57,5 +57,5 @@ contains
       eovsz=1./((1.-cr*(1.-fc))*fc)
       return
       end subroutine restcon
-      
+
 end module restcon_mod

@@ -28,5 +28,5 @@ contains
       siggy=val
       return
       end function siggy
-      
+
 end module siggy_mod

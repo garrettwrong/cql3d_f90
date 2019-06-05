@@ -51,6 +51,6 @@ contains
 10    continue
       return
       end subroutine soucrit
-      
-      
+
+
 end module soucrit_mod

@@ -836,7 +836,7 @@ contains
 !dir$ bounds
       return
       end subroutine coeff1
-      
+
       subroutine coeff2 (nx,x,ny,y,f,fxx,fyy,fxxyy,idm,ibd,wk)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -909,7 +909,7 @@ contains
  108  continue
       return
       end subroutine coeff2
-      
+
       subroutine intrp (n,x,f,w,y,i,int,tab,itab)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(i+1)    ,f(i*int+1)    ,w(i*int+1)  ,tab(3) &
@@ -961,7 +961,7 @@ contains
  106  continue
       return
       end subroutine intrp
-      
+
       subroutine search (xbar,x,n,i)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(n)
@@ -999,7 +999,7 @@ contains
       i = min0(i+k,nm1)
       go to 103
       end subroutine search
-      
+
       subroutine terp1 (n,x,f,w,y,int,tab,itab)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -1085,7 +1085,7 @@ contains
 !     version numbers in one statistics call
 !-----------------------------------------------------------------------
       end function terp2
-      
+
       subroutine searche (xbar,x,n,i,dx)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(n)
@@ -1110,7 +1110,7 @@ contains
 
       return
       end subroutine searche
-      
+
       subroutine terp1e (n,x,f,w,y,int,tab,itab,dx)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -1199,7 +1199,7 @@ contains
 !     version numbers in one statistics call
 !-----------------------------------------------------------------------
       end function t2
-      
+
       subroutine trip (n,a,b,c,y,z,int)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       a(n)       ,b(n)       ,c(n)       ,y(n)       , &
@@ -1250,7 +1250,7 @@ contains
  140  format( '         cj_debug: trip', 5e16.8)
       return
       end subroutine trip
-      
+
 !************************************************************************
 !     END OF SPLINES
 !************************************************************************
@@ -1823,5 +1823,5 @@ contains
       istat =0 !reset for next case
       return
       end subroutine deallocate_error
-      
+
 end module zcunix_mod

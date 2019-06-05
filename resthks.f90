@@ -74,5 +74,5 @@ contains
 
       return
       end subroutine resthks
-      
+
 end module resthks_mod

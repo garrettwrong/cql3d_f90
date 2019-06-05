@@ -20,5 +20,5 @@ contains
       exlin=(y2-y1)/(x2-x1)*(xx-x1)+y1
       return
       end function exlin
-      
+
 end module exlin_mod

@@ -316,6 +316,6 @@ contains
 
       return
       end subroutine efield
-      
-      
+
+
 end module efield_mod

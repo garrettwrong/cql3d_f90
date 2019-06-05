@@ -216,6 +216,6 @@ contains
 
       return
       end subroutine pltpower
-      
-      
+
+
 end module pltpower_mod

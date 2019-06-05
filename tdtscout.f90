@@ -63,5 +63,5 @@ contains
       close(unit=12)
       return
       end subroutine tdtscout
-      
+
 end module tdtscout_mod

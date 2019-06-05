@@ -29,7 +29,7 @@ contains
 !..... input: ls,dz,flux0,flux1,flux2
 
       dimension dz(1:ls),flux1(0:ls+1),flux2(0:ls+1)
-         !YuP[2019-05-30] corrected sub.efld_cd 
+         !YuP[2019-05-30] corrected sub.efld_cd
          !                so that dz argument starts with index 1.
 
 !.....input/output:
@@ -109,5 +109,5 @@ contains
 
       return
       end function fluxpar
-      
+
 end module esefld_mod

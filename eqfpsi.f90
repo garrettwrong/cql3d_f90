@@ -77,5 +77,5 @@ contains
       endif
       return
       end subroutine eqppsi
-      
+
 end module eqfpsi_mod

@@ -112,8 +112,8 @@ contains
     return
 
   end subroutine pltdf
-  
-  
+
+
 
       subroutine pltcont(k,pltcase,tt_,itype)
       use param_mod

@@ -21,7 +21,7 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       character*(*) action
-      
+
       integer :: cqlb_size !XXXX BUG, integer array expected, not real(c_double)  YuP:agreed
       save
 
@@ -164,6 +164,6 @@ contains
 
       return
       end subroutine vlh
-      
-      
+
+
 end module vlh_mod

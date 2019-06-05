@@ -68,7 +68,7 @@ contains
 !yup      if (ifirst.eq."first") then
          call bcast(urfpwrc,zero,nrayelts*nrayn*mrfn)
          call bcast(urfpwrl,zero,nrayelts*nrayn*mrfn)
-         ! urfpwrc, urfpwrl, scalurf are dimensioned as (1:nrayelts,1:nrayn,1:mrfn) 
+         ! urfpwrc, urfpwrl, scalurf are dimensioned as (1:nrayelts,1:nrayn,1:mrfn)
 !yup      endif
       call bcast(scalurf,one, nrayelts*nrayn*mrfn)
 !BH120815      call bcast(salphac,zero,nrayelts*nrayn*mrfn)
@@ -367,6 +367,6 @@ contains
 
       return
       end subroutine urfdamp0
-      
-      
+
+
 end module urfdamp0_mod

@@ -51,5 +51,5 @@ contains
 200    continue
        return
        END subroutine lam
-       
+
 end module tdnpalam_mod

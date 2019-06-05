@@ -87,5 +87,5 @@ contains
       call tdtrchkd(f2,vpint_,denrad)
       return
       end subroutine tdtrvtor
-      
+
 end module tdtrvtor_mod

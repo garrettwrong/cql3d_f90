@@ -163,6 +163,6 @@ contains
 
       return
       end subroutine coefwti
-      
-      
+
+
 end module coefwti_mod

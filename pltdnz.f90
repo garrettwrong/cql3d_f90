@@ -122,6 +122,6 @@ contains
 
       return
       end subroutine pltdnz
-      
-      
+
+
 end module pltdnz_mod

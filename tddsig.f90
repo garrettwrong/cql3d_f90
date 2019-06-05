@@ -397,5 +397,5 @@ contains
 
       return
       end function haugyp
-      
+
 end module tddsig_mod

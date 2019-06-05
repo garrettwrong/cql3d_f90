@@ -135,6 +135,6 @@ contains
 !         if(lr_.eq.1) pause
       return
       end subroutine bavgmax
-      
-      
+
+
 end module bavgmax_mod

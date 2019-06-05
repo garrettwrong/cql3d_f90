@@ -82,6 +82,6 @@ contains
  612  format("density (line-integration) =",1pe16.5)
       return
       end subroutine pltelec
-      
-      
+
+
 end module pltelec_mod

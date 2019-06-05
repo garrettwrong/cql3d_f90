@@ -63,5 +63,5 @@ contains
       endif
       return
       end subroutine tdtrfcop
-      
+
 end module tdtrfcop_mod

@@ -95,5 +95,5 @@ contains
 
       return
       end subroutine wploweq
-      
+
 end module wploweq_mod

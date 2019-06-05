@@ -96,5 +96,5 @@ contains
 
  200  return
       end function sigfn
-      
+
 end module sigfn_mod

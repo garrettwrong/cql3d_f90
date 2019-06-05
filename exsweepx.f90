@@ -51,7 +51,7 @@ contains
 !     Particle source...
 !..................................................................
             +.5*so(i,j)*vptb(i,lr_)*cint2(j)*cynt2(i,l_)
-            
+
           temp3(i,j)=temp3(i,j)*dtr*one_
 
 !..................................................................
@@ -71,6 +71,6 @@ contains
       endif
       return
       end subroutine exsweepx
-      
-      
+
+
 end module exsweepx_mod

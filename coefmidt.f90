@@ -104,5 +104,5 @@ contains
         call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
       return
       end subroutine coefmidt
-      
+
 end module coefmidt_mod

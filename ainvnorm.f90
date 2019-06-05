@@ -112,6 +112,6 @@ contains
  40   continue
       return
       end subroutine ainvnorm
-      
-      
+
+
 end module ainvnorm_mod

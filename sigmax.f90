@@ -62,5 +62,5 @@ contains
 
       return
       end subroutine sigmax
-      
+
 end module sigmax_mod

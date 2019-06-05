@@ -277,5 +277,5 @@ contains
 
       return
       end subroutine GET_DATE_TIME
-      
+
 end module ainplt_mod

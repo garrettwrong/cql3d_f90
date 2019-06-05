@@ -40,6 +40,6 @@ contains
       endif
       return
       end subroutine tdsxray
-      
-      
+
+
 end module tdsxray_mod

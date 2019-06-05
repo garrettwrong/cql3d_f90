@@ -83,6 +83,6 @@ contains
  500  continue
       return
       end subroutine diagxswt
-      
-      
+
+
 end module diagxswt_mod

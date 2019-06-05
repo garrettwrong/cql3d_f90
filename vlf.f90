@@ -63,7 +63,7 @@ contains
 !
 !      common/temp_imax_old/ imax_old(lza)   ;for checking taunew.
 
-      
+
       integer :: cqlb_size !XXX see below XXX  YuP:agreed
       complex*16 cwz,cwxyp,cwxym,cei
 

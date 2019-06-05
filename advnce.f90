@@ -27,7 +27,7 @@ contains
 
   ! Statement functions are now (in Fortran 95) declared obsolete.
   ! Replaced by internal functions below.
-  
+
   !..................................................................
   !     Define some integration coefficients.
   !..................................................................
@@ -575,7 +575,7 @@ contains
   !     Express the theta flux at (i+1/2,j)
   !..................................................................
 
-  real(c_double) function hfi(i,j,k,l_in) !YuP[2019-05-30] added k,l_in 
+  real(c_double) function hfi(i,j,k,l_in) !YuP[2019-05-30] added k,l_in
     integer :: i,j,k,l_in
     hfi = dd(i,j)*fpi(i,j,k,l_in) &
          +de(i,j)*0.5*dxi(j)*(fpi(i,ifp(j),k,l_in)-fpi(i,j-1,k,l_in)) &

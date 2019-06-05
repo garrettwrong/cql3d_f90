@@ -216,5 +216,5 @@ contains
  9510 FORMAT(/////20X,10(1H*),'   ZERO PIVOT IN NONCYM'///)
 !
       END subroutine nonsym
-      
+
 end module znonsym_mod

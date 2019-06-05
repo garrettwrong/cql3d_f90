@@ -55,5 +55,5 @@ contains
       close(unit=41)
  999  return
       end subroutine dsk_gr
-      
+
 end module dsk_gr_mod

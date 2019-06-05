@@ -116,6 +116,6 @@ contains
 
       return
       end subroutine tdtrvsou
-      
-      
+
+
 end module tdtrvsou_mod

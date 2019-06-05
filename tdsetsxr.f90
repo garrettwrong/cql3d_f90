@@ -135,5 +135,5 @@ contains
 
       return
       end subroutine tdsetsxr
-      
+
 end module tdsetsxr_mod

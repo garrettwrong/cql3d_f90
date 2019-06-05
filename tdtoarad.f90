@@ -93,5 +93,5 @@ contains
       endif
       return
       end subroutine tdtoarad
-      
+
 end module tdtoarad_mod

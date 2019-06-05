@@ -307,6 +307,6 @@ contains
 
  999  return
       end subroutine finit
-      
-      
+
+
 end module finit_mod

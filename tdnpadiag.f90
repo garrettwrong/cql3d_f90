@@ -44,6 +44,6 @@ contains
 
       return
       end subroutine tdnpadiag
-      
+
 
 end module tdnpadiag_mod

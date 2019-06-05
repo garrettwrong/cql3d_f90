@@ -66,6 +66,6 @@ contains
       flxfn=psi0*sum
       return
       end function flxfn
-      
-      
+
+
 end module flxfn_mod

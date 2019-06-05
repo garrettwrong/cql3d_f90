@@ -10,7 +10,7 @@ module mpilib_mod
 
   !YuP[2019-05-31] These subroutines could be moved into mpins_par.f (in /mpi/)
   !  to be inserted into a_cqlp.f90 (for example);
-  !  Then we would not need mpilib.f90 at all. 
+  !  Then we would not need mpilib.f90 at all.
 
 contains
 
@@ -158,6 +158,6 @@ contains
       mpitime = mpitime1
       return
       end subroutine mpiwtime
-      
-      
+
+
 end module mpilib_mod

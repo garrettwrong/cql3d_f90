@@ -283,7 +283,7 @@ contains
           fmax=max(ffmax,fmax)
  500    continue
 
-        if(fmin.lt.zero) then ! YuP[2019-04-23] was if(fmin.lt.0.) 
+        if(fmin.lt.zero) then ! YuP[2019-04-23] was if(fmin.lt.0.)
 !     calculate line average density of f
           call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,temp4(0:iy+1,0:jx+1),1)
           call diagdens(xline0,xmidp0,eline0)
@@ -337,6 +337,6 @@ contains
 
       return
       end subroutine diagimpd
-      
-      
+
+
 end module diagimpd_mod

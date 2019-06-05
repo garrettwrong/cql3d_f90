@@ -285,5 +285,5 @@ contains
       call coeff1(nnr,psiar,fpsiar,d2fpsiar,i1p,1,workk)
       return
       end subroutine eqtopeol
-      
+
 end module eqtopeol_mod

@@ -32,6 +32,6 @@ contains
       endif
       return
       end function eqfninv
-      
-      
+
+
 end module eqfninv_mod

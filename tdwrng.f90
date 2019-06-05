@@ -71,5 +71,5 @@ contains
 10990 format("unspecified")
       return
       end subroutine tdwrng
-      
+
 end module tdwrng_mod

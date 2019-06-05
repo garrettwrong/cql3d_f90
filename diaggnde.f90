@@ -611,6 +611,6 @@ contains
       enddo
       return
       end subroutine diaggnde
-      
-      
+
+
 end module diaggnde_mod

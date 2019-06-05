@@ -34,5 +34,5 @@ contains
 !
       return
       end subroutine aminmx
-      
+
 end module aminmx_mod

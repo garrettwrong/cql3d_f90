@@ -105,6 +105,6 @@ contains
 
       return
       end subroutine tdtrrsou
-      
-      
+
+
 end module tdtrrsou_mod

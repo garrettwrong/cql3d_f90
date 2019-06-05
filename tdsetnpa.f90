@@ -175,5 +175,5 @@ contains
 
       return
       end subroutine tdsetnpa
-      
+
 end module tdsetnpa_mod

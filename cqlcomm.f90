@@ -1405,7 +1405,7 @@ module cqlcomm_mod
   real(c_double), pointer :: tamm1(:)
   !common /csigma/ tamm1  !(0:mmsv)
 
-  integer, pointer :: iind(:) ! YuP[2019-04-24] integer 
+  integer, pointer :: iind(:) ! YuP[2019-04-24] integer
   !common /csigma/ iind  !(1:jx)
 
   !..............................................................

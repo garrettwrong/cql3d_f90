@@ -30,5 +30,5 @@ contains
       endif
       return
       end subroutine profaxis
-      
+
 end module profaxis_mod

@@ -84,6 +84,6 @@ contains
       endif
       return
       end subroutine eqcoord
-      
-      
+
+
 end module eqcoord_mod

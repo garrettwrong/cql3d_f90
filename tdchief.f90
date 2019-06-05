@@ -392,7 +392,7 @@ contains
          !In sub.efld_cd: dz, flux1, flux2, elparnw are dimensioned as (0:lrors+1).
          !Here, dz(lza,lrzmax) starts with index (1,1),
          !but flux1(0:lsa1),flux2(0:lsa1),elparnw(0:lsa1) start with index 0.
-         !YuP[2019-05-30] corrected sub.efld_cd 
+         !YuP[2019-05-30] corrected sub.efld_cd
          ! so that dz argument starts with index 1, i.e. dz(1:ls) [dz(1:lrors)]
          ! Note that in sub.efld_cd the loop is over kk=1,ls [kk=1,lrors]
          ! so that indexes 0 and ls+1 are not used.
@@ -517,7 +517,7 @@ contains
                amp_f= ampfarl( f(0:iy+1,0:jx+1,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
                amp_h= ampfarl(fh(0:iy+1,0:jx+1,kelec,ll),ll)*dtr
                amp_g= ampfarl(fg(0:iy+1,0:jx+1,kelec,ll),ll)*dtr
-               !YuP[2019-05-30] Note that fh() and fg() are allocated as 
+               !YuP[2019-05-30] Note that fh() and fg() are allocated as
                ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index (for now).
                ! If kelec>1, we can get a problem here.
                write(*,'(a,3i4,3e12.4)') &
@@ -600,7 +600,7 @@ contains
 !     108 kA to 138 kA.)
 !BH131107 Moved the ll=1,ilend reversal to above if(ampfmod.eq.enabled..
 !.......................................................................
-!MPIINSERT_IF_RANK_EQ_0      
+!MPIINSERT_IF_RANK_EQ_0
       WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f befor achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
@@ -673,12 +673,12 @@ contains
 
  1    continue ! End loop over radius:  New f is obtained for each ll
 
-!MPIINSERT_IF_RANK_EQ_0      
+!MPIINSERT_IF_RANK_EQ_0
       WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f after achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 !MPIINSERT_ENDIF_RANK
- 
+
 !MPIINSERT_BARRIER
 !MPIINSERT_BCAST_DISTRIBUTION
 !MPIINSERT_BCAST_COLL_COEFFS
@@ -710,7 +710,7 @@ contains
            call diagscal(k) !YuP! renorm f if lbdry(k)=scale/consscal
         enddo ! k
       enddo ! ll
-!MPIINSERT_IF_RANK_EQ_0      
+!MPIINSERT_IF_RANK_EQ_0
       WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f rescaled.      n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
@@ -1174,6 +1174,6 @@ contains
 
       return
       end subroutine tdchief
-      
-      
+
+
 end module tdchief_mod

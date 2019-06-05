@@ -80,5 +80,5 @@ contains
 
       return
       end subroutine ntdstore
-      
+
 end module ntdstore_mod

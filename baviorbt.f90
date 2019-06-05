@@ -768,7 +768,7 @@ contains
       iyy=iy_(lr) !-YuP-101215: Don't use iy=; it's in common /params/
       itl=itl_(lr)
       iyh=iyh_(lr)
-      call bcast(deltarho(1:iy,1:lz,lr),zero,iy*lz) ! for a given lr 
+      call bcast(deltarho(1:iy,1:lz,lr),zero,iy*lz) ! for a given lr
       ! dimensioned : deltarho(iy,lz,lrzmax)
       ! Alternatively could set deltarho=0.d0 infront of "do lr=1,lrzmax" line
 

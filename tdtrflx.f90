@@ -87,6 +87,6 @@ contains
       flxout=flxout*dttr
       return
       end subroutine tdtrflx
-      
-      
+
+
 end module tdtrflx_mod

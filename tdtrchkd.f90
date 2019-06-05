@@ -44,5 +44,5 @@ contains
  10   continue
       return
       end subroutine tdtrchkd
-      
+
 end module tdtrchkd_mod

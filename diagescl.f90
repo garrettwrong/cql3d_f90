@@ -111,6 +111,6 @@ contains
       call dscal(iyjx2,denscl,f(0:iy+1,0:jx+1,ngen,l_),1)
       return
       end subroutine diagescl
-      
-      
+
+
 end module diagescl_mod

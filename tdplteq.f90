@@ -185,6 +185,6 @@ contains
 
       return
       end subroutine tdplteq
-      
-      
+
+
 end module tdplteq_mod

@@ -96,5 +96,5 @@ contains
       endif
       return
       end subroutine tdtoaray
-      
+
 end module tdtoaray_mod

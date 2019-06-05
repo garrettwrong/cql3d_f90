@@ -34,5 +34,5 @@ contains
       endif
       return
       end function eqfn
-      
+
 end module eqfn_mod

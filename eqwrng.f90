@@ -64,5 +64,5 @@ contains
 
       stop 'eqwrng: error' ! stop at all MPI cores
       end subroutine eqwrng
-      
+
 end module eqwrng_mod

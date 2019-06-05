@@ -273,7 +273,7 @@ contains
 !MPIINSERT_IF_RANK_EQ_0
       WRITE(*,*)'urfalloc: w* allocated. istat_tot=',istat_tot
 !MPIINSERT_ENDIF_RANK
-                  
+
       !if(urfb_version.eq.1)then ! 2 is the new version developed by YuP
         ! if 1, it will use the original version
         !-YuP 101121:  These are usually large arrays:
@@ -323,6 +323,6 @@ contains
 
       return
       end subroutine urfalloc
-      
-      
+
+
 end module urfalloc_mod

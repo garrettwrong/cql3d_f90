@@ -46,5 +46,5 @@ contains
  40   continue
       return
       end subroutine diagdens
-      
+
 end module diagdens_mod

@@ -33,6 +33,6 @@ contains
  1    continue
       return
       end subroutine tdxin23d
-      
-      
+
+
 end module tdxin23d_mod

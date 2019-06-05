@@ -126,7 +126,7 @@ contains
     integer :: neq
     integer :: nvar
     real(c_double) :: permtol
-    real(c_double) :: xnorm != 1.  !XXXX should this be initialized? YuP: xnorm is output of impnorm() 
+    real(c_double) :: xnorm != 1.  !XXXX should this be initialized? YuP: xnorm is output of impnorm()
     real(c_double) :: zrhsj1
 
     !.................................................................
@@ -143,7 +143,7 @@ contains
     !.................................................................
 
 
-!MPIINSERT_INCLUDE     
+!MPIINSERT_INCLUDE
 
     !BH080303    real(c_float) etime,tm1,tm(2) !Dclrtns for lf95 ETIME(). See man etime.
     !BH080303    Using f95 intrinsic subroutine, cpu_time
@@ -256,10 +256,10 @@ contains
     navnc=navnc+1
     md1abd= 3*(iy+3)+1 ! Should be at least 2*ml+mu+1 (see below)
 
-!MPIINSERT_IF_RANK_EQ_0      
+!MPIINSERT_IF_RANK_EQ_0
     if(inewjmax.gt.inewjx)then !YuP[2019-04-24] added printout
       WRITE(*,*)'impavnc0: inewjmax>inewjx', inewjmax,inewjx
-    endif 
+    endif
 !MPIINSERT_ENDIF_RANK
 
     !YuP[07-2017] Moved this part from micxinit and tdinitl,
@@ -410,7 +410,7 @@ contains
     !     Copy current distribution into f_..   YuP: moved to tdchief:
     !cc      call dcopy(iyjx2*ngen,f(0,0,1,l_),1,f_(0,0,1,l_),1)
 
-    !write(*,*) 'impavnc0, l_,elecfld:', l_ ,elecfld(l_)  
+    !write(*,*) 'impavnc0, l_,elecfld:', l_ ,elecfld(l_)
     !..................................................................
     !     Logic for allocation/deallocation
     !..................................................................
@@ -816,9 +816,9 @@ contains
                       fh0m=fh(i,j,1,l_)+fh(i,j-1,1,l_)
                       fhp0=fh(i+1,j,1,l_)+fh(i,j,1,l_)
                       fhm0=fh(i,j,1,l_)+fh(i-1,j,1,l_)
-                      !YuP[2019-05-30] Note that fh() and fg() are allocated as 
+                      !YuP[2019-05-30] Note that fh() and fg() are allocated as
                       ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index only, for now.
-                      
+
                       !BH170407  Following had very small effect on a test (see a_change.h),
                       !BH170407  and have concern it could affect stability of the solution.
                       !BH170407                      !BH170406
@@ -1928,7 +1928,7 @@ contains
 
                    kku=ieq+(k-1)*iyjx  !-YuP-> version from impavnc
                 else ! for soln_method it3dv or it3drv
-                   kku=ieq-(ieq_(l_)-1)+(k-1)*iyjx 
+                   kku=ieq-(ieq_(l_)-1)+(k-1)*iyjx
                 endif
                 scal(kku,l_)=one/xnorm !!YuP[2019-04-24] was 1./xnorm
                 !if(kku.le.0 .or. kku.gt.iyjx*ngen) then
@@ -1936,7 +1936,7 @@ contains
                 !k,l_,ieq,ieq_(l_),kku,ieq_tot
                 !                pause
                 !endif
-                
+
                 !..................................................................
                 !     End of major j and I loops..
                 !..................................................................
@@ -2108,7 +2108,7 @@ contains
 
              if ( (soln_method.eq.'it3dv')  .and.  &
                   ilast_lr.eq.1 .and. n.eq.1  ) then
-                !write out coeffs in a format which can be compared directly 
+                !write out coeffs in a format which can be compared directly
                 !with soln_method=itsol output.
                 iunit=39
                 i1=0  !beginning of coeff print for given surface
@@ -2322,11 +2322,11 @@ contains
                 ! Writing into this file causes problems for MPI (I/O).
                 ! Keep it 0, to avoid slow runs ! YuP[04-2017]
                 ! Alternatively, set in your batch script:
-                ! export FORT_BUFFERED=1 
-                !(or the csh equivalent - setenv FORT_BUFFERED 1 ) 
+                ! export FORT_BUFFERED=1
+                !(or the csh equivalent - setenv FORT_BUFFERED 1 )
                 ! At NERSC, it was the default in before 2017
                 ! but it caused problems with some
-                ! newer compilers. 
+                ! newer compilers.
                 ! It seems its removal causes the I/O to take longer.
 
 
@@ -2409,7 +2409,7 @@ contains
                 !BH080303        tm1 = etime(tm)
                 call cpu_time(tm1)
 
-!MPIINSERT_IF_RANK_EQ_0      
+!MPIINSERT_IF_RANK_EQ_0
       WRITE(*,'(a,i4,2e19.11)')  &
        'impavnc rhs before dgbtrf l_,MIN(rhs),MAX(rhs)', &
                 l_,MINVAL(rhs),MAXVAL(rhs)
@@ -2417,7 +2417,7 @@ contains
        'impavnc ABD before dgbtrf l_,MIN(abd),SUM(abd)', &
                 l_,MINVAL(abd),SUM(abd)
 !MPIINSERT_ENDIF_RANK
-                
+
                 !     factorize matrix
                 !_cray  64-bit-compiler uses sgbtrf (from lapack library).
                 !_pc    32-bit-compiler uses dgbtrf (from lapack library).
@@ -2448,7 +2448,7 @@ contains
                 call dgbtrs(transpose,inewjx,ml,mu,inbrhs,abd,md1abd, &
                      ipivot,rhs,inewjx,info)
 
-!MPIINSERT_IF_RANK_EQ_0      
+!MPIINSERT_IF_RANK_EQ_0
       WRITE(*,'(a,i4,2e19.11)')  &
        'impavnc rhs after  dgbtrs l_,MIN(rhs),MAX(rhs)', &
                 l_,MINVAL(rhs),MAXVAL(rhs)
@@ -2456,7 +2456,7 @@ contains
        'impavnc ABD after  dgbtrs l_,MIN(abd),SUM(abd)', &
                 l_,MINVAL(abd),SUM(abd)
 !MPIINSERT_ENDIF_RANK
-                
+
                 if (info .ne. 0) then
                    print *,' warning after sgbtrs in impavnc0: info = ',info
                    stop 'impavnc0 2'
@@ -2635,7 +2635,7 @@ contains
                    !             Store new f into fh
                    call dcopy(iyjx2*ngen,f(0:iy+1,0:jx+1,1:ngen,l_),1, &
                                         fh(0:iy+1,0:jx+1,1:ngen,l_),1)
-                   !YuP[2019-05-30] Note that in case of cqlpmod.eq."enabled", 
+                   !YuP[2019-05-30] Note that in case of cqlpmod.eq."enabled",
                    ! fh() is allocated as fh(0:iy+1,0:jx+1,1:ngen,0:ls+1) in wpalloc
                    factor="disabled"
                    icount_ese=2
@@ -2814,7 +2814,7 @@ contains
              z00t=z00itu1
              !              itl (or itu)case:
           else
-          
+
          t0ml_=qz(j)*( &
          cl(itl-1,j-1,l_)*dj(itl,j-1,k,l_)*eym5(itl,l_)) &
          +r2y(j,l_)*(-de(itl-1,j)*(1.-di(itl-1,j-1,k,l_))) &
@@ -2850,7 +2850,7 @@ contains
          +r2y(j,l_)*( &
          -de(itu,j)*di(itu,j+1,k,l_)/ &
          (2.*dx(j)))
-          
+
              z00itl= z00f -(  &
                    t0ml_*bsl(j-1,k,l_)+t00l_*bsl(j,k,l_)   &
                   +t0pl_*bsl(j+1,k,l_)+t0mu_*bsu(j-1,k,l_) &

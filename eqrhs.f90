@@ -38,5 +38,5 @@ contains
       ydot(2)=-dpsidr/(rbval)
       return
       end subroutine eqrhs
-      
+
 end module eqrhs_mod

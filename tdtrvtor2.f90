@@ -140,6 +140,6 @@ contains
 
       return
       end subroutine tdtrvtor2
-      
-      
+
+
 end module tdtrvtor2_mod

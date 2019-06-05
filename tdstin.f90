@@ -43,5 +43,5 @@ contains
 
       return
       end subroutine tdstin
-      
+
 end module tdstin_mod

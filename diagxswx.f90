@@ -169,6 +169,6 @@ contains
  500  continue
       return
       end subroutine diagxswx
-      
-      
+
+
 end module diagxswx_mod

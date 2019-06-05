@@ -103,6 +103,6 @@ contains
  10   continue
       return
       end subroutine tdtrchk
-      
-      
+
+
 end module tdtrchk_mod

@@ -78,5 +78,5 @@ contains
       endif
       return
       end subroutine lossorbm
-      
+
 end module lossorbm_mod

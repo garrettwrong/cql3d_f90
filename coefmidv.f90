@@ -147,6 +147,6 @@ contains
 
       return
       end subroutine coefmidv
-      
-      
+
+
 end module coefmidv_mod

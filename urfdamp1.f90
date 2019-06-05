@@ -8,7 +8,7 @@ module urfdamp1_mod
   !XXXXXXXXX these require disabling TKR checks !!
   !use urfpackm_mod, only : unpack
   !use urfpackm_mod, only : unpack16
-  external unpack    
+  external unpack
   external unpack16
 
   !---END USE
@@ -413,6 +413,6 @@ contains
 
       return
       end subroutine urfdamp1
-      
-      
+
+
 end module urfdamp1_mod

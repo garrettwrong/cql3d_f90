@@ -9,7 +9,7 @@ module bcast_mod
 ! XXX every thing in this file and related to it should be deleted
 ! YuP: basically I agree. I guess the intent was to use a fast procedure with unrolled loops,
 ! similar to dcopy().
-! Never accomplished. 
+! Never accomplished.
 ! But now there are too many lines with "bcast" in the source.
 
 !
@@ -55,5 +55,5 @@ contains
  100  continue
       return
       end subroutine ccast
-      
+
 end module bcast_mod

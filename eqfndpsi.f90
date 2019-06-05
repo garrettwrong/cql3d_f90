@@ -420,6 +420,6 @@ contains
 
       return
       end subroutine eqfndpsi
-      
-      
+
+
 end module eqfndpsi_mod

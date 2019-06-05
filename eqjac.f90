@@ -60,5 +60,5 @@ contains
       pd(2,2)=(-d2psidrz+dpsidr/alpha*dalphadz)/alpha
       return
       end subroutine eqjac
-      
+
 end module eqjac_mod

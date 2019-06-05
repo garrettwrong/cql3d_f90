@@ -585,8 +585,8 @@ contains
 
       return
       end function rbound
-      
-      
+
+
       SUBROUTINE DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.1) --
@@ -783,10 +783,10 @@ contains
    40 CONTINUE
       RETURN
 !*
-!*     End of 
+!*     End of
 !*
       END subroutine DGBTF2
-      
+
       SUBROUTINE DGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.1) --
@@ -1221,10 +1221,10 @@ contains
 !*
       RETURN
 !*
-!*     End of 
+!*     End of
 !*
       END subroutine DGBTRF
-      
+
       SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, &
                          INFO )
         implicit none
@@ -1406,10 +1406,10 @@ contains
       END IF
       RETURN
 !*
-!*     End of 
+!*     End of
 !*
       END subroutine DGBTRS
-      
+
       SUBROUTINE DGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA,BETA
@@ -1720,7 +1720,7 @@ contains
 !*     End of  .
 !*
       END subroutine DGEMM
-      
+
       SUBROUTINE DGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA,BETA
@@ -2138,7 +2138,7 @@ contains
 !*     End of   .
 !*
       END subroutine DGER
-      
+
       SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -2255,10 +2255,10 @@ contains
 !*
       RETURN
 !*
-!*     End of 
+!*     End of
 !*
       END subroutine DLASWP
-      
+
       SUBROUTINE DSWAP(N,DX,INCX,DY,INCY)
 !*     .. Scalar Arguments ..
       INTEGER INCX,INCY,N
@@ -2663,7 +2663,7 @@ contains
 !*     End of  .
 !*
       END subroutine DTBSV
-      
+
       SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA
@@ -3034,7 +3034,7 @@ contains
 !*     End of  .
 !*
       END subroutine DTRSM
-      
+
       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3185,7 +3185,7 @@ contains
 !*
       RETURN
       END FUNCTION IEEECK
-      
+
       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, &
                        N4 )
 !*
@@ -3341,7 +3341,7 @@ contains
 !*     End of ILAENV
 !*
       END FUNCTION ILAENV
-      
+
       LOGICAL FUNCTION LSAME(CA,CB)
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3427,7 +3427,7 @@ contains
 !*     End of LSAME
 !*
       END FUNCTION LSAME
-      
+
       SUBROUTINE XERBLA( SRNAME, INFO )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3470,7 +3470,7 @@ contains
  9999 FORMAT( ' ** On entry to ', A6, ' parameter number ', I2, ' had ', &
             'an illegal value' )
 !*
-!*     End of 
+!*     End of
 !*
     END SUBROUTINE XERBLA
 
@@ -3652,10 +3652,10 @@ contains
       END IF
       RETURN
 !*
-!*     End of 
+!*     End of
 !*
       END subroutine DGESV
-      
+
       SUBROUTINE DGETF2( M, N, A, LDA, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.2) --
@@ -3797,10 +3797,10 @@ contains
    10 CONTINUE
       RETURN
 !*
-!*     End of 
+!*     End of
 !*
       END subroutine DGETF2
-      
+
       SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.2) --
@@ -3953,10 +3953,10 @@ contains
       END IF
       RETURN
 !*
-!*     End of 
+!*     End of
 !*
       END subroutine DGETRF
-      
+
       SUBROUTINE DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 !*
 !*  -- LAPACK routine (version 3.3.1) --
@@ -4100,10 +4100,10 @@ contains
 !*
       RETURN
 !*
-!*     End of 
+!*     End of
 !*
       END subroutine DGETRS
-      
+
 !*> \brief \b DLAMCH
 !*
 !*  =========== DOCUMENTATION ===========
@@ -4249,7 +4249,7 @@ contains
 !*     End of DLAMCH
 !*
       END FUNCTION DLAMCH
-      
+
 !************************************************************************
 !*> \brief \b DLAMC3
 !*> \details
@@ -5265,11 +5265,11 @@ contains
 !*
 !------  YuP[2019-04-23] commented this function - it is not used.
 !*       INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
-!* 
+!*
 !*       .. Scalar Arguments ..
 !*       INTEGER            IHI, ILO, ISPEC, LWORK, N
 !*       CHARACTER          NAME*( * ), OPTS*( * )
-!*  
+!*
 !*
 !*> \par Purpose:
 !*  =============
@@ -5277,7 +5277,7 @@ contains
 !*> \verbatim
 !*>
 !*>      This program sets problem and machine dependent parameters
-!*>      useful for xHSEQR and its subroutines. It is called whenever 
+!*>      useful for xHSEQR and its subroutines. It is called whenever
 !*>      ILAENV is called with 12 <= ISPEC <= 16
 !*> \endverbatim
 !*
@@ -5566,7 +5566,7 @@ contains
 !!*     ==== End of IPARMQ ====
 !!*
 !      END FUNCTION IPARMQ
-      
+
 !*> \brief \b LSAME
 !*
 !*  =========== DOCUMENTATION ===========

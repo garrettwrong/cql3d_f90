@@ -58,6 +58,6 @@ contains
 
       return
       end subroutine sigalloc
-      
-      
+
+
 end module sigalloc_mod

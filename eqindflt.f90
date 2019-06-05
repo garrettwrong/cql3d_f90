@@ -53,5 +53,5 @@ contains
       zbox=100.
       return
       end subroutine eqindflt
-      
+
 end module eqindflt_mod

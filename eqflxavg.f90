@@ -43,6 +43,6 @@ contains
       flxavgd_=sum1
       return
       end subroutine eqflxavg
-      
-      
+
+
 end module eqflxavg_mod

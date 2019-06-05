@@ -594,6 +594,6 @@ contains
 !
       return
       end subroutine tdinitl
-      
-      
+
+
 end module tdinitl_mod

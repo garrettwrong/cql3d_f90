@@ -197,6 +197,6 @@ contains
 
       return
       end subroutine ainitial
-      
-      
+
+
 end module ainitial_mod

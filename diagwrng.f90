@@ -129,6 +129,6 @@ contains
 10990 format("unspecified")
 
       end subroutine diagwrng
-      
-      
+
+
 end module diagwrng_mod

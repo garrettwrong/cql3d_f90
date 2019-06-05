@@ -33,5 +33,5 @@ contains
  1    continue
       return
       end subroutine tdxin13d
-      
+
 end module tdxin13d_mod

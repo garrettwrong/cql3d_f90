@@ -110,5 +110,5 @@ contains
 
       return
       end subroutine tdtrvtor3
-      
+
 end module tdtrvtor3_mod

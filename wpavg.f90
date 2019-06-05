@@ -63,5 +63,5 @@ contains
 
       return
       end subroutine wpavg
-      
+
 end module wpavg_mod

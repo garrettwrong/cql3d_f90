@@ -104,5 +104,5 @@ contains
 10990 format(" unspecified in wpwrng")
 
       end subroutine wpwrng
-      
+
 end module wpwrng_mod

@@ -28,5 +28,5 @@ contains
 
       return
       end subroutine micxinim
-      
+
 end module micxinim_mod

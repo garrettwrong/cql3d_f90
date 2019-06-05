@@ -29,6 +29,6 @@ contains
 
       return
       end subroutine ntloop
-      
-      
+
+
 end module ntloop_mod

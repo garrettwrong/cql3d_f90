@@ -80,5 +80,5 @@ contains
  30   continue
       return
       end subroutine eqelpse
-      
+
 end module eqelpse_mod

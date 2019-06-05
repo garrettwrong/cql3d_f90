@@ -377,7 +377,7 @@ contains
          ampfln(ll)=ampfarl(f_(0:iy+1,0:jx+1,kelec,ll),ll)
          ampflh(ll)=ampfarl(fh(0:iy+1,0:jx+1,kelec,ll),ll)
          ampflg(ll)=ampfarl(fg(0:iy+1,0:jx+1,kelec,ll),ll)
-         !YuP[2019-05-30] Note that fh() and fg() are allocated as 
+         !YuP[2019-05-30] Note that fh() and fg() are allocated as
          ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index.
          ! If kelec>1, we can get a problem here.
       enddo

@@ -234,6 +234,6 @@ contains
 
       return
       end subroutine tddiag
-      
-      
+
+
 end module tddiag_mod

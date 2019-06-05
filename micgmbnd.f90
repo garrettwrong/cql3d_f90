@@ -55,6 +55,6 @@ contains
  10   continue
       return
       end subroutine micgmbnd
-      
-      
+
+
 end module micgmbnd_mod

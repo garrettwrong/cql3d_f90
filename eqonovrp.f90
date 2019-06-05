@@ -37,6 +37,6 @@ contains
  20   continue
       return
       end subroutine eqonovrp
-      
-      
+
+
 end module eqonovrp_mod

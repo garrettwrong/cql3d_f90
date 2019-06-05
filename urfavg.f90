@@ -47,5 +47,5 @@ contains
 
       return
       end subroutine urfavg
-      
+
 end module urfavg_mod

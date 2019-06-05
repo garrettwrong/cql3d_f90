@@ -38,5 +38,5 @@ contains
  1    continue
       return
       end subroutine cfpsymt
-      
+
 end module cfpsymt_mod

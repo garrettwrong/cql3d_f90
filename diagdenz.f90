@@ -146,6 +146,6 @@ contains
  201  continue
       return
       end subroutine diagdenz
-      
-      
+
+
 end module diagdenz_mod
