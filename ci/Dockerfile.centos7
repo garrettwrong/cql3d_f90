@@ -1,0 +1,31 @@
+FROM centos:7
+
+#setup the base sysem
+RUN yum upgrade -y
+RUN yum group install "Development Tools" -y
+RUN yum group install "X Window System" -y
+RUN yum -y install epel-release
+RUN yum install gcc-gfortran netcdf netcdf-fortran netcdf-devel netcdf-fortran-devel emacs libX11-devel -y
+
+# setup enough PGPLOT to work with cql3d
+RUN curl -o pgplot522.tar.gz ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot522.tar.gz && \
+    tar -xvzf pgplot522.tar.gz && \
+    cd pgplot && \
+    mv drivers.list drivers.list.bak && \
+    printf "  NUDRIV 0 /NULL      Null device (no output)                           Std F77 \n  PSDRIV 1 /PS        PostScript printers, monochrome, landscape        Std F77 \n  PSDRIV 2 /VPS       Postscript printers, monochrome, portrait         Std F77 \n  PSDRIV 3 /CPS       PostScript printers, color, landscape             Std F77 \n  PSDRIV 4 /VCPS      PostScript printers, color, portrait              Std F77 \n  XWDRIV 1 /XWINDOW   Workstations running X Window System               C \n""" > drivers.list && \
+    ./makemake $PWD linux g77_gcc && \
+    sed -i 's/=g77/=gfortran/g'  makefile && \
+    sed -i 's#/usr/X11R6/lib#/usr/lib64/#g' makefile && \
+    sed -i 's#/usr/X11R6/include#/usr/include#g' makefile && \
+    make && \
+    cp  libpgplot.a libpgplot.so grfont.dat rgb.txt /usr/lib64
+ENV PGPLOT_DIR=/usr/lib64
+
+# setup Remik's nccmp tool
+RUN curl -L -o nccmp-1.8.3.1.tar.gz https://gitlab.com/remikz/nccmp/-/archive/1.8.3.1/nccmp-1.8.3.1.tar.gz && \
+    tar -xvzf nccmp-1.8.3.1.tar.gz && \
+    cd nccmp-1.8.3.1 && \
+    chmod +x ./configure && \
+    ./configure && \
+    make && \
+    make install
