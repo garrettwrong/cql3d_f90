@@ -23,14 +23,14 @@ RUN curl -o pgplot522.tar.gz ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot522.ta
     sed -i 's#/usr/X11R6/lib#/usr/lib64/#g' makefile && \
     sed -i 's#/usr/X11R6/include#/usr/include#g' makefile && \
     make && \
-    export PGPLOT_DIR=$HOME/pgplot && \
-    export LD_LIBRARY_PATH=$PGPLOT:$LD_LIBRARY_PATH
+    cp  libpgplot.a libpgplot.so grfont.dat rgb.txt /usr/lib64
+ENV PGPLOT_DIR=/usr/lib64
 
 # setup Remik's nccmp tool
 RUN curl -L -o nccmp-1.8.3.1.tar.gz https://gitlab.com/remikz/nccmp/-/archive/1.8.3.1/nccmp-1.8.3.1.tar.gz && \
     tar -xvzf nccmp-1.8.3.1.tar.gz && \
     cd nccmp-1.8.3.1 && \
-    chmod +x ./configure # wut && \
+    chmod +x ./configure && \
     ./configure && \
     make && \
     make install

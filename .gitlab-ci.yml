@@ -4,15 +4,14 @@ stages:
 
 image: garrettwrong/cql3d_f90_centos-7
 
-build:
+build:centos7:
   stage: build
-  cache:              # <- Enable caching on files so they are available in the next stage
-    untracked: true   # <- Cache the git untracked files (ex. node_modules)
-# eventually we should have master do extra stuff, maybe.
-#  only:
-#    - master          # <- This stage run only on master branch update
   script:
   - make -f  makefile_gfortran64.CentOS7
+  artifacts:
+    paths:
+    - xcql3d_gfortran64
+    expire_in: 1 week
 
 case1:
   stage: test
@@ -20,3 +19,5 @@ case1:
   - cd ci/case1
   - ../../xcql3d_gfortran64
   - nccmp -dmgfs reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
+  dependencies:
+  - build:centos7
