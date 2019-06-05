@@ -32,7 +32,8 @@ contains
       dimension f2(0:iyp1,0:jxp1,ngen,0:*)
       dimension denrad(ngen,lrorsa),denvel(ngen,lrorsa)
 
-      call dcopy (iyjx2*ngen*(lrors+1),f1,1,f2,1)
+      call dcopy(iyjx2*ngen*(lrors+1),f1(0:iy+1,0:jx+1,1:ngen,0:lrors),1, &
+                                      f2(0:iy+1,0:jx+1,1:ngen,0:lrors),1)
 
       call tdtrchkd(f1,vpint,denvel)
 
@@ -85,5 +86,6 @@ contains
 
       call tdtrchkd(f2,vpint_,denrad)
       return
-      end
+      end subroutine tdtrvtor
+      
 end module tdtrvtor_mod

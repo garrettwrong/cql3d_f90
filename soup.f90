@@ -104,9 +104,10 @@ contains
 
       if (isounor .ne. 1) then
         facz=exp(-(zl-zm1(kk,m,lr_))**2/zm2(kk,m,lr_))
-        call dscal(jx,facz*sounor(kk,m,l,lr_)*asor(kk,m,lr_), &
-          soupp(1:jx,lr_),1)
+        call dscal(jx,facz*sounor(kk,m,l,lr_)*asor(kk,m,lr_),soupp(1:jx,lr_),1)
       endif
       return
-      end
+      end subroutine soup
+      
+      
 end module soup_mod

@@ -45,5 +45,6 @@ contains
         eline=eline+tam2(j)*cint2(j)*tcsgm1(j)
  40   continue
       return
-      end
+      end subroutine diagdens
+      
 end module diagdens_mod

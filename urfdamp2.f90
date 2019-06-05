@@ -149,8 +149,8 @@ contains
 
           locatn=(jjx*(is-1)+jjx*nrayelts*(iray-1))/ibytes+1
           locatn16=(jjx*(is-1)+jjx*nrayelts*(iray-1))/ibytes16+1
-          call bcast(db(1:iyjxp1,0),zero,iyjxp1)
-          call bcast(dc(1:iyjxp1,0),zero,iyjxp1)
+          call bcast(db(1:iy,0:jx),zero,iyjxp1)
+          call bcast(dc(1:iy,0:jx),zero,iyjxp1)
           call ibcast(ilim1d,0,jx)
           call ibcast(ilim2d,0,jx)
 
@@ -298,14 +298,14 @@ contains
             ilim1dd(j)=min0(ilim1dd(j),iy)
  7        continue
 
-          call bcast(temp1(0:iyjx2,0),zero,iyjx2)
+          call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
           call urfmidv_db(jmin,jmax)
 !cc          call bcast(temp1(0,0),zero,iyjx2) ! Not really necessary
           call urfmidv_dc(jmin,jmax)
 
           do j=jminm-1,jmaxp
          !Setting gftp as an array rather than function reduces cpu time
-         ! advnce.h:  cl(i,j)=.25*vptb(itl,lr_)/vptb(i,lr_)*dc(i,j)
+         ! advnce.f90:  cl(i,j)=.25*vptb(itl,lr_)/vptb(i,lr_)*dc(i,j)
              cl_itlm1= .25*vptb(itl,lr_)/vptb(itl-1,lr_)*dc(itl-1,j)
              cl_itlp1= .25*vptb(itl,lr_)/vptb(itl+1,lr_)*dc(itl+1,j)
              cl_itup1= .25*vptb(itl,lr_)/vptb(itu+1,lr_)*dc(itu+1,j)
@@ -383,5 +383,7 @@ contains
 
 
       return
-      end
+      end subroutine urfdamp2
+      
+      
 end module urfdamp2_mod

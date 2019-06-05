@@ -62,5 +62,6 @@ contains
       endif
 30    continue
       return
-      end
+      end subroutine pltcycl
+      
 end module pltcycl_mod

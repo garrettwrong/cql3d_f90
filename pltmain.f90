@@ -35,8 +35,8 @@ module pltmain_mod
 
   use iso_c_binding, only : c_float
 
-  !XXXX
-  external pack21
+
+  external pack21  !XXXX
 
   character*7, private :: scale
   real(c_float), private ::  X, Y, ANGLE, FJUST
@@ -59,9 +59,9 @@ contains
     !
     REAL RILIN
 
-    !MPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
-    !MPIINSERT_IF_RANK_NE_0_RETURN
+!MPIINSERT_IF_RANK_NE_0_RETURN
     ! make plots on mpirank.eq.0 only
 
     if (noplots.eq."enabled1") return
@@ -548,7 +548,7 @@ contains
         CALL PGSCH(1.) ! set character size; default is 1.
         call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin, &
              emax*1.05)
-        call GPCV2D(ptime(1:nch(l_),l_), pengy(1:nch(l),k,l_), nch(l_)) ! energy(time)
+        call GPCV2D(ptime(1:nch(l_),l_), pengy(1:nch(l_),k,l_), nch(l_)) ! energy(time)
         CALL PGLAB('time (sec)',' ',' ')
         !call GSCPVS(.08,.35) ! set current position for text
         write(t_,10110) k
@@ -719,13 +719,13 @@ contains
         CALL PGMTXT('T',RILIN,0.,0.,t_) ! Top
 
       return
-      end
+      end subroutine pltends
 
   !From pltfluxs
       subroutine pltfluxs
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in  pltfluxs.  To get gfi(),hfi()
       use pltdf_mod, only : JXQ
       use r8subs_mod, only : luf
       use aminmx_mod, only : aminmx
@@ -867,7 +867,7 @@ contains
         else
          do 202 j=1,jx
            do 201 i=1,iy
-              temp1(i,j)=hfi(i,j)
+              temp1(i,j)=hfi(i,j,k,l_)
  201       continue
  202    continue
         endif
@@ -1074,7 +1074,7 @@ contains
  970  format("species no.",i2,5x,"Krook velocity space flux")
 
       return
-      end
+      end subroutine pltfluxs
 
   !from pltprppr
 
@@ -1210,7 +1210,7 @@ contains
  20   continue
 
       return
-      end
+      end subroutine pltprppr
 
    !from pltrstv
 
@@ -1379,13 +1379,13 @@ contains
 
  190  continue
       return
-      end
+      end subroutine pltrstv
 
   ! pltstrml
       subroutine pltstrml
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in  pltstrml.  To get gfi(),hfi(),hfu()
       use pltdf_mod, only : cont, tempcntr, nconta
       use pltdf_mod, only : wx, wy, IIY, JXQ
       use r8subs_mod, only : luf, dcopy
@@ -1538,15 +1538,16 @@ contains
         call coefmidt(dd,1)
         call coefmidt(de,2)
         call coefmidt(df,3)
-        call bcast(temp5(0:iyjx2,0),zero,iyjx2)
+        call bcast(temp5(0:iy+1,0:jx+1),zero,iyjx2)
 !
 !     In the case implct .eq. "disabled" copy the former values
 !     of the distribution function into temporary arrays.
 !
         if (implct .eq. "disabled") then
-          call dcopy(iyjx2,fxsp(0:iyjx2-1,0,k,l_),1, &
-                temp1(0:iyjx2-1,0),1)
-          call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp2(0:iyjx2-1,0),1)
+          call dcopy(iyjx2,fxsp(0:iy+1,0:jx+1,k,l_),1,  &
+                          temp1(0:iy+1,0:jx+1), 1)
+          call dcopy(iyjx2,   f(0:iy+1,0:jx+1,k,l_),1,  &
+                          temp2(0:iy+1,0:jx+1),1)
         endif
 !
 !     Now proceed with the integration over H
@@ -1556,13 +1557,13 @@ contains
 !     initialization..
 !
           do 15 i=1,iy
- 15       temp4(i,1)=(hfi(i,1)+hfi(i-1,1))*.5*dxp5(1)
+ 15       temp4(i,1)=(hfi(i,1,k,l_)+hfi(i-1,1,k,l_))*.5*dxp5(1)
 !
 !     Now complete the integration for all x(j)
 !
           do 20 j=2,jx-1
             do 31 i=1,iy
-              temp4(i,j)=(hfi(i,j)+hfi(i-1,j))*.5*dxp5(j) &
+              temp4(i,j)=(hfi(i,j,k,l_)+hfi(i-1,j,k,l_))*.5*dxp5(j) &
                 +temp4(i,j-1)
  31         continue
  20       continue
@@ -1571,13 +1572,13 @@ contains
 !     initialization..
 !
           do 19 i=1,iy
- 19       temp4(i,1)=(hfu(i,1)+hfu(i-1,1))*.5*dxp5(1)
+ 19       temp4(i,1)=(hfu(i,1,k,l_)+hfu(i-1,1,k,l_))*.5*dxp5(1)
 !
 !     Now complete the integration for all x(j)
 !
           do 21 j=2,jx-1
             do 32 i=1,iy
-              temp4(i,j)=(hfu(i,j)+hfu(i-1,j))*.5*dxp5(j) &
+              temp4(i,j)=(hfu(i,j,k,l_)+hfu(i-1,j,k,l_))*.5*dxp5(j) &
                 +temp4(i,j-1)
  32         continue
  21       continue
@@ -1860,7 +1861,7 @@ contains
  570  format(4(1pe16.6))
 
       return
-      end
+      end subroutine pltstrml
 
   ! from pltfofvv
   subroutine pltfofvv
@@ -1884,7 +1885,7 @@ contains
       character*8 target
       do 20 k=1,ngen
         call GXGLFR(0) ! new page(s)
-        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp3(0:iyjx2-1,0),1)
+        call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp3(0:iy+1,0:jx+1),1)
         if (tandem.eq."enabled" .and. k.eq.kionn) then
           target="ionmesh"
           jxq=jlwr
@@ -1952,7 +1953,7 @@ contains
 
 
       return
-      end
+      end subroutine pltfofvv
 
 
 !
@@ -1989,7 +1990,7 @@ contains
         enddo
 
       return
-      end
+      end subroutine fofv
 
   ! from souplt
       subroutine souplt
@@ -2017,8 +2018,8 @@ contains
 
          if (xlncur(k,lr_).lt.1.e-10) goto 10
 !BH171231         if(frmodp.eq.'enabled')then ! NBI source
-           call dcopy(iyjx2,source(0:iyjx2-1,0,k,indxlr_),1, &
-              temp1(0:iyjx2-1,0),1)
+           call dcopy(iyjx2,source(0:iy+1,0:jx+1,k,indxlr_),1, &
+                             temp1(0:iy+1,0:jx+1),1)
 !BH171231         endif
          write(t_,550) k
  550     format(1x,"Species ",i2, &
@@ -2068,7 +2069,7 @@ contains
 !yup      call pltso_theta  !YuP[06-2016]
 
       return
-      end
+      end subroutine souplt
 !
 !=======================================================================
       subroutine pltsofvv
@@ -2097,8 +2098,8 @@ contains
         temp3=0.d0 ! initialize for each k species
         if (xlncur(k,lr_).lt.1.e-10) goto 20
 !BH171231        if(frmodp.eq.'enabled')then ! NBI source
-          call dcopy(iyjx2,source(0:iyjx2-1,0,k,indxlr_),1, &
-             temp3(0:iyjx2-1,0),1) ! temp3
+          call dcopy(iyjx2,source(0:iy+1,0:jx+1,k,indxlr_),1, &
+                            temp3(0:iy+1,0:jx+1),1) ! temp3
 !BH171231        endif
 
 !-----YuP[2018-01-08] revised to match cqlinput_help:
@@ -2253,7 +2254,7 @@ contains
 
 
       return
-      end
+      end subroutine pltsofvv
 
 
 !
@@ -2289,8 +2290,8 @@ contains
         if (xlncur(k,lr_).lt.1.e-10) goto 20
 
         if(frmodp.eq.'enabled')then ! NBI source
-          call dcopy(iyjx2,source(0:iyjx2-1,0,k,indxlr_),1, &
-                temp3(0:iyjx2-1,0),1) ! temp3
+          call dcopy(iyjx2,source(0:iy+1,0:jx+1,k,indxlr_),1, &
+                            temp3(0:iy+1,0:jx+1),1) ! temp3
         endif
 
 
@@ -2374,7 +2375,7 @@ contains
 
 
       return
-      end
+      end subroutine pltso_theta
 !
 
 

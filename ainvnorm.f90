@@ -111,5 +111,7 @@ contains
         tnorm(k)=vnorm**3/(gam1*one_)
  40   continue
       return
-      end
+      end subroutine ainvnorm
+      
+      
 end module ainvnorm_mod

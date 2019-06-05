@@ -30,8 +30,10 @@ contains
       include 'trans.h'
       nobind="disabled"
 !.......................................................................
-      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
-           fvn(0:iyjx2*ngen*lrors-1,0,1,1),1)
+     !YuP: frn,fvn,fvn_1,frn_1,frn_2 are dimensioned as 0:iyp1,0:jxp1,1:ngen,0:lrors
+     !                          and f is dimensioned as 0:iy+1,0:jx+1,1:ngen,1:lrors
+      call dcopy(iyjx2*ngen*lrors,f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                                fvn(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
 !..............................................................
 !     The velocity split for this time step is done and we assume
 !     that the results of this split resides in fvn(i,j,k,l) and
@@ -42,9 +44,11 @@ contains
 !     accomplished in a density conserving manner.
 !..............................................................
       if (nonadi .eq. 6) then
-         !XXX
-        call tdtrvtor2(fvn(0:iyp1,0:jxp1,1,1),frn(0:iyp1,0:jxp1,1,1),vpint,vpint_,1)
+         !XXX YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+        call tdtrvtor2(fvn(0:iyp1,0:jxp1,1:ngen,1), &
+                       frn(0:iyp1,0:jxp1,1:ngen,1), vpint,vpint_,1)
       else
+        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or lrz)
         call tdtrvtor(fvn,frn)
       endif
 !..............................................................
@@ -61,7 +65,9 @@ contains
 !..............................................................
 !     Keep a copy for accuracy check later...
 !..............................................................
-      call dcopy(iyjx2*ngen*(lrors+1),frn,1,frn_2,1)
+     !YuP: frn,fvn,fvn_1,frn_1,frn_2 are dimensioned as 0:iyp1,0:jxp1,1:ngen,0:lrors
+      call dcopy(iyjx2*ngen*(lrors+1),frn(0:iy+1,0:jx+1,1:ngen,0:lrors),1, &
+                                    frn_2(0:iy+1,0:jx+1,1:ngen,0:lrors),1)
 !..............................................................
 !     Loop over species index.
 !..............................................................
@@ -171,12 +177,9 @@ contains
               do 290 j=1,jx
                 frn(idx(i,l),j,k,l)=eg_(j,ij,l)*frn(idx(i,l-1),j,k,l-1) &
                   +fg_(j,ij,l)
-!              write(*,'(a,3i4,2e12.4)') 'transp=== l,j,i,d_r=',
-!     ~         l,j,i,d_r(i,j,k,l),d_rr(i,j,k,l)
 
  290          continue
  295        continue
-!         pause
 
             do 310 l=l_lower(i),lrors
               ii=idx(i,l)
@@ -208,7 +211,6 @@ contains
               zs=zs+vpint_(idx(i,l),lrindx(l))
               zt=zt+vpint_(idx(i,l),lrindx(l))*frn(idx(i,l),1,k,l)
  420        continue
-!              write(*,*) 'transp=== l,zs,zt=', l,zs,zt
             do 430 i=1,iytr(l)
               frn(idx(i,l),1,k,l)=zt/zs
  430        continue
@@ -220,10 +222,14 @@ contains
 !     mesh - interpolate onto the velocity mesh, returning it in frn.
 !......................................................................
       if (nonadi .eq. 6) then
-        call tdtrrtov2(frn(0:ipy1,0:jxp1,1,1),frn(0:ipy1,0:jxp1,1,1),vpint,vpint_,1)
+        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+        call tdtrrtov2(frn(0:ipy1,0:jxp1,1:ngen,1), &
+                       frn(0:ipy1,0:jxp1,1:ngen,1), vpint,vpint_,1)
       else
         call tdtrrtov(frn)
       endif
       return
-      end
+      end subroutine tdtransp
+      
+      
 end module tdtransp_mod

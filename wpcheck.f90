@@ -39,8 +39,8 @@ contains
       include 'wpadvnc.h'
 !.......................................................................
 
-      call bcast(fxsp(0:iyjx2*ngen*lrors,0,1,1),zero,iyjx2*ngen*lrors)
-      call bcast(f(0:iyjx2*ngen*lrors,0,1,1),zero,iyjx2*ngen*lrors)
+      call bcast(fxsp(0:iy+1,0:jx+1,1:ngen,1:lrors),zero,iyjx2*ngen*lrors)
+      call bcast(   f(0:iy+1,0:jx+1,1:ngen,1:lrors),zero,iyjx2*ngen*lrors)
       call bcast(zdns,zero,lrors)
       call bcast(zdnsb,zero,lrors)
       call bcast(zdns1,zero,lrors)
@@ -652,5 +652,6 @@ contains
 !%OS
 
       return
-      end
+      end subroutine wpcheck
+      
 end module wpcheck_mod

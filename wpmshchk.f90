@@ -135,5 +135,7 @@ contains
       if (ls .le. 10) stop 'wpmshchk: Need to set ls>10'
 
  999  return
-      end
+      end subroutine wpmshchk
+      
+      
 end module wpmshchk_mod

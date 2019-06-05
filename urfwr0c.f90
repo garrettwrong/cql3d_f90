@@ -42,5 +42,6 @@ contains
  10   continue
 
       return
-      end
+      end subroutine urfwr0c
+      
 end module urfwr0c_mod

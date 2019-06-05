@@ -42,5 +42,6 @@ contains
  2    continue
 
       return
-      end
+      end subroutine tdstin
+      
 end module tdstin_mod

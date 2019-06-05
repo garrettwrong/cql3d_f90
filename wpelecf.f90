@@ -13,23 +13,17 @@ module wpelecf_mod
   real(c_double) :: zdaijm1
   real(c_double) :: zddij
   real(c_double) :: zddim1j
+  real(c_double) :: ghelec
 
 contains
 
-      real(c_double) function ghelec(i,j,k)
-      use param_mod
-      use cqlcomm_mod
-      use advnce_mod
-
-      ghelec = qz(j)*(zdaij*fpj(i,j,k)-zdaijm1*fpj(i,j-1,k)) &
-        + ry(i,j)*(zddij*fpi(i,j)-zddim1j*fpi(i-1,j))
-      end function ghelec
+!---real(c_double) function ghelec() !YuP[2019-05-31] now a scalar, see below
 
 !
       subroutine wpelecf(kopt)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in wpelecf.  To get fpi(),fpj(),qz(),ry()
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
@@ -144,12 +138,17 @@ contains
               zdaijm1=zdacofm*coss(i,l)
               zddij=zddcof*(sinn(i,l)+sinn(i+1-1/(iy_(l)+1-i),l))**2
               zddim1j=zddcof*(sinn(i-1+1/i,l)+sinn(i,l))**2
-              velsou(i,j,k,l)=velsou(i,j,k,l)+ghelec(i,j,k)
+              !YuP[2019-05-31] Added ghelec here as a scalar (was function):
+              ghelec=     qz(j)*(zdaij*fpj(i,j,k,l)-zdaijm1*fpj(i,j-1,k,l)) &
+                    + ry(i,j,l)*(zddij*fpi(i,j,k,l)-zddim1j*fpi(i-1,j,k,l))
+              velsou(i,j,k,l)=velsou(i,j,k,l)+ghelec
  330        continue
  320      continue
  310    continue
  300  continue
 
       return
-      end
+      end subroutine wpelecf
+      
+      
 end module wpelecf_mod

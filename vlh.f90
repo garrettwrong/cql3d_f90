@@ -21,8 +21,8 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       character*(*) action
-      !XXXX BUG, integer array expected, not real(c_double)
-      integer :: cqlb_size
+      
+      integer :: cqlb_size !XXXX BUG, integer array expected, not real(c_double)  YuP:agreed
       save
 
 !.................................................................
@@ -55,7 +55,7 @@ contains
 
 
       do 35  nmod=1,mrfn
-        call bcast (bqlm,zero,iyjx)
+        call bcast(bqlm,zero,iyjx)
         do 30 j=1,jx
           do 20 l=1,lz
             do 10 i=1,iy
@@ -163,5 +163,7 @@ contains
       call vlhbplt
 
       return
-      end
+      end subroutine vlh
+      
+      
 end module vlh_mod

@@ -18,7 +18,7 @@ c
       use zcunix_mod, only : terp2
       implicit integer (i-n), real*8 (a-h,o-z)
 
-CMPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
       character*8 multiply,method
 
@@ -169,7 +169,7 @@ c..................................................................
         if (psibrth.lt.psilim) then  !i.e., outside LCFS
           lbrth(ipar)=0
         else
-          lbrth(ipar)=luf_bin(apsi,tr)
+          lbrth(ipar)=luf_bin(apsi,tr(1:lrz))
         endif
 
         if(fr_gyrop.eq.'enabled')then ! YuP[03/13/2015]
@@ -220,7 +220,7 @@ c..................................................................
               !Or maybe still use the actual particle position for lbrth?
               lbrth(ipar)=0
            else
-              lbrth(ipar)=luf_bin(apsi,tr)
+              lbrth(ipar)=luf_bin(apsi,tr(1:lrz))
            endif
            ! Also, update gx,qy,qz - it will update xpts,ypts,zpts
            qx(ipar)=px(ipar)
@@ -316,7 +316,7 @@ c.......................................................................
         call tdnflxs(ll)
         llbrth(ll)=0
 cBH171014        call bcast(source(0,0,kfrsou,ll),zero,iyjx2)
-        call bcast(source(0:iyjx2,0,k,ll),zero,iyjx2)
+        call bcast(source(0:iy+1,0:jx+1,k,ll),zero,iyjx2)
 
 c..................................................................
 c     Begin loop over the birth particles.
@@ -482,7 +482,7 @@ c     Locate the flux surface to which this particle will be
 c     assigned.
 c..................................................................
 
-          j=luf_bin(vmag/vnorm,xmidpt) !jx
+          j=luf_bin(vmag/vnorm,xmidpt(1:jx)) !jx
           if (j.gt.jx) go to 100
           i=luf_bin(tmdplne,ymid(1:iy,l_)) !iy
           if (i.gt.iy) then
@@ -586,7 +586,7 @@ c..................................................................
       do 300 ll=1,lrz
         call tdnflxs(ll)
         curbrth(ll)=DBLE(llbrth(ll))/dvol(lr_)*scalfact
-        call dscal(iyjx2,scalfact*tr3(ll),source(0:iyjx2-1,0,k,ll),1)
+        call dscal(iyjx2,scalfact*tr3(ll),source(0:iy+1,0:jx+1,k,ll),1)
         asor(k,1,lr_)=asorz(k,1,lr_)*scalfact*tr3(ll)
         xlncur(k,lr_)=asor(k,1,lr_)*zmaxpsi(lr_)
         xlncurt(lr_)=xlncur(k,lr_)

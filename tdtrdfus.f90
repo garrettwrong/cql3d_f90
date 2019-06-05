@@ -13,8 +13,8 @@ module tdtrdfus_mod
 
   !---END USE
 
-  !XXXXX
-  external pack21
+
+  external pack21  !XXXXX
   external unpack21
 
 !
@@ -214,7 +214,7 @@ contains
       endif  !On difus_io(1).ne."drrin"
 
       return
-      end
+      end subroutine tdtrdfus
 !
 !
       real(c_double) function tdtrrshape(lr)
@@ -267,7 +267,7 @@ contains
       endif
 
       return
-      end
+      end function tdtrrshape
 !
 !
       real(c_double) function tdtrrshape1(lr)
@@ -316,7 +316,7 @@ contains
       endif
 
       return
-      end
+      end function tdtrrshape1
 !
 !
       subroutine tdtrvshape(k,l)
@@ -343,7 +343,7 @@ contains
       lr=lrindx(l)
       l_autocorr=pi*qsafety(lr)*radmaj
 
-      call bcast(temp1(0:iyjx2,0),zero,iyjx2)
+      call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
 !      write(*,*)'tdtrdfus:difus_vshape',difus_vshape
       do  j=1,jx
          vel=x(j)*vnorm/gamma(j)
@@ -368,7 +368,7 @@ contains
       enddo
 
       return
-      end
+      end subroutine tdtrvshape
 
 
 
@@ -434,12 +434,13 @@ contains
       endif
 
       return
-      end
+      end function coll_freq
+      
 
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
-      !XXXXXXXXX  dim for work() did not match, used comm
-      use cqlcomm_mod
+      !XXXXXXXXX  dim for work() did not match, used comm !YuP: work() is not used.
+      !use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
@@ -452,12 +453,10 @@ contains
 !     At this stage uses linear interpolation
 !.......................................................................
 
-      parameter (nwka=3*lrza+1)
-      !XXXXX potentially did not match comm dimension: work(nwka)
+      !parameter (nwka=3*lrza+1) ! YuP: Not used
+      !XXXXX potentially did not match comm dimension: work(nwka)!YuP: work() is not used.
       dimension oldx(1),oldf(1),ynewx(1),ynewf(1)
-      !XXXX matched, but cannot redefine:  dimension i1p(2)
-      dimension secondd(lrza)
-      !XXXX matched, but cannot redifine:  itab(3), tab(3)
+      !dimension secondd(lrza) ! YuP: Not used
 
       do jj = 1,npts_in-1
         do ll = 0,npts
@@ -470,7 +469,7 @@ contains
       enddo
 
       return
-      end
+      end subroutine ryaintorz
 
 
       subroutine diffus_io(kopt)
@@ -757,13 +756,13 @@ contains
       call ncvpt_int2(ncid,vid,1,1,lrzmax,istatus)
 
       istatus= NF_INQ_VARID(ncid,'rya',vid)
-      call ncvpt_doubl2(ncid,vid,1,lrzmax,rya(1),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),lrzmax,rya(1),istatus)
 
       istatus= NF_INQ_VARID(ncid,'rpconz',vid)
-      call ncvpt_doubl2(ncid,vid,1,lrzmax,rpconz(1),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),lrzmax,rpconz(1),istatus)
 
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)
-      call ncvpt_doubl2(ncid,vid,1,1,rhomax,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,rhomax,istatus)
 
       istatus= NF_INQ_VARID(ncid,'lrz',vid)
       call ncvpt_int2(ncid,vid,1,1,lrz,istatus)
@@ -775,13 +774,13 @@ contains
       call ncvpt_int2(ncid,vid,1,1,jx,istatus)
 
       istatus= NF_INQ_VARID(ncid,'x',vid)
-      call ncvpt_doubl2(ncid,vid,1,jx,x,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),jx,x,istatus)
 
       istatus= NF_INQ_VARID(ncid,'vnorm',vid)
-      call ncvpt_doubl2(ncid,vid,1,1,vnorm,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,vnorm,istatus)
 
       istatus= NF_INQ_VARID(ncid,'enorm',vid)
-      call ncvpt_doubl2(ncid,vid,1,1,enorm,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,enorm,istatus)
 
       istatus= NF_INQ_VARID(ncid,'iy',vid)
       call ncvpt_int2(ncid,vid,1,1,iymax,istatus)
@@ -1000,7 +999,7 @@ contains
       endif  !On kopt.eq.3 .or. kopt.eq.4
 
       return
-      end
+      end subroutine diffus_io
 !
 !
       real(c_double) function difus_io_scale(k,iopt)
@@ -1061,4 +1060,6 @@ contains
       return
 
       end function difus_io_scale
+      
+      
 end module tdtrdfus_mod

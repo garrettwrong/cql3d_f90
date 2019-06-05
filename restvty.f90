@@ -147,5 +147,6 @@ contains
       endif
 !
       return
-      end
+      end subroutine restvty
+      
 end module restvty_mod

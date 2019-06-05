@@ -468,7 +468,7 @@ contains
 !
 !
       subroutine dscal(n,da,dx,incx)
-!     !XXX, just multiply it..
+!     !XXX, just multiply it..    YuP: it uses unrolled loops, for speed.
 !     scales a vector by a constant.
 !     uses unrolled loops for increment equal to one.
 !     jack dongarra, linpack, 3/11/78.
@@ -555,7 +555,7 @@ contains
 
 
       real(c_float) function rbound(r8)
-      save !XXXX why?
+      save !XXXX why?  YuP: probably not needed
 !
 !     Converts a real(c_double) argument to a real number,
 !     equal to 0. (if r8=0.) or,
@@ -584,7 +584,9 @@ contains
       endif
 
       return
-      end function
+      end function rbound
+      
+      
       SUBROUTINE DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.1) --
@@ -781,9 +783,10 @@ contains
    40 CONTINUE
       RETURN
 !*
-!*     End of DGBTF2
+!*     End of 
 !*
-    END  subroutine
+      END subroutine DGBTF2
+      
       SUBROUTINE DGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.1) --
@@ -1218,9 +1221,10 @@ contains
 !*
       RETURN
 !*
-!*     End of DGBTRF
+!*     End of 
 !*
-   END subroutine
+      END subroutine DGBTRF
+      
       SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, &
                          INFO )
         implicit none
@@ -1402,10 +1406,10 @@ contains
       END IF
       RETURN
 !*
-!*     End of DGBTRS
+!*     End of 
 !*
-      END subroutine
-
+      END subroutine DGBTRS
+      
       SUBROUTINE DGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA,BETA
@@ -1713,10 +1717,10 @@ contains
 !*
       RETURN
 !*
-!*     End of DGEMM .
+!*     End of  .
 !*
-      END subroutine
-
+      END subroutine DGEMM
+      
       SUBROUTINE DGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA,BETA
@@ -1972,9 +1976,9 @@ contains
 !*
       RETURN
 !*
-!*     End of DGEMV .
+!*     End of  .
 !*
-      END subroutine
+      END subroutine DGEMV
 
       SUBROUTINE DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 !*     .. Scalar Arguments ..
@@ -2131,10 +2135,10 @@ contains
 !*
       RETURN
 !*
-!*     End of DGER  .
+!*     End of   .
 !*
-      END subroutine
-
+      END subroutine DGER
+      
       SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -2251,10 +2255,10 @@ contains
 !*
       RETURN
 !*
-!*     End of DLASWP
+!*     End of 
 !*
-      END subroutine
-
+      END subroutine DLASWP
+      
       SUBROUTINE DSWAP(N,DX,INCX,DY,INCY)
 !*     .. Scalar Arguments ..
       INTEGER INCX,INCY,N
@@ -2324,7 +2328,7 @@ contains
           DY(I+2) = DTEMP
    50 CONTINUE
       RETURN
-      END subroutine
+      END subroutine DSWAP
 
       SUBROUTINE DTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
 !*     .. Scalar Arguments ..
@@ -2656,10 +2660,10 @@ contains
 !*
       RETURN
 !*
-!*     End of DTBSV .
+!*     End of  .
 !*
-      END subroutine
-
+      END subroutine DTBSV
+      
       SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA
@@ -3027,10 +3031,10 @@ contains
 !*
       RETURN
 !*
-!*     End of DTRSM .
+!*     End of  .
 !*
-      END subroutine
-
+      END subroutine DTRSM
+      
       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3039,7 +3043,8 @@ contains
 !*
 !*     .. Scalar Arguments ..
       INTEGER            ISPEC
-      REAL               ONE, ZERO
+      !YuP[2019-04-23]was:  REAL               ONE, ZERO
+      real(c_double)  ONE, ZERO ! YuP[2019-04-23]
 !*     ..
 !*
 !*  Purpose
@@ -3072,8 +3077,10 @@ contains
 !*          = 1:  Arithmetic produced the correct answers
 !*
 !*     .. Local Scalars ..
-      REAL               NAN1, NAN2, NAN3, NAN4, NAN5, NAN6, NEGINF, &
-                         NEGZRO, NEWZRO, POSINF
+!YuP[2019-04-23]was:      REAL               NAN1, NAN2, NAN3, NAN4, NAN5, NAN6, NEGINF, &
+!YuP[2019-04-23]was:                         NEGZRO, NEWZRO, POSINF
+      real(c_double) NAN1, NAN2, NAN3, NAN4, NAN5, NAN6, NEGINF, &
+                       NEGZRO, NEWZRO, POSINF !YuP[2019-04-23]
 !*     ..
 !*     .. Executable Statements ..
       IEEECK = 1
@@ -3177,7 +3184,8 @@ contains
       END IF
 !*
       RETURN
-    END FUNCTION IEEECK
+      END FUNCTION IEEECK
+      
       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, &
                        N4 )
 !*
@@ -3308,7 +3316,7 @@ contains
 !        ILAENV = 0
          ILAENV = 1
          IF( ILAENV.EQ.1 ) THEN
-            ILAENV = IEEECK( 0, 0.0, 1.0 )
+            ILAENV=IEEECK( 0,0.d0,1.d0 ) !YuP[2019-04-23]was: IEEECK( 0, 0.0, 1.0 )
          END IF
 !*
       ELSE IF( ISPEC.EQ.11 ) THEN
@@ -3318,7 +3326,7 @@ contains
 !        ILAENV = 0
          ILAENV = 1
          IF( ILAENV.EQ.1 ) THEN
-            ILAENV = IEEECK( 1, 0.0, 1.0 )
+            ILAENV =IEEECK( 1,0.d0,1.d0 ) !YuP[2019-04-23]was: IEEECK( 1, 0.0, 1.0 )
          END IF
 !*
       ELSE
@@ -3332,8 +3340,8 @@ contains
 !*
 !*     End of ILAENV
 !*
-    END FUNCTION ILAENV
-
+      END FUNCTION ILAENV
+      
       LOGICAL FUNCTION LSAME(CA,CB)
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3418,7 +3426,8 @@ contains
 !*
 !*     End of LSAME
 !*
-    END FUNCTION LSAME
+      END FUNCTION LSAME
+      
       SUBROUTINE XERBLA( SRNAME, INFO )
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
@@ -3461,7 +3470,7 @@ contains
  9999 FORMAT( ' ** On entry to ', A6, ' parameter number ', I2, ' had ', &
             'an illegal value' )
 !*
-!*     End of XERBLA
+!*     End of 
 !*
     END SUBROUTINE XERBLA
 
@@ -3643,9 +3652,10 @@ contains
       END IF
       RETURN
 !*
-!*     End of DGESV
+!*     End of 
 !*
-      END
+      END subroutine DGESV
+      
       SUBROUTINE DGETF2( M, N, A, LDA, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.2) --
@@ -3787,10 +3797,10 @@ contains
    10 CONTINUE
       RETURN
 !*
-!*     End of DGETF2
+!*     End of 
 !*
-   END subroutine
-
+      END subroutine DGETF2
+      
       SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
 !*
 !*  -- LAPACK routine (version 3.2) --
@@ -3943,10 +3953,10 @@ contains
       END IF
       RETURN
 !*
-!*     End of DGETRF
+!*     End of 
 !*
-   END subroutine
-
+      END subroutine DGETRF
+      
       SUBROUTINE DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 !*
 !*  -- LAPACK routine (version 3.3.1) --
@@ -4090,9 +4100,10 @@ contains
 !*
       RETURN
 !*
-!*     End of DGETRS
+!*     End of 
 !*
-      END subroutine
+      END subroutine DGETRS
+      
 !*> \brief \b DLAMCH
 !*
 !*  =========== DOCUMENTATION ===========
@@ -4237,7 +4248,8 @@ contains
 !*
 !*     End of DLAMCH
 !*
-    END FUNCTION DLAMCH
+      END FUNCTION DLAMCH
+      
 !************************************************************************
 !*> \brief \b DLAMC3
 !*> \details
@@ -4281,7 +4293,7 @@ contains
 !*
 !*     End of DLAMC3
 !*
-    END FUNCTION DLAMC3
+      END FUNCTION DLAMC3
 !*
 !************************************************************************
 !$$$      SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
@@ -5251,12 +5263,13 @@ contains
 !*  Definition:
 !*  ===========
 !*
+!------  YuP[2019-04-23] commented this function - it is not used.
 !*       INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
-!*
+!* 
 !*       .. Scalar Arguments ..
 !*       INTEGER            IHI, ILO, ISPEC, LWORK, N
 !*       CHARACTER          NAME*( * ), OPTS*( * )
-!*
+!*  
 !*
 !*> \par Purpose:
 !*  =============
@@ -5264,7 +5277,7 @@ contains
 !*> \verbatim
 !*>
 !*>      This program sets problem and machine dependent parameters
-!*>      useful for xHSEQR and its subroutines. It is called whenever
+!*>      useful for xHSEQR and its subroutines. It is called whenever 
 !*>      ILAENV is called with 12 <= ISPEC <= 16
 !*> \endverbatim
 !*
@@ -5445,114 +5458,115 @@ contains
 !*> \endverbatim
 !*>
 !*  =====================================================================
-      INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
-!*
-!*  -- LAPACK auxiliary routine (version 3.4.0) --
-!*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-!*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-!*     November 2011
-!*
-!*     .. Scalar Arguments ..
-      INTEGER            IHI, ILO, ISPEC, LWORK, N
-      CHARACTER          NAME*( * ), OPTS*( * )
-!*
-!*  ================================================================
-!*     .. Parameters ..
-      INTEGER            INMIN, INWIN, INIBL, ISHFTS, IACC22
-      PARAMETER          ( INMIN = 12, INWIN = 13, INIBL = 14, &
-                         ISHFTS = 15, IACC22 = 16 )
-      INTEGER            NMIN, K22MIN, KACMIN, NIBBLE, KNWSWP
-      PARAMETER          ( NMIN = 75, K22MIN = 14, KACMIN = 14, &
-                         NIBBLE = 14, KNWSWP = 500 )
-      REAL               TWO
-      PARAMETER          ( TWO = 2.0 )
-!*     ..
-!*     .. Local Scalars ..
-      INTEGER            NH, NS
-!*     ..
-!*     .. Intrinsic Functions ..
-      INTRINSIC          LOG, MAX, MOD, NINT, REAL
-!*     ..
-!*     .. Executable Statements ..
-      IF( ( ISPEC.EQ.ISHFTS ) .OR. ( ISPEC.EQ.INWIN ) .OR. &
-          ( ISPEC.EQ.IACC22 ) ) THEN
-!*
-!*        ==== Set the number simultaneous shifts ====
-!*
-         NH = IHI - ILO + 1
-         NS = 2
-         IF( NH.GE.30 ) &
-            NS = 4
-         IF( NH.GE.60 ) &
-            NS = 10
-         IF( NH.GE.150 ) &
-            NS = MAX( 10, NH / NINT( LOG( REAL( NH ) ) / LOG( TWO ) ) )
-         IF( NH.GE.590 ) &
-            NS = 64
-         IF( NH.GE.3000 ) &
-            NS = 128
-         IF( NH.GE.6000 ) &
-            NS = 256
-         NS = MAX( 2, NS-MOD( NS, 2 ) )
-      END IF
-!*
-      IF( ISPEC.EQ.INMIN ) THEN
-!*
-!*
-!*        ===== Matrices of order smaller than NMIN get sent
-!*        .     to xLAHQR, the classic double shift algorithm.
-!*        .     This must be at least 11. ====
-!*
-         IPARMQ = NMIN
-!*
-      ELSE IF( ISPEC.EQ.INIBL ) THEN
-!*
-!*        ==== INIBL: skip a multi-shift qr iteration and
-!*        .    whenever aggressive early deflation finds
-!*        .    at least (NIBBLE*(window size)/100) deflations. ====
-!*
-         IPARMQ = NIBBLE
-!*
-      ELSE IF( ISPEC.EQ.ISHFTS ) THEN
-!*
-!*        ==== NSHFTS: The number of simultaneous shifts =====
-!*
-         IPARMQ = NS
-!*
-      ELSE IF( ISPEC.EQ.INWIN ) THEN
-!*
-!*        ==== NW: deflation window size.  ====
-!*
-         IF( NH.LE.KNWSWP ) THEN
-            IPARMQ = NS
-         ELSE
-            IPARMQ = 3*NS / 2
-         END IF
-!*
-      ELSE IF( ISPEC.EQ.IACC22 ) THEN
-!*
-!*        ==== IACC22: Whether to accumulate reflections
-!*        .     before updating the far-from-diagonal elements
-!*        .     and whether to use 2-by-2 block structure while
-!*        .     doing it.  A small amount of work could be saved
-!*        .     by making this choice dependent also upon the
-!*        .     NH=IHI-ILO+1.
-!*
-         IPARMQ = 0
-         IF( NS.GE.KACMIN ) &
-            IPARMQ = 1
-         IF( NS.GE.K22MIN ) &
-            IPARMQ = 2
-!*
-      ELSE
-!*        ===== invalid value of ispec =====
-         IPARMQ = -1
-!*
-      END IF
-!*
-!*     ==== End of IPARMQ ====
-!*
-    END FUNCTION IPARMQ
+!      INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
+!!*
+!!*  -- LAPACK auxiliary routine (version 3.4.0) --
+!!*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+!!*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+!!*     November 2011
+!!*
+!!*     .. Scalar Arguments ..
+!      INTEGER            IHI, ILO, ISPEC, LWORK, N
+!      CHARACTER          NAME*( * ), OPTS*( * )
+!!*
+!!*  ================================================================
+!!*     .. Parameters ..
+!      INTEGER            INMIN, INWIN, INIBL, ISHFTS, IACC22
+!      PARAMETER          ( INMIN = 12, INWIN = 13, INIBL = 14, &
+!                         ISHFTS = 15, IACC22 = 16 )
+!      INTEGER            NMIN, K22MIN, KACMIN, NIBBLE, KNWSWP
+!      PARAMETER          ( NMIN = 75, K22MIN = 14, KACMIN = 14, &
+!                         NIBBLE = 14, KNWSWP = 500 )
+!      REAL               TWO
+!      PARAMETER          ( TWO = 2.0 )
+!!*     ..
+!!*     .. Local Scalars ..
+!      INTEGER            NH, NS
+!!*     ..
+!!*     .. Intrinsic Functions ..
+!      INTRINSIC          LOG, MAX, MOD, NINT, REAL
+!!*     ..
+!!*     .. Executable Statements ..
+!      IF( ( ISPEC.EQ.ISHFTS ) .OR. ( ISPEC.EQ.INWIN ) .OR. &
+!          ( ISPEC.EQ.IACC22 ) ) THEN
+!!*
+!!*        ==== Set the number simultaneous shifts ====
+!!*
+!         NH = IHI - ILO + 1
+!         NS = 2
+!         IF( NH.GE.30 ) &
+!            NS = 4
+!         IF( NH.GE.60 ) &
+!            NS = 10
+!         IF( NH.GE.150 ) &
+!            NS = MAX( 10, NH / NINT( LOG( REAL( NH ) ) / LOG( TWO ) ) )
+!         IF( NH.GE.590 ) &
+!            NS = 64
+!         IF( NH.GE.3000 ) &
+!            NS = 128
+!         IF( NH.GE.6000 ) &
+!            NS = 256
+!         NS = MAX( 2, NS-MOD( NS, 2 ) )
+!      END IF
+!!*
+!      IF( ISPEC.EQ.INMIN ) THEN
+!!*
+!!*
+!!*        ===== Matrices of order smaller than NMIN get sent
+!!*        .     to xLAHQR, the classic double shift algorithm.
+!!*        .     This must be at least 11. ====
+!!*
+!         IPARMQ = NMIN
+!!*
+!      ELSE IF( ISPEC.EQ.INIBL ) THEN
+!!*
+!!*        ==== INIBL: skip a multi-shift qr iteration and
+!!*        .    whenever aggressive early deflation finds
+!!*        .    at least (NIBBLE*(window size)/100) deflations. ====
+!!*
+!         IPARMQ = NIBBLE
+!!*
+!      ELSE IF( ISPEC.EQ.ISHFTS ) THEN
+!!*
+!!*        ==== NSHFTS: The number of simultaneous shifts =====
+!!*
+!         IPARMQ = NS
+!!*
+!      ELSE IF( ISPEC.EQ.INWIN ) THEN
+!!*
+!!*        ==== NW: deflation window size.  ====
+!!*
+!         IF( NH.LE.KNWSWP ) THEN
+!            IPARMQ = NS
+!         ELSE
+!            IPARMQ = 3*NS / 2
+!         END IF
+!!*
+!      ELSE IF( ISPEC.EQ.IACC22 ) THEN
+!!*
+!!*        ==== IACC22: Whether to accumulate reflections
+!!*        .     before updating the far-from-diagonal elements
+!!*        .     and whether to use 2-by-2 block structure while
+!!*        .     doing it.  A small amount of work could be saved
+!!*        .     by making this choice dependent also upon the
+!!*        .     NH=IHI-ILO+1.
+!!*
+!         IPARMQ = 0
+!         IF( NS.GE.KACMIN ) &
+!            IPARMQ = 1
+!         IF( NS.GE.K22MIN ) &
+!            IPARMQ = 2
+!!*
+!      ELSE
+!!*        ===== invalid value of ispec =====
+!         IPARMQ = -1
+!!*
+!      END IF
+!!*
+!!*     ==== End of IPARMQ ====
+!!*
+!      END FUNCTION IPARMQ
+      
 !*> \brief \b LSAME
 !*
 !*  =========== DOCUMENTATION ===========

@@ -62,5 +62,6 @@ contains
 
 
       return
-      end
+      end subroutine eqinitl
+      
 end module eqinitl_mod

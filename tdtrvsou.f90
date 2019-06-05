@@ -17,7 +17,7 @@ contains
       subroutine tdtrvsou(k)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in tdtrvsou.  To get gfi(),hfi(),gfu(),hfu(),etc.
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..............................................................
@@ -49,8 +49,8 @@ contains
 !%OS  should be j=2,jx-1? may depend on lbdry
 !%OS  do 110 j=1,jx
         do 110 j=2,jx-1
-          velsou(i,j,k,l_)=qz(j)*(gfi(i,j,k)-gfi(i,j-1,k))+ &
-            ry(i,j)*(hfi(i,j)-hfi(i-1,j))+ &
+          velsou(i,j,k,l_)= qz(j)*(gfi(i,j,k)-gfi(i,j-1,k))+ &
+                          ry(i,j,l_)*(hfi(i,j,k,l_)-hfi(i-1,j,k,l_))+ &
             vptb(i,lr_)*(cah(i,j)*f(i,j,k,l_)+so(i,j))+ &
             cthta(i,j)*(fpithta(i,j)-fpithta(i-1,j))
           velsou2(i,j,k,l_)=cthta(i,j)*(fpithta(i,j)-fpithta(i-1,j))
@@ -86,7 +86,7 @@ contains
       if (cqlpmod .ne. "enabled") then
         do 200 j=1,jx
           velsou(itl,j,k,l_)=qz(j)*(gfi(itl,j,k)-gfi(itl,j-1,k))+ &
-            r2y(j)*(-hfi(itl-1,j)+2.*hfi(itl,j)+hfi(itu,j))+ &
+            r2y(j,l_)*(-hfi(itl-1,j,k,l_)+2.*hfi(itl,j,k,l_)+hfi(itu,j,k,l_))+ &
             vptb(itl,lr_)*(cah(itl,j)*f(itl,j,k,l_)+so(itl,j))
  200    continue
       endif
@@ -110,8 +110,12 @@ contains
 !.......................................................................
 
       if (cqlpmod .ne. "enabled") &
-        call tdtrvtor3(velsou(0:iyp1,0:jxp1,1,1),velsou(0:iyp1,0:jxp1,1,1),cynt2,cynt2_,2,k)
+        call tdtrvtor3(velsou(0:iyp1,0:jxp1,1:ngen,1), &
+                       velsou(0:iyp1,0:jxp1,1:ngen,1), cynt2,cynt2_,2,k)
+      !YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen, [for given l_]
 
       return
-      end
+      end subroutine tdtrvsou
+      
+      
 end module tdtrvsou_mod

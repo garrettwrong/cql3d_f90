@@ -36,31 +36,32 @@ contains
 
       if (cqlpmod .ne. "enabled") then
         if (kopt .eq. 1) then
-          call dcopy(iyjx2*ngen,f(0:iyjx2*ngen-1,0,1,l_),1, &
-                f_(0:iyjx2*ngen-1,0,1,l_),1)
-          call dcopy(iyjx2*ngen,frn(0:iyjx2*ngen-1,0,1,l_),1, &
-               f(0:iyjx2*ngen-1,0,1,l_),1)
+          call dcopy(iyjx2*ngen,  f(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                 f_(0:iy+1,0:jx+1,1:ngen,l_),1)
+          call dcopy(iyjx2*ngen,frn(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                  f(0:iy+1,0:jx+1,1:ngen,l_),1)
         else if (kopt .eq. 2) then
-          call dcopy(iyjx2*ngen,fvn(0:iyjx2*ngen-1,0,1,l_),1, &
-                f(0:iyjx2*ngen-1,0,1,l_),1)
+          call dcopy(iyjx2*ngen,fvn(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                  f(0:iy+1,0:jx+1,1:ngen,l_),1)
         else if (kopt .eq. 3) then
-          call dcopy(iyjx2*ngen,f_(0:iyjx2*ngen-1,0,1,l_),1, &
-                f(0:iyjx2*ngen-1,0,1,l_),1)
+          call dcopy(iyjx2*ngen, f_(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                  f(0:iy+1,0:jx+1,1:ngen,l_),1)
         endif
       else
         if (kopt .eq. 1) then
-          call dcopy(iyjx2*ngen,f(0:iyjx2*ngen-1,0,1,l_),1, &
-                f_(0:iyjx2*ngen-1,0,1,l_),1)
-          call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,l_),1, &
-               f(0:iyjx2*ngen-1,0,1,l_),1)
+          call dcopy(iyjx2*ngen,     f(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                    f_(0:iy+1,0:jx+1,1:ngen,l_),1)
+          call dcopy(iyjx2*ngen,  fnp1(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                     f(0:iy+1,0:jx+1,1:ngen,l_),1)
         else if (kopt .eq. 2) then
-          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,l_),1, &
-                f(0:iyjx2*ngen-1,0,1,l_),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                     f(0:iy+1,0:jx+1,1:ngen,l_),1)
         else if (kopt .eq. 3) then
-          call dcopy(iyjx2*ngen,f_(0:iyjx2*ngen-1,0,1,l_),1, &
-                f(0:iyjx2*ngen-1,0,1,l_),1)
+          call dcopy(iyjx2*ngen,    f_(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                     f(0:iy+1,0:jx+1,1:ngen,l_),1)
         endif
       endif
       return
-      end
+      end subroutine tdtrfcop
+      
 end module tdtrfcop_mod

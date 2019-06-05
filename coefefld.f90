@@ -26,8 +26,8 @@ contains
 !..................................................................
 
 
-      call bcast(cex(1:iyjx,1,l_),zero,iyjx)
-      call bcast(cet(1:iyjx,1,l_),zero,iyjx)
+      call bcast(cex(1:iy,1:jx,l_),zero,iyjx)
+      call bcast(cet(1:iy,1:jx,l_),zero,iyjx)
 !     Division by 300. below is conversion to cgs: 300 volts/statvolt.
 !%OS  coefld=-radmaj*fpsi(lr_)*onovrp(2,lr_)*flxavgd(lr_)
       if (cqlpmod .ne. "enabled") then
@@ -69,5 +69,6 @@ contains
  50     continue
  40   continue
       return
-      end
+      end subroutine coefefld
+      
 end module coefefld_mod

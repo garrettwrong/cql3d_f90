@@ -43,5 +43,7 @@ contains
         call urfwrite_(krf,24)
       endif
       return
-      end
+      end subroutine urfwrite
+      
+      
 end module urfwrite_mod

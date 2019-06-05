@@ -196,6 +196,6 @@ contains
  40     continue
       endif
  999  return
-      end
+      end subroutine losstor
 
 end module losstor_mod

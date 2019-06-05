@@ -496,5 +496,7 @@ contains
 
 
       return
-      end
+      end subroutine micxinit
+      
+      
 end module micxinit_mod

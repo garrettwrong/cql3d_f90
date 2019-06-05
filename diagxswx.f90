@@ -21,7 +21,7 @@ module diagxswx_mod
 contains
 
       subroutine diagxswx(k)
-      use advnce_mod
+      use advnce_mod !here: in diagimpd(). To get gfu(), gfi()
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : dcopy
@@ -133,7 +133,7 @@ contains
       call coefmidt(de,2)
       call coefmidt(df,3)
  90   continue
-      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp2(0:iy+1,0:jx+1),1,temp1(0:iy+1,0:jx+1),1)
       if (ineg .eq. "disabled") go to 400
 
       do 410 j=1,jx
@@ -163,10 +163,12 @@ contains
 !..................................................................
 
       if (iactst .eq. "disabled") go to 500
-      call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,temp4(0:iy+1,0:jx+1),1)
       call diagdens(yline,ymidd,eline)
       yline=yline*one_
  500  continue
       return
-      end
+      end subroutine diagxswx
+      
+      
 end module diagxswx_mod

@@ -448,5 +448,7 @@ contains
  999  continue
 
       return
-      end
+      end subroutine micxiniz
+      
+      
 end module micxiniz_mod

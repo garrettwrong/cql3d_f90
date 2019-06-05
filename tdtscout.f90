@@ -62,5 +62,6 @@ contains
  100  format(5e16.6)
       close(unit=12)
       return
-      end
+      end subroutine tdtscout
+      
 end module tdtscout_mod

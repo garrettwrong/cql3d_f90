@@ -215,5 +215,7 @@ contains
  100  continue ! k=1,ngen
 
       return
-      end
+      end subroutine pltpower
+      
+      
 end module pltpower_mod

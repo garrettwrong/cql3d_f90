@@ -93,5 +93,6 @@ contains
       write(*,*)'tdtraloc:  Leaving tdtraloc'
 
       return
-      end
+      end subroutine tdtraloc
+      
 end module tdtraloc_mod

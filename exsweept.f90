@@ -16,7 +16,7 @@ contains
       subroutine exsweept(k)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in exsweept(). To get hfu()
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
@@ -46,8 +46,8 @@ contains
 !     differentiate the flux hfu
 !..................................................................
 
-          temp6(i,j)=hfu(i,j)
-          temp3(i,j)=(hfu(i,j)-hfu(i-1,j))*dx(j)*twopi &
+          temp6(i,j)=hfu(i,j,k,l_)
+          temp3(i,j)=(hfu(i,j,k,l_)-hfu(i-1,j,k,l_))*dx(j)*twopi &
 
 !..................................................................
 !     Particle source
@@ -74,9 +74,9 @@ contains
 
 !dir$ ivdep
       do 200 j=1,jx
-        temp6(itl,j)=hfu(itl,j)
-        temp6(itu,j)=hfu(itu,j)
-        temp3(itl,j)=-(hfu(itl-1,j)-2.*hfu(itl,j)-hfu(itu,j))*pi*dx(j) &
+        temp6(itl,j)=hfu(itl,j,k,l_)
+        temp6(itu,j)=hfu(itu,j,k,l_)
+        temp3(itl,j)=-(hfu(itl-1,j,k,l_)-2.*hfu(itl,j,k,l_)-hfu(itu,j,k,l_))*pi*dx(j) &
           +.5*cah(itl,j)*temp2(itl,j)*vptb(itl,lr_) &
           *cynt2(itl,l_)*cint2(j) &
           +.5*so(itl,j)*vptb(itl,lr_)*cint2(j)*cynt2(itl,l_)
@@ -93,5 +93,7 @@ contains
         if (error.gt.1.e-8) call diagwrng(15)
       endif
       return
-      end
+      end subroutine exsweept
+      
+      
 end module exsweept_mod

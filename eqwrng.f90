@@ -63,5 +63,6 @@ contains
 10990 format("unspecified")
 
       stop 'eqwrng: error' ! stop at all MPI cores
-      end
+      end subroutine eqwrng
+      
 end module eqwrng_mod

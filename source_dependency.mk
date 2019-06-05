@@ -1,4 +1,6 @@
 # Source line to be included in makefiles
+# YuP[2019-05-31] frhexdrv.f is removed - not used
+
 SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	pltdf.f90 eqrhopsi.f90 equilib.f90 \
 	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \
@@ -24,7 +26,7 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	eqtopeol.f90  eqvolpsi.f90  eqwrng.f90  \
 	esefld.f90  exlin.f90  exsweep.f90  exsweept.f90   \
 	exsweepx.f90  finit.f90  firstdrv.f90  fle.f90 flxfn.f90  \
-	freya.f  freyasou.f  frhexdrv.f   \
+	freya.f  freyasou.f  \
 	frinitl.f  frinitz.f  frnbdep2.f  frnfreya.f  \
 	frset.f frsmooth.f  frsplft.f   \
 	frstup.f  frsubs.f  frsuppor.f  frwrong.f  \

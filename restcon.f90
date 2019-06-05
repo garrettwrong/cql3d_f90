@@ -56,5 +56,6 @@ contains
       cr=.56/bnumb(kionn)*(3.-bnumb(kionn))/(3.+bnumb(kionn))
       eovsz=1./((1.-cr*(1.-fc))*fc)
       return
-      end
+      end subroutine restcon
+      
 end module restcon_mod

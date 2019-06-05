@@ -78,5 +78,6 @@ contains
       endif
 
       return
-      end
+      end subroutine tdtrmuy
+      
 end module tdtrmuy_mod

@@ -67,7 +67,7 @@ contains
       nlrestrt="disabled"
 
       return
-      end
+      end subroutine aindfpa
 !
 !
 !==================================================================
@@ -202,7 +202,7 @@ contains
       endif                     !on kopt
 
  999  return
-      end
+      end subroutine ainadjnl
 
 !
 !
@@ -340,7 +340,7 @@ contains
       endif                     !on kopt
 
  999  return
-      end
+      end subroutine ainadjnl_fsetup_setup0
 
 !
 
@@ -391,7 +391,7 @@ contains
       WRITE(*,*)
 
       return
-      end
+      end subroutine ain_transcribe
 
 
 end module aindfpa_mod

@@ -32,15 +32,15 @@ module impavnc0_mod
   use tdtrvsou_mod, only : tdtrvsou
 
   !---END USE
-  ! XXX this is probably a bug in the original code.
+  ! XXX this is probably a bug in the original code.  YuP: added 'k' as argument in "statement functions", see advnce.f90
   !use advnce_mod, only :  k => advnce_k ! use advnce_mod's advnce_k
-  use advnce_mod
-  integer,pointer  :: k => advnce_k
+  !use advnce_mod  !here: in impavnc0_mod. To get k?
+  !integer,pointer  :: k => advnce_k
 
   ! gauss_, these are used in it3dalloc
   integer, public ::  inewjmax, ialloc
-  ! XXX this was an integer somewhere?
-  ! XXXvnc vs vnc0 abd etc?
+  ! XXX this was an integer somewhere?  ! YuP: ialloc is not used anymore.
+  ! XXX vnc vs vnc0 abd etc?   YuP: impavnc should be removed from compilation; only impavnc0 is used
   real(c_double), pointer, private ::  abd(:,:)
   integer, pointer, private :: ipivot(:)
   ! ampf, these are used in it3dalloc
@@ -53,7 +53,7 @@ contains
   subroutine impavnc0(kopt)
     use param_mod
     use cqlcomm_mod
-    use advnce_mod
+    use advnce_mod !here: in impavnc0(). To get many functions
     use r8subs_mod, only : dgbtrf, dgbtrs, dcopy
     implicit none
 
@@ -102,6 +102,7 @@ contains
     integer :: j
     integer :: jcont
     integer :: jstart
+    integer :: k ! species index (internal loop in k, see below)
     integer :: kku
     integer :: kopt
     integer :: krylov1
@@ -125,7 +126,7 @@ contains
     integer :: neq
     integer :: nvar
     real(c_double) :: permtol
-    real(c_double) :: xnorm != 1.  !XXXX should this be initialized?
+    real(c_double) :: xnorm != 1.  !XXXX should this be initialized? YuP: xnorm is output of impnorm() 
     real(c_double) :: zrhsj1
 
     !.................................................................
@@ -142,7 +143,7 @@ contains
     !.................................................................
 
 
-    !MPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE     
 
     !BH080303    real(c_float) etime,tm1,tm(2) !Dclrtns for lf95 ETIME(). See man etime.
     !BH080303    Using f95 intrinsic subroutine, cpu_time
@@ -151,7 +152,7 @@ contains
     character(len=8) ::  alloc, factor, dalloc
     real(c_double) :: zavarj1(iy+4)
     integer :: ijaj1(iy+4)
-    real(c_double) :: zmatcont(12) !XXXX should this be init 0?
+    real(c_double) :: zmatcont(12) !XXXX should this be init 0? YuP: done below.
     integer :: janelt(12)
     character(len=1) :: transpose
 
@@ -175,8 +176,8 @@ contains
     ilast_lr=0
     if (l_.eq.1 .or. lrz.eq.1) ifirst_lr=1
     if (l_.eq.lrz) ilast_lr=1
-    !      write(*,'(a,4i5)')'impavnc0: n,icount_imp,ifirst_lr,ilast_lr',
-    !     +                     n,icount_imp,ifirst_lr,ilast_lr
+    !write(*,'(a,4i5)')'impavnc0: n,icount_imp,ifirst_lr,ilast_lr', &
+    !n,icount_imp,ifirst_lr,ilast_lr
 
     !.......................................................................
     !     nadjoint is set = 0, to remove effect of Olivier Sauter's adjoint
@@ -209,15 +210,15 @@ contains
     !BH071029:  [But subsequently found had problems with iyh=itl elsewhere
     !BH071029:  in the code, so suggest bigger rya(1) or iy for time being.]
     if (itl.lt.iyh) then
-       inew=iy/2 + itl - 1
+       inew=iy/2 + itl - 1 ! for itl.lt.iyh
        ipassbnd=iyh-itl+1
     else  !i.e., itl=iyh
-       inew=iy
+       inew=iy ! for itl=iyh
        ipassbnd=0  !i.e., no trapped region for iyh=itl,
        !as in following case.
     endif
     if (symtrap .ne. "enabled") then
-       inew=iy
+       inew=iy ! for symtrap.ne."enabled"
        ipassbnd=0
     endif
     if (nadjoint.eq.1 .and. symtrap.eq."enabled") inew=2*itl-1
@@ -255,6 +256,11 @@ contains
     navnc=navnc+1
     md1abd= 3*(iy+3)+1 ! Should be at least 2*ml+mu+1 (see below)
 
+!MPIINSERT_IF_RANK_EQ_0      
+    if(inewjmax.gt.inewjx)then !YuP[2019-04-24] added printout
+      WRITE(*,*)'impavnc0: inewjmax>inewjx', inewjmax,inewjx
+    endif 
+!MPIINSERT_ENDIF_RANK
 
     !YuP[07-2017] Moved this part from micxinit and tdinitl,
     ! as it may depend on k in a multi-species run
@@ -283,8 +289,8 @@ contains
     !     Probably should move these calcs to it3dalloc.f
     !.................................................................
 
-    !      write(*,*)'impavnc0: iy,iyh,itl,itu,ml,mu,inew,jx,inewjx',
-    !     +     iy,iyh,itl,itu,ml,mu,inew,jx,inewjx
+    !write(*,*)'impavnc0: iy,iyh,itl,itu,ml,mu,inew,jx,inewjx', &
+    !iy,iyh,itl,itu,ml,mu,inew,jx,inewjx
 
     iwk_ilu=25000000  !sub ilut will give error if not suff lrg
     !                          !NEED bigger than single flux surface solve
@@ -358,22 +364,22 @@ contains
     endif
 
     !     Just to check:
-    !      write(*,*)'impavnc0:size(abd_lapack,1),size(abd_lapack,2)=',
-    !     +     size(abd_lapack,1),size(abd_lapack,2)
-    !      write(*,*)'impavnc0:size of a_csr,ja_csr,ia_csr,alu,jlu,ju',
-    !     +     size(a_csr),size(ja_csr),size(ia_csr),size(alu),
-    !     +     size(jlu),size(ju)
-    !      write(*,*)'impavnc0:size of jw_ilu,w_ilu_rhs0,sol,vv',
-    !     +     size(jw_ilu),size(w_ilu),size(rhs0),size(sol),size(vv)
+    !write(*,*)'impavnc0:size(abd_lapack,1),size(abd_lapack,2)=',
+    !size(abd_lapack,1),size(abd_lapack,2)
+    !write(*,*)'impavnc0:size of a_csr,ja_csr,ia_csr,alu,jlu,ju',
+    !size(a_csr),size(ja_csr),size(ia_csr),size(alu),
+    !size(jlu),size(ju)
+    !write(*,*)'impavnc0:size of jw_ilu,w_ilu_rhs0,sol,vv',
+    !size(jw_ilu),size(w_ilu),size(rhs0),size(sol),size(vv)
 
 
 
     !     So, no confusion:
     if (soln_method.eq.'itsol1')  &
-         call bcast(abd_lapack(1:icsrijc,1),zero,icsrij)
+         call bcast(abd_lapack(1:icsrij,1),zero,icsrij)
 
-    !      write(*,*)'impavnc0: size(ja_csr),icsrip=',size(ja_csr),icsrij
-    !      write(*,*)'impavnc0: size(ia_csr),icsrip=',size(ia_csr),icsrip
+    !write(*,*)'impavnc0: size(ja_csr),icsrip=',size(ja_csr),icsrij
+    !write(*,*)'impavnc0: size(ia_csr),icsrip=',size(ia_csr),icsrip
 
     if (soln_method.eq.'itsol' .or. soln_method.eq.'itsol1') then
        call bcast(a_csr(1:icsrij),zero,icsrij)
@@ -404,7 +410,7 @@ contains
     !     Copy current distribution into f_..   YuP: moved to tdchief:
     !cc      call dcopy(iyjx2*ngen,f(0,0,1,l_),1,f_(0,0,1,l_),1)
 
-    !      write(*,*) 'impavnc0, l_,elecfld:', l_ ,elecfld(l_)
+    !write(*,*) 'impavnc0, l_,elecfld:', l_ ,elecfld(l_)  
     !..................................................................
     !     Logic for allocation/deallocation
     !..................................................................
@@ -447,11 +453,20 @@ contains
        !-YuP      if (alloc.eq."enabled") then
        if(ASSOCIATED(ipivot)) then
           ! abd and ipivot are already allocated => do nothing
+          abd=zero !YuP[2019-04-24] was absent
        else ! Not allocated yet
-          write(*,*)'impavnc0 Before allocate; Size req. for abd:',lenabd
-          allocate(abd(md1abd,inewjmax),STAT=istat) !Big size ~3*jx*iy^2
-          write(*,*)'impavnc0 abd: Allocate/istat=',istat
-          call bcast(abd,zero,lenabd)
+          !write(*,*)'impavnc0 Before allocate; Size req. for abd:',lenabd
+          !YuP[2019-04-24] allocate(abd(md1abd,inewjmax),STAT=istat) !Big size ~3*jx*iy^2
+          ![2019-04-24] abd() is used in subr.dgbtrf and dgbtrs with dims abd(md1abd,inewjx)
+          !So changing allocation to
+          allocate(abd(md1abd,inewjx),STAT=istat) !YuP[2019-04-24] !Big size ~3*jx*iy^2
+          ![2019-04-24] The problem is - inewjx may change from one flux surface
+          ! to another, and that is what inewjmax was trying to account for
+          !(it is the maximum of inew*jx = (iyh+itl-1)*jx over all flux surfaces).
+          !
+          !write(*,*)'impavnc0 abd: Allocate/istat=',istat
+          !XXXcall bcast(abd,0,lenabd)   YuP: ok, below
+          abd=zero !YuP[2019-04-24] was 0.
           allocate(ipivot(iyjx),STAT=istat)
           call ibcast(ipivot,0,iyjx)
           ! will preset the values to zero in loop k=1,ngen
@@ -626,7 +641,7 @@ contains
           if (.not.(ampfmod.eq."enabled" .and. kopt.eq.3 &
                .and.cqlpmod.ne."enabled" .and. k.eq.kelec)) then
 
-             write(*,*)'impavnc0:  factor.eq."disabled", OK?'
+             !write(*,*)'impavnc0:  factor.eq."disabled", OK?'
              ipassbnd=iyh+1-itl
              if (symtrap.ne."enabled" .or. nadjoint.eq.1) ipassbnd=0
              do 2002 j=1,jx
@@ -692,7 +707,7 @@ contains
                       rhs(ieq)=rhs(ieq)*scal(neq,l_)
 
                       if (nadjoint.eq.1 .and. symtrap.eq."enabled" &
-                           .and. i.eq.itu) rhs(ieq)=0.0
+                           .and. i.eq.itu) rhs(ieq)=zero !YuP[2019-04-24] was 0.
 
                    endif  ! On if j.eq.1.and.lbdtry(k).ne.conserv;  else
 
@@ -735,9 +750,9 @@ contains
                 continue
              else               ! Not allocated yet
                 allocate(ampfda(iy,0:jx),STAT=istat)
-                if (istat.ne.0) write(*,*)'impanvc0: ampfda prblm'
+                if (istat.ne.0) WRITE(*,*)'impanvc0: ampfda prblm'
                 allocate(ampfdd(0:iy,jx),STAT=istat)
-                if (istat.ne.0) write(*,*)'impanvc0: ampfdd prblm'
+                if (istat.ne.0) WRITE(*,*)'impanvc0: ampfdd prblm'
              endif
              call bcast(ampfda,zero,SIZE(ampfda))
              call bcast(ampfdd,zero,SIZE(ampfdd))
@@ -801,6 +816,9 @@ contains
                       fh0m=fh(i,j,1,l_)+fh(i,j-1,1,l_)
                       fhp0=fh(i+1,j,1,l_)+fh(i,j,1,l_)
                       fhm0=fh(i,j,1,l_)+fh(i-1,j,1,l_)
+                      !YuP[2019-05-30] Note that fh() and fg() are allocated as 
+                      ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index only, for now.
+                      
                       !BH170407  Following had very small effect on a test (see a_change.h),
                       !BH170407  and have concern it could affect stability of the solution.
                       !BH170407                      !BH170406
@@ -822,8 +840,8 @@ contains
                            /(xsq(j)*cynt2(i,l_)/twopi))
 
                       rhs(ieq)=rhs(ieq)*scal(neq,l_)
-                      !                      write(*,'(a,3i4,4e12.3)')'l_,j,i,rhs=',
-                      !     +                l_,j,i,rhs_old,rhs(ieq),ampfda(i,j),ampfdd(i,j)
+                      !write(*,'(a,3i4,4e12.3)')'l_,j,i,rhs=',
+                      !l_,j,i,rhs_old,rhs(ieq),ampfda(i,j),ampfdd(i,j)
 
                    endif        ! On if j.eq.1
                 enddo           ! On indexsww
@@ -836,21 +854,21 @@ contains
           !
           !     reinitialize to zero matrix and rhs
           !
-          !          write(*,*)'impavnc0:size(rhs) ',size(rhs)
+          !write(*,*)'impavnc0:size(rhs) ',size(rhs)
           if (soln_method.eq.'direct' .or. soln_method.eq.'itsol1') then
-             call bcast(abd,zero,lenabd)
-             !xxxabd = 0.
+             !XXX call bcast(abd,0,lenabd) YuP: ok, below
+             abd=zero !YuP[2019-04-24] was 0.
              do i=1,inewjx_(l_)
-                rhs(i)=0.0
+                rhs(i)=zero !YuP[2019-04-24] was 0.
                 ipivot(i)=0
              enddo
           elseif (soln_method.eq.'itsol') then
              do i=1,inewjx_(l_)
-                rhs(i)=0.0
+                rhs(i)=zero !YuP[2019-04-24] was 0.
              enddo
           elseif (ifirst_lr.eq.1) then  ! for it3dv and it3drv
              do i=1,ieq_tot
-                rhs(i)=0.0
+                rhs(i)=zero !YuP[2019-04-24] was 0.
              enddo
           endif
 
@@ -898,8 +916,8 @@ contains
           !BH071029           ipassbnd=iyh+1-itl
           !BH071029           if (symtrap.ne."enabled" .or. nadjoint.eq.1) ipassbnd=0
           !BH070527          ieq=0
-          !          write(*,*)'impavnc0, before j and i loops: ieq,icoeff=',
-          !     +                                               ieq,icoeff
+          !write(*,*)'impavnc0, before j and i loops: ieq,icoeff=',
+          !ieq,icoeff
 
           !%OS
           !          zzzto=0.0
@@ -910,10 +928,11 @@ contains
           !     do loop 12 is the major loop over j (momentum).
           !..................................................................
 
-          zrhsj1=0.0
+          zrhsj1=zero !YuP[2019-04-24] was 0.
           !BH040719          call bcast(zavarj1,zero,mu+1)
           !BH040719          call ibcast(ijaj1,0,mu+1)
           call bcast(zavarj1,zero,iy+4)
+          zmatcont=zero !YuP[2019-04-24] added
           call ibcast(ijaj1,0,iy+4)
 
           do 12 j=1,jx
@@ -1029,22 +1048,23 @@ contains
 
                 !.................................................................
                 !     Define the 9 coefficients of the left hand side
-                !     for example xmm(i,j)*f(i-1,j-1,l_)+ x0m(i,j-1)*f(i,j-1,l_) +..
+                !     for example xmm(i,j,k)*f(i-1,j-1,l_)+ x0m(i,j-1)*f(i,j-1,l_) +..
                 !     + seven other terms on left side = z00(i,j,k)
                 !     xmm, xpm, t0m, z00 etc are statement functions defined in
                 !
                 !     abd stores the transposed of the band matrix in the LAPACK sgbtrf format
                 !.................................................................
 
-                zmatcont(1)=xmm(i,j)
-                zmatcont(2)=x0m(i,j)
-                zmatcont(3)=xpm(i,j)
-                zmatcont(4)=xm0(i,j)
-                zmatcont(5)=x00(i,j)
-                zmatcont(6)=xp0(i,j)
-                zmatcont(7)=xmp(i,j)
-                zmatcont(8)=x0p(i,j)
-                zmatcont(9)=xpp(i,j)
+                zmatcont(1)=xmm(i,j,k)
+                zmatcont(2)=x0m(i,j,k)
+                zmatcont(3)=xpm(i,j,k)
+                zmatcont(4)=xm0(i,j,k)
+                zmatcont(5)=x00(i,j,k)
+                zmatcont(6)=xp0(i,j,k)
+                zmatcont(7)=xmp(i,j,k)
+                zmatcont(8)=x0p(i,j,k)
+                zmatcont(9)=xpp(i,j,k)
+
                 !     Normalize equation
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
@@ -1069,12 +1089,12 @@ contains
                 janelt(6)=ieq+inew
                 nvar=6
 
-                zmatcont(1)=xmm(i,j)
-                zmatcont(2)=x0m(i,j)+xpm(i,j)
-                zmatcont(3)=xm0(i,j)
-                zmatcont(4)=x00(i,j)+xp0(i,j)
-                zmatcont(5)=xmp(i,j)
-                zmatcont(6)=x0p(i,j)+xpp(i,j)
+                zmatcont(1)=xmm(i,j,k)
+                zmatcont(2)=x0m(i,j,k)+xpm(i,j,k)
+                zmatcont(3)=xm0(i,j,k)
+                zmatcont(4)=x00(i,j,k)+xp0(i,j,k)
+                zmatcont(5)=xmp(i,j,k)
+                zmatcont(6)=x0p(i,j,k)+xpp(i,j,k)
 
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
@@ -1093,9 +1113,9 @@ contains
                 if (lbdry(k).eq."fixed") then
                    janelt(1)=ieq
                    nvar=1
-                   zmatcont(1)=1.
+                   zmatcont(1)=one !YuP[2019-04-24] was 1.
                    rhs(ieq)=f_(iyh,1,k,l_) ! f_ at previous t-step
-                   xnorm=1.
+                   xnorm=one !YuP[2019-04-24] was 1.
                    go to 5000
                 endif
 
@@ -1122,8 +1142,8 @@ contains
                    ! Add to the matrix: f(j=1)=rhs=f_mean(j=2) :
                    janelt(1)=ieq
                    nvar=1
-                   zmatcont(1)=1.
-                   xnorm=1.
+                   zmatcont(1)=one !YuP[2019-04-24] was 1.
+                   xnorm=one !YuP[2019-04-24] was 1.
                    rhs(ieq)=f_(iyh,1,k,l_) !original (same as mean(f_(:,j=1,k,l_))
                    !rhs(ieq)=f_(iyh,2,k,l_) ! j=2 at prev.step ! gives neg.dens.
                    !rhs(ieq)= f_max !unstable
@@ -1157,13 +1177,14 @@ contains
                    janelt(4)=ieq+inew+idistl
                    nvar=4
                    !
-                   zmatcont(1)=x00(i,j)
-                   zmatcont(2)=xp0(i,j)
-                   zmatcont(3)=x0p(i,j)
-                   zmatcont(4)=xpp(i,j)
+                   zmatcont(1)=x00(i,j,k)
+                   zmatcont(2)=xp0(i,j,k)
+                   zmatcont(3)=x0p(i,j,k)
+                   zmatcont(4)=xpp(i,j,k)
+
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
-                   !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
-                   !                write(*,*)'HERE0.1: i,j,icntsww,xnorm',i,j,icntsww,xnorm
+                   !if (ieq.le.840)write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
+                   !write(*,*)'HERE0.1: i,j,icntsww,xnorm',i,j,icntsww,xnorm
                    go to 5000
 
                    !.................................................................
@@ -1179,13 +1200,14 @@ contains
                    janelt(4)=ieq+inew
                    nvar=4
                    !
-                   zmatcont(1)=xm0(i,j)
-                   zmatcont(2)=x00(i,j)
-                   zmatcont(3)=xmp(i,j)
-                   zmatcont(4)=x0p(i,j)
+                   zmatcont(1)=xm0(i,j,k)
+                   zmatcont(2)=x00(i,j,k)
+                   zmatcont(3)=xmp(i,j,k)
+                   zmatcont(4)=x0p(i,j,k)
+
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
-                   !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
-                   !                write(*,*)'HERE0.2:i,j,icntsww,xnorm',i,j,icntsww,xnorm
+                   !if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
+                   !write(*,*)'HERE0.2:i,j,icntsww,xnorm',i,j,icntsww,xnorm
                    go to 5000
 
                    !.................................................................
@@ -1212,17 +1234,18 @@ contains
 
                    nvar=8
                    !
-                   zmatcont(1)=tm0(j)
-                   zmatcont(2)=tmp(j)
-                   zmatcont(3)=t00(j)
-                   zmatcont(4)=t0p(j)
-                   zmatcont(5)=tp0(j)
-                   zmatcont(6)=tpp(j)
-                   zmatcont(7)=tu0(j)
-                   zmatcont(8)=tup(j)
+                   zmatcont(1)=tm0(j,k)
+                   zmatcont(2)=tmp(j,k)
+                   zmatcont(3)=t00(j,k)
+                   zmatcont(4)=t0p(j,k)
+                   zmatcont(5)=tp0(j,k)
+                   zmatcont(6)=tpp(j,k)
+                   zmatcont(7)=tu0(j,k)
+                   zmatcont(8)=tup(j,k)
+
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
-                   !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
-                   !                write(*,*)'HERE0.3: i,j,icntsww,xnorm',i,j,icntsww,xnorm
+                   !if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
+                   !write(*,*)'HERE0.3: i,j,icntsww,xnorm',i,j,icntsww,xnorm
                    go to 5000
 
                    !.................................................................
@@ -1238,14 +1261,14 @@ contains
                    janelt(4)=ieq+inew
                    nvar=4
                    !
-                   zmatcont(1)=xm0(i,j)
-                   zmatcont(2)=x00(i,j)+xp0(i,j)
-                   zmatcont(3)=xmp(i,j)
-                   zmatcont(4)=x0p(i,j)+xpp(i,j)
+                   zmatcont(1)=xm0(i,j,k)
+                   zmatcont(2)=x00(i,j,k)+xp0(i,j,k)
+                   zmatcont(3)=xmp(i,j,k)
+                   zmatcont(4)=x0p(i,j,k)+xpp(i,j,k)
 
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
-                   !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
-                   !                write(*,*)'HERE0.4: i,j,icntsww,xnorm',i,j,icntsww,xnorm
+                   !if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
+                   !write(*,*)'HERE0.4: i,j,icntsww,xnorm',i,j,icntsww,xnorm
                    go to 5000
 
                    !.................................................................
@@ -1263,15 +1286,15 @@ contains
                    janelt(6)=ieq+inew+idistl
                    nvar=6
                    !
-                   zmatcont(1)=xm0(i,j)
-                   zmatcont(2)=x00(i,j)
-                   zmatcont(3)=xp0(i,j)
-                   zmatcont(4)=xmp(i,j)
-                   zmatcont(5)=x0p(i,j)
-                   zmatcont(6)=xpp(i,j)
+                   zmatcont(1)=xm0(i,j,k)
+                   zmatcont(2)=x00(i,j,k)
+                   zmatcont(3)=xp0(i,j,k)
+                   zmatcont(4)=xmp(i,j,k)
+                   zmatcont(5)=x0p(i,j,k)
+                   zmatcont(6)=xpp(i,j,k)
                    call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
-                   !                if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
-                   !                write(*,*)'HERE0.5: i,j,icntsww,xnorm',i,j,icntsww,xnorm
+                   !if (ieq.le.840) write(*,*)'ieq,rhs(ieq)',ieq,rhs(ieq)
+                   !write(*,*)'HERE0.5: i,j,icntsww,xnorm',i,j,icntsww,xnorm
                    go to 5000
                 endif
 
@@ -1290,12 +1313,13 @@ contains
                 janelt(6)=ieq+inew+idistl
                 nvar=6
                 !
-                zmatcont(1)=x0m(i,j)
-                zmatcont(2)=xpm(i,j)
-                zmatcont(3)=x00(i,j)
-                zmatcont(4)=xp0(i,j)
-                zmatcont(5)=x0p(i,j)
-                zmatcont(6)=xpp(i,j)
+                zmatcont(1)=x0m(i,j,k)
+                zmatcont(2)=xpm(i,j,k)
+                zmatcont(3)=x00(i,j,k)
+                zmatcont(4)=xp0(i,j,k)
+                zmatcont(5)=x0p(i,j,k)
+                zmatcont(6)=xpp(i,j,k)
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1315,12 +1339,13 @@ contains
                 janelt(6)=ieq+inew
                 nvar=6
                 !
-                zmatcont(1)=xmm(i,j)
-                zmatcont(2)=x0m(i,j)
-                zmatcont(3)=xm0(i,j)
-                zmatcont(4)=x00(i,j)
-                zmatcont(5)=xmp(i,j)
-                zmatcont(6)=x0p(i,j)
+                zmatcont(1)=xmm(i,j,k)
+                zmatcont(2)=x0m(i,j,k)
+                zmatcont(3)=xm0(i,j,k)
+                zmatcont(4)=x00(i,j,k)
+                zmatcont(5)=xmp(i,j,k)
+                zmatcont(6)=x0p(i,j,k)
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1355,18 +1380,19 @@ contains
                 endif
                 nvar=12
                 !
-                zmatcont(1)=tmm(j)
-                zmatcont(2)=tm0(j)
-                zmatcont(3)=tmp(j)
-                zmatcont(4)=t0m(j)
-                zmatcont(5)=t00(j)
-                zmatcont(6)=t0p(j)
-                zmatcont(7)=tpm(j)
-                zmatcont(8)=tp0(j)
-                zmatcont(9)=tpp(j)
-                zmatcont(10)=tum(j)
-                zmatcont(11)=tu0(j)
-                zmatcont(12)=tup(j)
+                zmatcont(1)=tmm(j,k)
+                zmatcont(2)=tm0(j,k)
+                zmatcont(3)=tmp(j,k)
+                zmatcont(4)=t0m(j,k)
+                zmatcont(5)=t00(j,k)
+                zmatcont(6)=t0p(j,k)
+                zmatcont(7)=tpm(j,k)
+                zmatcont(8)=tp0(j,k)
+                zmatcont(9)=tpp(j,k)
+                zmatcont(10)=tum(j,k)
+                zmatcont(11)=tu0(j,k)
+                zmatcont(12)=tup(j,k)
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1402,12 +1428,13 @@ contains
                 janelt(6)=ieq+idistl
                 nvar=6
                 !
-                zmatcont(1)=xmm(i,j)
-                zmatcont(2)=xm0(i,j)
-                zmatcont(3)=x0m(i,j)
-                zmatcont(4)=x00(i,j)
-                zmatcont(5)=xpm(i,j)
-                zmatcont(6)=xp0(i,j)
+                zmatcont(1)=xmm(i,j,k)
+                zmatcont(2)=xm0(i,j,k)
+                zmatcont(3)=x0m(i,j,k)
+                zmatcont(4)=x00(i,j,k)
+                zmatcont(5)=xpm(i,j,k)
+                zmatcont(6)=xp0(i,j,k)
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1425,10 +1452,11 @@ contains
                 janelt(4)=ieq
                 nvar=4
                 !
-                zmatcont(1)=xmm(i,j)
-                zmatcont(2)=xm0(i,j)
-                zmatcont(3)=x0m(i,j)+xpm(i,j)
-                zmatcont(4)=x00(i,j)+xp0(i,j)
+                zmatcont(1)=xmm(i,j,k)
+                zmatcont(2)=xm0(i,j,k)
+                zmatcont(3)=x0m(i,j,k)+xpm(i,j,k)
+                zmatcont(4)=x00(i,j,k)+xp0(i,j,k)
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1459,14 +1487,15 @@ contains
 
                 nvar=8
                 !
-                zmatcont(1)=tmm(jx)
-                zmatcont(2)=tm0(jx)
-                zmatcont(3)=t0m(jx)
-                zmatcont(4)=t00(jx)
-                zmatcont(5)=tpm(jx)
-                zmatcont(6)=tp0(jx)
-                zmatcont(7)=tum(jx)
-                zmatcont(8)=tu0(jx)
+                zmatcont(1)=tmm(jx,k)
+                zmatcont(2)=tm0(jx,k)
+                zmatcont(3)=t0m(jx,k)
+                zmatcont(4)=t00(jx,k)
+                zmatcont(5)=tpm(jx,k)
+                zmatcont(6)=tp0(jx,k)
+                zmatcont(7)=tum(jx,k)
+                zmatcont(8)=tu0(jx,k)
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1485,10 +1514,11 @@ contains
                 janelt(4)=ieq-inew+idistr
                 nvar=4
                 !
-                zmatcont(1)=x00(i,j)
-                zmatcont(2)=xm0(i,j)
-                zmatcont(3)=x0m(i,j)
-                zmatcont(4)=xmm(i,j)
+                zmatcont(1)=x00(i,j,k)
+                zmatcont(2)=xm0(i,j,k)
+                zmatcont(3)=x0m(i,j,k)
+                zmatcont(4)=xmm(i,j,k)
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1507,10 +1537,11 @@ contains
 
                 nvar=4
                 !
-                zmatcont(1)=x00(i,j)
-                zmatcont(2)=xp0(i,j)
-                zmatcont(3)=xpm(i,j)
-                zmatcont(4)=x0m(i,j)
+                zmatcont(1)=x00(i,j,k)
+                zmatcont(2)=xp0(i,j,k)
+                zmatcont(3)=xpm(i,j,k)
+                zmatcont(4)=x0m(i,j,k)
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1528,8 +1559,8 @@ contains
                    !     set f(itu)=0
                    janelt(1)=ieq
                    nvar=1
-                   zmatcont(1)=1.0
-                   rhs(ieq)=0.0
+                   zmatcont(1)=one !YuP[2019-04-24] was 1.0
+                   rhs(ieq)=zero !YuP[2019-04-24] was 0.
 
                 else if (j .eq. 1) then
 
@@ -1543,14 +1574,14 @@ contains
                    janelt(8)=ieq+inew+1
                    nvar=8
                    !
-                   zmatcont(1)=tp0(j)
-                   zmatcont(2)=tpp(j)
-                   zmatcont(3)=t00(j)
-                   zmatcont(4)=t0p(j)
-                   zmatcont(5)=tu0(j)
-                   zmatcont(6)=tup(j)
-                   zmatcont(7)=tm0(j)
-                   zmatcont(8)=tmp(j)
+                   zmatcont(1)=tp0(j,k)
+                   zmatcont(2)=tpp(j,k)
+                   zmatcont(3)=t00(j,k)
+                   zmatcont(4)=t0p(j,k)
+                   zmatcont(5)=tu0(j,k)
+                   zmatcont(6)=tup(j,k)
+                   zmatcont(7)=tm0(j,k)
+                   zmatcont(8)=tmp(j,k)
                 else if (j .eq. jx) then
 
                    janelt(1)=ieq-inew+idistr
@@ -1563,14 +1594,14 @@ contains
                    janelt(8)=ieq+1
                    nvar=8
                    !
-                   zmatcont(1)=tpm(jx)
-                   zmatcont(2)=tp0(jx)
-                   zmatcont(3)=t0m(jx)
-                   zmatcont(4)=t00(jx)
-                   zmatcont(5)=tum(jx)
-                   zmatcont(6)=tu0(jx)
-                   zmatcont(7)=tmm(jx)
-                   zmatcont(8)=tm0(jx)
+                   zmatcont(1)=tpm(jx,k)
+                   zmatcont(2)=tp0(jx,k)
+                   zmatcont(3)=t0m(jx,k)
+                   zmatcont(4)=t00(jx,k)
+                   zmatcont(5)=tum(jx,k)
+                   zmatcont(6)=tu0(jx,k)
+                   zmatcont(7)=tmm(jx,k)
+                   zmatcont(8)=tm0(jx,k)
 
                 else
 
@@ -1588,20 +1619,21 @@ contains
                    janelt(12)=ieq+inew+1
                    nvar=12
                    !
-                   zmatcont(1)=tpm(j)
-                   zmatcont(2)=tp0(j)
-                   zmatcont(3)=tpp(j)
-                   zmatcont(4)=t0m(j)
-                   zmatcont(5)=t00(j)
-                   zmatcont(6)=t0p(j)
-                   zmatcont(7)=tum(j)
-                   zmatcont(8)=tu0(j)
-                   zmatcont(9)=tup(j)
-                   zmatcont(10)=tmm(j)
-                   zmatcont(11)=tm0(j)
-                   zmatcont(12)=tmp(j)
+                   zmatcont(1)=tpm(j,k)
+                   zmatcont(2)=tp0(j,k)
+                   zmatcont(3)=tpp(j,k)
+                   zmatcont(4)=t0m(j,k)
+                   zmatcont(5)=t00(j,k)
+                   zmatcont(6)=t0p(j,k)
+                   zmatcont(7)=tum(j,k)
+                   zmatcont(8)=tu0(j,k)
+                   zmatcont(9)=tup(j,k)
+                   zmatcont(10)=tmm(j,k)
+                   zmatcont(11)=tm0(j,k)
+                   zmatcont(12)=tmp(j,k)
 
                 endif
+
                 call impnorm(xnorm,zmatcont,rhs(ieq),nvar)
 
                 go to 5000
@@ -1630,10 +1662,12 @@ contains
 
 
                       if (j .ne. 1) then
+
                          do jcont=1,nvar
                             abd(ibandpieq-janelt(jcont),janelt(jcont))= &
                                  zmatcont(jcont)
                          end do
+
                          !BH050804 bugfix:              else
                          !BH070419:             elseif (lbdry(k).eq."conserv") then
                          !BH070419: Wonder what I was thinking?
@@ -1643,6 +1677,7 @@ contains
                          !.......................................................................
                          !     for j=1 impose f(i)=cst condition
                          !.......................................................................
+
                          do 5100 icon=1,nvar
                             if (janelt(icon) .le. inew) then
                                !     (i,j=1) contributions -> (iy,1) point
@@ -1662,12 +1697,12 @@ contains
                          if (ieq .lt. inew) then
                             !     i<iy,j=1: f(i)-f(iy)=0.
                             nvar=2
-                            zmatcont(1)=0.5
-                            zmatcont(2)=-0.5
+                            zmatcont(1)=half !YuP[2019-04-24] was 0.5
+                            zmatcont(2)=-half !YuP[2019-04-24] was -0.5
                             janelt(1)=ieq
                             janelt(2)=inew
-                            rhs(ieq)=0.0
-                            xnorm=2.0
+                            rhs(ieq)=zero !YuP[2019-04-24] was 0.
+                            xnorm=2.d0 !YuP[2019-04-24] was 2.0
                             do jcont=1,nvar
                                abd(ibandpieq-janelt(jcont),janelt(jcont))= &
                                     zmatcont(jcont)
@@ -1754,12 +1789,12 @@ contains
                          if (ieq .lt. inew) then
                             !     i<iy,j=1: f(i)-f(iy)=0.
                             nvar=2
-                            zmatcont(1)=0.5
-                            zmatcont(2)=-0.5
+                            zmatcont(1)=half !YuP[2019-04-24] was 0.5
+                            zmatcont(2)=-half !YuP[2019-04-24] was -0.5
                             janelt(1)=ieq
                             janelt(2)=inew
-                            rhs(ieq)=0.0
-                            xnorm=2.0
+                            rhs(ieq)=zero !YuP[2019-04-24] was 0.
+                            xnorm=2.d0 !YuP[2019-04-24] was 2.0
                             do jcont=1,nvar
                                icoeff=icoeff+1
                                a_csr(icoeff)=zmatcont(jcont)
@@ -1849,12 +1884,12 @@ contains
                          if ((ieq-(ieq_(l_)-1)).lt. inew) then
                             !     i<iy,j=1: f(i)-f(iy)=0.
                             nvar=2
-                            zmatcont(1)=0.5
-                            zmatcont(2)=-0.5
+                            zmatcont(1)=half !YuP[2019-04-24] was 0.5
+                            zmatcont(2)=-half !YuP[2019-04-24] was -0.5
                             janelt(1)=ieq
                             janelt(2)=inew+(ieq_(l_)-1)
-                            rhs(ieq)=0.0
-                            xnorm=2.0
+                            rhs(ieq)=zero !YuP[2019-04-24] was 0.
+                            xnorm=2.d0 !YuP[2019-04-24] was 2.0
                             do jcont=1,nvar
                                icoeff=icoeff+1
                                a_csr(icoeff)=zmatcont(jcont)
@@ -1893,19 +1928,19 @@ contains
 
                    kku=ieq+(k-1)*iyjx  !-YuP-> version from impavnc
                 else ! for soln_method it3dv or it3drv
-                   kku=ieq-(ieq_(l_)-1)+(k-1)*iyjx
+                   kku=ieq-(ieq_(l_)-1)+(k-1)*iyjx 
                 endif
-                scal(kku,l_)=1./xnorm
-                !              if(kku.le.0 .or. kku.gt.iyjx*ngen) then
-                !                write(*,*)'impavnc0: k,l_,ieq,ieq_(l_),kku,ieq_tot=',
-                !     ~                          k,l_,ieq,ieq_(l_),kku,ieq_tot
+                scal(kku,l_)=one/xnorm !!YuP[2019-04-24] was 1./xnorm
+                !if(kku.le.0 .or. kku.gt.iyjx*ngen) then
+                !write(*,*)'impavnc0: k,l_,ieq,ieq_(l_),kku,ieq_tot=',
+                !k,l_,ieq,ieq_(l_),kku,ieq_tot
                 !                pause
-                !              endif
-
+                !endif
+                
                 !..................................................................
                 !     End of major j and I loops..
                 !..................................................................
-                !              write(*,*)'ij-loop-end: ieq,rhs(ieq) ',ieq,rhs(ieq)
+                !write(*,*)'ij-loop-end: ieq,rhs(ieq) ',ieq,rhs(ieq)
 11              continue
 12              continue
 
@@ -1919,21 +1954,23 @@ contains
 
                    !         Estimating number of coeffs per flux surface
                    !         to compare with actual number:
-                   !          write(*,*)'impanvc0: Number of CSR coeffs: icoeff=',icoeff
+                   !write(*,*)'impanvc0: Number of CSR coeffs: icoeff=',icoeff
                    !         icoeff_est=(iy+2)*3+(jx-1)*9*((iyh-itl)+2*itl)  Calc'd above
-                   !          write(*,*)'impavnc0: Estimate of of icoeff=', icoeff_est
+                   !write(*,*)'impavnc0: Estimate of of icoeff=', icoeff_est
                    !         Check coeff storage:
                    if (icoeff.gt.size(a_csr)) then
+!MPIINSERT_IF_RANK_EQ_0
                       WRITE(*,*)'impavnc0:icoeff.gt.size(a_csr)'
+!MPIINSERT_ENDIF_RANK
                       STOP
                    endif
                 endif  ! on soln_method.ne.'direct'
 
                 !     Check number of equations:
                 !        if (soln_method.eq.'itsol' .or. soln_method.eq.'itsol1') then
-                !           write(*,*)'impavnc0: ieq should equal inewjx: ',ieq,inewjx
+                !write(*,*)'impavnc0: ieq should equal inewjx: ',ieq,inewjx
                 !        elseif(soln_method.eq.'it3dv' .or. soln_method.eq.'it3drv') then
-                !           write(*,*)'impavnc0: ieq should equal ieq_tot: ',ieq,ieq_tot
+                !write(*,*)'impavnc0: ieq should equal ieq_tot: ',ieq,ieq_tot
                 !           pause
                 !        endif
 
@@ -1942,16 +1979,6 @@ contains
                    iunit=39
                    i1=1
                    i2=icoeff
-                   !yup      if (n.eq.1 .and. ifirst_lr.eq.1) open(iunit)
-                   !yup      write(iunit,*)'a_csr(i1:i2), l_,i1,i2 ',l_,i1,i2
-                   !yup      write(iunit,110) a_csr(i1:i2)
-                   !yup      write(iunit,*)'ja_csr(i1:i2), l_,i1,i2 ',l_,i1,i2
-                   !yup      write(iunit,111) ja_csr(i1:i2)
-                   !yup      write(iunit,*)'ia_csr(1:ieq), l_,ieq ',l_,ieq
-                   !yup      write(iunit,111) ia_csr(1:ieq)
-                   !yup      write(iunit,*)'rhs(1:ieq), l_,ieq ',l_,ieq
-                   !yup      write(iunit,110) rhs(1:ieq)
-                   !yup      if (n.eq.1. and. ilast_lr.eq.1) close(iunit)
                 endif  ! on solution_meth=itsol
 
                 !..................................................................
@@ -1961,7 +1988,7 @@ contains
 
              endif     ! on factor
 
-             !        write(*,*)'impavnc0:  factor =',factor
+             !write(*,*)'impavnc0:  factor =',factor
 
 
 
@@ -2005,10 +2032,10 @@ contains
                      ar_csr,jar_csr,iar_csr,ac_csr,jac_csr,iac_csr, &
                      icsrijc,jw_ilu,ierr)
 
-                !MPIINSERT_IF_RANK_EQ_0
+!MPIINSERT_IF_RANK_EQ_0
                 WRITE(*,*)'impavnc0 aft.aplb: ieq_tot, iyjx*lrz, ierr', &
                      ieq_tot,iyjx*lrz,ierr
-                !MPIINSERT_ENDIF_RANK
+!MPIINSERT_ENDIF_RANK
 
                 ieqp=54
                 i1=1
@@ -2060,11 +2087,13 @@ contains
                 lowd=ml+mu+1
                 ml_a=ml
                 mu_a=mu
-                ! XXX , changed  a(1),ja(1),ia(1) ~~> i,ja,ia
+                ! XXX , changed  a(1),ja(1),ia(1) ~~> a,ja,ia  ! YuP:ok
                 call bndcsr(n_rows_A,abd_lapack,nabd,lowd,ml_a,mu_a, &
                      a_csr,ja_csr,ia_csr,icsrij,ierr_csr)
                 if (ierr_csr.ne.0) then
+!MPIINSERT_IF_RANK_EQ_0
                    WRITE(*,*)'impavnc0/bndcsr: STOP ierr_csr=',ierr_csr
+!MPIINSERT_ENDIF_RANK
                    stop
                 endif
 
@@ -2079,8 +2108,8 @@ contains
 
              if ( (soln_method.eq.'it3dv')  .and.  &
                   ilast_lr.eq.1 .and. n.eq.1  ) then
-                !        write out coeffs in a format which can be compared directly
-                !        with soln_method=itsol output.
+                !write out coeffs in a format which can be compared directly 
+                !with soln_method=itsol output.
                 iunit=39
                 i1=0  !beginning of coeff print for given surface
                 i2=0  !end of coeff print for given surface
@@ -2108,8 +2137,6 @@ contains
                 ierr=0
                 lfil0=min(lfil,n_rows_A)
 
-                !-YuP        write (*,*) ' ++ ILUT Preconditioner ++++ '
-                !-YuP        write (*,*) ' ++ droptol =, lfil.le.n_rows_A  ++ ',droptol,lfil0
 
                 call cpu_time(tm1)
                 !BH070523:  Change array input to be first element,
@@ -2135,7 +2162,7 @@ contains
                 !
 
                 if ( soln_method.eq."itsol" .or. soln_method.eq."itsol1" ) then
-                   !XXX again, now passing by array, was passing elem
+                   !XXX again, now passing by array, was passing elem.  YuP:ok
                    call ilut (n_rows_A,a_csr,ja_csr,ia_csr,lfil0, &
                         droptol,alu,jlu,ju,iwk_ilu,w_ilu, &
                         jw_ilu,ierr)
@@ -2147,7 +2174,7 @@ contains
                 elseif(soln_method.eq.'it3dv') then
                    ! perform soln only at last flux surface (l_=lrz)
                    if ( ilast_lr.eq.1 ) then
-                      ! XXX passing array
+                      ! XXX passing array.  YuP:ok
                       call ilut (n_rows_A,a_csr,ja_csr,ia_csr,lfil0, &
                            droptol,alu,jlu,ju,iwk_ilu,w_ilu, &
                            jw_ilu,ierr)
@@ -2155,9 +2182,9 @@ contains
                       !     +             lfil0,droptol,permtol,mbloc,
                       !     +             alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1),jw_ilu(1),
                       !     +             iperm_ilu(1),ierr)
-                      !MPIINSERT_IF_RANK_EQ_0
-                      !       WRITE(*,*)'impavnc0 aft.ilut:  l_,ierr',l_,ierr,soln_method
-                      !MPIINSERT_ENDIF_RANK
+!MPIINSERT_IF_RANK_EQ_0
+                      !WRITE(*,*)'impavnc0 aft.ilut:  l_,ierr',l_,ierr,soln_method
+!MPIINSERT_ENDIF_RANK
                       do i=1,n_rows_A
                          rhs0(i)=rhs(i) !Copy rhs, for input to pgmres since
                          !this input is modified.
@@ -2173,9 +2200,9 @@ contains
                       !     +             lfil0,droptol,permtol,mbloc,
                       !     +             alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1),jw_ilu(1),
                       !     +             iperm_ilu(1),ierr)
-                      !MPIINSERT_IF_RANK_EQ_0
-                      !       WRITE(*,*)'impavnc0 aft.ilut:  l_,ierr',l_,ierr,soln_method
-                      !MPIINSERT_ENDIF_RANK
+!MPIINSERT_IF_RANK_EQ_0
+                      !WRITE(*,*)'impavnc0 aft.ilut:  l_,ierr',l_,ierr,soln_method
+!MPIINSERT_ENDIF_RANK
                       do i=1,n_rows_A
                          rhs0(i)=rhs(i) !Copy rhs, for input to pgmres since
                          !this input is modified.
@@ -2185,10 +2212,12 @@ contains
 
                 call cpu_time(tm(1))
                 tm1= tm(1) - tm1
-                !        write(*,*)'impavnc0: icount_imp, time for ilut tm1=',
-                !     +                        icount_imp,tm1
+                !write(*,*)'impavnc0: icount_imp, time for ilut tm1=',
+                !icount_imp,tm1
                 if (ierr.ne.0) then
+!MPIINSERT_IF_RANK_EQ_0
                    WRITE(*,*)'impavnc0 after ilut: ierr=',ierr
+!MPIINSERT_ENDIF_RANK
                    STOP 'if ierr=-2 or -3, reduce lfil or increase iwk_ilu'
                    ! Try to reduce lfil (say, to 10) or increase iwk_ilu
                 endif
@@ -2292,13 +2321,13 @@ contains
                 iout=0 !38 ! 0 means no writing to fort.iout file.
                 ! Writing into this file causes problems for MPI (I/O).
                 ! Keep it 0, to avoid slow runs ! YuP[04-2017]
-                ! Alternatively, set inyourbatchscript:
-                ! exportFORT_BUFFERED=1
-                !(orthecshequivalent-setenvFORT_BUFFERED 1)
-                ! At NERSC, it was the defaultin before 2017
-                ! butitcausedproblemswithsome
-                ! newercompilers.
-                ! It seems itsremovalcausestheI/Ototake longer.
+                ! Alternatively, set in your batch script:
+                ! export FORT_BUFFERED=1 
+                !(or the csh equivalent - setenv FORT_BUFFERED 1 ) 
+                ! At NERSC, it was the default in before 2017
+                ! but it caused problems with some
+                ! newer compilers. 
+                ! It seems its removal causes the I/O to take longer.
 
 
                 call cpu_time(tm1)
@@ -2308,7 +2337,7 @@ contains
                 !--------------------------------------------------------------
                 !     Put sol into rhs vector (i.e., as in soln from direct solve)
                 if ( soln_method.eq."itsol" .or. soln_method.eq."itsol1" ) then
-                   !XXXX
+                   !XXXX  YuP: ok
                    call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                         maxits,iout,a_csr,ja_csr,ia_csr,alu, &
                         jlu,ju,ierr)
@@ -2317,16 +2346,16 @@ contains
                    ! perform soln
                    ! only at last flux surface (l_=lrz).
                    if ( ilast_lr.eq.1 ) then
-                      !MPIINSERT_IF_RANK_EQ_0
-                      !       WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
-                      !MPIINSERT_ENDIF_RANK
-                      !XXX
+!MPIINSERT_IF_RANK_EQ_0
+                      !WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
+!MPIINSERT_ENDIF_RANK
+                      !XXX  YuP: ok
                       call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                            maxits,iout,a_csr,ja_csr,ia_csr,alu, &
                            jlu,ju,ierr)
-                      !MPIINSERT_IF_RANK_EQ_0
-                      !       WRITE(*,*)'impavnc0  after pgmres:  ierr',ierr
-                      !MPIINSERT_ENDIF_RANK
+!MPIINSERT_IF_RANK_EQ_0
+                      !WRITE(*,*)'impavnc0  after pgmres:  ierr',ierr
+!MPIINSERT_ENDIF_RANK
                       do inr = 1,n_rows_A
                          rhs(inr)=sol(inr)
                          !-> rhs(1:n_rows_A)=sol(1:n_rows_A) results in stack overflow
@@ -2337,16 +2366,16 @@ contains
                    ! only at last flux surface (l_=lrz).
                    if ( ilast_lr.eq.1 ) then
 
-                      !MPIINSERT_IF_RANK_EQ_0
-                      !       WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
-                      !MPIINSERT_ENDIF_RANK
-                      !XXX
+!MPIINSERT_IF_RANK_EQ_0
+                      !WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
+!MPIINSERT_ENDIF_RANK
+                      !XXX YuP:ok
                       call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                            maxits,iout,ac_csr,jac_csr,iac_csr,alu, &
                            jlu,ju,ierr)
-                      !MPIINSERT_IF_RANK_EQ_0
-                      !       WRITE(*,*)'impavnc0  after pgmres:  ierr',ierr
-                      !MPIINSERT_ENDIF_RANK
+!MPIINSERT_IF_RANK_EQ_0
+                      !WRITE(*,*)'impavnc0  after pgmres:  ierr',ierr
+!MPIINSERT_ENDIF_RANK
 
                       do inr = 1,n_rows_A
                          rhs(inr)=sol(inr)
@@ -2357,13 +2386,13 @@ contains
 
                 call cpu_time(tm(1))
                 tm1= tm(1) - tm1
-                !       write(*,*)'impavnc0: time for pgmres tm1=',tm1
+                !write(*,*)'impavnc0: time for pgmres tm1=',tm1
                 if (ierr.ne.0) then
-                   !MPIINSERT_IF_RANK_EQ_0
+!MPIINSERT_IF_RANK_EQ_0
                    WRITE(*,*)'impavnc0 after pgmres, ierr=',ierr
                    WRITE(*,*)'ierr=1 converg. not achieved in itmax iterations'
                    WRITE(*,*)' -1 Initial guess seems to be the exact solution'
-                   !MPIINSERT_ENDIF_RANK
+!MPIINSERT_ENDIF_RANK
                    STOP 'ierr.ne.0, from pgmres'
                 endif
 
@@ -2380,13 +2409,22 @@ contains
                 !BH080303        tm1 = etime(tm)
                 call cpu_time(tm1)
 
+!MPIINSERT_IF_RANK_EQ_0      
+      WRITE(*,'(a,i4,2e19.11)')  &
+       'impavnc rhs before dgbtrf l_,MIN(rhs),MAX(rhs)', &
+                l_,MINVAL(rhs),MAXVAL(rhs)
+      WRITE(*,'(a,i4,2e19.11)')  &
+       'impavnc ABD before dgbtrf l_,MIN(abd),SUM(abd)', &
+                l_,MINVAL(abd),SUM(abd)
+!MPIINSERT_ENDIF_RANK
+                
                 !     factorize matrix
                 !_cray  64-bit-compiler uses sgbtrf (from lapack library).
                 !_pc    32-bit-compiler uses dgbtrf (from lapack library).
                 if (factor .ne. "disabled") then
                    !          call sgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
-                   !          write(*,*)'impavnc0 before dgbtrf, l_,inewjx,ml=',l_,inewjx,ml
-                   ! XXX
+                   !write(*,*)'impavnc0 before dgbtrf, l_,inewjx,ml=',l_,inewjx,ml
+                   ! XXX  YuP:ok
                    call dgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
                    if (info .ne. 0) then
                       print *,' warning after sgbtrf in impavnc0: info = ',info
@@ -2394,7 +2432,7 @@ contains
                    endif
                 endif
                 !       tm1 = etime(tm) - tm1
-                !       write(*,*)'impavnc0: time for dgbtrf tm1=',tm1
+                !write(*,*)'impavnc0: time for dgbtrf tm1=',tm1
 
                 !     solve system
                 !_cray  64-bit-compiler uses sgbtrs (from lapack library).
@@ -2406,16 +2444,25 @@ contains
                 inbrhs = 1
                 transpose = 'n'
                 !        call sgbtrs(transpose,inewjx,ml,mu,inbrhs,abd,md1abd,ipivot
-                ! XXXX
+                ! XXXX  YuP: ok
                 call dgbtrs(transpose,inewjx,ml,mu,inbrhs,abd,md1abd, &
                      ipivot,rhs,inewjx,info)
 
+!MPIINSERT_IF_RANK_EQ_0      
+      WRITE(*,'(a,i4,2e19.11)')  &
+       'impavnc rhs after  dgbtrs l_,MIN(rhs),MAX(rhs)', &
+                l_,MINVAL(rhs),MAXVAL(rhs)
+      WRITE(*,'(a,i4,2e19.11)')  &
+       'impavnc ABD after  dgbtrs l_,MIN(abd),SUM(abd)', &
+                l_,MINVAL(abd),SUM(abd)
+!MPIINSERT_ENDIF_RANK
+                
                 if (info .ne. 0) then
                    print *,' warning after sgbtrs in impavnc0: info = ',info
                    stop 'impavnc0 2'
                 endif
                 !       tm1 = etime(tm) - tm1
-                !       write(*,*)'impavnc0: time for dgbtrs tm1=',tm1
+                !write(*,*)'impavnc0: time for dgbtrs tm1=',tm1
 
              endif  !on soln_method.eq.'direct'
 
@@ -2441,7 +2488,7 @@ contains
 
              elseif(soln_method.eq.'it3dv' .or. soln_method.eq.'it3drv') then
                 ! soln performed only at last flux surface
-                !          write(*,*)'impavnc0: n,ilast_lr or rhs=>f',n,ilast_lr
+                !write(*,*)'impavnc0: n,ilast_lr or rhs=>f',n,ilast_lr
                 if ( ilast_lr.eq.1 ) then
                    l1=1
                    l2=lrz
@@ -2566,9 +2613,12 @@ contains
 
              enddo  !  On ll ; finished with updating f
 
-             WRITE(*,'(a,2i6)') &
-                  'impavnc[ZOW]: sol.found, f is updated. k,l_=', &
-                  k,l_
+!MPIINSERT_IF_RANK_EQ_0
+     !WRITE(*,'(a,2i6)') 'impavnc[ZOW]: sol.found, f is updated. k,l_=',k,l_
+      WRITE(*,'(a,2i4,3e15.7)')  &
+       'impavnc[ZOW] f fnd,updatd n,l_,MIN(f),MAX(f),SUM(f)=', &
+                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
+!MPIINSERT_ENDIF_RANK
              ! Note, with MPI, and soln_method.eq.'direct',
              ! parallelization is done over ll (l_) index.
              ! mpirank=0 is not doing calculations, only receiving data.
@@ -2583,8 +2633,10 @@ contains
                 if (icount_ese.eq.1) then
 
                    !             Store new f into fh
-                   call dcopy(iyjx2*ngen,f(0:iyjx2*ngen-1,0,1,l_),1, &
-                        fh(0:iyjx2*ngen-1,0,1,l_),1)
+                   call dcopy(iyjx2*ngen,f(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                        fh(0:iy+1,0:jx+1,1:ngen,l_),1)
+                   !YuP[2019-05-30] Note that in case of cqlpmod.eq."enabled", 
+                   ! fh() is allocated as fh(0:iy+1,0:jx+1,1:ngen,0:ls+1) in wpalloc
                    factor="disabled"
                    icount_ese=2
                    go to 10
@@ -2598,8 +2650,8 @@ contains
                         1,x,coss(1:iy,l_),cynt2(1:iy,l_),cint2,temp1,iy,jx)
                    flux2(l_)=fluxpar( &
                         1,x,coss(1:iy,l_),cynt2(1:iy,l_),cint2,temp2,iy,jx)
-                   call dcopy(iyjx2*ngen,f_(0:iyjx2*ngen-1,0,1,l_),1, &
-                        f(0:iyjx2*ngen-1,0,1,l_),1)
+                   call dcopy(iyjx2*ngen,f_(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                                          f(0:iy+1,0:jx+1,1:ngen,l_),1)
 
                    go to 999
                 endif
@@ -2618,8 +2670,8 @@ contains
                 if (icount_ampf.eq.1) then
 
                    !             Store new f into fh
-                   call dcopy(iyjx2,f(0:iyjx2-1,0,kelec,l_),1, &
-                        fh(0:iyjx2-1,0,1,l_),1)
+                   call dcopy(iyjx2,f(0:iy+1,0:jx+1,kelec,l_),1, &
+                                   fh(0:iy+1,0:jx+1,1,l_),1)
                    !YuP[05-2017] corrected dcopy in the above line:
                    !was iyjx2*ngen, but we only copy one species (kelec)
                    factor="disabled"
@@ -2629,15 +2681,15 @@ contains
                 elseif (icount_ampf.eq.2) then
 
                    !             g function is in f, store into fg
-                   call dcopy(iyjx2,f(0:iyjx2-1,0,kelec,l_),1, &
-                        fg(0:iyjx2-1,0,1,l_),1)
+                   call dcopy(iyjx2,f(0:iy+1,0:jx+1,kelec,l_),1, &
+                                   fg(0:iy+1,0:jx+1,1,l_),1)
                    !YuP[05-2017] corrected dcopy in the above line:
                    !was iyjx2*ngen, but we only copy one species (kelec)
                    !BH170312:  Checking effect of zeroing correction part of distn:
                    !BH170312:              call bcast(fg(0,0,1,l_),zero,iyjx2*ngen)
                    !             Restore f with f_, and return.
-                   call dcopy(iyjx2,f_(0:iyjx2-1,0,kelec,l_),1, &
-                        f(0:iyjx2-1,0,kelec,l_),1)
+                   call dcopy(iyjx2,f_(0:iy+1,0:jx+1,kelec,l_),1, &
+                                     f(0:iy+1,0:jx+1,kelec,l_),1)
                    !YuP[05-2017] corrected dcopy in the above line:
                    !was iyjx2*ngen, but we only copy one species (kelec)
                    go to 999
@@ -2691,11 +2743,12 @@ contains
   real(c_double) function z00(i,j,k)
     use param_mod
     use cqlcomm_mod
-    use advnce_mod
+    use advnce_mod !here: in z00(). To get xmm(), etc. (many functions)
     implicit none
     integer :: i
     integer :: j
     integer :: k !XXX example why k is terrible global var name
+    ! k is species index, everywhere in the code, except subr. frsubs, ilut, r8subs
     integer :: istat0
     integer :: iboot
     real(c_double) :: z00f
@@ -2706,11 +2759,6 @@ contains
 
     !cc         save  ! YuP: Not really needed
 
-    !      CONTAINS     PG90 at GA couldn't accept this construct,
-    !                   complaining that functions in advnce.h were
-    !                   being redefined.
-
-    !     removed this construct for franklin.nerc.gov: pg compiler
 
     !.......................................................................
     !     z00 is the right hand side of the equation, and holds the
@@ -2734,49 +2782,13 @@ contains
 
 
     !     statement functions for itl or itu [depracated in f95]
-
+    !YuP[2019-04-24] Changed statement functions into scalars below.
     real(c_double) :: t0ml_
-    t0ml_(j)=qz(j)*( &
-         cl(itl-1,j-1)*dj(itl,j-1,k,l_)*eym5(itl,l_)) &
-         +r2y(j)*(-de(itl-1,j)*(1.-di(itl-1,j-1,k,l_))) &
-         /(2.*dx(j))
-
     real(c_double) :: t00l_
-    t00l_(j)= &
-         +qz(j)*( &
-         -cl(itl-1,j)*dj(itl,j,k,l_)*eym5(itl,l_) &
-         +cl(itl-1,j-1)*(1.-dj(itl,j-1,k,l_))*eym5(itl,l_)) &
-         +r2y(j)*(dd(itl-1,j)*(1.-di(itl-1,j,k,l_)) &
-         +df(itl-1,j)*eym5(itl,l_))
-
     real(c_double) :: t0pl_
-    t0pl_(j)=qz(j)*( &
-         -cl(itl-1,j)*eym5(itl,l_)*(1.-dj(itl,j,k,l_))) &
-         +r2y(j)*de(itl-1,j)/(2.*dx(j))*(1.-di(itl-1,j+1,k,l_))
-
     real(c_double) :: t0mu_
-    t0mu_(j)=qz(j)*( &
-         -cl(itu+1,j-1)*dj(itu,j-1,k,l_)*eyp5(itu,l_)) &
-         +r2y(j)*( &
-         +de(itu,j)*di(itu,j-1,k,l_))/(2.*dx(j))
-
     real(c_double) :: t00u_
-    t00u_(j)= &
-         +qz(j)*( &
-         +cl(itu+1,j)*dj(itu,j,k,l_)*eyp5(itu,l_) &
-         -cl(itu+1,j-1)*(1.-dj(itu,j-1,k,l_))*eyp5(itu,l_)) &
-         +r2y(j)*( &
-         -dd(itu,j) &
-         *di(itu,j,k,l_) &
-         +df(itu,j)*eyp5(itu,l_))
-
     real(c_double) :: t0pu_
-    t0pu_(j)=qz(j)*( &
-         +cl(itu+1,j)*(1.-dj(itu,j,k,l_))*eyp5(itu,l_)) &
-         +r2y(j)*( &
-         -de(itu,j)*di(itu,j+1,k,l_)/ &
-         (2.*dx(j)))
-
 
 
     !  Test if bootstrap calc is needed (giving iboot=1)
@@ -2791,20 +2803,58 @@ contains
     if (iboot.eq.1) then
        if (i.eq.(itl-1)) then
           !              itl-1 case:
-          z00itl1=z00f -xpm(i,j)*bsl(j-1,k,l_)-xp0(i,j)*bsl(j,k,l_) &
-               -xpp(i,j)*bsl(j+1,k,l_)
+          z00itl1=z00f -xpm(i,j,k)*bsl(j-1,k,l_)-xp0(i,j,k)*bsl(j,k,l_) &
+               -xpp(i,j,k)*bsl(j+1,k,l_)
           z00t=z00itl1
        else
           !              itu+1 case:
           if (i.eq.(itu+1))then
-             z00itu1=z00f -xmm(i,j)*bsu(j-1,k,l_)-xm0(i,j)*bsu(j,k,l_) &
-                  -xmp(i,j)*bsu(j+1,k,l_)
+             z00itu1=z00f -xmm(i,j,k)*bsu(j-1,k,l_)-xm0(i,j,k)*bsu(j,k,l_) &
+                  -xmp(i,j,k)*bsu(j+1,k,l_)
              z00t=z00itu1
              !              itl (or itu)case:
           else
-             z00itl=z00f - (t0ml_(j)*bsl(j-1,k,l_)+t00l_(j)*bsl(j,k,l_) &
-                  +t0pl_(j)*bsl(j+1,k,l_)+t0mu_(j)*bsu(j-1,k,l_) &
-                  +t00u_(j)*bsu(j,k,l_)+t0pu_(j)*bsu(j+1,k,l_))
+          
+         t0ml_=qz(j)*( &
+         cl(itl-1,j-1,l_)*dj(itl,j-1,k,l_)*eym5(itl,l_)) &
+         +r2y(j,l_)*(-de(itl-1,j)*(1.-di(itl-1,j-1,k,l_))) &
+         /(2.*dx(j))
+
+         t00l_= &
+         +qz(j)*( &
+         -cl(itl-1,j,l_)*dj(itl,j,k,l_)*eym5(itl,l_) &
+         +cl(itl-1,j-1,l_)*(1.-dj(itl,j-1,k,l_))*eym5(itl,l_)) &
+         +r2y(j,l_)*(dd(itl-1,j)*(1.-di(itl-1,j,k,l_)) &
+         +df(itl-1,j)*eym5(itl,l_))
+
+         t0pl_=qz(j)*( &
+         -cl(itl-1,j,l_)*eym5(itl,l_)*(1.-dj(itl,j,k,l_))) &
+         +r2y(j,l_)*de(itl-1,j)/(2.*dx(j))*(1.-di(itl-1,j+1,k,l_))
+
+         t0mu_=qz(j)*( &
+         -cl(itu+1,j-1,l_)*dj(itu,j-1,k,l_)*eyp5(itu,l_)) &
+         +r2y(j,l_)*( &
+         +de(itu,j)*di(itu,j-1,k,l_))/(2.*dx(j))
+
+         t00u_= &
+         +qz(j)*( &
+         +cl(itu+1,j,l_)*dj(itu,j,k,l_)*eyp5(itu,l_) &
+         -cl(itu+1,j-1,l_)*(1.-dj(itu,j-1,k,l_))*eyp5(itu,l_)) &
+         +r2y(j,l_)*( &
+         -dd(itu,j) &
+         *di(itu,j,k,l_) &
+         +df(itu,j)*eyp5(itu,l_))
+
+         t0pu_=qz(j)*( &
+         +cl(itu+1,j,l_)*(1.-dj(itu,j,k,l_))*eyp5(itu,l_)) &
+         +r2y(j,l_)*( &
+         -de(itu,j)*di(itu,j+1,k,l_)/ &
+         (2.*dx(j)))
+          
+             z00itl= z00f -(  &
+                   t0ml_*bsl(j-1,k,l_)+t00l_*bsl(j,k,l_)   &
+                  +t0pl_*bsl(j+1,k,l_)+t0mu_*bsu(j-1,k,l_) &
+                  +t00u_*bsu(j,k,l_)  +t0pu_*bsu(j+1,k,l_)      )
              z00t=z00itl
           endif
        endif

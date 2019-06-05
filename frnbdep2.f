@@ -12,7 +12,7 @@ c     elements in the r and z axes.  outputs the 3rd excited state
 c     component, rzhex, to file 'beamdep' for postprocessing.
 c-----------------------------------------------------------------------
 c     ONETWO DIVERGENCE
-CMPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
       parameter (nbdep=29)
       dimension psi(ki,kj),r(ki),z(kj),potsid(kf),
@@ -111,7 +111,7 @@ c
 c     output subset of rzhex to 'beamdep'
       nout=nbdep
 
-CMPIINSERT_IF_RANK_NE_0_RETURN
+!MPIINSERT_IF_RANK_NE_0_RETURN
 
       open(unit=nout,file='beamdep',status='new')
       write(nout,1000) nrpat,nzpat,me,mb

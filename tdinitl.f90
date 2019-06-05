@@ -593,5 +593,7 @@ contains
 !$$$      if (eqmod .eq. "enabled") call tdplteq
 !
       return
-      end
+      end subroutine tdinitl
+      
+      
 end module tdinitl_mod

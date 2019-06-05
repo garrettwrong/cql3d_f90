@@ -50,5 +50,6 @@ contains
 100    continue
 200    continue
        return
-       END
+       END subroutine lam
+       
 end module tdnpalam_mod

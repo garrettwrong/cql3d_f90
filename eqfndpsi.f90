@@ -419,5 +419,7 @@ contains
 !MPIINSERT_ENDIF_RANK
 
       return
-      end
+      end subroutine eqfndpsi
+      
+      
 end module eqfndpsi_mod

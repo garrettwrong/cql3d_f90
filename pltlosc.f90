@@ -61,5 +61,7 @@ contains
 92003   continue
  100  continue
       return
-      end
+      end subroutine pltlosc
+      
+      
 end module pltlosc_mod

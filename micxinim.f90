@@ -27,5 +27,6 @@ contains
  10   continue
 
       return
-      end
+      end subroutine micxinim
+      
 end module micxinim_mod

@@ -60,5 +60,6 @@ contains
       ifct1(jval)=65535*scal1+.5
       ifct2(jval)=65535*scal2+.5
       return
-      end
+      end subroutine urfedge
+      
 end module urfedge_mod

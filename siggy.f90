@@ -27,5 +27,6 @@ contains
       val=svtab(inum)
       siggy=val
       return
-      end
+      end function siggy
+      
 end module siggy_mod

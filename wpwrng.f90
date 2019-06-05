@@ -103,5 +103,6 @@ contains
 10170 format(" lmidvel should equal 0 with numindx=4 (centered scheme)")
 10990 format(" unspecified in wpwrng")
 
-      end
+      end subroutine wpwrng
+      
 end module wpwrng_mod

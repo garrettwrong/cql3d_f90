@@ -50,5 +50,7 @@ contains
         jxcrit(k,lr_)=luf(xcrit,x,jx)
 10    continue
       return
-      end
+      end subroutine soucrit
+      
+      
 end module soucrit_mod

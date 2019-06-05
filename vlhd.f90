@@ -116,5 +116,6 @@ contains
       endif
 
       return
-      end
+      end function vlhd
+      
 end module vlhd_mod

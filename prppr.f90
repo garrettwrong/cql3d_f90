@@ -31,7 +31,7 @@ contains
 
       logical trnsfm
       ipxjpx=jpxy*ipxy
-      call bcast(fpn(1:ipxjpx,1),zero,ipxjpx)
+      call bcast(fpn(1:jpxy,1:ipxy),zero,ipxjpx)
       trnsfm=(target.eq."velocity".and. relativ .ne. "disabled")
 
 !     ipxy refers to xperp,
@@ -238,5 +238,7 @@ contains
 !-obsolete 160    continue
 !-obsolete      endif
       return
-      end
+      end subroutine prppr
+      
+      
 end module prppr_mod

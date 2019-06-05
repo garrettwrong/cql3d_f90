@@ -38,7 +38,7 @@ contains
 !..................................................................
 
       sgain(3,k)=xlncur(k,lr_)*.5*dtr+sgain(3,k)
-      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp2(0:iy+1,0:jx+1),1,temp1(0:iy+1,0:jx+1),1)
       s=0.
       if (ineg .eq. "disabled") go to 350
 
@@ -61,7 +61,7 @@ contains
       engain(k)=engain(k)+eline*one_
       sgain(2,k)=xline*one_
  350  continue
-      call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,temp4(0:iy+1,0:jx+1),1)
 
 !..................................................................
 !     Compute power from df/dt and from setting neg f to zero.
@@ -70,7 +70,7 @@ contains
       if (n .gt. 0 .and. n/nchec*nchec .eq. n) then
         call diagentr(9,k)
         call diagentr(10,k)
-        call dcopy(iyjx2,temp4(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
+        call dcopy(iyjx2,temp4(0:iy+1,0:jx+1),1,temp1(0:iy+1,0:jx+1),1)
       endif
       if (iactst.eq."disabled") go to 500
 
@@ -82,5 +82,7 @@ contains
       yline=yline*one_
  500  continue
       return
-      end
+      end subroutine diagxswt
+      
+      
 end module diagxswt_mod

@@ -76,7 +76,7 @@ contains
           if (jegy(ny,1,k,lr_) .ge. jegy(ny,2,k,lr_)) jegy(ny,1,k,lr_)=0
  100    continue
  103  continue
-      call bcast(xlndnz(1:(ngen+1)*negyrga,1),zero,(ngen+1)*negyrga)
+      call bcast(xlndnz(1:(ngen+1),1:negyrga),zero,(ngen+1)*negyrga)
 
 !..................................................................
 !     xlndnz(k,ny) will eventually hold the line integrated density
@@ -93,7 +93,7 @@ contains
       endif
       do 10 k=1,ngen
          ! xxx just assign it, sigh
-        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp3(0:iyjx2-1,0),1)
+        call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp3(0:iy+1,0:jx+1),1)
         do 11 l=iorbstr,iorbend
           ileff=l
           if (cqlpmod .eq. "enabled") ileff=ls_
@@ -145,5 +145,7 @@ contains
         densz(l,ngen+1,nw,lr_)=densz(l,ngen+1,nw,lr_)+denn
  201  continue
       return
-      end
+      end subroutine diagdenz
+      
+      
 end module diagdenz_mod

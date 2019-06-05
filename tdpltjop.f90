@@ -906,5 +906,6 @@ contains
  809  CONTINUE
 
       return
-      end
+      end subroutine tdpltjop
+      
 end module tdpltjop_mod

@@ -38,7 +38,7 @@ contains
       if (pltvlhb.ne."enabled") return
 !$$$      if (pltovlp.eq."enabled".and. mrfn.gt.1) then
 !cc      call bcast(temp1(1,0),zero,iy*(jx+1)) ! YuP-101215: error?
-      call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
+      call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
 
       write(*,*)'rdc_bplt(krf): mrfn =',mrfn,' krf=',krf
 
@@ -62,7 +62,7 @@ contains
 
 
       return
-      end
+      end subroutine rdc_bplt
 
 
 end module rdc_bplt_mod

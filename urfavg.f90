@@ -46,5 +46,6 @@ contains
       enddo
 
       return
-      end
+      end subroutine urfavg
+      
 end module urfavg_mod

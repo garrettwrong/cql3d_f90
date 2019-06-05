@@ -194,7 +194,7 @@ contains
       allocate(jminray(nrayelts,nrayn,mrfn),STAT=istat)
       istat_tot=istat_tot+istat
 !MPIINSERT_IF_RANK_EQ_0
-      WRITE(*,*)'urfalloc: urfpwr* allocated'
+      WRITE(*,*)'urfalloc: urfpwr* allocated. istat_tot=',istat_tot
 !MPIINSERT_ENDIF_RANK
 
       if(istat.eq.0) call ibcast(jminray,0,SIZE(jminray))
@@ -270,16 +270,23 @@ contains
       allocate(wphi(nrayelts,nrayn,mrfn),STAT=istat)
       istat_tot=istat_tot+istat
       if(istat.eq.0) call bcast(wphi,zero,SIZE(wphi))
-
+!MPIINSERT_IF_RANK_EQ_0
+      WRITE(*,*)'urfalloc: w* allocated. istat_tot=',istat_tot
+!MPIINSERT_ENDIF_RANK
+                  
       !if(urfb_version.eq.1)then ! 2 is the new version developed by YuP
         ! if 1, it will use the original version
         !-YuP 101121:  These are usually large arrays:
         allocate(ilowp(ipack,mrfn),STAT=istat)
         istat_tot=istat_tot+istat
-        write(*,*)'urfalloc  ilowp: istat=',istat
+!MPIINSERT_IF_RANK_EQ_0
+        WRITE(*,*)'urfalloc  ilowp: istat=',istat
+!MPIINSERT_ENDIF_RANK
         allocate(iupp(ipack,mrfn),STAT=istat)
         istat_tot=istat_tot+istat
-        write(*,*)'urfalloc   iupp: istat=',istat
+!MPIINSERT_IF_RANK_EQ_0
+        WRITE(*,*)'urfalloc  iupp: istat=',istat
+!MPIINSERT_ENDIF_RANK
         allocate(ifct1_(ipack16,mrfn),STAT=istat)
         istat_tot=istat_tot+istat
 !MPIINSERT_IF_RANK_EQ_0
@@ -315,5 +322,7 @@ contains
 !MPIINSERT_ENDIF_RANK
 
       return
-      end
+      end subroutine urfalloc
+      
+      
 end module urfalloc_mod

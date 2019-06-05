@@ -83,7 +83,7 @@ contains
         if (cqlpmod .eq. "enabled") &
           thta=fmass(k)*clite2/(temppar(k,ls_)*ergtkev)
         do 2 j=1,jx
-           !XXXXXXXXX whole lotta underflow here
+           !XXXXXXXXX whole lotta underflow here. YuP: this is a standard Maxw.distr. Usually ok.
           swwtemp=exp(-gamm1(j)*thta)
           do 3 i=1,iy
             f(i,j,k,l_)=swwtemp
@@ -132,8 +132,8 @@ contains
          call bcast(tam3,zero,jx)
 !
 !  Put constant distribution in temp1, zero temp2
-         call bcast(temp1(0:iyjx2,0),one,iyjx2)
-         call bcast(temp2(0:iyjx2,0),zero,iyjx2)
+         call bcast(temp1(0:iy+1,0:jx+1),one,iyjx2)
+         call bcast(temp2(0:iy+1,0:jx+1),zero,iyjx2)
 !
 ! If fpld(2,k).ne.0., then set up the equatorial plane
 ! shifted "Maxwellian" in temp2.
@@ -306,5 +306,7 @@ contains
  70   continue ! k
 
  999  return
-      end
+      end subroutine finit
+      
+      
 end module finit_mod

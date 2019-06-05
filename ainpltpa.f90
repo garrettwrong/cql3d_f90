@@ -277,5 +277,6 @@ contains
       endif
 
       return
-      end
+      end subroutine ainpltpa
+      
 end module ainpltpa_mod

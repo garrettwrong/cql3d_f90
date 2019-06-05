@@ -73,5 +73,6 @@ contains
       pressau2=(1.+1.24*zfcol/zk033*zg)
 
       return
-      end
+      end subroutine resthks
+      
 end module resthks_mod

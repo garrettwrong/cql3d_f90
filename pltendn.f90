@@ -68,7 +68,7 @@ contains
 !        write(*,*)'pltendn: nch(l_),pefld(1:nch(l_),1)=',
 !     +                      nch(l_),pefld(1:nch(l_),1)
 
-        call aminmx(pefld(1:nch(l),l_),1,nch(l_),1,emin,emax,kmin,kmax)
+        call aminmx(pefld(1:nch(l_),l_),1,nch(l_),1,emin,emax,kmin,kmax)
         if (abs(emin-emax).lt.abs(emax)*dgts) emax=emin+.001*abs(emin)
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range
         CALL PGSVP(.2,.8,.65,.95)

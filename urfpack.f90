@@ -386,12 +386,12 @@ contains
                 iupjx=ilim2(jx)
                 ilwjx=ilim1(jx)
                 do 30 j=jmin+1,jx-1
-                  ilim2(j)=luf(vu/sx(j),cosmz(ilim2(j-1): &
-                    ilim2(j-1)+iupjx-ilim2(j-1),ll,lr_), &
-                    iupjx-ilim2(j-1))-1+ilim2(j-1)
-                  ilim1(j)=luf(vl/sx(j),cosmz(ilim1(j-1): &
-                    ilim1(j-1)+ilwjx-ilim1(j-1),ll,lr_), &
-                    ilwjx-ilim1(j-1))-1+ilim1(j-1)
+                  ilim0= ilim2(j-1)
+                  irange= iupjx-ilim2(j-1)
+                  ilim2(j)= luf(vu/sx(j),cosmz(ilim0:ilim0+irange-1,ll,lr_),irange) -1+ilim2(j-1)
+                  ilim0= ilim1(j-1)
+                  irange= ilwjx-ilim1(j-1)
+                  ilim1(j)= luf(vl/sx(j),cosmz(ilim0:ilim0+irange-1,ll,lr_),irange) -1+ilim1(j-1)
                     !YuP[04-2016] adjusted the range in theta around resonance
                     !to have at least 3 points
 !                    i2=ilim2(j)
@@ -708,5 +708,7 @@ contains
 
       write(*,*)'urfpack:  END'
       return
-      end
+      end subroutine urfpack
+      
+      
 end module urfpack_mod

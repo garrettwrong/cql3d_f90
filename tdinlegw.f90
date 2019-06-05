@@ -105,9 +105,13 @@ contains
 !l    1.1 construct Gaussian mesh and P_m*sin*dh for each m
 !.......................................................................
 
-      call congau(y(1:ipoints,klmesh),zxg,zxgh(1,0),ipoints,ngauss)
-      if (iparts .eq. 2) call congau(y(iistart:ipoints,klmesh), &
-        zxg(iigstrt),zxgh(iigstrt,0),ipoints,ngauss)
+      call congau(  y( 1:ipoints,klmesh), &
+                  zxg( 1:ipoints*ngauss), &
+                  zxgh(1:ipoints*ngauss, 0), ipoints,ngauss)
+      if (iparts .eq. 2) & 
+      call congau(  y( iistart: iistart+ipoints-1, klmesh), &
+                  zxg( iigstrt: iigstrt+ipoints*ngauss-1),  &
+                  zxgh(iigstrt: iigstrt+ipoints*ngauss-1, 0), ipoints,ngauss)
 
       do 110 iside=1,iparts
         ig0=(iside-1)*(iigstrt-1)
@@ -276,7 +280,7 @@ contains
 !MG end added 11/13/2017
 
       return
-      end
+      end subroutine tdinlegw
 
 !=======================================================================
 !=======================================================================
@@ -330,7 +334,9 @@ contains
  100  continue
 
       return
-      end
+      end subroutine lagrng
+      
+      
       subroutine congau(py,pyg,pygh,kpts,kgau)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -349,7 +355,9 @@ contains
  100  continue
 
       return
-      end
+      end subroutine congau
+      
+      
       subroutine gauss(kpts,pgausx,pgaush)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !     ------------------------------------
@@ -535,5 +543,6 @@ contains
 !
       return
 !
-      end
+      end subroutine gauss
+      
 end module tdinlegw_mod

@@ -93,11 +93,9 @@ contains
 !     Limit the range of integration at the pass/trapped boundary
 !...................................................................
 
-!      call bcast (tau(1,lr_),zero,iyh)
       call bcast(tau(1:iy,lr_),zero,iy)
-      call bcast(dtau(1:iy*lz,1,lr_),zero,iy*lz)
+      call bcast(dtau(1:iy,1:lz,lr_),zero,iy*lz)
       call bcast(tem2,zero,iyjx)
-!      call ibcast(itemc1,1,iy)    ! Test
       call ibcast(itemc1,0,iy)
 
 !...................................................................
@@ -361,6 +359,7 @@ contains
 !            step back to the first nonzero tem2).
             do ii=1,nii
               iguess=1
+              ii0= 1+(ii-1)*nsteps
               ii2= ii0+nsteps-1 !YuP[2019-04-22]should be nsteps elements
               wk_lug(1:nsteps)= tem2(ii0:ii2)
               itemc1(ii)=lug(zero,wk_lug,nsteps,iguess)-1
@@ -564,9 +563,9 @@ contains
 
       zboun(itl,lr_)=zstar
       call bcast(tau(1:iyh,lr_),zero,iyh)
-      !tau = 0
-      call bcast(dtau(1:iy*lz,1,lr_),zero,iy*lz)
-      !dtau = 0
+      !tau = 0 ! need to zeroe for a given lr_
+      call bcast(dtau(1:iy,1:lz,lr_),zero,iy*lz) ! for a given lr_
+      !dtau = 0 ! need to zeroe for a given lr_
 
 !...................................................................
 !     Begin loop over the particle orbit
@@ -769,7 +768,9 @@ contains
       iyy=iy_(lr) !-YuP-101215: Don't use iy=; it's in common /params/
       itl=itl_(lr)
       iyh=iyh_(lr)
-      call bcast(deltarho(1:iy*lrzmax,1,lr),zero,iy*lrzmax) ! YuP: is iy*lrzmax correct?.. umm you tell me XXX
+      call bcast(deltarho(1:iy,1:lz,lr),zero,iy*lz) ! for a given lr 
+      ! dimensioned : deltarho(iy,lz,lrzmax)
+      ! Alternatively could set deltarho=0.d0 infront of "do lr=1,lrzmax" line
 
 
 !.......................................................................
@@ -800,8 +801,8 @@ contains
 !     z=0 to z=z(l) of dtau:
 !     Use temp1 storage, so check lz.le.jx+1
       if (lz.gt.jx+1) STOP 'In baviorbt: Check lz versus jx+1'
-      call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
-      !temp1 = 0
+      call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
+      !temp1 = 0.d0 ! should also work. Which version is faster?
       do i=1,itl
          temp1(i,1)=dtau(i,1,lr)
          do l=2,lz
@@ -809,9 +810,9 @@ contains
          enddo
       enddo
 
-      call bcast(temp2(0:iyjx2-1,0),zero,iyjx2)
-      call bcast(temp3(0:iyjx2-1,0),zero,iyjx2)
-      !temp3 = 0
+      call bcast(temp2(0:iy+1,0:jx+1),zero,iyjx2)
+      call bcast(temp3(0:iy+1,0:jx+1),zero,iyjx2)
+      !temp3 = 0.d0 ! should also work. Which version is faster?
       do i=1,iyh
 
          if (i.le.itl) then !transiting
@@ -1205,7 +1206,7 @@ contains
       deltarz_interp=deltai
 
       return
-      end
+      end function deltarz_interp
 
 
 

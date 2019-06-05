@@ -89,5 +89,7 @@ contains
 
  30   continue
       return
-      end
+      end subroutine tdtloop
+      
+      
 end module tdtloop_mod

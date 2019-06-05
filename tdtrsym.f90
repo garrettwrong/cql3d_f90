@@ -28,5 +28,6 @@ contains
  10     continue
  5    continue
       return
-      end
+      end subroutine tdtrsym
+      
 end module tdtrsym_mod

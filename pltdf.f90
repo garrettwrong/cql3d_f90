@@ -50,7 +50,7 @@ contains
 
        ! This part is plotted for any pltd.ne.'disabled'
 
-       call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp1(0:iyjx2-1,0),1)
+       call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp1(0:iy+1,0:jx+1),1)
        write(t_,550) k
 550    format(1x,"Species ",i2," Distribution Function Contour Plot")
                CALL PGPAGE
@@ -105,14 +105,15 @@ contains
        endif !  pltd.eq."df" .or. pltd.eq."df_color"
 
 
-10  end do
+10  end do ! loop in k;  Also used for goto 10
 
 570 format(4(1pe16.6))
 
     return
 
-!bug end do
   end subroutine pltdf
+  
+  
 
       subroutine pltcont(k,pltcase,tt_,itype)
       use param_mod
@@ -595,7 +596,7 @@ contains
  151  format( "r/a=",1pe10.3,5x,"radial position (R)=",1pe12.4," cm")
  153  format( "rya=",1pe10.3,5x,"R=rpcon=",1pe12.4," cm,  Surf#",i4)
  999  return
-      end
+      end subroutine pltcont
 !
 !
       subroutine PGFUNC1(VISBLE,yplt,xplt,zplt)
@@ -641,7 +642,7 @@ contains
       ENDIF
 
       RETURN
-      END
+      END subroutine PGFUNC1
 
 
 
@@ -709,7 +710,7 @@ contains
 !        -- AIPS
          CALL PGCTAB(AL, AR, AG, AB, 20, CONTRA, BRIGHT)
       END IF
-      END
+      END SUBROUTINE PALETT
 
 
 end module pltdf_mod

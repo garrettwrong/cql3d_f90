@@ -138,5 +138,6 @@ contains
         cosovb(i,0)=0.
  70   continue
       return
-      end
+      end subroutine tdtrvint
+      
 end module tdtrvint_mod

@@ -133,26 +133,26 @@ contains
 !l    2.1 Initialize f_n+1/2
 !.......................................................................
 
-      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
-       fnhalf(0:iyjx2*ngen*lrors-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                             fnhalf(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
       if (sbdry .eq. "periodic") then
-        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1, &
-       fnhalf(0:iyjx2*ngen,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1, &
-       fnhalf(0:iyjx2*ngen-1,0,1,0),1)
-        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,1),1, &
-       velsou(0:iyjx2*ngen-1,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,ls),1, &
-       velsou(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
+                              fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
+        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,1   ),1, &
+                              velsou(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              velsou(0:iy+1,0:jx+1,1:ngen,0   ),1)
       else
-        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1, &
-       fnhalf(0:iyjx2*ngen-1,0,1,0),1)
-        call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1, &
-       fnhalf(0:iyjx2*ngen-1,0,1,ls+1),1)
-        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,1),1, &
-       velsou(0:iyjx2*ngen-1,0,1,0),1)
-        call dcopy(iyjx2*ngen,velsou(0:iyjx2*ngen-1,0,1,ls),1, &
-       velsou(0:iyjx2*ngen-1,0,1,ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
+                              fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,1   ),1, &
+                              velsou(0:iy+1,0:jx+1,1:ngen,0   ),1)
+        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              velsou(0:iy+1,0:jx+1,1:ngen,ls+1),1)
       endif
 
 !.......................................................................
@@ -172,17 +172,15 @@ contains
  2121     continue
  2120   continue
         if (sbdry .eq. "periodic") then
-          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1, &
-                fnhalf(0:iyjx2*ngen-1,0,1,ls+1) &
-            ,1)
-          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1, &
-               fnhalf(0:iyjx2*ngen-1,0,1,0),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
+                                fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                                fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
         else
-          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,1),1, &
-                fnhalf(0:iyjx2*ngen-1,0,1,0),1)
-          call dcopy(iyjx2*ngen,fnhalf(0:iyjx2*ngen-1,0,1,ls),1, &
-               fnhalf(0:iyjx2*ngen-1,0,1,ls+1) &
-            ,1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
+                                fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                                fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
         endif
       endif
       ivelmid=1
@@ -404,10 +402,10 @@ contains
 !     end of loop over general species
  220  continue
 
-      call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,1),1, &
-           fnp1(0:iyjx2*ngen-1,0,1,ls+1),1)
-      call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,ls),1, &
-           fnp1(0:iyjx2*ngen-1,0,1,0),1)
+      call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,1   ),1, &
+                            fnp1(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+      call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                            fnp1(0:iy+1,0:jx+1,1:ngen,0   ),1)
 
 !.......................................................................
 !l    3. Check the solution
@@ -436,10 +434,10 @@ contains
 
           if (sbdry .eq. "periodic") then
 !     Assumes ilspts=ls, i.e. solution at 0 and ls+1 not yet calculated
-            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,1),1, &
-                  fnp1(0:iyp1,1,k,ls+1),1)
-            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,ls),1, &
-                 fnp1(0:iyp1,1,k,0),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,1   ),1, &
+                              fnp1(0:iyp1,1,k,ls+1),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,ls  ),1, &
+                              fnp1(0:iyp1,1,k,0   ),1)
           endif
 
  400    continue
@@ -447,5 +445,7 @@ contains
       endif
 
       return
-      end
+      end subroutine wptrafx
+      
+      
 end module wptrafx_mod

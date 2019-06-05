@@ -215,5 +215,6 @@ contains
         20X,43(1H*)///)
  9510 FORMAT(/////20X,10(1H*),'   ZERO PIVOT IN NONCYM'///)
 !
-      END
+      END subroutine nonsym
+      
 end module znonsym_mod

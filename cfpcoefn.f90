@@ -50,14 +50,14 @@ contains
       endif
       impcoef=1
       nccoef=nccoef+1
-      call bcast(cal(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(cbl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(ccl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(cdl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(cel(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(cfl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(eal(1:iyjx*ngen*2,1,1,1,l_),zero,iyjx*ngen*2)
-      call bcast(ebl(1:iyjx*ngen*2,1,1,1,l_),zero,iyjx*ngen*2)
+      call bcast(cal(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(cbl(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(ccl(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(cdl(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(cel(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(cfl(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(eal(1:iy,1:jx,1:ngen,1:2,l_),zero,iyjx*ngen*2)
+      call bcast(ebl(1:iy,1:jx,1:ngen,1:2,l_),zero,iyjx*ngen*2)
 
 
 !..................................................................
@@ -95,7 +95,7 @@ contains
           call cfpmodbe(reltmp,ebk1,ebk2)
         endif
         rnorm=reltmp/(4.*pi*cnorm3*ebk2)
-        call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)
+        call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
 
 !..................................................................
 !     Need extra mesh points to represent ions on a mesh meant to
@@ -305,8 +305,8 @@ contains
  220        continue
           else
             call diagescl(kelecg)
-            call dcopy(iyjx2,f(0:iyjx2-1,0,ngen,l_),1, &
-                 fxsp(0:iyjx2-1,0,ngen,l_),1)
+            call dcopy(iyjx2,f(0:iy+1,0:jx+1,ngen,l_),1, &
+                          fxsp(0:iy+1,0:jx+1,ngen,l_),1)
           endif
  250    continue
       else
@@ -374,11 +374,11 @@ contains
           endif
           do 400 m=mu1,mu2,mu3
             if (colmodl.eq.4 .and. n.ge.naccel) then
-              call dcopy(iyjx2,fxsp(0:iyjx2-1,0,k,l_),1, &
-                    temp3(0:iyjx2-1,0),1)
+              call dcopy(iyjx2,fxsp(0:iy+1,0:jx+1,k,l_),1, &
+                              temp3(0:iy+1,0:jx+1),1)
             else
-              call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1, &
-                    temp3(0:iyjx2-1,0),1)
+              call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1, &
+                           temp3(0:iy+1,0:jx+1),1)
             endif
 
 !     compute V_m_b in tam1(j), for given l, m and gen. species b
@@ -677,14 +677,14 @@ contains
             anr1=gama(kk,k)*satioz2(k,kk)*one_
             if (anr1.lt.em90) goto 490
 !PTR>>>REPLACE PTR-DSCALCACD
-            call dscal(iyjx,anr1,ca(1:iyjx,1),1) !-YuP: size of ca..cf: iy*jx
-            call dscal(iyjx,anr1,cb(1:iyjx,1),1)
-            call dscal(iyjx,anr1,cc(1:iyjx,1),1)
-            call dscal(iyjx,anr1,cd(1:iyjx,1),1)
-            call dscal(iyjx,anr1,ce(1:iyjx,1),1)
-            call dscal(iyjx,anr1,cf(1:iyjx,1),1)
-            call dscal(iyjx,satiom(kk,k),ca(1:iyjx,1),1)
-            call dscal(iyjx,satiom(kk,k),cd(1:iyjx,1),1)
+            call dscal(iyjx,anr1,ca,1) !-YuP: size of ca..cf: iy*jx
+            call dscal(iyjx,anr1,cb,1)
+            call dscal(iyjx,anr1,cc,1)
+            call dscal(iyjx,anr1,cd,1)
+            call dscal(iyjx,anr1,ce,1)
+            call dscal(iyjx,anr1,cf,1)
+            call dscal(iyjx,satiom(kk,k),ca,1)
+            call dscal(iyjx,satiom(kk,k),cd,1)
 !PTR<<<END PTR-DSCALCACD
 
 
@@ -774,14 +774,14 @@ contains
 
 !PTR>>>REPLACE PTR-DSCAL2
             fscal= one/anr1
-            call dscal(iyjx,fscal,ca(1:iyjx,1),1)
-            call dscal(iyjx,fscal,cb(1:iyjx,1),1)
-            call dscal(iyjx,fscal,cc(1:iyjx,1),1)
-            call dscal(iyjx,fscal,cd(1:iyjx,1),1)
-            call dscal(iyjx,fscal,ce(1:iyjx,1),1)
-            call dscal(iyjx,fscal,cf(1:iyjx,1),1)
-            call dscal(iyjx,one/satiom(kk,k),ca(1:iyjx,1),1)
-            call dscal(iyjx,one/satiom(kk,k),cd(1:iyjx,1),1)
+            call dscal(iyjx,fscal,ca,1)  !-YuP: size of ca..cf: iy*jx
+            call dscal(iyjx,fscal,cb,1)
+            call dscal(iyjx,fscal,cc,1)
+            call dscal(iyjx,fscal,cd,1)
+            call dscal(iyjx,fscal,ce,1)
+            call dscal(iyjx,fscal,cf,1)
+            call dscal(iyjx,one/satiom(kk,k),ca,1)
+            call dscal(iyjx,one/satiom(kk,k),cd,1)
 !PTR<<<END PTR-DSCAL2
 
  490      continue ! kk=1,ngen
@@ -838,16 +838,16 @@ contains
 
       do 2000 k=1,ngen
         fscal= one/tnorm(k)  !tnorm=vnorm**3/(GAM1*one_), see ainvnorm.f
-        call dscal(iyjx,fscal,cal(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,fscal,cbl(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,fscal,ccl(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,fscal,cdl(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,fscal,cel(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,fscal,cfl(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,fscal,eal(1:iyjx,1,k,1,l_),1)
-        call dscal(iyjx,fscal,ebl(1:iyjx,1,k,1,l_),1)
-        call dscal(iyjx,fscal,eal(1:iyjx,1,k,2,l_),1)
-        call dscal(iyjx,fscal,ebl(1:iyjx,1,k,2,l_),1)
+        call dscal(iyjx,fscal,cal(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,fscal,cbl(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,fscal,ccl(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,fscal,cdl(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,fscal,cel(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,fscal,cfl(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,fscal,eal(1:iy,1:jx,k,1,l_),1)
+        call dscal(iyjx,fscal,ebl(1:iy,1:jx,k,1,l_),1)
+        call dscal(iyjx,fscal,eal(1:iy,1:jx,k,2,l_),1)
+        call dscal(iyjx,fscal,ebl(1:iy,1:jx,k,2,l_),1)
 
 !..................................................................
 !     For the case that colmodl=3, a positive definite operator
@@ -879,5 +879,7 @@ contains
 ! But it doesn't.  Check kerbel email, Oct 31, 2005.
 
       return
-      end
+      end subroutine cfpcoefn
+      
+      
 end module cfpcoefn_mod

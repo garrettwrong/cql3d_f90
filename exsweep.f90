@@ -25,7 +25,7 @@ contains
       subroutine exsweep
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in exsweep. To get alpx(), betx(), etc.
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
@@ -44,8 +44,8 @@ contains
 !     Copy current distribution into f_.
 !..................................................................
 
-      call dcopy(iyjx2*ngen,f(0:iyjx2*ngen-1,0,1,l_),1, &
-           f_(0:iyjx2*ngen-1,0,1,l_),1)
+      call dcopy(iyjx2*ngen,f(0:iy+1,0:jx+1,1:ngen,l_),1, &
+                           f_(0:iy+1,0:jx+1,1:ngen,l_),1)
 
 !..................................................................
 !     loop over all time advanced species..
@@ -122,7 +122,7 @@ contains
 !     copy the distribution function into temp1
 !..................................................................
 
-        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp1(0:iyjx2-1,0),1)
+        call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp1(0:iy+1,0:jx+1),1)
 
 !..................................................................
 !     Initialize at x=0 for the forward recursion of the velocity
@@ -144,8 +144,8 @@ contains
 !     Recall the quantity G(i,j) is really defined at G(i,j+1/2).
 !..................................................................
 
-          fgg(i,1)=delx(i,1)/betx(i,1)
-          egg(i,1)=alpx(i,1)/betx(i,1)
+          fgg(i,1)=delx(i,1,k,l_)/betx(i,1,k,l_)
+          egg(i,1)=alpx(i,1,k,l_)/betx(i,1,k,l_)
  20     continue
 
 !..................................................................
@@ -155,9 +155,9 @@ contains
         do 50 j=2,jxm1
 !dir$ ivdep
           do 40 i=1,iy
-            egg(i,j)=alpx(i,j)/(betx(i,j)-gamx(i,j)*egg(i,j-1))
-            fgg(i,j)=(delx(i,j)+gamx(i,j)*fgg(i,j-1))/ &
-              (betx(i,j)-gamx(i,j)*egg(i,j-1))
+            egg(i,j)=alpx(i,j,k,l_)/(betx(i,j,k,l_)-gamx(i,j,k,l_)*egg(i,j-1))
+            fgg(i,j)=(delx(i,j,k,l_)+gamx(i,j,k,l_)*fgg(i,j-1))/ &
+                     (betx(i,j,k,l_)-gamx(i,j,k,l_)*egg(i,j-1))
  40       continue
  50     continue
 
@@ -181,8 +181,8 @@ contains
 
 !dir$ ivdep
         do 60 i=1,iy
-          temc1(i)=gamx(i,jx)/betx(i,jx)
-          temc2(i)=delx(i,jx)/betx(i,jx)
+          temc1(i)=gamx(i,jx,k,l_)/betx(i,jx,k,l_)
+          temc2(i)=delx(i,jx,k,l_)/betx(i,jx,k,l_)
  60     continue
 
 !..................................................................
@@ -222,7 +222,7 @@ contains
 !     store distribution function after velocity split in fxsp
 !..................................................................
 
-        call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,fxsp(0:iyjx2-1,0,k,l_),1)
+        call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,fxsp(0:iy+1,0:jx+1,k,l_),1)
 
 !..................................................................
 !     velocity split done - commence with theta split
@@ -237,12 +237,12 @@ contains
 
 !dir$ ivdep
         do 110 j=2,jx
-          egg(1,j)=alpy(1,j)/bety(1,j)
-          egg(iyh,j)=gamy(iyh,j)/bety(iyh,j)
-          egg(iy,j)=gamy(iy,j)/bety(iy,j)
-          fgg(1,j)=dely(1,j)/bety(1,j)
-          fgg(iyh,j)=dely(iyh,j)/bety(iyh,j)
-          fgg(iy,j)=dely(iy,j)/bety(iy,j)
+          egg(1,j)=  alpy(1,  j,k,l_)/bety(1,  j,k,l_)
+          egg(iyh,j)=gamy(iyh,j,k,l_)/bety(iyh,j,k,l_)
+          egg(iy,j)= gamy(iy, j,k,l_)/bety(iy, j,k,l_)
+          fgg(1,j)=  dely(1,  j,k,l_)/bety(1,  j,k,l_)
+          fgg(iyh,j)=dely(iyh,j,k,l_)/bety(iyh,j,k,l_)
+          fgg(iy,j)= dely(iy, j,k,l_)/bety(iy, j,k,l_)
  110    continue
 
 !..................................................................
@@ -252,23 +252,23 @@ contains
         do 130 i=2,itl-1
 !dir$ ivdep
           do 120 j=2,jx
-            egg(i,j)=alpy(i,j)/(bety(i,j)-gamy(i,j)*egg(i-1,j))
-            fgg(i,j)=(dely(i,j)+gamy(i,j)*fgg(i-1,j))/(bety(i,j) &
-              -gamy(i,j)*egg(i-1,j))
+            egg(i,j)=alpy(i,j,k,l_)/(bety(i,j,k,l_)-gamy(i,j,k,l_)*egg(i-1,j))
+            fgg(i,j)=(dely(i,j,k,l_)+gamy(i,j,k,l_)*fgg(i-1,j))/(bety(i,j,k,l_) &
+                    -gamy(i,j,k,l_)*egg(i-1,j))
  120      continue
  130    continue
         do 150 i=iy-1,iy+2-itl,-1
           do 140 j=2,jx
-            egg(i,j)=gamy(i,j)/(bety(i,j)-alpy(i,j)*egg(i+1,j))
-            fgg(i,j)=(dely(i,j)+alpy(i,j)*fgg(i+1,j))/(bety(i,j) &
-              -alpy(i,j)*egg(i+1,j))
+            egg(i,j)=gamy(i,j,k,l_)/(bety(i,j,k,l_)-alpy(i,j,k,l_)*egg(i+1,j))
+            fgg(i,j)=(dely(i,j,k,l_)+alpy(i,j,k,l_)*fgg(i+1,j))/(bety(i,j,k,l_) &
+                    -alpy(i,j,k,l_)*egg(i+1,j))
  140      continue
  150    continue
         do 170 i=iyh-1,itl+1,-1
           do 180 j=2,jx
-            egg(i,j)=gamy(i,j)/(bety(i,j)-alpy(i,j)*egg(i+1,j))
-            fgg(i,j)=(dely(i,j)+alpy(i,j)*fgg(i+1,j))/(bety(i,j) &
-              -alpy(i,j)*egg(i+1,j))
+            egg(i,j)=gamy(i,j,k,l_)/(bety(i,j,k,l_)-alpy(i,j,k,l_)*egg(i+1,j))
+            fgg(i,j)=(dely(i,j,k,l_)+alpy(i,j,k,l_)*fgg(i+1,j))/(bety(i,j,k,l_) &
+                    -alpy(i,j,k,l_)*egg(i+1,j))
  180      continue
  170    continue
 
@@ -290,11 +290,11 @@ contains
 !..................................................................
 
         do 185 j=2,jx
-          tam1(j)=alpy(itl,j)
-          tam2(j)=.5*(bety(itl,j)+bety(itu,j))
-          tam3(j)=.5*gamy(itl,j)
-          tam4(j)=.5*alpy(itu,j)
-          tam5(j)=.5*(dely(itl,j)+dely(itu,j))
+          tam1(j)=alpy(itl,j,k,l_)
+          tam2(j)=.5*(bety(itl,j,k,l_)+bety(itu,j,k,l_))
+          tam3(j)=.5*gamy(itl,j,k,l_)
+          tam4(j)=.5*alpy(itu,j,k,l_)
+          tam5(j)=.5*(dely(itl,j,k,l_)+dely(itu,j,k,l_))
  185    continue
 
 !..................................................................
@@ -390,8 +390,10 @@ contains
 !     store new distribution in f.
 !..................................................................
 
-        call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,f(0:iyjx2-1,0,k,l_),1)
+        call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,f(0:iy+1,0:jx+1,k,l_),1)
  600  continue
       return
-      end
+      end subroutine exsweep
+      
+      
 end module exsweep_mod

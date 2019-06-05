@@ -32,5 +32,6 @@ contains
         a(k,ll)=a(k,0)*rn
  1    continue
       return
-      end
+      end subroutine tdxin13d
+      
 end module tdxin13d_mod

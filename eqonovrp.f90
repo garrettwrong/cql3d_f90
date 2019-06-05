@@ -36,5 +36,7 @@ contains
         if (ipower.eq.2) onovrp2=onovrs
  20   continue
       return
-      end
+      end subroutine eqonovrp
+      
+      
 end module eqonovrp_mod

@@ -74,7 +74,7 @@ contains
  6    continue
 
       return
-      end
+      end subroutine urfmidv_db
 
 
 
@@ -124,5 +124,6 @@ contains
  6    continue
 
       return
-      end
+      end subroutine urfmidv_dc
+      
 end module urfmidv_mod

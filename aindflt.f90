@@ -790,5 +790,6 @@ contains
 !$$$      i2_end= iy-1
 !$$$      inc_i2= 10 !4  ! increment
       return
-      end
+      end subroutine aindflt
+      
 end module aindflt_mod

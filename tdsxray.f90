@@ -39,5 +39,7 @@ contains
          call tdsxr0(rpmconz,tr1(1),icall,iplotsxr)
       endif
       return
-      end
+      end subroutine tdsxray
+      
+      
 end module tdsxray_mod

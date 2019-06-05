@@ -44,8 +44,8 @@ contains
 !..................................................................
 
       if (lossmode(ksp) .eq. "mirrorcc") then
-        call dcopy(iyjx2,temp1(0:iyjx2-1,0),1, &
-              gone(0:iyjx2-1,0,ksp,indxlr_),1)
+        call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1, &
+                          gone(0:iy+1,0:jx+1,ksp,indxlr_),1)
       elseif (lossmode(ksp) .eq. "mirrsnk") then
         do 30 i=1,iy
           do 40 j=1,jx
@@ -77,5 +77,6 @@ contains
 
       endif
       return
-      end
+      end subroutine lossorbm
+      
 end module lossorbm_mod

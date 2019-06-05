@@ -56,5 +56,6 @@ contains
 10070 format("failure in urfpack, can't find resonance region..")
 10990 format("unspecified error originating from urf module.")
       return
-      end
+      end subroutine urfwrong
+      
 end module urfwrong_mod

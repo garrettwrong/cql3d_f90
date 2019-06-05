@@ -17,7 +17,7 @@ contains
       subroutine coefwti(k)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in coefwti(). Maybe not needed?
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
@@ -35,8 +35,8 @@ contains
 
 
 !-YuP      call bcast(di(0,1,k,l_),half,(iy+1)*jx) ! could it be error?
-      call bcast(di(0:(iy+1)*(jx+2)-1,0,k,l_),half,(iy+1)*(jx+2))
-      !Note: di(0:iy,0:jx+1,1:ngen,lrors)
+      call bcast(di(0:iy,0:jx+1,k,l_),half,(iy+1)*(jx+2))
+          !Note: di(0:iy,0:jx+1,1:ngen,lrors)
 
       if (chang .ne. "disabled") then
 
@@ -162,5 +162,7 @@ contains
 
 
       return
-      end
+      end subroutine coefwti
+      
+      
 end module coefwti_mod

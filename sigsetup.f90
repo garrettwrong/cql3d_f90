@@ -290,12 +290,13 @@ contains
  80   sum1=sum1+sqrt(usq)*suc*pleg(m,jfee)*temc4(jfee)
  13   continue
  90   tamm1(m)=sum1*vicp2*vnorm/twopi  ! m=0,mmsv
-      call dcopy(mmsv+1,tamm1,1,csv(jsum:jsum+mmsv+1,0,iq),jxis)
+      call dcopy(mmsv+1,tamm1,1,csv(jsum:jsum+mmsv,0,iq),jxis)
 
  100  continue  !on jv2=1,jv1
  110  continue  !on jv1=1,jx
  120  continue  !on knumb=1,6
 
       return
-      end
+      end subroutine sigsetup
+      
 end module sigsetup_mod

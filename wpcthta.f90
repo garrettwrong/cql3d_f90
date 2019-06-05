@@ -36,5 +36,6 @@ contains
  100  continue
 
       return
-      end
+      end subroutine wpcthta
+      
 end module wpcthta_mod

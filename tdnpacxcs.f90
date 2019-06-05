@@ -133,5 +133,6 @@ contains
       pfit = dexp(cheb)
   100 return
 !
-      end
+      end subroutine alcheb
+      
 end module tdnpacxcs_mod

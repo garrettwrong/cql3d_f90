@@ -79,5 +79,6 @@ contains
  70   continue
 
       return
-      end
+      end subroutine ntdstore
+      
 end module ntdstore_mod

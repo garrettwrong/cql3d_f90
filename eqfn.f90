@@ -33,5 +33,6 @@ contains
         call eqwrng(5)
       endif
       return
-      end
+      end function eqfn
+      
 end module eqfn_mod

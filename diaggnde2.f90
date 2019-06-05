@@ -67,7 +67,7 @@ contains
 
 !     compute Legendre decomposition from temp3 to tam1
 !     m=0 contribution
-        call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp3(0:iyjx2-1,0),1)
+        call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp3(0:iy+1,0:jx+1),1)
         call cfpleg(0,ilegen,1)
         do 10 j=1,jx
           tam11(j)=tam1(j)*4.*pi
@@ -202,7 +202,7 @@ contains
           if (cqlpmod .eq. "enabled") zfact=gni*denpar(k,ls_)
 !BH070414  if (.not. nlrestrt) call dscal(iyjx2,zfact,f(0,0,k,l_),1)
           if (nlrestrt.eq."disabled") &
-               call dscal(iyjx2,zfact,f(0:iyjx2-1,0,k,l_),1)
+               call dscal(iyjx2,zfact,f(0:iy+1,0:jx+1,k,l_),1)
 
 !..................................................................
 !     xlndn is the field line density (particles/cm**2)
@@ -470,5 +470,5 @@ contains
  99   continue
 !
       return
-      end
+      end subroutine diaggnde2
 end module diaggnde2_mod

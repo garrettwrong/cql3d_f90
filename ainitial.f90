@@ -196,5 +196,7 @@ contains
 !
 
       return
-      end
+      end subroutine ainitial
+      
+      
 end module ainitial_mod

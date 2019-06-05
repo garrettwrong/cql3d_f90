@@ -73,8 +73,8 @@ contains
  50     continue
  60   continue
  70   continue
-      call bcast(sigsxr(1:jx*(msxr+1),0,ien,1),zero,jx*(msxr+1))
-      call bcast(sigsxr(1:jx*(msxr+1),0,ien,2),zero,jx*(msxr+1))
+      call bcast(sigsxr(1:jx,0:msxr,ien,1),zero,jx*(msxr+1))
+      call bcast(sigsxr(1:jx,0:msxr,ien,2),zero,jx*(msxr+1))
 
 !.......................................................................
 !     compute the integral.
@@ -134,5 +134,6 @@ contains
       endif
 
       return
-      end
+      end subroutine tdsetsxr
+      
 end module tdsetsxr_mod

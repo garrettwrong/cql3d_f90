@@ -7,6 +7,10 @@ module bcast_mod
   !---END USE
 
 ! XXX every thing in this file and related to it should be deleted
+! YuP: basically I agree. I guess the intent was to use a fast procedure with unrolled loops,
+! similar to dcopy().
+! Never accomplished. 
+! But now there are too many lines with "bcast" in the source.
 
 !
 !
@@ -25,7 +29,7 @@ contains
         a(i)=val
  100  continue
       return
-      end
+      end subroutine bcast
 !
 !
       subroutine ibcast(ia,ival,n)
@@ -40,7 +44,7 @@ contains
         ia(i)=ival
  100  continue
       return
-      end
+      end subroutine ibcast
 
 ! NME bcast routine for complex arrays
       subroutine ccast(c,cval,n)
@@ -50,5 +54,6 @@ contains
          c(i)=cval
  100  continue
       return
-      end
+      end subroutine ccast
+      
 end module bcast_mod

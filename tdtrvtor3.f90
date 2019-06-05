@@ -65,7 +65,10 @@ contains
       leff=lrors
       if (kopt .eq. 3) leff=lrz
 
-      call dcopy (iyjx2*ngen*leff,f1,1,f2,1)
+      call dcopy(iyjx2*ngen*leff,f1(0:iy+1,0:jx+1,1:ngen,1:leff),1, &
+                                 f2(0:iy+1,0:jx+1,1:ngen,1:leff),1)
+      !YuP: Error? Why do we need to copy all 1:leff radial points
+      !     if the rest is done for one given ill=l_ point?
 
       ill=l_
       if (kopt .eq. 3) ill=indxlr_
@@ -106,5 +109,6 @@ contains
  40   continue
 
       return
-      end
+      end subroutine tdtrvtor3
+      
 end module tdtrvtor3_mod

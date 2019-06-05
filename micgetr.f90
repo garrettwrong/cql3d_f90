@@ -60,5 +60,6 @@ contains
       return
  60   continue
       return
-      end
+      end subroutine micgetr
+      
 end module micgetr_mod

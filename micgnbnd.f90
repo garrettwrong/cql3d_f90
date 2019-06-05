@@ -89,5 +89,7 @@ contains
         vptb(i,lr_)=abs(coss(i,l_))*tau(i,lr_)
  40   continue
       return
-      end
+      end subroutine micgnbnd
+      
+      
 end module micgnbnd_mod

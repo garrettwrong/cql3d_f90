@@ -70,5 +70,6 @@ contains
 10100 format("STOP in tdtry: iactst=abort forces stop. error>1.e-8")
 10990 format("unspecified")
       return
-      end
+      end subroutine tdwrng
+      
 end module tdwrng_mod

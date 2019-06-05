@@ -39,7 +39,7 @@ contains
       isounor=1
       do 200 l=1,lz
         do 100 k=1,ngen
-          call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)
+          call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
           do 50 m=1,nso
 
 !..................................................................
@@ -77,5 +77,7 @@ contains
 
       isounor=0
       return
-      end
+      end subroutine sounorm
+      
+      
 end module sounorm_mod

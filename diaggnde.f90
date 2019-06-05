@@ -233,11 +233,11 @@ contains
           wpar(k,lr_)=wpar_*fions(k)/hn
           wperp(k,lr_)=wperp_*fions(k)/hn
         endif
-!CMPIINSERT_IF_RANK_EQ_0
-!        write(*,*)
-!     + 'diaggnde: k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)',
-!     +            k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)
-!CMPIINSERT_ENDIF_RANK
+!MPIINSERT_IF_RANK_EQ_0
+!        WRITE(*,*) &
+!       'diaggnde: k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)', &
+!                  k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)
+!MPIINSERT_ENDIF_RANK
 
 !..................................................................
 !     At timet=0. scale the
@@ -259,7 +259,7 @@ contains
 !%OS
           gni=1./gn
           hni=0.0
-          !XXXXXX infinity?
+          !XXXXXX infinity?  YuP: hn and gn are never 0 - they are integrals over distr.func.
           if (l_ .eq. lmdpln_) hni=1./hn
           if (l_ .eq. lmdpln_) hnis(k,lr_)=hni
 
@@ -281,8 +281,8 @@ contains
                .or. (fpld(1,1).eq.-1.0)) then
              continue
           else
-             call dscal(iyjx2,zfact,f(0:iyjx2-1,0,k,l_),1)
-             !XXXX, why not ?
+             call dscal(iyjx2,zfact,f(0:iy+1,0:jx+1,k,l_),1)
+             !XXXX, why not ?  YuP:Could use f(:,:,k,l_)=f(:,:,k,l_)*zfact Not sure which way is faster
              !f(:,0,k,l_) = f(:,0,k,l_)*zfact
           endif
 !          write(*,*)'diaggnde: k,lr_,zfact,reden(k,lr_)=',
@@ -610,5 +610,7 @@ contains
          enddo
       enddo
       return
-      end
+      end subroutine diaggnde
+      
+      
 end module diaggnde_mod

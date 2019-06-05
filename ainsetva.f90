@@ -178,16 +178,16 @@ contains
       endif
 !BH110330      if (msxr.gt.mx) then
 !BH110330        msxr=mx
-!BH110330CMPIINSERT_IF_RANK_EQ_0
+!BH110330!MPIINSERT_IF_RANK_EQ_0
 !BH110330        WRITE(*,201) mx
-!BH110330CMPIINSERT_ENDIF_RANK
+!BH110330!MPIINSERT_ENDIF_RANK
 !BH110330 201    format('WARNING: msxr reset to mx =', i5)
 !BH110330      endif
 !BH110331      if (mmsv.gt.mx) then
 !BH110331        mmsv=mx
-!BH110331CMPIINSERT_IF_RANK_EQ_0
+!BH110331!MPIINSERT_IF_RANK_EQ_0
 !BH110331        WRITE(*,202) mx
-!BH110331CMPIINSERT_ENDIF_RANK
+!BH110331!MPIINSERT_ENDIF_RANK
 !BH110331 202    format('WARNING: mmsv reset to mx =', i5)
 !BH110331      endif
       mxp1=mx+1
@@ -1398,5 +1398,7 @@ contains
 !      enddo
 
       return
-      end
+      end subroutine ainsetva
+      
+      
 end module ainsetva_mod

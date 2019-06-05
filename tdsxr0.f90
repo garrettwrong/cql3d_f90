@@ -729,5 +729,7 @@ contains
       deallocate(tempp4,tempp5,tempp6,STAT=istat1)
 
       return
-      end
+      end subroutine tdsxr0
+      
+      
 end module tdsxr0_mod

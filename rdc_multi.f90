@@ -44,7 +44,7 @@ contains
     !.................................................................
     !.................................................................
 
-    write(*,*) 'Begin rdc_multi'
+      write(*,*) 'Begin rdc_multi'
 
     !.................................................................
     !     Allocate rdc diffusion arrays on iy,jx,lrz grid
@@ -343,7 +343,7 @@ contains
 
 
 
-   write(*,*)'rdc_multi: after read of rdcfile(krf), krf=',krf
+      write(*,*)'rdc_multi: after read of rdcfile(krf), krf=',krf
 
 
 
@@ -482,14 +482,14 @@ contains
 
          do i_psi=1,n_psi
 
-            call dcopy(n_upar*n_uprp,rdc_cqlb(1:n_upar*n_uprp,1,i_psi) &
-                 ,1,ddd(1:n_upar*n_uprp,1,1),1)
-            call dcopy(n_upar*n_uprp,rdc_cqlc(1:n_upar*n_uprp,1,i_psi) &
-                 ,1,ddd(1:n_upar*n_uprp,1,2),1)
-            call dcopy(n_upar*n_uprp,rdc_cqle(1:n_upar*n_uprp,1,i_psi) &
-                 ,1,ddd(1:n_upar*n_uprp,1,3),1)
-            call dcopy(n_upar*n_uprp,rdc_cqlf(1:n_upar*n_uprp,1,i_psi) &
-                 ,1,ddd(1:n_upar*n_uprp,1,4),1)
+            call dcopy(n_upar*n_uprp,rdc_cqlb(1:n_uprp, 1:n_upar, i_psi) &
+                                      ,1, ddd(1:n_uprp, 1:n_upar, 1),1)
+            call dcopy(n_upar*n_uprp,rdc_cqlc(1:n_uprp, 1:n_upar, i_psi) &
+                                      ,1, ddd(1:n_uprp, 1:n_upar, 2),1)
+            call dcopy(n_upar*n_uprp,rdc_cqle(1:n_uprp, 1:n_upar, i_psi) &
+                                      ,1, ddd(1:n_uprp, 1:n_upar, 3),1)
+            call dcopy(n_upar*n_uprp,rdc_cqlf(1:n_uprp, 1:n_upar, i_psi) &
+                                      ,1, ddd(1:n_uprp, 1:n_upar, 4),1)
 
             do kk=1,3
                do j=1,n_uprp
@@ -530,14 +530,14 @@ contains
             enddo
 
 
-            call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,1),1, &
-                 rdc_cqlb(1:n_upar*n_uprp,1,i_psi),1)
-            call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,2),1, &
-                 rdc_cqlc(1:n_upar*n_uprp,1,i_psi),1)
-            call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,3),1, &
-                 rdc_cqle(1:n_upar*n_uprp,1,i_psi),1)
-            call dcopy(n_upar*n_uprp,ddd(1:n_upar*n_uprp,1,4),1, &
-                 rdc_cqlf(1:n_upar*n_uprp,1,i_psi),1)
+            call dcopy(n_upar*n_uprp,ddd(1:n_uprp, 1:n_upar, 1),1, &
+                                rdc_cqlb(1:n_uprp, 1:n_upar, i_psi),1)
+            call dcopy(n_upar*n_uprp,ddd(1:n_uprp, 1:n_upar, 2),1, &
+                                rdc_cqlc(1:n_uprp, 1:n_upar, i_psi),1)
+            call dcopy(n_upar*n_uprp,ddd(1:n_uprp, 1:n_upar, 3),1, &
+                                rdc_cqle(1:n_uprp, 1:n_upar, i_psi),1)
+            call dcopy(n_upar*n_uprp,ddd(1:n_uprp, 1:n_upar, 4),1, &
+                                rdc_cqlf(1:n_uprp, 1:n_upar, i_psi),1)
 
          enddo  ! On i_psi
 
@@ -558,13 +558,13 @@ contains
 
       if (rdc_upar_sign.lt.0.d0) then
          do i_psi=1,n_psi
-            call dcopy(n_upar*n_uprp,rdc_cqlb(1:n_upar*n_uprp,1,i_psi) &
+            call dcopy(n_upar*n_uprp,rdc_cqlb(1:n_uprp, 1:n_upar, i_psi) &
                  ,1,tmpb,1)
-            call dcopy(n_upar*n_uprp,rdc_cqlc(1:n_upar*n_uprp,1,i_psi) &
+            call dcopy(n_upar*n_uprp,rdc_cqlc(1:n_uprp, 1:n_upar, i_psi) &
                  ,1,tmpc,1)
-            call dcopy(n_upar*n_uprp,rdc_cqle(1:n_upar*n_uprp,1,i_psi) &
+            call dcopy(n_upar*n_uprp,rdc_cqle(1:n_uprp, 1:n_upar, i_psi) &
                  ,1,tmpe,1)
-            call dcopy(n_upar*n_uprp,rdc_cqlf(1:n_upar*n_uprp,1,i_psi) &
+            call dcopy(n_upar*n_uprp,rdc_cqlf(1:n_uprp, 1:n_upar, i_psi) &
                  ,1,tmpf,1)
             do i_upar=1,n_upar
                i_uparinv=n_upar-(i_upar-1)

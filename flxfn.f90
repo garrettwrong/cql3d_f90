@@ -65,5 +65,7 @@ contains
       if (next.lt.100) go to 20
       flxfn=psi0*sum
       return
-      end
+      end function flxfn
+      
+      
 end module flxfn_mod

@@ -248,7 +248,7 @@ contains
             xz=psiinv(yval,iupdown)
             psifpy=psifp(xz)
          else if (psimodel.eq."spline") then !But only called with axitorus
-            xt=psiinv(yval, iupdown) !XXXXX BUG, missing iupdown
+            xt=psiinv(yval,iupdown) !XXXXX BUG, missing iupdown.  YuP:agreed
             psifpy=psifp(xt)
          endif
       endif

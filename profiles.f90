@@ -948,7 +948,7 @@ contains
 !
 
       return
-      end
+      end subroutine profiles
 !
 !
       real(c_double) function tdprof(timet,y,t)
@@ -974,5 +974,6 @@ contains
       endif
 
       return
-      end
+      end function tdprof
+      
 end module profiles_mod

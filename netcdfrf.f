@@ -6,9 +6,8 @@ c
       use bcast_mod, only : ibcast
       !use pack21_mod, only : pack21
       !use pack21_mod, only : unpack21
-      ! XXXX ugh, you should fix these.
-      external pack21
-      external unpack21
+      external pack21    ! XXXX ugh, you should fix these.  YuP: don't know what exactly to fix
+      external unpack21  ! XXXX ugh, you should fix these.
       integer, private ::  numrec(nmodsa) !-YuP-> added: as a function of krf
 
       save
@@ -80,7 +79,7 @@ c
 c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
       include 'netcdf.inc'
-CMPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
 c --- some stuff for netCDF file ---
       character*128 name
@@ -101,7 +100,7 @@ c --- some stuff for netCDF file ---
 
       data start/1,1,1,1/, start1/1,1,1,1/
 
-CMPIINSERT_IF_RANK_NE_0_RETURN
+!MPIINSERT_IF_RANK_NE_0_RETURN
 c This subroutine is only called from MPI rank=0.
 
       cei=(0.,1.)
@@ -594,11 +593,11 @@ c-YuP:      vid=ncvid(ncid,'lrzmax',istatus)
 
 c-YuP:      vid=ncvid(ncid,'rya',istatus)
       istatus= NF_INQ_VARID(ncid,'rya',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,lrzmax,rya(1),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),lrzmax,rya(1),istatus)
 
 c-YuP:      vid=ncvid(ncid,'rhomax',istatus)
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,1,rhomax,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,rhomax,istatus)
 
 c-YuP:      vid=ncvid(ncid,'lrz',istatus)
       istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
@@ -623,15 +622,15 @@ c-YuP:      vid=ncvid(ncid,'jx',istatus)
 
 c-YuP:      vid=ncvid(ncid,'x',istatus)
       istatus= NF_INQ_VARID(ncid,'x',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,jx,x,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),jx,x,istatus)
 
 c-YuP:      vid=ncvid(ncid,'vnorm',istatus)
       istatus= NF_INQ_VARID(ncid,'vnorm',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,1,vnorm,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,vnorm,istatus)
 
 c-YuP:      vid=ncvid(ncid,'enorm',istatus)
       istatus= NF_INQ_VARID(ncid,'enorm',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,1,enorm,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,enorm,istatus)
 
 c-YuP:      vid=ncvid(ncid,'iy',istatus)
       istatus= NF_INQ_VARID(ncid,'iy',vid)  !-YuP: NetCDF-f77 get vid
@@ -842,7 +841,7 @@ c-YuP:      vid=ncvid(ncid,'nray',istatus)
 
 c-YuP:      vid=ncvid(ncid,'freqcy',istatus)
       istatus= NF_INQ_VARID(ncid,'freqcy',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,1,freqcy(krf),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,freqcy(krf),istatus)
 
 c-YuP:      vid=ncvid(ncid,'lh',istatus)
       istatus= NF_INQ_VARID(ncid,'lh',vid)  !-YuP: NetCDF-f77 get vid
@@ -1484,7 +1483,7 @@ C==========================================================================
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
-CMPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
 c     This subroutine uses netCDF-2 subroutines.
 c     http://www.unidata.ucar.edu/packages/netcdf/index.html
@@ -1510,7 +1509,7 @@ c --- some stuff for netCDF file ---
 
       data start/1,1,1,1/, start1/1,1,1/
 
-CMPIINSERT_IF_RANK_NE_0_RETURN
+!MPIINSERT_IF_RANK_NE_0_RETURN
 
       WRITE(*,*)'Begin of netcdf_rdc, krf=',krf
 
@@ -1749,15 +1748,15 @@ c-YuP:      vid=ncvid(ncid,'lrzmax',istatus)
 
 c-YuP:      vid=ncvid(ncid,'rya',istatus)
       istatus= NF_INQ_VARID(ncid,'rya',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,tau_count(2),rya(1),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),tau_count(2),rya(1),istatus)
 
 c-YuP:      vid=ncvid(ncid,'rpconz',istatus)
       istatus= NF_INQ_VARID(ncid,'rpconz',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,tau_count(2),rpconz(1),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),tau_count(2),rpconz(1),istatus)
 
 c-YuP:      vid=ncvid(ncid,'rhomax',istatus)
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,1,rhomax,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,rhomax,istatus)
 
 c-YuP:      vid=ncvid(ncid,'lrz',istatus)
       istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
@@ -1773,15 +1772,15 @@ c-YuP:      vid=ncvid(ncid,'jx',istatus)
 
 c-YuP:      vid=ncvid(ncid,'x',istatus)
       istatus= NF_INQ_VARID(ncid,'x',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,jx,x,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),jx,x,istatus)
 
 c-YuP:      vid=ncvid(ncid,'vnorm',istatus)
       istatus= NF_INQ_VARID(ncid,'vnorm',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,1,vnorm,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,vnorm,istatus)
 
 c-YuP:      vid=ncvid(ncid,'enorm',istatus)
       istatus= NF_INQ_VARID(ncid,'enorm',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,1,1,enorm,istatus)
+      call ncvpt_doubl2(ncid,vid,(1),1,enorm,istatus)
 
 c-YuP:      vid=ncvid(ncid,'iy',istatus)
       istatus= NF_INQ_VARID(ncid,'iy',vid)  !-YuP: NetCDF-f77 get vid

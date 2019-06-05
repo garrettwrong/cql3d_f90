@@ -121,11 +121,12 @@ frwrong.o: cqlcomm.o param.o
 fle.o: bcast.o cqlcomm.o diagwrng.o micgetr.o param.o r8subs.o 
 flxfn.o: cqlcomm.o diagwrng.o param.o 
 frplteq.o: cqlcomm.o param.o r8subs.o tdnflxs.o 
-hpalloc0.o: param.o 
 ilut.o: r8subs.o 
-impavnc.o: advnce.o bcast.o coefmidt.o coefmidv.o coefstup.o \
-	coefwti.o coefwtj.o cqlcomm.o diagimpd.o esefld.o impchk.o impnorm.o \
-	param.o r8subs.o tdtrvsou.o 
+#YuP[2019-05-31]: hpalloc0 is not used.
+#YuP[2019-05-31]: impavnc is not used. Only impavnc0 is used.
+#impavnc.o: advnce.o bcast.o coefmidt.o coefmidv.o coefstup.o \
+#	coefwti.o coefwtj.o cqlcomm.o diagimpd.o esefld.o impchk.o impnorm.o \
+#	param.o r8subs.o tdtrvsou.o 
 impavnc0.o: advnce.o bcast.o bsl.o bsu.o coefmidt.o coefmidv.o \
 	coefstup.o coefwti.o coefwtj.o cqlcomm.o esefld.o ilut.o impchk.o \
 	impnorm.o param.o r8subs.o tdtranspn.o tdtrvsou.o 
@@ -144,9 +145,7 @@ micxinit.o: cqlcomm.o diagwrng.o micgetr.o param.o tdtry.o zcunix.o
 micxiniz.o: cqlcomm.o diagwrng.o micgetr.o param.o psif.o tdxin13d.o zcunix.o 
 mpilib.o: cqlcomm.o param.o r8subs.o 
 netcdfrf.o: bcast.o cqlcomm.o pack21.o param.o
-netcdfrw2.o: advnce.o bcast.o cqlcomm.o coefefad.o coeffpad.o \
-        coefmidt.o coefmidv.o coefrfad.o coefstup.o diagentr.o \
-        param.o prppr.o r8subs.o tdfinterp.o zcunix.o
+netcdfrw2.o: advnce.o bcast.o coeffpad.o coefmidt.o coefstup.o cqlcomm.o diagentr.o param.o prppr.o r8subs.o tdfinterp.o zcunix.o
 ntdstore.o: cqlcomm.o param.o restvty.o 
 ntloop.o: cqlcomm.o param.o 
 pack21.o: bcast.o r8subs.o 
@@ -346,4 +345,6 @@ wptramu.o: bcast.o cqlcomm.o param.o r8subs.o wpbdry.o wpcheck.o \
 wptrmuy.o: cqlcomm.o param.o 
 wpvptb.o: cqlcomm.o param.o 
 wpwrng.o: cqlcomm.o param.o 
+
+#BH
 freya.o: aminmx.o bcast.o param.o

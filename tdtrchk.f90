@@ -102,5 +102,7 @@ contains
         endif
  10   continue
       return
-      end
+      end subroutine tdtrchk
+      
+      
 end module tdtrchk_mod

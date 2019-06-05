@@ -92,5 +92,6 @@ contains
  30     continue
       endif
       return
-      end
+      end subroutine tdtoarad
+      
 end module tdtoarad_mod

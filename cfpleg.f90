@@ -92,5 +92,7 @@ contains
       call dscal(jx,sa,tam1,1)
 
       return
-      end
+      end subroutine cfpleg
+      
+      
 end module cfpleg_mod

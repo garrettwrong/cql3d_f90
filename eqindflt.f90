@@ -52,5 +52,6 @@ contains
       rtol=1.e-8
       zbox=100.
       return
-      end
+      end subroutine eqindflt
+      
 end module eqindflt_mod

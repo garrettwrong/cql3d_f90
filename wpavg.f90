@@ -62,5 +62,6 @@ contains
         zeleavg2/zcuravg2/sptzr(1),z1oravg,zflxavg,zflxavg2,n
 
       return
-      end
+      end subroutine wpavg
+      
 end module wpavg_mod

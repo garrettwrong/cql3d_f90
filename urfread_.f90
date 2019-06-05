@@ -419,7 +419,7 @@ contains
 !cc 4    format (9(' ',i4)) ! YuP:  as inGENRAY
 
       return
-      end
+      end subroutine urfread_
 
 
 
@@ -591,5 +591,6 @@ contains
       if(allocated(urfwk)) deallocate(urfwk)
 !MG end added 11/13/2017
       return
-      end
+      end subroutine urfread_i
+      
 end module urfread__mod

@@ -31,5 +31,7 @@ contains
       endif
 !
       return
-      end
+      end subroutine cfpcoefc
+      
+      
 end module cfpcoefc_mod

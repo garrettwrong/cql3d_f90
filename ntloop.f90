@@ -28,5 +28,7 @@ contains
       time_(l_)=timet
 
       return
-      end
+      end subroutine ntloop
+      
+      
 end module ntloop_mod

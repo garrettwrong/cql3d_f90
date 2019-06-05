@@ -30,8 +30,8 @@ contains
 !..................................................................
 
 
-      call bcast(dbb(1:iyjxp1,0),zero,iyjxp1)
-      call bcast(dff(0:iyp1jx-1,1),zero,iyp1jx)
+      call bcast(dbb(1:iy,0:jx),zero,iyjxp1)
+      call bcast(dff(0:iy,1:jx),zero,iyp1jx)
 
       if (cqlpmod.ne."enabled") then
       if (vlhmod.eq."enabled" .or. vlfmod.eq."enabled") then
@@ -187,5 +187,6 @@ contains
       endif  !On rdcmod
 
       return
-      end
+      end subroutine coefrfad
+      
 end module coefrfad_mod

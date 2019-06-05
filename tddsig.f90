@@ -100,7 +100,7 @@ contains
 
       return
 
-      end
+      end function tddsig
 !
 !
       real(c_double) function haugyp(ec,e,t)
@@ -396,5 +396,6 @@ contains
       haugyp=seHC
 
       return
-      end
+      end function haugyp
+      
 end module tddsig_mod

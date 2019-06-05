@@ -118,6 +118,6 @@ contains
       iisave=iisave+limit
       if(lmxx.ne.0) goto 683
       return
-      end
+      end subroutine block
 
 end module zblock_mod

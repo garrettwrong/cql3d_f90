@@ -58,5 +58,7 @@ contains
       sgainr=sgainr+flxout
       conserv=(total-total0-sgainr)/(total*.5+total0*.5)
       return
-      end
+      end subroutine tdtrcon
+      
+      
 end module tdtrcon_mod

@@ -21,7 +21,7 @@ contains
       subroutine diagimpd(k)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in diagimpd(). To get gfu(), gfi()
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -73,7 +73,7 @@ contains
 !..................................................................
 
 
-      call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp2(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp2(0:iy+1,0:jx+1),1)
       sgain(1,k)=0.
       sgain(2,k)=0.
       sgain(3,k)=0.
@@ -196,7 +196,7 @@ contains
 !     if ineg="enabled" or "enabled1" or "trunc_d", set f.le.0 to zero.
 !..................................................................
 
-      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp2(0:iy+1,0:jx+1),1,temp1(0:iy+1,0:jx+1),1)
       call bcast(temp4,zero,iyjx2)
 
       if (ineg .eq. "disabled") go to 141
@@ -245,7 +245,7 @@ contains
       else ! on ineg
 
       f011=temp2(1,1)
-      fmin=1.e-20*f011
+      fmin=1.d-20*f011 !YuP[2019-04-23] was 1.e-20*f011
       do i=1,iy
       do j=1,jx
          if ( temp2(i,j) .le. fmin) then ! Found f(i,j)<=fmin
@@ -283,9 +283,9 @@ contains
           fmax=max(ffmax,fmax)
  500    continue
 
-        if(fmin.lt.0.) then
+        if(fmin.lt.zero) then ! YuP[2019-04-23] was if(fmin.lt.0.) 
 !     calculate line average density of f
-          call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
+          call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,temp4(0:iy+1,0:jx+1),1)
           call diagdens(xline0,xmidp0,eline0)
 !     add 1.1*fmin to f
           fadd=1.1*abs(fmin)
@@ -295,7 +295,7 @@ contains
  521        continue
  520      continue
 !     recalculate density
-          call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp4(0:iyjx2-1,0),1)
+          call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,temp4(0:iy+1,0:jx+1),1)
           call diagdens(xline1,xmidp1,eline1)
 !         renormalize f to old density
           ffac=xline0/xline1
@@ -322,7 +322,7 @@ contains
        'diagimpd neg.val.adjusted n,l_,MIN(temp1),MAX(temp1)', &
          n,l_,MINVAL(temp1),MAXVAL(temp1)
 !MPIINSERT_ENDIF_RANK
-      call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,f(0:iyjx2-1,0,k,l_),1)
+      call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,f(0:iy+1,0:jx+1,k,l_),1)
 !MPIINSERT_IF_RANK_EQ_0
       WRITE(*,'(a,2i4,3e15.7)') &
        'diagimpd AFTER  f update. n,l_,MIN(f),MAX(f),SUM(f)=', &
@@ -336,5 +336,7 @@ contains
       endif
 
       return
-      end
+      end subroutine diagimpd
+      
+      
 end module diagimpd_mod

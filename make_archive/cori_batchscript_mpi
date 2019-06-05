@@ -1,0 +1,12 @@
+#!/bin/bash -l 
+
+#SBATCH -J petrov-CQL
+#SBATCH -p regular
+#SBATCH --qos=premium
+#SBATCH --account=m77
+#SBATCH -t 0:03:00
+#SBATCH -C haswell
+#SBATCH -N 7  # 7*32=224 (32 tasks/node) In general, should be 32*N=n*(c/2)
+
+cd $SLURM_SUBMIT_DIR
+srun -n 112 -c 4 ./xcql3d_mpi_intel

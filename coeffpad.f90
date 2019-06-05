@@ -47,5 +47,6 @@ contains
 
 
       return
-      end
+      end subroutine coeffpad
+      
 end module coeffpad_mod

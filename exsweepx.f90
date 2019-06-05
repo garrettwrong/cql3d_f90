@@ -17,7 +17,7 @@ contains
       subroutine exsweepx(k)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in exsweepx(). To get gfu()
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
@@ -43,18 +43,15 @@ contains
 
           temp5(i,j)=gfu(i,j,k)
           temp3(i,j)=(gfu(i,j,k)-gfu(i,j-1,k))*cynt2(i,l_) &
-
 !..................................................................
 !     Krook operator..
 !..................................................................
-
             +cah(i,j)*temp2(i,j)*vptb(i,lr_)*cint2(j)*cynt2(i,l_) &
-
 !..................................................................
 !     Particle source...
 !..................................................................
-
             +.5*so(i,j)*vptb(i,lr_)*cint2(j)*cynt2(i,l_)
+            
           temp3(i,j)=temp3(i,j)*dtr*one_
 
 !..................................................................
@@ -73,5 +70,7 @@ contains
         if (error.gt.1.e-8) call diagwrng(15)
       endif
       return
-      end
+      end subroutine exsweepx
+      
+      
 end module exsweepx_mod

@@ -90,14 +90,14 @@ contains
       endif
       impcoef=1
       nccoef=nccoef+1
-      call bcast(cal(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(cbl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(ccl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(cdl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(cel(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(cfl(1:iyjx*ngen,1,1,l_),zero,iyjx*ngen)
-      call bcast(eal(1:iyjx*ngen*2,1,1,1,l_),zero,iyjx*ngen*2)
-      call bcast(ebl(1:iyjx*ngen*2,1,1,1,l_),zero,iyjx*ngen*2)
+      call bcast(cal(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(cbl(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(ccl(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(cdl(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(cel(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(cfl(1:iy,1:jx,1:ngen,l_),zero,iyjx*ngen)
+      call bcast(eal(1:iy,1:jx,1:ngen,1:2,l_),zero,iyjx*ngen*2)
+      call bcast(ebl(1:iy,1:jx,1:ngen,1:2,l_),zero,iyjx*ngen*2)
 
 !..................................................................
 !     if only gen. species contributions are desired execute jump..
@@ -130,7 +130,7 @@ contains
           call cfpmodbe(reltmp,ebk1,ebk2)
         endif
         rnorm=reltmp/(4.*pi*cnorm3*ebk2)
-        call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)
+        call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
 
 !..................................................................
 !     Need extra mesh points to represent ions on a mesh meant to
@@ -358,8 +358,8 @@ contains
  220        continue
           else
             call diagescl(kelecg)
-            call dcopy(iyjx2,f(0:iyjx2-1,0,ngen,l_),1, &
-                 fxsp(0:iyjx2-1,0,ngen,l_),1)
+            call dcopy(iyjx2,f(0:iy+1,0:jx+1,ngen,l_),1, &
+                          fxsp(0:iy+1,0:jx+1,ngen,l_),1)
           endif
  250    continue
       else
@@ -411,11 +411,11 @@ contains
           endif
           do 400 m=mu1,mu2,mu3
             if (colmodl.eq.4 .and. n.ge.naccel) then
-              call dcopy(iyjx2,fxsp(0:iyjx2-1,0,k,l_),1, &
-                    temp3(0:iyjx2-1,0),1)
+              call dcopy(iyjx2,fxsp(0:iy+1,0:jx+1,k,l_),1, &
+                              temp3(0:iy+1,0:jx+1),1)
             else
-              call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1, &
-                    temp3(0:iyjx2-1,0),1)
+              call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1, &
+                           temp3(0:iy+1,0:jx+1),1)
             endif
 
 !     compute V_m_b in tam1(j), for given l, m and gen. species b
@@ -871,14 +871,14 @@ contains
             endif
             anr1=gama(kk,k)*satioz2(k,kk)*one_
             if (anr1.lt.em90) goto 490
-            call dscal(iyjx,anr1,ca(1:iyjx,1),1) !-YuP: size of ca..cf: iy*jx
-            call dscal(iyjx,anr1,cb(1:iyjx,1),1)
-            call dscal(iyjx,anr1,cc(1:iyjx,1),1)
-            call dscal(iyjx,anr1,cd(1:iyjx,1),1)
-            call dscal(iyjx,anr1,ce(1:iyjx,1),1)
-            call dscal(iyjx,anr1,cf(1:iyjx,1),1)
-            call dscal(iyjx,satiom(kk,k),ca(1:iyjx,1),1)
-            call dscal(iyjx,satiom(kk,k),cd(1:iyjx,1),1)
+            call dscal(iyjx,anr1,ca,1) !-YuP: size of ca..cf: iy*jx
+            call dscal(iyjx,anr1,cb,1)
+            call dscal(iyjx,anr1,cc,1)
+            call dscal(iyjx,anr1,cd,1)
+            call dscal(iyjx,anr1,ce,1)
+            call dscal(iyjx,anr1,cf,1)
+            call dscal(iyjx,satiom(kk,k),ca,1)
+            call dscal(iyjx,satiom(kk,k),cd,1)
 !.......................................................................
 !     Note: At this point, ca, ..,cf(i,j) are the coeff. from gen. species k
 !     at a given orbit position l.
@@ -957,14 +957,14 @@ contains
  485          continue
             endif
 
-            call dscal(iyjx,one/anr1,ca(1:iyjx,1),1) !-YuP: size of ca..cf: iy*jx
-            call dscal(iyjx,one/anr1,cb(1:iyjx,1),1)
-            call dscal(iyjx,one/anr1,cc(1:iyjx,1),1)
-            call dscal(iyjx,one/anr1,cd(1:iyjx,1),1)
-            call dscal(iyjx,one/anr1,ce(1:iyjx,1),1)
-            call dscal(iyjx,one/anr1,cf(1:iyjx,1),1)
-            call dscal(iyjx,one/satiom(kk,k),ca(1:iyjx,1),1)
-            call dscal(iyjx,one/satiom(kk,k),cd(1:iyjx,1),1)
+            call dscal(iyjx,one/anr1,ca,1) !-YuP: size of ca..cf: iy*jx
+            call dscal(iyjx,one/anr1,cb,1)
+            call dscal(iyjx,one/anr1,cc,1)
+            call dscal(iyjx,one/anr1,cd,1)
+            call dscal(iyjx,one/anr1,ce,1)
+            call dscal(iyjx,one/anr1,cf,1)
+            call dscal(iyjx,one/satiom(kk,k),ca,1)
+            call dscal(iyjx,one/satiom(kk,k),cd,1)
  490      continue
 
 !     end of loop over gen. species k
@@ -994,16 +994,16 @@ contains
       if (madd .eq. 2) call cfpsymt
 
       do 2000 k=1,ngen
-        call dscal(iyjx,one/tnorm(k),cal(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),cbl(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),ccl(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),cdl(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),cel(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),cfl(1:iyjx,1,k,l_),1)
-        call dscal(iyjx,one/tnorm(k),eal(1:iyjx,1,k,1,l_),1)
-        call dscal(iyjx,one/tnorm(k),ebl(1:iyjx,1,k,1,l_),1)
-        call dscal(iyjx,one/tnorm(k),eal(1:iyjx,1,k,2,l_),1)
-        call dscal(iyjx,one/tnorm(k),ebl(1:iyjx,1,k,2,l_),1)
+        call dscal(iyjx,one/tnorm(k),cal(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),cbl(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),ccl(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),cdl(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),cel(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),cfl(1:iy,1:jx,k,l_),1)
+        call dscal(iyjx,one/tnorm(k),eal(1:iy,1:jx,k,1,l_),1)
+        call dscal(iyjx,one/tnorm(k),ebl(1:iy,1:jx,k,1,l_),1)
+        call dscal(iyjx,one/tnorm(k),eal(1:iy,1:jx,k,2,l_),1)
+        call dscal(iyjx,one/tnorm(k),ebl(1:iy,1:jx,k,2,l_),1)
 !..................................................................
 !     For the case that colmodl=3, a positive definite operator
 !     is not guaranteed. This is a bastardized, hybrid collisional
@@ -1026,5 +1026,7 @@ contains
         endif
  2000 continue
       return
-      end
+      end subroutine cfpcoefr
+      
+      
 end module cfpcoefr_mod
