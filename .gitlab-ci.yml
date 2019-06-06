@@ -33,6 +33,7 @@ case1:
   artifacts:
     paths:
     - ci/case1/reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
+    - ci/case1/reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.ps
     expire_in: 1 week
 
   dependencies:
