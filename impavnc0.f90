@@ -2321,13 +2321,13 @@ contains
                 iout=0 !38 ! 0 means no writing to fort.iout file.
                 ! Writing into this file causes problems for MPI (I/O).
                 ! Keep it 0, to avoid slow runs ! YuP[04-2017]
-                ! Alternatively, set in your batch script:
-                ! export FORT_BUFFERED=1
-                !(or the csh equivalent - setenv FORT_BUFFERED 1 )
-                ! At NERSC, it was the default in before 2017
-                ! but it caused problems with some
-                ! newer compilers.
-                ! It seems its removal causes the I/O to take longer.
+                ! Alternatively, set in your batch script:
+                ! export FORT BUFFERED=1
+                !(or the csh equivalent - setenv FORT BUFFERED 1 )
+                ! At NERSC, it was the default in before 2017
+                ! but it caused problems with some
+                ! newer compilers.
+                ! It seems its removal causes the I/O to take longer.
 
 
                 call cpu_time(tm1)

@@ -5,7 +5,9 @@ stages:
 
 checkbadchars:
   stage: lint
-  script: grep -axv '.*' *.f *.f90 *.h *.h77 README* LICENSE* cqlinput* CQL3D_users.txt eqdsk
+  script: >
+    test $(grep -caxv '.*' *.f *.f90 *.h *.h77 README* LICENSE* cqlinput* CQL3D_users.txt eqdsk |
+    cut -d: -f2 | awk '{ SUM += $1} END { print SUM }') -eq 0
 
 enforce_unixish:
   stage: lint
