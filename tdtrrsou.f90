@@ -36,7 +36,7 @@ contains
 !     interpolate f_ on the transport velocity mesh, such that:
 !     int(vptp*f_*d3u0) is constant
 !.......................................................................
-      !XXX YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+      ! YuP: This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
       call tdtrvtor2(  f(0:iyp1,0:jxp1,1:ngen,1), &
                      frn(0:iyp1,0:jxp1,1:ngen,1), vpint,vpint_,1)
 

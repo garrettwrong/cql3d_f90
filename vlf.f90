@@ -64,7 +64,7 @@ contains
 !      common/temp_imax_old/ imax_old(lza)   ;for checking taunew.
 
 
-      integer :: cqlb_size !XXX see below XXX  YuP:agreed
+      integer :: cqlb_size
       complex*16 cwz,cwxyp,cwxym,cei
 
 
@@ -92,7 +92,7 @@ contains
         allocate(cqlc(iy,jx,lrz,mrfn),STAT=istat)
         allocate(cqle(iy,jx,lrz,mrfn),STAT=istat)
         allocate(cqlf(iy,jx,lrz,mrfn),STAT=istat)
-        cqlb_size=size(cqlb) !XXXXXX BUG, was real(c_double) type, you wanted integer. YuP:agreed
+        cqlb_size=size(cqlb)
         call bcast(cqlb,zero,cqlb_size)
         call bcast(cqlc,zero,cqlb_size)
         call bcast(cqle,zero,cqlb_size)

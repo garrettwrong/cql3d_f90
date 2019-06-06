@@ -58,7 +58,6 @@ contains
       call bcast(powurf(0:nmodsa),zero,nmodsa+1)
       call bcast(powurfc(0:nmodsa),zero,nmodsa+1)
       call bcast(powurfl(0:nmodsa),zero,nmodsa+1)
-      !XXXX YuP: correct, below:
       call bcast(powrf( 1:lrza, 1:nmodsa),zero,lrza*nmodsa)
       call bcast(powrfc(1:lrza, 1:nmodsa),zero,lrza*nmodsa)
       call bcast(powrfl(1:lrza, 1:nmodsa),zero,lrza*nmodsa)

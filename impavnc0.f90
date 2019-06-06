@@ -32,15 +32,9 @@ module impavnc0_mod
   use tdtrvsou_mod, only : tdtrvsou
 
   !---END USE
-  ! XXX this is probably a bug in the original code.  YuP: added 'k' as argument in "statement functions", see advnce.f90
-  !use advnce_mod, only :  k => advnce_k ! use advnce_mod's advnce_k
-  !use advnce_mod  !here: in impavnc0_mod. To get k?
-  !integer,pointer  :: k => advnce_k
 
   ! gauss_, these are used in it3dalloc
   integer, public ::  inewjmax, ialloc
-  ! XXX this was an integer somewhere?  ! YuP: ialloc is not used anymore.
-  ! XXX vnc vs vnc0 abd etc?   YuP: impavnc should be removed from compilation; only impavnc0 is used
   real(c_double), pointer, private ::  abd(:,:)
   integer, pointer, private :: ipivot(:)
   ! ampf, these are used in it3dalloc
@@ -465,7 +459,6 @@ contains
           !(it is the maximum of inew*jx = (iyh+itl-1)*jx over all flux surfaces).
           !
           !write(*,*)'impavnc0 abd: Allocate/istat=',istat
-          !XXXcall bcast(abd,0,lenabd)   YuP: ok, below
           abd=zero !YuP[2019-04-24] was 0.
           allocate(ipivot(iyjx),STAT=istat)
           call ibcast(ipivot,0,iyjx)
@@ -856,7 +849,6 @@ contains
           !
           !write(*,*)'impavnc0:size(rhs) ',size(rhs)
           if (soln_method.eq.'direct' .or. soln_method.eq.'itsol1') then
-             !XXX call bcast(abd,0,lenabd) YuP: ok, below
              abd=zero !YuP[2019-04-24] was 0.
              do i=1,inewjx_(l_)
                 rhs(i)=zero !YuP[2019-04-24] was 0.
@@ -2087,7 +2079,6 @@ contains
                 lowd=ml+mu+1
                 ml_a=ml
                 mu_a=mu
-                ! XXX , changed  a(1),ja(1),ia(1) ~~> a,ja,ia  ! YuP:ok
                 call bndcsr(n_rows_A,abd_lapack,nabd,lowd,ml_a,mu_a, &
                      a_csr,ja_csr,ia_csr,icsrij,ierr_csr)
                 if (ierr_csr.ne.0) then
@@ -2174,7 +2165,6 @@ contains
                 elseif(soln_method.eq.'it3dv') then
                    ! perform soln only at last flux surface (l_=lrz)
                    if ( ilast_lr.eq.1 ) then
-                      ! XXX passing array.  YuP:ok
                       call ilut (n_rows_A,a_csr,ja_csr,ia_csr,lfil0, &
                            droptol,alu,jlu,ju,iwk_ilu,w_ilu, &
                            jw_ilu,ierr)
@@ -2337,7 +2327,6 @@ contains
                 !--------------------------------------------------------------
                 !     Put sol into rhs vector (i.e., as in soln from direct solve)
                 if ( soln_method.eq."itsol" .or. soln_method.eq."itsol1" ) then
-                   !XXXX  YuP: ok
                    call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                         maxits,iout,a_csr,ja_csr,ia_csr,alu, &
                         jlu,ju,ierr)
@@ -2349,7 +2338,6 @@ contains
 !MPIINSERT_IF_RANK_EQ_0
                       !WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
 !MPIINSERT_ENDIF_RANK
-                      !XXX  YuP: ok
                       call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                            maxits,iout,a_csr,ja_csr,ia_csr,alu, &
                            jlu,ju,ierr)
@@ -2369,7 +2357,6 @@ contains
 !MPIINSERT_IF_RANK_EQ_0
                       !WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
 !MPIINSERT_ENDIF_RANK
-                      !XXX YuP:ok
                       call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                            maxits,iout,ac_csr,jac_csr,iac_csr,alu, &
                            jlu,ju,ierr)

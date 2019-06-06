@@ -22,7 +22,7 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
       character*(*) action
 
-      integer :: cqlb_size !XXXX BUG, integer array expected, not real(c_double)  YuP:agreed
+      integer :: cqlb_size
       save
 
 !.................................................................

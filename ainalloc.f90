@@ -167,38 +167,30 @@ contains
       istat_tot=0
       allocate(f(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(f(0,0,1,1),zero,SIZE(f)) YuP:ok
       f = zero
       allocate(fxsp(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(fxsp(0,0,1,1),zero,SIZE(fxsp))  YuP:ok
       fxsp = zero
       allocate(f_(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(f_(0,0,1,1),zero,SIZE(f_)) YuP:ok
       f_ = zero
 
       allocate(spasou(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(spasou(0,0,1,1),zero,SIZE(spasou))  YuP:ok
       spasou = zero
       allocate(velsou(0:iy+1,0:jx+1,ngen,0:lrors+1),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(velsou(0,0,1,0),zero,SIZE(velsou))  YuP:ok
       velsou = zero
       allocate(velsou2(0:iy+1,0:jx+1,ngen,0:lrors+1),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(velsou2(0,0,1,0),zero,SIZE(velsou2))  YuP:ok
       velsou2 = zero
 
       allocate(source(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(source(0,0,1,1),zero,SIZE(source))  YuP:ok
       source = zero
 
       allocate(gone(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(gone(0,0,1,1),zero,SIZE(gone))  YuP:ok
       gone = zero
 
       allocate(egylosa(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
@@ -883,7 +875,6 @@ contains
 
       allocate(gon(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(gon(0,0),zero,SIZE(gon))  YuP:ok
       gon = zero
 
       allocate(so(0:iy+1,0:jx+1),STAT=istat)
@@ -1096,17 +1087,11 @@ contains
       istat_tot=istat_tot+istat
       allocate(temp6(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(temp1(0,0),zero,SIZE(temp1))  YuP:ok
       temp1 = zero
-      !XXXcall bcast(temp2(0,0),zero,SIZE(temp2))  YuP:ok
       temp2 = zero
-      !XXXcall bcast(temp3(0,0),zero,SIZE(temp3))  YuP:ok
       temp3 = zero
-      !XXXcall bcast(temp4(0,0),zero,SIZE(temp4))  YuP:ok
       temp4 = zero
-      !XXXcall bcast(temp5(0,0),zero,SIZE(temp5))  YuP:ok
       temp5 = zero
-      !XXXcall bcast(temp6(0,0),zero,SIZE(temp6))  YuP:ok
       temp6 = zero
 
       allocate(xllji(jpxy,ipxy),STAT=istat)
@@ -1151,13 +1136,11 @@ contains
       if (tavg.ne."disabled") then
          allocate(favg(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
          istat_tot=istat_tot+istat
-         !XXXcall bcast(favg(0,0,1,1),zero,SIZE(f))  YuP:ok
-         favg = zero
+            favg = zero
       endif
 
       allocate(pentr(nonch,ngen,-1:15,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(pentr(1,1,-1,1),zero,SIZE(pentr))  YuP:ok
       pentr = zero
 
       allocate(constp(nonch,lrors),STAT=istat)
@@ -1172,7 +1155,6 @@ contains
       allocate(sgaint(8,ngen,lrors),STAT=istat)
       call bcast(sgaint,zero,8*ngen*lrors)
       allocate(entr(ngen,-1:15,lrors),STAT=istat)
-      !XXXcall bcast(entr(1,-1,1),zero,ngen*17*lrors)  YuP:ok
       entr = zero
 
       allocate(xlndnz(ngen+1,negyrga),STAT=istat)

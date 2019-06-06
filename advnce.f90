@@ -21,8 +21,6 @@ module advnce_mod
   implicit none
   save
 
-  !yup: k now is input in those functions below.   integer, public, target ::  advnce_k
-
 contains
 
   ! Statement functions are now (in Fortran 95) declared obsolete.
@@ -37,17 +35,17 @@ contains
     qz = 1./cint2(j)
   end function qz
 
-  real(c_double) function ry(i,j,l_in) !YuP[2019-05-30] added l_in
+  real(c_double) function ry(i,j,l_in)
     integer :: i,j,l_in
     ry = dx(j)*twopi/(cynt2(i,l_in)*cint2(j))
   end function ry
 
-  real(c_double) function cl(i,j,l_in) !YuP[2019-05-30] added l_in
+  real(c_double) function cl(i,j,l_in)
     integer :: i,j,l_in
     cl = .25*vptb(itl,l_in)/vptb(i,l_in)*dc(i,j)
   end function cl
 
-  real(c_double) function r2y(j,l_in) !YuP[2019-05-30] added l_in
+  real(c_double) function r2y(j,l_in)
     integer :: j,l_in
     r2y = ry(itl,j,l_in)*.5
   end function r2y
@@ -73,22 +71,22 @@ contains
   !     f1i(i,j)=temp1(i+1,j)*(1.-di(i,j,k,l_))+temp1(i,j)*di(i,j,k,l_)
   !     f2i(i,j)=temp2(i+1,j)*(1.-di(i,j,k,l_))+temp2(i,j)*di(i,j,k,l_)
   ! YuP-101228: same as above, but re-arranged to have one '*'
-  real(c_double) function f1j(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function f1j(i,j,k,l_in)
     integer :: i,j,k,l_in
     f1j = temp1(i,j+1) + (temp1(i,j)-temp1(i,j+1))*dj(i,j,k,l_in)
   end function f1j
 
-  real(c_double) function f2j(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function f2j(i,j,k,l_in)
     integer :: i,j,k,l_in
     f2j = temp2(i,j+1) + (temp2(i,j)-temp2(i,j+1))*dj(i,j,k,l_in)
   end function f2j
 
-  real(c_double) function f1i(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function f1i(i,j,k,l_in)
     integer :: i,j,k,l_in
     f1i = temp1(i+1,j) + (temp1(i,j)-temp1(i+1,j))*di(i,j,k,l_in)
   end function f1i
 
-  real(c_double) function f2i(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function f2i(i,j,k,l_in)
     integer :: i,j,k,l_in
     f2i = temp2(i+1,j) + (temp2(i,j)-temp2(i+1,j))*di(i,j,k,l_in)
   end function f2i
@@ -107,12 +105,12 @@ contains
   !     automatically force gamx(i,1) (alpx(i,jx)) to be zero.
   !..................................................................
 
-  real(c_double) function alpx(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function alpx(i,j,k,l_in)
     integer :: i,j,k,l_in
     alpx =  (da(i,j)*(1.-dj(i,j,k,l_in))+db(i,j)*exp5(j)) * qz(j)
   end function alpx
 
-  real(c_double) function betx(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function betx(i,j,k,l_in)
     integer :: i,j,k,l_in
     betx =  (db(i,j)*exp5(j)+db(i,j-1)*exm5(j)-da(i,j) &
          *dj(i,j,k,l_in)+da(i,j-1) &
@@ -121,7 +119,7 @@ contains
          *cah(i,j)+vptb(i,lr_)*rbgn
   end function betx
 
-  real(c_double) function gamx(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function gamx(i,j,k,l_in)
     integer :: i,j,k,l_in
     gamx =  (-da(i,j-1)*dj(i,j-1,k,l_in)+db(i,j-1)*exm5(j)) * qz(j)
   end function gamx
@@ -133,7 +131,7 @@ contains
   !     Define the appropriate average at the p/t boundary
   !..................................................................
 
-  real(c_double) function cdf(j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function cdf(j,k,l_in)
     integer :: j,k,l_in
     cdf =  (cl(itl-1,j,l_in)*(f1j(itl,j,k,l_in)-f1j(itl-1,j,k,l_in)) &
          *eyp5(itl-1,l_in)+2. &
@@ -141,7 +139,7 @@ contains
          +cl(itu+1,j,l_in)*(f1j(itu+1,j,k,l_in)-f1j(itu,j,k,l_in))*eyp5(itu,l_in))
   end function cdf
 
-  real(c_double) function delx(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function delx(i,j,k,l_in)
     !use iso_c_binding, only : c_double
     integer :: i,j,k,l_in
     delx = cvmgt( DBLE(&
@@ -167,12 +165,12 @@ contains
   !Note: alpy(),bety(),gamy(),dely() are only used in exsweep.f90.
   !      Could be moved there?
 
-  real(c_double) function alpy(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function alpy(i,j,k,l_in)
     integer :: i,j,k,l_in
     alpy =  (dd(i,j)*(1.-di(i,j,k,l_in))+df(i,j)*eyp5(i,l_in)) *ry(i,j,l_in)
   end function alpy
 
-  real(c_double) function bety(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function bety(i,j,k,l_in)
     integer :: i,j,k,l_in
     bety =  (-dd(i,j)*di(i,j,k,l_in) &
          +df(i,j)*eyp5(i,l_in) &
@@ -181,12 +179,12 @@ contains
          +vptb(i,lr_)*rbgn
   end function bety
 
-  real(c_double) function gamy(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function gamy(i,j,k,l_in)
     integer :: i,j,k,l_in
     gamy =  -ry(i,j,l_in)*(dd(i-1,j)*di(i-1,j,k,l_in) - df(i-1,j)*eym5(i,l_in))
   end function gamy
 
-  real(c_double) function dely(i,j,k,l_in)  !YuP[2019-05-30] added k,l_in
+  real(c_double) function dely(i,j,k,l_in)
     integer :: i,j,k,l_in
     dely =  ry(i,j,l_in)*0.5*dxi(j)*(de(i,j)*(f1i(i,ifp(j),k,l_in)-f1i(i,j-1,k,l_in)) &
          -de(i-1,j)*(f1i(i-1,ifp(j),k,l_in)-f1i(i-1,j-1,k,l_in))) &
@@ -249,26 +247,26 @@ contains
   !
   !.......................................................................
 
-  real(c_double) function xmm(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function xmm(i,j,k)
     integer :: i,j,k
     xmm = (-qz(j)*dc(i,j-1)*dj(i-1,j-1,k,l_)*dyi(i,l_) &
          -ry(i,j,l_)*de(i-1,j)*di(i-1,j-1,k,l_)*dxi(j))*.5
   end function xmm
 
-  real(c_double) function x0m(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function x0m(i,j,k)
     integer :: i,j,k
     x0m = qz(j)*da(i,j-1)*dj(i,j-1,k,l_)+ry(i,j,l_)*(de(i,j)* &
           di(i,j-1,k,l_)-de(i-1,j)*(1.-di(i-1,j-1,k,l_)))*0.5*dxi(j) &
           -qz(j)*db(i,j-1)*exm5(j)
   end function x0m
 
-  real(c_double) function xpm(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function xpm(i,j,k)
     integer :: i,j,k
     xpm = (qz(j)*dc(i,j-1)*dj(i+1,j-1,k,l_)*dyi(i,l_)+ &
          ry(i,j,l_)*de(i,j)*(1.-di(i,j-1,k,l_))*dxi(j))*.5
   end function xpm
 
-  real(c_double) function xm0(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function xm0(i,j,k)
     integer :: i,j,k
     xm0 = qz(j)*(dc(i,j)*dj(i-1,j,k,l_) &
          -dc(i,j-1)*(1.-dj(i-1,j-1,k,l_))) &
@@ -277,7 +275,7 @@ contains
          +cthta(i,j)*dithta(i-1,j,l_) !Added since 1992
   end function xm0
 
-  real(c_double) function x00(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function x00(i,j,k)
     integer :: i,j,k
     x00 = qz(j)* &
          (-da(i,j)*dj(i,j,k,l_)+da(i,j-1)*(1.-dj(i,j-1,k,l_)) &
@@ -289,7 +287,7 @@ contains
          +cthta(i,j)*(1.-dithta(i-1,j,l_)-dithta(i,j,l_)) !Added since 1992
   end function x00
 
-  real(c_double) function xp0(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function xp0(i,j,k)
     integer :: i,j,k
     xp0 = qz(j)*(-dc(i,j)*dj(i+1,j,k,l_) &
          +dc(i,j-1)*(1.-dj(i+1,j-1,k,l_)))*0.5*dyi(i,l_) &
@@ -298,20 +296,20 @@ contains
          -cthta(i,j)*(1.-dithta(i,j,l_)) !Added since 1992
   end function xp0
 
-  real(c_double) function xmp(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function xmp(i,j,k)
     integer :: i,j,k
     xmp = qz(j)*dc(i,j)*(1.-dj(i-1,j,k,l_))*.5*dyi(i,l_)+ &
          ry(i,j,l_)*de(i-1,j)*.5*dxi(j)*di(i-1,j+1,k,l_)
   end function xmp
 
-  real(c_double) function x0p(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function x0p(i,j,k)
     integer :: i,j,k
     x0p = qz(j)*(-da(i,j)*(1.-dj(i,j,k,l_))-db(i,j)*exp5(j)) &
          +ry(i,j,l_)*(-de(i,j)*di(i,j+1,k,l_) &
          +de(i-1,j)*(1.-di(i-1,j+1,k,l_)))*0.5*dxi(j)
   end function x0p
 
-  real(c_double) function xpp(i,j,k) !YuP[2019-05-31] added k
+  real(c_double) function xpp(i,j,k)
     integer :: i,j,k
     xpp = -qz(j)*dc(i,j)*(1.-dj(i+1,j,k,l_))*0.5*dyi(i,l_) &
          -ry(i,j,l_)*de(i,j)*(1.-di(i,j+1,k,l_))*0.5*dxi(j)
@@ -408,13 +406,13 @@ contains
   !.......................................................................
 
 
-  real(c_double) function tmm(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tmm(j,k)
     integer :: j,k
     tmm = -qz(j)*cl(itl-1,j-1,l_)*dj(itl-1,j-1,k,l_)*eym5(itl,l_) &
          -r2y(j,l_)*di(itl-1,j-1,k,l_)*de(itl-1,j)*0.5*dxi(j)
   end function tmm
 
-  real(c_double) function tm0(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tm0(j,k)
     integer :: i,j,k
     tm0 = qz(j)*cl(itl-1,j,l_)*dj(itl-1,j,k,l_)*eym5(itl,l_) &
          -qz(j)*cl(itl-1,j-1,l_)*(1.-dj(itl-1,j-1,k,l_))*eym5(itl,l_) &
@@ -422,13 +420,13 @@ contains
          -df(itl-1,j)*eym5(itl,l_))
   end function tm0
 
-  real(c_double) function tmp(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tmp(j,k)
     integer :: j,k
     tmp = qz(j)*cl(itl-1,j,l_)*(1.-dj(itl-1,j,k,l_))*eym5(itl,l_) &
          +r2y(j,l_)*di(itl-1,j+1,k,l_)*de(itl-1,j)*0.5*dxi(j)
   end function tmp
 
-  real(c_double) function t0m(j,k) !YuP[2019-05-31] added k
+  real(c_double) function t0m(j,k)
     integer :: j,k
     t0m = qz(j)*(da(itl,j-1)*dj(itl,j-1,k,l_)-db(itl,j-1)*exm5(j)+ &
          cl(itl-1,j-1,l_)*dj(itl,j-1,k,l_)*eym5(itl,l_)-2.*cl(itl+1,j-1,l_)* &
@@ -438,7 +436,7 @@ contains
          *di(itl,j-1,k,l_)+de(itu,j)*di(itu,j-1,k,l_))*0.5*dxi(j)
   end function t0m
 
-  real(c_double) function t00(j,k) !YuP[2019-05-31] added k
+  real(c_double) function t00(j,k)
     integer :: j,k
     t00 = vptb(itl,lr_)/dtreff &
          +qz(j)*(-da(itl,j)*dj(itl,j,k,l_)+db(itl,j)* &
@@ -456,12 +454,10 @@ contains
          -2.*dd(itl,j)*di(itl,j,k,l_) &
          +2.*df(itl,j)*eyp5(itl,l_)-dd(itu,j) &
          *di(itu,j,k,l_) &
-         !XXXXXXXXXXXXXXXXXXXXXXx bug? +df(itu,j)*eyp5(itu,l_))-vptb(i,lr_)*cah(itl,j) !YuP:agreed
          +df(itu,j)*eyp5(itu,l_))-vptb(itl,lr_)*cah(itl,j)
-         !YuP: yes, it should be vptb(itl,lr_)*cah(itl,j). It is actually corrected in CQL3D-FOW
   end function t00
 
-  real(c_double) function t0p(j,k) !YuP[2019-05-31] added k
+  real(c_double) function t0p(j,k)
     integer :: j,k
     t0p = qz(j)*(-da(itl,j)*(1.-dj(itl,j,k,l_))-db(itl,j)*exp5(j) &
          -cl(itl-1,j,l_)*eym5(itl,l_)*(1.-dj(itl,j,k,l_))+2.*cl(itl+1,j,l_) &
@@ -472,13 +468,13 @@ contains
          -de(itu,j)*di(itu,j+1,k,l_)*0.5*dxi(j) )
   end function t0p
 
-  real(c_double) function tpm(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tpm(j,k)
     integer :: j,k
     tpm = 2.*qz(j)*cl(itl+1,j-1,l_)*eyp5(itl,l_)*dj(itl+1,j-1,k,l_) &
           +2.*r2y(j,l_)*de(itl,j)*(1.-di(itl,j-1,k,l_))*0.5*dxi(j)
   end function tpm
 
-  real(c_double) function tp0(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tp0(j,k)
     integer :: j,k
     tp0 = -2.*qz(j)*(cl(itl+1,j,l_)*dj(itl+1,j,k,l_)*eyp5(itl,l_)- &
          cl(itl+1,j-1,l_)*(1.-dj(itl+1,j-1,k,l_))*eyp5(itl,l_)) &
@@ -486,19 +482,19 @@ contains
          -2.*r2y(j,l_)*dd(itl,j)*(1.-di(itl,j,k,l_))
   end function tp0
 
-  real(c_double) function tpp(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tpp(j,k)
     integer :: j,k
     tpp = -2*qz(j)*cl(itl+1,j,l_)*eyp5(itl,l_)*(1.-dj(itl+1,j,k,l_)) &
          -2.*r2y(j,l_)*de(itl,j)*0.5*dxi(j)*(1.-di(itl,j+1,k,l_))
   end function tpp
 
-  real(c_double) function tum(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tum(j,k)
     integer :: j,k
     tum = qz(j)*cl(itu+1,j-1,l_)*eyp5(itu,l_)*dj(itu+1,j-1,k,l_) &
          +r2y(j,l_)*de(itu,j)*0.5*dxi(j)*(1.-di(itu,j-1,k,l_))
   end function tum
 
-  real(c_double) function tu0(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tu0(j,k)
     integer :: j,k
     tu0 = -qz(j)*cl(itu+1,j,l_)*dj(itu+1,j,k,l_)*eyp5(itu,l_) &
          +qz(j)*cl(itu+1,j-1,l_)*eyp5(itu,l_)*(1.-dj(itu+1,j-1,k,l_)) &
@@ -506,7 +502,7 @@ contains
          +df(itu,j)*eyp5(itu,l_))
   end function tu0
 
-  real(c_double) function tup(j,k) !YuP[2019-05-31] added k
+  real(c_double) function tup(j,k)
     integer :: j,k
     tup = -qz(j)*cl(itu+1,j,l_)*eyp5(itu,l_)*(1.-dj(itu+1,j,k,l_)) &
          -r2y(j,l_)*de(itu,j)*(1.-di(itu,j+1,k,l_))*0.5*dxi(j)
@@ -553,12 +549,12 @@ contains
   !     Express the Chang-Cooper weighted average f(i+1/2,j,l_): fpi
   !..................................................................
 
-  real(c_double) function fpip(i,j,k,l_in) !YuP[2019-05-30] added k,l_in
+  real(c_double) function fpip(i,j,k,l_in)
     integer :: i,j,k,l_in
     fpip = f(i+1,j,k,l_in) + cvmgt(bsl(j,k,l_in),zero,(i+1).eq.itl)
   end function fpip
 
-  real(c_double) function fpi0(i,j,k,l_in) !YuP[2019-05-30] added k,l_in
+  real(c_double) function fpi0(i,j,k,l_in)
     integer :: i,j,k,l_in
     fpi0 = f(i,j,k,l_in) + cvmgt(bsu(j,k,l_in),zero,i.eq.itu)
     !     Note: no need to check bootcalc="disabled" or not,
@@ -566,7 +562,7 @@ contains
   end function fpi0
 
 
-  real(c_double) function fpi(i,j,k,l_in) !YuP[2019-05-30] added k,l_in
+  real(c_double) function fpi(i,j,k,l_in)
     integer :: i,j,k,l_in
     fpi = fpip(i,j,k,l_in)*(1.-di(i,j,k,l_in)) + fpi0(i,j,k,l_in)*di(i,j,k,l_in)
   end function fpi
@@ -575,7 +571,7 @@ contains
   !     Express the theta flux at (i+1/2,j)
   !..................................................................
 
-  real(c_double) function hfi(i,j,k,l_in) !YuP[2019-05-30] added k,l_in
+  real(c_double) function hfi(i,j,k,l_in)
     integer :: i,j,k,l_in
     hfi = dd(i,j)*fpi(i,j,k,l_in) &
          +de(i,j)*0.5*dxi(j)*(fpi(i,ifp(j),k,l_in)-fpi(i,j-1,k,l_in)) &

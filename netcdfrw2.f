@@ -5354,9 +5354,6 @@ c              If rhoin.gt.1, point is outside the LCFS.  Leave f4d=0.
                      vn=f4dv(iv)*vnorm
                      do it=1,nt_f4d
                         pitch=f4dt(it)
-!XXXXXXXXXXXXX k again, this is three bugs in one line! YuP: agreed; this was mixed-up with CQL3D-FOW version
-!XXXXXX                         call tdfinterp(k,vn,pitch,rhoin,polang,
-!XXXXXX     +                              f4d(ir,iz,iv,it),tau_b)
                          call tdfinterp(vn,pitch,rhoin,polang,
      +                                  f4d(ir,iz,iv,it))
 

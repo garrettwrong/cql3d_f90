@@ -157,7 +157,6 @@ module cqlcomm_mod
        xjc(nbctimea),xjb(nbctimea), &
        totcrt(nbctimea), &
        tavg1(ntavga),tavg2(ntavga)
-  ! XXX bug  YuP:Where? nondtr1 is integer, ok
   integer :: nondtr1(ndtr1a)
 
   !..................................................................
@@ -642,7 +641,6 @@ module cqlcomm_mod
   !common &
   !!real(c_double) :: wkbc(3*nbctimea),iopbc(2) ! YuP[2019-04-24] Not used
 
-  ! bug  YuP: mplot is character(len=8), ok
   character(len=8) :: mplot(lrorsa)
 
   !common &
@@ -1350,7 +1348,6 @@ module cqlcomm_mod
   !     all arrays used only in CQL3D
   !..................................................................
 
-  ! maybe bug   YuP: real(c_double) is correct, for the three arrays below
   real(c_double) :: jparb(lrza),jparbt(lrza),jparbp(lrza) ! real is correct
   !common/ar3d/
   real(c_double) :: rrz(0:lrza), &
@@ -1563,7 +1560,6 @@ module cqlcomm_mod
   real(c_double), pointer :: jbp1(:,:) !YuP[2019-04-24] real is correct
   !common jbp1
 
-  ! bug  YuP: character(len=8) is correct
   character(len=8) :: irffile(nmodsa)
 
   !common &
@@ -2024,5 +2020,5 @@ module cqlcomm_mod
   save
 !contains
 !YuP: if empty, gives a compilation error in IntelFortran
-  ! lolz
+
 end module cqlcomm_mod
