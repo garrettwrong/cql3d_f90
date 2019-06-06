@@ -545,5 +545,6 @@ contains
  630  continue
 
       return
-      end
+      end subroutine wpbdry
+
 end module wpbdry_mod

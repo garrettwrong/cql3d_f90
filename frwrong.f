@@ -4,10 +4,10 @@ c
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
-CMPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
 ! print error messages - on mpirank.eq.0 only
-CMPIINSERT_IF_RANK_EQ_0
+!MPIINSERT_IF_RANK_EQ_0
       if (kerr.eq.1 .or. kerr.eq.2) then
         WRITE(*,10010)
       elseif (kerr.eq.3) then
@@ -19,7 +19,7 @@ CMPIINSERT_IF_RANK_EQ_0
       else
         WRITE(*,10990)
       endif
-CMPIINSERT_ENDIF_RANK
+!MPIINSERT_ENDIF_RANK
 
 10010 format("kspeci not properly input for use with fr-module")
 10030 format("subroutine freyasou - loop 110")

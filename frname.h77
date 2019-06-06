@@ -10,7 +10,8 @@ c     be duplication of variable names.  If you want to combine
 c     with namelist in name.h, then check all the following variables.
 c     Might have to change a couple of variable names.
 c     frname.h is used included into frcomm.h, which is used by
-c     freya.f,frhexdrv.f,frinitl.f,frnfreya.f
+c     freya.f,frinitl.f,frnfreya.f
+! # YuP[2019-05-31] frhexdrv.f is removed - not used
 c................................................................
       namelist/frsetup/ timbplt,beamon,btime,nameb,relnub
      &  ,anglev,angleh,ashape,aheigh,awidth,bcur,bptor,blenp,bshape

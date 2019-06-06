@@ -426,5 +426,7 @@ contains
       ! of E near R=Rmag  (r~0).
 
       return
-      end
+      end subroutine tdrmshst
+
+
 end module tdrmshst_mod

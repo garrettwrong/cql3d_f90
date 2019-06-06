@@ -72,7 +72,7 @@ contains
       weightu=1.-weightl
 
  10   return
-      end
+      end subroutine lookup
 !
 !
       subroutine lookup_tdf(x,xarray,length,weightu,weightl,lement)
@@ -157,5 +157,7 @@ contains
       !   and x<xarray(2) (strictly less)
 
  10   return
-      end
+      end subroutine lookup_tdf
+
+
 end module lookup_mod

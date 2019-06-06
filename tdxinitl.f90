@@ -665,7 +665,6 @@ contains
 !     arrays for source term
          nga=ngena
          do 4 kk=1,nso
-            !XXXX npwrsou and mpwrsou is int, but tdxin23d expected real
             call tdxin23d(sellm1z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
                  DBLE(mpwrsou(k)))
             call tdxin23d(sellm2z,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(k)), &
@@ -688,7 +687,6 @@ contains
                  DBLE(mpwrsou(k)))
 
 !     Allow for possiblity to intialize asorz(k,kk,1:lrzmax) directly
-            ! XXX exp vars are expected to be reals
             if(asorz(k,kk,0).ne.-1.) then
                call tdxin23d(asorz,rya,lrzmax,nga,nsoa,k,kk,DBLE(npwrsou(0)), &
                     DBLE(mpwrsou(0)))
@@ -733,7 +731,7 @@ contains
       endif
 
       return
-      end
+      end subroutine tdxinitl
 
 
 

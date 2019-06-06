@@ -43,6 +43,7 @@ contains
       call tdnpa0(rrz,tr1(1),icall,iplotnbi)
 
       return
-      end
+      end subroutine tdnpadiag
+
 
 end module tdnpadiag_mod

@@ -31,5 +31,7 @@ contains
         call eqwrng(6)
       endif
       return
-      end
+      end function eqfninv
+
+
 end module eqfninv_mod

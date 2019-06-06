@@ -54,5 +54,6 @@ contains
  1005 format(5e16.8)
       close(unit=41)
  999  return
-      end
+      end subroutine dsk_gr
+
 end module dsk_gr_mod

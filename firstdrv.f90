@@ -43,5 +43,6 @@ contains
       a=h2**2/h1**2
       fprim(n)=(f(n-1)*a - f(n-2) - f(n)*(a-1))/(a*h1-h2)
       return
-      end
+      end subroutine firstdrv
+
 end module firstdrv_mod

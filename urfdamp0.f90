@@ -58,16 +58,16 @@ contains
       call bcast(powurf(0:nmodsa),zero,nmodsa+1)
       call bcast(powurfc(0:nmodsa),zero,nmodsa+1)
       call bcast(powurfl(0:nmodsa),zero,nmodsa+1)
-      !XXXX
-      call bcast(powrf(1:lrza, 1:nmodsa),zero,lrza*nmodsa)
+      call bcast(powrf( 1:lrza, 1:nmodsa),zero,lrza*nmodsa)
       call bcast(powrfc(1:lrza, 1:nmodsa),zero,lrza*nmodsa)
       call bcast(powrfl(1:lrza, 1:nmodsa),zero,lrza*nmodsa)
       call bcast(powurfi(0:lrza,0:nmodsa),zero,(lrza+1)*(nmodsa+1))
 
       call bcast(urfpwr,zero,nrayelts*nrayn*mrfn)
 !yup      if (ifirst.eq."first") then
-         call bcast(urfpwrc(1:nrayelts*nrayn*mrfn,1,1),zero,nrayelts*nrayn*mrfn)
-         call bcast(urfpwrl(1:nrayelts*nrayn*mrfn,1,1),zero,nrayelts*nrayn*mrfn)
+         call bcast(urfpwrc,zero,nrayelts*nrayn*mrfn)
+         call bcast(urfpwrl,zero,nrayelts*nrayn*mrfn)
+         ! urfpwrc, urfpwrl, scalurf are dimensioned as (1:nrayelts,1:nrayn,1:mrfn)
 !yup      endif
       call bcast(scalurf,one, nrayelts*nrayn*mrfn)
 !BH120815      call bcast(salphac,zero,nrayelts*nrayn*mrfn)
@@ -326,8 +326,8 @@ contains
       if (maxmodes.gt.1) then
         do 600 kk=2,maxmodes
           kkk=krf+kk-1
-          call dcopy(nrayn*nrayelts,delpwr(1:nrayn*nrayelts,1,krf),1, &
-               delpwr(1:nrayn*nrayelts,1,kkk),1)
+          call dcopy(nrayn*nrayelts,delpwr(1:nrayelts,1:nrayn,krf),1, &
+                                    delpwr(1:nrayelts,1:nrayn,kkk),1)
           do iray=1,nrayn
              nrayelt0(iray,kkk)=nrayelt0(iray,krf)
           enddo
@@ -365,5 +365,7 @@ contains
 !...................................................................
 
       return
-      end
+      end subroutine urfdamp0
+
+
 end module urfdamp0_mod

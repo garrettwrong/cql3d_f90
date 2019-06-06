@@ -83,7 +83,7 @@ contains
       CALL PGUNSA
 !
       return
-      end
+      end subroutine pltvectr
 
 
 

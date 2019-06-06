@@ -34,7 +34,7 @@ contains
           if (soucoord .ne. "disabled") then
         do 800 m=1,nso
           if (n .lt. nonso(k,m) .or. n .gt. noffso(k,m)) go to 800
-          call bcast(temp2(0:iyjx2-1,0),zero,iyjx2)
+          call bcast(temp2(0:iy+1,0:jx+1),zero,iyjx2)
           do 700 l=1,lz
 
 !..................................................................
@@ -115,7 +115,7 @@ contains
 !     scale the current to be equal to asor
 !..................................................................
 
-          call dscal(iyjx2,q1,temp2(0:iyjx2,0),1)
+          call dscal(iyjx2,q1,temp2(0:iy+1,0:jx+1),1)
           do 200 j=1,jx
             do 150 i=1,iy
               source(i,j,k,indxlr_)=source(i,j,k,indxlr_)+temp2(i,j)
@@ -133,5 +133,7 @@ contains
 
  900  continue
       return
-      end
+      end subroutine sourcef
+
+
 end module sourcef_mod

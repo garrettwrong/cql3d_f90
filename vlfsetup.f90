@@ -257,5 +257,7 @@ contains
  200  continue ! k=1,mrfn
 
       return
-      end
+      end subroutine vlfsetup
+
+
 end module vlfsetup_mod

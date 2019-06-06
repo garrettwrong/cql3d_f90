@@ -945,5 +945,7 @@ contains
       enddo
 
       return
-      end
+      end subroutine tdnpa0
+
+
 end module tdnpa0_mod

@@ -43,7 +43,7 @@ contains
       if (pltovlp.eq."enabled".and. mrfn.gt.1) then
 
       if (cqlpmod.ne."enabled") then
-         call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)
+         call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
 
          do 560 k=1,mrfn
             do 561 j=1,jx
@@ -69,7 +69,7 @@ contains
            l_=l
 
 !cc           call bcast(temp1(1,0),zero,iy*(jx+1)) ! YuP-101215: error?
-           call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
+           call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
 
         do 570 k=1,mrfn
           do 571 j=1,jx
@@ -376,7 +376,7 @@ contains
 
 
       return
-      end
+      end subroutine vlfbplt
 
 
 end module vlfbplt_mod

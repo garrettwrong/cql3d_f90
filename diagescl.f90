@@ -36,11 +36,11 @@ contains
 
       vnorm2=vnorm*vnorm
       if (n.ge.naccel) then
-        call dcopy(iyjx2,fxsp(0:iyjx2-1,0,kelecg,l_),1, &
-              temp2(0:iyjx2-1,0),1)
+        call dcopy(iyjx2,fxsp(0:iy+1,0:jx+1,kelecg,l_),1, &
+                        temp2(0:iy+1,0:jx+1),1)
       else
-        call dcopy(iyjx2,f(0:iyjx2-1,0,kelecg,l_),1, &
-              temp2(0:iyjx2-1,0),1)
+        call dcopy(iyjx2,f(0:iy+1,0:jx+1,kelecg,l_),1, &
+                     temp2(0:iy+1,0:jx+1),1)
       endif
       call bcast(tam4,zero,jx)
       do 20 i=1,iy
@@ -94,8 +94,8 @@ contains
  85       continue
         endif
  90   continue
-      call dcopy(iyjx2,f(0:iyjx2-1,0,ngen,l_),1, &
-           temp2(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,f(0:iy+1,0:jx+1,ngen,l_),1, &
+                   temp2(0:iy+1,0:jx+1),1)
       call bcast(tam4,zero,jx)
       do 110 i=1,iy
         do 100 j=1,jx
@@ -108,7 +108,9 @@ contains
  120  continue
       dratio=1.
       denscl=dratio*xlndneg/hn
-      call dscal(iyjx2,denscl,f(0:iyjx2-1,0,ngen,l_),1)
+      call dscal(iyjx2,denscl,f(0:iy+1,0:jx+1,ngen,l_),1)
       return
-      end
+      end subroutine diagescl
+
+
 end module diagescl_mod

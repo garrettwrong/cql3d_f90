@@ -59,5 +59,6 @@ contains
 !      endif
 
       return
-      end
+      end subroutine coefload
+
 end module coefload_mod

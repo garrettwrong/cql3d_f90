@@ -84,5 +84,6 @@ contains
       write(*,*)'vlfalloc:  Leaving vlfalloc'
 
       return
-      end
+      end subroutine vlfalloc
+
 end module vlfalloc_mod

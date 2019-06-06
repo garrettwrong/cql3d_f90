@@ -220,5 +220,6 @@ contains
       endif  !On rfread
 
       return
-      end
+      end subroutine urfinitl
+
 end module urfinitl_mod

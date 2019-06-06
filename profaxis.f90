@@ -29,5 +29,6 @@ contains
         rn=dratio+(1.0-dratio)*(1.-rova**expn1)**expm1
       endif
       return
-      end
+      end subroutine profaxis
+
 end module profaxis_mod

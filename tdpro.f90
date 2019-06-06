@@ -28,5 +28,6 @@ contains
  10   continue
       tdpro = exp(arg)
       return
-      end
+      end function tdpro
+
 end module tdpro_mod

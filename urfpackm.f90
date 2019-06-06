@@ -9,8 +9,8 @@ module urfpackm_mod
 !
 !
 
-contains
-
+!contains
+!YuP: if empty, gives a compilation error in IntelFortran
 
 end module urfpackm_mod
 

@@ -385,10 +385,18 @@ contains
             call tdnflxs(ll)
             call achiefn(kopt) ! achiefn(2) here (cqlpmod="enabled")
          enddo
-         ! XXX this looks like an indexing bug to me
-         ! xxx but i used what is defined by  esefld::efld_cd code
-         print *, 'XXXCHECK'
-         call efld_cd(dz(1:lrors+2,lr_),lrors,vnorm,flux1,flux2,elparnw,flux0)
+         ! XXX this looks like an indexing bug to me             YuP fixed below.
+         ! but i used what is defined by  esefld::efld_cd code.  YuP fixed below.
+         call efld_cd(dz(1:lrors,lr_),lrors,vnorm, &
+                      flux1(0:lrors+1),flux2(0:lrors+1),elparnw(0:lrors+1),flux0)
+         !In sub.efld_cd: dz, flux1, flux2, elparnw are dimensioned as (0:lrors+1).
+         !Here, dz(lza,lrzmax) starts with index (1,1),
+         !but flux1(0:lsa1),flux2(0:lsa1),elparnw(0:lsa1) start with index 0.
+         !YuP[2019-05-30] corrected sub.efld_cd
+         ! so that dz argument starts with index 1, i.e. dz(1:ls) [dz(1:lrors)]
+         ! Note that in sub.efld_cd the loop is over kk=1,ls [kk=1,lrors]
+         ! so that indexes 0 and ls+1 are not used.
+         ! Bob, please check !
       endif
 
 !.......................................................................
@@ -455,8 +463,8 @@ contains
             endif
          enddo
 !        Copy current distribution f into f_
-         call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,kelec,1), &
-              1,f_(0:iyjx2*ngen*lrors-1,0,kelec,1),1)
+         call dcopy(iyjx2*ngen*lrors,f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                                    f_(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
 !        Bring background profiles up to time step n
          ! No effect if bctime=0 (time-indep. profiles).
          call profiles ! if(ampfmod.eq.'enabled' .and. n+1.ge.nonampf)
@@ -505,10 +513,13 @@ contains
                                    !Gives fh,fg(,,1,ll) for each ll.
                                    !it_ampf is passed in common block
                ! YuP test/printout
-               amp_f_=ampfarl(f_(0:ll,0,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
-               amp_f=ampfarl(f(0:ll,0,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
-               amp_h=ampfarl(fh(0:ll,0,kelec,ll),ll)*dtr
-               amp_g=ampfarl(fg(0:ll,0,kelec,ll),ll)*dtr
+               amp_f_=ampfarl(f_(0:iy+1,0:jx+1,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
+               amp_f= ampfarl( f(0:iy+1,0:jx+1,kelec,ll),ll)*dtr !ampfarl has 1/dtr factor
+               amp_h= ampfarl(fh(0:iy+1,0:jx+1,kelec,ll),ll)*dtr
+               amp_g= ampfarl(fg(0:iy+1,0:jx+1,kelec,ll),ll)*dtr
+               !YuP[2019-05-30] Note that fh() and fg() are allocated as
+               ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index (for now).
+               ! If kelec>1, we can get a problem here.
                write(*,'(a,3i4,3e12.4)') &
                  'after achiefn(3): n,it,ll,integrals f, f-h, g:', &
                   n,it,ll, amp_f, amp_f-amp_h, amp_g
@@ -551,8 +562,8 @@ contains
 !MPIINSERT_BARRIER
 
 !     Copy current distribution f into f_
-      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
-           f_(0:iyjx2*ngen*lrors-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                                 f_(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
 
       if (transp.eq."enabled" .and. n.ne.0 .and. adimeth.ne."enabled" &
             .and. soln_method.ne."it3drv" .and. nefiter.eq.1)  then
@@ -565,8 +576,8 @@ contains
 !     flux surfaces (soln at start of step is in f_(,,,)).
 !.......................................................................
         if(cqlpmod.ne."enabled" .and. n.ge.nontran .and. n.lt.nofftran) &
-            call dcopy(iyjx2*ngen*lrors,frn_2(0:iyjx2*ngen*lrors-1, &
-              0,1,1),1,f(0:iyjx2*ngen*lrors-1,0,1,1),1)
+            call dcopy(iyjx2*ngen*lrors,frn_2(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                                            f(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
       endif
 
 !..................................................
@@ -589,6 +600,11 @@ contains
 !     108 kA to 138 kA.)
 !BH131107 Moved the ll=1,ilend reversal to above if(ampfmod.eq.enabled..
 !.......................................................................
+!MPIINSERT_IF_RANK_EQ_0
+      WRITE(*,'(a,2i4,3e15.7)') &
+      'tdchief: f befor achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
+               n,l_,MINVAL(f),MAXVAL(f),SUM(f)
+!MPIINSERT_ENDIF_RANK
       do 1 ll=1,ilend   !ilend=lrz for cqlpmod.ne.'enabled'
         !determine local variables depending on flux surface (l_,iy,..)
         call tdnflxs(ll) !-> get l_,lr_,...
@@ -657,6 +673,12 @@ contains
 
  1    continue ! End loop over radius:  New f is obtained for each ll
 
+!MPIINSERT_IF_RANK_EQ_0
+      WRITE(*,'(a,2i4,3e15.7)') &
+      'tdchief: f after achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
+               n,l_,MINVAL(f),MAXVAL(f),SUM(f)
+!MPIINSERT_ENDIF_RANK
+
 !MPIINSERT_BARRIER
 !MPIINSERT_BCAST_DISTRIBUTION
 !MPIINSERT_BCAST_COLL_COEFFS
@@ -671,8 +693,8 @@ contains
            ! (For lbdry0='enabled', coeff matrix is set up
            !   to automatically maintain unicity.)
            if (lbdry0.ne."enabled") then !-YuP: moved here from impavnc0
-             call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1, &
-                   fxsp(0:iyjx2-1,0,k,l_),1)
+             call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1, &
+                           fxsp(0:iy+1,0:jx+1,k,l_),1)
              s=0.
              t=0.
              do 2100 i=1,iy
@@ -688,6 +710,11 @@ contains
            call diagscal(k) !YuP! renorm f if lbdry(k)=scale/consscal
         enddo ! k
       enddo ! ll
+!MPIINSERT_IF_RANK_EQ_0
+      WRITE(*,'(a,2i4,3e15.7)') &
+      'tdchief: f rescaled.      n,l_,MIN(f),MAX(f),SUM(f)=', &
+               n,l_,MINVAL(f),MAXVAL(f),SUM(f)
+!MPIINSERT_ENDIF_RANK
 
       call cpu_time(t_after_diag1) !-.-.-.-.-.-.-.-.-.-.-.-.-.
 
@@ -724,8 +751,9 @@ contains
          do ll=1,ilend
             ! determine local variables depending on flux surface (l_, iy,..)
             call tdnflxs(ll)
-            call dcopy(iyjx2,f_(0:iyjx2-1,0,1,l_),1, &
-                 f(0:iyjx2-1,0,1,l_),1)
+            call dcopy(iyjx2,f_(0:iy+1,0:jx+1,kelec,l_),1, &
+                              f(0:iy+1,0:jx+1,kelec,l_),1)
+            !YuP[2019-05-30] Corrected species index '1'-->'kelec'
          enddo ! ll
          nefiter=nefiter+1 ! counts iterations
          go to 20 ! Another iteration, using old f() but new elecfld()
@@ -1145,5 +1173,7 @@ contains
       endif
 
       return
-      end
+      end subroutine tdchief
+
+
 end module tdchief_mod

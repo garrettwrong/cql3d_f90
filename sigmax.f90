@@ -61,5 +61,6 @@ contains
       enddo
 
       return
-      end
+      end subroutine sigmax
+
 end module sigmax_mod

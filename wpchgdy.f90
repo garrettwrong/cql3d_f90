@@ -59,5 +59,6 @@ contains
  200  continue
 
  999  return
-      end
+      end subroutine wpchgdy
+
 end module wpchgdy_mod

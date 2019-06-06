@@ -500,7 +500,7 @@ contains
 
 
  999  return
-      end
+      end subroutine tdtravct
 
 
 
@@ -589,7 +589,7 @@ contains
       enddo
 
       return
-      end
+      end subroutine funcv
 
 
 !=======================================================================
@@ -612,9 +612,10 @@ contains
       nobind="disabled"
 
 !.......................................................................
-
-      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
-           fvn(0:iyjx2*ngen*lrors-1,0,1,1),1)
+     !YuP: frn,fvn,fvn_1,frn_1,frn_2 are dimensioned as 0:iyp1,0:jxp1,1:ngen,0:lrors
+     !                          and f is dimensioned as 0:iy+1,0:jx+1,1:ngen,1:lrors
+      call dcopy(iyjx2*ngen*lrors,f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                                fvn(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
 
 !..............................................................
 !     The velocity split for this time step is done and we assume
@@ -629,9 +630,11 @@ contains
 !%OS
 !      write(*,*) 'f(i,3,1,1),i=1,iy',(f(i,3,1,1),i=1,iy)
       if (nonadi .eq. 6) then
-         !XXX
-        call tdtrvtor2(fvn(0:iyp1,0:jxp1,1,1),frn(0:iyp1,0:jxp1,1,1),vpint,vpint_,1)
+         !XXX YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+        call tdtrvtor2(fvn(0:iyp1,0:jxp1,1:ngen,1), &
+                       frn(0:iyp1,0:jxp1,1:ngen,1), vpint,vpint_,1)
       else
+        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or lrz)
         call tdtrvtor(fvn,frn)
       endif
 !%OS
@@ -823,14 +826,15 @@ contains
 !......................................................................
 
       if (nonadi .eq. 6) then
-         !XXX
-        call tdtrrtov2(frn(0:iyp1,0:jxp1,1,1),frn(0:iyp1,0:jxp1,1,1),vpint,vpint_,1)
+        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+        call tdtrrtov2(frn(0:ipy1,0:jxp1,1:ngen,1), &
+                       frn(0:ipy1,0:jxp1,1:ngen,1), vpint,vpint_,1)
       else
         call tdtrrtov(frn)
       endif
 
       return
-      end subroutine
+      end subroutine tdtransp1
 
 
 !=======================================================================
@@ -942,7 +946,7 @@ contains
          if(test.lt.TOLX)return
       enddo
       write(*,*) 'MAXITS exceeded in newt'
-      END
+      END subroutine newt
 
 
 !=======================================================================
@@ -1044,7 +1048,7 @@ contains
 
       goto 1
 
-      END
+      END subroutine lnsrch
 
 
 !=======================================================================
@@ -1069,7 +1073,7 @@ contains
          enddo
       enddo
       return
-      END
+      END subroutine fdjac
 
 !=======================================================================
 !=======================================================================
@@ -1086,7 +1090,7 @@ contains
       enddo
       fffmin=0.5*sum
       return
-      END
+      END function fffmin
 
 !=======================================================================
 !=======================================================================
@@ -1156,7 +1160,7 @@ contains
          endif
       enddo
       return
-      END
+      END subroutine ludcmp
 
 !=======================================================================
 !=======================================================================
@@ -1188,6 +1192,6 @@ contains
          b(i)=sum/a(i,i)
       enddo
       return
-      END
+      END subroutine lubksb
 
 end module tdtravct_mod

@@ -16,8 +16,8 @@ module tdreadf_mod
 
   !---END USE
 
-  !XXXXX
-  external unpack21
+
+  external unpack21  !XXXXX
 
 !
 !
@@ -198,9 +198,9 @@ contains
          endif
 !$$$BH180517:
 !$$$         if (ngen.gt.1) then
-!$$$CMPIINSERT_IF_RANK_EQ_0
+!$$$MPIINSERT_IF_RANK_EQ_0
 !$$$            WRITE(*,*)'tdreadf: need ngen.gt.1 reading of distfunc.nc'
-!$$$CMPIINSERT_ENDIF_RANK
+!$$$MPIINSERT_ENDIF_RANK
 !$$$            stop 'in tdreadf'
 !$$$         endif
 
@@ -449,13 +449,13 @@ contains
 
 !$$$BH180518
 !$$$         if (ngen.gt.1) then
-!$$$CMPIINSERT_IF_RANK_EQ_0
+!$$$MPIINSERT_IF_RANK_EQ_0
 !$$$            WRITE(*,*)
 !$$$            WRITE(*,*)'================================================'
 !$$$            WRITE(*,*)'tdreadf: Re-grid of rstrt distribution:'
 !$$$            WRITE(*,*)'requires ngen.le.1'
 !$$$            WRITE(*,*)'================================================'
-!$$$CMPIINSERT_ENDIF_RANK
+!$$$MPIINSERT_ENDIF_RANK
 !$$$            stop
 !$$$         else
 !$$$            k=1
@@ -896,7 +896,7 @@ contains
  9210 format(1p10e14.6)
 !.......................................................................
 
-      end
+      end subroutine tdreadf
 
 !      end module tdreadf_mod
 end module tdreadf_mod

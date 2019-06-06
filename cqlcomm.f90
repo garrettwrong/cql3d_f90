@@ -1,4 +1,4 @@
-!     comm
+!     cqlcomm
 !
 !.......................................................................
 !     There are a number of arrays intended for temporary storage
@@ -35,6 +35,8 @@
 !     that name_decl.h can be used by itself in aindflt.f.
 !     aindflt.f will also be used for setting defaults in the
 !     SWIM project Integrated Plasma Simulation (IPS) modules.
+! # YuP[2019-05-31] name_decl.h is removed - not used anymore
+!   [all declarations are here, in cqlcomm]
 !.......................................................................
 
 module cqlcomm_mod
@@ -155,7 +157,6 @@ module cqlcomm_mod
        xjc(nbctimea),xjb(nbctimea), &
        totcrt(nbctimea), &
        tavg1(ntavga),tavg2(ntavga)
-  ! XXX bug
   integer :: nondtr1(ndtr1a)
 
   !..................................................................
@@ -220,7 +221,7 @@ module cqlcomm_mod
   !*****************************************************************
 
   !common /diskx/ &
-  integer ::  mpwrsou(0:ngena),npwrsou(0:ngena)
+  real(c_double) :: mpwrsou(0:ngena),npwrsou(0:ngena) !YuP[2019-04-24] corrected to real
   real(c_double) ::asor(ngena,nsoa,lrza)
 
   !common /params/ &
@@ -335,7 +336,8 @@ module cqlcomm_mod
        nr_f4d,nz_f4d,nv_f4d,nt_f4d
   real(c_double) :: rfacz,roveram,relaxden
   real(c_double) :: enmin_npa,enmax_npa,fds_npa, &
-       nonadi,curr_edge,efrelax,efrelax1,currerr
+       curr_edge,efrelax,efrelax1,currerr
+  integer :: nonadi !YuP[2019-04-24]
 
   !common/ar3d/ &
   real(c_double) :: difus_rshape(8),difus_vshape(4),difin(njenea), &
@@ -608,8 +610,8 @@ module cqlcomm_mod
   integer :: iplot,nplott,isave,nsavet,nirzplt, &
        nefiter ! counts iterations for el.field (efswtch="method5")
   !common &
-  real(c_double) :: elecfldc,elecfldb,  & !V/cm, Added for ampfmod case
-       it_ampf   !iteraction counter for ampfmod case
+  real(c_double) :: elecfldc,elecfldb !V/cm, Added for ampfmod case
+  integer :: it_ampf  !iteraction counter for ampfmod case !YuP[2019-04-24]
 
   !..................................................................
   !     VECTORS.....
@@ -637,9 +639,8 @@ module cqlcomm_mod
        tz1(lza),tz2(lza)
 
   !common &
-  real(c_double) :: wkbc(3*nbctimea),iopbc(2)
+  !!real(c_double) :: wkbc(3*nbctimea),iopbc(2) ! YuP[2019-04-24] Not used
 
-  ! bug
   character(len=8) :: mplot(lrorsa)
 
   !common &
@@ -1058,7 +1059,7 @@ module cqlcomm_mod
   !common /dptr95/ l_lower
   integer, pointer :: lpt(:)
   !common /dptr95/ lpt
-  real(c_double), pointer :: mun(:) !for real?
+  real(c_double), pointer :: mun(:) ! real is correct
   !common /dptr95/ mun
   real(c_double), pointer :: fll(:)
   !common /dptr95/ fll
@@ -1331,7 +1332,7 @@ module cqlcomm_mod
   !     scalars used in CQL3D
   !..................................................................
 
-  real(c_double) :: li
+  real(c_double) :: li  ! real is correct
   !common/sc3d/ &
   real(c_double) :: dttr,dtreff,currtza,currtpza,conserv, &
        fom,fomp,fompla,fomtot,flxout, &
@@ -1347,8 +1348,7 @@ module cqlcomm_mod
   !     all arrays used only in CQL3D
   !..................................................................
 
-  ! maybe bug
-  real(c_double) :: jparb(lrza),jparbt(lrza),jparbp(lrza)
+  real(c_double) :: jparb(lrza),jparbt(lrza),jparbp(lrza) ! real is correct
   !common/ar3d/
   real(c_double) :: rrz(0:lrza), &
        tr(0:lrza),tr1(0:lrza),tr2(0:lrza), &
@@ -1402,7 +1402,7 @@ module cqlcomm_mod
   real(c_double), pointer :: tamm1(:)
   !common /csigma/ tamm1  !(0:mmsv)
 
-  integer, pointer :: iind(:)
+  integer, pointer :: iind(:) ! YuP[2019-04-24] integer
   !common /csigma/ iind  !(1:jx)
 
   !..............................................................
@@ -1553,19 +1553,18 @@ module cqlcomm_mod
   !common/params/ &
   integer :: jjx
 
-  !XXX rules are for breaking amiright
-  real(c_double), pointer :: jbm1(:,:)
+  real(c_double), pointer :: jbm1(:,:) !YuP[2019-04-24] real is correct
   !common jbm1
-  real(c_double), pointer :: jb0(:,:)
+  real(c_double), pointer :: jb0(:,:)  !YuP[2019-04-24] real is correct
   !common jb0
-  real(c_double), pointer :: jbp1(:,:)
+  real(c_double), pointer :: jbp1(:,:) !YuP[2019-04-24] real is correct
   !common jbp1
 
-  ! bug
   character(len=8) :: irffile(nmodsa)
 
   !common &
-  real(c_double) :: argmax, nurf
+  real(c_double) :: argmax
+  integer :: nurf ! YuP[2019-04-24] integer
   !     1  lenj0, &
   integer :: mrf,mrfn,  &
        nrayn,nrayelts, & !-YuP 101122: added &
@@ -1650,7 +1649,7 @@ module cqlcomm_mod
   !common /dptr95/ lloc
   integer, pointer :: llray(:,:,:)
   !common /dptr95/ llray
-  real(c_double), pointer :: psiloc(:,:,:)
+  real(c_double), pointer :: psiloc(:,:,:) !YuP[2019-04-24] real
   !common /dptr95/ psiloc
   real(c_double), pointer :: scalurf(:,:,:)
   !common /dptr95/ scalurf
@@ -1700,9 +1699,9 @@ module cqlcomm_mod
   !common /dptr95/ nrayelt
   integer, pointer :: jslofas(:,:)
   !common /dptr95/ jslofas
-  integer, pointer :: nurefls(:,:)
+  integer, pointer :: nurefls(:,:) !YuP[2019-04-24] integer
   !common /dptr95/ nurefls
-  integer, pointer :: keiks(:,:)
+  integer, pointer :: keiks(:,:) !YuP[2019-04-24] integer
   !common /dptr95/ keiks
   integer, pointer :: jpes(:,:)
   !common /dptr95/ jpes
@@ -1726,7 +1725,7 @@ module cqlcomm_mod
   !common /dptr95/ lrayelt
   real(c_double), pointer :: delpwr0(:,:)
   !common /dptr95/ delpwr0
-  integer, pointer :: nrayelt0(:,:)
+  integer, pointer :: nrayelt0(:,:) !YuP[2019-04-24] integer
   !common /dptr95/ nrayelt0
   real(c_double), pointer :: truncd(:) ! 1:jx
   !common /dptr95/ truncd
@@ -1779,7 +1778,8 @@ module cqlcomm_mod
   real(c_double) :: anecc(nrada),tekev(nrada),tikev(nint1a,nrada), &
        anicc(nint1a,nrada), &
        amass(nint1a),achrg(nint1a),elecf(nrada), &
-       rho_(nrada),names(10),psiar_(nrada)
+       rho_(nrada),psiar_(nrada)
+  character(len=80) :: names(10) !YuP[2019-04-24]
   integer :: nspc,ialign9
   real(c_double) :: fpsiar_(nrada),pary(nrada),ppary(nrada), &
        gpary(nrada),ztop_,zbot_,rleft,rright
@@ -2018,6 +2018,7 @@ module cqlcomm_mod
 
 
   save
-contains
-  ! lolz
+!contains
+!YuP: if empty, gives a compilation error in IntelFortran
+
 end module cqlcomm_mod

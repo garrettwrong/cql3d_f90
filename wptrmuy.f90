@@ -111,5 +111,6 @@ contains
       endif
 
       return
-      end
+      end subroutine wptrmuy
+
 end module wptrmuy_mod

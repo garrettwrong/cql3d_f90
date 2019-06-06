@@ -323,12 +323,12 @@ contains
       endif
       mmxp1=mmx+1
 
-      call bcast(ss(1:iy*lz*(mmxp1+1),1,0,lr_),zero,iy*lz*(mmxp1+1))
-      call bcast(ssy(1:iy*lz*mxp1,1,0,lr_),zero,iy*lz*mxp1)
-      call bcast(ssyi(1:iy*lz*mxp1,1,0,lr_),zero,iy*lz*mxp1)
-      call bcast(ssyy(1:iy*lz*mxp1,1,0,lr_),zero,iy*lz*mxp1)
-      call bcast(ssyyy(1:iy*lz*mxp1,1,0,lr_),zero,iy*lz*mxp1)   !Not used?
-      call bcast(dpcosz(1:iy*lz*mmxp1,1,0,lr_),zero,iy*lz*mmxp1)
+      call bcast(ss(1:iy,1:lz,0:mmxp1,lr_),zero,iy*lz*(mmxp1+1))
+      call bcast(ssy(1:iy,1:lz,0:mx,lr_),zero,iy*lz*mxp1)
+      call bcast(ssyi(1:iy,1:lz,0:mx,lr_),zero,iy*lz*mxp1)
+      call bcast(ssyy(1:iy,1:lz,0:mx,lr_),zero,iy*lz*mxp1)
+      call bcast(ssyyy(1:iy,1:lz,0:mx,lr_),zero,iy*lz*mxp1)   !Not used?
+      call bcast(dpcosz(1:iy,1:lz,0:mmx,lr_),zero,iy*lz*(mmx+1))
 
       do 270 l=1,lz
 !     test if l in lsindx(i) => ilcqlp=1
@@ -500,10 +500,12 @@ contains
 
  360  continue
 
-      call dscal(iy*lz*mmxp1,-one,dpcosz(1:iy*lz*mmxp1,1,0,lr_),1)
+      call dscal(iy*lz*mmxp1,-one,dpcosz(1:iy,1:lz,0:mmx,lr_),1)
+                  !Note: allocate(dpcosz(iy,lz,0:mmx,lrzmax)
 !BH110330:  Doesn't look like waa and wbb are used for anything?
-      call dscal(lz*mxp1,-one,waa(1:lz*mxp1,0,lr_),1)
-      call dscal(lz*mxp1,-one,wbb(1:lz*mxp1,0,lr_),1)
+      !call dscal(lz*mxp1,-one,waa(1:lz,0:mx,lr_),1)
+      !call dscal(lz*mxp1,-one,wbb(1:lz,0:mx,lr_),1)
+               !Note: allocate(waa(lz,0:mx,lrzmax)
 
 
 
@@ -672,5 +674,7 @@ contains
  999  continue
 
       return
-      end
+      end subroutine micxinil
+
+
 end module micxinil_mod

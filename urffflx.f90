@@ -141,5 +141,6 @@ contains
 !      write(*,*)'urffflx:ncontrib(1:lrzmax):',(ncontrib(l),l=1,lrzmax)
 
       return
-      end
+      end subroutine urffflx
+
 end module urffflx_mod

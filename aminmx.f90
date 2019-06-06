@@ -33,5 +33,6 @@ contains
       end do
 !
       return
-      end
+      end subroutine aminmx
+
 end module aminmx_mod

@@ -301,5 +301,7 @@ contains
  1002 format(3i5,e16.6)
  1003 format(5e16.6)
  1004 format(5i5)
-      end
+      end subroutine tdtscinp
+
+
 end module tdtscinp_mod

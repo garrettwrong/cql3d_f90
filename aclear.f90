@@ -246,5 +246,6 @@ contains
 
 
       return
-      end
+      end subroutine aclear
+
 end module aclear_mod

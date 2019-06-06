@@ -301,5 +301,7 @@ contains
         call diagwrng(3)
       endif
       return
-      end
+      end subroutine aingeom
+
+
 end module aingeom_mod

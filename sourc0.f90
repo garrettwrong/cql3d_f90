@@ -34,5 +34,6 @@ contains
  12     continue
  10   continue
       return
-      end
+      end subroutine sourc0
+
 end module sourc0_mod

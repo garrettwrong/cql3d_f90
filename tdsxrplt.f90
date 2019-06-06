@@ -157,7 +157,7 @@ contains
  612  format(1pe12.2,12x)
 
       return
-      end
+      end subroutine tdsxrplt
 
 
 !
@@ -289,7 +289,7 @@ contains
       deallocate(rrtab2,STAT=istat)
 
       return
-      end
+      end subroutine tdsxrvw
 
 
 end module tdsxrplt_mod

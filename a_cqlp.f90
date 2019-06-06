@@ -55,7 +55,7 @@ program a_cql3d
 !
 !..................................................................
 !
-!     Highlights of code history (see also a_change.h):
+!     Highlights of code history (see also a_change):
 !
 !     02/01/2011
 !     MPI version of code (YuP)
@@ -229,7 +229,7 @@ program a_cql3d
 !     While this code uses dynamic dimensioning for most arrays,
 !     some statically allocated arrays persist in this version. Thus
 !     some parameters must be set. See include file 'param.h'. A few
-!     parameters could need setting in 'frcomm.h' if the neutral beam
+!     parameters could need setting in 'frcomm.h77' if the neutral beam
 !     NFREYA code is being utilized.  Finally zfreya.F holds some
 !     routines used by the neutral beam deposition module
 !     (NFREYA - Oak Ridge).

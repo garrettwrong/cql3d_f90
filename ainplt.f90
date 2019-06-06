@@ -246,7 +246,7 @@ contains
  1004 format(a60)
  1005 format(a300)
       return
-      end
+      end subroutine ainplt
 
 
 
@@ -276,5 +276,6 @@ contains
            //'s'
 
       return
-      end
+      end subroutine GET_DATE_TIME
+
 end module ainplt_mod

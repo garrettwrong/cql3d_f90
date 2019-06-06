@@ -154,5 +154,6 @@ contains
       if(idskf.ne."disabled".and.ll.eq.lrors)  close(unit=4)
       if(idskrf.ne."disabled".and.ll.eq.lrors)  close(unit=5)
       return
-      end
+      end subroutine dskout
+
 end module dskout_mod

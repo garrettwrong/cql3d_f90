@@ -214,7 +214,7 @@ contains
                 +dz(lp,ll)/bbpsi(lp,ll)*den_of_s2(lp)/zmaxpsi(ll)
 
  999  return
-      end
+      end subroutine fle_pol
 
 
 
@@ -381,7 +381,7 @@ contains
       enddo
 
  999  return
-      end
+      end subroutine fle_fsa
 !
 !
       subroutine fle(setup,lp)
@@ -519,5 +519,7 @@ contains
                 +(dz(lp,lr_)/bbpsi(lp,lr_))*den_of_s1(lp)/zmaxpsi(lr_)
 
  999  return
-      end
+      end subroutine fle
+
+
 end module fle_mod

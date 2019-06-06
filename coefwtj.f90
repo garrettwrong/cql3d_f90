@@ -17,7 +17,7 @@ contains
       subroutine coefwtj(k)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in coefwtj(). Maybe not needed?
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
@@ -35,8 +35,8 @@ contains
 
 
 !-YuP      call bcast(dj(1,0,k,l_),half,iyjxp1) ! could it be error?
-      call bcast(dj(0:(iy+2)*(jx+1)-1,0,k,l_),half,(iy+2)*(jx+1))
-      !Note:  dj(0:iy+1,0:jx,1:ngen,lrors)
+      call bcast(dj(0:iy+1,0:jx,k,l_),half,(iy+2)*(jx+1))
+         !Note:  dj(0:iy+1,0:jx,1:ngen,lrors)
 
       if (chang.ne."disabled") then
 !..................................................................
@@ -127,5 +127,7 @@ contains
 
 
       return
-      end
+      end subroutine coefwtj
+
+
 end module coefwtj_mod

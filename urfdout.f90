@@ -65,5 +65,6 @@ contains
       if(ll.eq.lrz)  close(unit=31)
 
       return
-      end
+      end subroutine urfdout
+
 end module urfdout_mod

@@ -18,7 +18,7 @@ contains
       subroutine impchk(k)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in impchk(). To get gfi(), qz(),ry(), hfi(), etc.
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
@@ -35,7 +35,7 @@ contains
       dimension zdns(lrorsa)
 !%OS
       fpithta(i,j)=f(i+1,j,k,l_)*(1.-dithta(i,j,l_)) + &
-        f(i  ,j,k,l_)*dithta(i,j,l_)
+                   f(i  ,j,k,l_)*dithta(i,j,l_)
 
 !.......................................................................
 
@@ -57,7 +57,7 @@ contains
             *one_
           temp3(i,j)=gfi(i,j,k)*qz(j)
           temp3(i,j)=temp3(i,j)-gfi(i,j-1,k)*qz(j)
-          temp3(i,j)=temp3(i,j)+(hfi(i,j)-hfi(i-1,j))*ry(i,j)
+          temp3(i,j)=temp3(i,j)+(hfi(i,j,k,l_)-hfi(i-1,j,k,l_))*ry(i,j,l_)
           temp3(i,j)=(temp3(i,j)+vptb(i,lr_) &
             *(cah(i,j)*f(i,j,k,l_)+so(i,j))+spasou(i,j,k,l_)+ &
             cthta(i,j)*(fpithta(i,j)-fpithta(i-1,j)) ) &
@@ -66,9 +66,9 @@ contains
           sumleft=sumleft+temp4(i,j)
           sumright=sumright+temp3(i,j)
           temp5(i,j)=gfi(i,j,k)
-          temp6(i,j)=hfi(i,j)
-          temp1(i,j)=qz(j)*(gfi(i,j,k)-gfi(i,j-1,k))
-          temp2(i,j)=ry(i,j)*(hfi(i,j)-hfi(i-1,j))
+          temp6(i,j)=hfi(i,j,k,l_)
+          temp1(i,j)=  qz(j)*(gfi(i,j,k)-gfi(i,j-1,k))
+          temp2(i,j)=ry(i,j,l_)*(hfi(i,j,k,l_)-hfi(i-1,j,k,l_))
           zdns(l_)=zdns(l_)+temp3(i,j)/dtreff- &
             vptb(i,lr_)*spasou(i,j,k,l_)*cynt2(i,l_)*cint2(j)
  2      continue
@@ -89,7 +89,7 @@ contains
         temp3(itl,j)=gfi(itl,j,k)*qz(j)
         temp3(itl,j)=temp3(itl,j)-gfi(itl,j-1,k)*qz(j)
         temp3(itl,j)= &
-          temp3(itl,j)-r2y(j)*(hfi(itl-1,j)-2.*hfi(itl,j)-hfi(itu,j))
+          temp3(itl,j)-r2y(j,l_)*(hfi(itl-1,j,k,l_)-2.*hfi(itl,j,k,l_)-hfi(itu,j,k,l_))
         temp3(itl,j)=temp3(itl,j)+(cah(itl,j)*f(itl,j,k,l_) &
           +so(itl,j))*vptb(itl,lr_) + spasou(itl,j,k,l_)
         temp3(itl,j)=temp3(itl,j)*dtreff*cint2(j)*cynt2(itl,l_) &
@@ -99,8 +99,8 @@ contains
         sumright=sumright+temp3(itl,j)*2.
         temp5(itl,j)=gfi(itl,j,k)
         temp5(itu,j)=gfi(itu,j,k)
-        temp6(itl,j)=hfi(itl,j)
-        temp6(itu,j)=hfi(itu,j)
+        temp6(itl,j)=hfi(itl,j,k,l_)
+        temp6(itu,j)=hfi(itu,j,k,l_)
  3    continue
 
  50   continue
@@ -190,5 +190,7 @@ contains
       endif
 !%OS
       return
-      end
+      end subroutine impchk
+
+
 end module impchk_mod

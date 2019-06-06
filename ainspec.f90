@@ -151,5 +151,6 @@ contains
 !MPIINSERT_ENDIF_RANK
 
       return
-      end
+      end subroutine ainspec
+
 end module ainspec_mod

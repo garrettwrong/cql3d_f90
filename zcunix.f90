@@ -38,7 +38,7 @@ contains
       endif
 
       return
-      end
+      end function taper
 !
 !     subroutine aminmx(array,ifirst,ilast,istride,amin,amax,
 !     *indmin,indmax)
@@ -835,7 +835,8 @@ contains
  114  continue
 !dir$ bounds
       return
-      end
+      end subroutine coeff1
+
       subroutine coeff2 (nx,x,ny,y,f,fxx,fyy,fxxyy,idm,ibd,wk)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -907,7 +908,8 @@ contains
  107  continue
  108  continue
       return
-      end
+      end subroutine coeff2
+
       subroutine intrp (n,x,f,w,y,i,int,tab,itab)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(i+1)    ,f(i*int+1)    ,w(i*int+1)  ,tab(3) &
@@ -958,7 +960,8 @@ contains
       tab(3) = (w(i0)*flp+w(ip)*fl0)/flk
  106  continue
       return
-      end
+      end subroutine intrp
+
       subroutine search (xbar,x,n,i)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(n)
@@ -995,7 +998,8 @@ contains
       if (xbar .le. x(i+1)) return
       i = min0(i+k,nm1)
       go to 103
-      end
+      end subroutine search
+
       subroutine terp1 (n,x,f,w,y,int,tab,itab)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -1017,7 +1021,7 @@ contains
 !
       call intrp (n,x,f,w,y,i,int,tab,itab)
       return
-      end
+      end subroutine terp1
 
 
       real(c_double) function terp2 &
@@ -1080,7 +1084,8 @@ contains
 !     subroutine intrp and corrected problem with
 !     version numbers in one statistics call
 !-----------------------------------------------------------------------
-      end
+      end function terp2
+
       subroutine searche (xbar,x,n,i,dx)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       x(n)
@@ -1104,7 +1109,8 @@ contains
       i=(xbar-x(1))/dx+1
 
       return
-      end
+      end subroutine searche
+
       subroutine terp1e (n,x,f,w,y,int,tab,itab,dx)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
@@ -1126,7 +1132,7 @@ contains
 !
       call intrp (n,x,f,w,y,i,int,tab,itab)
       return
-      end
+      end subroutine terp1e
 
 
 !..................................................................
@@ -1192,7 +1198,8 @@ contains
 !     subroutine intrp and corrected problem with
 !     version numbers in one statistics call
 !-----------------------------------------------------------------------
-      end
+      end function t2
+
       subroutine trip (n,a,b,c,y,z,int)
       implicit integer (i-n), real(c_double) (a-h,o-z)
       dimension       a(n)       ,b(n)       ,c(n)       ,y(n)       , &
@@ -1242,54 +1249,13 @@ contains
  102  continue
  140  format( '         cj_debug: trip', 5e16.8)
       return
-      end
+      end subroutine trip
+
 !************************************************************************
 !     END OF SPLINES
 !************************************************************************
 !
 !
-
-!!XXXXXX
-!       real(c_double) function erf(xxx)
-!       implicit integer (i-n), real(c_double) (a-h,o-z)
-!       save
-! !------------------------------------------------------
-! !     This routine computes the ERROR FUNCTION.
-! !------------------------------------------------------
-!       real(c_double) tusqpi
-!       dimension a(5)
-!       sign=1.
-!       if (xxx .lt. 0.) sign=-1.
-!       xcg=sign*xxx
-!       x2=xcg*xcg
-!       if (xcg .ge. .6) go to 20
-!       sum=xcg
-!       term=xcg
-!       kmax=6
-!       do 10 k=1,kmax
-!         t1=DBLE(k)
-!         t2=DBLE(2*k+1)/DBLE(2*k-1)
-!         term=-term*x2/(t1*t2)
-!         sum=sum+term
-!  10   continue
-!       erf=tusqpi*sum
-!       erf=sign*erf
-!       return
-!  20   continue
-!       p=.3275911
-!       a(1)=.225836846
-!       a(2)=-.252128668
-!       a(3)=1.25969513
-!       a(4)=-1.287822453
-!       a(5)=.94064607
-!       eta=1./(1.+p*xcg)
-!       phip=tusqpi*exp(-x2)
-!       term=(((a(5)*eta+a(4))*eta+a(3))*eta+a(2))*eta+a(1)
-!       erf=1.-term*eta*phip
-!       erf=sign*erf
-!       return
-!       end
-
 
 !######date01jan1984     copyright ukaea, harwell.
 !######aliasim01ad
@@ -1304,7 +1270,7 @@ contains
  100  continue
       im01ad = kount
       return
-      end
+      end function im01ad
 
 !
 !
@@ -1552,7 +1518,7 @@ contains
         tempa=tempa*x/(n+n-2)
  240  b(n)=tempa*(1.e0+tempb/n)
  250  return
-      end
+      end subroutine zzbeslri
 
 !***********************************************************************
 !$$$      subroutine zzechk(nchars,narray)
@@ -1676,7 +1642,7 @@ contains
         'for example, to print up to 10 nonfatal warning messages, '&
         '  use     call zzxset(10,0)    ')
 10040 format (/28h program abort due to error.)
-      end
+      end subroutine zzrchk
 
 !***********************************************************************
       subroutine zzrget(nfatal,ntrace)
@@ -1696,7 +1662,7 @@ contains
 
       call zzstgt(1,nfatal,ntrace)
       return
-      end
+      end subroutine zzrget
 
 !***********************************************************************
       subroutine zzrprt(nchars,narray)
@@ -1720,7 +1686,7 @@ contains
       print 10010,(narray(i),i=1,nwords)
       return
 10010 format (1x,13a10)
-      end
+      end subroutine zzrprt
 
 !***********************************************************************
       subroutine zzstgt(k,nfatal,ntrace)
@@ -1741,7 +1707,7 @@ contains
       if (k.gt.0) nfatal = lnf
       if (k.gt.0) ntrace = lnt
       return
-      end
+      end subroutine zzstgt
 
 !***********************************************************************
       subroutine zzxset(nfatal,ntrace)
@@ -1785,7 +1751,7 @@ contains
 
       call zzstgt(0,nfatal,ntrace)
       return
-      end
+      end subroutine zzxset
 
 
 
@@ -1800,7 +1766,7 @@ contains
              2x,"status =",i5)
       istat =0 !reset for next case
       return
-      end
+      end subroutine allocate_error
 
 
 
@@ -1814,5 +1780,6 @@ contains
              2x,"status =",i5, " process rank =",i5)
       istat =0 !reset for next case
       return
-      end
+      end subroutine deallocate_error
+
 end module zcunix_mod

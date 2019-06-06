@@ -91,5 +91,6 @@ contains
       END IF
 
       return
-      end
+      end subroutine pltinit
+
 end module pltinit_mod

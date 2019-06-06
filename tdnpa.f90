@@ -114,5 +114,7 @@ contains
       endif  ! On npa_process(5)
 
       return
-      end
+      end subroutine tdnpa
+
+
 end module tdnpa_mod

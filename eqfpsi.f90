@@ -45,7 +45,7 @@ contains
         fppsi__=tab(2)
       endif
       return
-      end
+      end subroutine eqfpsi
 
 
 !
@@ -76,5 +76,6 @@ contains
         pppsi__=tab(2)
       endif
       return
-      end
+      end subroutine eqppsi
+
 end module eqfpsi_mod

@@ -68,7 +68,8 @@ contains
       leff=lrors
       if (kopt .eq. 3) leff=lrz
 
-      call dcopy (iyjx2*ngen*leff,f1,1,f2,1)
+      call dcopy(iyjx2*ngen*leff,f1(0:iy+1,0:jx+1,1:ngen,1:leff),1, &
+                                 f2(0:iy+1,0:jx+1,1:ngen,1:leff),1)
       do 10 k=1,ngen
         do 20 l=1,leff
           itl=itl_(l)
@@ -138,5 +139,7 @@ contains
  10   continue
 
       return
-      end
+      end subroutine tdtrvtor2
+
+
 end module tdtrvtor2_mod

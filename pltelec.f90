@@ -81,5 +81,7 @@ contains
  611  format("species ",i3, " (electrons)   n= ",i5,"  time= ",1pe14.4)
  612  format("density (line-integration) =",1pe16.5)
       return
-      end
+      end subroutine pltelec
+
+
 end module pltelec_mod

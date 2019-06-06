@@ -32,5 +32,7 @@ contains
         a(k,kk,ll)=a(k,kk,0)*rn
  1    continue
       return
-      end
+      end subroutine tdxin23d
+
+
 end module tdxin23d_mod

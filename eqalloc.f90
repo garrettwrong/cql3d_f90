@@ -46,5 +46,7 @@ contains
       write(*,*)'eqalloc:  Leaving eqalloc'
 
       return
-      end
+      end subroutine eqalloc
+
+
 end module eqalloc_mod

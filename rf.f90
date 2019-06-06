@@ -23,5 +23,6 @@ contains
       character*8 action
 
       return
-      end
+      end subroutine rf
+
 end module rf_mod

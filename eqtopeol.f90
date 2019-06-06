@@ -284,5 +284,6 @@ contains
       i1p(2)=4
       call coeff1(nnr,psiar,fpsiar,d2fpsiar,i1p,1,workk)
       return
-      end
+      end subroutine eqtopeol
+
 end module eqtopeol_mod

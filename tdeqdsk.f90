@@ -298,7 +298,9 @@ contains
 !..................................................................
 
         nprim=nspc
-        write(6,'(/A/)') ' WARNING: nimp not defined in comm.h'
+!MPIINSERT_IF_RANK_EQ_0
+        WRITE(6,'(/A/)') ' WARNING: nimp not defined in comm.h'
+!MPIINSERT_ENDIF_RANK
          nion=nprim+nimp
       else if (eqsource.eq."eqdsk" .or. eqsource.eq."topeol") then
         ku=0
@@ -373,7 +375,7 @@ contains
         open(unit=17,file="tdeqdsk",delim='apostrophe',status='unknown')
       endif
 !BH:000906  Maybe problem with format of the following write(17,210)
-!BH070116      write(17,210) mnemonic,ipestg,nnr,nnz,nnv_
+!BH070116      !write(17,210) mnemonic,ipestg,nnr,nnz,nnv_
 !BH070116:  Swe ymideqd=0.  BE CAREFUL in future something else needed.
       ymideqd=0.
       write(17,210) mnemonic,ipestg,nnr,nnz,nfp_
@@ -403,8 +405,9 @@ contains
         write(17,250) (pcvac(i),i=1,9)
       endif
       if (partner.ne."selene") then
-         write(*,*)  &
-        'tdeqdsk: work reqd to write xcontr,ycontr,xlimiter,ylimiter'
+!MPIINSERT_IF_RANK_EQ_0
+         WRITE(*,*)'tdeqdsk: work reqd to write xcontr,ycontr,xlimiter,ylimiter'
+!MPIINSERT_ENDIF_RANK
 !        write(17,221) ncontr,nlimiter
 !        if (ncontr.ne.0) then
 !          write(17,220)(xcontr(i),ycontr(i),i=1,ncontr)

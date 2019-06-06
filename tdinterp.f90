@@ -117,5 +117,6 @@ contains
  100  write(*,1000)
  1000 format("failure in tdinterp: parameter kjx too small")
       call exit(1)
-      end
+      end subroutine tdinterp
+
 end module tdinterp_mod

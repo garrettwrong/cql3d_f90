@@ -27,5 +27,6 @@ contains
  11     continue
  10   continue
       return
-      end
+      end subroutine soup0
+
 end module soup0_mod

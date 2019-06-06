@@ -54,5 +54,5 @@ contains
       s=terp2(zeff,epsil,n8,az,n12,ae,af,afx,afy,afxy,n8,0,0)
       diagcfac=s
       return
-      end
+      end function diagcfac
 end module diagcfac_mod

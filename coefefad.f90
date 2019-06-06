@@ -38,5 +38,6 @@ contains
  20   continue
 
       return
-      end
+      end subroutine coefefad
+
 end module coefefad_mod

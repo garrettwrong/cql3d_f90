@@ -21,7 +21,7 @@ contains
     use r8subs_mod, only : dcopy
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
-    !MPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
 
     character(len=8) frplt
@@ -46,7 +46,7 @@ contains
     !..................................................................
 
 
-    !MPIINSERT_IF_RANK_NE_0_RETURN
+!MPIINSERT_IF_RANK_NE_0_RETURN
     ! make plots on mpirank.eq.0 only
 
     if (noplots.eq."enabled1") return
@@ -170,7 +170,7 @@ contains
     !..................................................................
 
     iskip=1+ipts/nfrplt
-    write(*,*)'frplteq: ipts,nfrplt,iskip',ipts,nfrplt,iskip
+       write(*,*)'frplteq: ipts,nfrplt,iskip',ipts,nfrplt,iskip
     if (iskip .eq. 0) then
        write(*,*) 'frplteq: iskip=0, beam missing plasma? '
     else

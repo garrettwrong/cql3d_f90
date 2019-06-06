@@ -101,7 +101,8 @@ contains
  71     continue
  7    continue
 
-        call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)
+        call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
       return
-      end
+      end subroutine coefmidt
+
 end module coefmidt_mod

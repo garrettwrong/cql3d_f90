@@ -124,5 +124,7 @@ contains
       CALL PGSLW(lnwidth) ! restore linewidth
 
       return
-      end
+      end subroutine prpprctr
+
+
 end module prpprctr_mod

@@ -30,5 +30,6 @@ contains
  100  continue
 
       return
-      end
+      end subroutine wpvptb
+
 end module wpvptb_mod

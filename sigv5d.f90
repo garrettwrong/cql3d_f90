@@ -77,7 +77,7 @@ contains
 !BH120314:      if (k .ne. 0 .and. isigsgv2 .eq. 1) call sigmaxwl(k,kk)
 !BH120314:      call dcopy(iyjx2,temp3(0,0),1,temp1(0,0),1)
 
-      call bcast(temp3(0:iyjx2-1,0),zero,iyjx2)
+      call bcast(temp3(0:iy+1,0:jx+1),zero,iyjx2)
       if (kk .eq. 0) then  !No species 'a' general distrn.  Use maxwl.
             !write(*,*)'sigv5d:Reactant#1: Use Maxwellian with k=',k
          bn1=reden(k,lr_)
@@ -110,7 +110,7 @@ contains
          if(k.eq.0 .and. kk.eq.0) go to 90 !-> next reaction type
          !write(*,*)'sigv5d:Reactant#2: knumb,igenrl,imaxwln=',knumb,kk,k
 
-         call bcast(temp3(0:iyjx2-1,0),zero,iyjx2)
+         call bcast(temp3(0:iy+1,0:jx+1),zero,iyjx2)
          if (kk.eq.0) then
                !write(*,*)'sigv5d:Reactant#2: Use Maxwellian with k=',k
             bn2=reden(k,lr_)
@@ -165,7 +165,7 @@ contains
       call bcast(feta(1:jx,l1),zero,jx)
 !     Copy distribution a into temp3, for cfpleg:
 !%bh      call dcopy(iyjx2,temp4,1,temp3,1)
-      call dcopy(iyjx2,temp1(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,temp3(0:iy+1,0:jx+1),1)
       do 202 j=1,jx
       tam3(j)=temp1(iy+1-imax(l,lr_),j)
 202   tam2(j)=temp1(imax(l,lr_),j)
@@ -175,7 +175,7 @@ contains
       if (knumb .ge. 3) go to 210
 
 !%bh      call dcopy(iyjx2,temp5,1,temp3,1)
-      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp2(0:iy+1,0:jx+1),1,temp3(0:iy+1,0:jx+1),1)
       do 201 j=1,jx
       tam3(j)=temp2(iy+1-imax(l,lr_),j)
       tam2(j)=temp2(imax(l,lr_),j)
@@ -255,5 +255,7 @@ contains
 !     That is, <sigma*v>=sigf(,)*(1+delta_ij)/(n_i*n_j).
 
       return
-      end
+      end subroutine sigv5d
+
+
 end module sigv5d_mod

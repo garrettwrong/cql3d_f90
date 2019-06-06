@@ -43,10 +43,10 @@ contains
  120      continue
  110    continue
  100  continue
-      call dcopy(iyjx2*ngen*ls,fnp1(0:iyjx2*ngen*ls-1,0,1,1),1, &
-           f(0:iyjx2*ngen*ls-1,0,1,1),1)
-      call dcopy(iyjx2*ngen*ls,fnp1(0:iyjx2*ngen*ls-1,0,1,1),1, &
-           f_(0:iyjx2*ngen*ls-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*ls,fnp1(0:iy+1,0:jx+1,1:ngen,1:ls),1, &
+                                  f(0:iy+1,0:jx+1,1:ngen,1:ls),1)
+      call dcopy(iyjx2*ngen*ls,fnp1(0:iy+1,0:jx+1,1:ngen,1:ls),1, &
+                                 f_(0:iy+1,0:jx+1,1:ngen,1:ls),1)
 
       return
 
@@ -56,13 +56,15 @@ contains
 
  200  continue
 
-      call dcopy(iyjx2*ngen*(ls+2),fnp1(0:iyjx2*ngen*(ls+2)-1,0,1,0),1, &
-           fnp0(0:iyjx2*ngen*(ls+2)-1,0,1,0),1)
-      call dcopy(iyjx2*ngen*ls,fnp1(0:iyjx2*ngen*ls-1,0,1,1),1, &
-           f(0:iyjx2*ngen*ls-1,0,1,1),1)
-      call dcopy(iyjx2*ngen*ls,fnp1(0:iyjx2*ngen*ls-1,0,1,1),1, &
-           f_(0:iyjx2*ngen*ls-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*(ls+2),fnp1(0:iy+1,0:jx+1,1:ngen,0:ls+1),1, &
+                                   fnp0(0:iy+1,0:jx+1,1:ngen,0:ls+1),1)
+      call dcopy(iyjx2*ngen*ls,    fnp1(0:iy+1,0:jx+1,1:ngen,1:ls  ),1, &
+                                      f(0:iy+1,0:jx+1,1:ngen,1:ls  ),1)
+      call dcopy(iyjx2*ngen*ls,    fnp1(0:iy+1,0:jx+1,1:ngen,1:ls  ),1, &
+                                     f_(0:iy+1,0:jx+1,1:ngen,1:ls  ),1)
 
       return
-      end
+      end subroutine wpsavf
+
+
 end module wpsavf_mod

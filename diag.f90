@@ -93,5 +93,7 @@ contains
 
       pinput=pelec+pwrf+psou
       return
-      end
+      end subroutine diag
+
+
 end module diag_mod

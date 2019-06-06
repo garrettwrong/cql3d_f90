@@ -33,5 +33,6 @@ contains
         a(ll)=a(0)*rn
  1    continue
       return
-      end
+      end subroutine tdxin33d
+
 end module tdxin33d_mod

@@ -314,7 +314,7 @@ contains
 !    (default soffpr=0.0)
 
       xsoffpr=soffpr*xvte3
-      ! XXX
+      ! XXX    YuP: was xl(jflh), where jflh=(jfl+1)/2, and I don't know why.
       call lookup(xsoffpr,xl,jfl,wtu,wtl,lement)
       jsoffpr=min(lement,jfl)
 
@@ -497,9 +497,9 @@ contains
 
       if (n.eq.nstop) then
       if (knockon.eq."fpld_dsk") then
-         call dcopy(iyjx2,source(0:iyjx2-1,0,k,l_),1, &
-              temp1(0:iyjx2-1,0),1)
-         call dscal(iyjx2,dtr,temp1(0:iyjx2-1,0),1)
+         call dcopy(iyjx2,source(0:iy+1,0:jx+1,k,l_),1, &
+                           temp1(0:iy+1,0:jx+1),1)
+         call dscal(iyjx2,dtr,temp1(0:iy+1,0:jx+1),1)
          iunit=20
          open (unit=iunit,file='fpld_dsk',status='unknown')
          !do 80 k=1,1 !  k=kelecg
@@ -512,9 +512,9 @@ contains
          stop 'Wrote disk file from subroutine souceko: fpld_dsk'
       endif
       if (knockon.eq."fpld_ds1") then
-         call dcopy(iyjx2,source(0:iyjx2-1,0,k,l_),1, &
-              temp1(0:iyjx2-1,0),1)
-         call dscal(iyjx2,dtr,temp1(0:iyjx2-1,0),1)
+         call dcopy(iyjx2,source(0:iy+1,0:jx+1,k,l_),1, &
+                           temp1(0:iy+1,0:jx+1),1)
+         call dscal(iyjx2,dtr,temp1(0:iy+1,0:jx+1),1)
          do j=1,jx
             do i=1,iy
                temp1(i,j)=temp1(i,j)+f_(i,j,k,1)
@@ -548,5 +548,7 @@ contains
       xlncur(1,lr_)=s1*zmaxpsi(lr_)
 
  999  return
-      end
+      end subroutine sourceko
+
+
 end module sourceko_mod

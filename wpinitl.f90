@@ -166,26 +166,26 @@ contains
 !l    4.1 fnp1 (which may be used before first time-step in wparsou)
 !.......................................................................
 
-      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
-           fnp0(0:iyjx2*ngen*lrors-1,0,1,1),1)
-      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
-           fnp1(0:iyjx2*ngen*lrors-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                               fnp0(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                               fnp1(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
       if (sbdry .eq. "periodic") then
-        call dcopy(iyjx2*ngen,fnp0(0:iyjx2*ngen-1,0,1,1),1, &
-              fnp0(0:iyjx2*ngen-1,0,1,lrors+1),1)
-        call dcopy(iyjx2*ngen,fnp0(0:iyjx2*ngen-1,0,1,lrors),1, &
-             fnp0(0:iyjx2*ngen-1,0,1,0),1)
-        call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,1),1, &
-             fnp1(0:iyjx2*ngen-1,0,1,lrors+1),1)
-        call dcopy(iyjx2*ngen,fnp1(0:iyjx2*ngen-1,0,1,lrors),1, &
-             fnp1(0:iyjx2*ngen-1,0,1,0),1)
+        call dcopy(iyjx2*ngen, fnp0(0:iy+1,0:jx+1,1:ngen,1      ),1, &
+                               fnp0(0:iy+1,0:jx+1,1:ngen,lrors+1),1)
+        call dcopy(iyjx2*ngen, fnp0(0:iy+1,0:jx+1,1:ngen,lrors  ),1, &
+                               fnp0(0:iy+1,0:jx+1,1:ngen,0      ),1)
+        call dcopy(iyjx2*ngen, fnp1(0:iy+1,0:jx+1,1:ngen,1      ),1, &
+                               fnp1(0:iy+1,0:jx+1,1:ngen,lrors+1),1)
+        call dcopy(iyjx2*ngen, fnp1(0:iy+1,0:jx+1,1:ngen,lrors  ),1, &
+                               fnp1(0:iy+1,0:jx+1,1:ngen,0      ),1)
       endif
 
 !.......................................................................
 !l    4.2 electrostatic electric field
 !.......................................................................
 
-      call bcast(elparnw(0),elpar0,ls+2)
+      call bcast(elparnw(0:ls+1),elpar0,ls+2)
 
 !.......................................................................
 !l    4.3 Effective value of l-1,l,l+1 for a given l (ex:ls+1->1 if period.)
@@ -260,5 +260,7 @@ contains
  440  continue
 
       return
-      end
+      end subroutine wpinitl
+
+
 end module wpinitl_mod

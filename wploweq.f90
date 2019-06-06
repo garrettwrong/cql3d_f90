@@ -94,5 +94,6 @@ contains
  111  continue
 
       return
-      end
+      end subroutine wploweq
+
 end module wploweq_mod

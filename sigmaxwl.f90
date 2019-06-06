@@ -50,5 +50,6 @@ contains
       temp3(i,0)=temp3(i,0)*sn
 23    continue
       return
-      end
+      end subroutine sigmaxwl
+
 end module sigmaxwl_mod

@@ -57,5 +57,7 @@ contains
       write(*,*)'sigalloc:  Leaving sigalloc'
 
       return
-      end
+      end subroutine sigalloc
+
+
 end module sigalloc_mod

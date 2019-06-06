@@ -36,8 +36,9 @@ contains
 !     interpolate f_ on the transport velocity mesh, such that:
 !     int(vptp*f_*d3u0) is constant
 !.......................................................................
-      !XXX
-      call tdtrvtor2(f(0:iyp1,0:jxp1,1,1),frn(0:iyp1,0:jxp1,1,1),vpint,vpint_,1)
+      ! YuP: This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+      call tdtrvtor2(  f(0:iyp1,0:jxp1,1:ngen,1), &
+                     frn(0:iyp1,0:jxp1,1:ngen,1), vpint,vpint_,1)
 
 !.......................................................................
 !     compute advective term
@@ -98,9 +99,12 @@ contains
 !     interpolate source on itl-2,...,itl+2 points such that the integral
 !     over velocity is conserved
 !.......................................................................
-
-      call tdtrrtov2(spasou,spasou,cynt2,cynt2_,3)
+      !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+      call tdtrrtov2(spasou(0:ipy1,0:jxp1,1:ngen,1), &
+                     spasou(0:ipy1,0:jxp1,1:ngen,1), cynt2,cynt2_,3)
 
       return
-      end
+      end subroutine tdtrrsou
+
+
 end module tdtrrsou_mod

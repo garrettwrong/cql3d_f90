@@ -174,5 +174,6 @@ contains
       enddo
 
       return
-      end
+      end subroutine tdsetnpa
+
 end module tdsetnpa_mod

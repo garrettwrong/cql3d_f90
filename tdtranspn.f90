@@ -36,8 +36,8 @@ contains
 !     splitting soln implemented in tdtransp.
 !     BH071105
 !.......................................................................
-      call dcopy(iyjx2*ngen*lrors,f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
-           fvn(0:iyjx2*ngen*lrors-1,0,1,1),1)
+      call dcopy(iyjx2*ngen*lrors,f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+                                fvn(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
 !..............................................................
 !     The distribution from the previous time step resides in
 !     fvn(i,j,k,l).  This is now (071111) defined on the complete
@@ -85,7 +85,7 @@ contains
 !.......................................................................
 !  Copy fvn to frn as in tdtransp, although they are now on same grid
 !.......................................................................
-
+      !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or lrz)
       call tdtrvtor(fvn,frn)
 
 !..............................................................
@@ -346,5 +346,7 @@ contains
 !      pause
 
       return
-      end
+      end subroutine tdtranspn
+
+
 end module tdtranspn_mod

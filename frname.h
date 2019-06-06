@@ -10,7 +10,8 @@
 !     with namelist in name.h, then check all the following variables.
 !     Might have to change a couple of variable names.
 !     frname.h is used included into frcomm.h, which is used by
-!     freya.f,frhexdrv.f,frinitl.f,frnfreya.f
+!     freya.f,frinitl.f,frnfreya.f
+! # YuP[2019-05-31] frhexdrv.f is removed - not used   
 !................................................................
       namelist/frsetup/ timbplt,beamon,btime,nameb,relnub &
 	,anglev,angleh,ashape,aheigh,awidth,bcur,bptor,blenp,bshape &

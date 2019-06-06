@@ -167,39 +167,31 @@ contains
       istat_tot=0
       allocate(f(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(f(0,0,1,1),zero,SIZE(f))
-      f = 0
+      f = zero
       allocate(fxsp(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(fxsp(0,0,1,1),zero,SIZE(fxsp))
-      fxsp = 0
+      fxsp = zero
       allocate(f_(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(f_(0,0,1,1),zero,SIZE(f_))
-      f_ = 0
+      f_ = zero
 
       allocate(spasou(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(spasou(0,0,1,1),zero,SIZE(spasou))
-      spasou = 0
+      spasou = zero
       allocate(velsou(0:iy+1,0:jx+1,ngen,0:lrors+1),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(velsou(0,0,1,0),zero,SIZE(velsou))
-      velsou = 0
+      velsou = zero
       allocate(velsou2(0:iy+1,0:jx+1,ngen,0:lrors+1),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(velsou2(0,0,1,0),zero,SIZE(velsou2))
-      velsou2 = 0
+      velsou2 = zero
 
       allocate(source(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(source(0,0,1,1),zero,SIZE(source))
-      source = 0
+      source = zero
 
       allocate(gone(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(gone(0,0,1,1),zero,SIZE(gone))
-      gone = 0
+      gone = zero
 
       allocate(egylosa(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
       istat_tot=istat_tot+istat
@@ -279,7 +271,7 @@ contains
       call bcast(dj,zero,SIZE(dj))  ! Maybe set to 0.5 ?
 !BH090810:  Think dyp5,dym5,eyp5, and eym5 are over-dimensioned
 !BH090810:  from i=0, when only need i=1.
-!HB090826:  NO, at least for dyp5, through hfi(i-1,j) in impchk, i=1.
+!HB090826:  NO, at least for dyp5, through hfi(i-1,j,k,l_) in impchk, i=1.
 !HB090826:    Although multiplied by df(i,j) which is 0. for i=0,
 !BH090826:    still the dyp5(0,j) needs to exist.
       allocate(dym5(1:iy,lrors),STAT=istat)
@@ -883,8 +875,7 @@ contains
 
       allocate(gon(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(gon(0,0),zero,SIZE(gon))
-      gon = 0
+      gon = zero
 
       allocate(so(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
@@ -1096,18 +1087,12 @@ contains
       istat_tot=istat_tot+istat
       allocate(temp6(0:iy+1,0:jx+1),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(temp1(0,0),zero,SIZE(temp1))
-      temp1 = 0
-      !XXXcall bcast(temp2(0,0),zero,SIZE(temp2))
-      temp2 = 0
-      !XXXcall bcast(temp3(0,0),zero,SIZE(temp3))
-      temp3 = 0
-      !XXXcall bcast(temp4(0,0),zero,SIZE(temp4))
-      temp4 = 0
-      !XXXcall bcast(temp5(0,0),zero,SIZE(temp5))
-      temp5 = 0
-      !XXXcall bcast(temp6(0,0),zero,SIZE(temp6))
-      temp6 = 0
+      temp1 = zero
+      temp2 = zero
+      temp3 = zero
+      temp4 = zero
+      temp5 = zero
+      temp6 = zero
 
       allocate(xllji(jpxy,ipxy),STAT=istat)
       istat_tot=istat_tot+istat
@@ -1151,14 +1136,12 @@ contains
       if (tavg.ne."disabled") then
          allocate(favg(0:iy+1,0:jx+1,ngen,lrors),STAT=istat)
          istat_tot=istat_tot+istat
-         !XXXcall bcast(favg(0,0,1,1),zero,SIZE(f))
-         favg = 0
+            favg = zero
       endif
 
       allocate(pentr(nonch,ngen,-1:15,lrors),STAT=istat)
       istat_tot=istat_tot+istat
-      !XXXcall bcast(pentr(1,1,-1,1),zero,SIZE(pentr))
-      pentr = 0
+      pentr = zero
 
       allocate(constp(nonch,lrors),STAT=istat)
       istat_tot=istat_tot+istat
@@ -1172,8 +1155,7 @@ contains
       allocate(sgaint(8,ngen,lrors),STAT=istat)
       call bcast(sgaint,zero,8*ngen*lrors)
       allocate(entr(ngen,-1:15,lrors),STAT=istat)
-      !XXXcall bcast(entr(1,-1,1),zero,ngen*17*lrors)
-      entr = 0
+      entr = zero
 
       allocate(xlndnz(ngen+1,negyrga),STAT=istat)
       call bcast(xlndnz,zero,(ngen+1)*negyrga)

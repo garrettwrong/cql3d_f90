@@ -41,16 +41,16 @@ contains
       write(*,*)'urfbes:  Before allocation, nharmx=',nharmx
       allocate(besl(nharmx+2),STAT=istat) !-YuP->added
       !XXXcall bcast(besl,0.0,SIZE(besl))     !-YuP->added
-      besl = 0
+      besl = 0.d0
       allocate(jbm1(nbssltbl,mrfn),STAT=istat) !-YuP->added
       !XXXcall bcast(jbm1,0.0,SIZE(jbm1))          !-YuP->added
-      jbm1 = 0
+      jbm1 = 0.d0 ! for all (1:nbssltbl,1:mrfn)
       allocate(jb0(nbssltbl,mrfn),STAT=istat)  !-YuP->added
       !XXXcall bcast(jb0,0.0,SIZE(jbm1))           !-YuP->added
-      jb0 = 0
+      jb0 = 0.d0 ! for all (1:nbssltbl,1:mrfn)
       allocate(jbp1(nbssltbl,mrfn),STAT=istat) !-YuP->added
       !XXXcall bcast(jbp1,0.0,SIZE(jbm1))          !-YuP->added
-      jbp1 = 0
+      jbp1 = 0.d0 ! for all (1:nbssltbl,1:mrfn)
       write(*,*)'urfbes:  After allocation'
 
 !..................................................................
@@ -64,7 +64,7 @@ contains
 !     Find maximum k-perp
 !..................................................................
 
-        call aminmx(wnper(1:nrayelts*nrayelts,1,krf), &
+        call aminmx(wnper(1:nrayelts,1:nrayn,krf), &
               1,nrayelts*nrayn,1,emin,emax, &
               kmin,kmax)
         em=emax
@@ -135,5 +135,6 @@ contains
       write(*,*)'End urfbes'
 
       return
-      end
+      end subroutine urfbes
+
 end module urfbes_mod

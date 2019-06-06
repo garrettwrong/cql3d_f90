@@ -9,7 +9,7 @@ is placed in the SWIM svn repository by Bob Harvey (CompX).
 This version have recently been converted entirely to
 use f90 pointers, rather than the previous default cray pointers,
 simplifying further code development.  Recent changes in the
-code are catalogued in a_change.h in the distribution.
+code are catalogued in a_change in the distribution.
 
 There is some MPI capability through the makefile_mpi_xxxx
 make files, although speed up is maximally about a factor of 2 [but
@@ -81,7 +81,7 @@ svn copy https://cswim.org/svn/cswim/cql3d/trunk \
 
 May 15, 2009
 ============
-See a_change.h for updates.
+See a_change for updates.
 Fixed couple of minor bugs, plus updated rdc_multi.f to accomodate
 different normalization velocities in cql3d and in the input
 du0u0_input file.
@@ -102,7 +102,7 @@ https://cswim.org/svn/cswim/cql3d/tags/cql3d_f90ptr_090515  (Revision 1569).
 June 16, 2009
 =============
 Updated version number will be 1679.
-See a_change.h for updates.
+See a_change for updates.
 Main change:  The maxp parameter in param.i was reset from 1500 to 150000,
 increasing the number of Monte Carlo particles which can be used in 
 NBI model.  Previously, the namelist value was reset to maxp, unnecessarily
@@ -127,7 +127,7 @@ Couple of bug fixes, not expected to affect past results.
 Fully relativistic FP collisional coeffs working again,
 and are being further benchmarked.
 Most of prior graflib plotting now upgraded to pgplot.
-See a_change.h for more detail.
+See a_change for more detail.
 
 
 Also, svn checked out cql3d_cswim_svn/tags/cql3d_f90ptr_090515
@@ -168,7 +168,7 @@ integrations in momentum space.  It is accurate to within
 a couple of percent in electrical conductivity, for fusion
 energy plasma temperatures (see report 
 CompX-2009-1_Fully-Rel.pdf, Yuri Petrov, 091016).
-Also, a_change.h has a few more details.
+Also, a_change has a few more details.
 
 
 March 26, 2010
@@ -259,7 +259,7 @@ large growth of the particle tail population, e.g., in some ICRF cases.
 When restarting cql3d from a netcdf file, the distrfunc text restart
 file is not longer needed.
 
-(8) Several bugs were fixed, as detailed in the a_change.h file.
+(8) Several bugs were fixed, as detailed in the a_change file.
 
 (9) A suite of 16 test cases covering the above options plus several other
 cases has been constructed, and is used to ensure code integrity.
@@ -430,7 +430,7 @@ Aug. 9, 2011
 version="cql3d_cswim_110804_mpi"
 revision 3419
 
-Small mods, bug fixes, improvements, per a_change.h
+Small mods, bug fixes, improvements, per a_change
 including:
 -clipping option to smooth external diffusion coeffs from DC
  or AORSA added in rdc_multi.

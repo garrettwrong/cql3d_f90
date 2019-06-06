@@ -128,5 +128,7 @@ contains
 10220 format("(urfmod=enabled.and.iy.gt.255)not allowed. urfpack:ilim1")
 10990 format("unspecified")
 
-      end
+      end subroutine diagwrng
+
+
 end module diagwrng_mod

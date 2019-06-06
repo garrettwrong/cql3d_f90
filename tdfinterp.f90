@@ -205,7 +205,7 @@ contains
       fdist=exp(fdist)
 
       return
-      end
+      end subroutine tdfinterp
 
 !
 end module tdfinterp_mod

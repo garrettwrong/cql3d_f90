@@ -85,7 +85,7 @@ contains
     read(2,sousetup)
     read(2,eqsetup)
     read(2,rfsetup)
-    !lose(2)
+    close(2)
 
     !..................................................................
     !     Call routine which finds electron and ion species indices.
@@ -141,7 +141,7 @@ contains
 
     open(unit=2,file="cqlinput",delim='apostrophe',status="old")
     call frset(lrz,noplots,nmlstout)   ! Uses unit 2
-    !lose(2)
+    close(2)
 
     !..................................................................
     !     Call an initialization routine which determines flux surface
@@ -213,8 +213,8 @@ contains
     call tdnflxs(1)
     !     Copy current distribution f into f_
     call dcopy(iyjx2*ngen*lrors, &
-         f(0:iyjx2*ngen*lrors-1,0,1,1),1, &
-         f_(0:iyjx2*ngen*lrors-1,0,1,1),1)
+          f(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
+         f_(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
     !     bring background profiles up to time step n
     if(nefiter.eq.1) call profiles
     ! Reset time step if (n+1).eq.nondtr1(i). .AND. LRZMAX=1
@@ -245,8 +245,8 @@ contains
        ! (For lbdry0='enabled', coeff matrix is set up
        !   to automatically maintain unicity.)
        if (lbdry0.ne."enabled") then !-YuP: moved here from impavnc0
-          call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1, &
-               fxsp(0:iyjx2-1,0,k,l_),1)
+          call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1, &
+                        fxsp(0:iy+1,0:jx+1,k,l_),1)
           s=0.
           t=0.
           do 2100 i=1,iy

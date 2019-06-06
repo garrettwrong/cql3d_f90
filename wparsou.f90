@@ -41,7 +41,8 @@ contains
       if (n .eq. 0) return
 !%OS
 
-      call bcast(spasou(0:iyjx2*ngen*lrors-1,0,1,1),zero,iyjx2*ngen*lrors)
+      !call bcast(spasou(0:iy+1,0:jx+1,1:ngen,1:lrors),zero,iyjx2*ngen*lrors)
+      spasou = zero
       call bcast(zdns,zero,lrors)
       call bcast(zdnspa,zero,lrors)
       call bcast(zdnvel,zero,lrors)
@@ -338,5 +339,6 @@ contains
 !%OS
 
       return
-      end
+      end subroutine wparsou
+
 end module wparsou_mod

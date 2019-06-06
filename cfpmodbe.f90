@@ -56,5 +56,6 @@ contains
  2000 continue
       bk2=bk0+2.*bk1/x
       return
-      end
+      end subroutine cfpmodbe
+
 end module cfpmodbe_mod

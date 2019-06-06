@@ -161,5 +161,6 @@ contains
       close(unit=iunwrif)
       !pause
       return
-      end
+      end subroutine tdwritef
+
 end module tdwritef_mod

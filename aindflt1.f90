@@ -87,6 +87,6 @@ contains
       nnr=nnra
 
       return
-      end
+      end subroutine aindflt1
 
 end module aindflt1_mod

@@ -349,5 +349,7 @@ contains
  10     continue
  20   continue
       return
-      end
+      end subroutine urfsetup
+
+
 end module urfsetup_mod

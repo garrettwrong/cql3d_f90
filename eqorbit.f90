@@ -477,7 +477,7 @@ contains
             if (bpsi_(l-1).gt.bpsi_(l)) then
                iwarn=iwarn+1
                if (iwarn.eq.1) then
-                 write(*,1000) l,rmag,rcon ! XXX had , bug
+                 write(*,1000) l,rmag,rcon ! XXX had , bug  YuP:agreed
                  !print*,bpsi_(1:l)
                end if
                bpsi_(l)=bpsi_(l-1)+em40 !YuP[2015/05/03] redefine: increasing
@@ -809,5 +809,7 @@ contains
       endif
 
       return
-      end
+      end subroutine eqorbit
+
+
 end module eqorbit_mod

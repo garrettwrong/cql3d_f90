@@ -37,8 +37,8 @@ contains
 !     Compute the new density..
 !..................................................................
 
-      call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp2(0:iyjx2-1,0),1)
-      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2,0),1)
+      call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp2(0:iy+1,0:jx+1),1)
+      call dcopy(iyjx2,temp2(0:iy+1,0:jx+1), 1,temp1(0:iy+1,0:jx+1),1)
       call bcast(tam1,zero,jx)
       call bcast(tam4,zero,jx)
 
@@ -132,7 +132,7 @@ contains
          enddo ! j
       else  !---> nbctime=0 (not a time-dependent profile)
          ratio(k,lr_)=xlndn00(k,lr_)/runden ! field-line-aver <n>
-         call dscal(iyjx2,ratio(k,lr_),f(0:iyjx2-1,0,k,l_),1) !rescale f
+         call dscal(iyjx2,ratio(k,lr_),f(0:iy+1,0:jx+1,k,l_),1) !rescale f
 !         write(*,'(a,3i4,3e13.5)')'diagscal: n,k,lr,xlndn00,runden,gn',
 !     +                               n,k,lr_,xlndn00(k,lr_),runden,gn
          write(*,'(a,3i4,e13.5)') &
@@ -149,5 +149,6 @@ contains
       endif
 
       return
-      end
+      end subroutine diagscal
+
 end module diagscal_mod

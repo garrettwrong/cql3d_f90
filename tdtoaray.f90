@@ -95,5 +95,6 @@ contains
  30     continue
       endif
       return
-      end
+      end subroutine tdtoaray
+
 end module tdtoaray_mod

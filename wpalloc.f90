@@ -78,5 +78,6 @@ contains
 !MPIINSERT_ENDIF_RANK
 
       return
-      end
+      end subroutine wpalloc
+
 end module wpalloc_mod

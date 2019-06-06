@@ -236,7 +236,7 @@ contains
     !     the specific definition of the radial coordinate.
     !..................................................................
 
-    write(*,*)'eqrhopsi: generate,radcoord: ',generate,radcoord
+      write(*,*)'eqrhopsi: generate,radcoord: ',generate,radcoord
 
     if (generate.eq."enabled") then     ! generate eqpsi
        !        nzc=(nnz-1)/2+1                   ! up-down symmetry assumed

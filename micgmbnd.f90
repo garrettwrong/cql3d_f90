@@ -54,5 +54,7 @@ contains
  100    format(i4,3(1pe16.8),3(1pe10.2))
  10   continue
       return
-      end
+      end subroutine micgmbnd
+
+
 end module micgmbnd_mod

@@ -176,5 +176,6 @@ contains
       CALL PGSCH(1.) ! restore character size; default is 1.
 
       return
-      end
+      end subroutine pltvflux
+
 end module pltvflux_mod

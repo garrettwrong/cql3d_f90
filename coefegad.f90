@@ -31,5 +31,6 @@ contains
  11     continue
  10   continue
       return
-      end
+      end subroutine coefegad
+
 end module coefegad_mod

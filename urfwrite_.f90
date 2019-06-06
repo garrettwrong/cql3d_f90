@@ -197,9 +197,8 @@ contains
       enddo  !  iray
 
 !..................................................................
-
-
       close(unit=i_)
       return
-      end
+      end subroutine urfwrite_
+
 end module urfwrite__mod

@@ -79,5 +79,6 @@ contains
  31     continue
  30   continue
       return
-      end
+      end subroutine eqelpse
+
 end module eqelpse_mod

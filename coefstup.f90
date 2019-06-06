@@ -54,7 +54,7 @@ contains
       if (ifag.eq.0) then
         call bcast(so,zero,iyjx2)
       else
-        call dcopy(iyjx2,source(0:iyjx2-1,0,k,indxlr_),1,so,1)
+        call dcopy(iyjx2,source(0:iy+1,0:jx+1,k,indxlr_),1,so,1)
       endif
       xrf=0.
 
@@ -129,5 +129,7 @@ contains
 !%OS  endif
 
       return
-      end
+      end subroutine coefstup
+
+
 end module coefstup_mod

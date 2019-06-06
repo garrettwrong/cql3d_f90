@@ -28,7 +28,9 @@ contains
 
 !..... input: ls,dz,flux0,flux1,flux2
 
-      dimension dz(0:ls+1),flux1(0:ls+1),flux2(0:ls+1)
+      dimension dz(1:ls),flux1(0:ls+1),flux2(0:ls+1)
+         !YuP[2019-05-30] corrected sub.efld_cd
+         !                so that dz argument starts with index 1.
 
 !.....input/output:
       dimension elparnw(0:ls+1)
@@ -53,7 +55,7 @@ contains
       enddo
 
       return
-      end
+      end subroutine efld_cd
 !
 !
       real(c_double) function fluxpar &
@@ -106,5 +108,6 @@ contains
       endif
 
       return
-      end
+      end function fluxpar
+
 end module esefld_mod

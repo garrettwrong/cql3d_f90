@@ -38,7 +38,7 @@ contains
       if (pltvlhb.ne."enabled") return
       if (pltovlp.eq."enabled".and. mrfn.gt.1) then
 !cc        call bcast(temp1(1,0),zero,iy*(jx+1))  ! YuP-101215: error?
-        call bcast(temp1(0:iyjx2-1,0),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
+        call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
 
 
         do 560 k=1,mrfn
@@ -110,7 +110,7 @@ contains
  661  format("vpar21/vth=",1pe15.7,"   vpar11/vth=",1pe15.7)
 
       return
-      end
+      end subroutine vlhbplt
 
 
 end module vlhbplt_mod

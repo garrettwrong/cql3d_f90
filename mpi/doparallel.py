@@ -72,7 +72,7 @@ def procbuf():
     s = string.join(string.split(str),'')
     for p in pat:
         if p in s:
-            printbuf('CMPI :::')
+            printbuf('!MPI :::')
             return
     printbuf()
 
@@ -128,7 +128,7 @@ def start(s, D):
 ## main blocking module
 ## YuP[07-2016] removed usage of block.mpi as it was inserting lines at wrong place.
 ## YuP: Instead, use appropriate lines from mpins_par.f 
-##     (such as CMPIINSERT_IF_RANK_NE_0_RETURN) in subroutines which are
+##     (such as !MPIINSERT_IF_RANK_NE_0_RETURN) in subroutines which are
 ##     supposed to be called by mpirank=0 only.
 def block():
     ## blocking lines
@@ -164,7 +164,7 @@ def dompi():
     ## reading insertions
     L = open(sys.argv[3],'r').readlines()
     for l in L:
-        if l[0]=='C':
+        if (l[0]=='C') | (l[0]=='!'):
             key = string.strip(l)
             ins[key] = []
         else:
@@ -173,15 +173,15 @@ def dompi():
     mode = ''
     for l in out:
         if mode=='replace':
-            inf.append('CMPI :::'+l)
+            inf.append('!MPI :::'+l)
             mode = ''
             continue
         ll = string.strip(l)
-        if l[0:4]=='CMPI' and ins.has_key(ll):
-            inf.append('CMPI >>>')
+        if ((l[0:4]=='CMPI')|(l[0:4]=='!MPI')) and ins.has_key(ll):
+            inf.append('!MPI >>>')
             for i in ins[ll]:
                 inf.append(i)
-            inf.append('CMPI <<<')
+            inf.append('!MPI <<<')
             if l[0:11]=='CMPIREPLACE':
                 mode = 'replace'
             continue

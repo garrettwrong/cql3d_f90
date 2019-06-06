@@ -33,7 +33,7 @@ contains
       call bcast(vderb(1:iy,lr_),zero,iy)
       call bcast(psicu(1:iy,lr_),zero,iy)
       call bcast(psiqu(1:iy,lr_),zero,iy)
-      call bcast(sincosba(1:iy*ngen,1,lr_),zero,iy*ngen)
+      call bcast(sincosba(1:iy,1:ngen,lr_),zero,iy*ngen)
 
 
       lrange=lz
@@ -134,5 +134,7 @@ contains
 !         write(*,*)'bavgmax psimx=',lr_,psimx(lr_)
 !         if(lr_.eq.1) pause
       return
-      end
+      end subroutine bavgmax
+
+
 end module bavgmax_mod

@@ -83,5 +83,7 @@ contains
  1000   continue
       endif
       return
-      end
+      end subroutine eqcoord
+
+
 end module eqcoord_mod

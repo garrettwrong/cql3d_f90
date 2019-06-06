@@ -83,5 +83,6 @@ contains
       call bcast(f_vtor,one,jx*ngen*lrors*18)
 
       return
-      end
+      end subroutine tdtrflg
+
 end module tdtrflg_mod

@@ -6,11 +6,11 @@ module urfb0_mod
 
   use bcast_mod, only : bcast
   use tdnflxs_mod, only : tdnflxs
-  !XXXXXXXXXXX
+
   !use urfpackm_mod, only : unpack
   !use urfpackm_mod, only : unpack16
-  external unpack
-  external unpack16
+  external unpack    !XXXXXXXXXXX
+  external unpack16  !XXXXXXXXXXX
 
   !---END USE
 
@@ -50,8 +50,9 @@ contains
 !..................................................................
 !     Zero out the coefficients: all flux surfaces
 !..................................................................
-      call bcast(urfb(1:iyjx*lrz*mrfn,1,1,1),zero,iyjx*lrz*mrfn)
-      call bcast(urfc(1:iyjx*lrz*mrfn,1,1,1),zero,iyjx*lrz*mrfn)
+      call bcast(urfb,zero,iyjx*lrz*mrfn)
+      call bcast(urfc,zero,iyjx*lrz*mrfn)
+      ! urfb and urfc are dimensioned as (1:iy,1:jx,1:lrz,1:mrfn)
       !call bcast(urfe(1,1,1,1),zero,iyjx*lrz*mrfn)
       !call bcast(urff(1,1,1,1),zero,iyjx*lrz*mrfn)
 !YuP[03/18/2015] urfe,urff are expressed through urfb,urfc
@@ -226,6 +227,7 @@ contains
                !if(urfb_version.eq.1)then ! 2 is the new version developed by YuP
                  ! if 1, it will use the original version
                  !XXX I hope you guys really know what you are doing...!
+                 !YuP: if it does not work in f90, the whole run will be screwed...
                  call unpack(ilowp(locatn,krf),8,ilim1(1),jjx)
                  call unpack(iupp(locatn,krf),8,ilim2(1),jjx)
                  call unpack16(ifct1_(locatn16,krf),8,ifct1(1),jjx)
@@ -474,7 +476,7 @@ contains
 !MG end added 11/13/2017
 
       return
-      end
+      end subroutine urfb0
 
 
 
@@ -569,7 +571,7 @@ contains
       else ! res.region is shifted from upar=0 point
          umn= min(abs(vparlo),abs(vparup))
          umn_norm= umn/vnorm
-         jmn= luf_bin(umn_norm,x) ! x(jmn-1) <= umn_norm <  x(jmn)
+         jmn= luf_bin(umn_norm,x(1:jx)) ! x(jmn-1) <= umn_norm <  x(jmn)
          jmn= max(2,jmn)  ! to be sure jmn>1
          jmn= min(jmn,jx) ! to be sure jmn is not exceeding jx
       endif
@@ -971,7 +973,7 @@ contains
       enddo  ! loop in j
 
       return
-      end
+      end subroutine urfb_add
 
 
 
@@ -1048,6 +1050,6 @@ contains
 
  10   continue
       return
-      end function
+      end function luf_bin
 
 end module urfb0_mod

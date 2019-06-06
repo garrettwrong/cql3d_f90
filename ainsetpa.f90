@@ -192,5 +192,6 @@ contains
       nonch=nstop+1 !!! Before 101220: nonch=noncha (==2000)
 
       return
-      end
+      end subroutine ainsetpa
+
 end module ainsetpa_mod

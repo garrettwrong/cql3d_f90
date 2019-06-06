@@ -42,5 +42,7 @@ contains
       flxavg_=sum2/sum1
       flxavgd_=sum1
       return
-      end
+      end subroutine eqflxavg
+
+
 end module eqflxavg_mod

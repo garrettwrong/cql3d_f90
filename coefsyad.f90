@@ -30,5 +30,6 @@ contains
  21     continue
  20   continue
       return
-      end
+      end subroutine coefsyad
+
 end module coefsyad_mod

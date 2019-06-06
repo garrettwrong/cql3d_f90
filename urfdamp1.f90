@@ -5,7 +5,7 @@ module urfdamp1_mod
   use iso_c_binding, only : c_double
 
   use tdnflxs_mod, only : tdnflxs
-  !XXXXXXXXX these require disbaling TKR checks !!
+  !XXXXXXXXX these require disabling TKR checks !!
   !use urfpackm_mod, only : unpack
   !use urfpackm_mod, only : unpack16
   external unpack
@@ -411,8 +411,8 @@ contains
  10   continue ! do iray=nray0,nray(krf)
 
 
-
-
       return
-      end
+      end subroutine urfdamp1
+
+
 end module urfdamp1_mod

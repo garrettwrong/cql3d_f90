@@ -70,7 +70,7 @@ c
 c
 c..................................................................
 c
-c     Highlights of code history (see also a_change.h):
+c     Highlights of code history (see also a_change):
 c
 c     10/01/2017
 c     Ampere-Faraday equations solved self-consistently for the 

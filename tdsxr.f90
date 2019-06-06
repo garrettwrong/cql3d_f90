@@ -108,7 +108,7 @@ contains
 !....................................................................
 
       if (illcal .eq. 1) then
-        call dcopy(iyjx2,f(0:iyjx2-1,0,kelec,l_),1,temp2(0:iyjx2-1,0),1)
+        call dcopy(iyjx2,f(0:iy+1,0:jx+1,kelec,l_),1,temp2(0:iy+1,0:jx+1),1)
       else
         zthta=0.5*fmass(kelec)*vnorm**2/(temp(kelec,lr_)*ergtkev)
         zcoef=vnorm**3*reden(kelec,lr_)/ &
@@ -157,7 +157,7 @@ contains
 !     Copy the distribution into temp3 (for cfpleg)
 !......................................................................
 
-      call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
+      call dcopy(iyjx2,temp2(0:iy+1,0:jx+1),1,temp3(0:iy+1,0:jx+1),1)
 
       do 20 m=0,msxr
         call bcast(feta(1:jx,m),zero,jx)
@@ -261,5 +261,7 @@ contains
 !MG end  added 11/13/2017
 
       return
-      end
+      end subroutine tdsxr
+
+
 end module tdsxr_mod

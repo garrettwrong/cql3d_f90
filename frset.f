@@ -6,7 +6,7 @@ c
       implicit integer (i-n), real(c_double) (a-h,o-z)
       include 'frcomm.h77'
       include 'frname.h77'
-CMPIINSERT_INCLUDE
+!MPIINSERT_INCLUDE
 
       character*1024 t_
       character*8 noplots,nmlstout
@@ -131,7 +131,7 @@ c     Reset npart, for nubeam list case
       if (read_birth_pts.eq."enabled") npart=nbirth_pts
 
 
-CMPIINSERT_IF_RANK_EQ_0
+!MPIINSERT_IF_RANK_EQ_0
       ! make plots on mpirank.eq.0 only
       if (noplots .ne. "enabled1") then
       write(t_,1000)
@@ -149,7 +149,7 @@ CMPIINSERT_IF_RANK_EQ_0
       RILIN=13.
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
       endif
-CMPIINSERT_ENDIF_RANK
+!MPIINSERT_ENDIF_RANK
 
 
 c..................................................................

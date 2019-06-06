@@ -29,7 +29,7 @@ contains
       subroutine pltvec(lefct)
       use param_mod
       use cqlcomm_mod
-      use advnce_mod
+      use advnce_mod !here: in pltvec.  To get gfi(),hfi(),gfu(),hfu()
       use r8subs_mod, only : dcopy
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -212,8 +212,8 @@ contains
 
 
          if (lefct .eq. 3 .and. xrf .eq. 0) go to 190
-         call bcast(temp5(0:iyjx2-1,0),zero,iyjx2)
-         call bcast(temp4(0:iyjx2-1,0),zero,iyjx2)
+         call bcast(temp5(0:iy+1,0:jx+1),zero,iyjx2)
+         call bcast(temp4(0:iy+1,0:jx+1),zero,iyjx2)
 !        In the following, tam2 and tam3 are the code fluxes Gamma_x and
 !          sin(theta)*Gamma_theta interpolated onto the code mesh
 !          x,theta.  temp5 and temp4 are the parallel and perpendicular
@@ -222,7 +222,7 @@ contains
             do 140 i=2,iy-1
                do 141 j=2,jxm1
                   tam2(j)=-(gfi(i,j,k)+gfi(i,j-1,k))*.5/xsq(j)
-                  tam3(j)=-(hfi(i,j)+hfi(i-1,j))*.5*xi(j)
+                  tam3(j)=-(hfi(i,j,k,l_)+hfi(i-1,j,k,l_))*.5*xi(j)
                   temp5(i,j)=tam2(j)*coss(i,l_)-tam3(j)
                   temp4(i,j)=tam2(j)*sinn(i,l_)+tam3(j)/tann(i,l_)
  141           continue
@@ -236,20 +236,20 @@ contains
 
 
          else
-            call dcopy(iyjx2,f_(0:iyjx2-1,0,k,l_),1, &
-                 temp1(0:iyjx2-1,0),1)
-            call dcopy(iyjx2,fxsp(0:iyjx2-1,0,k,l_),1, &
-                 temp2(0:iyjx2-1,0),1)
+            call dcopy(iyjx2,  f_(0:iy+1,0:jx+1,k,l_),1, &
+                            temp1(0:iy+1,0:jx+1),1)
+            call dcopy(iyjx2,fxsp(0:iy+1,0:jx+1,k,l_),1, &
+                            temp2(0:iy+1,0:jx+1),1)
             do 240 j=2,jxm1
                do 241 i=2,iy-1
                   temp6(i,j)=-(gfu(i,j,k)+gfu(i,j-1,k))*.5/xsq(j)
  241           continue
  240        continue
-            call dcopy(iyjx2,temp2(0:iyjx2-1,0),1,temp1(0:iyjx2-1,0),1)
-            call dcopy(iyjx2,f(0:iyjx2-1,0,k,l_),1,temp2(0:iyjx2-1,0),1)
+            call dcopy(iyjx2,temp2(0:iy+1,0:jx+1),1,temp1(0:iy+1,0:jx+1),1)
+            call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp2(0:iy+1,0:jx+1),1)
             do 242 i=2,iy-1
                do 243 j=2,jxm1
-                  tam3(j)=-(hfu(i,j)+hfu(i-1,j))*.5*xi(j)
+                  tam3(j)=-(hfu(i,j,k,l_)+hfu(i-1,j,k,l_))*.5*xi(j)
                   temp5(i,j)=temp6(i,j)*coss(i,l_)-tam3(j)
                   temp4(i,j)=temp6(i,j)*sinn(i,l_)+tam3(j)/tann(i,l_)
  243           continue
@@ -271,7 +271,7 @@ contains
 !      write(*,*)'pltvec:  temp4, temp5',
 !     +     ((temp4(i,j),temp5(i,j),i=1,10),j=1,10)
 
-         call dcopy(iyjx2,temp5(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
+         call dcopy(iyjx2,temp5(0:iy+1,0:jx+1),1,temp3(0:iy+1,0:jx+1),1)
 
          call prppr(target,"norm",xll,xlu,xpl,xpu)
 
@@ -279,7 +279,7 @@ contains
          ipxjpx=jpxy*ipxy
          call dcopy(ipxjpx,fpn,1,xhead,1)
 
-         call dcopy(iyjx2,temp4(0:iyjx2-1,0),1,temp3(0:iyjx2-1,0),1)
+         call dcopy(iyjx2,temp4(0:iy+1,0:jx+1),1,temp3(0:iy+1,0:jx+1),1)
 
          call prppr(target,"norm",xll,xlu,xpl,xpu)
 

@@ -31,5 +31,6 @@ contains
       zlog=(((((a7*zx+a6)*zx+a5)*zx+a4)*zx+a3)*zx+a2)*zx+a1
       sigie=exp(zlog)
       return
-      end
+      end function sigie
+
 end module sigie_mod

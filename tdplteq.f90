@@ -184,5 +184,7 @@ contains
 !..................................................................
 
       return
-      end
+      end subroutine tdplteq
+
+
 end module tdplteq_mod

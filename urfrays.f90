@@ -85,5 +85,6 @@ contains
       if (icall.eq.0) imprf=1
       icall=1
       return
-      end
+      end subroutine urfrays
+
 end module urfrays_mod

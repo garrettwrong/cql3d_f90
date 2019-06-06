@@ -233,5 +233,7 @@ contains
  50   continue
 
       return
-      end
+      end subroutine tddiag
+
+
 end module tddiag_mod

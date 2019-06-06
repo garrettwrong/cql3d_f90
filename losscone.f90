@@ -524,7 +524,7 @@ contains
 
 !BH160529      if (lr_.eq.1) STOP  !This is for stop after extended o/p
       return
-      end
+      end subroutine losscone
 
 
 end module losscone_mod

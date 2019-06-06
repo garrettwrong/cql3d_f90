@@ -95,5 +95,6 @@ contains
       sigfn=6.937e-15*enum**2/denom
 
  200  return
-      end
+      end function sigfn
+
 end module sigfn_mod

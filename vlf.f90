@@ -29,7 +29,7 @@ contains
 
 !  *** NOTE: Bunch of write(*,*) statements related to checking
 !            out effect of taunew.  For now, use taunew="disabled".
-!            See comments in a_change.h.
+!            See comments in a_change.
 
 !.................................................................
 !     subroutine vlf is a  cyclotron QL model
@@ -63,7 +63,7 @@ contains
 !
 !      common/temp_imax_old/ imax_old(lza)   ;for checking taunew.
 
-      !XXX see below XXX
+
       integer :: cqlb_size
       complex*16 cwz,cwxyp,cwxym,cei
 
@@ -92,7 +92,7 @@ contains
         allocate(cqlc(iy,jx,lrz,mrfn),STAT=istat)
         allocate(cqle(iy,jx,lrz,mrfn),STAT=istat)
         allocate(cqlf(iy,jx,lrz,mrfn),STAT=istat)
-        cqlb_size=size(cqlb) !XXXXXX BUG, was real(c_double) type, you wanted integer
+        cqlb_size=size(cqlb)
         call bcast(cqlb,zero,cqlb_size)
         call bcast(cqlc,zero,cqlb_size)
         call bcast(cqle,zero,cqlb_size)
@@ -198,10 +198,10 @@ contains
       do 20 l=1,lz
 
         if (cqlpmod.eq."enabled")then !should be one surface: indxlr_=1
-           call bcast (cqlb(1:iyjx,1,indxlr_,krfmode),zero,iyjx)
-           call bcast (cqlc(1:iyjx,1,indxlr_,krfmode),zero,iyjx)
-           call bcast (cqle(1:iyjx,1,indxlr_,krfmode),zero,iyjx)
-           call bcast (cqlf(1:iyjx,1,indxlr_,krfmode),zero,iyjx)
+           call bcast(cqlb(1:iy,1:jx,indxlr_,krfmode),zero,iyjx)
+           call bcast(cqlc(1:iy,1:jx,indxlr_,krfmode),zero,iyjx)
+           call bcast(cqle(1:iy,1:jx,indxlr_,krfmode),zero,iyjx)
+           call bcast(cqlf(1:iy,1:jx,indxlr_,krfmode),zero,iyjx)
         endif
 
         tap1=taper(pol(l,lr_),vlfpol(krfmode), &
@@ -803,14 +803,14 @@ contains
 !..................................................................
 
            if (cqlpmod.eq."enabled") then ! should be one surface
-           call dcopy(iyjx,cqlb(1:iyjx,1,1,krfmode),1, &
-                   wcqlb(1:iyjx,1,krfmode,l),1)
-           call dcopy(iyjx,cqlc(1:iyjx,1,1,krfmode),1, &
-                wcqlc(1:iyjx,1,krfmode,l),1)
-           call dcopy(iyjx,cqle(1:iyjx,1,1,krfmode),1, &
-                wcqle(1:iyjx,1,krfmode,l),1)
-           call dcopy(iyjx,cqlf(1:iyjx,1,1,krfmode),1, &
-                wcqlf(1:iyjx,1,krfmode,l),1)
+           call dcopy(iyjx,cqlb(1:iy,1:jx,1,krfmode),1, &
+                          wcqlb(1:iy,1:jx,krfmode,l),1)
+           call dcopy(iyjx,cqlc(1:iy,1:jx,1,krfmode),1, &
+                          wcqlc(1:iy,1:jx,krfmode,l),1)
+           call dcopy(iyjx,cqle(1:iy,1:jx,1,krfmode),1, &
+                          wcqle(1:iy,1:jx,krfmode,l),1)
+           call dcopy(iyjx,cqlf(1:iy,1:jx,1,krfmode),1, &
+                          wcqlf(1:iy,1:jx,krfmode,l),1)
            endif
 
 !..................................................................
@@ -958,7 +958,7 @@ contains
       call vlfbplt
 
       return
-      end
+      end subroutine vlf
 
 
 end module vlf_mod

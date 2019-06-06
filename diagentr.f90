@@ -18,7 +18,7 @@ module diagentr_mod
 
 !
 !
-!XXX GBW, i may have messed up the dcopy bounds here, try 0:end-1
+!XXX GBW, i may have messed up the dcopy bounds here, try 0:end-1. YuP:fixed
 
 contains
 
@@ -26,7 +26,7 @@ contains
       use param_mod
       use cqlcomm_mod
       use r8subs_mod
-      use advnce_mod
+      use advnce_mod !here: in diagentr(). To get gfu(),gfi()
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
@@ -176,7 +176,7 @@ contains
       elseif (lefct.eq.5) then
         if (n .lt. nonso(k,1) .or. n .gt. noffso(k,1)) go to 3000
         call bcast(tam1,zero,jx)
-        call dcopy(iyjx2,source(0:iyjx2,0,k,indxlr_),1,so,1)
+        call dcopy(iyjx2,source(0:iy+1,0:jx+1,k,indxlr_),1,so,1)
         do 99 i=1,iy
           do 100 j=1,jx
             tam1(j)=tam1(j)+so(i,j)*cynt2(i,l_)*vptb(i,lr_)
@@ -192,7 +192,7 @@ contains
       elseif (lefct.eq.6 .or. lefct.eq.7) then
         if(lefct.eq.6) then
           call coefload(k)
-          call dcopy(iyjx2,gon(0:iyjx2,0),1,temp1(0:iyjx2,0),1)
+          call dcopy(iyjx2,gon(0:iy+1,0:jx+1),1,temp1(0:iy+1,0:jx+1),1)
           go to 105
         endif
         call coefload(k)
@@ -273,7 +273,7 @@ contains
 !..................................................................
 
       if (implct .eq. "disabled") then
-        call dcopy(iyjx2,f_(0:iyjx2,0,k,l_),1,temp1(0:iyjx2,0),1)
+        call dcopy(iyjx2,f_(0:iy+1,0:jx+1,k,l_),1,temp1(0:iy+1,0:jx+1),1)
       endif
 
 !..................................................................
@@ -364,7 +364,7 @@ contains
  2000 entr(k,4,l_)=entr(k,4,l_)+entr(k,lefct,l_)
  3000 continue
       return
-      end
+      end subroutine diagentr
 !
 !
 !=====================================================================
@@ -410,7 +410,7 @@ contains
 !      write(*,*)'diagentr: entr(1,5,*)',(entr(1,5,ll),ll=1,lrz)
 
       return
-      end
+      end subroutine diagentr_vol
 
 
 !
@@ -418,7 +418,7 @@ contains
 !=====================================================================
 !
 !
-      real(c_double) function gfi(i,j,k)
+      real(c_double) function gfi(i,j,k) ! l_ is in cqlcomm_mod
       use param_mod
       use cqlcomm_mod
       use advnce_mod, only : cl, fpj0, fpj, fpjp
@@ -428,15 +428,15 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
       if((i.ne.itl .and. i.ne.itu) .or. symtrap.ne."enabled") then
-       gfii= dc(i,j)*0.5*dyi(i,l_)*(fpjp(i,j,k)-fpj0(i-1,j,k))
+       gfii= dc(i,j)*0.5*dyi(i,l_)*(fpjp(i,j,k,l_)-fpj0(i-1,j,k,l_))
        else
        gfii= &
-        +cl(itl-1,j)*eyp5(itl-1,l_)*(fpjp(itl-1,j,k)-fpj(itl-1,j,k)) &
-        +2.*cl(itl+1,j)*eyp5(itl,l_)*(fpj(itl+1,j,k)-fpj(itl,j,k)) &
-        +cl(itu+1,j)*eyp5(itu,l_)*(fpj(itu+1,j,k)-fpj0(itu,j,k))
+        +cl(itl-1,j,l_)*eyp5(itl-1,l_)*(fpjp(itl-1,j,k,l_)-fpj(itl-1,j,k,l_)) &
+        +2.*cl(itl+1,j,l_)*eyp5(itl,l_)*(fpj(itl+1,j,k,l_)-fpj(itl,j,k,l_)) &
+        +cl(itu+1,j,l_)*eyp5(itu,l_)*(fpj(itu+1,j,k,l_)-fpj0(itu,j,k,l_))
       endif
 
-      gfi=da(i,j)*fpj(i,j,k) &
+      gfi=da(i,j)*fpj(i,j,k,l_) &
          +db(i,j)*exp5(j)*(f(i,j+1,k,l_)-f(i,j,k,l_)) +gfii
 
       end function gfi
@@ -446,7 +446,7 @@ contains
 !=====================================================================
 !
 !
-      real(c_double) function gfu(i,j,k)
+      real(c_double) function gfu(i,j,k)  ! l_ is in cqlcomm_mod
       use param_mod
       use cqlcomm_mod
       use advnce_mod, only : cdf, f1j, f2j
@@ -457,13 +457,13 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
       if(i .ne. itl  .and. i .ne. itu) then
-        gfuu=dc(i,j)*(f1j(i+1,j)-f1j(i-1,j))*0.5*dyi(i,l_)
+        gfuu=dc(i,j)*(f1j(i+1,j,k,l_)-f1j(i-1,j,k,l_))*0.5*dyi(i,l_)
       else
-        gfuu=cdf(j)
+        gfuu=cdf(j,k,l_)
       endif
 
 
-      gfu=da(i,j)*f2j(i,j) &
+      gfu=da(i,j)*f2j(i,j,k,l_) &
          +db(i,j)*(temp2(i,j+1)-temp2(i,j))*exp5(j) +gfuu
 
       end function gfu

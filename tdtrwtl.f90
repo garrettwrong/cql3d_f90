@@ -33,5 +33,7 @@ contains
  1    continue
 
       return
-      end
+      end subroutine tdtrwtl
+
+
 end module tdtrwtl_mod

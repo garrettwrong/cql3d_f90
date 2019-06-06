@@ -121,5 +121,7 @@ contains
       CALL PGUNSA
 
       return
-      end
+      end subroutine pltdnz
+
+
 end module pltdnz_mod

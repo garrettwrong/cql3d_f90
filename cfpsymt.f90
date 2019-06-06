@@ -37,5 +37,6 @@ contains
  2      continue
  1    continue
       return
-      end
+      end subroutine cfpsymt
+
 end module cfpsymt_mod
