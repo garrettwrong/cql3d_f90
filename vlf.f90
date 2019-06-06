@@ -29,7 +29,7 @@ contains
 
 !  *** NOTE: Bunch of write(*,*) statements related to checking
 !            out effect of taunew.  For now, use taunew="disabled".
-!            See comments in a_change.h.
+!            See comments in a_change.
 
 !.................................................................
 !     subroutine vlf is a  cyclotron QL model

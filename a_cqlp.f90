@@ -55,7 +55,7 @@ program a_cql3d
 !
 !..................................................................
 !
-!     Highlights of code history (see also a_change.h):
+!     Highlights of code history (see also a_change):
 !
 !     02/01/2011
 !     MPI version of code (YuP)

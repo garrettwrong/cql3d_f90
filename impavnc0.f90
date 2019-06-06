@@ -819,7 +819,7 @@ contains
                       !YuP[2019-05-30] Note that fh() and fg() are allocated as
                       ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index only, for now.
 
-                      !BH170407  Following had very small effect on a test (see a_change.h),
+                      !BH170407  Following had very small effect on a test (see a_change),
                       !BH170407  and have concern it could affect stability of the solution.
                       !BH170407                      !BH170406
                       !BH170407                      !Adding nonlinear (NL) term using previous iteration fg:

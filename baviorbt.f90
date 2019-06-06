@@ -26,7 +26,7 @@ contains
 
 !  *** NOTE: Bunch of write(*,*) statements related to checking
 !            out effect of taunew.  For now, might use taunew="disabled".
-!            See comments in a_change.h.
+!            See comments in a_change.
 
 !...................................................................
 !     New fully numerical calculation of tau and dtau. (BH: 970211).
