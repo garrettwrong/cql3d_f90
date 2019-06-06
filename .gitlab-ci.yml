@@ -1,11 +1,19 @@
 stages:
+  - lint
   - build
   - test
 
-image: garrettwrong/cql3d_f90_centos-7
+checkbadchars:
+  stage: lint
+  script: grep -axv '.*' *.f *.f90 *.h *.h77 README* LICENSE* cqlinput* CQL3D_users.txt eqdsk
+
+enforce_unixish:
+  stage: lint
+  script: test $(file -k  *.f *.f90 *.h *.h77 README* LICENSE* cqlinput* CQL3D_users.txt eqdsk | grep -c "CRLF") -eq 0
 
 build:centos7:
   stage: build
+  image: garrettwrong/cql3d_f90_centos-7
   script:
   - make -f  makefile_gfortran64.CentOS7
   artifacts:
@@ -15,6 +23,7 @@ build:centos7:
 
 case1:
   stage: test
+  image: garrettwrong/cql3d_f90_centos-7
   script:
   - cd ci/case1
   - ../../xcql3d_gfortran64
