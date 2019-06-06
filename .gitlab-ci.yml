@@ -30,5 +30,10 @@ case1:
   - cd ci/case1
   - ../../xcql3d_gfortran64
   - nccmp -dmgfs reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
+  artifacts:
+    paths:
+    - ci/case1/reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
+    expire_in: 1 week
+
   dependencies:
   - build:centos7
