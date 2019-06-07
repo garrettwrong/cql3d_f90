@@ -11,7 +11,8 @@ module aindfpa_mod
 
 contains
 
-      subroutine aindfpa
+  subroutine aindfpa
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -28,43 +29,43 @@ contains
 
 !.......................................................................
 
-      ibox(1)="unset"
-      ibox(2)="unset"
-      ibox(3)="unset"
-      iuser="unset"
-      ioutput(1)=6
-      ioutput(2)=0
-      mnemonic="mnemonic"
+      setup0%ibox(1)="unset"
+      setup0%ibox(2)="unset"
+      setup0%ibox(3)="unset"
+      setup0%iuser="unset"
+      setup0%ioutput(1)=6
+      setup0%ioutput(2)=0
+      setup0%mnemonic="mnemonic"
 
-!     Avoid some special calls, if special_calls=disabled in
+!     Avoid some special calls, if setup0%special_calls=disabled in
 !     &setup0 namelist.
 !     [System calls not supported on some machines.]
 !     [Could use this for other system dependent branching, in future....]
 
-      special_calls="enabled"
+      setup0%special_calls="enabled"
 
 !     main parameters (used to allocate memory and determine model)
-      lrz=0
-      lrzmax=0
-      lrzdiff="disabled"
-      cqlpmod="disabled"
-      ls=0
-      lsmax=0
-      lsdiff="disabled"
+      setup0%lrz=0
+      setup0%lrzmax=0
+      setup0%lrzdiff="disabled"
+      setup0%cqlpmod="disabled"
+      setup0%ls=0
+      setup0%lsmax=0
+      setup0%lsdiff="disabled"
       do 100 ll=0,lrorsa
-        lrindx(ll)=ll
-        lsindx(ll)=ll
+        setup0%lrindx(ll)=ll
+        setup0%lsindx(ll)=ll
  100  continue
 
-      noplots="disabled"
-      nmlstout="trnscrib"
-      lnwidth=3  ! Plot line width in units of 0.005 inches
+      setup0%noplots="disabled"
+      setup0%nmlstout="trnscrib"
+      setup0%lnwidth=3  ! Plot line width in units of 0.005 inches
 
 !      nlwritf=.false.
 !      nlrestrt=.false.
 
-      nlwritf="disabled"
-      nlrestrt="disabled"
+      setup0%nlwritf="disabled"
+      setup0%nlrestrt="disabled"
 
       return
       end subroutine aindfpa

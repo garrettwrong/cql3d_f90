@@ -13,7 +13,8 @@ module tdplteq_mod
 
 contains
 
-      subroutine tdplteq(krf)
+  subroutine tdplteq(krf)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use frplteq_mod, only : micfrplt, textt
@@ -39,7 +40,7 @@ contains
       pltrays="enabled" ! for plotting rays over cross-sectional view.
                         ! Can be moved to namelist later.
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       plteq="enabled"
       if (plteq.eq."disabled") return
 
@@ -101,7 +102,7 @@ contains
 
       IF (LRZMAX.GT.200) STOP 'TDPLTEQ: CHECK DIM OF TEXTT'
 
-      do 10 l=1,lrzmax
+      do 10 l=1,setup0%lrzmax
          IF (LORBIT(L).GT.LFIELDA) STOP 'TDPLTEQ: CHECK DIM OF RTAB1/2'
         do 20 j=1,lorbit(l)
            RTAB1(j)=solr(lorbit(l)+1-j,l)
@@ -140,12 +141,12 @@ contains
              RTAB1(ilim)=rlimiter(ilim)
              RTAB2(ilim)=zlimiter(ilim)
           enddo
-          CALL PGSLW(lnwidth*2) ! bold
+          CALL PGSLW(setup0%lnwidth*2) ! bold
           CALL PGLINE(nline,RTAB1,RTAB2)
           if(machine.eq."mirror") then
           CALL PGLINE(nline,-RTAB1,RTAB2) !mirror area to the left of Z-axis
           endif
-          CALL PGSLW(lnwidth) ! restore
+          CALL PGSLW(setup0%lnwidth) ! restore
         endif
 
       endif !eqsym.eq.'none' or (urfmod.ne."disabled")&(pltrays.eq.'enabled')

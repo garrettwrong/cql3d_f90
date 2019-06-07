@@ -51,7 +51,7 @@ contains
 
       ampfarl= (4.d0*pi*(-charge*vnorm))/ &
 !BH131110     +        vnorm*drpmconz(ll)*dlpsii(ll)*cn
-!BH131110, BUT think vnorm* is correct, cancels vnorm in impanvc0:dfdvz &
+!BH131110, BUT think vnorm* is correct, cancesetup0%ls vnorm in impanvc0:dfdvz &
               (clight*dtr) *cn    ! now [statA/cm^2 /cm]
         !YuP[02-2017] removed drpmconz(ll) factor.
         !YuP[03-2017] Removed symm factor next to dlpgpsii(ll) :
@@ -86,37 +86,37 @@ contains
 
 
 !     NOTE: fh is alternatively allocated (differently) in wpalloc.f
-!           when cqlpmod.eq.enabled.
+!           when setup0%cqlpmod.eq.enabled.
 !           fh and fg are allocated here for Kupfer functions.
 !           Only needed for electrons.
-      allocate(fh(0:iy+1,0:jx+1,1,1:lrz),STAT=istat)
+      allocate(fh(0:iy+1,0:jx+1,1,1:setup0%lrz),STAT=istat)
       call bcast(fh,zero,SIZE(fh))
 
-      allocate(fg(0:iy+1,0:jx+1,1,1:lrz),STAT=istat)
+      allocate(fg(0:iy+1,0:jx+1,1,1:setup0%lrz),STAT=istat)
       call bcast(fg,zero,SIZE(fg))
 
-      allocate(ampfln(1:lrz),STAT=istat)
+      allocate(ampfln(1:setup0%lrz),STAT=istat)
       call bcast(ampfln,zero,SIZE(ampfln))
 
-      allocate(ampflh(1:lrz),STAT=istat)
+      allocate(ampflh(1:setup0%lrz),STAT=istat)
       call bcast(ampflh,zero,SIZE(ampflh))
 
-      allocate(ampflg(1:lrz),STAT=istat)
+      allocate(ampflg(1:setup0%lrz),STAT=istat)
       call bcast(ampflg,zero,SIZE(ampflg))
 
-      allocate(ampfa(1:lrz,1:lrz),STAT=istat)
+      allocate(ampfa(1:setup0%lrz,1:setup0%lrz),STAT=istat)
       call bcast(ampfa,zero,SIZE(ampfa))
 
-      allocate(ampfb(1:lrz,1:lrz),STAT=istat)
+      allocate(ampfb(1:setup0%lrz,1:setup0%lrz),STAT=istat)
       call bcast(ampfb,zero,SIZE(ampfb))
 
-      allocate(ampfaa(1:lrz,1:lrz),STAT=istat)
+      allocate(ampfaa(1:setup0%lrz,1:setup0%lrz),STAT=istat)
       call bcast(ampfaa,zero,SIZE(ampfaa))
 
-      allocate(ampfc(1:lrz),STAT=istat)
+      allocate(ampfc(1:setup0%lrz),STAT=istat)
       call bcast(ampfc,zero,SIZE(ampfc))
 
-      allocate(ampf2ebar(1:lrz),STAT=istat)
+      allocate(ampf2ebar(1:setup0%lrz),STAT=istat)
       call bcast(ampf2ebar,zero,SIZE(ampf2ebar))
 
       return
@@ -154,12 +154,12 @@ contains
 !     elecfldn(,,) are the values of elecfld used at each radius,time step,
 !     and iteration, but in statV/cm, evaluated at radial bin centers (as
 !     is elecfld).
-!     elecfldn(0:lrz+1,0:nstop,0:nampfmax)=elecfldc,elecfld(1:lrz),elecfldb
+!     elecfldn(0:setup0%lrz+1,0:nstop,0:nampfmax)=elecfldc,elecfld(1:setup0%lrz),elecfldb
 !                                 for each n,iteration (converted to cgs).
-!     delecfld0(1:lrz,1:nstop)= elecfld(1:lrz,n+1)-elecfld(1:lrz,n)
+!     delecfld0(1:setup0%lrz,1:nstop)= elecfld(1:setup0%lrz,n+1)-elecfld(1:setup0%lrz,n)
 !                              i.e., total change in elecfld over time step
 !                                    evaluated at bin centers.
-!     delecfld0n(1:lrz,1:nstop,1:nampfmax)=change in electric field a each
+!     delecfld0n(1:setup0%lrz,1:nstop,1:nampfmax)=change in electric field a each
 !        step n=1:nstop, and each iteration, evaluated at bin centers.
 !.......................................................................
 
@@ -167,12 +167,12 @@ contains
         ! Do not set elecfldn(.,nn,.) to 0.d0 for nn<nonampf
         ! They were saved as the background el.fld at earlier steps.
         ! See tdchief, L~639
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             psi0bar(ll,nn)=one  !Not presently recalc'd or used.
          enddo  !On ll
       enddo  !On nn
       do nn=1,nstop
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             delecfld0(ll,nn)=zero
             do it=1,nampfmax
                delecfld0n(ll,nn,it)=zero !actually, already done in ainalloc
@@ -184,7 +184,7 @@ contains
       elecfld(0)=elecfldc !Check elecfldc is set properly
 
 !BH170329
-      do ll=0,lrz
+      do ll=0,setup0%lrz
          elecfldn(ll,nonampf,0)=elecfld(ll)/300.d0
       enddo
 
@@ -196,7 +196,7 @@ contains
 ! So commenting it here:
 !      if (nonampf.gt.0) then
 !         do nn=0,nonampf-1
-!            do ll=0,lrz
+!            do ll=0,setup0%lrz
 !               do it=0,nampfmax
 !                  elecfldn(ll,nn,it)=elecfldn(ll,nonampf,1) ! for all it
 !               enddo
@@ -246,15 +246,15 @@ contains
 
 !     Follow subroutine tdxinitl
         if (iproelec.eq."parabola") then
-          elecfldn(lrz+1,nn,0)=elecfldb/300.d0 !here: ampfefldb(nn.ge.nonampf)
+          elecfldn(setup0%lrz+1,nn,0)=elecfldb/300.d0 !here: ampfefldb(nn.ge.nonampf)
           ! nn= nonampf,nonampf+1,...,nstop
         elseif(iproelec.eq."spline") then ! YuP[03-2017] added option
           ! Was set in tdxinitl:
           !call tdinterp("zero","free",ryain,elecin,njene,rya(1), &
-          !       elecfld(1),lrzmax)
+          !       elecfld(1),setup0%lrzmax)
           !elecfldc=elecin(1)
           !elecfldb=elecin(njene)
-          elecfldn(lrz+1,nn,0)=elecfldb/300.d0 !here: ampfefldb(nn.ge.nonampf)
+          elecfldn(setup0%lrz+1,nn,0)=elecfldb/300.d0 !here: ampfefldb(nn.ge.nonampf)
         else
           STOP &
          'ampfefldb: only setup for iproelec.eq."parabola" or "spline" '
@@ -281,13 +281,13 @@ contains
             if (tmdmeth.eq."method1".and.elecc(1).ne.zero) then
 
                if (itme.eq.0) then
-                  elecfldn(lrz+1,nn,0)=elecb(1)/300.d0
+                  elecfldn(setup0%lrz+1,nn,0)=elecb(1)/300.d0
                elseif (itme.lt.nbctime) then
-                  elecfldn(lrz+1,nn,0)=(elecb(itme)+(elecb(itme1) &
+                  elecfldn(setup0%lrz+1,nn,0)=(elecb(itme)+(elecb(itme1) &
                        -elecb(itme))/(bctime(itme1)-bctime(itme)) &
                        *(timett-bctime(itme)))/300.d0
                else
-                  elecfldn(lrz+1,nn,0)=elecb(nbctime)/300.d0
+                  elecfldn(setup0%lrz+1,nn,0)=elecb(nbctime)/300.d0
                endif
             endif
          endif
@@ -296,12 +296,12 @@ contains
       endif  !On nbctime
 
 !     Scale boundary electric field
-      elecfldn(lrz+1,nn,0)=elecscal*elecfldn(lrz+1,nn,0) !here: ampfefldb(nn.ge.nonampf)
+      elecfldn(setup0%lrz+1,nn,0)=elecscal*elecfldn(setup0%lrz+1,nn,0) !here: ampfefldb(nn.ge.nonampf)
 
       !YuP[21-08-2017] Added: copy the boundary value for iteration=0
       ! to all other iterations:
       do niter=0,nampfmax ! or up to nefitera
-         elecfldn(lrz+1,nn,niter)=elecfldn(lrz+1,nn,0) !here: ampfefldb(nn.ge.nonampf)
+         elecfldn(setup0%lrz+1,nn,niter)=elecfldn(setup0%lrz+1,nn,0) !here: ampfefldb(nn.ge.nonampf)
       enddo
 
 
@@ -309,18 +309,18 @@ contains
 !     step radial profile, or previous iteration.
       !it_prev=0 ! YuP[21-08-2017] was 0
       it_prev=nampfmax ! But logically, should be the last? YuP[21-08-2017]
-      do ll=0,lrz
+      do ll=0,setup0%lrz
          elecfldn(ll,nn,0)=elecfldn(ll,nn-1,it_prev)
          !YuP: Now: previous time step, but the LAST iteration at that step
       enddo
 
-!      do ll=0,lrz
+!      do ll=0,setup0%lrz
 !      write(*,*)'ampfefldb: n,ll,elecfldn(ll,n+1,0)*300=',
 !     +                      n,ll,elecfldn(ll,nn,0)*300
 !      enddo
 
 !     Zero delecfld0
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          delecfld0(ll,nn)=zero
          delecfld0n(ll,nn,1)=zero
       enddo
@@ -373,19 +373,19 @@ contains
 
 
 
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          ampfln(ll)=ampfarl(f_(0:iy+1,0:jx+1,kelec,ll),ll)
          ampflh(ll)=ampfarl(fh(0:iy+1,0:jx+1,kelec,ll),ll)
          ampflg(ll)=ampfarl(fg(0:iy+1,0:jx+1,kelec,ll),ll)
          !YuP[2019-05-30] Note that fh() and fg() are allocated as
-         ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index.
+         ! fh(0:iy+1,0:jx+1,1,1:setup0%lrz), i.e. k=1 index.
          ! If kelec>1, we can get a problem here.
       enddo
 
-      do ll=1,lrz ! == l index in notes
+      do ll=1,setup0%lrz ! == l index in notes
 !        BH140302: adjusting - to +, and back
          ampftmp=-(one/(clight*rmag))*drpmconz(ll)*rpconz(ll)
-         do llp=1,lrz ! == l' index in notes
+         do llp=1,setup0%lrz ! == l' index in notes
             !YuP[03-2017] removed dlpsii(ll)/dlpgpsii(ll) factor in ampfarl
             !and added it here as dlpsii(llp)/dlpgpsii(ll)
             ![note that dlpsii is at llp==l' index now, not ll]
@@ -398,11 +398,11 @@ contains
          enddo
       enddo
 
-!     Set up matrix ampfaa for the delecfld0n(1:lrz,nn,it)
+!     Set up matrix ampfaa for the delecfld0n(1:setup0%lrz,nn,it)
 !tmp      Set up ampfaa (coefficient next to deltaE(llp,n+1)
-      call bcast(ampfaa,zero,lrz*lrz)
-      do ll=1,lrz     !== l  in notes
-         do llp=1,lrz !== l' in notes
+      call bcast(ampfaa,zero,setup0%lrz*setup0%lrz)
+      do ll=1,setup0%lrz     !== l  in notes
+         do llp=1,setup0%lrz !== l' in notes
             if (llp.eq.ll) then ! l'=l
                ampfaa(ll,llp)= two -ampfa(ll,llp)
             ! Summing a_{l,l'} over l'  -  Up to l or l-1 ?
@@ -410,9 +410,9 @@ contains
             ! Tests: a very little difference
             ! (summing up to l-1 gives a little bit faster decay of I current)
             elseif (llp.gt.ll) then ! l'>l
-               ! This should be only present if(ll.le.lrz-1)
-               ! But from condition ll < llp (<= lrz)
-               ! it is clear that here we can only find ll.le.lrz-1
+               ! This should be only present if(ll.le.setup0%lrz-1)
+               ! But from condition ll < llp (<= setup0%lrz)
+               ! it is clear that here we can only find ll.le.setup0%lrz-1
                ampfaa(ll,llp)= four*(-one)**(llp-ll)
             else ! llp < ll  (l' < l in notes)
                ampfaa(ll,llp)= -ampfa(ll,llp)
@@ -421,31 +421,31 @@ contains
       enddo
 
       write(*,'(a,2i4)')'ampfsoln: nn,it-1=', nn,it-1
-      do ll=0,lrz+1
+      do ll=0,setup0%lrz+1
         write(*,'(a,i4,2e15.6)') &
       'ampfsoln before soln: ll,elecfldn(ll,nn,it-1)*300,elecfld(ll)=', &
                              ll,elecfldn(ll,nn,it-1)*300,elecfld(ll)
       enddo
 
 !     Set up the rhs vector
-!tmp      Setup ampf2ebar,ampfc  (1:lrz), Check elecfldn has it=0 dimensioning
+!tmp      Setup ampf2ebar,ampfc  (1:setup0%lrz), Check elecfldn has it=0 dimensioning
 !tmp      and set up.  elecfldn(,,0) is set up from elecfld at previous
 !tmp      time step.
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          ! This is 2E^bar (l,n) in notes
 !BH170329 ampf2ebar(ll)=elecfld0n(ll,nn,it-1)+elecfld0n(ll-1,nn,it-1)![statV/cm]
          ampf2ebar(ll)=two*elecfldn(ll,nn,it-1) ![statV/cm]
          !here nn is from nonampf,...,nstop  range
       enddo
 
-      call bcast(ampfc,zero,lrz)
-      do ll=1,lrz
-         ! This is -2E^bar(l) -2E(lrz)
+      call bcast(ampfc,zero,setup0%lrz)
+      do ll=1,setup0%lrz
+         ! This is -2E^bar(l) -2E(setup0%lrz)
          ampfc(ll)= -ampf2ebar(ll) &
-           +two*(-one)**(lrz-ll)*elecfldn(lrz+1,nn,it-1) ![statV/cm]
+           +two*(-one)**(setup0%lrz-ll)*elecfldn(setup0%lrz+1,nn,it-1) ![statV/cm]
          ! YuP: the edge term is corrected
-         if(ll.le.lrz-1)then
-         do llp=ll+1,lrz ! (l < l' < = lrz in notes)
+         if(ll.le.setup0%lrz-1)then
+         do llp=ll+1,setup0%lrz ! (l < l' < = setup0%lrz in notes)
             ampfc(ll)=ampfc(ll)-two*(-one)**(llp-ll)*ampf2ebar(llp) ![statV/cm]
             ! YuP[02-2017] corrected (-one)**(llp-l) to (-one)**(llp-ll)
          enddo
@@ -461,16 +461,16 @@ contains
 !     Gaussian elimination with pivoting.
 
       if (.not. allocated(ipiv)) then
-         allocate(ipiv(lrz))
+         allocate(ipiv(setup0%lrz))
       endif
-      call dgesv(lrz,1,ampfaa,lrz,ipiv,ampfc,lrz,info)
+      call dgesv(setup0%lrz,1,ampfaa,setup0%lrz,ipiv,ampfc,setup0%lrz,info)
       !    DGESV( N,NRHS, A,  LDA,IPIV,  B,  LDB,INFO )
       !computes the solution to a system of linear equations A * X = B
       !So, the matrix A(N,N) is ampfaa, and the vector B is ampfc.
       !On exit, B contains the solution vector X, which corresponds to
-      !the values of delecfld0n(ll,*,*) for all ll=1:lrz,
+      !the values of delecfld0n(ll,*,*) for all ll=1:setup0%lrz,
       !which is the time-step (or iteration) change in electric field
-      !evaluated at bin centers ll=1:lrz.
+      !evaluated at bin centers ll=1:setup0%lrz.
 
       if (info .ne. 0) then
          print *,' warning after dgesv in ampfsoln: info= ',info
@@ -480,14 +480,14 @@ contains
 !     Update elecfld (tor elec fld) to present iteration
 !     The ampfc soln is based on statvolt/cm elecfld.
 !     (Alternatively, consider code mod to work entirely in V/cm?)
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          delecfld0n(ll,nn,it)=ampfc(ll) ! statvolt/cm
          elecfldn(ll,nn,it)=elecfldn(ll,nn,it-1)+delecfld0n(ll,nn,it)
          elecfld(ll)=elecfldn(ll,nn,it)*300.d0 ! V/cm
       enddo
 
 
-      do ll=0,lrz+1
+      do ll=0,setup0%lrz+1
         write(*,'(a,i4,2e15.6)') &
       'ampfsoln  after soln: ll,elecfldn(ll,nn,it)*300,elecfld(ll)=', &
                              ll,elecfldn(ll,nn,it)*300,elecfld(ll)
@@ -495,7 +495,7 @@ contains
       !here nn is from nonampf,...,nstop  range
 
 !     Update total delecfld0 for this time step nn
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          delecfld0(ll,nn)=delecfld0(ll,nn)+delecfld0n(ll,nn,it) ![statV/cm]
       enddo
 

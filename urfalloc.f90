@@ -39,8 +39,8 @@ contains
 !     Allocate allocatable arrays for rf modules
 !.......................................................................
 
-      lniyjx=iy*jx*lrz*mrfn
-      lniylz=iy*lz*lrzmax
+      lniyjx=iy*jx*setup0%lrz*mrfn
+      lniylz=iy*lz*setup0%lrzmax
       lnyxp2=iyjx2*ngen*lrors
       lnj=jx
       lni=iy
@@ -100,22 +100,22 @@ contains
 !..................................................................
       istat_tot=0
 
-      allocate(urfb(iy,jx,lrz,mrfn),STAT=istat)
+      allocate(urfb(iy,jx,setup0%lrz,mrfn),STAT=istat)
       istat_tot=istat_tot+istat
       if(istat.eq.0) call bcast(urfb,zero,SIZE(urfb))
-      allocate(urfc(iy,jx,lrz,mrfn),STAT=istat)
+      allocate(urfc(iy,jx,setup0%lrz,mrfn),STAT=istat)
       istat_tot=istat_tot+istat
       if(istat.eq.0) call bcast(urfc,zero,SIZE(urfc))
-      !allocate(urfe(iy,jx,lrz,mrfn),STAT=istat)
+      !allocate(urfe(iy,jx,setup0%lrz,mrfn),STAT=istat)
       !istat_tot=istat_tot+istat
-      !allocate(urff(iy,jx,lrz,mrfn),STAT=istat)
+      !allocate(urff(iy,jx,setup0%lrz,mrfn),STAT=istat)
       !istat_tot=istat_tot+istat
       !if(istat.eq.0) call bcast(urff,zero,SIZE(urff))
       !WRITE(*,*)'urfalloc: urff allocated'
 !YuP[03/18/2015] urfe,urff are expressed through urfb,urfc
 !No need to save them.
 
-      allocate(cosmz(iy,lz,lrzmax),STAT=istat)
+      allocate(cosmz(iy,lz,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       if(istat.eq.0) call bcast(cosmz,zero,SIZE(cosmz))
       allocate(g_(0:iyp1,0:jxp1,ngen,lrors),STAT=istat)

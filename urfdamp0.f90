@@ -54,7 +54,7 @@ contains
 !yup      character*8 ifirst
 !yup      data ifirst/"first"/
 
-      call bcast(powrft(1:lrzmax),zero,lrzmax)
+      call bcast(powrft(1:setup0%lrzmax),zero,setup0%lrzmax)
       call bcast(powurf(0:nmodsa),zero,nmodsa+1)
       call bcast(powurfc(0:nmodsa),zero,nmodsa+1)
       call bcast(powurfl(0:nmodsa),zero,nmodsa+1)
@@ -92,7 +92,7 @@ contains
 
 !cc        call bcast(da(1,0),zero,iyjxp1) ! YuP: Why needed? No effect.
       if (n.ge.nondamp) then
-!cc      do 6 ll=1,lrz ! Loop over flux surfaces
+!cc      do 6 ll=1,setup0%lrz ! Loop over flux surfaces
       do 5 krfmode=1,mrfn ! loop over wave modes.
 !cc          call tdnflxs(lmdpln(ll)) !-> Determine l_, lr_, etc.
           if (n.gt.0 .and. urfdmp.eq."secondd") then
@@ -151,7 +151,7 @@ contains
 !     mode or harmonic.  (watts)
 !
 !     powurfi(0:lr,0:mrfn) partial powers integrated up to rho(lr).
-!     powurf(krf)=powurfi(lrzmax,krf).    (watts)
+!     powurf(krf)=powurfi(setup0%lrzmax,krf).    (watts)
 !
 !     powurfc(0) total coll. urf power summed over modes and radius
 !     powurfc(1:mrfn) total coll. urf power summed over radius, for
@@ -298,7 +298,7 @@ contains
  20     continue ! do iray=1,nray(krf)
 
         ! Total powers (sum over radial index)
-        do 30 l=1,lrzmax
+        do 30 l=1,setup0%lrzmax
             do 19 kk=1,MAX(1,maxmodes) ! if maxmodes<1, then kk=1
               kkk=krf+kk-1
               powurfi(l,kkk)=powurfi(l-1,kkk)+powrf(l,kkk)
@@ -316,12 +316,12 @@ contains
               powurfl(kkk)=powurfl(kkk)+powrfl(l,kkk)
               powrfl(l,kkk)=powrfl(l,kkk)/dvol(l)
  19         continue ! kk=1,maxmodes
- 30     continue ! l=1,lrzmax
+ 30     continue ! l=1,setup0%lrzmax
         do 29 kk=1,MAX(1,maxmodes) ! if maxmodes<1, then kk=1
           kkk=krf+kk-1
-          powurf(kkk)=powurfi(lrzmax,kkk)
+          powurf(kkk)=powurfi(setup0%lrzmax,kkk)
  29     continue ! kk=1,maxmodes
-      powurf(0)=powurfi(lrzmax,0)
+      powurf(0)=powurfi(setup0%lrzmax,0)
 
       if (maxmodes.gt.1) then
         do 600 kk=2,maxmodes

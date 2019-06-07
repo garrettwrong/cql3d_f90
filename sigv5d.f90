@@ -158,7 +158,7 @@ contains
       do 100 l=1,lz
         sum=0.
 
-!     Loop over Legendre polynomials
+!     Loop over Legendre polynomiasetup0%ls
       do l1=0,mmx1
 
       call bcast(fetb(1:jx,l1),zero,jx)

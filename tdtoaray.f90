@@ -16,7 +16,7 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
-!     Storing values on limited lrz mesh and time-dependent quantities
+!     Storing values on limited setup0%lrz mesh and time-dependent quantities
 !     recall:
 !     lr_     : radial index
 !     l_      : spatial variable index

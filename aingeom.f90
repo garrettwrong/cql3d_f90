@@ -27,11 +27,11 @@ contains
 
 !..................................................................
 !     This routine is called repeatedly from tdinitl, for the
-!     range of values of lr_=lrzmax,1,-1.
-!     Alternatively, for lrzmax=1, it is called from achief1.
+!     range of values of lr_=setup0%lrzmax,1,-1.
+!     Alternatively, for setup0%lrzmax=1, it is called from achief1.
 !
-!     aingeom controls the flux surface geometry and sets up magnetic
-!     fields, bpsi=(B(z))/B(0)); it also calls the "eq"uilibrium module
+!     aingeom controsetup0%ls the flux surface geometry and sets up magnetic
+!     fields, bpsi=(B(z))/B(0)); it also calsetup0%ls the "eq"uilibrium module
 !     which utilizes an MHD equilibrium code "eqdsk" file, if required.
 !     A heuristic mirror scenario (supplied by Gary Smith, LLNL) is also
 !     available.
@@ -47,8 +47,8 @@ contains
 !BH151202      if (machine.eq."toroidal") then
       if (machine.eq."toroidal".or.machine.eq."mirror") then
 
-!Following makes more sense[BH:990816]    if (l_.eq.lrzmax) call eqalloc
-        if (lr_.eq.lrzmax) call eqalloc
+!Following makes more sense[BH:990816]    if (l_.eq.setup0%lrzmax) call eqalloc
+        if (lr_.eq.setup0%lrzmax) call eqalloc
 
 !..................................................................
 !     If the "eq"uilibrium module is utilized...
@@ -75,7 +75,7 @@ contains
         if (eqsym.ne."none") then
            ! up-dn symmetry: everything is evaluated over 1/2 surface
            symm=2.d0
-           ! Factor symm=2 is because solrz(l,ll),solzz(l,ll) is
+           ! Factor symm=2 is because sosetup0%lrz(l,ll),solzz(l,ll) is
            ! over half-surface, and so is ddarea,ddvol,
            ! and also vtau_fow() or tau() are evaluated over half-orbits.
         else

@@ -166,20 +166,20 @@ contains
 !     z(l,lr) covers half-pol turn, eqsym.ne."none"; else, full-turn.
 !......................................................................
 
-!     (assumes lrz=1 when cqlpmod=enabled)
-      if (cqlpmod.eq."enabled" .and. l_.ne.lrors) go to 999
+!     (assumes setup0%lrz=1 when setup0%cqlpmod=enabled)
+      if (setup0%cqlpmod.eq."enabled" .and. l_.ne.lrors) go to 999
 
 !.......................................................................
 !     loop over lz
 !.......................................................................
 
       do 210 l=1,lz
-!     test if l in lsindx(i) => ilcqlp=1
+!     test if l in setup0%lsindx(i) => ilcqlp=1
         ilcqlp=0
-        if (cqlpmod.eq."enabled" .and. ls.eq.lz) ilcqlp=1
-        if (cqlpmod.eq."enabled" .and. ls.lt.lz) then
-          do 211 ill=1,ls
-            if (lsindx(ill) .eq. l) then
+        if (setup0%cqlpmod.eq."enabled" .and. setup0%ls.eq.lz) ilcqlp=1
+        if (setup0%cqlpmod.eq."enabled" .and. setup0%ls.lt.lz) then
+          do 211 ill=1,setup0%ls
+            if (setup0%lsindx(ill) .eq. l) then
               ilcqlp=1
               go to 212
             endif
@@ -192,7 +192,7 @@ contains
         iiyh=iyh
         iitl=itl
         iitu=itu
-        if (cqlpmod .eq. "enabled") then
+        if (setup0%cqlpmod .eq. "enabled") then
           if (ilcqlp .eq. 1) then
             iiyh=iyh_(indxls(l))
             iiy=iy_(indxls(l))
@@ -305,10 +305,10 @@ contains
 !     end of loop over lz
  210  continue
 
-      if (cqlpmod .ne. "enabled") imax(lz_bmax(lr_),lr_)=iitl
+      if (setup0%cqlpmod .ne. "enabled") imax(lz_bmax(lr_),lr_)=iitl
 
 !..................................................................
-!     compute legendre polynomials and their derivatives along
+!     compute legendre polynomiasetup0%ls and their derivatives along
 !     orbits which pierce the midplane at y(i,lmdpln_).
 !..................................................................
 
@@ -331,12 +331,12 @@ contains
       call bcast(dpcosz(1:iy,1:lz,0:mmx,lr_),zero,iy*lz*(mmx+1))
 
       do 270 l=1,lz
-!     test if l in lsindx(i) => ilcqlp=1
+!     test if l in setup0%lsindx(i) => ilcqlp=1
         ilcqlp=0
-        if (cqlpmod.eq."enabled" .and. ls.eq.lz) ilcqlp=1
-        if (cqlpmod.eq."enabled" .and. ls.lt.lz) then
-          do 271 ill=1,ls
-            if (lsindx(ill) .eq. l) then
+        if (setup0%cqlpmod.eq."enabled" .and. setup0%ls.eq.lz) ilcqlp=1
+        if (setup0%cqlpmod.eq."enabled" .and. setup0%ls.lt.lz) then
+          do 271 ill=1,setup0%ls
+            if (setup0%lsindx(ill) .eq. l) then
               ilcqlp=1
               go to 272
             endif
@@ -348,7 +348,7 @@ contains
         iiyh=iyh
         iitl=itl
         iitu=itu
-        if (cqlpmod .eq. "enabled") then
+        if (setup0%cqlpmod .eq. "enabled") then
           if (ilcqlp .eq. 1) then
             iiyh=iyh_(indxls(l))
             iiy=iy_(indxls(l))
@@ -410,12 +410,12 @@ contains
 !.......................................................................
 
       do 360 l=1,lz
-!     test if l in lsindx(i) => ilcqlp=1
+!     test if l in setup0%lsindx(i) => ilcqlp=1
         ilcqlp=0
-        if (cqlpmod.eq."enabled" .and. ls.eq.lz) ilcqlp=1
-        if (cqlpmod.eq."enabled" .and. ls.lt.lz) then
-          do 3601 ill=1,ls
-            if (lsindx(ill) .eq. l) then
+        if (setup0%cqlpmod.eq."enabled" .and. setup0%ls.eq.lz) ilcqlp=1
+        if (setup0%cqlpmod.eq."enabled" .and. setup0%ls.lt.lz) then
+          do 3601 ill=1,setup0%ls
+            if (setup0%lsindx(ill) .eq. l) then
               ilcqlp=1
               go to 3602
             endif
@@ -428,7 +428,7 @@ contains
         iiyh=iyh
         iitl=itl
         iitu=itu
-        if (cqlpmod .eq. "enabled") then
+        if (setup0%cqlpmod .eq. "enabled") then
           if (ilcqlp .eq. 1) then
             iiyh=iyh_(indxls(l))
             iiy=iy_(indxls(l))
@@ -489,23 +489,23 @@ contains
 
         if (ilcqlp .eq. 1) then
           ilundsc=indxls(l)
-          call tdinlegw(l,lrindx(ilundsc),indxlr(lrindx(ilundsc)), &
+          call tdinlegw(l,setup0%lrindx(ilundsc),indxlr(setup0%lrindx(ilundsc)), &
             ilundsc)
-        else if (cqlpmod .ne. "enabled") then
+        else if (setup0%cqlpmod .ne. "enabled") then
           call tdinlegw(l,lr_,indxlr_,l_)
         else
           ilundsc=indxls(l)
-          call tdinlegw(l,lrindx(ilundsc),indxlr(lrindx(ilundsc)),1)
+          call tdinlegw(l,setup0%lrindx(ilundsc),indxlr(setup0%lrindx(ilundsc)),1)
         endif
 
  360  continue
 
       call dscal(iy*lz*mmxp1,-one,dpcosz(1:iy,1:lz,0:mmx,lr_),1)
-                  !Note: allocate(dpcosz(iy,lz,0:mmx,lrzmax)
+                  !Note: allocate(dpcosz(iy,lz,0:mmx,setup0%lrzmax)
 !BH110330:  Doesn't look like waa and wbb are used for anything?
       !call dscal(lz*mxp1,-one,waa(1:lz,0:mx,lr_),1)
       !call dscal(lz*mxp1,-one,wbb(1:lz,0:mx,lr_),1)
-               !Note: allocate(waa(lz,0:mx,lrzmax)
+               !Note: allocate(waa(lz,0:mx,setup0%lrzmax)
 
 
 
@@ -529,7 +529,7 @@ contains
       endif
 
       do 400 i=1,iyh_(lmdpln_)
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
 
           do 370 l=1,ilzhfs
             if (abs(cosz(i,l,lr_)) .le. 1.e-10) go to 380
@@ -614,7 +614,7 @@ contains
         if (zboun(itl_(lmdpln_),lr_) .le. z(l,lr_)) go to 697
  696  continue
  697  continue
-!%OS  if (cqlpmod .ne. "enabled") then
+!%OS  if (setup0%cqlpmod .ne. "enabled") then
       lmax(itl_(lmdpln_),lr_)=l-1
       lmax(itu_(lmdpln_),lr_)=l-1
 !%OS  endif
@@ -649,7 +649,7 @@ contains
 !     psidz(lr_) is another orbit integral required to determine some
 !     types of averages.
 !     r0drdz(lr_) is used with elecflag='parallel'.
-!     Note: zmaxpsi, psidz, r0drdz  only computed on lrindx() mesh pnts.
+!     Note: zmaxpsi, psidz, r0drdz  only computed on setup0%lrindx() mesh pnts.
 !
 !     Note: These quantities will be ~2x as big, for eqsym.eq."none".
 !......................................................................

@@ -25,7 +25,7 @@ contains
     !mnt  function psif(arclength)
     !mnt  calculates the ratio of mod B at arclength from the midplane
     !mnt  to mod B at the midplane; 1 < psi < psimx(lr_).
-    !mnt  the value of psimodel controls which model is expressed:
+    !mnt  the value of psimodel controsetup0%ls which model is expressed:
     !mnt  options are:
     !mnt  psimodel="axitorus", "smith", "spline"
     !

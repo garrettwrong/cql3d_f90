@@ -11,7 +11,8 @@ module eqinitl_mod
 
 contains
 
-      subroutine eqinitl
+  subroutine eqinitl
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -33,7 +34,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.ne."enabled1") then
+      if (setup0%noplots.ne."enabled1") then
       CALL PGPAGE
       RILIN=0.
       CALL PGMTXT('T',-RILIN,0.,0.,"PARAMETER VALUES")

@@ -58,7 +58,7 @@ contains
 !..................................................................
 !     fill out increasing psi array of bin boundaries, as in urffflx.
 !..................................................................
-         do l=1,lrzmax
+         do l=1,setup0%lrzmax
             tr2(l)=psimag-psivalm(l)
          enddo
 

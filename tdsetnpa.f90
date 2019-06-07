@@ -27,7 +27,7 @@ contains
 !     http://www-amdis.iaea.org/.
 !     It is much simpler than required for the SXR case, due to the
 !     delta-functions in energy and scattering angle in the differential
-!     cross-section, assuming zero-velocity background neutrals.
+!     cross-section, assuming zero-velocity background neutrasetup0%ls.
 !.......................................................................
 
       real(c_double),dimension(nen_npa,npaproc)::sigmanpa

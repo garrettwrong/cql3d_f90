@@ -23,19 +23,20 @@ module urfchief_mod
 
 contains
 
-      subroutine urfchief
+  subroutine urfchief
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !..................................................................
-!     This routine controls the urf module
+!     This routine controsetup0%ls the urf module
 !     The following control variables are used in determining the
 !     action of this subroutine:
 !     nrfstep1, nrfstep2, nrfpwr, nrfitr1, nrfitr2, nrfitr3, urfncoef
 !
-!     nurf=a counter for the number of calls to urfchief which have
+!     nurf=a counter for the number of calsetup0%ls to urfchief which have
 !     resulted in calculation or recalculation of the diffusion
 !     coefficients. (Initialized to 0).
 !     The nurf variable is incremented (at end of urfchief) each time
@@ -50,14 +51,14 @@ contains
 !     diffusion coeffs, using a fraction of the input power
 !     = (1/2)**nrfpwr.
 !     return.
-!     3. Repeat step 2 for next nrfpwr calls, but with fractional input
+!     3. Repeat step 2 for next nrfpwr calsetup0%ls, but with fractional input
 !     power (1/2)**(nrfpwr-1), (1/2)**(nrfpwr-2),.... (1/2)**0.
 !     (This step is a no-op if nrfpwr=0).
-!     4. Iterate step 2 with full input power for next nrfitr1 calls.
+!     4. Iterate step 2 with full input power for next nrfitr1 calsetup0%ls.
 !     (This step is a no-op if nrfitr1=0).
 !     5. Extend extendable rays by nrfstep2 steps.
 !     6. Re-calc damping from ray data and then quasilinear diffusion
-!     coeffs.  Iterate this step nrfitr2 additional calls.
+!     coeffs.  Iterate this step nrfitr2 additional calsetup0%ls.
 !     7. Steps 5 and 6 are carried out nrfitr3 times.
 !
 !     Thus choose
@@ -175,7 +176,7 @@ contains
 
 !.......................................................................
 !     compute damping and power but do not update delpwr according
-!     to what has been absorbed before => compatible with lrz<lrzmax
+!     to what has been absorbed before => compatible with setup0%lrz<setup0%lrzmax
 !.......................................................................
 
         call urfdamp0(irfpwr,iopt)
@@ -248,7 +249,7 @@ contains
 
 !..................................................................
 !     Call the coefficient generator.
-!     Radial surfaces: lrz (and not lrors)
+!     Radial surfaces: setup0%lrz (and not lrors)
 !     Generate B,C,E and F
 !..................................................................
       call cpu_time(t_urf1) !-.-.-.-.-.-.-.-.-.-.-.-.-.
@@ -262,7 +263,7 @@ contains
       imprf=1
 
 
-      do 50 ll=1,lrz
+      do 50 ll=1,setup0%lrz
 !..................................................................
 !     Read flux surface dependent data from disk.
 !     for midplane parameter values
@@ -277,7 +278,7 @@ contains
 !..................................................................
 !     Plot out diffusion coefficients
 !..................................................................
-        if (noplots.ne."enabled1") call urfbplt !only when plturfb="enabled"
+        if (setup0%noplots.ne."enabled1") call urfbplt !only when plturfb="enabled"
                                                 !or  plturfb='color'
  50   continue
 

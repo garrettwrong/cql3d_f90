@@ -13,7 +13,8 @@ module wparsou_mod
 
 contains
 
-      subroutine wparsou
+  subroutine wparsou
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -35,7 +36,7 @@ contains
 !.......................................................................
 
 !     restarted runs read spasou from restart file
-      if (n.eq.0 .and. (nlrestrt.ne."disabled")) return
+      if (n.eq.0 .and. (setup0%nlrestrt.ne."disabled")) return
 
 !%OS
       if (n .eq. 0) return
@@ -127,7 +128,7 @@ contains
 !.......................................................................
 
             if (sbdry.eq."periodic" .and. laddbnd.eq.1 .and. &
-              l.eq.l_upper(i) .and. l_upper(i).ne.ls) then
+              l.eq.l_upper(i) .and. l_upper(i).ne.setup0%ls) then
               do 401 j=2,jx
 !     points A_i and A_ii (notes p. Num(13))
                 spasou(i,j,k,l)= &
@@ -141,7 +142,7 @@ contains
                   *cint2(j)
 
 !     points B_i and B_ii (notes p. Num(13))
-                ll=ls+2-l_upper(i)
+                ll=setup0%ls+2-l_upper(i)
                 spasou(i,j,k,ll)= &
                   (fnp1(i,j,k,ll)-fnhalf(i,j,k,ll))/dtreff &
                   -velsou(i,j,k,ll)
@@ -205,22 +206,22 @@ contains
                 cynt2(iieff,l)*cint2(j)
  412        continue
 
- 320        if (sbdry.ne."periodic" .or. l_upper(i).eq.ls .or. l.eq.1) &
+ 320        if (sbdry.ne."periodic" .or. l_upper(i).eq.setup0%ls .or. l.eq.1) &
               go to 300
 
 !.......................................................................
-!l    3.2 point ll=ls+2-l, i.e. bottom half cross-section. Not yet treated
+!l    3.2 point ll=setup0%ls+2-l, i.e. bottom half cross-section. Not yet treated
 !     in 3.1 if particle is trapped.
-!     Thus: l in [ls+2-l_upper(i),ls]
+!     Thus: l in [setup0%ls+2-l_upper(i),setup0%ls]
 !.......................................................................
 
-            ll=ls+2-l
+            ll=setup0%ls+2-l
 
             if (ilpm1ef(i,ll,ipshft1).eq.-999 .or. &
               ilpm1ef(i,ll,ipshft2).eq.-999) go to 322
 
 !.......................................................................
-!l    3.2.1 cos(theta)>0, ll>ls/2+1
+!l    3.2.1 cos(theta)>0, ll>setup0%ls/2+1
 !.......................................................................
 
             l1=lpm1eff(ll,ipshft1)
@@ -236,7 +237,7 @@ contains
  421        continue
 
 !.......................................................................
-!l    3.2.2 cos(theta) < 0, ll>ls/2+1
+!l    3.2.2 cos(theta) < 0, ll>setup0%ls/2+1
 !.......................................................................
 
  322        continue
@@ -266,16 +267,16 @@ contains
 
 !%OSc interpolate on node points
 !%OS  if (mod(nummods,10) .le. 4) then
-!%OS  do 210 i=1,iy_(ls)
-!%OS  spasou(i,j,k,ls)=spasou(ilpm1ef(i,ls,-1),j,k,ls-1)+
-!%OS  /             dszm5(ls)/(dszm5(ls)+dszm5(ls-1))*
-!%OS  1           (spasou(ilpm1ef(i,ls,-1),j,k,ls-1)-
-!%OS  1               spasou(ilpm1ef(ilpm1ef(i,ls,-1),ls-1,-1),j,k,ls-2))
+!%OS  do 210 i=1,iy_(setup0%ls)
+!%OS  spasou(i,j,k,setup0%ls)=spasou(ilpm1ef(i,setup0%ls,-1),j,k,setup0%ls-1)+
+!%OS  /             dszm5(setup0%ls)/(dszm5(setup0%ls)+dszm5(setup0%ls-1))*
+!%OS  1           (spasou(ilpm1ef(i,setup0%ls,-1),j,k,setup0%ls-1)-
+!%OS  1               spasou(ilpm1ef(ilpm1ef(i,setup0%ls,-1),setup0%ls-1,-1),j,k,setup0%ls-2))
 !%OS  210        continue
-!%OS  do 211 l=ls-1,2,-1
+!%OS  do 211 l=setup0%ls-1,2,-1
 !%OS  do 211 i=1,iy_(l)
-!%OS  spasou(i,j,k,l)=(1.-dls(i,j,k,l))*spasou(i,j,k,l)+
-!%OS  +                      dls(i,j,k,l)*spasou(ilpm1ef(i,l,-1),j,k,l-1)
+!%OS  spasou(i,j,k,l)=(1.-dsetup0%ls(i,j,k,l))*spasou(i,j,k,l)+
+!%OS  +                      dsetup0%ls(i,j,k,l)*spasou(ilpm1ef(i,l,-1),j,k,l-1)
 !%OS  211        continue
 !%OS  do 212 i=1,iy_(1)
 !%OS  spasou(i,j,k,1)=2.*spasou(i,j,k,1)-

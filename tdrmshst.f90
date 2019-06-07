@@ -21,6 +21,7 @@ contains
       subroutine tdrmshst
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !..................................................................
 !     This routine initializes the radial meshes and integration
@@ -40,7 +41,7 @@ contains
 
       dimension d2equ(lrza),d2areamd(lrza),d2volmid(lrza),worka(lrza)
       dimension d2volcon(lrza)
-      dimension workk(itlrza), wk(lrzmax)
+      dimension workk(itlrza), wk(setup0%lrzmax)
 
       character*8 ifirst
       data ifirst /"first"/
@@ -55,13 +56,13 @@ contains
 
       if (ifirst.eq."first") then
       !!YuP[07-2017] added: do this only at 1st call
-      do 10 ll=1,lrzmax
+      do 10 ll=1,setup0%lrzmax
         rz(ll)=rya(ll)*rmn
         rrz(ll)=rrz(ll)*rmn !YuP[07-2017]: recursive: make sure it is done once!
         ! if this subroutine is called more than once, the above line
         ! is only performed once.
  10   continue
-      rrz(lrzmax)=rmn
+      rrz(setup0%lrzmax)=rmn
       ifirst="notfirst"
       endif !YuP[07-2017] added: do this only at 1st call
 
@@ -69,17 +70,17 @@ contains
         tpisr0=2.*pi**2*radmaj
         dvol(1)=tpisr0*rrz(1)**2
         darea(1)=dvol(1)/(2.*pi*radmaj)
-        do 7 ll=1,lrzmax
+        do 7 ll=1,setup0%lrzmax
           tr(ll)=tpisr0*rrz(ll)**2
  7      continue
-        do 700 ll=2,lrzmax
+        do 700 ll=2,setup0%lrzmax
           dvol(ll)=tr(ll)-tr(ll-1)
           darea(ll)=dvol(ll)/(2.*radmaj*pi) !here: for eqmod.eq."disabled"
  700    continue
 
       elseif (eqmod.eq."enabled") then
 
-        do 25 l=1,lrzmax
+        do 25 l=1,setup0%lrzmax
           equilpsp(l)=-equilpsi(l)
  25     continue
         equilpsp(0)=-psimag
@@ -89,11 +90,11 @@ contains
 !       Bin boundaries are DEFINED by the average outer equatorial
 !       plane major radius between those of neighboring Fokker-Planck
 !       points.
-        do 16 l=1,lrzmax
-          if (l.lt.lrzmax) then
+        do 16 l=1,setup0%lrzmax
+          if (l.lt.setup0%lrzmax) then
             rpmconz(l)=(rpconz(l)+rpconz(l+1))*.5
           else
-            rpmconz(lrzmax)=rmaxcon
+            rpmconz(setup0%lrzmax)=rmaxcon
           endif
 !     rmincon and rmaxcon are the inner and outer major radii of the
 !     LCFS at ez=0.
@@ -105,13 +106,13 @@ contains
           call eqorbit(epsicon_)
           call eqvolpsi(epsicon_,volmid(l),areamid(l))
           !!write(*,'(i4,3f15.3)') l,rpmconz(l),rpconz(l),areamid(l)
-          ! YuP [Apr/2014]: jump in areamid(l) at last l=lrzmax,
+          ! YuP [Apr/2014]: jump in areamid(l) at last l=setup0%lrzmax,
           ! because of jump in rpmconz(l).
           ! Not really a bug; it depends how you define
           ! the bin around last FP'ed surface.
  16     continue
         equilpsi(0)=psimag
-        do 60 l=1,lrzmax
+        do 60 l=1,setup0%lrzmax
           worka(l)=-psivalm(l)
  60     continue
         i1p(1)=4
@@ -119,29 +120,29 @@ contains
         itab(1)=1
         itab(2)=0
         itab(3)=0
-!     cannot use 4-point interpolation if lrzmax=3
-!     (should not run with lrzmax=2, as cubic spline not defined)
-        if (lrzmax .eq. 3) then
+!     cannot use 4-point interpolation if setup0%lrzmax=3
+!     (should not run with setup0%lrzmax=2, as cubic spline not defined)
+        if (setup0%lrzmax .eq. 3) then
           i1p(1)=2
           i1p(2)=2
           d2volmid(1)=0.0
-          d2volmid(lrzmax)=(volmid(lrzmax) - volmid(lrzmax-1)) / &
-            (worka(lrzmax)   - worka(lrzmax-1))
+          d2volmid(setup0%lrzmax)=(volmid(setup0%lrzmax) - volmid(setup0%lrzmax-1)) / &
+            (worka(setup0%lrzmax)   - worka(setup0%lrzmax-1))
           d2areamd(1)=0.0
-          d2areamd(lrzmax)=(areamid(lrzmax) - areamid(lrzmax-1)) / &
-            (worka(lrzmax)   - worka(lrzmax-1))
+          d2areamd(setup0%lrzmax)=(areamid(setup0%lrzmax) - areamid(setup0%lrzmax-1)) / &
+            (worka(setup0%lrzmax)   - worka(setup0%lrzmax-1))
         endif
 !
-        call coeff1(lrzmax,worka(1),volmid(1),d2volmid,i1p,1,workk)
-        call terp1(lrzmax,worka(1),volmid(1),d2volmid,-psilim,1,tab, &
+        call coeff1(setup0%lrzmax,worka(1),volmid(1),d2volmid,i1p,1,workk)
+        call terp1(setup0%lrzmax,worka(1),volmid(1),d2volmid,-psilim,1,tab, &
           itab)
-        volmid(lrzmax)=tab(1)
-        call coeff1(lrzmax,worka(1),areamid(1),d2areamd,i1p,1,workk)
-        call terp1(lrzmax,worka(1),areamid(1),d2areamd,-psilim,1,tab, &
+        volmid(setup0%lrzmax)=tab(1)
+        call coeff1(setup0%lrzmax,worka(1),areamid(1),d2areamd,i1p,1,workk)
+        call terp1(setup0%lrzmax,worka(1),areamid(1),d2areamd,-psilim,1,tab, &
           itab)
-        areamid(lrzmax)=tab(1)
-        psivalm(lrzmax)=psilim
-        do 15 ll=1,lrzmax
+        areamid(setup0%lrzmax)=tab(1)
+        psivalm(setup0%lrzmax)=psilim
+        do 15 ll=1,setup0%lrzmax
           darea(ll)=(areamid(ll)-areamid(ll-1)) !here: for eqmod.eq."enabled"
           dvol(ll)=(volmid(ll)-volmid(ll-1))
  15     continue
@@ -156,18 +157,18 @@ contains
 !     are here attributed to values of psi at the outside of the
 !     l-th volume.  (not sure about accuracy here. BobH, 950221).
 
-        call coeff1(lrzmax,worka(1),bmdplne,d2bmdpl,i1p,1,workk)
+        call coeff1(setup0%lrzmax,worka(1),bmdplne,d2bmdpl,i1p,1,workk)
 
-        !YuP160304 call coeff1(lrzmax,rz(1),equilpsi(1),d2equ,i1p,1,workk)
-        tr(0:lrzmax)= psimag-equilpsi(0:lrzmax)
+        !YuP160304 call coeff1(setup0%lrzmax,rz(1),equilpsi(1),d2equ,i1p,1,workk)
+        tr(0:setup0%lrzmax)= psimag-equilpsi(0:setup0%lrzmax)
         !pol.flux, in ascending order needed for coeff1
-        call coeff1(lrzmax,rya(1),tr(1),d2equ,i1p,1,workk)
+        call coeff1(setup0%lrzmax,rya(1),tr(1),d2equ,i1p,1,workk)
         itab(1)=0
         itab(2)=1
         itab(3)=0
-        do 50 l=1,lrzmax
-          !YuP160304 call terp1(lrzmax,rz(1),equilpsi(1),d2equ,rz(l),1,tab,itab)
-          call terp1(lrzmax,rya(1),tr(1),d2equ,rya(l),1,tab,itab)
+        do 50 l=1,setup0%lrzmax
+          !YuP160304 call terp1(setup0%lrzmax,rz(1),equilpsi(1),d2equ,rz(l),1,tab,itab)
+          call terp1(setup0%lrzmax,rya(1),tr(1),d2equ,rya(l),1,tab,itab)
           dpsidrho(l)=-tab(2) ! '-' because we used ascending psi function
  50     continue
 
@@ -176,8 +177,8 @@ contains
 !     dpsi(l) must equal psivalm(l)-psivalm(l-1) or something is wrong.
 !.......................................................................
 
-        do 20 l=1,lrzmax ! YuP[01-2017] was 1,lrz
-          ilr=lrindx(l)
+        do 20 l=1,setup0%lrzmax ! YuP[01-2017] was 1,setup0%lrz
+          ilr=setup0%lrindx(l)
           dpsi(ilr)=dvol(ilr)*bmdplne(ilr)/(twopi*zmaxpsi(ilr))
           if (eqsym.ne."none") dpsi(ilr)=dpsi(ilr)*0.5
  20     continue
@@ -186,7 +187,7 @@ contains
 
 !MPIINSERT_IF_RANK_EQ_0
       WRITE(*,*)'tdrmshst: lr, dvol(lr), darea(lr) based on eqvolpsi'
-      do ll=1,lrzmax ! YuP[01-2017] was 1,lrz
+      do ll=1,setup0%lrzmax ! YuP[01-2017] was 1,setup0%lrz
           WRITE(*,'(i6,2e12.4)') ll,  dvol(ll),  darea(ll)
       enddo
       WRITE(*,'(a,2e12.4)') &
@@ -203,16 +204,16 @@ contains
       itab(1)=0
       itab(2)=1
       itab(3)=0
-      call coeff1(lrzmax,rz(1),volcon(1),d2volcon,i1p,1,workk)
-      do 70 l=0,lrzmax-1
+      call coeff1(setup0%lrzmax,rz(1),volcon(1),d2volcon,i1p,1,workk)
+      do 70 l=0,setup0%lrzmax-1
         drp5(l)=rz(l+1)-rz(l)
         vx=(rz(l)+rz(l+1))*.5
-        call terp1(lrzmax,rz(1),volcon(1),d2volcon(1),vx,1,tab,itab)
+        call terp1(setup0%lrzmax,rz(1),volcon(1),d2volcon(1),vx,1,tab,itab)
         h_r(l)=tab(2)/(4.*pi**2*radmaj)
  70   continue
-      call terp1(lrzmax,rz(1),volcon(1),d2volcon(1),radmin,1,tab,itab)
-!%OS  h_r(lrzmax)=tab(2)
-      h_r(lrzmax)=tab(2)/(4.*pi**2*radmaj)
+      call terp1(setup0%lrzmax,rz(1),volcon(1),d2volcon(1),radmin,1,tab,itab)
+!%OS  h_r(setup0%lrzmax)=tab(2)
+      h_r(setup0%lrzmax)=tab(2)/(4.*pi**2*radmaj)
 
 !.......................................................................
 !     If efswtch="method5",
@@ -222,7 +223,7 @@ contains
 !     Also, add wedge of edge current outside r/a=0.8.
 !.......................................................................
 
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
          curreq(l)=10.*rpcon(l)*(btor0(l)/bmidplne(l))*pppsi(l) &
                    +bmidplne(l)/(4.*pi*1.e-1)*fppsi(l)
       enddo
@@ -230,7 +231,7 @@ contains
 
       if (efswtch.eq."method5") then
       curr_edge_roa=0.8
-      do 30 l=1,lrzmax
+      do 30 l=1,setup0%lrzmax
          currxj(l)=curreq(l)
          if (rovera(l).gt.0.8) then
             currxj(l)=currxj(l)+ &
@@ -264,7 +265,7 @@ contains
          gamaset1=17.
       endif
 
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
 
          fmu=fmass(kionn)/proton
          beamengy=80.   !Assumed beam energy (keV)
@@ -303,7 +304,7 @@ contains
 !             dlpsii (poloidal distance integrated psi=B/B0)
 !.......................................................................
 
-      do ll=1,lrzmax
+      do ll=1,setup0%lrzmax
 
 !$$$         if (ll.eq.1) then
 !$$$            do l=1,lorbit(ll)
@@ -320,9 +321,9 @@ contains
          ! Define the bin width around bin center #ll
          ![which is at R=rpconz(ll), having upper boundary at R=rpmconz(ll)]
          drpmconz(ll)=rpmconz(ll)-rpmconz(ll-1)
-         !Note: rpmconz(0)=rmag, and  rpmconz(lrzmax)=rmaxcon
+         !Note: rpmconz(0)=rmag, and  rpmconz(setup0%lrzmax)=rmaxcon
          !so that   drpmconz(1)= rpmconz(1)-Rmag
-         ! and      drpmconz(lrzmax)= rmaxcon-rpmconz(lrzmax-1)
+         ! and      drpmconz(setup0%lrzmax)= rmaxcon-rpmconz(setup0%lrzmax-1)
 
          dlpgpsii(ll)=zero
          do l=2,lorbit(ll)
@@ -361,7 +362,7 @@ contains
       ! at the outboard midplane,
       ! drpmconz(ll)=rpmconz(ll)-rpmconz(ll-1)
       ! Or we can write: drpmconz(ll)= (Rp(ll+1)-Rp(ll-1))/2
-      ! for ll= 2 : lrz-1
+      ! for ll= 2 : setup0%lrz-1
       ! where Rp(ll) is the R coord at radial bin center #ll.
       ! For ll=1, it is different:
       ! drpmconz(1)= rpmconz(1)-rpmconz(0) = 0.5(Rp(1)+Rp(2)) - Rmag
@@ -391,13 +392,13 @@ contains
       ! Interpolate values of dlpgpsii to the OUTER (upper) border
       ! of radial bin; For a bin#ll with center at rpconz(ll),
       ! the upper border is at  rpmconz(ll) .
-      ! Reason: the cumulative integrals over dlpsii(r),
-      ! effectively the integrals over r*dr,
+      ! Reason: the cumulative integrasetup0%ls over dlpsii(r),
+      ! effectively the integrasetup0%ls over r*dr,
       ! are done numerically as SUM(r(ll)*dr(ll)), ll=1:lll
       ! This method gives a larger value than exact value
       ! because of the last point -- r(lll)*dr(lll).
       ! It contains an extra 0.5*r(lll)*dr(lll) value,
-      ! So the values of such integrals correspond to r(lll)+0.5*dr(lll)
+      ! So the values of such integrasetup0%ls correspond to r(lll)+0.5*dr(lll)
       ! rather to r(lll).
       ! Further in calculations,
       ! the values of SUM(r(ll)*dr(ll)) are divided by
@@ -407,17 +408,17 @@ contains
       ! r(lll)+0.5*dr(lll), we should also adjust the denominator
       ! to the same point (r --> r+0.5*dr), which is the upper boundary
       ! of the radial bin lll.
-      do ll=1,lrzmax-1
+      do ll=1,setup0%lrzmax-1
          rrr= (rpmconz(ll)-rpconz(ll))/(rpconz(ll+1)-rpconz(ll))
          wk(ll)= dlpgpsii(ll) +(dlpgpsii(ll+1)-dlpgpsii(ll))*rrr
       enddo
-      do ll=1,lrzmax-1
+      do ll=1,setup0%lrzmax-1
          dlpgpsii(ll)=wk(ll)
       enddo
-      ! Note that the last point (ll=lrzmax) is omitted.
+      ! Note that the last point (ll=setup0%lrzmax) is omitted.
       ! Instead, we adjust the width of the last bin:
-      ! Original: drpmconz(lrzmax)= rmaxcon-rpmconz(lrzmax-1)
-      !drpmconz(lrzmax)= rpconz(lrzmax)-rpmconz(lrzmax-1) ! Adjusted,
+      ! Original: drpmconz(setup0%lrzmax)= rmaxcon-rpmconz(setup0%lrzmax-1)
+      !drpmconz(setup0%lrzmax)= rpconz(setup0%lrzmax)-rpmconz(setup0%lrzmax-1) ! Adjusted,
       ! which sets it to half-width of the interior-cell width.
       ! (This adjustment is not very useful: gives a small bend in E(r)
       ! at the edge of r-grid).

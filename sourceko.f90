@@ -206,7 +206,7 @@ contains
 !       from the previous lug-method occur in typically 1-5
 !       out of jx=350 points, for i0param=1000).
 
-         call ibcast(i0tran,1,(i0param+1)*lz*lrz)
+         call ibcast(i0tran,1,(i0param+1)*lz*setup0%lrz)
 !000123BH         dsinth=0.5*pi/(i0param-1.) !Fix below increases accuracy abit
 !BH170927:  But, this correction made a significant difference in the
 !BH170927:  calculation of the wh80 test case, to the distribution.
@@ -220,7 +220,7 @@ contains
 !BH180416:       write(*,*) '         INVESTIGATION, 180416 !!!!'
 !BH180416:       write(*,*)
          dsinthi=1./dsinth
-         do ir=1,lrz
+         do ir=1,setup0%lrz
             do il=1,lz
                i0tran(1,il,ir)=1
                i0tran(i0param+1,il,ir)=iyh_(ir)
@@ -228,7 +228,7 @@ contains
                do ii=2,i0param
                   sinth=(ii-1)*dsinth
                   i0=lug(sinth,sinz(1:iyh_(ir),il, &
-                   lrindx(ir)),iyh_(ir),i0)
+                   setup0%lrindx(ir)),iyh_(ir),i0)
                   i0m1=i0-1
                   if (i0m1.eq.0) then
                      i0m1=1

@@ -48,8 +48,8 @@ contains
 !      the full radial mesh on which plasma parameters are specified.
 !
 !    In the following, we are only interested in the given data
-!    which is at flux surfaces numbered ll=1:lrz
-!    (thus we can consider lrindx(ll)=ll).
+!    which is at flux surfaces numbered ll=1:setup0%lrz
+!    (thus we can consider setup0%lrindx(ll)=ll).
 !
 !
 !     distribution function normalized so that
@@ -58,14 +58,14 @@ contains
 !.......................................................................
 !
 !.......................................................................
-!     Fill rovera_, containing FP'd flux surfaces (lrz.le.lrzmax).
-!     f is given on this restricted set of surfaces f(,,,1:lrz).
+!     Fill rovera_, containing FP'd flux surfaces (setup0%lrz.le.setup0%lrzmax).
+!     f is given on this restricted set of surfaces f(,,,1:setup0%lrz).
 !.......................................................................
 
       if (ifirst.eq.1 ) then
-         allocate (rovera_(lrz), STAT=istat)
-         do ll=1,lrz
-            rovera_(ll)=rovera(lrindx(ll))
+         allocate (rovera_(setup0%lrz), STAT=istat)
+         do ll=1,setup0%lrz
+            rovera_(ll)=rovera(setup0%lrindx(ll))
          enddo
          ifirst=0
       endif
@@ -73,15 +73,15 @@ contains
 !.......................................................................
 !     For given poloidal angle and pitch, determine equatorial
 !     plane pitch angle.
-!     ll= radial index in rovera_(1:lrz) grid
-!     lr= radial index in rovera(1:lrzmax) grid
+!     ll= radial index in rovera_(1:setup0%lrz) grid
+!     lr= radial index in rovera(1:setup0%lrzmax) grid
 !     lookup() adjusts weights for endpoints.
 !.......................................................................
 
-      call lookup(rho,rovera_,lrz,rweightu_,rweightl_,ll)
-      call lookup(rho,rovera,lrzmax,rweightu,rweightl,lr)
+      call lookup(rho,rovera_,setup0%lrz,rweightu_,rweightl_,ll)
+      call lookup(rho,rovera,setup0%lrzmax,rweightu,rweightl,lr)
 
-!     Lookup polang on surrounding pol[1:lz,1:lrzmax] meshes,
+!     Lookup polang on surrounding pol[1:lz,1:setup0%lrzmax] meshes,
 !     interpolate for B/B0, and obtain equatorial plane pitch angle.
 
       if (eqsym.ne."none" .and. polang.gt.pi) &
@@ -147,7 +147,7 @@ contains
 !..................................................................
 
 !     lookup pitch0 on y-grid corresponding to neighboring f()
-      lrm=lrindx(ll-1)
+      lrm=setup0%lrindx(ll-1)
       call lookup(pitch0,y(1:iy_(lr),lr),iy_(lr),pweightu,pweightl,iyy)
       call lookup(pitch0,y(1:iy_(lrm),lrm),iy_(lrm),pweightum,pweightlm,iyym)
       call lookup(xvel,x,jx,xweightu,xweightl,jxx)

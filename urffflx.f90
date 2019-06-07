@@ -39,7 +39,7 @@ contains
 
 
 
-      do 1 l=1,lrzmax
+      do 1 l=1,setup0%lrzmax
  1    tr2(l)=psimag-psivalm(l)
 
 !..................................................................
@@ -47,7 +47,7 @@ contains
 !     assign it to a given flux surface.
 !..................................................................
 
-      call ibcast(ncontrib(1),0,lrzmax)
+      call ibcast(ncontrib(1),0,setup0%lrzmax)
       icount_outside_lim=0 ! only for printout
       icount_outside_ez=0  ! only for printout
       icount_outside_er=0  ! only for printout
@@ -100,23 +100,23 @@ contains
             psiloc(is,iray,irfn(krf))= terp2(rray,zray,nnr,er,nnz,ez, &
                                      epsi,epsirr,epsizz,epsirz,nnra,0,0)
             apsi=psimag-psiloc(is,iray,irfn(krf))
-            l=luf(apsi,tr2(1),lrzmax)
-!BH090602   Ray elements outside LCFS (rho=1 surface) will be attributed to lrzmax
-            if (l.gt.lrzmax) then
+            l=luf(apsi,tr2(1),setup0%lrzmax)
+!BH090602   Ray elements outside LCFS (rho=1 surface) will be attributed to setup0%lrzmax
+            if (l.gt.setup0%lrzmax) then
                if (icount_outside_lim.eq.0) &
                write(*,*)'urffflx: Ray elements outside of rho=1'
                icount_outside_lim=icount_outside_lim+1 !for a printout
                write(*,'(a,i4,2i7)') &
-                   'urffflx:l>lrzmax; iray,is,icount_outside_lim', &
+                   'urffflx:l>setup0%lrzmax; iray,is,icount_outside_lim', &
                                       iray,is,icount_outside_lim
-               l=lrzmax ! Adjusted
+               l=setup0%lrzmax ! Adjusted
             endif
 !$$$            if (l.le.0) then
-!$$$               write(*,*)'urffflx:l,lrzmax,k,iray,is',l,lrzmax,k,iray,is
+!$$$               write(*,*)'urffflx:l,setup0%lrzmax,k,iray,is',l,setup0%lrzmax,k,iray,is
 !$$$               go to 30
 !$$$            endif
             lloc(is,iray,irfn(krf))=l
-!BH090602            if (l.gt.lrzmax) go to 30
+!BH090602            if (l.gt.setup0%lrzmax) go to 30
             ncontrib(l)=ncontrib(l)+1
  30       continue
  20     continue
@@ -138,7 +138,7 @@ contains
  120  continue !  krf=1,mrf
 
 !     Temporary print out checking number of elements at each rad bin:
-!      write(*,*)'urffflx:ncontrib(1:lrzmax):',(ncontrib(l),l=1,lrzmax)
+!      write(*,*)'urffflx:ncontrib(1:setup0%lrzmax):',(ncontrib(l),l=1,setup0%lrzmax)
 
       return
       end subroutine urffflx

@@ -119,8 +119,8 @@ contains
 10140 format("namelist error: ylower < y(itl,l_) < yupper")
 10150 format("iactst = abort forces stop, error > 1.e-8")
 10160 format("njene must be less than njenea")
-10170 format("(lrzdiff=enabled .and. radial transport) not allowed")
-10180 format("(lrzdiff=enabled .and. frmod=enabled) not allowed")
+10170 format("(setup0%lrzdiff=enabled .and. radial transport) not allowed")
+10180 format("(setup0%lrzdiff=enabled .and. frmod=enabled) not allowed")
 10190 format("(urfmod=enabled .and. meshy=fixed_mu) not allowed")
 10200 format("iyh .ne. iy/2, iyh=",i4,"  iy=",i4,"  l_=",i4)
 10210 format("itu .ne. iy-itl+1, itu=",i4,"  iy=",i4,"  itl=",i4, &

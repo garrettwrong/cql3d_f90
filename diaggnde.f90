@@ -20,6 +20,7 @@ module diaggnde_mod
 contains
 
   subroutine diaggnde
+    use cqlconf_mod, only : setup0
     !implicit integer (i-n), real(c_double) (a-h,o-z)
     implicit none
     real(c_double) :: areaovol
@@ -59,13 +60,13 @@ contains
 !.......................................................................
 
       if (oldiag .ne. "enabled") then
-!     use Legendre decomposition for computing the integrals
+!     use Legendre decomposition for computing the integrasetup0%ls
         call diaggnde2
         return
       endif
 
 !..................................................................
-!     Compute integrals for various moments
+!     Compute integrasetup0%ls for various moments
 !     tam1 will contain midplane density moment
 !     tam2 will contain field line (flux surface averaged) density
 !     tam3 will contain parallel current density - at midplane.
@@ -76,13 +77,13 @@ contains
       currmt(l_)=0.
       currmtp(l_)=0.
 
-!     For cqlpmod.ne."enabled", default lmdpln_ will take on values
-!       lrz:1 and successive calls (for given time step).  l_ also
+!     For setup0%cqlpmod.ne."enabled", default lmdpln_ will take on values
+!       setup0%lrz:1 and successive calsetup0%ls (for given time step).  l_ also
 !       takes on these values, so following if statement is satisfied
 !       at each call diaggnde.
-!     For cqlpmod.eq."enabled", lmpdpln_ will equal 1 at each call,
+!     For setup0%cqlpmod.eq."enabled", lmpdpln_ will equal 1 at each call,
 !       whereas l_ varies lrors:1, representing distance along B-field.
-!       Only a single flux surface is examined, lrz=1, and lr_ is a
+!       Only a single flux surface is examined, setup0%lrz=1, and lr_ is a
 !       chosen integer.
       if (l_ .eq. lmdpln_) then
         currt(lr_)=0.
@@ -105,7 +106,7 @@ contains
                ! in the loss cone, but tests show that the solution
                ! can become unstable in such case.
                ! So, keep f() non-zero in the loss cone,
-               ! but do not add such f() to the integrals/sums over d3v.
+               ! but do not add such f() to the integrasetup0%ls/sums over d3v.
               tam1(j)=tam1(j)+f(i,j,k,l_)*cynt2(i,l_)
               tam3(j)=tam3(j)+f(i,j,k,l_)*cynt2(i,l_)*coss(i,l_)
 !     include vptb=|cos(th0)| * tau
@@ -259,7 +260,7 @@ contains
 !%OS
           gni=1./gn
           hni=0.0
-          !XXXXXX infinity?  YuP: hn and gn are never 0 - they are integrals over distr.func.
+          !XXXXXX infinity?  YuP: hn and gn are never 0 - they are integrasetup0%ls over distr.func.
           if (l_ .eq. lmdpln_) hni=1./hn
           if (l_ .eq. lmdpln_) hnis(k,lr_)=hni
 
@@ -268,7 +269,7 @@ contains
 !..................................................................
 
           zfact=hni*zmaxpsi(lr_)*reden(k,lr_)
-          if (cqlpmod .eq. "enabled") zfact=gni*denpar(k,ls_)
+          if (setup0%cqlpmod .eq. "enabled") zfact=gni*denpar(k,ls_)
 
 !MPIINSERT_IF_RANK_EQ_0
           WRITE(*,*)'----------------------- lr_===', lr_
@@ -277,7 +278,7 @@ contains
                          lr_,reden(k,lr_),gn,sum(gone(1:iy,1:jx,k,lr_))
 !MPIINSERT_ENDIF_RANK
 
-          if ( (nlrestrt.ne."disabled") &
+          if ( (setup0%nlrestrt.ne."disabled") &
                .or. (fpld(1,1).eq.-1.0)) then
              continue
           else
@@ -320,7 +321,7 @@ contains
 !..................................................................
 
           faccur=reden(k,lr_)*hni*zmaxpsi(lr_)*vnorm*bnumb(k)*charge
-          if (cqlpmod .eq. "enabled") faccur=denpar(k,ls_)*vnorm* &
+          if (setup0%cqlpmod .eq. "enabled") faccur=denpar(k,ls_)*vnorm* &
             bnumb(k)*charge*gni
           currm(k,l_)=faccur*cn
           curra(k,l_)=faccur*curra(k,l_)
@@ -351,7 +352,7 @@ contains
           endif
 
           fgni=faccur*psifct/3.e+9
-          if (cqlpmod .eq. "enabled") fgni=faccur/3.e+9
+          if (setup0%cqlpmod .eq. "enabled") fgni=faccur/3.e+9
           call dscal(jx,fgni,currv(1:jx,k,l_),1)
           call dscal(jx,fgni,currvs(1:jx,k),1)
 
@@ -397,11 +398,11 @@ contains
           denpar(k,ls_)=one_*gn
           if (sbdry.eq."periodic" .and. transp.eq."enabled") then
             if (ls_ .eq. 1) then
-              denpar(k,lsmax+1)=denpar(k,1)
-              enrgypa(k,lsmax+1)=enrgypa(k,1)
-            else if (ls_ .eq. lsmax) then
-              denpar(k,0)=denpar(k,lsmax)
-              enrgypa(k,0)=enrgypa(k,lsmax)
+              denpar(k,setup0%lsmax+1)=denpar(k,1)
+              enrgypa(k,setup0%lsmax+1)=enrgypa(k,1)
+            else if (ls_ .eq. setup0%lsmax) then
+              denpar(k,0)=denpar(k,setup0%lsmax)
+              enrgypa(k,0)=enrgypa(k,setup0%lsmax)
             endif
           endif
           if (l_ .eq. lmdpln_) then
@@ -465,11 +466,11 @@ contains
  85     continue
 
 !..................................................................
-!     lrzmax.gt.0 flags a multi-flux surface (CQL3D) run.
+!     setup0%lrzmax.gt.0 flags a multi-flux surface (CQL3D) run.
 !     Define dA/DV
 !..................................................................
 
-        if (lrzmax.gt.1.and.n.gt.0) then
+        if (setup0%lrzmax.gt.1.and.n.gt.0) then
           areaovol=darea(lr_)/dvol(lr_)
         else
           if (eqmod.eq."enabled") then

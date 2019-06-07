@@ -30,14 +30,14 @@ contains
                   ! removed around each tp bndry.  This was the
                   ! only option pre-070419.
       if (meshy.eq."free") return
-!BH070419      if (cqlpmod .ne. "enabled") iytr(lrors)=iy-6
-      if (cqlpmod .ne. "enabled" .and. tfac.ge.0.) then
+!BH070419      if (setup0%cqlpmod .ne. "enabled") iytr(lrors)=iy-6
+      if (setup0%cqlpmod .ne. "enabled" .and. tfac.ge.0.) then
          ipacktp=3
          iytr(lrors)=iy-2*ipacktp  !Setting up transport mesh with bins
                                   !at and neighboring t-p bndry removed.
                                   !Used in splitting algorithm for
                                   !transp='enabled'.
-      else  ! i.e., cqlpmod.eq."enabled" .and./.or. tfac.lt.0.
+      else  ! i.e., setup0%cqlpmod.eq."enabled" .and./.or. tfac.lt.0.
          ipacktp=0
          iytr(lrors)=iy
       endif

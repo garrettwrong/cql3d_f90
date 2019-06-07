@@ -13,7 +13,8 @@ module coefmidt_mod
 
 contains
 
-      subroutine coefmidt(c,nn)
+  subroutine coefmidt(c,nn)
+      use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -57,7 +58,7 @@ contains
 !     redefine fluxes near pass/trapped boundary
 !..................................................................
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         xx=-1.
         if (nn .eq. 3) xx=1
         do 4 j=1,jx

@@ -24,7 +24,7 @@ contains
 !..................................................................
 !     This routine computes the density gain (from dF/dt) and compares i
 !     locally to the density gain from the r.h.s. of the F.P. equation.
-!     sumleft and sumright are the integrated totals. error is the
+!     sumleft and sumright are the integrated totasetup0%ls. error is the
 !     normalized difference and should be as close to roundoff as
 !     possible.
 !..................................................................
@@ -49,7 +49,7 @@ contains
 !..................................................................
 
       do 10 i=1,iy
-        if ((i.eq.itl .or. i.eq.itu) .and. cqlpmod.ne."enabled")go to 10
+        if ((i.eq.itl .or. i.eq.itu) .and. setup0%cqlpmod.ne."enabled")go to 10
 !%OS  do 2 j=1,jx
         do 2 j=2,jx-1
           temp4(i,j)=(f(i,j,k,l_)-f_(i,j,k,l_)) &
@@ -78,7 +78,7 @@ contains
 !     Pass/trapped boundary
 !..................................................................
 
-      if (cqlpmod .eq. "enabled") go to 50
+      if (setup0%cqlpmod .eq. "enabled") go to 50
 
 !%OS  should be j=1,jx? may depend on lbdry
       do 3 j=2,jx-1

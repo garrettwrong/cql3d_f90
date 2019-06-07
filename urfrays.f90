@@ -17,7 +17,7 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.................................................................
-!     This routine calls ray tracing code(s), if namelist
+!     This routine calsetup0%ls ray tracing code(s), if namelist
 !     variables, call_lh, call_ech, or call_fw are "enabled".
 !.................................................................
 

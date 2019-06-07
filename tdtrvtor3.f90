@@ -27,7 +27,7 @@ contains
 !     with vp and vp_ being the weights for f1 and f2 respectively.
 !     That is: sum(f1(i)*vp(i)) = sum(f2(i)*vp_(i)), i=1,iy_(l)
 !
-!     This new version of tdtrvtor is such that two successive calls
+!     This new version of tdtrvtor is such that two successive calsetup0%ls
 !     to tdtrvtor2(f1,f2,.,.,iopt) and then tdtrrtov2(f2,f1b,.,.,iopt)
 !     gives f1b = f1 at each point i=1,iy_(l)
 !
@@ -35,7 +35,7 @@ contains
 !     2:       "        of quasilinear term (velsou) (ADI)
 !     3:       "        of transport term (spasou)   (ADI)
 !
-!     Assumes that vp is vp(lrindx(l)) if kopt = 1 and vp(l) otherwise,
+!     Assumes that vp is vp(setup0%lrindx(l)) if kopt = 1 and vp(l) otherwise,
 !     where l=1,lrors
 !..............................................................
 
@@ -60,10 +60,10 @@ contains
       endif
 
 !.......................................................................
-!     kopt=3: loop over lrz instead of lrors
+!     kopt=3: loop over setup0%lrz instead of lrors
 !.......................................................................
       leff=lrors
-      if (kopt .eq. 3) leff=lrz
+      if (kopt .eq. 3) leff=setup0%lrz
 
       call dcopy(iyjx2*ngen*leff,f1(0:iy+1,0:jx+1,1:ngen,1:leff),1, &
                                  f2(0:iy+1,0:jx+1,1:ngen,1:leff),1)

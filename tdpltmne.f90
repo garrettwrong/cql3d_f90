@@ -14,7 +14,8 @@ module tdpltmne_mod
 
 contains
 
-      subroutine tdpltmne
+  subroutine tdpltmne
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : rbound
@@ -44,29 +45,29 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       if (plt3d .ne. "enabled") return
-      if (lrzmax .le. 2) return
-      lrzevn=(lrzmax/2)*2
+      if (setup0%lrzmax .le. 2) return
+      lrzevn=(setup0%lrzmax/2)*2
       dgts=1.e-8
 !..................................................................
 !     Determine the x-axis for plots (psi or rho - both normalized).
 !..................................................................
 
       if (pltvs.eq."psi") then
-        do 20 l=1,lrzmax
+        do 20 l=1,setup0%lrzmax
           tr(l)=(equilpsi(0)-equilpsi(l))/equilpsi(0)
  20     continue
         write(t_horiz,'(a3)') 'psi'
       else
-        do 30 l=1,lrzmax
+        do 30 l=1,setup0%lrzmax
           tr(l)=rz(l)/radmin
  30     continue
         write(t_horiz,'(a6,a8,a1)') 'rho (=', radcoord, ')'
       endif
 
-      do 21 l=1,lrz
-        trilr(l)=tr(lrindx(l))
+      do 21 l=1,setup0%lrz
+        trilr(l)=tr(setup0%lrindx(l))
  21   continue
 
 
@@ -84,7 +85,7 @@ contains
         write(t_,3002) k,kspeci(1,k),kspeci(2,k),n
         CALL PGMTXT('T',3.,0.,0.,t_)
  3002   format("species no. ",i2,4x,a8,2x,a8,2x," time step n=",i4)
-        do 19 l=1,lrzmax
+        do 19 l=1,setup0%lrzmax
           tr1(l)=reden(k,l)
           tr2(l)=0.0
           tr3(l)=0.0
@@ -95,12 +96,12 @@ contains
  19     continue
         fmin=0.
         fmax=0.
-        call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+        call aminmx(tr1(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
         if (fmin .ge. .95*fmax) fmin=.95*fmax
-        call aminmx(tr2(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+        call aminmx(tr2(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin1,fmax1,kmin,kmax)
         if (fmin1.lt.fmin) fmin=fmin1
         if(fmax1.gt.fmax) fmax=fmax1
-        call aminmx(tr3(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+        call aminmx(tr3(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin1,fmax1,kmin,kmax)
         if (fmin1.lt.fmin) fmin=fmin1
         if(fmax1.gt.fmax) fmax=fmax1
         fmax=fmax*1.05 ! extend range, in case the profile is flat
@@ -111,22 +112,22 @@ contains
         ENDDO
         RPG1=fmin
         RPG2=fmax
-        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+        CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         DO I=1,LRZMAX
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2)
         DO I=1,LRZMAX
            RLRZAP12(I)=tr2(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
         CALL PGSLS(3)
         DO I=1,LRZMAX
            RLRZAP13(I)=tr3(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
         CALL PGSLS(1)
         write(t_,4050) pltvs
  4050   format(a8)
@@ -153,25 +154,25 @@ contains
         CALL PGMTXT('T',3.,0.,0.,t_)
 
         if (n .eq. 0) then
-          do 18 l=1,lrzmax
+          do 18 l=1,setup0%lrzmax
             tr1(l)=energy(k,l) ! FSA, solid line
             tr2(l)=0
 !     tr3 set to zero so no need to change following plot statements
             tr3(l)=0
  18       continue
           if (k .le. ngen) then
-            do 181 ll=1,lrz
-              tr2(lrindx(ll))=energym(k,ll) ! midplane, dashed line
+            do 181 ll=1,setup0%lrz
+              tr2(setup0%lrindx(ll))=energym(k,ll) ! midplane, dashed line
  181        continue
           endif
         else if (k .le. ngen) then ! and n>0
-          do 182 l=1,lrzmax
+          do 182 l=1,setup0%lrzmax
             tr1(l)=energy(k,l) ! FSA, solid line
             tr2(l)=0.0
             tr3(l)=0.0
  182      continue
-          do 183 l=1,lrz
-            ilr=lrindx(l)
+          do 183 l=1,setup0%lrz
+            ilr=setup0%lrindx(l)
             tr2(ilr)=energyv(k,ilr) !?? FSA, transport related,  dashed line
             tr3(ilr)=energyr(k,ilr) !?? FSA, transport related,  dot-dashed line
  183      continue
@@ -179,12 +180,12 @@ contains
 
         fmin=0.
         fmax=0.
-        call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+        call aminmx(tr1(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
         if (fmin .ge. .95*fmax) fmin=.95*fmax
-        call aminmx(tr2(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+        call aminmx(tr2(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin1,fmax1,kmin,kmax)
         if (fmin1.lt.fmin) fmin=fmin1
         if(fmax1.gt.fmax) fmax=fmax1
-        call aminmx(tr3(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+        call aminmx(tr3(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin1,fmax1,kmin,kmax)
         if (fmin1.lt.fmin) fmin=fmin1
         if(fmax1.gt.fmax) fmax=fmax1
         fmax=fmax*1.05 ! extend range, in case the profile is flat
@@ -198,17 +199,17 @@ contains
         RPG1=fmin
         RPG2=fmax
         RPG1=min(fmin,0.)
-        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+        CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
 
         CALL PGSLS(1)  !solid
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
 
         CALL PGSLS(2)  !Set dashed line style
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
 
         CALL PGSLS(3)  !Set dot-dash line style
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
 
         CALL PGSLS(1)  !Re-set solid line style for annotation
 
@@ -220,7 +221,7 @@ contains
 
  400  continue
 
-      if (cqlpmod .eq. "enabled") then
+      if (setup0%cqlpmod .eq. "enabled") then
 
         do 350 k=1,ntotal
           if (k.gt.ngen .and. k.ne.kelec .and. n.gt.1) go to 350
@@ -234,24 +235,24 @@ contains
         CALL PGUNSA
           write(t_,3050) k,kspeci(1,k),kspeci(2,k)
         CALL PGMTXT('T',3.,0.,0.,t_)
-          write(t_,3051) lrindx(1),rz(lrindx(1))/radmin
+          write(t_,3051) setup0%lrindx(1),rz(setup0%lrindx(1))/radmin
         CALL PGMTXT('T',2.,0.,0.,t_)
  3050     format("species no. ",i2,2x,a8,2x,a8)
  3051     format("r(",i2,")/a=",1pe11.4)
 
 
-          do 352 ll=1,lsmax
+          do 352 ll=1,setup0%lsmax
             tr1s(ll)=denpar(k,ll)
  352      continue
           fmin=0.
           fmax=0.
-          call aminmx(tr1s(1:lsmax),1,lsmax,1,fmin,fmax,kmin,kmax)
+          call aminmx(tr1s(1:setup0%lsmax),1,setup0%lsmax,1,fmin,fmax,kmin,kmax)
           if (fmin .ge. .95*fmax) fmin=.95*fmax
           fmin=0.d0 ! YuP: make lower limit =0.0
           fmax=fmax*1.05 ! extend range, in case the profile is flat
 
         DO I=1,LSMAX
-           RLRORSA(I)=z(i,lrindx(1))
+           RLRORSA(I)=z(i,setup0%lrindx(1))
            RLRORSA1(I)=tr1s(i)
         ENDDO
         RPG1=fmin
@@ -267,7 +268,7 @@ contains
         ENDIF
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
+        CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA1(1))
 
           write(t_,4051)
  4051     format("s (cms)")
@@ -290,21 +291,21 @@ contains
         CALL PGUNSA
           write(t_,3050) k,kspeci(1,k),kspeci(2,k)
         CALL PGMTXT('T',3.,0.,0.,t_)
-          write(t_,3051) lrindx(1),rz(lrindx(1))/radmin
+          write(t_,3051) setup0%lrindx(1),rz(setup0%lrindx(1))/radmin
         CALL PGMTXT('T',2.,0.,0.,t_)
 
-          do 452 ll=1,lsmax
+          do 452 ll=1,setup0%lsmax
             tr1s(ll)=enrgypa(k,ll) ! Midplane
  452      continue
           fmin=0.
           fmax=0.
-          call aminmx(tr1s(1:lsmax),1,lsmax,1,fmin,fmax,kmin,kmax)
+          call aminmx(tr1s(1:setup0%lsmax),1,setup0%lsmax,1,fmin,fmax,kmin,kmax)
           if (fmin .ge. .95*fmax) fmin=.95*fmax
           fmin=0.d0 ! YuP: make lower limit =0.0
           fmax=fmax*1.05 ! extend range, in case the profile is flat
 
         DO I=1,LSMAX
-           RLRORSA(I)=z(i,lrindx(1))
+           RLRORSA(I)=z(i,setup0%lrindx(1))
            RLRORSA1(I)=tr1s(i)
         ENDDO
         RPG1=fmin
@@ -320,7 +321,7 @@ contains
         ENDIF
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
+        CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA1(1))
 
           write(t_,4051)
 
@@ -356,19 +357,19 @@ contains
 
 
 
-          do 69 l=1,lrzmax
+          do 69 l=1,setup0%lrzmax
             tr2(l)=currr(k,l)
             tr3(l)=currv_(k,l)
             tr1(l)=currz(k,l)
  69       continue
           fmin=0.
           fmax=0.
-          call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+          call aminmx(tr1(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
           if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
-          call aminmx(tr2(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+          call aminmx(tr2(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin1,fmax1,kmin,kmax)
           if (fmin1.lt.fmin) fmin=fmin1
           if(fmax1.gt.fmax) fmax=fmax1
-          call aminmx(tr3(1:lrzmax),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+          call aminmx(tr3(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin1,fmax1,kmin,kmax)
           if (fmin1.lt.fmin) fmin=fmin1
           if(fmax1.gt.fmax) fmax=fmax1
           if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
@@ -379,22 +380,22 @@ contains
         ENDDO
         RPG1=fmin
         RPG2=fmax
-        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+        CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         DO I=1,LRZMAX
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2)
         DO I=1,LRZMAX
            RLRZAP12(I)=tr2(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
         CALL PGSLS(3)
         DO I=1,LRZMAX
            RLRZAP13(I)=tr3(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
         CALL PGSLS(1) ! restore solid line
         write(t_,4050) pltvs
         CALL PGLAB(t_,'Curr Den (A/cm\u2\d)',' ')
@@ -406,7 +407,7 @@ contains
 
 
 !
-          if (cqlpmod.eq."enabled") then
+          if (setup0%cqlpmod.eq."enabled") then
 
         CALL PGPAGE
         CALL PGSVP(.2,.8,.2,.6)
@@ -418,20 +419,20 @@ contains
         CALL PGUNSA
           write(t_,3050) k,kspeci(1,k),kspeci(2,k)
         CALL PGMTXT('T',3.,0.,0.,t_)
-          write(t_,3051) lrindx(1),rz(lrindx(1))/radmin
+          write(t_,3051) setup0%lrindx(1),rz(setup0%lrindx(1))/radmin
         CALL PGMTXT('T',2.,0.,0.,t_)
 
 
 
 
 
-            do 551 ll=1,lsmax
+            do 551 ll=1,setup0%lsmax
               tr1s(ll)=pcurr(nch(ll),k,ll)
               tr2s(ll)=psis(ll)*pcurr(nch(1),k,1)
  551        continue
-            ilsmx=lsmax
+            ilsmx=setup0%lsmax
             if (sbdry .eq. "periodic") then
-              ilsmx=lsmax+1
+              ilsmx=setup0%lsmax+1
               tr1s(ilsmx)=tr1s(1)
               tr2s(ilsmx)=tr2s(1)
             endif
@@ -446,7 +447,7 @@ contains
 
 
         DO I=1,LSMAX
-           RLRORSA(I)=z(i,lrindx(1))
+           RLRORSA(I)=z(i,setup0%lrindx(1))
            RLRORSA1(I)=tr1s(i)
            RLRORSA2(I)=tr2s(i)
         ENDDO
@@ -457,9 +458,9 @@ contains
         ENDIF
         CALL PGSWIN(RLRORSA(1),RLRORSA(LSMAX),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA1(1))
+        CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA1(1))
         CALL PGSLS(2)
-        CALL PGLINE(lsmax,RLRORSA(1),RLRORSA2(1))
+        CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA2(1))
         CALL PGSLS(1)
         write(t_,4051)
         CALL PGLAB(t_,'Curr Den (A/cm\u2\d',' ')
@@ -486,11 +487,11 @@ contains
  6002       format("total rf power =",1pe10.2," Watts")
         CALL PGMTXT('T',2.,0.,0.,t_)
 
-            do 99 ll=1,lrzmax
+            do 99 ll=1,setup0%lrzmax
  99         tr1(ll)=rfpwrz(k,ll)
             fmin=0.
             fmax=0.
-            call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+            call aminmx(tr1(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
 !BH090220            if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
         if (abs(fmin-fmax).lt.fmax*dgts) fmax=fmin+.001*abs(fmin)
         if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
@@ -507,12 +508,12 @@ contains
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-        CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+        CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         DO I=1,LRZMAX
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGLAB('Radius','RF Power (W/cm\u3\d)',' ')
 
 
@@ -533,11 +534,11 @@ contains
  6004       format(";","synchrotron radiated power =",e16.6," Watts")
             CALL  PGMTXT('T',2.,0.,0.,t_)
 
-            do 79 ll=1,lrzmax
+            do 79 ll=1,setup0%lrzmax
  79            tr1(ll)=psyncz(ll)
             fmin=0.
             fmax=0.
-            call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+            call aminmx(tr1(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
             if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
             if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
 
@@ -549,12 +550,12 @@ contains
             IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
                RPG2= RPG1+1.e-16
             ENDIF
-            CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+            CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
             CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
             DO I=1,LRZMAX
                RLRZAP11(I)=tr1(i)
             ENDDO
-            CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+            CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
             CALL PGLAB('Radius','Synch Power (W/cm\u3\d)',' ')
 
           endif ! syncrad.ne."disabled" .and. k.eq.kelecg
@@ -599,16 +600,16 @@ contains
 !BH120314                  CALL PGMTXT('T',2.,0.,0.,t_)
 !BH120314               endif
 
-               do 801 ll=1,lrzmax
+               do 801 ll=1,setup0%lrzmax
                   tr1(ll)=fuspwrv(lsig,ll)
                   tr2(ll)=fuspwrm(lsig,ll)
  801           continue
 
                fmin=0.
                fmax=0.
-               call aminmx(tr1(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+               call aminmx(tr1(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
 !BH120314               if (isigsgv2.eq.1) then
-!BH120314                 call aminmx(tr2(1),1,lrzmax,1,fmin1,fmax1,kmin,kmax)
+!BH120314                 call aminmx(tr2(1),1,setup0%lrzmax,1,fmin1,fmax1,kmin,kmax)
 !BH120314                 fmin=min(fmin,fmin1)
 !BH120314                 fmax=max(fmax,fmax1)
 !BH120314               endif
@@ -623,17 +624,17 @@ contains
                IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
                   RPG2= RPG1+1.e-16
                ENDIF
-               CALL PGSWIN(RLRZAP1(1),RLRZAP1(lrzmax),RPG1,RPG2)
+               CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
                CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
                DO I=1,LRZMAX
                   RLRZAP11(I)=tr1(i)
                ENDDO
-               CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+               CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
                CALL PGSLS(2)
                DO I=1,LRZMAX
                   RLRZAP12(I)=tr2(i)
                ENDDO
-               CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+               CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
                CALL PGSLS(1)
                CALL PGSAVE
                CALL PGSCH(1.44)
@@ -714,12 +715,12 @@ contains
 !$$$            call gscpvs(.01,.85)
 !$$$            write(t_,3002) k,kspeci(1,k),kspeci(2,k)
 !$$$            call gptx2d(t_)
-!$$$            do 6030 l=1,lrzmax-1,2
+!$$$            do 6030 l=1,setup0%lrzmax-1,2
 !$$$              write(t_,6005) tr(l),pegyz(k,l),tr(l+1),pegyz(k,l+1)
 !$$$              call gptx2d(t_)
 !$$$ 6030       continue
-!$$$            if (lrzmax.ne.lrzevn) then
-!$$$              write(t_,6031) tr(lrzmax),pegyz(k,lrzmax)
+!$$$            if (setup0%lrzmax.ne.lrzevn) then
+!$$$              write(t_,6031) tr(setup0%lrzmax),pegyz(k,setup0%lrzmax)
 !$$$              call gptx2d(t_)
 !$$$            endif
 !$$$ 6005       format(2("pegyz(",e12.5,")=",e15.5," Watts per cc",3x),"$")
@@ -729,16 +730,16 @@ contains
 !$$$ 6006       format(";","total phenomenological energy loss =",e16.6,
 !$$$     1        " Watts","$")
 !$$$
-!$$$            do 89  l=1,lrzmax
+!$$$            do 89  l=1,setup0%lrzmax
 !$$$ 89         tr1(l)=pegyz(k,l)
 !$$$            fmin=0.
 !$$$            fmax=0.
-!$$$            call aminmx(tr1(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+!$$$            call aminmx(tr1(1),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
 !$$$            if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
-!$$$            call gswd2d("linlin$",tr(1),tr(lrzmax),fmin,fmax)
+!$$$            call gswd2d("linlin$",tr(1),tr(setup0%lrzmax),fmin,fmax)
 !$$$            call gsvp2d(.2,.8,.2,.5)
 !$$$            call gpgr80("linlin$")
-!$$$            call gpcv2d(tr(1),tr1(1),lrzmax)
+!$$$            call gpcv2d(tr(1),tr1(1),setup0%lrzmax)
 !$$$C%OS  call gxglfr(0)
 !$$$          endif
 !$$$
@@ -757,12 +758,12 @@ contains
 !$$$            call gscpvs(.01,.85)
 !$$$            write(t_,3002) k,kspeci(1,k),kspeci(2,k)
 !$$$            call gptx2d(t_)
-!$$$            do 6040 l=1,lrzmax-1,2
+!$$$            do 6040 l=1,setup0%lrzmax-1,2
 !$$$              write(t_,6007) tr(l),pplossz(k,l),tr(l+1),pplossz(k,l+1)
 !$$$              call gptx2d(t_)
 !$$$ 6040       continue
-!$$$            if (lrzmax.ne.lrzevn) then
-!$$$              write(t_,6041) tr(lrzmax),pplossz(k,lrzmax)
+!$$$            if (setup0%lrzmax.ne.lrzevn) then
+!$$$              write(t_,6041) tr(setup0%lrzmax),pplossz(k,setup0%lrzmax)
 !$$$              call gptx2d(t_)
 !$$$            endif
 !$$$ 6007       format(2("pplossz(",e12.5,")=",e15.5," Watts per cc",3x),
@@ -772,16 +773,16 @@ contains
 !$$$            call gptx2d(t_)
 !$$$ 6008       format(";","total particle loss power =",e16.6," Watts","$")
 !$$$
-!$$$            do 109  l=1,lrzmax
+!$$$            do 109  l=1,setup0%lrzmax
 !$$$ 109        tr1(l)=pegyz(k,l)
 !$$$            fmin=0.
 !$$$            fmax=0.
-!$$$            call aminmx(tr1(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
+!$$$            call aminmx(tr1(1),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
 !$$$            if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
-!$$$            call gswd2d("linlin$",tr(1),tr(lrzmax),fmin,fmax)
+!$$$            call gswd2d("linlin$",tr(1),tr(setup0%lrzmax),fmin,fmax)
 !$$$            call gsvp2d(.2,.8,.2,.5)
 !$$$            call gpgr80("linlin$")
-!$$$            call gpcv2d(tr(1),tr1(1),lrzmax)
+!$$$            call gpcv2d(tr(1),tr1(1),setup0%lrzmax)
 !$$$            call gxglfr(0)
 !$$$          endif
 !

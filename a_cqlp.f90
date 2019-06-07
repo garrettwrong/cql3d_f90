@@ -250,7 +250,8 @@ program a_cql3d
 !
 !..................................................................
 
-real(c_float) tarray(2)
+  real(c_float) tarray(2)
+  character(len=*),parameter :: nml_file = 'cqlinput'
 
 !MPIINSERT_INCLUDE
 
@@ -265,7 +266,7 @@ mpirank=0 ! When MPI is used, mpirank is set in init_mpi below
 
 call cpu_time(tarray(1))    !This is an f95 intrinsic subroutine
 !------------!
-call abchief !-> calls tdchief (only)
+call abchief(nml_file) !-> calls tdchief (only)
 !------------!
 call cpu_time(tarray(2))
 

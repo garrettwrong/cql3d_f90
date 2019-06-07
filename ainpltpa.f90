@@ -33,7 +33,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       CALL PGPAGE
       RILIN=0.
@@ -109,7 +109,7 @@ contains
       RILIN=RILIN+1.
 !      CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
-      if (lrzmax .gt. 1) then
+      if (setup0%lrzmax .gt. 1) then
 
          write(t_,13014)
 13014    format("lrza is the maximum number of radial flux surfaces")
@@ -180,7 +180,7 @@ contains
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13027)
-13027 format("ndtr1a is maximum number of time step intervals dtr1().")
+13027 format("ndtr1a is maximum number of time step intervasetup0%ls dtr1().")
       RILIN=RILIN+1.
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
 

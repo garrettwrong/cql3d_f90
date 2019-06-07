@@ -19,21 +19,21 @@ contains
 ! its energy.
 ! It uses beam-stopping cross sections from tdnpabscs.f and assumes that
 ! the energtic neutral has energy greater than Ti and Te.
-! The results are stored in array stoplamda(1:lrzmax,1:n_en_length) in cm
+! The results are stored in array stoplamda(1:setup0%lrzmax,1:n_en_length) in cm
 ! Inputs: en_ is an array of energetic neutral energies with length nen
 ! en_ is the left edge of energy bin....
 ! Version 1.0
 ! Outputs checked and looks reasonable.
 !..............V.Tang 9-25-05...............................................
        implicit integer (i-n), real(c_double) (a-h,o-z)
-       real(c_double),dimension(lrzmax,nen_npa)::stoplamda
+       real(c_double),dimension(setup0%lrzmax,nen_npa)::stoplamda
        real(c_double),dimension(nen_npa)::en_m
        real(c_double)::stopcs
-       real(c_double),dimension(lrzmax)::ene
+       real(c_double),dimension(setup0%lrzmax)::ene
 
 !       print*, "lam called"
-       print*,lrzmax, nen_npa
-       do 200 nn=1,lrzmax !flux surface
+       print*,setup0%lrzmax, nen_npa
+       do 200 nn=1,setup0%lrzmax !flux surface
        do 100 mm=1,nen_npa !energy
 !$$$       print*,'lam: loop enetered'
 !$$$       print*,'lam: electron den is:',ene(nn)
@@ -42,7 +42,7 @@ contains
 !$$$       print*,'lam: fast neut engy:',en_m(mm)/bnumb(1)
        stopcs=0.
        call bscs(en_m(mm)/bnumb(1),ene(nn), &
-        temp(kelec,nn),zeff(nn),stopcs) ! calls bscs to get cross section
+        temp(kelec,nn),zeff(nn),stopcs) ! calsetup0%ls bscs to get cross section
 !$$$       print*,'cross section:', stopcs
        stoplamda(nn,mm)=1/(ene(nn)*stopcs) ! mean-free path=1/(ne*sigma_stop) in cm
 !$$$       print *,"lam: flux surface",nn,"Energy index",mm

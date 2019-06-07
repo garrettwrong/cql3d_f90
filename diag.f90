@@ -18,7 +18,7 @@ contains
       save
 
 !..................................................................
-!     This routine controls the calculation of various
+!     This routine controsetup0%ls the calculation of various
 !     density and power diagnostics.
 !     In particular, it determines density gain and loss due to
 !     various physical and numerical processes.

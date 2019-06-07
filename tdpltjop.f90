@@ -14,7 +14,8 @@ module tdpltjop_mod
 
 contains
 
-      subroutine tdpltjop
+  subroutine tdpltjop
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -41,26 +42,26 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
 !..................................................................
 !     Determine the x-axis for plots (psi or rho - both normalized).
 !..................................................................
 
       if (pltvs.eq."psi") then
-        do 20 l=1,lrzmax
+        do 20 l=1,setup0%lrzmax
           tr(l)=(equilpsi(0)-equilpsi(l))/equilpsi(0)
  20     continue
         write(t_horiz,'(a3)') 'psi'
       else
-        do 30 l=1,lrzmax
+        do 30 l=1,setup0%lrzmax
           tr(l)=rya(l) !YuP: was rz(l)/radmin
           !write(*,*)'lr,radmin,rz(lr),rya(lr)=',l,radmin,rz(l),rya(l)
  30     continue
         write(t_horiz,'(a6,a8,a1)') 'rho (=', radcoord, ')'
       endif
 
-      do l=1,lrzmax ! for plots of profiles vs R
+      do l=1,setup0%lrzmax ! for plots of profiles vs R
           RLRZAP(l)=rpcon(l) ! R_outermost of flux surf.
       enddo
 
@@ -89,14 +90,14 @@ contains
 
       fmin=0.
       fmax=0.
-      call aminmx(currtz(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
-      call aminmx(currtpz(1:lrzmax),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(currtz(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
+      call aminmx(currtpz(1:setup0%lrzmax),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (fmax.lt.gmax) fmax=gmax
-      call aminmx(bscurm(1:lrzmax,1,kke),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(bscurm(1:setup0%lrzmax,1,kke),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (fmax.lt.gmax) fmax=gmax
-      call aminmx(bscurm(1:lrzmax,2,kki),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(bscurm(1:setup0%lrzmax,2,kki),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (fmax.lt.gmax) fmax=gmax
       if (fmax-fmin.lt.1.e-8) fmin=fmax-.1*abs(fmax)-1.e-5
@@ -117,7 +118,7 @@ contains
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
 
-!yup      call aminmx(totcurz(1),1,lrzmax,1,gmin,gmax,kmin,kmax)
+!yup      call aminmx(totcurz(1),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
 !yup      if (gmin.lt.fmin) fmin=gmin
 !yup      if (fmax.lt.gmax) fmax=gmax
 !yup [May-2014] Do not plot the total current anymore,
@@ -165,23 +166,23 @@ contains
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         ! fi (general ions):
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         ! fi+e [can be general ions (if any) + general electrons,
         ! or general ions + screening current from e; see eleccomp='enabled' option]:
         CALL PGSLS(2) ! ---
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
-        ! Bootstrap for e, based on jhirsh88/99 models:
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+        ! Bootstrap for e, based on jhirsh88/99 modesetup0%ls:
         CALL PGSLS(3) ! -.-
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
-        ! Bootstrap for ions, based on jhirsh88/99 models:
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
+        ! Bootstrap for ions, based on jhirsh88/99 modesetup0%ls:
         CALL PGSLS(4) ! ...
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP14(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP14(1))
         CALL PGSLS(1) ! Restore solid line
 !yup        ! Total: [YuP: do not plot anymore]
 !yup        DO I=1,LRZMAX
 !yup           RLRZAP13(I)=totcurz(i)
 !yup        ENDDO
-!yup        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
+!yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
         CALL PGSAVE
         CALL PGSCH(1.44)
         CALL PGLAB(' ','curr density (A/cm\u2\d)',' ')
@@ -194,20 +195,20 @@ contains
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-        CALL PGSWIN(RPGmin,RLRZAP(lrzmax),RPG1,RPG2)
+        CALL PGSWIN(RPGmin,RLRZAP(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         ! fi (general ions):
-        CALL PGLINE(lrzmax,RLRZAP(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP11(1))
         ! fi+e [can be general ions (if any) + general electrons,
         ! or general ions + screening current from e; see eleccomp='enabled' option]:
         CALL PGSLS(2) ! ---
-        CALL PGLINE(lrzmax,RLRZAP(1),RLRZAP12(1))
-        ! Bootstrap for e, based on jhirsh88/99 models:
+        CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP12(1))
+        ! Bootstrap for e, based on jhirsh88/99 modesetup0%ls:
         CALL PGSLS(3) ! -.-
-        CALL PGLINE(lrzmax,RLRZAP(1),RLRZAP13(1))
-        ! Bootstrap for ions, based on jhirsh88/99 models:
+        CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP13(1))
+        ! Bootstrap for ions, based on jhirsh88/99 modesetup0%ls:
         CALL PGSLS(4) ! ...
-        CALL PGLINE(lrzmax,RLRZAP(1),RLRZAP14(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP14(1))
         CALL PGSLS(1) ! Restore solid line
         CALL PGSAVE
         CALL PGSCH(1.44)
@@ -252,11 +253,11 @@ contains
       fmin=0.
       fmax=0.
 
-      call aminmx(currtzi(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
-      call aminmx(currtpzi(1:lrzmax),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(currtzi(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
+      call aminmx(currtpzi(1:setup0%lrzmax),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (fmax.lt.gmax) fmax=gmax
-!yup      call aminmx(totcurzi(1),1,lrzmax,1,gmin,gmax,kmin,kmax)
+!yup      call aminmx(totcurzi(1),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
 !yup      if (gmin.lt.fmin) fmin=gmin
 !yup      if (fmax.lt.gmax) fmax=gmax
       if (fmax-fmin.lt.1.e-8) fmin=fmax-.1*abs(fmax)-1.e-5
@@ -282,17 +283,17 @@ contains
         DO I=1,LRZMAX
            RLRZAP11(I)=currtzi(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2)
         DO I=1,LRZMAX
            RLRZAP12(I)=currtpzi(i)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
 !yup        CALL PGSLS(3)
 !yup        DO I=1,LRZMAX
 !yup           RLRZAP13(I)=totcurzi(i)
 !yup        ENDDO
-!yup        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1))
+!yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
         CALL PGSLS(1)
         CALL PGSAVE
         CALL PGSCH(1.44)
@@ -342,7 +343,7 @@ contains
         "      (sorpw_rf for gen.species 1,2,3)")
 
 !     Start printing results on first page
-      do 10  l=1,min(40,lrzmax)
+      do 10  l=1,min(40,setup0%lrzmax)
         if (ngen.eq.1) then
           write(t_,6015) tr(l),sorpwt(l),sorpw_nbi(kfrsou1,l), &
             sorpw_rf(1,l)
@@ -357,12 +358,12 @@ contains
         RILIN=RILIN+1.
  10   continue
 
-!     Continue printing results on second page, if lrzmax.gt.40
-      if (lrzmax.gt.40) then
+!     Continue printing results on second page, if setup0%lrzmax.gt.40
+      if (setup0%lrzmax.gt.40) then
          CALL PGPAGE
          CALL PGSVP(.05,.95,.05,.95)
          RILIN=0.+3.
-         do l=41,lrzmax
+         do l=41,setup0%lrzmax
             if (ngen.eq.1) then
                write(t_,6015) tr(l),sorpwt(l),sorpw_nbi(kfrsou1,l), &
                     sorpw_rf(1,l)
@@ -384,24 +385,24 @@ contains
 
 
       RILIN=RILIN+2.
-      write(t_,6022) sorpwtza !sorpwtza=sorpwti(lrzmax) !NBI+RF, all gen.species
+      write(t_,6022) sorpwtza !sorpwtza=sorpwti(setup0%lrzmax) !NBI+RF, all gen.species
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
       RILIN=RILIN+1.
-      write(t_,6023) sorpw_nbii(kfrsou1,lrzmax)     ! NBI only
+      write(t_,6023) sorpw_nbii(kfrsou1,setup0%lrzmax)     ! NBI only
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
       RILIN=RILIN+1.
       if (ngen.ge.1) then
-         write(t_,6024) sorpw_rfi(1,lrzmax) ! RF(1st gen.species) only
+         write(t_,6024) sorpw_rfi(1,setup0%lrzmax) ! RF(1st gen.species) only
          CALL PGMTXT('T',-RILIN,0.,0.,t_)
          RILIN=RILIN+1.
       endif
       if (ngen.ge.2) then
-         write(t_,6025) sorpw_rfi(2,lrzmax) ! RF(2nd gen.species) only
+         write(t_,6025) sorpw_rfi(2,setup0%lrzmax) ! RF(2nd gen.species) only
          CALL PGMTXT('T',-RILIN,0.,0.,t_)
          RILIN=RILIN+1.
       endif
       if (ngen.ge.3) then
-         write(t_,6026) sorpw_rfi(3,lrzmax) ! RF(3rd gen.species) only
+         write(t_,6026) sorpw_rfi(3,setup0%lrzmax) ! RF(3rd gen.species) only
          CALL PGMTXT('T',-RILIN,0.,0.,t_)
          RILIN=RILIN+1.
       endif
@@ -442,7 +443,7 @@ contains
         "           (powrf(*,harmonic) for harmonics = 1-5)")
 
 !     Start printing results on first page
-      do l=1,min(40,lrzmax)
+      do l=1,min(40,setup0%lrzmax)
         if (mrfn.eq.1) then
           write(t_,6115) tr(l),powrft(l),powrf(l,1)
         elseif (mrfn.eq.2) then
@@ -461,12 +462,12 @@ contains
         RILIN=RILIN+1.
       enddo
 
-!     Continue printing results on second page, if lrzmax.gt.40
-      if (lrzmax.gt.40) then
+!     Continue printing results on second page, if setup0%lrzmax.gt.40
+      if (setup0%lrzmax.gt.40) then
          CALL PGPAGE
          CALL PGSVP(.05,.95,.05,.95)
          RILIN=0.+3.
-         do l=41,lrzmax
+         do l=41,setup0%lrzmax
            if (mrfn.eq.1) then
              write(t_,6115) tr(l),powrft(l),powrf(l,1)
            elseif (mrfn.eq.2) then
@@ -563,8 +564,8 @@ contains
       fmax=0.
       gmin=0.
       gmax=0.
-      call aminmx(powrft(1:lrzmax),1,lrzmax,1,gmin,gmax,kmin,kmax)
-      call aminmx(sorpwt(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+      call aminmx(powrft(1:setup0%lrzmax),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(sorpwt(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
       if (gmin.lt.fmin) fmin=gmin
       if (gmax.gt.fmax) fmax=gmax
       !if (fmax-fmin.lt.1.e-16) fmin=fmax-.1*abs(fmax)-1.e-5
@@ -573,7 +574,7 @@ contains
       RPG2=fmax
       RPG1=min(fmin,0.) !Make lower limit 0 when fmin>0
 
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
         tr1(l)=powrft(l)
       enddo
 
@@ -581,7 +582,7 @@ contains
       CALL PGSVP(.2,.8,.2,.6)
       CALL PGSAVE
       CALL PGSCH(1.44) ! set character size; default is 1.
-      CALL PGSLW(lnwidth) ! line thickness/width
+      CALL PGSLW(setup0%lnwidth) ! line thickness/width
       CALL PGMTXT('T',6.,0.5,0.5, &
                     'FSA SOURCE POWER DEN: (WATTS/CM\u3\d)')
       CALL PGMTXT('T',5.,0.,0., &
@@ -611,28 +612,28 @@ contains
         DO I=1,LRZMAX
            RLRZAP11(I)=sorpwt(i) ! solid: NBI+RF(all gen.species)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2) ! 2-> dashed
         DO I=1,LRZMAX
            RLRZAP12(I)=sorpw_nbi(kfrsou1,I) ! dashed: NBI only
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
       do k=1,ngen ! rf sources for general species
          DO I=1,LRZMAX
             RLRZAP12(I)=sorpw_rf(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
-         CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
       enddo ! k=1,ngen
       !
       CALL PGSLS(1) ! solid
-      CALL PGSLW(lnwidth+1) ! bold
+      CALL PGSLW(setup0%lnwidth+1) ! bold
       DO I=1,LRZMAX
          RLRZAP13(I)=powrft(i)
       ENDDO
-      CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
+      CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
       CALL PGSLS(1)
-      CALL PGSLW(lnwidth) !
+      CALL PGSLW(setup0%lnwidth) !
       CALL PGSAVE
       CALL PGSCH(1.44)
       CALL PGLAB(' ','power density (W/cm\u3\d)',' ')
@@ -647,7 +648,7 @@ contains
       CALL PGSVP(.2,.8,.2,.6)
       CALL PGSAVE
       CALL PGSCH(1.44) ! set character size; default is 1.
-      CALL PGSLW(lnwidth) ! line thickness/width
+      CALL PGSLW(setup0%lnwidth) ! line thickness/width
       CALL PGMTXT('T',6.,0.5,0.5, &
                     'FSA RF POWER DEN: (WATTS/CM\u3\d)')
       CALL PGMTXT('T',3.,0.,0., &
@@ -661,7 +662,7 @@ contains
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
       ! Vertical axis limits:
-      call aminmx(powrft(1:lrzmax),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(powrft(1:setup0%lrzmax),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
       RPG1=gmin ! could be negative because of numerical errors
       RPG2=gmax*1.2 ! give 20% extra
       RPG1=min(gmin,0.) !Make lower limit 0 when gmin>0
@@ -675,17 +676,17 @@ contains
             RLRZAP12(I)=sorpw_rf(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
-         CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
       enddo ! k=1,ngen
       !
       CALL PGSLS(1) ! solid
-      CALL PGSLW(lnwidth+1) ! bold
+      CALL PGSLW(setup0%lnwidth+1) ! bold
       DO I=1,LRZMAX
          RLRZAP13(I)=powrft(i)
       ENDDO
-      CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
+      CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
       CALL PGSLS(1)
-      CALL PGSLW(lnwidth) !
+      CALL PGSLW(setup0%lnwidth) !
       CALL PGSAVE
       CALL PGSCH(1.44)
       CALL PGLAB(' ','power density (W/cm\u3\d)',' ')
@@ -700,11 +701,11 @@ contains
 
       fmin=0.
       fmax=0.
-      call aminmx(sorpwti(1:lrzmax),1,lrzmax,1,fmin,fmax,kmin,kmax)
+      call aminmx(sorpwti(1:setup0%lrzmax),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
       if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
 
       do 50 kk=1,mrfn
-        call aminmx(powurfi(1:lrzmax,kk),1,lrzmax,1,gmin,gmax,kmin,kmax)
+        call aminmx(powurfi(1:setup0%lrzmax,kk),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
         if (gmin.lt.fmin) fmin=gmin
         if (fmax.lt.gmax) fmax=gmax
  50   continue
@@ -748,27 +749,27 @@ contains
         DO I=1,LRZMAX
            RLRZAP11(I)=sorpwti(i) ! solid: NBI+RF(all gen.species)
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2) ! 2-> dashed
         DO I=1,LRZMAX
            RLRZAP12(I)=sorpw_nbii(kfrsou1,I) ! dashed: NBI only
         ENDDO
-        CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
       do k=1,ngen ! rf sources for general species
          DO I=1,LRZMAX
             RLRZAP12(I)=sorpw_rfi(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
-         CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
       enddo ! k=1,ngen
       CALL PGSLS(1) ! solid
-      CALL PGSLW(lnwidth+1) ! bold
+      CALL PGSLW(setup0%lnwidth+1) ! bold
       DO I=1,LRZMAX
          RLRZAP13(I)=powurfi(i,0) ! = SUM_harmonics{powurfi(l,harmonics)}
       ENDDO
-      CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
+      CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
       CALL PGSLS(1) ! restore: solid line
-      CALL PGSLW(lnwidth) ! restore
+      CALL PGSLW(setup0%lnwidth) ! restore
       CALL PGSAVE
       CALL PGSCH(1.44)
       CALL PGLAB(' ','Int power: 0 to psi (or rho)',' ')
@@ -782,7 +783,7 @@ contains
       !(because, if the power level is too small, the curve can be too low)
 !..................................................................
 
-      call aminmx(powurfi(1:lrzmax,0),1,lrzmax,1,gmin,gmax,kmin,kmax)
+      call aminmx(powurfi(1:setup0%lrzmax,0),1,setup0%lrzmax,1,gmin,gmax,kmin,kmax)
       if (gmax-gmin.lt.1.e-8) gmin=gmax-.1*abs(gmax)-1.e-5
       RPG1=gmin
       RPG2=gmax*1.2 ! give 20% more
@@ -819,16 +820,16 @@ contains
             RLRZAP12(I)=sorpw_rfi(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
-         CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP12(1))
+         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
       enddo ! k=1,ngen
       CALL PGSLS(1) ! solid
-      CALL PGSLW(lnwidth+1) ! bold
+      CALL PGSLW(setup0%lnwidth+1) ! bold
       DO I=1,LRZMAX
          RLRZAP13(I)=powurfi(i,0) ! = SUM_harmonics{powurfi(l,harmonics)}
       ENDDO
-      CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
+      CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
       CALL PGSLS(1) ! restore: solid line
-      CALL PGSLW(lnwidth) ! restore
+      CALL PGSLW(setup0%lnwidth) ! restore
       CALL PGSAVE
       CALL PGSCH(1.44)
       CALL PGLAB(' ','Int power: 0 to psi (or rho)',' ')
@@ -854,7 +855,7 @@ contains
 !$$$      write(t_,8010) pltvs
 !$$$      call gptx2d(t_)
 !$$$ 8010 format(4x,a8,2x," J/P (fi)   J/P (fi+e)","$")
-!$$$      do 801 l=1,lrzmax
+!$$$      do 801 l=1,setup0%lrzmax
 !$$$        write(t_,8011) tr(l),bdre(l),bdrep(l)
 !$$$        call gptx2d(t_)
 !$$$ 801  continue
@@ -872,22 +873,22 @@ contains
 !%OS  call gscvlb(1)
 !$$$      fmin=0.
 !$$$      fmax=0.
-!$$$      call aminmx(bdrep(1),1,lrzmax,1,fmin,fmax,kmin,kmax)
-!$$$      call aminmx(bdre(1),1,lrzmax,1,fminn,fmaxx,kmin,kmax)
+!$$$      call aminmx(bdrep(1),1,setup0%lrzmax,1,fmin,fmax,kmin,kmax)
+!$$$      call aminmx(bdre(1),1,setup0%lrzmax,1,fminn,fmaxx,kmin,kmax)
 !$$$      if (fminn.lt.fmin) fmin=fminn
 !$$$      if (fmaxx.gt.fmax) fmax=fmaxx
 !$$$      if (fmax-fmin.lt.1.e-8) fmin=fmax-.1*abs(fmax)-1.e-5
-!$$$      call gswd2d("linlin$",tr(1),tr(lrzmax),fmin,fmax)
+!$$$      call gswd2d("linlin$",tr(1),tr(setup0%lrzmax),fmin,fmax)
 !$$$      call gsvp2d(.2,.9,.15,.6)
 !$$$      call gscvft(0.)
 !$$$      text(1)="fi+e$"
 !$$$      call gscvtx(loc(text))
 !$$$      call gpgr80("linlin$")
-!$$$      call gpcv2d(tr(1),bdrep(1),lrzmax)
+!$$$      call gpcv2d(tr(1),bdrep(1),setup0%lrzmax)
 !$$$      call gscvft(.3)
 !$$$      text(1)="fi$"
 !$$$      call gscvtx(loc(text))
-!$$$      call gpcv2d(tr(1),bdre,lrzmax)
+!$$$      call gpcv2d(tr(1),bdre,setup0%lrzmax)
 !$$$      call gstxan(90.)
 !$$$      call gscpvs(.01,.375)
 !$$$      call gscvlb(0)

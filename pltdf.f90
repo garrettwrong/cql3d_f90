@@ -24,6 +24,7 @@ module pltdf_mod
 contains
 
   subroutine pltdf
+    use cqlconf_mod, only : setup0
     use param_mod
     use cqlcomm_mod
     use r8subs_mod, only : dcopy
@@ -41,7 +42,7 @@ contains
 
     REAL RILIN
 
-    if (noplots.eq."enabled1") return
+    if (setup0%noplots.eq."enabled1") return
 
     if (pltd.eq."disabled") return
 
@@ -115,7 +116,8 @@ contains
 
 
 
-      subroutine pltcont(k,pltcase,tt_,itype)
+  subroutine pltcont(k,pltcase,tt_,itype)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : luf
@@ -169,7 +171,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       if(ASSOCIATED(wx)) then
         ! wx and wy are already allocated => do nothing
@@ -335,7 +337,7 @@ contains
 !**bh
 !
 !     In the case abs(dmin).le.contrmin*dmax, then plot contours
-!     occur at levels:
+!     occur at levesetup0%ls:
 !     cont(j)=dmax * contrmin**(1-(j-.5)/ncont),  j=1,ncont
 !     This can be described as a geometric progression of values
 !     from (near) dmax down to contrmin*dmax.
@@ -469,7 +471,7 @@ contains
       FLOGMIN=LOG10(dmax*contrmin) ! => FLOGMIN=FLOGMAX-LOG10R
       !write(*,*)'FLOGMIN,FLOGMAX=',FLOGMIN,FLOGMAX
       !dmin, dmax are found above, for TEMP1(I,J)=f(I,J) (lin. scale).
-      !      but RCONT() levels are log()
+      !      but RCONT() levesetup0%ls are log()
 
       !Set the coordinate transformation matrix TR(1:6):
       !world coordinate = pixel number.
@@ -517,9 +519,9 @@ contains
 
       ! Or plot the interpolated fparprp(ipar,iprp)
       ! over (vpar,vprp) rectangular grid:
-      !CALL PGSLW(1) !lnwidth=1 thin line
+      !CALL PGSLW(1) !setup0%lnwidth=1 thin line
       !CALL PGCONT(RTEMP2,npar,nprp,1,npar,1,nprp,RCONTLOG,-NCONT,TR)
-      CALL PGSLW(3) !restore lnwidth=3 normal line width
+      CALL PGSLW(3) !restore setup0%lnwidth=3 normal line width
 
 
 
@@ -581,7 +583,7 @@ contains
       CALL PGSLS(4)
       CALL PGLINE(iy,RTAB1,RTAB2)
       CALL PGSLS(1) ! 1-> restore solid line
-      CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
+      CALL PGSLW(setup0%lnwidth) !setup0%lnwidth=3 line width in units of 0.005
 
 
       if (k.eq.0) return

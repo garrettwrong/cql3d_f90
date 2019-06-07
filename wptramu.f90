@@ -48,7 +48,7 @@ contains
 !     numclas = 0: normal case
 !     1: assumes up/down symmetric case and periodic condition
 !     but compute equil. parameters on top half cross-section
-!     on ls/2+1 points and then copy the rest in sub. wploweq
+!     on setup0%ls/2+1 points and then copy the rest in sub. wploweq
 !     Otherwise, same as numclas=0 with sbdry="periodic"
 !     In each class, nummods is divided into two groups:
 !     mod(nummods,10) < 5: 2-D FP velocity equ. solved on nodal s points
@@ -58,7 +58,7 @@ contains
 !     If numindx = 0,1: use backward diff. scheme + bound. cond at l=1
 !     2: "  back/forward depending on sign(cos(theta))
 !     and on numixts
-!     3: " forward diff. + bound cond at l=ls
+!     3: " forward diff. + bound cond at l=setup0%ls
 !     4: " centered diff. + bound. cond. at l=1
 !     Note: if sbdry="periodic" there might not be any extra boundary
 !     conditions imposed (see wpbdry)
@@ -139,7 +139,7 @@ contains
 !l    2. Construct the matrix. The equations are solved at a given species k
 !     and theta i, but "simultaneously" for all momentum j. This
 !     way, one can have longer inner loops over j than over l, as in
-!     general jx > ls. The index j was chosen instead of i, because
+!     general jx > setup0%ls. The index j was chosen instead of i, because
 !     y(i,l) mesh does not depend on j. But note that we consider the
 !     equ. for i and ii=iymax+1-i "simultaneously".
 !.......................................................................
@@ -148,7 +148,7 @@ contains
 !l    2.1 Initialize f_n+1/2, velsou and imaxper, iymxper, iyhper
 !.......................................................................
 
-      do 210 l=1,ls
+      do 210 l=1,setup0%ls
         imaxper(l)=imax(l,lr_)
         iymxper(l)=iy_(l)
         iyhper(l)=iyh_(l)
@@ -157,34 +157,34 @@ contains
                              fnhalf(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
       if (sbdry .eq. "periodic") then
         call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
-                              fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
-        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
                               fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
         call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,1   ),1, &
-                              velsou(0:iy+1,0:jx+1,1:ngen,ls+1),1)
-        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              velsou(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
                               velsou(0:iy+1,0:jx+1,1:ngen,0   ),1)
-        imaxper(0)=imaxper(ls)
-        imaxper(ls+1)=imaxper(1)
-        iymxper(0)=iymxper(ls)
-        iymxper(ls+1)=iymxper(1)
-        iyhper(0)=iyhper(ls)
-        iyhper(ls+1)=iyhper(1)
+        imaxper(0)=imaxper(setup0%ls)
+        imaxper(setup0%ls+1)=imaxper(1)
+        iymxper(0)=iymxper(setup0%ls)
+        iymxper(setup0%ls+1)=iymxper(1)
+        iyhper(0)=iyhper(setup0%ls)
+        iyhper(setup0%ls+1)=iyhper(1)
       else
         call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
                               fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
-        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
-                              fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
+                              fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
         call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,1   ),1, &
                               velsou(0:iy+1,0:jx+1,1:ngen,0   ),1)
-        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
-                              velsou(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
+                              velsou(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
         imaxper(0)=imaxper(1)
-        imaxper(ls+1)=imaxper(ls)
+        imaxper(setup0%ls+1)=imaxper(setup0%ls)
         iymxper(0)=iymxper(1)
-        iymxper(ls+1)=iymxper(ls)
+        iymxper(setup0%ls+1)=iymxper(setup0%ls)
         iyhper(0)=iyhper(1)
-        iyhper(ls+1)=iyhper(ls)
+        iyhper(setup0%ls+1)=iyhper(setup0%ls)
       endif
 
 !.......................................................................
@@ -196,7 +196,7 @@ contains
       if (mod(nummods,10).le.4 .and. lmidvel.ne.0) then
         do 2120 k=1,ngen
           do 2121 j=1,jx
-            do 2122 l=1,ls
+            do 2122 l=1,setup0%ls
               do 2123 i=1,min(iyhper(l+1),iyhper(l))
                 fnhalf(i,j,k,l)=0.5*(fnhalf(i,j,k,l)+fnhalf(i,j,k,l+1))
                 ii=iymxper(l)+1-i
@@ -209,22 +209,22 @@ contains
         if (sbdry .eq. "periodic") then
           do 2124 k=1,ngen
             do 2125 j=1,jx
-              do 2126 i=1,iyhper(ls)
-                fnhalf(i,j,k,0)=0.5*(fnhalf(i,j,k,ls)+fnhalf(i,j,k,1))
-                iils=iymxper(ls)+1-i
+              do 2126 i=1,iyhper(setup0%ls)
+                fnhalf(i,j,k,0)=0.5*(fnhalf(i,j,k,setup0%ls)+fnhalf(i,j,k,1))
+                iils=iymxper(setup0%ls)+1-i
                 ii1=iymxper(1)+1-i
-                fnhalf(iils,j,k,0)=0.5*(fnhalf(iils,j,k,ls)+ &
+                fnhalf(iils,j,k,0)=0.5*(fnhalf(iils,j,k,setup0%ls)+ &
                   fnhalf(ii1,j,k,1))
-                fnhalf(i,j,k,ls+1)=fnhalf(i,j,k,0)
-                fnhalf(ii1,j,k,ls+1)=fnhalf(iils,j,k,0)
+                fnhalf(i,j,k,setup0%ls+1)=fnhalf(i,j,k,0)
+                fnhalf(ii1,j,k,setup0%ls+1)=fnhalf(iils,j,k,0)
  2126         continue
  2125       continue
  2124     continue
         else
           call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
                                 fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
-          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
-                                fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
+                                fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
         endif
       endif
       ivelmid=1
@@ -237,15 +237,15 @@ contains
         ism1(l)=1
         isdiag(l)=ileft+1
         isp1(l)=iband
-        if (sbdry.eq."periodic" .and. (l.le.2.or. l.gt.ls/2)) then
+        if (sbdry.eq."periodic" .and. (l.le.2.or. l.gt.setup0%ls/2)) then
           if (l .eq. 1) then
             ism1(l)=iband
             isp1(l)=iband-1
           else if (l .eq. 2) then
             ism1(l)=ileft
-          else if (l .eq. ls/2+1) then
+          else if (l .eq. setup0%ls/2+1) then
             isp1(l)=ileft
-          else if (l .eq. ls/2+2) then
+          else if (l .eq. setup0%ls/2+2) then
             ism1(l)=isdiag(l)+1
             isp1(l)=1
           else
@@ -263,7 +263,7 @@ contains
 
 !     j=1 => zeroth order eq. to be solved, assuming velsou(j=1)=0
 !     => f_n+1(j=1)=f_n+1/2(j=1)
-        do 221 ll=1,ls
+        do 221 ll=1,setup0%ls
           call bcast(fnp1(0:iyp1,1,k,ll),f(1,1,k,ll),iyp1+1)
  221    continue
 
@@ -283,7 +283,7 @@ contains
           endif
 
           ii=iymax+1-i
-          do 2301 l=1,ls
+          do 2301 l=1,setup0%ls
             do 2302 icol=1,iband
               do 2303 j=2,jx
                 bndmats(j,l,icol,1)=0.0
@@ -292,13 +292,13 @@ contains
  2302       continue
             do 2304 j=2,jx
               rhspar(l,j,1)=0.0
-              rhspar(ls-2+l,j,1)=0.0
+              rhspar(setup0%ls-2+l,j,1)=0.0
               rhspar(l,j,2)=0.0
  2304       continue
  2301     continue
 
 !.......................................................................
-!l    2.3.1 Construct matrices at each j , l and ls+2-l (if periodic)
+!l    2.3.1 Construct matrices at each j , l and setup0%ls+2-l (if periodic)
 !.......................................................................
 
           do 231 l=1+ipstrt*imstrt,l_upper(i)-ipend*imend
@@ -352,18 +352,18 @@ contains
 23120       continue
 
 !.......................................................................
-!l    2.3.1.3 point l=ls+2-l, i.e. bottom half cross-section, if not
+!l    2.3.1.3 point l=setup0%ls+2-l, i.e. bottom half cross-section, if not
 !     yet treated
 !.......................................................................
 
- 2313       if (sbdry.ne."periodic" .or. l_upper(i).eq.ls .or. l.eq.1) &
+ 2313       if (sbdry.ne."periodic" .or. l_upper(i).eq.setup0%ls .or. l.eq.1) &
               go to 231
 
-            ll=ls+2-l
+            ll=setup0%ls+2-l
             ilsrow=lsbtopr(ll)
 
 !.......................................................................
-!l    2.3.1.3.1 cos(theta) > 0, ll=ls+2-l
+!l    2.3.1.3.1 cos(theta) > 0, ll=setup0%ls+2-l
 !.......................................................................
 
             if (i.gt.min(imaxper(ll+ipshft1),imaxper(ll+ipshft2))) &
@@ -384,7 +384,7 @@ contains
 23131       continue
 
 !.......................................................................
-!l    2.3.1.3.2 cos(theta) < 0, ll=ls+2-l
+!l    2.3.1.3.2 cos(theta) < 0, ll=setup0%ls+2-l
 !.......................................................................
 
  2314       continue
@@ -425,7 +425,7 @@ contains
 !.......................................................................
 
           ilslen=l_upper(i)-l_lower(i)+1
-          if (sbdry .eq. "periodic" .and. l_upper(i).ne.ls) &
+          if (sbdry .eq. "periodic" .and. l_upper(i).ne.setup0%ls) &
             ilslen=2*ilslen-1
           icombin=1
           if (sbdry.eq."periodic" .and. i.gt.itl_(1) .and. numindx.eq.2 &
@@ -466,7 +466,7 @@ contains
                 ijdiag=(ilslen-2)*iband+3
                 zmat(ijdiag)=zmat(ijdiag)+bndmats(j,ilslen-1,3,2)
                 zmat(ijdiag+2)=bndmats(j,ilslen-1,1,2)
-!     point ilslen (i.e. ls+2-l_upper(i)):
+!     point ilslen (i.e. setup0%ls+2-l_upper(i)):
                 ijdiag=(ilslen-1)*iband+3
                 zmat(ijdiag)=zmat(ijdiag)+bndmats(j,ilslen,3,2)
                 zmat(ijdiag+2)=bndmats(j,ilslen,1,2)
@@ -481,7 +481,7 @@ contains
  2334           continue
 !     new total number of unknown
                 ilslen=2*ilslen-2
-!     correct point l=3 (i.e. l=ls):
+!     correct point l=3 (i.e. l=setup0%ls):
                 ijdiag=(ilslen-2)*iband+3
                 zmat(ijdiag+1)=zmat(ijdiag+2)
                 zmat(ijdiag+2)=0.0
@@ -561,14 +561,14 @@ contains
 
       if (sbdry .eq. "periodic") then
         call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,1   ),1, &
-                              fnp1(0:iy+1,0:jx+1,1:ngen,ls+1),1)
-        call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              fnp1(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
+        call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
                               fnp1(0:iy+1,0:jx+1,1:ngen,0   ),1)
       else
         call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,1   ),1, &
                               fnp1(0:iy+1,0:jx+1,1:ngen,0   ),1)
-        call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
-                              fnp1(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+        call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
+                              fnp1(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
       endif
 
 !.......................................................................
@@ -584,7 +584,7 @@ contains
       if (nonadi .ne. 3) then
 
         do 400 k=1,ngen
-          do 410 l=1,ls
+          do 410 l=1,setup0%ls
             zs=0.
             zt=0.
             do 420 i=1,iymxper(l)
@@ -598,14 +598,14 @@ contains
 
           if (sbdry .eq. "periodic") then
             call dcopy(iyp1+1,fnp1(0:iyp1,1,k,1   ),1, &
-                              fnp1(0:iyp1,1,k,ls+1),1)
-            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,ls  ),1, &
+                              fnp1(0:iyp1,1,k,setup0%ls+1),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,setup0%ls  ),1, &
                               fnp1(0:iyp1,1,k,0   ),1)
           else
             call dcopy(iyp1+1,fnp1(0:iyp1,1,k,1   ),1, &
                               fnp1(0:iyp1,1,k,0   ),1)
-            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,ls  ),1, &
-                              fnp1(0:iyp1,1,k,ls+1),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,setup0%ls  ),1, &
+                              fnp1(0:iyp1,1,k,setup0%ls+1),1)
           endif
 
  400    continue

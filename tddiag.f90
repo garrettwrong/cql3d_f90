@@ -29,7 +29,7 @@ contains
 !     Compute the total current in AMPS, (currza).
 !.......................................................................
 
-      if (cqlpmod .eq. "enabled") print *," WARNING in tddiag: routine", &
+      if (setup0%cqlpmod .eq. "enabled") print *," WARNING in tddiag: routine", &
         " not yet ready for CQLP"
 
 
@@ -60,11 +60,11 @@ contains
 
 !..................................................................
 !     Compute the total RF power absorbed.
-!     Also compute the integrals of the perpendicular and
+!     Also compute the integrasetup0%ls of the perpendicular and
 !     parallel energy (units changed from ergs to joules).
 !..................................................................
 
-        do 2 ll=1,lrzmax
+        do 2 ll=1,setup0%lrzmax
           currza(k)=currza(k)+darea(ll)*currz(k,ll)
           rfpwrt(k)=rfpwrt(k)+dvol(ll)*rfpwrz(k,ll)
           gkpwrt(k)=gkpwrt(k)+dvol(ll)*gkpwrz(k,ll)
@@ -103,7 +103,7 @@ contains
       totcurzi(0)=0.
       ccurtor(0)=0.
       ccurpol(0)=0.
-      do 4 ll=1,lrzmax
+      do 4 ll=1,setup0%lrzmax
         currtzi(ll)=currtzi(ll-1)+darea(ll)*currtz(ll)
         currtpzi(ll)=currtpzi(ll-1)+darea(ll)*currtpz(ll)
         do k=1,2
@@ -120,11 +120,11 @@ contains
  4    continue
       do k=1,2
       do kk=1,2
-         bscurma(k,kk)=bscurmi(lrzmax,k,kk)
+         bscurma(k,kk)=bscurmi(setup0%lrzmax,k,kk)
       enddo
       enddo
-      currtza=currtzi(lrzmax)
-      currtpza=currtpzi(lrzmax)
+      currtza=currtzi(setup0%lrzmax)
+      currtpza=currtpzi(setup0%lrzmax)
       totcurza=currtpza+bscurma(1,1)
 !
 !..................................................................
@@ -137,27 +137,27 @@ contains
       do k=1,ngen
         sorpw_rfi(k,0)=0.0
         sorpw_nbii(k,0)=0.0
-        do ll=1,lrzmax
+        do ll=1,setup0%lrzmax
            sorpw_rfi(k,ll)=sorpw_rfi(k,ll-1)+sorpw_rf(k,ll)*dvol(ll)
            sorpw_nbii(k,ll)=sorpw_nbii(k,ll-1)+sorpw_nbi(k,ll)*dvol(ll)
         enddo
       enddo
 
       sorpwti(0)=0.0
-      do 11 ll=1,lrzmax
+      do 11 ll=1,setup0%lrzmax
         sorpwti(ll)=sorpwti(ll-1)+sorpwt(ll)*dvol(ll)
  11   continue
 
-      sorpwtza=sorpwti(lrzmax)
+      sorpwtza=sorpwti(setup0%lrzmax)
 
       volume=0.
-      do 14 ll=1,lrzmax
+      do 14 ll=1,setup0%lrzmax
          volume=volume+dvol(ll)
  14   continue
 
       li=0.
       if (eqmod.eq."enabled") then
-         do 15 ll=1,lrzmax
+         do 15 ll=1,setup0%lrzmax
             li=li+bpolsqaz(ll)*dvol(ll)
  15      continue
          li=li/volume/bpolsqlm
@@ -181,20 +181,20 @@ contains
       do 30 k=1,ntotal
         if ((k.eq.kelecg.and.kelecm.eq.0) .or. k.eq.kelecm) then
           if (k.eq.kelecg.and.(colmodl.eq.1.or.colmodl.eq.3)) go to 21
-          do 20 ll=1,lrzmax
+          do 20 ll=1,setup0%lrzmax
             eden=eden+reden(k,ll)*dvol(ll)
             etemp=etemp+energy(k,ll)*dvol(ll)
             ethtemp=ethtemp+temp(k,ll)*dvol(ll)
             edntmp=edntmp+reden(k,ll)*dvol(ll)*energy(k,ll)
  20       continue
           edenlavg=(rpcon(1)-rmcon(1))*reden(k,0)
-          do 22 ll=2,lrzmax
+          do 22 ll=2,setup0%lrzmax
             edenlavg=edenlavg+(rpcon(ll)-rpcon(ll-1)+rmcon(ll-1) &
               -rmcon(ll))*0.5*(reden(k,ll)+reden(k,ll-1))
  22       continue
  21       continue
         elseif (k.gt.ngen) then
-          do 40 ll=1,lrzmax
+          do 40 ll=1,setup0%lrzmax
             pden=pden+reden(k,ll)*dvol(ll)
             pdntmp=pdntmp+reden(k,ll)*dvol(ll)*energy(k,ll)
  40       continue
@@ -206,7 +206,7 @@ contains
         pden=pden/volume
       endif
       eden=eden/volume
-      edenlavg=edenlavg/(rpcon(lrzmax)-rmcon(lrzmax))
+      edenlavg=edenlavg/(rpcon(setup0%lrzmax)-rmcon(setup0%lrzmax))
       etemp=(2./3.)*etemp/volume
       ethtemp=ethtemp/volume
       coef=eden/1.e+14*radmaj*.01/(sorpwtza+em90)
@@ -226,7 +226,7 @@ contains
 
       do 50  k=1,ntotal
         energyt(k)=0.0
-        do 51  ll=1,lrzmax
+        do 51  ll=1,setup0%lrzmax
           energyt(k)=energyt(k)+energy(k,ll)*reden(k,ll)*dvol(ll) &
             *1.6e-16
  51     continue

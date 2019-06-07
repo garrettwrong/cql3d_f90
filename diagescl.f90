@@ -65,7 +65,7 @@ contains
       c0t=sqrt(1.-1./psimx(lr_))
       pfrac=1./(1.-c0t**3)
       xllaveg=svll*zmaxpsi(lr_)*pfrac/xlndneg
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         thta=fmass(ngen)*clite2/(temp(ngen,lr_)*ergtkev)
         ovthesq=fmass(ngen)/(temp(ngen,lr_)*ergtkev)
       else

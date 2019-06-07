@@ -30,7 +30,7 @@ contains
       call bcast(cet(1:iy,1:jx,l_),zero,iyjx)
 !     Division by 300. below is conversion to cgs: 300 volts/statvolt.
 !%OS  coefld=-radmaj*fpsi(lr_)*onovrp(2,lr_)*flxavgd(lr_)
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
          if (efflag .eq. "toroidal") then
             coefld=-rmag*fpsi(lr_)*onovrp(2,lr_)*flxavgd(lr_) &
                  *charge/300./vnorm
@@ -39,8 +39,8 @@ contains
             coefld=-r0drdz(lr_)*charge/300./vnorm
          endif
       endif
-!%OS  if (cqlpmod .eq. "enabled") coefld=-radmaj*fpsi(lr_)/solrs(l_)**2
-      if (cqlpmod .eq. "enabled") then
+!%OS  if (setup0%cqlpmod .eq. "enabled") coefld=-radmaj*fpsi(lr_)/solrs(l_)**2
+      if (setup0%cqlpmod .eq. "enabled") then
         if (mod(nummods,10).le.4 .or. transp.ne."enabled" .or. &
           lmidvel.eq.0) then
           coefld=-rmag*fpsi(lr_)/solrs(l_)**2 &
@@ -57,7 +57,7 @@ contains
 !%OS
 
       iend=itl-1
-      if (cqlpmod.eq."enabled" .and. symtrap.ne."enabled") iend=iyh
+      if (setup0%cqlpmod.eq."enabled" .and. symtrap.ne."enabled") iend=iyh
 
       do 40 i=1,iend
         ii=iy+1-i

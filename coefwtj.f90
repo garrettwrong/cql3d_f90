@@ -117,7 +117,7 @@ contains
 
 
 !.......................................................................
-!     Ensures correct differentiation at end of intervals
+!     Ensures correct differentiation at end of intervasetup0%ls
 !.......................................................................
 
       do 30 i=1,iy

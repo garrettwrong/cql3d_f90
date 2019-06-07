@@ -28,7 +28,8 @@ module achiefn_mod
 
 contains
 
-      subroutine achiefn(kopt)
+  subroutine achiefn(kopt)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use impavnc0_mod, only : impavnc0
@@ -39,7 +40,7 @@ contains
 
 !..................................................................
 !     kopt=0: This routine advances the  equations in momemtum space
-!             over time-step n (or if cqlpmod.eq.'disabled',
+!             over time-step n (or if setup0%cqlpmod.eq.'disabled',
 !             transp='enabled',soln_method.eq.'it3drv', then only
 !             calc coeffs until at last flux surface.
 !     kopt=1: Compute plasma density and energy transfer
@@ -47,7 +48,7 @@ contains
 !             when kopt=1, impavnc0 is not called.
 !     kopt=2: Calculated h and g functions and associated fluxes,
 !             to obtain electrostatic electric field for
-!             cqlpmod="enabled",sbdry="periodic",esfld="enabled".
+!             setup0%cqlpmod="enabled",sbdry="periodic",esfld="enabled".
 !             (BH:Evidently, have not fully implemented this yet.
 !             No kopt reference is in impanvc0.  It was
 !             successfully implemented in the STELLA code (a derivative
@@ -89,7 +90,7 @@ contains
       if (kopt.eq.0) then
            n=n+1
            n_(l_)=n ! new time-step for this flux surface
-           ! for 2-d (v_par,v_perp) calculation ntloop controls
+           ! for 2-d (v_par,v_perp) calculation ntloop controsetup0%ls
            ! end of run or restart.
            ! Also updates time.
            call ntloop
@@ -190,7 +191,7 @@ contains
 !..................................................
 
       if (transp.eq."disabled" .or. &
-        (cqlpmod.eq."enabled".and.n.ge.nontran)) then
+        (setup0%cqlpmod.eq."enabled".and.n.ge.nontran)) then
         call diaggnde
 !..................................................
 !     Compute plasma resistivity for electron runs..
@@ -215,7 +216,7 @@ contains
          if (nplot(i).ge.0 .and. nplot(i).le.nstop) &
              nplott=nplott+1 !YuP:could do this counting in ainsetva?
       enddo
-      if (noplots.ne."enabled1") then
+      if (setup0%noplots.ne."enabled1") then
          do i=1,nplott
             if(n.eq.nplot(i)) then
                iplot=i
@@ -224,7 +225,7 @@ contains
          enddo
       endif
 
-      if (lrzmax.eq.1) then
+      if (setup0%lrzmax.eq.1) then
         if (n.eq.nstop .or. iplot.ne.0) call tdoutput(2)
         if (n.eq.nstop .or. iplot.ne.0) call pltmain
         if (n.eq.nstop.and.pltra.eq."enabled") then
@@ -238,22 +239,22 @@ contains
            call pgend
 !BH080106           cputime=etime(tarray)
            call cpu_time(cputime)
-           write (*,*) 'achiefn/lrzmax=1: CPU time (seconds)', cputime
+           write (*,*) 'achiefn/setup0%lrzmax=1: CPU time (seconds)', cputime
            if (ichkpnt.ne."disabled") then
              write(cptline,100) i,ichkpnt
  100         format("chkpnt -p ",i5," -f ",a8)
              print *,cptline
            endif
         endif ! n.eq.nstop
-      endif ! lrzmax=1
+      endif ! setup0%lrzmax=1
 
 !..................................................
 !     plotting (and netcdf store) logic for 3-D code ..
 !     Used if transp="disabled".
 !..................................................
-      if (transp .eq. "disabled" .and. noplots.ne."enabled1") then
+      if (transp .eq. "disabled" .and. setup0%noplots.ne."enabled1") then
 !$$$      if (transp .eq. "disabled") then
-         if (lrzmax.gt.1) then
+         if (setup0%lrzmax.gt.1) then
             if (n.ge.nstop) then
                call pltmain
                call netcdfmain

@@ -19,7 +19,8 @@ module diaggnde2_mod
 
 contains
 
-      subroutine diaggnde2
+  subroutine diaggnde2
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : dscal, dcopy
@@ -42,7 +43,7 @@ contains
 !.......................................................................
 
 !..................................................................
-!l    1. Compute integrals for 0th and 1st moments using the same
+!l    1. Compute integrasetup0%ls for 0th and 1st moments using the same
 !     Legendre decomposition as in computing the collision term
 !     Compute the other terms including bounce-averaged term in the same
 !     way as diaggnde.
@@ -51,7 +52,7 @@ contains
 !..................................................................
 
       ilegen=1
-      if (cqlpmod .eq. "enabled") ilegen=l_
+      if (setup0%cqlpmod .eq. "enabled") ilegen=l_
 
       currmt(l_)=0.
       currmtp(l_)=0.
@@ -199,9 +200,9 @@ contains
 !..................................................................
 
           zfact=hni*zmaxpsi(lr_)*reden(k,lr_)
-          if (cqlpmod .eq. "enabled") zfact=gni*denpar(k,ls_)
+          if (setup0%cqlpmod .eq. "enabled") zfact=gni*denpar(k,ls_)
 !BH070414  if (.not. nlrestrt) call dscal(iyjx2,zfact,f(0,0,k,l_),1)
-          if (nlrestrt.eq."disabled") &
+          if (setup0%nlrestrt.eq."disabled") &
                call dscal(iyjx2,zfact,f(0:iy+1,0:jx+1,k,l_),1)
 
 !..................................................................
@@ -234,7 +235,7 @@ contains
 
 
           faccur=reden(k,lr_)*hni*zmaxpsi(lr_)*vnorm*bnumb(k)*charge
-          if (cqlpmod .eq. "enabled") faccur=denpar(k,ls_)*vnorm* &
+          if (setup0%cqlpmod .eq. "enabled") faccur=denpar(k,ls_)*vnorm* &
             bnumb(k)*charge*gni
           currm(k,l_)=faccur*cn
 
@@ -252,7 +253,7 @@ contains
           psifct=psiovr(lr_)/onovrp(1,lr_)
           if (l_ .eq. lmdpln_) curr(k,lr_)=currm(k,l_)*psifct
           fgni=faccur*psifct/3.e+9
-          if (cqlpmod .eq. "enabled") fgni=faccur/3.e+9
+          if (setup0%cqlpmod .eq. "enabled") fgni=faccur/3.e+9
           call dscal(jx,fgni,currv(1:jx,k,l_),1)
           call dscal(jx,fgni,currvs(1:jx,k),1)
 
@@ -284,11 +285,11 @@ contains
           denpar(k,ls_)=one_*gn
           if (sbdry.eq."periodic" .and. transp.eq."enabled") then
             if (ls_ .eq. 1) then
-              denpar(k,lsmax+1)=denpar(k,1)
-              enrgypa(k,lsmax+1)=enrgypa(k,1)
-            else if (ls_ .eq. lsmax) then
-              denpar(k,0)=denpar(k,lsmax)
-              enrgypa(k,0)=enrgypa(k,lsmax)
+              denpar(k,setup0%lsmax+1)=denpar(k,1)
+              enrgypa(k,setup0%lsmax+1)=enrgypa(k,1)
+            else if (ls_ .eq. setup0%lsmax) then
+              denpar(k,0)=denpar(k,setup0%lsmax)
+              enrgypa(k,0)=enrgypa(k,setup0%lsmax)
             endif
           endif
           if (l_ .eq. lmdpln_) then
@@ -335,11 +336,11 @@ contains
  85     continue
 
 !..................................................................
-!     lrzmax.gt.0 flags a multi-flux surface (CQL3D) run.
+!     setup0%lrzmax.gt.0 flags a multi-flux surface (CQL3D) run.
 !     Define dA/DV
 !..................................................................
 
-        if (lrzmax.gt.1.and.n.gt.0) then
+        if (setup0%lrzmax.gt.1.and.n.gt.0) then
           areaovol=darea(lr_)/dvol(lr_)
         else
           if (eqmod.eq."enabled") then

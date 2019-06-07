@@ -45,16 +45,17 @@ module pltmain_mod
 contains
 
   subroutine pltmain
+    use cqlconf_mod, only : setup0
     use param_mod
     use cqlcomm_mod
     use pltdf_mod, only: pltdf
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !
-    !     This routine controls driver plots
+    !     This routine controsetup0%ls driver plots
     !
     !
-    !     Modified some Graflib to pgplot calls by Yuri Petrov, 090727,
+    !     Modified some Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
     !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
     !
     REAL RILIN
@@ -64,8 +65,8 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
     ! make plots on mpirank.eq.0 only
 
-    if (noplots.eq."enabled1") return
-    if (n.eq.0 .and. lrzmax.gt.1) return
+    if (setup0%noplots.eq."enabled1") return
+    if (n.eq.0 .and. setup0%lrzmax.gt.1) return
     if (mplot(l_).eq."disabled") return
 
     rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
@@ -77,7 +78,7 @@ contains
     !(sometimes font is too big from previous plot)
 
     RILIN=0.
-    if (cqlpmod .ne. "enabled") then
+    if (setup0%cqlpmod .ne. "enabled") then
                 CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL RADIAL QUANTITIES")
     else
                 CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL PARALLEL QUANTITIES")
@@ -87,7 +88,7 @@ contains
     write(t_,150) n,timet
     RILIN=RILIN+1.
           CALL PGMTXT('T',-RILIN,0.,0.,t_)
-    write(t_,1501) lr_,lrz
+    write(t_,1501) lr_,setup0%lrz
     RILIN=RILIN+1.
           CALL PGMTXT('T',-RILIN,0.,0.,t_)
     write(t_,151) rovera(lr_),rr
@@ -101,7 +102,7 @@ contains
 151 format("r/a=",1pe10.3,5x,"radial position (R)=",1pe12.4," cms")
 153 format("rya=",1pe10.3,5x,"R=rpcon=",1pe10.3," cm")
 
-    if (cqlpmod .eq. "enabled") then
+    if (setup0%cqlpmod .eq. "enabled") then
        write(t_,152) l_,sz(l_)
        RILIN=RILIN+1.
                CALL PGMTXT('T',-RILIN,0.,0.,t_)
@@ -145,7 +146,7 @@ contains
 162 format("vthe (sqrt(te/me))/c = ",f15.7)
 163 format("vthe/vnorm = ",f15.7)
 
-    if (cqlpmod .eq. "enabled") then
+    if (setup0%cqlpmod .eq. "enabled") then
        zvthes=vth(kelec,l_)/clight
        zvtheon=vth(kelec,l_)/vnorm
        write(t_,164) zvthes
@@ -163,8 +164,8 @@ contains
     !     time
     !
     if (pltend.ne."disabled" .and. nch(l_).ge.2) then
-       if (cqlpmod .ne. "enabled") call pltendn
-       if (cqlpmod .eq. "enabled") call pltends
+       if (setup0%cqlpmod .ne. "enabled") call pltendn
+       if (setup0%cqlpmod .eq. "enabled") call pltends
     endif
     !
     !     Plot ion source if marker is engaged.
@@ -230,7 +231,7 @@ contains
     !     Plot the density as a function of poloidal angle for a
     !     set of energy ranges..
     !
-    if (n.ne.0 .and. pltdn.ne."disabled" .and. cqlpmod.ne."enabled") call pltdnz
+    if (n.ne.0 .and. pltdn.ne."disabled" .and. setup0%cqlpmod.ne."enabled") call pltdnz
     !
     !     plot contours of df/dt next..
     !
@@ -479,7 +480,7 @@ contains
     ! ANGLE  (input)  : angle, in degrees, that the baseline is to make
     !                   with the horizontal, increasing counter-clockwise
     !                   (0.0 is horizontal).
-    ! FJUST  (input)  : controls horizontal justification of the string.
+    ! FJUST  (input)  : controsetup0%ls horizontal justification of the string.
     !                   If FJUST = 0.0, the string will be left-justified
     !                   at the point (X,Y); if FJUST = 0.5, it will be
     !                   centered, and if FJUST = 1.0, it will be right
@@ -490,7 +491,8 @@ contains
   end subroutine gptx2d
   !---------------------------------------------------------------------
 
-      subroutine pltends
+  subroutine pltends
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -500,14 +502,14 @@ contains
 !     constant vs. time., at a given s, distance along the magnetic field.
 !     A cqlp.eq.'enabled' routine.
 !
-!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
       REAL RILIN !-> For PGPLOT (text output positioning)
       dimension wk_nch(nonch)
 !
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       if (pltend.eq."disabled") return
       dgts=1.e-8
       rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
@@ -737,7 +739,7 @@ contains
 !     Do combined fluxes, and individual fluxes, per pltflux1 vector.
 !...................................................................
 !
-!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
@@ -834,7 +836,7 @@ contains
 !     Finally to enforce boundary conditions (zero flux in general
 !     except at the pass/trapped boundary) certain coefficients
 !     are zeroed out or suitably averaged at specific mesh points.
-!     The numbers 1,2,3 appearing in the calls below signify
+!     The numbers 1,2,3 appearing in the calsetup0%ls below signify
 !     which coefficient is being treated.
 !
 !     first the velocity flux..
@@ -1078,7 +1080,8 @@ contains
 
   !from pltprppr
 
-  subroutine pltprppr
+      subroutine pltprppr
+        use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -1087,7 +1090,7 @@ contains
 !mnt  This routine plots the parallel distribution function.
 !...
 !
-!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 !     Need to re-work this a bit, for plot of pitch angle averaged
@@ -1097,7 +1100,7 @@ contains
       REAL RILIN !-> For PGPLOT (text output positioning)
 
       character*8 target
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
 !     Return, if using a theta average distribution
 !     (which may conflict with call fle_fsa or fle_pol, below).
@@ -1123,7 +1126,7 @@ contains
         if (knockon.ne."disabled") then
 !           call fle("setup",0)
 !           call fle("calc",1)
-        elseif (lrz.eq.1) then
+        elseif (setup0%lrz.eq.1) then
            call fle_pol("setup",0)
            call fle_pol("calc",1)
         else
@@ -1214,7 +1217,8 @@ contains
 
    !from pltrstv
 
-   subroutine pltrstv
+      subroutine pltrstv
+        use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -1223,14 +1227,14 @@ contains
 !     Plot electron resistivity and related quantities.
 !
 
-!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
       REAL RILIN !-> For PGPLOT (text output positioning)
 
 !
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       if (kelecg .eq. 0 .or. abs(elecfld(lr_)) .lt. 1.e-10) go to 190
 
@@ -1266,7 +1270,7 @@ contains
       CALL PGMTXT('T',RILIN,0.,0.,t_)
 
       illeff=lr_
-      if (cqlpmod .eq. "enabled") illeff=ls_
+      if (setup0%cqlpmod .eq. "enabled") illeff=ls_
       call aminmx(rovsp(2:nch(l_),illeff),1,nch(l_)-1, &
             1,emin,emax,kmin,kmax)
 
@@ -1383,6 +1387,7 @@ contains
 
   ! pltstrml
       subroutine pltstrml
+        use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use advnce_mod !here: in  pltstrml.  To get gfi(),hfi(),hfu()
@@ -1406,7 +1411,7 @@ contains
 !     in routine pltvec when all physical processes are
 !     included and when the problem is at steady state.
 !
-!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !     YuP[2018-01-04] Adjusted, to make plots of streamlines.
 !
@@ -1428,7 +1433,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       !mcont=ncont ! ncont is set in cqlinput (default is 25)
       mcont=60 !YuP: looks like, from setup below,
@@ -1530,7 +1535,7 @@ contains
 !     Finally to enforce boundary conditions (zero flux in general
 !     except at the pass/trapped boundary) certain coefficients
 !     are zeroed out or suitably averaged at specific mesh points.
-!     The numbers 1,2,3 appearing in the calls below signify
+!     The numbers 1,2,3 appearing in the calsetup0%ls below signify
 !     which coefficient is being treated.
 !
 !     the theta flux..
@@ -1729,7 +1734,7 @@ contains
          DO I=1,iy
             DMIN=MIN(temp1(I,J),DMIN)
             DMAX=MAX(temp1(I,J),DMAX)
-            RTEMP1(I,J)=temp4(I,J) ! the cont() levels of this function
+            RTEMP1(I,J)=temp4(I,J) ! the cont() levesetup0%ls of this function
             ! will be plotted.
          ENDDO
         ENDDO
@@ -1814,7 +1819,7 @@ contains
         CALL PGSLS(4)
         CALL PGLINE(iy,RTAB1,RTAB2) ! v=vth line
         CALL PGSLS(1) ! 1-> restore solid line
-        CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
+        CALL PGSLW(setup0%lnwidth) !setup0%lnwidth=3 line width in units of 0.005
         !--------------------------------------------------------
         CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,mcont,PGFUNC1)
         !subr.PGFUNC1(VISBLE,yplt,xplt,zplt) uses /PGLOCAL1/wx,wy,IIY,JXQ
@@ -1853,7 +1858,7 @@ contains
         enddo
 
         CALL PGSLS(1) ! restore: solid line
-        CALL PGSLW(lnwidth) ! restore linewidth
+        CALL PGSLW(setup0%lnwidth) ! restore linewidth
         CALL PGSCH(1.0) ! recover default 1.0 fontsize
 
  500  continue ! k species ------------------------------------------
@@ -1876,7 +1881,7 @@ contains
 !**********************
 !
 !
-!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
@@ -2031,9 +2036,9 @@ contains
          crnt=xlncur(k,lr_)*zmaxpsii(lr_) ! [ptcl/sec/cm^3]
 
 !BH171231         write(t_,540) crnt_nbi
-!BH171231 540     format("NBI source rate=",1pe11.4," ptcls/cc/sec")
+!BH171231 540     format("NBI source rate=",1pe11.4," ptcsetup0%ls/cc/sec")
          write(t_,540) crnt
- 540     format("Particle source rate=",1pe11.4," ptcls/cc/sec")
+ 540     format("Particle source rate=",1pe11.4," ptcsetup0%ls/cc/sec")
          RILIN=10.
          CALL PGMTXT('B',RILIN,-.2,0.,t_)
          write(t_,542) entr(k,5,l_)
@@ -2355,7 +2360,7 @@ contains
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
 
         write(t_,10041)
-10041   format("(int(0,pi)*S0*2pi*sin(theta0)*dtheta0= ptcls/sec)")
+10041   format("(int(0,pi)*S0*2pi*sin(theta0)*dtheta0= ptcsetup0%ls/sec)")
         RILIN=RILIN+1.
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
 

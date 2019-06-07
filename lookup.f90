@@ -24,7 +24,7 @@ contains
 !     that xarray(lement).gt.x.
 !     weightu/weightl are the upper/lower weights for xarray
 !     in  x(lement:lement+1).
-!     If x falls outside bounds of the array, weightl/weightu set
+!     If x falsetup0%ls outside bounds of the array, weightl/weightu set
 !     to give constant value at relevant bounds of the array.
 !..................................................................
 
@@ -50,7 +50,7 @@ contains
 
       if(x.ge.xarray(length)) then
          ! YuP: this case:
-         ! orbit gets outside of equilpsi(lrz), the surface #lrz.
+         ! orbit gets outside of equilpsi(setup0%lrz), the surface #setup0%lrz.
          if ((abs(xarray(length)-x)/ &
               max(abs(xarray(length)),abs(x))).gt.em12) then
 !           write if outside roundoff limits:
@@ -91,7 +91,7 @@ contains
 !     that xarray(lement).gt.x.
 !     weightu/weightl are the upper/lower weights for xarray
 !     in  x(lement:lement+1).
-!     If x falls outside bounds of the array, weightl/weightu set
+!     If x falsetup0%ls outside bounds of the array, weightl/weightu set
 !     to give constant value at relevant bounds of the array.
 !..................................................................
 
@@ -119,7 +119,7 @@ contains
 
       if(x.ge.xarray(length)) then
          ! YuP: this case:
-         ! orbit gets outside of equilpsi(lrz), the surface #lrz.
+         ! orbit gets outside of equilpsi(setup0%lrz), the surface #setup0%lrz.
 !         if ((abs(xarray(length)-x)/
 !     1        max(abs(xarray(length)),abs(x))).gt.em12) then
 !           write if outside roundoff limits:

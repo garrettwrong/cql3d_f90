@@ -20,7 +20,7 @@ contains
 
 !.............................................................
 !     This routine computes the density of species f1, given
-!     that vpint=vp(lrindx). This will work for arrays defined on
+!     that vpint=vp(setup0%lrindx). This will work for arrays defined on
 !     radial as well as the velocity mesh.
 !.............................................................
 
@@ -33,7 +33,7 @@ contains
           call bcast(tam1,zero,jx)
           do 20 i=1,iy_(l)
             do 30 j=1,jx
-              tam1(j)=tam1(j)+f1(i,j,k,l)*vp(i,lrindx(l))
+              tam1(j)=tam1(j)+f1(i,j,k,l)*vp(i,setup0%lrindx(l))
  30         continue
  20       continue
           densty(k,l)=0.

@@ -30,7 +30,7 @@ contains
 !..................................................................
 !     Subroutine to calculate bounce-averaged Fokker-Planck collision
 !     coefficients. Used for relativ='fully'. See Mark Franz thesis.
-!     If (cqlpmod .eq. "enabled") then compute only the coefficients
+!     If (setup0%cqlpmod .eq. "enabled") then compute only the coefficients
 !     at the orbit position l=l_ and do not perform the bounce-averages.
 !..................................................................
 !
@@ -121,7 +121,7 @@ contains
 !..................................................................
         rstmss=fmass(k)*clite2/ergtkev
         reltmp=rstmss/temp(k,lr_)
-        if (cqlpmod .eq. "enabled") reltmp=rstmss/temppar(k,ls_)
+        if (setup0%cqlpmod .eq. "enabled") reltmp=rstmss/temppar(k,ls_)
         if (reltmp .gt. 100. .or. relativ .eq. "disabled") then
           ebk2=sqrt(pi/(2.*reltmp))
         else if (reltmp .lt. .01) then
@@ -190,7 +190,7 @@ contains
         tam10(1)=0.
         tam11(jx)=0.
 !......................................................................:
-!     tam3(jx)->tam6(jx), tam11(jx) and tam12(jx) represent integrals
+!     tam3(jx)->tam6(jx), tam11(jx) and tam12(jx) represent integrasetup0%ls
 !     from xmax of the grid to infinity.
 !     The following coding performs this integration. In this case 21*xmax
 !     represents infinity. The lack of this piece is most obvious when
@@ -277,7 +277,7 @@ contains
 !     the contribution to all general species coeff.
 !.......................................................................
 
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
           call bavdens(k)
         else
           do 59 i=1,iy
@@ -376,7 +376,7 @@ contains
 !     CQLP case: compute only s(l_)
 !.......................................................................
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         iorbstr=1
         iorbend=lz
       else
@@ -385,7 +385,7 @@ contains
       endif
       do 600 l=iorbstr,iorbend
         ileff=l
-        if (cqlpmod .eq. "enabled") ileff=ls_
+        if (setup0%cqlpmod .eq. "enabled") ileff=ls_
 
         do 500 k=1,ngen
 !..................................................................
@@ -424,7 +424,7 @@ contains
             call cfpleg(m,ileff,1)
 
 !.................................................................
-!     Calculate the integrals prior to using them
+!     Calculate the integrasetup0%ls prior to using them
 !..................................................................
             tam2(1) = 0. !-YuP-> added:
             tam3(1) = 0. !-YuP-> clean-up tam2&3(1) from previous usage.
@@ -449,13 +449,13 @@ contains
 !..................................................................
 !     The do loops 302 through 307 seek to take advantage of the
 !     Maxwellian nature of f for v < vth/2. This is employed in
-!     the integrations to obtain the functionals - Thus f is
+!     the integrations to obtain the functionasetup0%ls - Thus f is
 !     assumed to be Maxwellian between velocity mesh points,
 !     not linear.
 !..................................................................
                 do 302 j=2,jx
                   xs=sqrt(0.5*temp(k,lr_)*ergtkev/fmass(k))
-                  if (cqlpmod .eq. "enabled") &
+                  if (setup0%cqlpmod .eq. "enabled") &
                     xs=sqrt(temppar(k,ls_)*ergtkev*0.5/fmass(k))
                   if (x(j)*vnorm.gt.xs) go to 303
  302            continue
@@ -472,7 +472,7 @@ contains
  304            continue
                 rstmss=fmass(k)*clite2/ergtkev
                 reltmp=rstmss/temp(k,lr_)
-                if (cqlpmod .eq. "enabled") reltmp=rstmss/temppar(k,ls_)
+                if (setup0%cqlpmod .eq. "enabled") reltmp=rstmss/temppar(k,ls_)
                 call bcast(tam8,zero,jx*2)
                 nintg=max0(21,min0(51,int(x(2)/ &
                   sqrt(.2*cnorm2/reltmp))))
@@ -523,7 +523,7 @@ contains
                   jj=jx+1-j
                   jp=jj+1
                   jm=j-1
-                  ! X-integrals after Eq.(53) Franz Thesis
+                  ! X-integrasetup0%ls after Eq.(53) Franz Thesis
                   tamt1(1,j,l2,l1) =tamt1(1,jm,l2,l1)+tam2(j)
                   tamt1(2,jj,l2,l1)=tamt1(2,jp,l2,l1)+tam2(jp)
                   tamt2(1,j,l2,l1) =tamt2(1,jm,l2,l1)+tam3(j)
@@ -533,7 +533,7 @@ contains
  315        continue   ! l1=0,m+2
 !..................................................................
 !     In this set of loops I need to sum up all the contributions to the
-!     integrals and then just use these in the coefficients
+!     integrasetup0%ls and then just use these in the coefficients
 !..................................................................
             do 309 j=1,jx  !-YuP->: was j=2,jx
               tam1(j)=0.
@@ -884,7 +884,7 @@ contains
 !     at a given orbit position l.
 !.......................................................................
 
-            if (cqlpmod .ne. "enabled") then
+            if (setup0%cqlpmod .ne. "enabled") then
 
 !     Perform the bounce averaging
               do 480 i=1,imax(l,lr_)
@@ -976,7 +976,7 @@ contains
 !..................................................................
 !     define needed coefficients at pass/trapped boundary
 !..................................................................
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         do 2001 k=1,ngen
           do 2002 j=1,jx
             cal(itl,j,k,l_)=0.25*vptb(itl,lr_) * ( cal(itl-1,j,k,l_)/ &

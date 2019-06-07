@@ -28,7 +28,7 @@ contains
 !     If analegco="disabled":
 !     The integral is computed using a ngauss-point Gaussian quadrature
 !     where f at the Gauss points is obtained using a nlagran-point
-!     Lagrangian interpolation with polynomials (see 25.2.2 p.878,
+!     Lagrangian interpolation with polynomiasetup0%ls (see 25.2.2 p.878,
 !     Abramowitz and Stegun). For the weights, we use the actual
 !     value of P_m(cos(th))*sin(th) at the Gauss points, multiplied
 !     by the Gaussian weights. Thus only f is interpolated.
@@ -73,13 +73,13 @@ contains
 
       if (analegco .eq. "enabled") go to 200
 
-!     CQL3D: imax points in two intervals [1,imax] and [iy+1-imax,iy]
+!     CQL3D: imax points in two intervasetup0%ls [1,imax] and [iy+1-imax,iy]
       ipoints=imax(klpar,klrad)
       iistart=iy_(klmesh)+1-ipoints
       iigstrt=(iistart-1)*ngauss+1
       iparts=2
 !     CQLP: one interval [1,iy]
-      if (cqlpmod .eq. "enabled") then
+      if (setup0%cqlpmod .eq. "enabled") then
         ipoints=iy_(klmesh)
         iistart=0
         iigstrt=0
@@ -119,7 +119,7 @@ contains
         if (iside .eq. 2) zfact=-1.0
 
 !     compute m=1 (i.e. cos(th)) and total weight
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
           do 111 ig=ig0+1,ig0+inxgau
             zxgh(ig,1)=zfact*sqrt(1.-bbpsi(klpar,klrad)*sin(zxg(ig))**2)
             zxgh(ig,0)=zxgh(ig,0)*bbpsi(klpar,klrad)*sin(zxg(ig))* &
@@ -131,7 +131,7 @@ contains
             zxgh(ig,0)=zxgh(ig,0)*sin(zxg(ig))
  112      continue
         endif
-!     construct Legendre polynomials for m=2 to mmx
+!     construct Legendre polynomiasetup0%ls for m=2 to mmx
 !     m=2 and 3: explicit formula
         do 113 ig=ig0+1,ig0+inxgau
           zxgh(ig,2)=0.5*(3.*zxgh(ig,1)**2-1.)
@@ -223,7 +223,7 @@ contains
 !l    and the turning-point, computed in dpcosz(imax)
 !.......................................................................
 
-      if (cqlpmod .eq. "enabled") return
+      if (setup0%cqlpmod .eq. "enabled") return
 
       iimax=iy_(klmesh)+1-imax(klpar,klrad)
       do 140 m=0,mmx
@@ -251,7 +251,7 @@ contains
  200  continue
 
       iend=imax(klpar,klrad)-1
-      if (cqlpmod .eq. "enabled") iend=iyh_(klmesh)-1
+      if (setup0%cqlpmod .eq. "enabled") iend=iyh_(klmesh)-1
 
       do 201 m=0,mmx
         do 202 i=2,iend

@@ -31,8 +31,8 @@ contains
 !..............................................................
       if (n.eq.1) then
         total0=0.
-        do 10 l=1,lrz
-          ilr=lrindx(l)
+        do 10 l=1,setup0%lrz
+          ilr=setup0%lrindx(l)
           total0=xlndn0(ilr)/zmaxpsi(ilr)*dvol(ilr)+total0
  10     continue
       endif
@@ -42,8 +42,8 @@ contains
 !...............................................................
 
       total=0.
-      do 30 l=1,lrz
-        ilr=lrindx(l)
+      do 30 l=1,setup0%lrz
+        ilr=setup0%lrindx(l)
         do 40 k=1,ngen
           total=xlndn(k,ilr)/zmaxpsi(ilr)*dvol(ilr)+total
  40     continue

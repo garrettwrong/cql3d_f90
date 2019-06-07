@@ -11,7 +11,8 @@ module urfinitl_mod
 
 contains
 
-      subroutine urfinitl
+  subroutine urfinitl
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -26,7 +27,7 @@ contains
 
 !MPIINSERT_IF_RANK_EQ_0
       ! make plots on mpirank.eq.0 only
-      if (noplots.ne."enabled1") then
+      if (setup0%noplots.ne."enabled1") then
       write(t_,1000)
  1000 format("Urf (lower hybrid, fast wave, ech, ebw...) parameters:")
       CALL PGMTXT('T',-7.,0.,0.,t_)
@@ -178,8 +179,8 @@ contains
 !     rffile(1:nmodsa) are set by default to "notset",
 !     and may be set in the namelist input.
 
-!     If rffile(1)="mnemonic", rffile(1:3) is based
-!     on the namelist input character variable mnemonic.
+!     If rffile(1)="setup0%mnemonic", rffile(1:3) is based
+!     on the namelist input character variable setup0%mnemonic.
 !.......................................................................
 
       if (rfread.eq."netcdf") then
@@ -199,8 +200,8 @@ contains
             if (rffile(krf).eq."notset") rffile(krf)="raylh.nc"
          endif
 
-         if (rffile(1).eq."mnemonic") then
-            write(t_,110) mnemonic(1:length_char(mnemonic))
+         if (rffile(1).eq."setup0%mnemonic") then
+            write(t_,110) setup0%mnemonic(1:length_char(setup0%mnemonic))
  110        format(a,"_rf.nc")
             rffile(1)=t_
 
@@ -210,7 +211,7 @@ contains
                   WRITE(*,*)'urfinitl:  Expand calc of file name'
                   STOP
                endif
-               write(t_,111) mnemonic(1:length_char(mnemonic)),i
+               write(t_,111) setup0%mnemonic(1:length_char(setup0%mnemonic)),i
  111           format(a,"_rf.",i1,".nc")
                rffile(i)=t_
 

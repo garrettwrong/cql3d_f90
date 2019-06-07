@@ -30,7 +30,7 @@ contains
 !     mod(nummods,10)  > 4: linear or quadr. interpolation
 !
 !     Backward and centered schemes : impose cond. at l=1
-!     Forward schemes : impose cond. at l=ls
+!     Forward schemes : impose cond. at l=setup0%ls
 !
 !     Assumes for
 !     numindx = 1: backward scheme
@@ -86,37 +86,37 @@ contains
           fnhalf(i,kiorj,kspec,2)),ivelmid.eq.0)
  110  continue
 
-!     right boundary: l=ls
+!     right boundary: l=setup0%ls
 
  1120 continue
       if (numindx.eq.2 .or. numindx.eq.3) then
         iystart=1
-        iyend=iy_(ls)
+        iyend=iy_(setup0%ls)
         if (numindx .eq. 2) then
-          if (numixts .eq. +1) iyend=iyh_(ls)
-          if (numixts .eq. -1) iystart=iyh_(ls)+1
+          if (numixts .eq. +1) iyend=iyh_(setup0%ls)
+          if (numixts .eq. -1) iystart=iyh_(setup0%ls)+1
         endif
         do 112 i=iystart,iyend
-          bndmats(i,ls,1,1)=0.0
-          bndmats(i,ls,kleft+1,1)=1.0
-          bndmats(i,ls,iband,1)=0.0
-          rhspar(ls,i,1)=cvmgt(f(i,kiorj,kspec,ls),flin(dszm5(ls), &
-            dszm5(ls)+dszm5(ls-1),fnhalf(i,kiorj,kspec,ls-1), &
-            fnhalf(i,kiorj,kspec,ls-2)),ivelmid.eq.0)
+          bndmats(i,setup0%ls,1,1)=0.0
+          bndmats(i,setup0%ls,kleft+1,1)=1.0
+          bndmats(i,setup0%ls,iband,1)=0.0
+          rhspar(setup0%ls,i,1)=cvmgt(f(i,kiorj,kspec,setup0%ls),flin(dszm5(setup0%ls), &
+            dszm5(setup0%ls)+dszm5(setup0%ls-1),fnhalf(i,kiorj,kspec,setup0%ls-1), &
+            fnhalf(i,kiorj,kspec,setup0%ls-2)),ivelmid.eq.0)
  112    continue
       endif
 
       return
 
 !.......................................................................
-!l    1.2 Zero slopes: f(1)=f(2) and/or f(ls)=f(ls-1)
+!l    1.2 Zero slopes: f(1)=f(2) and/or f(setup0%ls)=f(setup0%ls-1)
 !.......................................................................
 
  120  continue
 
       if (numindx .eq. 3) go to 1220
 
-!     left boundary: ls=1
+!     left boundary: setup0%ls=1
       iystart=1
       iyend=iy_(1)
       if (numindx .eq. 2) then
@@ -132,24 +132,24 @@ contains
 !%OS  +                                   dtreff*velsou(i,kiorj,kspec,1)
  121  continue
 
-!     right boundary: l=ls
+!     right boundary: l=setup0%ls
 
  1220 continue
       if (numindx.eq.2 .or. numindx.eq.3) then
         iystart=1
-        iyend=iy_(ls)
+        iyend=iy_(setup0%ls)
         if (numindx .eq. 2) then
-          if (numixts .eq. +1) iyend=iyh_(ls)
-          if (numixts .eq. -1) iystart=iyh_(ls)+1
+          if (numixts .eq. +1) iyend=iyh_(setup0%ls)
+          if (numixts .eq. -1) iystart=iyh_(setup0%ls)+1
         endif
         do 122 i=iystart,iyend
-!%OS  bndmats(i,ls,1,1)=0.0
-          bndmats(i,ls,1,1)=-1.0
-          bndmats(i,ls,kleft+1,1)=1.0
-          bndmats(i,ls,iband,1)=0.0
-          rhspar(ls,i,1)=0.0
-!%OS  rhspar(ls,i,1)=fnhalf(i,kiorj,kspec,ls)+
-!%OS  *                               dtreff*velsou(i,kiorj,kspec,ls)
+!%OS  bndmats(i,setup0%ls,1,1)=0.0
+          bndmats(i,setup0%ls,1,1)=-1.0
+          bndmats(i,setup0%ls,kleft+1,1)=1.0
+          bndmats(i,setup0%ls,iband,1)=0.0
+          rhspar(setup0%ls,i,1)=0.0
+!%OS  rhspar(setup0%ls,i,1)=fnhalf(i,kiorj,kspec,setup0%ls)+
+!%OS  *                               dtreff*velsou(i,kiorj,kspec,setup0%ls)
  122    continue
       endif
 
@@ -376,11 +376,11 @@ contains
  600  continue
 
 !.......................................................................
-!l    6.1 Impose fixed value at l=l_upper(i), if different from ls
+!l    6.1 Impose fixed value at l=l_upper(i), if different from setup0%ls
 !     (Assumes l_lower(i)=1=l_mdpln and
-!     lsbtopr(ls-l_upper(i)+2)=lsbtopr(l_upper(i))+1 for all i)
+!     lsbtopr(setup0%ls-l_upper(i)+2)=lsbtopr(l_upper(i))+1 for all i)
 !     Note: There are 4 boundary points at l=l_upper(i) and
-!     l=ls-l_upper(i)+2 for i=kiorj and i=iymax+1-kiorj
+!     l=setup0%ls-l_upper(i)+2 for i=kiorj and i=iymax+1-kiorj
 !     => by reflection, we impose that f is symmetric at theta=pi/2
 !     (that is, impose mid-value at iyh: 0.5*(f(iyh_(l))+f(iyh_(l)+1)))
 !
@@ -445,9 +445,9 @@ contains
  612    continue
       endif
 
-!     point (i=kiorj,l=ls+2-l_upper(kiorj))
+!     point (i=kiorj,l=setup0%ls+2-l_upper(kiorj))
       if (numindx.eq.1 .or. numindx.eq.4 .or. iforbak.eq.0) then
-        ll=ls+2-l_upper(kiorj)
+        ll=setup0%ls+2-l_upper(kiorj)
         iief=iy_(ll)+1-kiorj
         lsrow=lsbtopr(ll)
         do 613 j=2,jx
@@ -458,9 +458,9 @@ contains
  613    continue
       endif
 
-!     point (i=iymax+1-kiorj,l=ls+2-l_upper(kiorj))
+!     point (i=iymax+1-kiorj,l=setup0%ls+2-l_upper(kiorj))
       if (numindx.eq.1 .or. numindx.eq.4 .or. iforbak.eq.1) then
-        ll=ls+2-l_upper(kiorj)
+        ll=setup0%ls+2-l_upper(kiorj)
         iief=iy_(ll)+1-kiorj
         lsrow=lsbtopr(ll)
         do 614 j=2,jx
@@ -520,8 +520,8 @@ contains
  623    continue
  622  continue
 
-!     points (kiorj,ls+2-l_upper(kiorj)) and (iy_(ll)+1-kiorj,ls+2-l_upper(kiorj))
-      ll=ls+2-l_upper(kiorj)
+!     points (kiorj,setup0%ls+2-l_upper(kiorj)) and (iy_(ll)+1-kiorj,setup0%ls+2-l_upper(kiorj))
+      ll=setup0%ls+2-l_upper(kiorj)
       iief=iy_(ll)+1-kiorj
       lsrow=lsbtopr(ll)
       do 624 ipoint=1,2

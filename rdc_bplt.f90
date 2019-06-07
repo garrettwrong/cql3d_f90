@@ -34,7 +34,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       if (pltvlhb.ne."enabled") return
 !$$$      if (pltovlp.eq."enabled".and. mrfn.gt.1) then
 !cc      call bcast(temp1(1,0),zero,iy*(jx+1)) ! YuP-101215: error?

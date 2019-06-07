@@ -34,7 +34,7 @@ contains
 
       do 10 k=1,ngen
         do 11 l=1,lrors
-          ilr=lrindx(l)
+          ilr=setup0%lrindx(l)
           itl=itl_(l)
           itu=itu_(l)
           do 12 j=1,jx

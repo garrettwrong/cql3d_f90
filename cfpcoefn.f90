@@ -32,7 +32,7 @@ contains
 !     Subroutine to calculate bounce-averaged Fokker-Planck collision
 !     coefficients (relativistic corrections added by MARK FRANZ--
 !     U.S.A.F.)
-!     If (cqlpmod .eq. "enabled") then compute only the coefficients
+!     If (setup0%cqlpmod .eq. "enabled") then compute only the coefficients
 !     at the orbit position l=l_ and do not perform the bounce-averages.
 !..................................................................
 !
@@ -86,7 +86,7 @@ contains
 
         rstmss=fmass(k)*clite2/ergtkev
         reltmp=rstmss/temp(k,lr_)
-        if (cqlpmod .eq. "enabled") reltmp=rstmss/temppar(k,ls_)
+        if (setup0%cqlpmod .eq. "enabled") reltmp=rstmss/temppar(k,ls_)
         if (reltmp .gt. 100. .or. relativ .eq. "disabled") then
           ebk2=sqrt(pi/(2.*reltmp))
         else if (reltmp .lt. .01) then
@@ -140,7 +140,7 @@ contains
         tam7(1)=0.
         tam9(1)=0.
 !..................................................................
-!     tam2(jx) and tam6(jx) represent integrals from xmax to infinity
+!     tam2(jx) and tam6(jx) represent integrasetup0%ls from xmax to infinity
 !     The following coding performs this integration. In this case 21*xmax
 !     represents infinity. The lack of this piece is most obvious when
 !     ions are a general species and electrons are fixed Maxwellians.
@@ -196,7 +196,7 @@ contains
 !     the contribution to all general species coeff.
 !.......................................................................
 
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
           call bavdens(k)
         else
           do 59 i=1,iy
@@ -322,7 +322,7 @@ contains
 !     CQLP case: compute only s(l_)
 !.......................................................................
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         iorbstr=1
         iorbend=lz  ! Whole flux surface, eqsym="none", else half FS.
       else
@@ -343,7 +343,7 @@ contains
 
       do 600 l=iorbstr,iorbend
         ileff=l
-        if (cqlpmod .eq. "enabled") ileff=ls_
+        if (setup0%cqlpmod .eq. "enabled") ileff=ls_
 
         do 500 k=1,ngen
 !.................................................................
@@ -428,13 +428,13 @@ contains
 !..................................................................
 !     The do loops 302 through 307 seek to take advantage of the
 !     Maxwellian nature of f for v < vth/2. This is employed in
-!     the integrations to obtain the functionals - Thus f is
+!     the integrations to obtain the functionasetup0%ls - Thus f is
 !     assumed to be Maxwellian between velocity mesh points,
 !     not linear. (not used)
 !..................................................................
             do 302 j=2,jx
               xs=sqrt(temp(k,lr_)*ergtkev*0.5/fmass(k))
-              if (cqlpmod .eq. "enabled") &
+              if (setup0%cqlpmod .eq. "enabled") &
                 xs=sqrt(temppar(k,ls_)*ergtkev*0.5/fmass(k))
               if (x(j)*vnorm.gt.xs) goto 303
  302        continue
@@ -450,7 +450,7 @@ contains
  304        continue
             rstmss=fmass(k)*clite2/ergtkev
             reltmp=rstmss/temp(k,lr_)
-            if (cqlpmod .eq. "enabled") reltmp=rstmss/temppar(k,ls_)
+            if (setup0%cqlpmod .eq. "enabled") reltmp=rstmss/temppar(k,ls_)
             call bcast(tam23,zero,jx*8)
             nintg=max0(21,min0(51,int(x(2)/sqrt(.2*cnorm2/reltmp))))
             nintg=2*(nintg/2)+1
@@ -693,7 +693,7 @@ contains
 !     at a given orbit position l.
 !.......................................................................
 
-            if (cqlpmod .ne. "enabled") then
+            if (setup0%cqlpmod .ne. "enabled") then
 
 !     Perform the bounce averaging
               do 480 i=1,imax(l,lr_)
@@ -759,7 +759,7 @@ contains
  470            continue
  480          continue ! i=1,imax(l,lr_)
 
-            else ! cqlpmod = "enabled"
+            else ! setup0%cqlpmod = "enabled"
               do 485 i=1,iy
                 do 486 j=2,jx
                   cal(i,j,kk,l_)=cal(i,j,kk,l_)+ca(i,j)
@@ -818,7 +818,7 @@ contains
 !..................................................................
 !     define needed coefficients at pass/trapped boundary
 !..................................................................
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         do 2001 k=1,ngen
           do 2002 j=1,jx
             cal(itl,j,k,l_)=0.25*vptb(itl,lr_) * ( cal(itl-1,j,k,l_)/ &

@@ -18,7 +18,7 @@ LOCATION  =   -L/usr/lib64   -L${PGPLOT_DIR}
 LIBRARIES=   -lX11 -lnetcdff -lnetcdf -lpgplot
 INCLUDE=/usr/include
 
-DEBUG     = -g -fbacktrace
+DEBUG     = -g -fbacktrace 
 OPTIMIZE  = -O1
 LISTING   = -Mlist
 #CSPECIAL  = -finit-local-zero #Need gfortran 4.3 for zeroing

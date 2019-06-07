@@ -16,25 +16,25 @@ contains
     use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
-    !      dimension f_(0:iy+1,0:jx+1,ngen,lrz)
+    !      dimension f_(0:iy+1,0:jx+1,ngen,setup0%lrz)
     !      f_ is passed in common
     allocatable :: bsl_s(:,:)
 
     !.........................................................................
     !     This routine is used to compute the skewing effect at the p/t bndry
     !     due to the bootstrap effect. It is not used if bootcalc="disabled",
-    !     or if advnce="explicit" or if lrz=1
+    !     or if advnce="explicit" or if setup0%lrz=1
     !     Subroutine bsl is for the lower theta tp-bndry at i=itl.
     !     There is also a separate subroutine bsu for the upper itu bndry.
     !.........................................................................
 
     bsl=0.
     if (bootcalc.eq."disabled") return
-    if (implct.ne."enabled" .or. lrz.eq.1 .or. n.lt.nonboot) return
+    if (implct.ne."enabled" .or. setup0%lrz.eq.1 .or. n.lt.nonboot) return
 
     if (.NOT. ALLOCATED(bsl_s)) then
-       allocate( bsl_s(0:jx+1,lrz) )
-       call bcast(bsl_s,zero,(jx+2)*lrz)
+       allocate( bsl_s(0:jx+1,setup0%lrz) )
+       call bcast(bsl_s,zero,(jx+2)*setup0%lrz)
     endif
 
     qb_mc=bnumb(kk)*charge*bthr(ll)/(fmass(kk)*clight)
@@ -55,7 +55,7 @@ contains
              dfdr=-(p1+p3)/(p1*p3)*f_(itl_(ll),jj,kk,ll) &
                   +p3/(p1*p2)*f_(itl_(ll+1),jj,kk,ll+1) &
                   -p1/(p2*p3)*f_(itl_(ll+2),jj,kk,ll+2)
-          elseif (ll.eq.lrz) then
+          elseif (ll.eq.setup0%lrz) then
              !            dfdr=(f_(itl_(ll),jj,kk,ll)-f_(itl_(ll-1),jj,kk,ll-1))/
              !     1      (rz(ll)-rz(ll-1))
              p1=rz(ll-1)-rz(ll-2)
@@ -92,7 +92,7 @@ contains
        rrr=rz(ll)-rban
        if (rrr.lt.rz(1)) rrr=rz(1)
        !BH080714:  rz dimensioned 0:lrza
-       call lookup(rrr,rz(1),lrzmax,weightu,weightl,irrr)
+       call lookup(rrr,rz(1),setup0%lrzmax,weightu,weightl,irrr)
        !$$$        if (irrr.le.1) then
        !$$$          bsl=f_(itl_(irrr),jj,kk,irrr)-f_(itl_(ll),jj,kk,ll)
        !$$$        else

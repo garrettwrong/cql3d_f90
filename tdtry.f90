@@ -13,7 +13,8 @@ module tdtry_mod
 
 contains
 
-      subroutine tdtry
+  subroutine tdtry
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -38,7 +39,7 @@ contains
 
       write(*,*)'tdtry:  ipacktp =',ipacktp
 
-      if (cqlpmod .ne."enabled") then
+      if (setup0%cqlpmod .ne."enabled") then
         zsntrp2=1./bbpsi(ilzhfs,lr_)
 !BH070419        ipacktp=3
 !BH070419 NOTE:  ipacktp now set in tdtrmuy, to coordinate with iytr.
@@ -59,13 +60,13 @@ contains
 
       if (meshy.eq."fixed_mu") then
         do 10 i=1,iymax/2
-          if (cqlpmod .ne."enabled") then
-            sinsq=mun(i)*bmidplne(lr_)/bmidplne(lrzmax)
+          if (setup0%cqlpmod .ne."enabled") then
+            sinsq=mun(i)*bmidplne(lr_)/bmidplne(setup0%lrzmax)
           else
             sinsq=mun(i)*psis(l_)
           endif
           if (sinsq.ge.1.) then
-            if(mark.eq.0 .and. cqlpmod.ne."enabled") then
+            if(mark.eq.0 .and. setup0%cqlpmod.ne."enabled") then
               call tdwrng(8)
             else
               it=i-1
@@ -74,7 +75,7 @@ contains
               go to 11
             endif
           elseif (sinsq.ge.zsntrp2 .and. mark.eq.0) then
-            if (cqlpmod .ne. "enabled") then
+            if (setup0%cqlpmod .ne. "enabled") then
               if (sinsq.eq.zsntrp2) call tdwrng(9)
               iu=i-1
             else
@@ -95,7 +96,7 @@ contains
         iyy=2*iyh   !-YuP-101215: Don't use iy=; it's in common /params/
                     ! Don't let overwrite the cqlinput value!
         iy_(l_)=iyy
-!BH070419        if (cqlpmod .ne. "enabled") then
+!BH070419        if (setup0%cqlpmod .ne. "enabled") then
 !BH070419          itl=iu+2
 !BH070419        else
 !BH070419          if (iu .eq. 0) iu=iyh
@@ -127,8 +128,8 @@ contains
         iy_(l_)=iyy
         do 13 i=1,iytr(lrors)/2
           if (mun(i).gt.thb(l_) .and. mark.eq.0) then
-            if (cqlpmod .ne. "enabled") iu=i-1
-            if (cqlpmod .eq. "enabled") iu=i-1
+            if (setup0%cqlpmod .ne. "enabled") iu=i-1
+            if (setup0%cqlpmod .eq. "enabled") iu=i-1
             mark=1
             iadd=ipacktp
           endif
@@ -136,8 +137,8 @@ contains
           y(ix,l_)=mun(i)
           idx(i,l_)=ix
  13     continue
-!BH070419        if (cqlpmod .ne. "enabled") itl=iu+2
-!BH070419        if (cqlpmod .eq. "enabled") itl=iu
+!BH070419        if (setup0%cqlpmod .ne. "enabled") itl=iu+2
+!BH070419        if (setup0%cqlpmod .eq. "enabled") itl=iu
         if (ipacktp.eq.3) then
            itl=iu+2
         elseif (ipacktp.eq.0) then
@@ -166,7 +167,7 @@ contains
 !     Make sure the passed/trapping interface is between two meshpoints.
 !..............................................................
 
-!BH070419      if (cqlpmod .ne. "enabled") then
+!BH070419      if (setup0%cqlpmod .ne. "enabled") then
       if (ipacktp.eq.3) then
         diff1=thb(l_)-y(iu,l_)
         if (diff1.lt.tbnd(l_)) tbnd(l_)=diff1/3.
@@ -189,7 +190,7 @@ contains
 !BH070419 will ignore this for now [Probably have to have y(itl)
 !BH070419 exactly at thb(l_), but not certain. Check this out later....]
 
-      if (cqlpmod .ne. "enabled" .and. ipacktp.eq.0) then
+      if (setup0%cqlpmod .ne. "enabled" .and. ipacktp.eq.0) then
 
          deltay1=abs(thb(l_)-y(iu,l_))
          deltay2=abs(y(iu+1,l_)-thb(l_))

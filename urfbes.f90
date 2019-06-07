@@ -26,7 +26,7 @@ contains
 !..................................................................
 !     Routine computes three Bessel tables, J_nharm-1,J_nharm, and
 !     J_nharm+1. Space is allocated. Once tables are created, subsequent
-!     calls check to see if the maximum argument has increased beyond
+!     calsetup0%ls check to see if the maximum argument has increased beyond
 !     table limits. If so, table is augmented.
 !..................................................................
 
@@ -76,7 +76,7 @@ contains
 !     this will decrease guess.
 !..................................................................
 
-!        bvalmin=fpsiz(lrindx(lrors))/er(nnr)
+!        bvalmin=fpsiz(setup0%lrindx(lrors))/er(nnr)
 !c**bh930729wcemin=charge*bvalmin/(fmass(kelecg)*clight)
 !        wcemin=abs(bnumb(1))*charge*bvalmin/(fmass(1)*clight)
 !**bh970620  Using ray data to get bvalmin:

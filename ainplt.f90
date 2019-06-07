@@ -11,7 +11,8 @@ module ainplt_mod
 
 contains
 
-      subroutine ainplt
+  subroutine ainplt
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -35,7 +36,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       if (pltinput .eq. "disabled") go to 3
 !%OS  call gxglfr(0)
@@ -47,14 +48,14 @@ contains
 !     returns the time as a character*24 variable.
 !     Doesn't work with pathscale compiler.
       WRITE(*,*)
-      WRITE(*,*)'ainplt:  If special_calls.eq."enabled" (default nml)'
+      WRITE(*,*)'ainplt:  If setup0%special_calls.eq."enabled" (default nml)'
       WRITE(*,*)'ainplt:    then code will bomb with compilers not'
       WRITE(*,*)'ainplt:    implementing SYSTEM call'
       WRITE(*,*)
-!BH111102      if (special_calls.eq.'enabled') then
+!BH111102      if (setup0%special_calls.eq.'enabled') then
          call GET_DATE_TIME (text24)
 !BH111102      else
-!BH111102         text24='special_calls.ne.enabled'
+!BH111102         text24='setup0%special_calls.ne.enabled'
 !BH111102      endif
 
       CALL PGPAGE
@@ -79,12 +80,12 @@ contains
 
 !     Get, write, and plot machine characteristics
 !     by writing a file, reading it, and removing.
-!     special_calls.ne.enabled branches around the system calls,
+!     setup0%special_calls.ne.enabled branches around the system calls,
 !     which are not enabled for some systems.  Could populate
 !     uname_output and pwd_output files extenal to this code
 !     using a script which then invokes this code (Ed D'Azevedo).
 
-      if (special_calls.eq.'enabled') then
+      if (setup0%special_calls.eq.'enabled') then
          call system('uname -a > uname_output')
 !_cray      call ishell('uname -a > uname_output')
          open(unit=13,file='uname_output',delim='apostrophe', &
@@ -102,7 +103,7 @@ contains
          call system('rm pwd_output')
 !_cray      call ishell('rm pwd_output')
 
-      elseif (special_calls.eq.'external') then
+      elseif (setup0%special_calls.eq.'external') then
          open(unit=13,file='uname_output',delim='apostrophe', &
               status='old')
          read(13,100) line
@@ -112,10 +113,10 @@ contains
          close(unit=13)
 
       else
-         line='special_calls.ne.enabled'
-         text256='special_calls.ne.enabled, possibly use script'
+         line='setup0%special_calls.ne.enabled'
+         text256='setup0%special_calls.ne.enabled, possibly use script'
 
-      endif                     ! on special_calls
+      endif                     ! on setup0%special_calls
 
       WRITE(*,*) ' '
       WRITE(*,2006) text24

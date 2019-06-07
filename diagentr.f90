@@ -284,7 +284,7 @@ contains
       do 1001 i=1,iy
         !09-09-2015 checked: almost no change when skipping i=1 and i=iy
         s_cynt2=cynt2(i,l_)
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
           if (i .ge. itl .and. i .le. iyh) s_cynt2=2.*cynt2(i,l_)
           ! Factor of 2 above because of skipping half trapped region?
           if (i .gt. iyh .and. i .le. itu) go to 1001 !next i
@@ -377,7 +377,7 @@ contains
 
 !     Integrate the FSA power densities over volume.
 
-      if (cqlpmod.eq."enabled") return
+      if (setup0%cqlpmod.eq."enabled") return
 
 !BH050616:  There is a code misfunction below, wherein
 !           entrintr(k,lefct) appears not to be zeroed
@@ -395,11 +395,11 @@ contains
          do k=1,ngen
             entrintr(k,llefct)=0.0
 !            write(*,*)'diagentr: entrintr(k,llefct)',entrintr(k,llefct)
-            do ll=1,lrz
+            do ll=1,setup0%lrz
 !BH050616:  Added if statement since above zeroing of entrintr
 !BH050616:  is not working?
                if(ll.eq.1) entrintr(k,llefct)=0.0
-               lr_=lrindx(ll)
+               lr_=setup0%lrindx(ll)
                entrintr(k,llefct)=entrintr(k,llefct)+ &
                     entr(k,llefct,ll)*dvol(lr_)
             enddo
@@ -407,7 +407,7 @@ contains
          enddo
       enddo
 !      write(*,*)'diagentr: entrintr',(entrintr(1,llefct),llefct=-1,15)
-!      write(*,*)'diagentr: entr(1,5,*)',(entr(1,5,ll),ll=1,lrz)
+!      write(*,*)'diagentr: entr(1,5,*)',(entr(1,5,ll),ll=1,setup0%lrz)
 
       return
       end subroutine diagentr_vol

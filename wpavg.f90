@@ -34,10 +34,10 @@ contains
       z1oravg=0.0
       zflxavg=0.0
       zflxavg2=0.0
-      ilr=lrindx(1)
+      ilr=setup0%lrindx(1)
       zelcof=elecfld(ilr)/300.*rmag*fpsi(ilr)/bmidplne(ilr)**2/3.e+09
       zelcof2=elecfld(ilr)/300.*rmag*fpsi(ilr)/bmidplne(ilr)/3.e+09
-      do 100 l=1,ls
+      do 100 l=1,setup0%ls
         zcuravg=zcuravg+dsz(l)*currmtpz(l)/psis(l)/bmidplne(ilr)/ &
           solrs(l)
         zcuravg2=zcuravg2+dsz(l)*currmtpz(l)

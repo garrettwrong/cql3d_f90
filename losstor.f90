@@ -17,7 +17,7 @@ contains
       save
 
 !..................................................................
-!     This routine provides a number of phenomenological loss models
+!     This routine provides a number of phenomenological loss modesetup0%ls
 !     for toroidal scenarios. In general a loss time as a function of
 !     momentum is determined.
 !

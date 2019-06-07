@@ -11,7 +11,8 @@ module pltinit_mod
 
 contains
 
-      subroutine pltinit
+  subroutine pltinit
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -30,18 +31,18 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
 !      write(*,*) 'PLTINIT-1'
 !      Remember, pgbeg should be integer
 !      ier=pgbeg(0,'plot.ps/VPS',1,1)
 !      Remember, pgopen should be integer
-      write(t_,1000) mnemonic(1:length_char(mnemonic))
+      write(t_,1000) setup0%mnemonic(1:length_char(setup0%mnemonic))
  1000 format(a,".ps/VCPS") !YuP: was /VPS (vertical black&white)
                            ! Use /VCPS for vertical Color pages
       ier=PGOPEN(t_)
       CALL PGSCI(1)
-      CALL PGSLW(lnwidth)
+      CALL PGSLW(setup0%lnwidth)
       write(*,*) 'PLTINIT-1 ier=1 is OK: ier=',ier
 !      ier=pgbeg(0,'?',1,1)
 !      if (ier.ne.1) write(*,*)

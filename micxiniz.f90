@@ -22,6 +22,7 @@ contains
       subroutine micxiniz
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
@@ -38,8 +39,8 @@ contains
 
 !%OS  compute psi_prime as df/ds
 !%OS  fpsismi(l)=psis(l)*dls(2,2,1,l)+psis(l+1)*(1-dls(2,2,1,l))
-      fpsismi(l)=(0.5-0.5*(1/(l+1))+0.5*(1/(ls+1-l)))*psis(l)+ &
-        (0.5+0.5*(1/(l+1))-0.5*(1/(ls+1-l)))*psis(l+1)
+      fpsismi(l)=(0.5-0.5*(1/(l+1))+0.5*(1/(setup0%ls+1-l)))*psis(l)+ &
+        (0.5+0.5*(1/(l+1))-0.5*(1/(setup0%ls+1-l)))*psis(l+1)
 
 !.......................................................................
 !l    1. Determine the field line orbit mesh z(1:lz,lr_).
@@ -285,30 +286,30 @@ contains
 
 !.......................................................................
 !l    3. Construct mesh and profiles in CQLP mode on given flux surface
-!     Note: If cqlpmod=enabled, lz=lsmax, full mesh along B
-!     ls gives mesh on which equations are solved
-!     (if periodic: sz(1)=sz(ls))
+!     Note: If setup0%cqlpmod=enabled, lz=setup0%lsmax, full mesh along B
+!     setup0%ls gives mesh on which equations are solved
+!     (if periodic: sz(1)=sz(setup0%ls))
 !     psis=B(s)/B(midplane), psisp=d(psis)/ds
 !.......................................................................
 
 !.......................................................................
 !l    3.1 s, sz, psis, psisp and related meshes
-!     Note: only one flux surface in CQLP so far (lrz=1)
+!     Note: only one flux surface in CQLP so far (setup0%lrz=1)
 !.......................................................................
 
-      if (cqlpmod.ne."enabled" .or. lr_.ne.lrindx(1)) go to 999  !To END
+      if (setup0%cqlpmod.ne."enabled" .or. lr_.ne.setup0%lrindx(1)) go to 999  !To END
 
 !     Following, not checked for eqsym.eq."none". Possibly OK. BH090923.
 
 !     Assumes midplane at l=1. If not, bmidplne, z mesh, bpsi etc should be
 !     redefine
-      do 310 l=1,ls
-        sz(l)=z(lsindx(l),lr_)
-        psis(l)=bbpsi(lsindx(l),lr_)/bbpsi(lmdpln(indxlr(lr_)),lr_)
-        psisp(l)=psifp(z(lsindx(l),lr_))/bbpsi(lmdpln(indxlr(lr_)),lr_)
+      do 310 l=1,setup0%ls
+        sz(l)=z(setup0%lsindx(l),lr_)
+        psis(l)=bbpsi(setup0%lsindx(l),lr_)/bbpsi(lmdpln(indxlr(lr_)),lr_)
+        psisp(l)=psifp(z(setup0%lsindx(l),lr_))/bbpsi(lmdpln(indxlr(lr_)),lr_)
  310  continue
 
-!     psipols, solrs, solzs
+!     psiposetup0%ls, solrs, solzs
       i1p(1)=2
       i1p(2)=2
       zd2bpol(1)=0.0
@@ -330,7 +331,7 @@ contains
       itab(2)=0
       itab(3)=0
 
-      do 311 l=1,ls
+      do 311 l=1,setup0%ls
         call terp1(lorbit(lr_),es(1:lorbit(lr_),lr_),eqbpol(1:lorbit(lr_),lr_),zd2bpol(1:lorbit(lr_)) &
           ,sz(l),1,tab,itab)
         psipols(l)=tab(1)/bmidplne(lr_)
@@ -341,7 +342,7 @@ contains
           ,sz(l),1,tab,itab)
         solzs(l)=tab(1)
  311  continue
-      do 312 l=2,ls-1
+      do 312 l=2,setup0%ls-1
         dsz(l)=0.5*(sz(l+1)-sz(l-1))
         dszp5(l)=sz(l+1)-sz(l)
         eszp5(l)=1./dszp5(l)
@@ -349,15 +350,15 @@ contains
         eszm5(l)=1./dszm5(l)
  312  continue
       dsz(1)=(sz(2)-sz(1))*0.5
-      dsz(ls)=(sz(ls)-sz(ls-1))*0.5
+      dsz(setup0%ls)=(sz(setup0%ls)-sz(setup0%ls-1))*0.5
       dszm5(1)=0.0
       eszm5(1)=0.0
       dszp5(1)=sz(2)-sz(1)
       eszp5(1)=1./dszp5(1)
-      dszm5(ls)=sz(ls)-sz(ls-1)
-      eszm5(ls)=1./dszm5(ls)
-      dszp5(ls)=0.0
-      eszp5(ls)=0.0
+      dszm5(setup0%ls)=sz(setup0%ls)-sz(setup0%ls-1)
+      eszm5(setup0%ls)=1./dszm5(setup0%ls)
+      dszp5(setup0%ls)=0.0
+      eszp5(setup0%ls)=0.0
 
 !.......................................................................
 !l    3.2 Construct parallel profile n(s) and T(s)
@@ -370,8 +371,8 @@ contains
  320  continue
 !     only parabola option for n(s), T(s) so far
       do 321 ik=1,ntotal
-        call tdxin13d(denpar,znormsh,lsmax,ntotala,ik,npwr(0),mpwr(0))
-        call tdxin13d(temppar,znormsh,lsmax,ntotala,ik,npwr(ik), &
+        call tdxin13d(denpar,znormsh,setup0%lsmax,ntotala,ik,npwr(0),mpwr(0))
+        call tdxin13d(temppar,znormsh,setup0%lsmax,ntotala,ik,npwr(ik), &
           mpwr(ik))
  321  continue
 
@@ -381,15 +382,15 @@ contains
 
       if (transp .ne. "enabled") go to 999
 
-!     Note: if transp=enabled then ls=lsmax
+!     Note: if transp=enabled then setup0%ls=setup0%lsmax
       if (sbdry.ne."periodic" .and. numclas.ne.1) then
         do 400 ik=1,ntotal
-          do 401 il=0,lsmax+1,lsmax+1
+          do 401 il=0,setup0%lsmax+1,setup0%lsmax+1
             denpar(ik,il)=0.0
             temppar(ik,il)=0.0
  401      continue
  400    continue
-        do 410 il=0,lsmax+1,lsmax+1
+        do 410 il=0,setup0%lsmax+1,setup0%lsmax+1
           sz(il)=0.0
           psisp(il)=0.0
           psipols(il)=0.0
@@ -402,16 +403,16 @@ contains
           eszp5(il)=0.0
  410    continue
       else
-!     0 <=> lsmax and lsmax+1 <=> 1
+!     0 <=> setup0%lsmax and setup0%lsmax+1 <=> 1
         do 420 ik=1,ntotal
-          do 421 il=0,lsmax+1,lsmax+1
-            iequiv=il/(lsmax+1)+lsmax*((lsmax+1-il)/(lsmax+1))
+          do 421 il=0,setup0%lsmax+1,setup0%lsmax+1
+            iequiv=il/(setup0%lsmax+1)+setup0%lsmax*((setup0%lsmax+1-il)/(setup0%lsmax+1))
             denpar(ik,il)=denpar(ik,iequiv)
             temppar(ik,il)=temppar(ik,iequiv)
  421      continue
  420    continue
-        do 430 il=0,lsmax+1,lsmax+1
-          iequiv=il/(lsmax+1)+lsmax*((lsmax+1-il)/(lsmax+1))
+        do 430 il=0,setup0%lsmax+1,setup0%lsmax+1
+          iequiv=il/(setup0%lsmax+1)+setup0%lsmax*((setup0%lsmax+1-il)/(setup0%lsmax+1))
           sz(il)=sz(iequiv)
           psisp(il)=psisp(iequiv)
           psipols(il)=psipols(iequiv)
@@ -432,14 +433,14 @@ contains
 !%OS
 !%OS  if (noffso(1,2) .eq. 999) go to 999
 !%OS
-!%OS  do 500 l=1,ls
+!%OS  do 500 l=1,setup0%ls
 !%OS  psisp(l)=(fpsismi(l)-fpsismi(l-1))/dsz(l)
 !%OS  500  continue
 !%OS  psisp(0)=0.0
-!%OS  psisp(ls+1)=0.0
+!%OS  psisp(setup0%ls+1)=0.0
 !%OS  if (sbdry .eq. "periodic") then
-!%OS  psisp(0)=psisp(ls)
-!%OS  psisp(ls+1)=psisp(1)
+!%OS  psisp(0)=psisp(setup0%ls)
+!%OS  psisp(setup0%ls+1)=psisp(1)
 !%OS  endif
 !%OS
 

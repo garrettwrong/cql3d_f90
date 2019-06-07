@@ -59,7 +59,7 @@ contains
 !                 tabulated on z_l points.
 !                 On the other hand, baviorbto does not properly
 !                 fill in dtau for i=itl pitch angle (tp-bndry).
-!                 Need to check this. (start with mnemonic.nc op).
+!                 Need to check this. (start with setup0%mnemonic.nc op).
 !...................................................................
 
 !cc      common/temp_imax_old/ imax_old(lza)
@@ -145,7 +145,7 @@ contains
             !if(l.eq.1)write(*,*)il,pt,tem1(il)
          enddo
 
-!c            if(lr_.eq.lrz) then
+!c            if(lr_.eq.setup0%lrz) then
 !c            write(*,*)'baviorbt  B/Bmin',l,lr_,bpsi(l,lr_)
 !c            endif
          !write(*,*)'bav_up: l,step2',l,step2
@@ -544,7 +544,7 @@ contains
 !...................................................................
 
 !cc      real(c_double), dimension(iy):: prnt1,prnt2,prnt3,prnt4  !For gdb printing
-!cc      real(c_double), dimension(iy,lrzmax):: prnt5   !For gdb printing
+!cc      real(c_double), dimension(iy,setup0%lrzmax):: prnt5   !For gdb printing
 
 
       character*8 bnc
@@ -751,8 +751,8 @@ contains
 !
 !     This subroutine is called after above calc of tau/dtau (taunew=
 !     "enabled"), and call to tdmshst.
-!     Is is assumed (has been checked in ainsetva.f) that lrzdiff
-!     .eq."disabled", giving lrz=lrzmax.
+!     Is is assumed (has been checked in ainsetva.f) that setup0%lrzdiff
+!     .eq."disabled", giving setup0%lrz=setup0%lrzmax.
 !
 !     Trapped and transiting particles are treated separately.
 !     See BH notes: 090821.
@@ -762,15 +762,15 @@ contains
       k=1  !ONLY setup for one species, ngen=1
 
 !......................................................................
-      do lr=1,lrzmax
+      do lr=1,setup0%lrzmax
 !......................................................................
 
       iyy=iy_(lr) !-YuP-101215: Don't use iy=; it's in common /params/
       itl=itl_(lr)
       iyh=iyh_(lr)
       call bcast(deltarho(1:iy,1:lz,lr),zero,iy*lz) ! for a given lr
-      ! dimensioned : deltarho(iy,lz,lrzmax)
-      ! Alternatively could set deltarho=0.d0 infront of "do lr=1,lrzmax" line
+      ! dimensioned : deltarho(iy,lz,setup0%lrzmax)
+      ! Alternatively could set deltarho=0.d0 infront of "do lr=1,setup0%lrzmax" line
 
 
 !.......................................................................
@@ -919,8 +919,8 @@ contains
 !  iz=1,nz_delta,it=1,nt_delta) on a regular R,Z,theta grid. theta is
 !  local pitch angle.  nr_delta,nz_delta,nt_delta are namelist input
 !  variables.
-!  Only do this after filling in all above lr=1,lrzmax values.
-!  (Subroutine calls are with lr in reverse order from lrzmax to 1.)
+!  Only do this after filling in all above lr=1,setup0%lrzmax values.
+!  (Subroutine calls are with lr in reverse order from setup0%lrzmax to 1.)
 !......................................................................
 
 !     First, interpolate deltarho data to deltarhop(i,l,lr) where
@@ -938,7 +938,7 @@ contains
       enddo
 !      write(*,*)'deltar:t_delta(1:nt_delta)=',t_delta(1:nt_delta)
 
-      do lr=1,lrzmax   !Coding setup for lrzdiff.ne."enabled"
+      do lr=1,setup0%lrzmax   !Coding setup for setup0%lrzdiff.ne."enabled"
          iyy=iy_(lr) !YuP-101215: Don't use iy=; it's in common /params/
 !         deltarhop(1,1,lr)=deltarho(1,1,lr)
 !         deltarhop(nt_delta,1,lr)=deltarho(iyy,1,lr)
@@ -984,7 +984,7 @@ contains
 !     [Choose that inwards shift is not further than to center
 !     of the 1st radial bin.]
 !
-!$$$      do lr=1,lrzmax            !Coding setup for lrzdiff.ne."enabled"
+!$$$      do lr=1,setup0%lrzmax            !Coding setup for setup0%lrzdiff.ne."enabled"
 !$$$         do l=1,lz
 !$$$            do i=1,nt_delta
 !$$$               deltarhop(i,l,lr)=min(rya(1)-rya(lr),deltarhop(i,l,lr))
@@ -1018,18 +1018,18 @@ contains
       enddo
 
 !     Simple loop over R,Z points, determining nearest l,lr points in
-!     the z(l=1,lz,lr=1,lrzmax) grid.
+!     the z(l=1,lz,lr=1,setup0%lrzmax) grid.
 !     NB:  up-down symmetry assumed
 !     If outside LCFS, extrapolate rho shift at constant poloidal
-!     angle from outermost computational flux surface (rya(lrzmax)).
+!     angle from outermost computational flux surface (rya(setup0%lrzmax)).
 
 !     tr2() below contains bin boundaries, in ascending order (for luf)
-      do lr=1,lrzmax
+      do lr=1,setup0%lrzmax
          tr2(lr)=psimag-psivalm(lr)
       enddo
-!      write(*,*)'deltar: tr2 (bin bndries)',tr2(1:lrzmax)
+!      write(*,*)'deltar: tr2 (bin bndries)',tr2(1:setup0%lrzmax)
 
-!      do lr=1,lrzmax
+!      do lr=1,setup0%lrzmax
 !         write(*,*)'deltar: pol(1:lz,lr)=',pol(1:lz,lr)
 !      enddo
 
@@ -1042,7 +1042,7 @@ contains
             psival=terp2(rpos,zpos,nnr,er, &
               nnz,ez,epsi,epsirr,epsizz,epsirz,nnra,0,0)
             apsi=psimag-psival
-            lr=min(luf(apsi,tr2(1),lrzmax),lrzmax)
+            lr=min(luf(apsi,tr2(1),setup0%lrzmax),setup0%lrzmax)
 
 !           Determine poloidal angle about mag axis:
 !           (see eqorbit.f and micxiniz.f, only setup for up-down symmetry)
@@ -1079,7 +1079,7 @@ contains
 !            write(*,*)'deltar: ione',ione
 
             if ((lr.ne.1 .and. ione.lt.0) &
-                 .or. (lr.ne.lrzmax .and. ione.gt.0)) then
+                 .or. (lr.ne.setup0%lrzmax .and. ione.gt.0)) then
                area1=abs((rpos-solrz(ll,lr))*(zpos-solzz(ll,lr)))
                area2=abs((solrz(ll,lr+ione)-rpos)* &
                     (zpos-solzz(ll,lr+ione)))
@@ -1106,7 +1106,7 @@ contains
 !     +                           deltarz(ir,iz,1:4),deltarz(ir,iz,10)
 
             elseif (lr.eq.1 .and. ione.lt.0 ) then
-!               write(*,*)'deltar: lr,lrzmax,ione =',lr,lrzmax,ione
+!               write(*,*)'deltar: lr,setup0%lrzmax,ione =',lr,setup0%lrzmax,ione
 
 !              Interpolate deltarhop at same poloidal angle,
 !              at lr=1 flux surface
@@ -1120,12 +1120,12 @@ contains
 !               write(*,*)'deltar: deltarz(ir,iz,1:4),deltarz(ir,iz,10)',
 !     +                           deltarz(ir,iz,1:4),deltarz(ir,iz,10)
 
-            elseif (lr.eq.lrzmax .and. ione.gt.0 ) then
-!               write(*,*)'deltar: lr,lrzmax,ione =',lr,lrzmax,ione
+            elseif (lr.eq.setup0%lrzmax .and. ione.gt.0 ) then
+!               write(*,*)'deltar: lr,setup0%lrzmax,ione =',lr,setup0%lrzmax,ione
 
 
 !              Interpolate deltarhop at same poloidal angle,
-!              at lr=lrzmax flux surface
+!              at lr=setup0%lrzmax flux surface
                call lookup(thetpol,pol(1:lz,lr),lz,weightu,weightl,lll)
 !               write(*,*)'deltar: tang,weightl,weightu,lll =',
 !     +                            tang,weightl,weightu,lll

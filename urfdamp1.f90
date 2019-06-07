@@ -49,7 +49,7 @@ contains
 !..................................................................
 !     fill out increasing psi array of bin boundaries, as in urffflx.
 !..................................................................
-         do l=1,lrzmax
+         do l=1,setup0%lrzmax
             tr2(l)=psimag-psivalm(l) ! store in comm.h
          enddo
 !.......................................................................
@@ -58,7 +58,7 @@ contains
 !**bh050820:  Trapped-particle bounce-time factor, trapfac, here set =1.,
 !**bh050820:  accounts for bounce time being twice the transitting bounce
 !**bh091031:  time.  However, bounce-averages are divided by bounce times,
-!**bh091031:  so this trapfac factor cancels out.
+!**bh091031:  so this trapfac factor cancesetup0%ls out.
 !**bh091031:  The symm factor though involves allocating half the ray power
 !**bh091031:  above the midplane (and half mirrored below), for
 !**bh091031:  up-down-symmetric case.

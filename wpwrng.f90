@@ -83,20 +83,20 @@ contains
 
       stop 'wpwrng:' ! stop at all MPI cores
 
-10010 format(" cqlpmod and colmodl=4 not allowed")
+10010 format(" setup0%cqlpmod and colmodl=4 not allowed")
 10020 format(" Cannot have periodic mesh along B and non full l mesh " &
         ,"for some pitch-angle")
 10030 format(" lmidpln .ne. 1 not yet valid with CQLP")
-10040 format(" Cannot run parallel transport with lsdiff=enabled")
+10040 format(" Cannot run parallel transport with setup0%lsdiff=enabled")
 10050 format(" error in micxinil in calculating imax")
 10060 format(" error in micxinil in calculating ill and cosz")
 10070 format(" updown .ne. symmetry with 9<numods<20")
 10080 format(" sbdry .ne. periodic with 9<numods<20")
-10090 format(" ls odd with 9<numods<20")
+10090 format(" setup0%ls odd with 9<numods<20")
 10100 format(" lz odd with 9<numods<20")
 10110 format(" iymax .ne. iy_(1)")
 10120 format(" l_lower(i).ne.1")
-10130 format(" l_upper(i).ne.ls for i<itl_(1) or i>itu_(1)")
+10130 format(" l_upper(i).ne.setup0%ls for i<itl_(1) or i>itu_(1)")
 10140 format(" i.ne.iyh_(l_upper(i))")
 10150 format(" wptrafx called with a non-constant y mesh")
 10160 format(" numixts should equal +1 or -1 with numindx=2 option")

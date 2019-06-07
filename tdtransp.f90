@@ -22,6 +22,7 @@ contains
       subroutine tdtransp
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use r8subs_mod, only : cvmgt, dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !..............................................................
@@ -44,11 +45,11 @@ contains
 !     accomplished in a density conserving manner.
 !..............................................................
       if (nonadi .eq. 6) then
-         !XXX YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+         !XXX YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or setup0%lrz)
         call tdtrvtor2(fvn(0:iyp1,0:jxp1,1:ngen,1), &
                        frn(0:iyp1,0:jxp1,1:ngen,1), vpint,vpint_,1)
       else
-        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or lrz)
+        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or setup0%lrz)
         call tdtrvtor(fvn,frn)
       endif
 !..............................................................
@@ -97,7 +98,7 @@ contains
               fg_(j,ii,lu)=delr(i,lu)/betr(i,lu)
               eg_(j,ii,lu)=alpr(i,lu)/betr(i,lu)
               frn(idx(i,lrors),j,k,lrors)=vptb_(idx(i,lrors), &
-                lrindx(lrors))/zmaxpsi(lrindx(lrors)) &
+                setup0%lrindx(lrors))/zmaxpsi(setup0%lrindx(lrors)) &
                 *frn(idx(i,lrors),j,k,lrors)
               eg_(j,ii,lrors)=0.
               fg_(j,ii,lrors)=frn(idx(i,lrors),j,k,lrors)
@@ -184,8 +185,8 @@ contains
             do 310 l=l_lower(i),lrors
               ii=idx(i,l)
               do 312 j=1,jx
-                frn(ii,j,k,l)=frn(ii,j,k,l)/vptb_(ii,lrindx(l))* &
-                  zmaxpsi(lrindx(l))
+                frn(ii,j,k,l)=frn(ii,j,k,l)/vptb_(ii,setup0%lrindx(l))* &
+                  zmaxpsi(setup0%lrindx(l))
  312          continue
  310        continue
 
@@ -208,8 +209,8 @@ contains
             zs=0.
             zt=0.
             do 420 i=1,iytr(l)
-              zs=zs+vpint_(idx(i,l),lrindx(l))
-              zt=zt+vpint_(idx(i,l),lrindx(l))*frn(idx(i,l),1,k,l)
+              zs=zs+vpint_(idx(i,l),setup0%lrindx(l))
+              zt=zt+vpint_(idx(i,l),setup0%lrindx(l))*frn(idx(i,l),1,k,l)
  420        continue
             do 430 i=1,iytr(l)
               frn(idx(i,l),1,k,l)=zt/zs
@@ -222,7 +223,7 @@ contains
 !     mesh - interpolate onto the velocity mesh, returning it in frn.
 !......................................................................
       if (nonadi .eq. 6) then
-        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or setup0%lrz)
         call tdtrrtov2(frn(0:ipy1,0:jxp1,1:ngen,1), &
                        frn(0:ipy1,0:jxp1,1:ngen,1), vpint,vpint_,1)
       else

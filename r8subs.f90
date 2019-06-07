@@ -619,10 +619,10 @@ contains
 !*          The number of columns of the matrix A.  N >= 0.
 !*
 !*  KL      (input) INTEGER
-!*          The number of subdiagonals within the band of A.  KL >= 0.
+!*          The number of subdiagonasetup0%ls within the band of A.  KL >= 0.
 !*
 !*  KU      (input) INTEGER
-!*          The number of superdiagonals within the band of A.  KU >= 0.
+!*          The number of superdiagonasetup0%ls within the band of A.  KU >= 0.
 !*
 !*  AB      (input/output) DOUBLE PRECISION array, dimension (LDAB,N)
 !*          On entry, the matrix A in band storage, in rows KL+1 to
@@ -631,11 +631,11 @@ contains
 !*          array AB as follows:
 !*          AB(kl+ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl)
 !*
-!*          On exit, details of the factorization: U is stored as an
-!*          upper triangular band matrix with KL+KU superdiagonals in
+!*          On exit, detaisetup0%ls of the factorization: U is stored as an
+!*          upper triangular band matrix with KL+KU superdiagonasetup0%ls in
 !*          rows 1 to KL+KU+1, and the multipliers used during the
 !*          factorization are stored in rows KL+KU+2 to 2*KL+KU+1.
-!*          See below for further details.
+!*          See below for further detaisetup0%ls.
 !*
 !*  LDAB    (input) INTEGER
 !*          The leading dimension of the array AB.  LDAB >= 2*KL+KU+1.
@@ -652,7 +652,7 @@ contains
 !*               singular, and division by zero will occur if it is used
 !*               to solve a system of equations.
 !*
-!*  Further Details
+!*  Further Detaisetup0%ls
 !*  ===============
 !*
 !*  The band storage scheme is illustrated by the following example, when
@@ -690,7 +690,7 @@ contains
 !*     ..
 !*     .. Executable Statements ..
 !*
-!*     KV is the number of superdiagonals in the factor U, allowing for
+!*     KV is the number of superdiagonasetup0%ls in the factor U, allowing for
 !*     fill-in.
 !*
       KV = KU + KL
@@ -819,10 +819,10 @@ contains
 !*          The number of columns of the matrix A.  N >= 0.
 !*
 !*  KL      (input) INTEGER
-!*          The number of subdiagonals within the band of A.  KL >= 0.
+!*          The number of subdiagonasetup0%ls within the band of A.  KL >= 0.
 !*
 !*  KU      (input) INTEGER
-!*          The number of superdiagonals within the band of A.  KU >= 0.
+!*          The number of superdiagonasetup0%ls within the band of A.  KU >= 0.
 !*
 !*  AB      (input/output) DOUBLE PRECISION array, dimension (LDAB,N)
 !*          On entry, the matrix A in band storage, in rows KL+1 to
@@ -831,11 +831,11 @@ contains
 !*          array AB as follows:
 !*          AB(kl+ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl)
 !*
-!*          On exit, details of the factorization: U is stored as an
-!*          upper triangular band matrix with KL+KU superdiagonals in
+!*          On exit, detaisetup0%ls of the factorization: U is stored as an
+!*          upper triangular band matrix with KL+KU superdiagonasetup0%ls in
 !*          rows 1 to KL+KU+1, and the multipliers used during the
 !*          factorization are stored in rows KL+KU+2 to 2*KL+KU+1.
-!*          See below for further details.
+!*          See below for further detaisetup0%ls.
 !*
 !*  LDAB    (input) INTEGER
 !*          The leading dimension of the array AB.  LDAB >= 2*KL+KU+1.
@@ -852,7 +852,7 @@ contains
 !*               singular, and division by zero will occur if it is used
 !*               to solve a system of equations.
 !*
-!*  Further Details
+!*  Further Detaisetup0%ls
 !*  ===============
 !*
 !*  The band storage scheme is illustrated by the following example, when
@@ -897,7 +897,7 @@ contains
 !*     ..
 !*     .. Executable Statements ..
 !*
-!*     KV is the number of superdiagonals in the factor U, allowing for
+!*     KV is the number of superdiagonasetup0%ls in the factor U, allowing for
 !*     fill-in
 !*
       KV = KU + KL
@@ -1263,19 +1263,19 @@ contains
 !*          The order of the matrix A.  N >= 0.
 !*
 !*  KL      (input) INTEGER
-!*          The number of subdiagonals within the band of A.  KL >= 0.
+!*          The number of subdiagonasetup0%ls within the band of A.  KL >= 0.
 !*
 !*  KU      (input) INTEGER
-!*          The number of superdiagonals within the band of A.  KU >= 0.
+!*          The number of superdiagonasetup0%ls within the band of A.  KU >= 0.
 !*
 !*  NRHS    (input) INTEGER
 !*          The number of right hand sides, i.e., the number of columns
 !*          of the matrix B.  NRHS >= 0.
 !*
 !*  AB      (input) DOUBLE PRECISION array, dimension (LDAB,N)
-!*          Details of the LU factorization of the band matrix A, as
+!*          Detaisetup0%ls of the LU factorization of the band matrix A, as
 !*          computed by DGBTRF.  U is stored as an upper triangular band
-!*          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
+!*          matrix with KL+KU superdiagonasetup0%ls in rows 1 to KL+KU+1, and
 !*          the multipliers used during the factorization are stored in
 !*          rows KL+KU+2 to 2*KL+KU+1.
 !*
@@ -2190,7 +2190,7 @@ contains
 !*          The increment between successive values of IPIV.  If IPIV
 !*          is negative, the pivots are applied in reverse order.
 !*
-!*  Further Details
+!*  Further Detaisetup0%ls
 !*  ===============
 !*
 !*  Modified by
@@ -2348,7 +2348,7 @@ contains
 !*
 !*  where b and x are n element vectors and A is an n by n unit, or
 !*  non-unit, upper or lower triangular band matrix, with ( k + 1 )
-!*  diagonals.
+!*  diagonasetup0%ls.
 !*
 !*  No test for singularity or near-singularity is included in this
 !*  routine. Such tests must be performed before calling this routine.
@@ -2396,9 +2396,9 @@ contains
 !*
 !*  K      - INTEGER.
 !*           On entry with UPLO = 'U' or 'u', K specifies the number of
-!*           super-diagonals of the matrix A.
+!*           super-diagonasetup0%ls of the matrix A.
 !*           On entry with UPLO = 'L' or 'l', K specifies the number of
-!*           sub-diagonals of the matrix A.
+!*           sub-diagonasetup0%ls of the matrix A.
 !*           K must satisfy  0 .le. K.
 !*           Unchanged on exit.
 !*
@@ -3261,7 +3261,7 @@ contains
 !*          >= 0: the value of the parameter specified by ISPEC
 !*          < 0:  if ILAENV = -k, the k-th argument had an illegal value.
 !*
-!*  Further Details
+!*  Further Detaisetup0%ls
 !*  ===============
 !*
 !*  The following conventions have been used when calling ILAENV from the
@@ -4252,7 +4252,7 @@ contains
 
 !************************************************************************
 !*> \brief \b DLAMC3
-!*> \details
+!*> \detaisetup0%ls
 !*> \b Purpose:
 !*> \verbatim
 !*> DLAMC3  is intended to force  A  and  B  to be stored prior to doing
@@ -4348,7 +4348,7 @@ contains
 !$$$*          The increment between successive values of IPIV.  If IPIV
 !$$$*          is negative, the pivots are applied in reverse order.
 !$$$*
-!$$$*  Further Details
+!$$$*  Further Detaisetup0%ls
 !$$$*  ===============
 !$$$*
 !$$$*  Modified by
@@ -4757,7 +4757,7 @@ contains
 !*
 !*> \ingroup auxOTHERauxiliary
 !*
-!*> \par Further Details:
+!*> \par Further Detaisetup0%ls:
 !*  =====================
 !*>
 !*> \verbatim
@@ -5389,7 +5389,7 @@ contains
 !*
 !*> \ingroup auxOTHERauxiliary
 !*
-!*> \par Further Details:
+!*> \par Further Detaisetup0%ls:
 !*  =====================
 !*>
 !*> \verbatim
@@ -5453,7 +5453,7 @@ contains
 !*>                         function increasing from 10 to 64.
 !*>
 !*>       IPARMQ(ISPEC=16) Select structured matrix multiply.
-!*>                        (See ISPEC=16 above for details.)
+!*>                        (See ISPEC=16 above for detaisetup0%ls.)
 !*>                        Default: 3.
 !*> \endverbatim
 !*>

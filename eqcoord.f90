@@ -24,7 +24,7 @@ contains
 
 
 !..................................................................
-!     This routine controls the translation of the equilibrium psi
+!     This routine controsetup0%ls the translation of the equilibrium psi
 !     and f =(R*Btor) data into information specific to a flux surface
 !     characterized by radial coordinate rovera(lr_). We have
 !     erhocon(lr_)=rovera(lr_)*rhomax where rhomax=eqrho(nconteqn).
@@ -39,7 +39,7 @@ contains
 !     basis for spline interpolation.
 !..................................................................
       generate="disabled"
-      if (lr_.eq.lrzmax) then
+      if (lr_.eq.setup0%lrzmax) then
         generate="enabled"
         call eqrhopsi(generate)
       endif
@@ -76,7 +76,7 @@ contains
 !     rho profile determined in subroutine tdxinit
 !..................................................................
 
-      if (profpsi.eq."enabled".and. lrzmax.gt.1) then
+      if (profpsi.eq."enabled".and. setup0%lrzmax.gt.1) then
         do 1000 k=1,ntotal
           reden(k,lr_)=reden(k,0)*(epsicon(lr_)/psimag)**.5
           temp(k,lr_)=(epsicon(lr_)/psimag)*temp(k,0)

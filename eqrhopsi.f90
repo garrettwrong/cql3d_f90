@@ -48,14 +48,14 @@ contains
     !     The eqpsi array can be provided externally
     !     (generate="disabled") or it can be generated within
     !     this routine (generate="enabled"). [It is called with
-    !     generate="enabled" from eqcoord when lr_.eq.lrzmax.]
+    !     generate="enabled" from eqcoord when lr_.eq.setup0%lrzmax.]
     !     Also, determines some approximate geometric quantities
     !     of the eqdsk.
     !..................................................................
 
     !......................................................................
     !     General, non-circular flux-surface psi values, epsi, have been
-    !     set up from eqdsk, topeol, or elliptical plasma models, depending
+    !     set up from eqdsk, topeol, or elliptical plasma modesetup0%ls, depending
     !     on eqmod.ne.'disabled' and eqsource.  epsi, at this point is an
     !     decreasing function from the magnetic axis to the plasam edge.
     !     For eqmod.ne.'disabled', namelist eqsource gives the source of
@@ -74,13 +74,13 @@ contains
     !             below has been moved up from subroutine eqorbit,
     !             to facilitate de-updown-symmetrization.
     !
-    !     Calls to the current subroutine eqrhospi are from eqcoord, in
-    !     descending order lr_=lrzmax,1,-1.
+    !     Calsetup0%ls to the current subroutine eqrhospi are from eqcoord, in
+    !     descending order lr_=setup0%lrzmax,1,-1.
     !......................................................................
 
 
     !      if (eqcall.eq."enabled") then   !Called on first run through.
-    if (lr_.eq.lrzmax) then   !Called on first run through.
+    if (lr_.eq.setup0%lrzmax) then   !Called on first run through.
        ibd(1)=4
        ibd(2)=4
        ibd(3)=4
@@ -232,7 +232,7 @@ contains
 
     !..................................................................
     !     This routine  is called with generate="enabled" from eqcoord
-    !     when lr_.eq.lrzmax.  radcoord is namelist input indicating
+    !     when lr_.eq.setup0%lrzmax.  radcoord is namelist input indicating
     !     the specific definition of the radial coordinate.
     !..................................................................
 

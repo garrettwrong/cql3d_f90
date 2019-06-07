@@ -43,6 +43,7 @@ contains
 
   subroutine achief1
     use param_mod
+    use cqlconf_mod, only : setup0
     use cqlcomm_mod
     use pltmain_mod, only : pltmain
     use r8subs_mod, only : dcopy
@@ -62,7 +63,7 @@ contains
     save
 
     !..................................................................
-    !     This routine directs the calculation for lrzmax=1
+    !     This routine directs the calculation for setup0%lrzmax=1
     !..................................................................
 
 
@@ -109,20 +110,20 @@ contains
     !     print namelists
     !.......................................................................
 
-    if (nmlstout.eq."enabled") then
+    if (setup0%nmlstout.eq."enabled") then
        write(6,*)'  In achief1: '
-       write(6,setup0)
+       !name now private, can write from setter write(6,setup0)
        write(6,setup)
        write(6,trsetup)
        write(6,sousetup)
        write(6,eqsetup)
        write(6,rfsetup)
-    elseif (nmlstout.eq."trnscrib") then
+    elseif (setup0%nmlstout.eq."trnscrib") then
        write(6,*)'  In achief1: '
        call ain_transcribe("cqlinput")
     else
        write(6,*)
-       write(6,*) 'mnemonic = ',mnemonic
+       write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
        write(6,*)
     endif
 
@@ -140,7 +141,7 @@ contains
     call frinitl
 
     open(unit=2,file="cqlinput",delim='apostrophe',status="old")
-    call frset(lrz,noplots,nmlstout)   ! Uses unit 2
+    call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
     close(2)
 
     !..................................................................
@@ -154,18 +155,18 @@ contains
     !     Initialize mesh along magnetic field line
     !.......................................................................
 
-    if (cqlpmod.eq."enabled" .and. numclas.eq.1 .and. ls.eq.lsmax)then
+    if (setup0%cqlpmod.eq."enabled" .and. numclas.eq.1 .and. setup0%ls.eq.setup0%lsmax)then
        lz=lz/2+1
-       lsmax=lsmax/2+1
-       ls=ls/2+1
+       setup0%lsmax=setup0%lsmax/2+1
+       setup0%ls=setup0%ls/2+1
     endif
 
     call micxiniz
 
-    if (cqlpmod.eq."enabled" .and. numclas.eq.1 .and. ls.eq.lsmax)then
+    if (setup0%cqlpmod.eq."enabled" .and. numclas.eq.1 .and. setup0%ls.eq.setup0%lsmax)then
        lz=2*(lz-1)
-       lsmax=2*(lsmax-1)
-       ls=2*(ls-1)
+       setup0%lsmax=2*(setup0%lsmax-1)
+       setup0%ls=2*(setup0%ls-1)
        call wploweq
     endif
 
@@ -232,7 +233,7 @@ contains
     if(nefiter.eq.1) then
        n=n+1
        n_(1)=n ! new time-step for this flux surface
-       ! for 2-d (v_par,v_perp) calculation ntloop controls
+       ! for 2-d (v_par,v_perp) calculation ntloop controsetup0%ls
        ! end of run or restart.
        ! Also updates time.
        call ntloop

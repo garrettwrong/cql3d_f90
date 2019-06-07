@@ -58,7 +58,7 @@ contains
 
     energ=ergtkev*energy(kelec,lr_)
     dense=reden(kelec,lr_)
-    if (cqlpmod .eq. "enabled") then
+    if (setup0%cqlpmod .eq. "enabled") then
        energ=ergtkev*enrgypa(kelec,ls_)
        dense=denpar(kelec,ls_)
     endif
@@ -70,7 +70,7 @@ contains
     if (colmodl.eq.1 .or. (colmodl.eq.3 .and. kelecm.ne.0)) then
        dense=reden(kelecm,lr_)
        energ=reden(kelecm,lr_)*energy(kelecm,lr_)*ergtkev/dense
-       if (cqlpmod .eq. "enabled") then
+       if (setup0%cqlpmod .eq. "enabled") then
           dense=denpar(kelecm,ls_)
           energ=enrgypa(kelecm,ls_)*ergtkev
        endif
@@ -80,7 +80,7 @@ contains
        km=kelecm
        energ=(reden(kelecg,lr_)*energy(kelecg,lr_)+reden(km,lr_)* &
             energy(km,lr_))*ergtkev/dense
-       if (cqlpmod .eq. "enabled") then
+       if (setup0%cqlpmod .eq. "enabled") then
           dense=denpar(kelec,ls_)+denpar(kelecm,ls_)
           energ=(denpar(kelecg,ls_)*enrgypa(kelecg,ls_)+denpar(km,ls_)* &
                enrgypa(km,ls_))*ergtkev/dense
@@ -89,10 +89,10 @@ contains
     deby=sqrt(energ/(dense*6.*pi*charge**2))
     do 10 i=1,ntotal
        si=energy(i,lr_)/fmass(i)
-       if (cqlpmod .eq. "enabled") si=enrgypa(i,ls_)/fmass(i)
+       if (setup0%cqlpmod .eq. "enabled") si=enrgypa(i,ls_)/fmass(i)
        do 11 k=1,ntotal
           sk=energy(k,lr_)/fmass(k)
-          if (cqlpmod .eq. "enabled") sk=enrgypa(k,ls_)/fmass(k)
+          if (setup0%cqlpmod .eq. "enabled") sk=enrgypa(k,ls_)/fmass(k)
           !990131          sf=amax1(si,sk)
           sf=max(si,sk)
           vikf=sqrt(sf*ergtkev*2.)

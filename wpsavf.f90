@@ -35,7 +35,7 @@ contains
 
       do 100 k=1,ngen
         do 110 j=0,jx+1
-          do 120 l=0,ls+1
+          do 120 l=0,setup0%ls+1
             do 130 i=0,iy_(l)+1
               fnp0(i,j,k,l)=0.5*(fnp0(i,j,k,l)+fnp1(i,j,k,l))
               fnp1(i,j,k,l)=fnp0(i,j,k,l)
@@ -43,10 +43,10 @@ contains
  120      continue
  110    continue
  100  continue
-      call dcopy(iyjx2*ngen*ls,fnp1(0:iy+1,0:jx+1,1:ngen,1:ls),1, &
-                                  f(0:iy+1,0:jx+1,1:ngen,1:ls),1)
-      call dcopy(iyjx2*ngen*ls,fnp1(0:iy+1,0:jx+1,1:ngen,1:ls),1, &
-                                 f_(0:iy+1,0:jx+1,1:ngen,1:ls),1)
+      call dcopy(iyjx2*ngen*setup0%ls,fnp1(0:iy+1,0:jx+1,1:ngen,1:setup0%ls),1, &
+                                  f(0:iy+1,0:jx+1,1:ngen,1:setup0%ls),1)
+      call dcopy(iyjx2*ngen*setup0%ls,fnp1(0:iy+1,0:jx+1,1:ngen,1:setup0%ls),1, &
+                                 f_(0:iy+1,0:jx+1,1:ngen,1:setup0%ls),1)
 
       return
 
@@ -56,12 +56,12 @@ contains
 
  200  continue
 
-      call dcopy(iyjx2*ngen*(ls+2),fnp1(0:iy+1,0:jx+1,1:ngen,0:ls+1),1, &
-                                   fnp0(0:iy+1,0:jx+1,1:ngen,0:ls+1),1)
-      call dcopy(iyjx2*ngen*ls,    fnp1(0:iy+1,0:jx+1,1:ngen,1:ls  ),1, &
-                                      f(0:iy+1,0:jx+1,1:ngen,1:ls  ),1)
-      call dcopy(iyjx2*ngen*ls,    fnp1(0:iy+1,0:jx+1,1:ngen,1:ls  ),1, &
-                                     f_(0:iy+1,0:jx+1,1:ngen,1:ls  ),1)
+      call dcopy(iyjx2*ngen*(setup0%ls+2),fnp1(0:iy+1,0:jx+1,1:ngen,0:setup0%ls+1),1, &
+                                   fnp0(0:iy+1,0:jx+1,1:ngen,0:setup0%ls+1),1)
+      call dcopy(iyjx2*ngen*setup0%ls,    fnp1(0:iy+1,0:jx+1,1:ngen,1:setup0%ls  ),1, &
+                                      f(0:iy+1,0:jx+1,1:ngen,1:setup0%ls  ),1)
+      call dcopy(iyjx2*ngen*setup0%ls,    fnp1(0:iy+1,0:jx+1,1:ngen,1:setup0%ls  ),1, &
+                                     f_(0:iy+1,0:jx+1,1:ngen,1:setup0%ls  ),1)
 
       return
       end subroutine wpsavf

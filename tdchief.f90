@@ -72,9 +72,12 @@ module tdchief_mod
 
 contains
 
-      subroutine tdchief
-      use param_mod
-      use cqlcomm_mod
+  subroutine tdchief(nml_file)
+    use param_mod
+    use cqlcomm_mod
+    use cqlconf_mod, only : nml_close
+    use cqlconf_mod, only : setup0
+    use cqlconf_mod, only : get_setup0_from_nml
       use netcdfrf_mod, only : netcdfrf
       use pltmain_mod, only : pltmain
       use r8subs_mod, only : dcopy
@@ -92,10 +95,13 @@ contains
       save
 
 !..................................................................
-!     This routine directs the calculation of CQL3d; it controls
-!     input, output, calls to CQL, calls to WD*, and holds the
+!     This routine directs the calculation of CQL3d; it controsetup0%ls
+!     input, output, calsetup0%ls to CQL, calsetup0%ls to WD*, and holds the
 !     main loops over radius of the toroidal device.
 !..................................................................
+
+      ! we can actually make this an argument if we want...
+      character(len=*), intent(in), optional :: nml_file
 
       include 'name.h'
 !MPIINSERT_INCLUDE
@@ -124,8 +130,9 @@ contains
 !..................................................................
 !     Read in first namelist, setup0: determines type of run, etc.
 !..................................................................
-      open(unit=2,file='cqlinput',status='old')
-      read(2,setup0)
+      !print *,'yyy', setup0%lrzmax
+      call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
+
 !MPIINSERT_BARRIER
 
 !..................................................................
@@ -139,50 +146,54 @@ contains
 !.......................................................................
       call aclear
 
+      ! this shoudl get (re)moved with each nml convers as need,
+      ! eventually totally handled by the config module
+      open(unit=2,file='cqlinput',status='old')
       read(2,setup)  ! Gets pltinput variable, for ainplt routine.
-      close(2)
 
       sumdtr=zero
 
 !.................................................................
-!     If noplots.ne."enabled1", initialize PGPLOT and plot
+!     If setup0%noplots.ne."enabled1", initialize PGPLOT and plot
 !     namelist input and parameters which are set in code before
 !     compilation.
 !.................................................................
-      if (noplots.ne."enabled1") then
+      if (setup0%noplots.ne."enabled1") then
         call pltinit   ! Initiates PGPLOT
         call ainplt
-        open(unit=2,file='cqlinput',status='old')
-        read(2,setup0)         !  re-read 1st (i.e., setup0) namelist
-        close(2)
+        !xxx add something do force re-read or not etc
+        !xxx open(unit=2,file='cqlinput',status='old')
+        call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
+        !read(2,setup0)         !  re-read 1st (i.e., setup0) namelist
+        !close(2)
         call ainsetpa          !  re-set according to setup0 nml
         call ainpltpa ! plots out the parameters
       endif
 
 
 !..................................................................
-!     If namelist variable lrzmax.le.1, then run the 2D code and
+!     If namelist variable setup0%lrzmax.le.1, then run the 2D code and
 !     dispense with the "td" module. (Runs thru achief1 and achiefn
 !     to a normal exit in ntloop).
 !..................................................................
 !-YuP: Not used anymore. Use general call to achiefn below, in ll-loop
-!-BH:  Except that some lrzmax=1 test cases are still used, and
+!-BH:  Except that some setup0%lrzmax=1 test cases are still used, and
 !-BH:  errors can arise when only only one value of a mesh
-!-BH:  is called  for.  For example, tdrmshst fails.
+!-BH:  is called  for.  For example, tdrmshst faisetup0%ls.
 !-BH:  However, additional functionality, such as sigmamod plotting
-!-BH:  depdends on lrzmax.ge.4 (BH120308: check this).
-      if (lrzmax.le.1) then
+!-BH:  depdends on setup0%lrzmax.ge.4 (BH120308: check this).
+      if (setup0%lrzmax.le.1) then
          nefiter=1              ! counts iterations; elecfld iterations for
                                 ! one flux surface are not functional;
                             ! set nefiter to 1 for logic control in impavnc0
          call achief1           ! YuP: only called during n=0; Why needed?
                                 ! BH:  In the past, at least, this call with
-                                !      lrzmax=1, time-stepped the soln
+                                !      setup0%lrzmax=1, time-stepped the soln
                                 !      to n=nstop in achiefn.
       endif
 
 !..................................................................
-!     call routine which controls array initialization
+!     call routine which controsetup0%ls array initialization
 !     (and sets n=0, n_(1:lrorsa)=0 though call aindflt1).
 !..................................................................
 
@@ -244,7 +255,7 @@ contains
       if ((n+1).eq.nonvphi .or. (n+1).eq.noffvphi) then
         write(*,*)'tdchief/nonvphi: call frnfreya, n=',n,'time=',timet
         call frnfreya(frmodp,fr_gyrop,beamplsep,beamponp,beampoffp, &
-                      hibrzp,mfm1p,noplots)
+                      hibrzp,mfm1p,setup0%noplots)
       endif
 
       k=kfrsou  !Only set up for one modulated beam species.
@@ -271,7 +282,7 @@ contains
                  if (ibeamponp.eq.0.and.nbctime.ne.0) then
                  write(*,*)'tdchief/nbctime:frnfreya,n=',n,'time=',timet
                    call frnfreya(frmodp,fr_gyrop,beamplsep,beamponp, &
-                         beampoffp,hibrzp,mfm1p,noplots)
+                         beampoffp,hibrzp,mfm1p,setup0%noplots)
                    ibeamponp=1
                  endif
               else
@@ -317,9 +328,9 @@ contains
         dtreff=dtr / 2.0
         dttr=dtreff
 !     radial transport
-        if (cqlpmod .ne. "enabled") call tdtrrsou
+        if (setup0%cqlpmod .ne. "enabled") call tdtrrsou
 !     parallel transport
-        if (cqlpmod.eq."enabled" .and. n.ge.nontran) call wparsou
+        if (setup0%cqlpmod.eq."enabled" .and. n.ge.nontran) call wparsou
       endif
 
 !..................................................................
@@ -346,7 +357,7 @@ contains
 !MPIINSERT_ENDIF_RANK
         call cpu_time(t_urf3) !-.-.-.-.-.-.-.-.-.-.-.-.-.
         !YuP[03-2016] Repeat plotting surfaces, but now - with rays
-        if (noplots.ne."enabled1" .and. eqmod.eq."enabled" &
+        if (setup0%noplots.ne."enabled1" .and. eqmod.eq."enabled" &
             .and. n.eq.0) then
            if(mrfn.gt.0)then ! just in case
               !(mrfn is supposed to be >0 when urfmod.ne."disabled")
@@ -358,15 +369,15 @@ contains
       endif ! urfmod.ne."disabled"
 
 !.......................................................................
-!     cqlpmod.eq.enabled:
+!     setup0%cqlpmod.eq.enabled:
 !     Compute parallel electric field from Poisson equation
 !.......................................................................
 
-      if (transp.eq."enabled" .and. cqlpmod.eq."enabled") &
+      if (transp.eq."enabled" .and. setup0%cqlpmod.eq."enabled") &
         call wpelecf(11)  ! eleven, not ll
 
 !.......................................................................
-!     cqlpmod.eq.enabled:
+!     setup0%cqlpmod.eq.enabled:
 !     Compute electrostatic parallel electric field from constant flux
 !     condition (for CQLP + current drive localized along field line).
 !     Uses Kupfer (PoP, 1995) f and g function decompostion in achiefn.
@@ -377,25 +388,25 @@ contains
 !              Also compare with ampfmod coding.
 !.......................................................................
 
-      if (cqlpmod.eq."enabled" .and. eseswtch.eq."enabled" .and. &
+      if (setup0%cqlpmod.eq."enabled" .and. eseswtch.eq."enabled" .and. &
           sbdry.eq."enabled") then
          kopt=2
          ilend=lrors
          do ll=1,ilend
             call tdnflxs(ll)
-            call achiefn(kopt) ! achiefn(2) here (cqlpmod="enabled")
+            call achiefn(kopt) ! achiefn(2) here (setup0%cqlpmod="enabled")
          enddo
          ! XXX this looks like an indexing bug to me             YuP fixed below.
          ! but i used what is defined by  esefld::efld_cd code.  YuP fixed below.
          call efld_cd(dz(1:lrors,lr_),lrors,vnorm, &
                       flux1(0:lrors+1),flux2(0:lrors+1),elparnw(0:lrors+1),flux0)
          !In sub.efld_cd: dz, flux1, flux2, elparnw are dimensioned as (0:lrors+1).
-         !Here, dz(lza,lrzmax) starts with index (1,1),
+         !Here, dz(lza,setup0%lrzmax) starts with index (1,1),
          !but flux1(0:lsa1),flux2(0:lsa1),elparnw(0:lsa1) start with index 0.
          !YuP[2019-05-30] corrected sub.efld_cd
-         ! so that dz argument starts with index 1, i.e. dz(1:ls) [dz(1:lrors)]
-         ! Note that in sub.efld_cd the loop is over kk=1,ls [kk=1,lrors]
-         ! so that indexes 0 and ls+1 are not used.
+         ! so that dz argument starts with index 1, i.e. dz(1:setup0%ls) [dz(1:lrors)]
+         ! Note that in sub.efld_cd the loop is over kk=1,setup0%ls [kk=1,lrors]
+         ! so that indexes 0 and setup0%ls+1 are not used.
          ! Bob, please check !
       endif
 
@@ -404,7 +415,7 @@ contains
 !.......................................................................
 
       ilend=lrors
-      if (transp.eq."enabled" .and. cqlpmod.eq."enabled" .and. &
+      if (transp.eq."enabled" .and. setup0%cqlpmod.eq."enabled" .and. &
         mod(nummods,10).ge.5 .and. sbdry.ne."periodic" &
         .and. lmidvel.ne.0) ilend=lrors-1
 
@@ -415,7 +426,7 @@ contains
 !     Computer the time-advanced toroidal electric field from Ampere-
 !     Faraday equations using Kupfer h and g functions.
 !
-!     cqlpmod.ne.enabled has been checked.
+!     setup0%cqlpmod.ne.enabled has been checked.
 !     Initialize electric fields at turnon of ampfmod.
 !.......................................................................
 
@@ -428,11 +439,11 @@ contains
          !!! and so we need values of elecfldn at n=0 in such case.
          !!! See a note just after call ampfefldb few lines below.
          do niter=0,nampfmax ! or up to nefitera
-           do ll=1,lrz
+           do ll=1,setup0%lrz
            elecfldn(ll,n,niter)=elecfld(ll)/300.d0 !here: n=0
            enddo
            ! Also need the end (bndry) point:
-           elecfldn(lrz+1,n,niter)=elecfldb/300.d0 !here: n=0
+           elecfldn(setup0%lrz+1,n,niter)=elecfldb/300.d0 !here: n=0
            ! Also save ll=0 point (magn.axis point):
            elecfldn(0,n,niter)=elecfld(0)/300.d0   !here: n=0
          enddo
@@ -471,30 +482,30 @@ contains
                        ! skip elecfld background profiles
 
 !        Get given boundary condition (i.e., edge) elec field, at time
-!        advanced position (i.e., elecfldn(ll,n+1,0) at ll=lrz+1 point).
+!        advanced position (i.e., elecfldn(ll,n+1,0) at ll=setup0%lrz+1 point).
 !        If time-dependent (nbctime>0),
 !        then it is given by time advanced elecb() or elecin_t(njene,).
          call ampfefldb(n+1,time+dtr)
 !        Besides, subr.ampfefldb Sets zero iteration of elecfldn
 !        equal to previous time step radial profile, like this:
-         ! elecfldn(ll,nn,0)=elecfldn(ll,nn-1,it_prev) ! where nn==n+1 (and ll=0:lrz)
+         ! elecfldn(ll,nn,0)=elecfldn(ll,nn-1,it_prev) ! where nn==n+1 (and ll=0:setup0%lrz)
          ! So, if nonampf=1, then we have here n=0, or nn=1,
          ! which means that we need the values of elecfldn at nn-1=0.
 
 
-!        elecfld(1:lrz) has been set.  If n=1=nonampf, then is given;
+!        elecfld(1:setup0%lrz) has been set.  If n=1=nonampf, then is given;
 !                       If n.ge.nonampf, then set near end of ampfsoln.
 
 !        Determine the time-advanced tor e-field
          kopt=3  !Amp-Faraday option
-         ilend=lrz
+         ilend=setup0%lrz
 
 !        Initialize elecfldn(ll,n+1,it=0) for upcoming ampfsoln
          do ll=1,ilend
             elecfldn(ll,n+1,0)=elecfld(ll)/300.d0
          enddo
          !YuP[21-08-2017] added but then commented out:
-         !elecfldn(lrz+1,n+1,0)=elecfldb/300.d0 !Not needed, done in ampfefldb
+         !elecfldn(setup0%lrz+1,n+1,0)=elecfldb/300.d0 !Not needed, done in ampfefldb
 
 !        Obtain the h and g functions over all radii and iteratively
 !        solve Ampere-Faraday eqns for the tor electric field.
@@ -518,10 +529,10 @@ contains
                amp_h= ampfarl(fh(0:iy+1,0:jx+1,kelec,ll),ll)*dtr
                amp_g= ampfarl(fg(0:iy+1,0:jx+1,kelec,ll),ll)*dtr
                !YuP[2019-05-30] Note that fh() and fg() are allocated as
-               ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index (for now).
+               ! fh(0:iy+1,0:jx+1,1,1:setup0%lrz), i.e. k=1 index (for now).
                ! If kelec>1, we can get a problem here.
                write(*,'(a,3i4,3e12.4)') &
-                 'after achiefn(3): n,it,ll,integrals f, f-h, g:', &
+                 'after achiefn(3): n,it,ll,integrasetup0%ls f, f-h, g:', &
                   n,it,ll, amp_f, amp_f-amp_h, amp_g
                ! YuP test/printout:
                !Confirmed that f() remains unchanged during
@@ -531,7 +542,7 @@ contains
 !           n is time advanced value
             call ampfsoln(it,n) !here n=nonampf,...,nstop
 !           Presently, ampfdiff does nothing, i.e. gives iflag=1
-!           In future, refine this, making it=it(1:lrz).
+!           In future, refine this, making it=it(1:setup0%lrz).
             itt=it
             call ampfdiff(iflag)  !iflag=0, only if error criteria met.
                                   !Presently a dummy call giving iflag=0
@@ -575,14 +586,14 @@ contains
 !     soln_method=it3drv:  soln is in f(,,,) on last call on the set of
 !     flux surfaces (soln at start of step is in f_(,,,)).
 !.......................................................................
-        if(cqlpmod.ne."enabled" .and. n.ge.nontran .and. n.lt.nofftran) &
+        if(setup0%cqlpmod.ne."enabled" .and. n.ge.nontran .and. n.lt.nofftran) &
             call dcopy(iyjx2*ngen*lrors,frn_2(0:iy+1,0:jx+1,1:ngen,1:lrors),1, &
                                             f(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
       endif
 
 !..................................................
 !     Bring background profiles up to time step n.
-!     Exclude updating of electric field elecfld(1:lrz) for
+!     Exclude updating of electric field elecfld(1:setup0%lrz) for
 !     ampfmod.eq.enabled .and. n.ge.nonampf [Check this for
 !     the eseswtch case also.]
 !..................................................
@@ -590,7 +601,7 @@ contains
       if(nefiter.eq.1) call profiles
 
 !.......................................................................
-!BH131103      do 1 ll=1,ilend   !ilend=lrz for cqlpmod.ne.'enabled'
+!BH131103      do 1 ll=1,ilend   !ilend=setup0%lrz for setup0%cqlpmod.ne.'enabled'
 !
 !     Can reverse order of do 1 ll=1,ilend, if needed for purposes
 !     of solving Ampere-Faraday eqns starting at given edge voltage.
@@ -605,7 +616,7 @@ contains
       'tdchief: f befor achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 !MPIINSERT_ENDIF_RANK
-      do 1 ll=1,ilend   !ilend=lrz for cqlpmod.ne.'enabled'
+      do 1 ll=1,ilend   !ilend=setup0%lrz for setup0%cqlpmod.ne.'enabled'
         !determine local variables depending on flux surface (l_,iy,..)
         call tdnflxs(ll) !-> get l_,lr_,...
         ! Reset time step if (n+1).eq.nondtr1(i). .AND. LRZMAX=1
@@ -636,8 +647,8 @@ contains
          !YuP[21-08-2017] Corrected, for the fields storage BEFORE the ampf is applied:
          do niter=0,nampfmax ! or up to nefitera
            elecfldn(ll,n+1,niter)=elecfld(ll)/300.d0
-           ! here: ll=1:lrz. But we also need the end (bndry) point:
-           elecfldn(lrz+1,n+1,niter)=elecfldb/300.d0 !here: n+1.lt.nonampf
+           ! here: ll=1:setup0%lrz. But we also need the end (bndry) point:
+           elecfldn(setup0%lrz+1,n+1,niter)=elecfldb/300.d0 !here: n+1.lt.nonampf
            ! Can also save ll=0 point (magn.axis point):
            elecfldn(0,n+1,niter)=elecfld(0)/300.d0
          enddo
@@ -646,15 +657,15 @@ contains
 
 !......................................................................
 !     TIME ADVANCE ON FLUX SURFACE rz(ll).
-!     If cqlpmod.ne.'enabled', transp='enabled', soln_method='it3drv',
+!     If setup0%cqlpmod.ne.'enabled', transp='enabled', soln_method='it3drv',
 !       then following call only adds ll flux surface contributions to
 !       the coefficient matrix, and then solves for time advanced distn
-!       at last flux surface, ll=lrz.
+!       at last flux surface, ll=setup0%lrz.
 !......................................................................
 
 !MPIINSERT_MPIWORKER
 !    It will insert :
-!      if(soln_method.eq.'direct' .and. lrzmax.gt.1) then
+!      if(soln_method.eq.'direct' .and. setup0%lrzmax.gt.1) then
 !         ! Parallelization for the impavnc0 solver is limited
 !         ! to soln_method='direct' (for now)
 !         mpiworker= MOD(ll-1,mpisize-1)+1  !1...(mpisize-1)
@@ -664,7 +675,7 @@ contains
 !         mpiworker=0
 !      endif
 
-        call achiefn(0)  !--> if implct='enabled', calls impavnc0
+        call achiefn(0)  !--> if implct='enabled', calsetup0%ls impavnc0
 
 
 !MPIINSERT_SEND_RECV
@@ -799,7 +810,7 @@ contains
            WRITE(*,*)'tdchief WARNING: than tavg1(1).'
            WRITE(*,*)'tdchief WARNING: Instead of favg(), '
            WRITE(*,*)'tdchief WARNING: the last available f() will be'
-           WRITE(*,*)'tdchief WARNING: saved into mnemonic.nc file. '
+           WRITE(*,*)'tdchief WARNING: saved into setup0%mnemonic.nc file. '
 !MPIINSERT_ENDIF_RANK
              do ll=1,ilend
              do k=1,ngen
@@ -869,7 +880,7 @@ contains
       if (transp .eq. "enabled" .and. n.ge.nontran .and. n.le.nofftran) &
          then
 
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
 !......................................................................
 !     The radial transport (tdtr...) routines follow. Store the results
 !     of the velocity space split in fvn. Then call the transport
@@ -878,7 +889,7 @@ contains
           call tdtransp
           call tdtrsavf
 
-        else  ! i.e., cqlpmod.eq.enabled
+        else  ! i.e., setup0%cqlpmod.eq.enabled
 
 !.......................................................................
 !     Parallel transport.
@@ -896,7 +907,7 @@ contains
  200      continue
           dtreff=noffso(1,1)*dtreff
 !%OS
-        endif ! on cqlpmod
+        endif ! on setup0%cqlpmod
 
       endif  ! on transp, etc.
       endif  ! on soln_method.ne.it3drv
@@ -906,7 +917,7 @@ contains
 !.......................................................................
 
       iplt3d=0
-      if (noplots.ne."enabled1") then
+      if (setup0%noplots.ne."enabled1") then
          do i=1,nplota
             if(n.eq.nplt3d(i)) then
                iplt3d=i
@@ -959,7 +970,7 @@ contains
                 currr(k,lr_)=curr(k,lr_)/3.e9
  25           continue
             endif
-            if ((adimeth.eq."enabled" .or. cqlpmod.ne."enabled") .and. &
+            if ((adimeth.eq."enabled" .or. setup0%cqlpmod.ne."enabled") .and. &
               n.ge.nontran .and. n.le.nofftran) then
               call tdtrfcop(2)
               call diaggnde
@@ -980,7 +991,7 @@ contains
 !$$$            do k=1,ngen
 !$$$               call diagentr(3,k) !To get pwrrfs at current l_ surface
 !$$$            enddo
-            if (noplots.ne."enabled1" .and. &
+            if (setup0%noplots.ne."enabled1" .and. &
                 (iplot.ne.0 .or. n.ge.nstop) ) then
                 !YuP[2017-11-27] Added n.ge.nstop, similar to achiefn
 !$$$            if ( iplot.ne.0) then
@@ -1005,13 +1016,13 @@ contains
 !l    Compute flux surface average current and resistivity for CQLP case
 !.......................................................................
 
-      if (transp.eq."enabled" .and. cqlpmod.eq."enabled") call wpavg
+      if (transp.eq."enabled" .and. setup0%cqlpmod.eq."enabled") call wpavg
 
 !......................................................................
 !     Compute conservation constant for transp="enabled"
 !......................................................................
 
-      if (transp.eq."enabled" .and. cqlpmod.ne."enabled") then
+      if (transp.eq."enabled" .and. setup0%cqlpmod.ne."enabled") then
         call tdtrcon
       endif
 
@@ -1019,7 +1030,7 @@ contains
 !     compute some radial diagnostics.
 !.......................................................................
 
-!%OS  still to verify and change if cqlpmod=enabled
+!%OS  still to verify and change if setup0%cqlpmod=enabled
       call tddiag
 
 !.......................................................................
@@ -1037,16 +1048,16 @@ contains
 !     Also, set plot flag  [iplt3d is set above, if plotting this step].
 !.......................................................................
 
-      if (lrzmax.lt.3 .and. softxry.ne."disabled") then
+      if (setup0%lrzmax.lt.3 .and. softxry.ne."disabled") then
          write(*,*)'*******************************************'
-         write(*,*)'tdchief:  SXR not computed for lrzmax.lt.3'
+         write(*,*)'tdchief:  SXR not computed for setup0%lrzmax.lt.3'
          write(*,*)'*******************************************'
       else
          if (softxry.ne."disabled".and.kelecg.gt.0) then
             icall="notfrst"
             ilold=l_
             iplotsxr='no'
-            if (iplt3d.ne.0 .or. n.eq.nstop .and. noplots.ne.'enabled1') &
+            if (iplt3d.ne.0 .or. n.eq.nstop .and. setup0%noplots.ne.'enabled1') &
                  iplotsxr='yes'
             call tdsxray(icall,iplotsxr) !Soft Xray diagnostic
             call tdnflxs(ilold)
@@ -1070,9 +1081,9 @@ contains
 !     plot radial information
 !.......................................................................
 
-      if ((iplt3d.ne.0 .or. n.eq.nstop).and.lrzmax .ge. 3) then
+      if ((iplt3d.ne.0 .or. n.eq.nstop).and.setup0%lrzmax .ge. 3) then
         icall="notfrst"
-        if (noplots.ne."enabled1") then
+        if (setup0%noplots.ne."enabled1") then
           call tdpltmne
 !         if equilibrium changed during run:
 !%OS      if (eqmod.eq."enabled".and.n.ge.nstop) call tdplteq

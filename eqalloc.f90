@@ -30,17 +30,17 @@ contains
 !..................................................................
       write(*,*)'eqalloc:  Entering eqalloc'
 
-      lnlfield=lfielda*lrzmax
+      lnlfield=lfielda*setup0%lrzmax
       lndumeq=4*lnlfield
-      allocate(drpmconz(lrzmax),STAT=istat)
+      allocate(drpmconz(setup0%lrzmax),STAT=istat)
       call bcast(drpmconz,zero,SIZE(drpmconz))
-      allocate(eqdell(lfielda,lrzmax),STAT=istat)
+      allocate(eqdell(lfielda,setup0%lrzmax),STAT=istat)
       call bcast(eqdell,zero,SIZE(eqdell))
-      allocate(eqbpol(lfielda,lrzmax),STAT=istat)
+      allocate(eqbpol(lfielda,setup0%lrzmax),STAT=istat)
       call bcast(eqbpol,zero,SIZE(eqbpol))
-      allocate(solr(lfielda,lrzmax),STAT=istat)
+      allocate(solr(lfielda,setup0%lrzmax),STAT=istat)
       call bcast(solr,zero,SIZE(solr))
-      allocate(solz(lfielda,lrzmax),STAT=istat)
+      allocate(solz(lfielda,setup0%lrzmax),STAT=istat)
       call bcast(solz,zero,SIZE(solz))
 
       write(*,*)'eqalloc:  Leaving eqalloc'

@@ -28,7 +28,7 @@ contains
       save
 !
 !
-!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !     Still need to finish contour modifications of GPCTV3.
 !
@@ -121,7 +121,7 @@ contains
       call GSLNSZ(0.)
 
       CALL PGSLS(1) ! restore: solid line
-      CALL PGSLW(lnwidth) ! restore linewidth
+      CALL PGSLW(setup0%lnwidth) ! restore linewidth
 
       return
       end subroutine prpprctr

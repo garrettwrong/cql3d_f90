@@ -14,7 +14,8 @@ module pltrun_mod
 
 contains
 
-      subroutine pltrun
+  subroutine pltrun
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : rbound
@@ -45,8 +46,8 @@ contains
 
       write (iounit,20001)
 20001 format(3x,'time',12x,'runaway x'//)
-      do ll=1,lrz
-        write(iounit,20010) lrindx(ll)
+      do ll=1,setup0%lrz
+        write(iounit,20010) setup0%lrindx(ll)
 20010   format(//2x,'flux surface ',i3)
         write(iounit,20015)
 20015   format(//19x,'denra:'/)
@@ -94,7 +95,7 @@ contains
       do ns=1,nframep
         write(iounit,20060) tplot(ns)
 20060   format(///2x,'Time=', f9.4,'secs.'/)
-        do ll=1,lrz
+        do ll=1,setup0%lrz
           write(iounit,20070) ll
 20070     format(2x,i3,'th flux surface'/, &
               5x,'GAMMA',15x,'F(GAMMA)'/)
@@ -111,11 +112,11 @@ contains
 !     Plotting
 !-----------------------------------------------------------------------
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       dgts=1.e-8
 
-      do ll=1,lrz
+      do ll=1,setup0%lrz
         call tdnflxs(ll)
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
 !BH070405        do nt=1,nch(l_)
@@ -508,7 +509,7 @@ contains
 !-----------------------------------------------------------------------
 
 
-      enddo   ! on ll:1,lrz
+      enddo   ! on ll:1,setup0%lrz
 
 10010 format("After time step(n)=",i4,5x,"time=",1pe14.6," secs")
 10011 format("r/a=",f7.4,",  radial bin=",i3, &

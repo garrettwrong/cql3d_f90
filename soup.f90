@@ -36,7 +36,7 @@ contains
 
 !..................................................................
 !     For the case that a Gaussian profile in polar coordinates
-!     is to be computed determine some exponentials depending on
+!     is to be computed determine some exponentiasetup0%ls depending on
 !     speed alone and store them in sovt(j,kk,m,lr_)
 !..................................................................
 

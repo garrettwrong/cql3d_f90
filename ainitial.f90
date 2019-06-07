@@ -78,7 +78,7 @@ contains
 !     Redefine vptb=1.0 if CQLP
 !.......................................................................
 
-      if (cqlpmod.eq."enabled" .and. l_.eq.lmdpln_) call wpvptb
+      if (setup0%cqlpmod.eq."enabled" .and. l_.eq.lmdpln_) call wpvptb
 
 !..............................................................
 !     Evaluate an additional integration coefficient.
@@ -149,7 +149,7 @@ contains
 !     module is appended.
 !.......................................................................
 
-      if (lrzmax.eq.1 .or.(cqlpmod.eq."enabled".and.l_.eq.lmdpln_)) then
+      if (setup0%lrzmax.eq.1 .or.(setup0%cqlpmod.eq."enabled".and.l_.eq.lmdpln_)) then
          if (nrf.ge.1) then
             if (vlfmod.eq."enabled") then
                call vlf("setup")
@@ -164,11 +164,11 @@ contains
          endif
       endif
 
-      if (lrzmax.gt.1 .and. nrf.ge.1 .and. vlhmod.eq."enabled") &
+      if (setup0%lrzmax.gt.1 .and. nrf.ge.1 .and. vlhmod.eq."enabled") &
            call vlh("setup")
 
-      if (lrzmax.gt.1 .and. nrf.ge.1 .and. vlfmod.eq."enabled") &
-           call vlf("setup") ! Added YuP[03-2016] Calling vlf for lrz>1
+      if (setup0%lrzmax.gt.1 .and. nrf.ge.1 .and. vlfmod.eq."enabled") &
+           call vlf("setup") ! Added YuP[03-2016] Calling vlf for setup0%lrz>1
 
 !.....................................................................
 !     Call conservation diagnostic routine..
@@ -192,7 +192,7 @@ contains
 !     print out some parameters
 !.......................................................................
 
-      if (lrzmax .eq. 1) call tdoutput(1)
+      if (setup0%lrzmax .eq. 1) call tdoutput(1)
 !
 
       return

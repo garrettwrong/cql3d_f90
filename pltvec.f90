@@ -26,7 +26,8 @@ module pltvec_mod
 
 contains
 
-      subroutine pltvec(lefct)
+  subroutine pltvec(lefct)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use advnce_mod !here: in pltvec.  To get gfi(),hfi(),gfu(),hfu()
@@ -52,7 +53,7 @@ contains
 
 !BH011228 Modifications for plotting with PGPLOT,  011228.
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       veclnth0=2./jpxy
 
@@ -323,7 +324,7 @@ contains
 !      enddo
 !         write(*,*)'pltvectr lin: n,lr_,lefct=',n,lr_,lefct
          call pltvectr(xtail,ytail,xhead,yhead,rheads,jpxy,ipxy,veclen, &
-                      noplots)
+                      setup0%noplots)
          t0t=sin(thb(l_))/cos(thb(l_))
          if (t0t .lt. 1.) then
             RPGX(1)=0.
@@ -382,7 +383,7 @@ contains
 !     Plot vector field, vector lengths proportional to log(abs(flux)),
 !     from max(abs(flux)) to contrmin*max(abs(flux)):
            call pltvectr(xtail,ytail,xhead,yhead,rheads,jpxy,ipxy, &
-                veclen,noplots)
+                veclen,setup0%noplots)
            t0t=sin(thb(l_))/cos(thb(l_))
            if (t0t .lt. 1.) then
               RPGX(1)=0.

@@ -109,7 +109,7 @@ contains
       jj=jj+1
 
 !..................................................................
-!     Integrate with mstep subintervals
+!     Integrate with mstep subintervasetup0%ls
 !..................................................................
 
       do 10 j=1,mstep

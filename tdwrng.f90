@@ -65,7 +65,7 @@ contains
 10070 format("subroutine ???? - iostatus returns error message")
 10080 format("transport model- meshy=fixed_mu.  Insufficient resolution" &
         "in the trapped region for some l. Set tfac larger")
-10090 format("transport model - transport mesh falls EXACTLTY on p/t",/, &
+10090 format("transport model - transport mesh falsetup0%ls EXACTLTY on p/t",/, &
         "boundary. Perturb tfac")
 10100 format("STOP in tdtry: iactst=abort forces stop. error>1.e-8")
 10990 format("unspecified")

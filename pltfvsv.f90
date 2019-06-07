@@ -15,7 +15,8 @@ module pltfvsv_mod
 contains
 
       subroutine pltfvsv
-      use param_mod
+        use cqlconf_mod, only : setup0
+        use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : luf
       use pltdf_mod, only : JXQ
@@ -32,7 +33,7 @@ contains
 !mnt  This routine plots f as a function of velocity or energy
 !mnt  for various angles.
 !...
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
 
       do 120 k=1,ngen ! ---------------------------------------------

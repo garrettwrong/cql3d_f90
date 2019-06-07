@@ -19,15 +19,19 @@ module tdoutput_mod
 contains
 
       subroutine tdoutput(kopt)
-      use param_mod
+        use cqlconf_mod, only : setup0
+        use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
+      integer :: kopt
+      integer :: l, ll
+      real(c_double) :: sqrt_pasinorm
       !implicit none
 
 !..................................................................
 !     diagnostics on paper
 !     kopt=1 ==> printout before first time step, at end of ainitial
-!                (if lrzmax.eq.1) or end of tdinitl
+!                (if setup0%lrzmax.eq.1) or end of tdinitl
 !     kopt=2 ==> printout after specified number of time steps,
 !                including at least the last time step.
 !..................................................................
@@ -36,7 +40,7 @@ contains
 
       dimension ztr(lrza)
       dimension xj(lrza),xp(lrza),xe(lrza),xc(lrza)
-      dimension rban_vth(lrzmax),dn_scale(lrzmax),dt_scale(lrzmax) !print-out
+      dimension rban_vth(setup0%lrzmax),dn_scale(setup0%lrzmax),dt_scale(setup0%lrzmax) !print-out
       character(len=8) :: ztext
 
 
@@ -49,12 +53,12 @@ contains
 !.......................................................................
       if (pltvs .ne. "psi") then
         ztext=" rovera "
-        do 10 l=1,lrzmax
+        do 10 l=1,setup0%lrzmax
           ztr(l)=rovera(l)
  10     continue
       else
         ztext=pltvs
-        do 11 l=1,lrzmax
+        do 11 l=1,setup0%lrzmax
           ztr(l)=(equilpsi(0)-equilpsi(l))/equilpsi(0)
  11     continue
       endif
@@ -66,7 +70,7 @@ contains
 
 !.......................................................................
 !     kopt=1 ==> printout before first time step, at end of ainitial
-!                (if lrzmax.eq.1) or end of tdinitl
+!                (if setup0%lrzmax.eq.1) or end of tdinitl
 !     kopt=2 ==> printout after specified number of time steps,
 !                including at least the last time step.
 
@@ -89,7 +93,7 @@ contains
 !     multiple cyclotron harmonics. (Bob Harvey: (858)509-2131, 11/23/93.
 !     The version OS_E_930217 used version OS_D_930209 and added the option
 !     of solving CQL on a few flux surfaces, while having many radial
-!     surfaces as main mesh (lrz<lrzmax, lrzdiff="enabled")
+!     surfaces as main mesh (setup0%lrz<setup0%lrzmax, setup0%lrzdiff="enabled")
 !
 !.......................................................................
  100  continue
@@ -112,31 +116,33 @@ contains
         rmag, rmag-r0geomp,zshift, &
         psimag,psilim, &
         btor, toteqd/3.e9 &
-        ,volmid(lrzmax), areamid(lrzmax)
-      if (cqlpmod .eq. "enabled") WRITE(6,9114) z(1,lrindx(1)), &
-        z(lsmax,lrindx(1))
+        ,volmid(setup0%lrzmax), areamid(setup0%lrzmax)
+      if (setup0%cqlpmod .eq. "enabled") WRITE(6,9114) z(1,setup0%lrindx(1)), &
+        z(setup0%lsmax,setup0%lrindx(1))
 
       WRITE(6,9111)
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
       if( (psilim-psimag).ne.0.d0 ) then !YuP[2018-01-03] added
-        ! Sometimes psilim=psimag (in lrz=1 runs)
+        ! Sometimes psilim=psimag (in setup0%lrz=1 runs)
         sqrt_psinorm=sqrt((equilpsi(l)-psimag)/(psilim-psimag))
       else
         sqrt_psinorm=0.d0
       endif
-      WRITE(6,91111) l,rovera(l),eps(l),btor0(l),bthr0(l), &
+! xxx can we get past this line, then dies at 147
+!      WRITE(6,91111) 
+print * , l,rovera(l),eps(l),btor0(l),bthr0(l), &
         bmod0(l),btor0(l)/bmod0(l),qsafety(l),psimx(l), &
         equilpsi(l),  sqrt_psinorm
       enddo
 
 
-      WRITE(6,9109) (l,rmcon(l),zmcon(l),rpconz(l),zpcon(l),l=1,lrzmax)
+      WRITE(6,9109) (l,rmcon(l),zmcon(l),rpconz(l),zpcon(l),l=1,setup0%lrzmax)
 !
       WRITE(6,9112)
 !     The last number in the following write is the ratio
 !     of curr/(<j.B>/<B>), where curr is the toroidal-area
 !     averaged parallel current plotted out from cql3d.
-      do 110 ll=1,lrzmax
+      do 110 ll=1,setup0%lrzmax
         zr0=rpcon(ll)
         WRITE(6,9113) ll,rgeom(ll),rovera(ll)*rhomax &
           ,zr0*onovrp(1,ll),psiavg(1,ll) &
@@ -146,13 +152,13 @@ contains
  110  continue
 !
 !l    1.1.2 parallel quantities
-!     (assumes lrz=1)
-      if (cqlpmod .eq. "enabled") then
-        ilr=lrindx(1)
+!     (assumes setup0%lrz=1)
+      if (setup0%cqlpmod .eq. "enabled") then
+        ilr=setup0%lrindx(1)
         WRITE(6,9115)
         do 112 ll=1,lrors
           zbfiob=fpsi(ilr)/solrs(ll)/psis(ll)/bmidplne(ilr)
-          WRITE(6,9116) lsindx(ll),sz(ll),solrs(ll),solzs(ll), &
+          WRITE(6,9116) setup0%lsindx(ll),sz(ll),solrs(ll),solzs(ll), &
             zbfiob,psis(ll),psisp(ll),psipols(ll)
  112    continue
       endif
@@ -234,7 +240,7 @@ contains
       do igen=1,ngen
          WRITE(6,*)
          WRITE(6,8115) igen, n
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             call tdnflxs(ll)
             call cfpgamma
             WRITE(6,8116) lr_,(gama(igen,ispec),ispec=1,ntotal)
@@ -252,19 +258,19 @@ contains
 
 !dir$ nextscalar
       do 123 jk=1,ntotal
-         do ll=1,lrzmax
+         do ll=1,setup0%lrzmax
            qb_mc=bnumb(jk)*charge*bthr(ll)/(fmass(jk)*clight)
            ! Banana width (for v=vthermal, at t-p bndry):
-           ! BH171230: For lrzdiff=enabled, lrz<lrzmax, the default
-           ! values of itl_(ll>lrz) can cause out-of-bounds coss.
-           if (ll.le.lrz) then
+           ! BH171230: For setup0%lrzdiff=enabled, setup0%lrz<setup0%lrzmax, the default
+           ! values of itl_(ll>setup0%lrz) can cause out-of-bounds coss.
+           if (ll.le.setup0%lrz) then
            rban_vth(ll)= abs(vth(jk,ll)*coss(itl_(ll),ll)/qb_mc) ! cm
            else
               rban_vth(ll)= zero
            endif
            llp=ll+1
            llm=ll-1
-           llp=min(llp,lrzmax) ! not to exceeed lrzmax
+           llp=min(llp,setup0%lrzmax) ! not to exceeed setup0%lrzmax
            llm=max(llm,1)
            ll0=1 ! reference density or temp.: at plasma center.
            ! Density Gradient scale; defined as n(center)/(dn/dr) :
@@ -289,12 +295,12 @@ contains
                         iprovphi.ne.'disabled') then
               WRITE(6,9126) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
               WRITE(6,9127) (il,ztr(il),reden(jk,il),temp(jk,il), &
-                 vth(jk,il),energy(jk,il),vphipl(il),il=1,lrzmax)
+                 vth(jk,il),energy(jk,il),vphipl(il),il=1,setup0%lrzmax)
             else
               WRITE(6,9120) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
               WRITE(6,9121) (il,ztr(il),reden(jk,il),temp(jk,il), &
                  vth(jk,il), energy(jk,il), &
-                 rban_vth(il), dn_scale(il), dt_scale(il), il=1,lrzmax)
+                 rban_vth(il), dn_scale(il), dt_scale(il), il=1,setup0%lrzmax)
             endif
          elseif (nnspec.eq.jk) then
             if(kspeci(2,jk).eq.'general' .and. &
@@ -302,16 +308,16 @@ contains
               WRITE(6,9128) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
               WRITE(6,9129) (il,ztr(il),reden(jk,il),temp(jk,il), &
                  vth(jk,il),energy(jk,il),enn(il,1),vphipl(il), &
-                 il=1,lrzmax)
+                 il=1,setup0%lrzmax)
             else
               WRITE(6,9122) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
               WRITE(6,9123) (il,ztr(il),reden(jk,il),temp(jk,il), &
-                 vth(jk,il),energy(jk,il),enn(il,1),il=1,lrzmax)
+                 vth(jk,il),energy(jk,il),enn(il,1),il=1,setup0%lrzmax)
             endif
          endif
-        if (cqlpmod .eq. "enabled") &
-          WRITE(6,9125) lrindx(1),(il,z(il,lrindx(1)),denpar(jk,il) &
-          ,temppar(jk,il),vthpar(jk,il),enrgypa(jk,il),il=1,lsmax)
+        if (setup0%cqlpmod .eq. "enabled") &
+          WRITE(6,9125) setup0%lrindx(1),(il,z(il,setup0%lrindx(1)),denpar(jk,il) &
+          ,temppar(jk,il),vthpar(jk,il),enrgypa(jk,il),il=1,setup0%lsmax)
  123  continue
       !pause
 !
@@ -324,7 +330,7 @@ contains
         ,/,1x,15("="),//,"  l",4x,a8,5x,"density",4x, &
         "temperature",6x,"vth",9x,"energy",4x,"neutral den")
  9123 format(i3,1p6e13.5)
- 9125 format(/," along magnetic field line, at lrindx=",i3,":",/, &
+ 9125 format(/," along magnetic field line, at setup0%lrindx=",i3,":",/, &
         9x,"s",/,(i3,1p5e13.5))
  9126 format(/" species no. ",i3,2x,a,a8,"    charge number: ",f6.2 &
         ,/,1x,15("="),//,"  l",4x,a8,5x,"density",4x, &
@@ -341,21 +347,21 @@ contains
 !.......................................................................
 
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
          WRITE(6,9130) (il,tauee(il),zmax(il),zmax(il)/vth(1,il), &
               zmax(il)/vth(2,il),taueeh(il),starnue(il), &
-          starnue(il)*eps(il)**1.5,zeff(il),il=1,lrzmax)
+          starnue(il)*eps(il)**1.5,zeff(il),il=1,setup0%lrzmax)
       else
         WRITE(6,9131) (il,tauee(il),zmax(il),zmax(il)/vth(1,il), &
               zmax(il)/vth(2,il),taueeh(il),starnue(il), &
-          starnue(il)*eps(lrindx(1))**1.5,zeff(il),il=1,lsmax)
+          starnue(il)*eps(setup0%lrindx(1))**1.5,zeff(il),il=1,setup0%lsmax)
       endif
 
 !
  9130 format(//,"  lr","   tauee(l)  ","   zmax(l)   "," zmax/vth(1) " &
         ," zmax/vth(2) ",4x,"taueeh",7x,"nuestar",2x,"nuest*eps**3/2", &
         4x,"zeff"/,(i3,1p8e13.4))
- 9131 format(//," ls","   tauee(l)  ","   zmax(l)   "," zmax/vth(1) " &
+ 9131 format(//," setup0%ls","   tauee(l)  ","   zmax(l)   "," zmax/vth(1) " &
         ," zmax/vth(2) ",4x,"taueeh",7x,"nuestar",2x,"nuest*eps**3/2", &
         4x,"zeff",/,(i3,1p8e13.4))
 
@@ -363,10 +369,10 @@ contains
 !l    1.3.1 Neoclassical related output.  See tdrmshst.f.
 !.......................................................................
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         WRITE(6,9132) (il,tauii(il),rhol(il),rhol_pol(il), &
            drr_gs(il),tau_neo(il),taubi(il),rhol_b(il),rhol_pol_b(il), &
-           drr_gs_b(il),tau_neo_b(il),il=1,lrzmax)
+           drr_gs_b(il),tau_neo_b(il),il=1,setup0%lrzmax)
       endif
 
  9132 format(/, &
@@ -440,7 +446,7 @@ contains
       do igen=1,ngen
          WRITE(6,*)
          WRITE(6,9201) igen
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             call tdnflxs(ll)
             call cfpgamma
             WRITE(6,9202) lr_,(gama(igen,ispec),ispec=1,ntotal)
@@ -458,20 +464,20 @@ contains
 !.......................................................................
       if (kelecg.ne.0) then
         WRITE (6,9210) kelecg,pltvs
-        WRITE(6,9211) (ztr(lrindx(l)),reden(kelecg,lrindx(l)), &
-          energy(kelecg,lrindx(l)),(powrf(lrindx(l),kk),kk=1,3), &
-          sorpwt(lrindx(l)),sorpwti(lrindx(l)), &
-          bdre(lrindx(l)),bdrep(lrindx(l)),vfluxz(lmdpln(l)),l=1,lrz)
+        WRITE(6,9211) (ztr(setup0%lrindx(l)),reden(kelecg,setup0%lrindx(l)), &
+          energy(kelecg,setup0%lrindx(l)),(powrf(setup0%lrindx(l),kk),kk=1,3), &
+          sorpwt(setup0%lrindx(l)),sorpwti(setup0%lrindx(l)), &
+          bdre(setup0%lrindx(l)),bdrep(setup0%lrindx(l)),vfluxz(lmdpln(l)),l=1,setup0%lrz)
         WRITE(6,9212) sorpwtza,(powurf(kk),kk=0,3), &
           powurfc(0),powurfl(0)
       endif
 
       if (niong.ne.0) then
         WRITE (6,9210) kiong(1),pltvs
-        WRITE(6,9211) (ztr(lrindx(l)),reden(kiong(1),lrindx(l)), &
-          energy(kiong(1),lrindx(l)),(powrf(lrindx(l),kk),kk=1,3), &
-          sorpwt(lrindx(l)),sorpwti(lrindx(l)),bdre(lrindx(l)), &
-          bdrep(lrindx(l)),vfluxz(lmdpln(l)),l=1,lrz)
+        WRITE(6,9211) (ztr(setup0%lrindx(l)),reden(kiong(1),setup0%lrindx(l)), &
+          energy(kiong(1),setup0%lrindx(l)),(powrf(setup0%lrindx(l),kk),kk=1,3), &
+          sorpwt(setup0%lrindx(l)),sorpwti(setup0%lrindx(l)),bdre(setup0%lrindx(l)), &
+          bdrep(setup0%lrindx(l)),vfluxz(lmdpln(l)),l=1,setup0%lrz)
         WRITE(6,9212) sorpwtza,(powurf(kk),kk=0,3), &
           powurfc(0),powurfl(0)
       endif
@@ -484,32 +490,32 @@ contains
       endif
 
 !     Normalized current and rf powers
-      if (cqlpmod.ne."enabled") then
+      if (setup0%cqlpmod.ne."enabled") then
         do 221 k=1,ngen
-          do 220 l=1,lrz
+          do 220 l=1,setup0%lrz
 !BH120221:  Added following call.  Req'd at each flux surface.
             call tdnflxs(l)
             call cfpgamma
             if (entr(k,3,l).ge. 1.e-20 .and. kelecg.ne.0) then
-              fnu0=2.0/tauee(lrindx(l))
-              xj(lrindx(l))=curr(k,lrindx(l))/reden(k,lrindx(l)) &
-                /charge/vth(kelec,lrindx(l))
-              xp(lrindx(l))=entr(k,3,l)/reden(k,lrindx(l)) &
-                /vth(kelec,lrindx(l))**2/fmass(k)/fnu0*1.e7
+              fnu0=2.0/tauee(setup0%lrindx(l))
+              xj(setup0%lrindx(l))=curr(k,setup0%lrindx(l))/reden(k,setup0%lrindx(l)) &
+                /charge/vth(kelec,setup0%lrindx(l))
+              xp(setup0%lrindx(l))=entr(k,3,l)/reden(k,setup0%lrindx(l)) &
+                /vth(kelec,setup0%lrindx(l))**2/fmass(k)/fnu0*1.e7
 
-              xe(lrindx(l))=xj(lrindx(l))/xp(lrindx(l))
+              xe(setup0%lrindx(l))=xj(setup0%lrindx(l))/xp(setup0%lrindx(l))
 
-              fnuc=8.*pi*reden(k,lrindx(l))*charge**4 &
+              fnuc=8.*pi*reden(k,setup0%lrindx(l))*charge**4 &
                 *gama(kelec,kelec)/(fmass(kelec)**2*clight**3)
-              xc(lrindx(l))=curr(k,lrindx(l))/(entr(k,3,l)*1.e7) &
+              xc(setup0%lrindx(l))=curr(k,setup0%lrindx(l))/(entr(k,3,l)*1.e7) &
                 /(charge/(fnuc*fmass(kelec)*clight))
             endif
  220      continue
 
         WRITE(6,9270)
-        WRITE(6,9271) (ztr(lrindx(l)),xj(lrindx(l)), &
-          xp(lrindx(l)),xe(lrindx(l)),xc(lrindx(l)), &
-          l=1,lrz)
+        WRITE(6,9271) (ztr(setup0%lrindx(l)),xj(setup0%lrindx(l)), &
+          xp(setup0%lrindx(l)),xe(setup0%lrindx(l)),xc(setup0%lrindx(l)), &
+          l=1,setup0%lrz)
  221    continue
       endif
  9270 format(/" Normalized RF Power and Current drive",/, &
@@ -520,17 +526,17 @@ contains
  9271 format(1p5e14.4)
 
 !     parallel profile
-      if (cqlpmod .eq. "enabled") then
-        WRITE(6,9213) kelecg,lrindx(1)
-        WRITE(6,9214) (sz(l),denpar(kelecg,lsindx(l)), &
-          enrgypa(kelecg,lsindx(l)),l=1,lrors)
-        if (ls .ge. 3) then
+      if (setup0%cqlpmod .eq. "enabled") then
+        WRITE(6,9213) kelecg,setup0%lrindx(1)
+        WRITE(6,9214) (sz(l),denpar(kelecg,setup0%lsindx(l)), &
+          enrgypa(kelecg,setup0%lsindx(l)),l=1,lrors)
+        if (setup0%ls .ge. 3) then
           zdensto=0.0
           zenrgto=0.0
           zlsto=0.0
-          do 210 l=1,ls
-            zdensto=zdensto+denpar(kelecg,lsindx(l))*dsz(l)
-            zenrgto=zenrgto+enrgypa(kelecg,lsindx(l))*dsz(l)
+          do 210 l=1,setup0%ls
+            zdensto=zdensto+denpar(kelecg,setup0%lsindx(l))*dsz(l)
+            zenrgto=zenrgto+enrgypa(kelecg,setup0%lsindx(l))*dsz(l)
             zlsto=zlsto+dsz(l)
  210      continue
           WRITE(6,9215) zdensto/zlsto,zenrgto/zlsto
@@ -552,7 +558,7 @@ contains
         /,"       by collisions (from ray data)  [W] :",1pe14.4, &
         /,"       by lin. damping (from ray data)[W] :",1pe14.4)
  9213 format(/," density and energy as a function of s for ", &
-        " general species k=",i2," , at lrindx=",i3," :", &
+        " general species k=",i2," , at setup0%lrindx=",i3," :", &
         //,8x,"s",11x,"density",7x,"energy")
  9214 format(1p3e14.4)
  9215 format(/," total per ds:",1p2e14.4)
@@ -564,10 +570,10 @@ contains
 !.......................................................................
 
       WRITE(6,9220) pltvs
-      WRITE(6,9221) (ztr(lrindx(l)),currtz(lrindx(l)), &
-        currtpz(lrindx(l)),bscurm(lrindx(l),1,1),totcurz(lrindx(l)), &
-        totcurzi(lrindx(l))-totcurzi(lrindx(l-1)), &
-        totcurzi(lrindx(l)),l=1,lrz) !NOTE: bscurm(l,1,1) is for e_maxw only !
+      WRITE(6,9221) (ztr(setup0%lrindx(l)),currtz(setup0%lrindx(l)), &
+        currtpz(setup0%lrindx(l)),bscurm(setup0%lrindx(l),1,1),totcurz(setup0%lrindx(l)), &
+        totcurzi(setup0%lrindx(l))-totcurzi(setup0%lrindx(l-1)), &
+        totcurzi(setup0%lrindx(l)),l=1,setup0%lrz) !NOTE: bscurm(l,1,1) is for e_maxw only !
       WRITE(6,9222) currtza,currtpza,bscurma,totcurza
  9220 format(//" Flux surf. avg. current densities [Amps/cm**2] " &
         "and integrated currents [Amps]:",/,1x, &
@@ -581,10 +587,10 @@ contains
 !.......................................................................
 
       WRITE(6,9320) pltvs
-      WRITE(6,9321) (ztr(lrindx(l)), &
-        curpol(lrindx(l)),ccurpol(lrindx(l)), &
-        curtor(lrindx(l)),ccurtor(lrindx(l)),l=1,lrz)
-      WRITE(6,9322) ccurpol(lrzmax),ccurtor(lrzmax)
+      WRITE(6,9321) (ztr(setup0%lrindx(l)), &
+        curpol(setup0%lrindx(l)),ccurpol(setup0%lrindx(l)), &
+        curtor(setup0%lrindx(l)),ccurtor(setup0%lrindx(l)),l=1,setup0%lrz)
+      WRITE(6,9322) ccurpol(setup0%lrzmax),ccurtor(setup0%lrzmax)
  9320 format(//" Poloidal and toroidal  current densities [Amps/cm**2] " &
         "and integrated currents [Amps]:",/,1x, &
         78("="),/,25x,a8,5x,"pol",3x,"intg. pol.",13x,"tor", &
@@ -597,7 +603,7 @@ contains
 !l    2.2.3 parallel profile
 !.......................................................................
 
-      if (cqlpmod .ne. "enabled") go to 222
+      if (setup0%cqlpmod .ne. "enabled") go to 222
 
       WRITE(6,9223)
       WRITE(6,9224) (sz(l),currmtz(l),currmtpz(l),currmtpz(l)/psis(l), &
@@ -658,7 +664,7 @@ contains
 !     restp(nch(l_),lr_)=Resistivity, calc'd from distn fnctn results
 !                  =<E_phi/R>/<j_phi/R>, toroidal resistivity.
 !                  Except, if efswtchn.eq."neo_hh" .and.
-!                    cqlpmod.ne."enabled" ==>
+!                    setup0%cqlpmod.ne."enabled" ==>
 !                    restp=(pol cross-section-area avg of E)/currpar
 !                    and currpar is sum of Hinton-Hazeltine neoclassical
 !                    current + runaway current.
@@ -687,12 +693,12 @@ contains
       WRITE(*,*)'                             fnctn results'
       WRITE(*,*)'          =<E_phi/R>/<j_phi/R>, toroidal resistivity'
       WRITE(*,*)'           Except, if efswtchn.eq."neo_hh" .and.'
-      WRITE(*,*)'           cqlpmod.ne."enabled" ==>'
+      WRITE(*,*)'           setup0%cqlpmod.ne."enabled" ==>'
       WRITE(*,*)'           restp=(pol x-section-area avg of E)/currpar'
       WRITE(*,*)'               and currpar is sum of Hinton-Hazeltine '
       WRITE(*,*)'               neoclassical current + runaway current.'
       WRITE(*,*)'           Units: statV-cm/statA = seconds'
-      WRITE(*,*)'restp/sptzr=resist_phi/sptzr (sptzr incls ONETWO Zeff)'
+      WRITE(*,*)'restp/sptzr=resist_phi/sptzr (sptzr incsetup0%ls ONETWO Zeff)'
       WRITE(*,*)'resist_neo=<E_parall*B>/<j_parall*B> (seconds)'
       WRITE(*,*)'res_neo/sptzr=<E_parall*B>/<j_parall*B>/sptzr'
       WRITE(*,*)'elecfld(lr_)=toroidal or parallel electric fld (V/cm)'
@@ -716,7 +722,7 @@ contains
        *gama(kelec,kelec)*zeff(1)/(temp(1,0)*ergtkev)**1.5
 
       il_old=l_
-      do 230 il=1,lrz
+      do 230 il=1,setup0%lrz
         call tdnflxs(lmdpln(il))
         zeps=eps(lr_)
         rovsf=1. / (1.-1.95*zeps**.5+.95*zeps)
@@ -762,7 +768,7 @@ contains
         ,"Con.largep",2x,"Zeff",2x,"One2/spt(Z)",3x,"Iconnor",2x, &
         "I33/1.95/rep",3x,"Hinton",6x,"Kim",8x,"g",5x,"(eta-1)/g")
       if(machine.eq."toroidal")then
-      do 2301 il=1,lrz
+      do 2301 il=1,setup0%lrz
         call tdnflxs(lmdpln(il))
         zeps=eps(lr_)
 !     R.D. Hazeltine, F.L. Hinton, and M.N. Rosenbluth (1973).
@@ -790,22 +796,22 @@ contains
 !%OS
 
       call tdnflxs(il_old)
-      if (cqlpmod .eq. "enabled") &
+      if (setup0%cqlpmod .eq. "enabled") &
         WRITE(6,9232) (l,sz(l),rovsloc(l),sptzr(l),l=1,lrors)
  9232 format(/," Local in s resistivity divided by spitzer:",//, &
         "  l",5x,"s",6x,"res/spitz",3x,"spitzer",/,(i3,1p3e11.3))
 
       if (n .lt. nstop) go to 233
 
-      if (cqlpmod .ne. "enabled") WRITE(6,9233) lrindx(1)
+      if (setup0%cqlpmod .ne. "enabled") WRITE(6,9233) setup0%lrindx(1)
  9233 format(/" res/spitz. per time step: for first flux surface:" &
         ," lr_= ",i3,":",/" ========================")
-      if (cqlpmod .eq. "enabled") WRITE(6,9234)lrindx(1),lsindx(1)
+      if (setup0%cqlpmod .eq. "enabled") WRITE(6,9234)setup0%lrindx(1),setup0%lsindx(1)
  9234 format(/" res/spitz. per time step: at flux surface:" &
         ," lr_= ",i3," for first orbit position ls_=",i3,":", &
         /" ========================")
-      illeff=lrindx(1)
-      if (cqlpmod .eq. "enabled") illeff=lsindx(1)
+      illeff=setup0%lrindx(1)
+      if (setup0%cqlpmod .eq. "enabled") illeff=setup0%lsindx(1)
       do 231 l=1,nch(1),8
         WRITE(6,9235) (il,rovsp(il,illeff),il=l,min(l+7,nch(1)))
         !-YuP: added: evolution of resistivity for first flux surface [cgs]
@@ -817,7 +823,7 @@ contains
       if (efiter.eq."enabled") then
 !BH171230:  Using efldn(,,) storage, not elecfldn(,,) for this case.
 !BH171230:  This storage had been set up before, but not used.
-         if (cqlpmod .ne. "enabled") WRITE(6,9247) lrindx(1)
+         if (setup0%cqlpmod .ne. "enabled") WRITE(6,9247) setup0%lrindx(1)
  9247 format(/" iteration elecn per time step: for 1st flux surface:" &
         ," lr_= ",i3,":",/" ========================")
          do 234 niter=1,nefitera
@@ -826,13 +832,13 @@ contains
             fiter=0.
             do 237 i=1,nch(1)
                !YuP: was a bug: fiter=fiter+abs(elecn(niter,i,illeff))
-               !YuP[21-08-2017] from ampf: elecn(1:lrz,0:nstop,nefitera)
+               !YuP[21-08-2017] from ampf: elecn(1:setup0%lrz,0:nstop,nefitera)
                fiter=fiter+abs(elecn(illeff,i,niter))
  237        continue
             if (fiter.eq.zero) go to 236
 
             do 235 l=1,nch(1),8
-               !YuP[21-08-2017] from ampf: elecn(1:lrz,0:nstop,nefitera).
+               !YuP[21-08-2017] from ampf: elecn(1:setup0%lrz,0:nstop,nefitera).
                !Corrected:
                WRITE(6,9235) (il,elecn(illeff,il,niter), &
                     il=l,min(l+7,nch(1)))
@@ -844,14 +850,14 @@ contains
       if (lrors .eq. 1) go to 233
 
       ilprin=lrors/2+1
-      if (cqlpmod .ne. "enabled") WRITE(6,9236) ilprin,lrindx(ilprin)
+      if (setup0%cqlpmod .ne. "enabled") WRITE(6,9236) ilprin,setup0%lrindx(ilprin)
  9236 format(/" res/spitz. per time step: for surface: ", &
-        "lrindx(",i3,")=",i3," :",/" ========================")
-      if (cqlpmod .eq. "enabled") WRITE(6,9237) ilprin,lsindx(ilprin)
+        "setup0%lrindx(",i3,")=",i3," :",/" ========================")
+      if (setup0%cqlpmod .eq. "enabled") WRITE(6,9237) ilprin,setup0%lsindx(ilprin)
  9237 format(/" res/spitz. per time step: for orbit pos.: ", &
-        "lsindx(",i3,")=",i3," :",/" ========================")
-      illeff=lrindx(ilprin)
-      if (cqlpmod .eq. "enabled") illeff=lsindx(ilprin)
+        "setup0%lsindx(",i3,")=",i3," :",/" ========================")
+      illeff=setup0%lrindx(ilprin)
+      if (setup0%cqlpmod .eq. "enabled") illeff=setup0%lsindx(ilprin)
       do 232 l=1,nch(ilprin),8
         WRITE(6,9235) (il,rovsp(il,illeff),il=l,min(l+7,nch(ilprin)))
  232  continue
@@ -885,7 +891,7 @@ contains
 
 !     transport conservation diagnostic
 
-      if (transp.eq."enabled" .and. cqlpmod.ne."enabled") then
+      if (transp.eq."enabled" .and. setup0%cqlpmod.ne."enabled") then
         WRITE(6,9242)
         do 242 l=1,lrors,8
           WRITE(6,9235) (il,constp(nch(il),il),il=l,min(l+7,lrors))

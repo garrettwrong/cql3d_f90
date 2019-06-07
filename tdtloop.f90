@@ -17,7 +17,8 @@ module tdtloop_mod
 
 contains
 
-      subroutine tdtloop
+  subroutine tdtloop
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
@@ -46,7 +47,7 @@ contains
 
 !MPIINSERT_IF_RANK_EQ_0
       ! make plots on mpirank.eq.0 only
-      if (noplots.ne."enabled1") then
+      if (setup0%noplots.ne."enabled1") then
          call pgclos  ! PGCLOS
          PRINT *,'PGPLOT CLOSED at time step n=',n
       endif
@@ -69,7 +70,7 @@ contains
 !     save distribution fnctn, restore original cqlinput, cputime, STOP
 !.......................................................................
 
-      if (nlwritf.ne."disabled") call tdwritef
+      if (setup0%nlwritf.ne."disabled") call tdwritef
 
 !MPIINSERT_IF_RANK_EQ_0
          call ainadjnl(1)

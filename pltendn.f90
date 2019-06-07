@@ -13,7 +13,8 @@ module pltendn_mod
 
 contains
 
-      subroutine pltendn
+  subroutine pltendn
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : rbound, luf
@@ -40,7 +41,7 @@ contains
 !      write(*,*)'pltendn:  HERE0'
 
 !
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       if (pltend.eq."disabled") return
       dgts=1.e-8
       rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
@@ -149,7 +150,7 @@ contains
 
 
         if (entr(k,3,l_).ge. 1.e-20 .and. kelecg.ne.0) then
-          if (lrzmax.gt.1.and.n.gt.0) then
+          if (setup0%lrzmax.gt.1.and.n.gt.0) then
             areaovol=darea(lr_)/dvol(lr_)
           else
             if (eqmod.eq."enabled") then
@@ -439,7 +440,7 @@ contains
 
 
       return
-      end subroutine pltendn
+    end subroutine pltendn
 
 
 
@@ -449,7 +450,8 @@ contains
 !======================================================================
 !======================================================================
 
-      subroutine plt_fow_cons ! developed for FOW, but can also be used for ZOW
+    subroutine plt_fow_cons ! developed for FOW, but can also be used for ZOW
+      use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : rbound
@@ -477,21 +479,21 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       if (pltend.eq."disabled") return
-      if (lrzmax .le. 2) return
+      if (setup0%lrzmax .le. 2) return
 
 !..................................................................
 !     Determine the x-axis for plots (psi or rho - both normalized).
 !..................................................................
 
       if (pltvs.eq."psi") then
-        do 20 l=1,lrzmax
+        do 20 l=1,setup0%lrzmax
           tr(l)=(equilpsi(0)-equilpsi(l))/equilpsi(0)
  20     continue
         write(t_horiz,'(a3)') 'psi'
       else
-        do 30 l=1,lrzmax
+        do 30 l=1,setup0%lrzmax
           tr(l)=rz(l)/radmin
  30     continue
         write(t_horiz,'(a6,a8,a1)') 'rho (=', radcoord, ')'
@@ -518,7 +520,7 @@ contains
         !Find min/max over all time steps and all radial points
         emin= 1.d16
         emax=-1.d16
-        do ll=1,lrz
+        do ll=1,setup0%lrz
         do itime=1,nch(ll)
            emin=min(emin,consnp(itime,ll))
            emax=max(emax,consnp(itime,ll))
@@ -533,7 +535,7 @@ contains
         CALL PGSWIN(RBOUND(ptime(1,1)),RBOUND(ptime(n+1,1)),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         CALL PGSLS(1)  ! 1-> solid; 2-> dashed; 3-> -.-.- ;
-        do l_=1,lrz
+        do l_=1,setup0%lrz
           do itime=1,n+1 !!YuP was: nonch
            RNONCHA1(itime)=RBOUND(ptime(itime,1))
            RNONCHA2(itime)=RBOUND(consnp(itime,l_))
@@ -558,7 +560,7 @@ contains
         !Find min/max over all time steps and all radial points
         emin= 1.d16
         emax=-1.d16
-        do ll=1,lrz
+        do ll=1,setup0%lrz
         do itime=1,nch(ll)
            emin=min(emin,consnp(itime,ll))
            emax=max(emax,consnp(itime,ll))
@@ -577,8 +579,8 @@ contains
            !RNONCHA1(it)=RBOUND(ptime(it,1))
 !BH171231           RLRZAP11(1:LRZMAX)= consnp(it,1:LRZMAX)
             RLRZAP11(1:LRZ)= consnp(it,1:LRZ)
-!BH171231           CALL PGLINE(lrzmax,RLRZAP1(1),RLRZAP11(1))
-           CALL PGLINE(lrz,RLRZAP1(1),RLRZAP11(1))
+!BH171231           CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+           CALL PGLINE(setup0%lrz,RLRZAP1(1),RLRZAP11(1))
         ENDDO
         CALL PGSAVE
         CALL PGSCH(1.)

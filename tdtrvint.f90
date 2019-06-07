@@ -26,14 +26,14 @@ contains
 
       if (transp.eq."disabled") return
 
-      call bcast(vpint_,zero,iy*lrzmax)
-      call bcast(cynt2_,zero,iy*lrz)
-      call bcast(vptb_,zero,iy*(lrzmax+1))
-      call bcast(bovcos,zero,(iy+1)*(lrz+1))
-      call bcast(cosovb,zero,(iy+1)*(lrz+1))
+      call bcast(vpint_,zero,iy*setup0%lrzmax)
+      call bcast(cynt2_,zero,iy*setup0%lrz)
+      call bcast(vptb_,zero,iy*(setup0%lrzmax+1))
+      call bcast(bovcos,zero,(iy+1)*(setup0%lrz+1))
+      call bcast(cosovb,zero,(iy+1)*(setup0%lrz+1))
 
       do 10 l=1,lrors
-        ilr = lrindx(l)
+        ilr = setup0%lrindx(l)
         itl=itl_(l)
         itu=itu_(l)
         iyh=iyh_(l)
@@ -101,10 +101,10 @@ contains
             m=iytr(lrors)+1-i
             cosovb(idx(i,l),l)=cynt2_(idx(i,lrors),lrors)/ &
               cynt2_(idx(i,l),l)*coss(idx(i,lrors),lrors)/ &
-              bmidplne(lrindx(lrors))
+              bmidplne(setup0%lrindx(lrors))
             cosovb(idx(m,l),l)=cynt2_(idx(m,lrors),lrors)/ &
               cynt2_(idx(m,l),l)*coss(idx(m,lrors),lrors)/ &
-              bmidplne(lrindx(lrors))
+              bmidplne(setup0%lrindx(lrors))
  30       continue
         else if (meshy.eq."fixed_y") then
           do 40 i=1,iytr(lrors)

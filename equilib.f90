@@ -128,8 +128,8 @@ contains
 
     if (index .eq. 0) then !==========================================
 
-       if(lr_.ne.lrzmax) return ! equilib is called from aingeom in lr loop
-       ! starting at lr_=lrzmax. Only calc once.
+       if(lr_.ne.setup0%lrzmax) return ! equilib is called from aingeom in lr loop
+       ! starting at lr_=setup0%lrzmax. Only calc once.
 
        if (eqsource.eq."tsc") then
           do j=1,nnz

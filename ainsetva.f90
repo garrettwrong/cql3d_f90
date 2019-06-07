@@ -43,13 +43,13 @@ contains
            stop 'check consistency of lrorsa in param.h'
 
 !BH081106:Found following condition leads to overwrite.
-!BH081106:For cqlpmod.ne.enabled, could check code to see how
+!BH081106:For setup0%cqlpmod.ne.enabled, could check code to see how
 !BH081106:essential the condition is.
 
       if (lsa.lt.lrza) stop 'check that lsa.ge.lrza?'
 
-      if (cqlpmod.eq."enabled" .and. lza.lt.lsa) &
-           stop 'check consistency of lza,lsa for cqlpmod=enabled'
+      if (setup0%cqlpmod.eq."enabled" .and. lza.lt.lsa) &
+           stop 'check consistency of lza,lsa for setup0%cqlpmod=enabled'
 
 !BH060314      if (nmodsa.ne.3)
 !BH060314     +     stop 'Better check out code for nmodsa.ne.3'
@@ -60,13 +60,13 @@ contains
 !l    1. check and define some mesh values
 !.......................................................................
 
-!     cannot run CQL3D with lrzmax>lrz (only CQL or CQLP)
-      if (lrzdiff.eq."enabled" .and. transp.eq."enabled" .and. &
-        cqlpmod.ne."enabled") call diagwrng(17)
-      if (lsdiff.eq."enabled" .and.  transp.eq."enabled" .and. &
-        cqlpmod.eq."enabled") call wpwrng(4)
-      if (lrzdiff.eq."enabled" .and. partner.eq."selene") WRITE(*, &
-        '("WARNING: partner=selene and lrzdiff=enabled not checked")')
+!     cannot run CQL3D with setup0%lrzmax>setup0%lrz (only CQL or CQLP)
+      if (setup0%lrzdiff.eq."enabled" .and. transp.eq."enabled" .and. &
+        setup0%cqlpmod.ne."enabled") call diagwrng(17)
+      if (setup0%lsdiff.eq."enabled" .and.  transp.eq."enabled" .and. &
+        setup0%cqlpmod.eq."enabled") call wpwrng(4)
+      if (setup0%lrzdiff.eq."enabled" .and. partner.eq."selene") WRITE(*, &
+        '("WARNING: partner=selene and setup0%lrzdiff=enabled not checked")')
 
       if (urfmod.ne."disabled" .and. meshy.eq."fixed_mu") &
         call diagwrng(19)
@@ -74,14 +74,14 @@ contains
         call diagwrng(22)
 
 !     storage problem for calc of parallel distn function, if
-!     lrz.gt.lz
+!     setup0%lrz.gt.lz
       if ((pltprpp.eq."enabled" .or.  knockon.ne."disabled") .and. &
-           lrz.gt.lz) then
+           setup0%lrz.gt.lz) then
 !MPIINSERT_IF_RANK_EQ_0
-         WRITE(*,*)'ainsetva/pltprpp:  lrz=', lrz, ' lz=', lz
-         WRITE(*,*)'Need lrz.le.lz for pltprpp or knockon enabled'
-         lz=lrz
-         WRITE(*,*)'WARNING: lz is reset to lrz=', lrz
+         WRITE(*,*)'ainsetva/pltprpp:  setup0%lrz=', setup0%lrz, ' lz=', lz
+         WRITE(*,*)'Need setup0%lrz.le.lz for pltprpp or knockon enabled'
+         lz=setup0%lrz
+         WRITE(*,*)'WARNING: lz is reset to setup0%lrz=', setup0%lrz
 !MPIINSERT_ENDIF_RANK
          !STOP
       endif
@@ -141,24 +141,24 @@ contains
 !MPIINSERT_IF_RANK_EQ_0
          WRITE(*,225)
 !MPIINSERT_ENDIF_RANK
- 225     format(//,'ERROR:  Presently ndeltarho calls are only setup',/ &
+ 225     format(//,'ERROR:  Presently ndeltarho calsetup0%ls are only setup',/ &
                    '        for taunew=enabled',//)
          STOP
       endif
 
-      if (ndeltarho.ne."disabled" .and. lrzdiff.ne."disabled") then
+      if (ndeltarho.ne."disabled" .and. setup0%lrzdiff.ne."disabled") then
 !MPIINSERT_IF_RANK_EQ_0
          WRITE(*,226)
 !MPIINSERT_ENDIF_RANK
  226     format(//,'ERROR:  ndeltarho feature not setup for setup',/ &
-                   '        for lrzdiff.ne."disabled"',//)
+                   '        for setup0%lrzdiff.ne."disabled"',//)
          STOP
       endif
 
       if (ndeltarho.ne."disabled" .and. urfdmp.eq."secondd") then
 !MPIINSERT_IF_RANK_EQ_0
          WRITE(*,227)
- 227     format(//,'ERROR:  Presently ndeltarho calls are only setup',/ &
+ 227     format(//,'ERROR:  Presently ndeltarho calsetup0%ls are only setup',/ &
                    '        for urfdmp.ne.disabled',//)
          WRITE(*,228)
 !MPIINSERT_ENDIF_RANK
@@ -512,17 +512,17 @@ contains
 !l    4.1 Set non-valid flags and parameters related to CQLP
 !.......................................................................
 
-      if (cqlpmod.ne."enabled" .or. transp.ne."enabled") then
+      if (setup0%cqlpmod.ne."enabled" .or. transp.ne."enabled") then
         sbdry = "disabled"
       endif
-      if (cqlpmod .eq. "enabled") then
-        if (lsmax .ge. 5) lz=lsmax
+      if (setup0%cqlpmod .eq. "enabled") then
+        if (setup0%lsmax .ge. 5) lz=setup0%lsmax
         numclas=nummods/10
         numindx=mod(mod(nummods,10),5)
         if (numclas.eq.1 .and. transp.eq."enabled") then
           if (updown .ne. "symmetry") call wpwrng(7)
           if (sbdry .ne. "periodic") call wpwrng(8)
-          if ((ls/2)*2 .ne. ls) call wpwrng(9)
+          if ((setup0%ls/2)*2 .ne. setup0%ls) call wpwrng(9)
           if ((lz/2)*2 .ne. lz) call wpwrng(10)
           if (jx.lt.iy) stop 'check rhspar/bndmats storage in comm.h'
         endif
@@ -530,7 +530,7 @@ contains
 !     should be redefined
 !
         if (lmidpln .ne. 1) call wpwrng(3)
-        do 310 ll=1,lrz
+        do 310 ll=1,setup0%lrz
           lmdpln(ll)=lmidpln
  310    continue
 !     parallel transport related flags
@@ -570,7 +570,7 @@ contains
         do 315 k=1,ngen
           lossmode(k)="disabled"
           torloss(k)="disabled"
-          do 316 l=0,lrz
+          do 316 l=0,setup0%lrz
             tauegy(k,l)=0.0
  316      continue
  315    continue
@@ -639,14 +639,14 @@ contains
          stop 'Need to set tavg values'
       endif
 
-!     Expand eegy, if lrzmax.gt.1, and values at lr_=2 are zero.
+!     Expand eegy, if setup0%lrzmax.gt.1, and values at lr_=2 are zero.
 !     (This is for convenience of input).
 
       do ny=1,negyrg-1
          do ii=1,2
             do kk=1,ngen
                if (eegy(ny,ii,kk,2).eq.zero) then
-                  do l=2,lrzmax
+                  do l=2,setup0%lrzmax
                      eegy(ny,ii,kk,l)=eegy(ny,ii,kk,1)
                   enddo
                endif
@@ -680,12 +680,12 @@ contains
          tfac=-1.
       endif
       if (qsineut .eq. "enabled") locquas="disabled"
-!BH100517:  Not needed.      if (lrzmax.eq.1) nrstrt=0
-      if (lrzmax.eq.1 .and. meshy.ne."free") then
+!BH100517:  Not needed.      if (setup0%lrzmax.eq.1) nrstrt=0
+      if (setup0%lrzmax.eq.1 .and. meshy.ne."free") then
         meshy="free"
 !MPIINSERT_IF_RANK_EQ_0
         WRITE(*,'(/"  WARNING: meshy has been changed to ""free"" ", &
-          "as lrzmax=1 (does not work otherwise)"/)')
+          "as setup0%lrzmax=1 (does not work otherwise)"/)')
 !MPIINSERT_ENDIF_RANK
       endif
       if (soln_method.eq."it3drv".and. meshy.ne."fixed_y") then
@@ -870,10 +870,10 @@ contains
             soln_method='direct'
          endif
          !enddo ! k=1,ngen
-         if (lrz.ne.lrzmax) then
+         if (setup0%lrz.ne.setup0%lrzmax) then
 !MPIINSERT_IF_RANK_EQ_0
             WRITE(*,*)
-            WRITE(*,*)'STOP: Not good to use lrz.ne.lrzmax'
+            WRITE(*,*)'STOP: Not good to use setup0%lrz.ne.setup0%lrzmax'
             WRITE(*,*)
 !MPIINSERT_ENDIF_RANK
             stop
@@ -913,14 +913,14 @@ contains
             stop
          endif
 
-         if (nlrestrt.eq."ncdfdist" .and. elecscal.ne.one) then
+         if (setup0%nlrestrt.eq."ncdfdist" .and. elecscal.ne.one) then
 !MPIINSERT_IF_RANK_EQ_0
             WRITE(*,*)'STOP: AmpFar restart assumes elecscal=1.'
 !MPIINSERT_ENDIF_RANK
             stop
          endif
 
-         if (nlrestrt.eq."ncdfdist" .and. nonampf.ne.0) then
+         if (setup0%nlrestrt.eq."ncdfdist" .and. nonampf.ne.0) then
 !MPIINSERT_IF_RANK_EQ_0
             WRITE(*,*)'WARNING: AmpFar restart assumes nonampf=0'
 !MPIINSERT_ENDIF_RANK
@@ -929,16 +929,16 @@ contains
 
       endif  !On ampfmod
 
-      if (ampfmod.eq."enabled".and.cqlpmod.eq."enabled") then
+      if (ampfmod.eq."enabled".and.setup0%cqlpmod.eq."enabled") then
 !MPIINSERT_IF_RANK_EQ_0
          write(*,*)
-         WRITE(*,*)'STOP: ampfmod.ne.enabled with cqlpmod.eq.enabled'
+         WRITE(*,*)'STOP: ampfmod.ne.enabled with setup0%cqlpmod.eq.enabled'
          write(*,*)
 !MPIINSERT_ENDIF_RANK
          stop
       endif
 
-      if (nlrestrt.eq."ncdfdist" .or. nlrestrt.eq."ncregrid") then
+      if (setup0%nlrestrt.eq."ncdfdist" .or.setup0%nlrestrt.eq."ncregrid") then
 !MPIINSERT_IF_RANK_EQ_0
          write(*,*)
          WRITE(*,*)'WARNING: Check that did not have netcdfshort='
@@ -947,7 +947,7 @@ contains
 !MPIINSERT_ENDIF_RANK
       endif
 
-      if (nlwritf.ne."disabled") then
+      if (setup0%nlwritf.ne."disabled") then
 !MPIINSERT_IF_RANK_EQ_0
          write(*,*)
          WRITE(*,*)'WARNING: If this run to be restarted, ensure that'
@@ -960,7 +960,7 @@ contains
       endif
 
       if (eseswtch.eq."enabled") then
-         if (.not.(cqlpmod.eq."enabled".and. sbdry.eq."periodic")) then
+         if (.not.(setup0%cqlpmod.eq."enabled".and. sbdry.eq."periodic")) then
             stop 'Check use of eseswtch'
          elseif (efswtch.ne."disabled") then
 !MPIINSERT_IF_RANK_EQ_0
@@ -971,8 +971,8 @@ contains
          endif
       endif
 
-      if (bootcalc.ne."disabled".and.lrzdiff.ne."disabled") then
-         stop 'bootcalc.ne.disabled .and. lrzdiff.ne.disabled'
+      if (bootcalc.ne."disabled".and.setup0%lrzdiff.ne."disabled") then
+         stop 'bootcalc.ne.disabled .and. setup0%lrzdiff.ne.disabled'
       endif
 
       if (efswtch.eq."method5") then
@@ -1022,8 +1022,8 @@ contains
       if (rya(0).ne.zero) then
          stop 'rya(0).ne.0. ==>  error in namelist input: rya(1)=?'
       endif
-      if (lrz.gt.1) then
-         do ll=2,lrz
+      if (setup0%lrz.gt.1) then
+         do ll=2,setup0%lrz
             if ( (rya(ll)-rya(ll-1)).le.0. ) stop 'Check rya() input'
          enddo
       endif
@@ -1049,11 +1049,11 @@ contains
 
       if (soln_method.eq.'itsol'.or. soln_method.eq.'itsol1' .or. &
           soln_method.eq.'it3dv'.or. soln_method.eq.'it3drv') then
-         if (cqlpmod.eq.'enabled' .or. &
+         if (setup0%cqlpmod.eq.'enabled' .or. &
              symtrap.ne.'enabled' ) then
 !MPIINSERT_IF_RANK_EQ_0
                 WRITE(*,*)'ainsetva: Check/re-configure itsol storage'// &
-                          ' for cqlpmod/symtrap/nadjoint.ne.0 cases'
+                          ' for setup0%cqlpmod/symtrap/nadjoint.ne.0 cases'
 !MPIINSERT_ENDIF_RANK
                 STOP
          endif
@@ -1138,10 +1138,10 @@ contains
               stop 'STOP:frmod.eq.disabled but beamplse.ne.disabled'
       endif
 
-!     Checking consistency of rdcmod and lrzdiff
-      if (rdcmod.ne."disabled" .and. lrzdiff.ne."disabled") then
+!     Checking consistency of rdcmod and setup0%lrzdiff
+      if (rdcmod.ne."disabled" .and. setup0%lrzdiff.ne."disabled") then
 !MPIINSERT_IF_RANK_EQ_0
-         WRITE(*,*)'ainsetva:  STOP, rdcmod requires lrzdiff=disabled'
+         WRITE(*,*)'ainsetva:  STOP, rdcmod requires setup0%lrzdiff=disabled'
 !MPIINSERT_ENDIF_RANK
          stop
       endif
@@ -1322,7 +1322,7 @@ contains
 !.......................................................................
 
 !     could be problems if nrskip.eq.0 and the irzplt() are not
-!     all distinct (or zero), or are .gt. lrz.
+!     all distinct (or zero), or are .gt. setup0%lrz.
       if (nrskip.eq.0) then
          do i=1,lrors
             if (irzplt(i).gt.lrors) then

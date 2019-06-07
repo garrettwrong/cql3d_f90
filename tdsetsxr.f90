@@ -37,7 +37,7 @@ contains
 
 !
 
-!     Compute cos and sin arrays. Determine Legendre polynomials out to
+!     Compute cos and sin arrays. Determine Legendre polynomiasetup0%ls out to
 !     order msxr.
 !
       jval_(ien)=jx
