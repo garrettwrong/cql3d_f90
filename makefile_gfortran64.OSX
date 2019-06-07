@@ -2,11 +2,14 @@
 
 SHELL     = /bin/sh
 NAME      = xcql3d_gfortran64
-COMPILER=	gfortran
-BUILDER=	$(COMPILER)
+COMPILER  = gfortran
+BUILDER   = $(COMPILER)
+LIBTOOL   = libtool -static
 
 # INCLUDE line
 include include_dependency.mk
+# Check if inlude files have changed i guess
+$(SOURCES):        $(INCLUDES)
 
 # SOURCE line
 include source_dependency.mk
@@ -30,16 +33,26 @@ LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
 DELETE    = rm -f
 
-# The following gives suffixes to be used in checking for suffix rules.
-# Written without dependencies, it may be useful to turn of such checking?
-.SUFFIXES:
+
+all: $(NAME) $(NAME)_shared lib$(NAME).a
 
 $(NAME):           $(F90OBJECTS) $(OBJECTS)
-	$(LOAD)    $(F90OBJECTS) $(OBJECTS)  $(LOCATION) $(LIBRARIES)
+	$(LOAD)    $^  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
 
-# Check if inlude files have changed i guess
-$(SOURCES):        $(INCLUDES)
+# For the libraries, we do not want a main
+LIBOBJS = $(filter-out a_cqlp.o, $(F90OBJECTS) $(OBJECTS))
+lib$(NAME).so: $(LIBOBJS)
+	$(BUILDER) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $@
+
+lib$(NAME).a: $(LIBOBJS)
+	$(LIBTOOL) -o $@ $^
+	$(PROTECT) $@
+
+$(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
+	$(BUILDER) -o $@ $(LDSPECIAL) $(DEBUG)	a_cqlp.o -L. -l$< $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $@
 
 
 # Following use of pattern matching works;
@@ -65,10 +78,11 @@ include module_dependency.mk
 
 # see Sect. 4.10.1, Static Pattern Rules.
 $(filter %.o,$(F90OBJECTS)): %.o: %.f90 $(INCLUDES)
-	$(COMPILE) $< -o $@ 
+	$(COMPILE) $< -o $@
 
 $(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
 	$(COMPILE) $< -o $@
+
 
 rebuild:
 	$(COMPILE) $(SOURCES) $(F90SOURCES)
@@ -77,3 +91,8 @@ rebuild:
 clean:
 	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
 	$(DELETE) *.mod
+	$(DELETE) *.so *.a
+
+.PHONY: all
+.PHONY: clean
+.PHONY: rebuild
