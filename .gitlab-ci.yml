@@ -73,3 +73,6 @@ release-image:
     - docker push $CONTAINER_RELEASE_IMAGE
   only:
     - master
+  only:
+    changes:
+      - ci/Dockerfile.centos7
