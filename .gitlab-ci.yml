@@ -2,6 +2,11 @@ stages:
   - lint
   - build
   - test
+  - release
+
+variables:
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
 
 checkbadchars:
   stage: lint
@@ -15,7 +20,7 @@ enforce_unixish:
 
 build:centos7:
   stage: build
-  image: garrettwrong/cql3d_f90_centos-7
+  image: $CONTAINER_TEST_IMAGE
   script:
   - make -f  makefile_gfortran64.CentOS7
   artifacts:
@@ -25,7 +30,7 @@ build:centos7:
 
 case1:
   stage: test
-  image: garrettwrong/cql3d_f90_centos-7
+  image: $CONTAINER_TEST_IMAGE
   script:
   - cd ci/case1
   - ../../xcql3d_gfortran64
@@ -39,3 +44,32 @@ case1:
 
   dependencies:
   - build:centos7
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+docker build:
+  stage: build
+  image: docker:stable
+  services:
+  - docker:dind
+  script:
+  - docker pull $CONTAINER_RELEASE_IMAGE || true
+  - docker build -f Dockerfile.centos7  --cache-from $CONTAINER_RELEASE_IMAGE -t $CONTAINER_TEST_IMAGE .
+  - docker push $CONTAINER_TEST_IMAGE
+  only:
+    changes:
+      - ci/Dockerfile.centos7
+
+
+release-image:
+  stage: release
+  image: docker:stable
+  services:
+  - docker:dind
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+  only:
+    - master
