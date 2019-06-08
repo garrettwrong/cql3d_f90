@@ -1405,12 +1405,12 @@ c--------------------------
       !YuP[2018-09-28], BH181112 added for 'lngshrtf' option,
       !for saving f() distr.func. at selected (nsave()) t steps only.
       vid=ncvdef2(ncid,'nsave',NCINT,1,tsavedim,istatus)
-      call ncaptc2(ncid,vid,'long_name',NCCHAR,39,
+      call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +           'Selected time steps, n.eq.nsave(1:nsavet)',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,4,'none',istatus)
 
       vid=ncvdef2(ncid,'tsave',NCDOUBLE,1,tsavedim,istatus)
-      call ncaptc2(ncid,vid,'long_name',NCCHAR,39,
+      call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +           'Times selected using n.eq.nsave(1:nsavet)',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,7,'seconds',istatus)
 

@@ -197,18 +197,19 @@ contains
 !..................................................................
 
 !MPIINSERT_IF_RANK_EQ_0
-      if (netcdfnm.ne."disabled") then
-         call netcdfrw2(0)
-      endif
+      nsavet=0 !YuP[2019-06-07] Should be defined in any case of netcdfshort
+      ! And for 'lngshrtf', it is set below:
       if (netcdfshort.eq.'lngshrtf') then
          isave=0  !Index for nonzero values of increasing nsave(1:nsavea)
-         nsavet=0 !Total nsave(i).ge.0 and .le.nstop
          do i=1,nsavea
             if (nsave(i).ge.0 .and. nsave(i).le.nstop) &
                  nsavet=nsavet+1
          enddo
       endif
-
+      
+      if (netcdfnm.ne."disabled") then
+         call netcdfrw2(0)
+      endif
 !MPIINSERT_ENDIF_RANK
 
 !.......................................................................
