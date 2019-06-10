@@ -1408,11 +1408,15 @@ c--------------------------
       call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +           'Selected time steps, n.eq.nsave(1:nsavet)',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,4,'none',istatus)
-
-      vid=ncvdef2(ncid,'tsave',NCDOUBLE,1,tsavedim,istatus)
-      call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
+      
+      if((netcdfshort.eq.'lngshrtf').and.isave.ne.0) then  !isave/nsavet set in tdchief
+        !YuP[2019-06-08] Added  if()
+        ! Define 'tsave' only for this case, otherwise 'tsave' will be empty
+        vid=ncvdef2(ncid,'tsave',NCDOUBLE,1,tsavedim,istatus)
+        call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +           'Times selected using n.eq.nsave(1:nsavet)',istatus)
-      call ncaptc2(ncid,vid,'units',NCCHAR,7,'seconds',istatus)
+        call ncaptc2(ncid,vid,'units',NCCHAR,7,'seconds',istatus)
+      endif
 
       vid=ncvdef2(ncid,'den_e',NCDOUBLE,2,r00_dims,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,16,
@@ -2643,7 +2647,8 @@ c     Time-Dependent data (numrec1=1)
 
       !YuP[2018-09-28] added for 'lngshrtf' option,
       !for saving f() distr.func. at selected t steps only.
-      if (isave.ne.0) then  !isave/nsavet set in tdchief
+      if((netcdfshort.eq.'lngshrtf').and.isave.ne.0) then  !isave/nsavet set in tdchief
+        !YuP[2019-06-08] Added (netcdfshort.eq.'lngshrtf') in if()
          istatus= NF_INQ_VARID(ncid,'nsave',vid) !here n=0
          call ncvpt_int2(ncid,vid,isave,1,nsave,istatus)
          istatus= NF_INQ_VARID(ncid,'tsave',vid) !here n=0
@@ -2730,7 +2735,7 @@ c-YuP:      vid=ncvid(ncid,'temp',istatus)
       istatus= NF_INQ_VARID(ncid,'curra',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
 
-      call bcast(tr(1),zero,lrzmax)
+      tr=zero !YuP[2019-06-08]was call bcast(tr(1),zero,lrzmax)
       do ll=1,lrz
          tr(ll)=ucrit(1,ll) !YuP[2018-09-24]
       enddo

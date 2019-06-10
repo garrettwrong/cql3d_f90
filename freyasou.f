@@ -561,7 +561,7 @@ c_pc      call free(psiptptr)
       if (multiply.ne."disabled") then
          deallocate(ranvc,STAT=istat)
       endif
-      call bcast(tr3(1),one,lrz)
+      tr3=one !YuP[2019-06-08]was call bcast(tr3(1),one,lrz)
 
 c..................................................................
 c     Smooth the source if input variable smooth .ge. .001

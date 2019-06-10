@@ -96,7 +96,7 @@ c     Average ion temperature..
 c..................................................................
 
       kimp_=ntotal-nimp+1
-      call bcast(tr1(1),zero,lrzmax)
+      tr1=zero !YuP[2019-06-08]was call bcast(tr1(1),zero,lrzmax)
       do 50 ll=1,lrzmax
         tp=0.
         dn=0.
@@ -121,7 +121,7 @@ c..................................................................
 c
       kk=0
       do 70 k=1,ntotal
-        call bcast(tr1(1),zero,lrzmax)
+        tr1=zero !YuP[2019-06-08]was call bcast(tr1(1),zero,lrzmax)
         if (k.eq.kelecm .or. k.eq.kelecg) go to 70
         kk=kk+1
 c        if (kk.gt.nprim .and. k.lt.kimp_) then

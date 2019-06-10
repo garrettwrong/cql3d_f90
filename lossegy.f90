@@ -49,7 +49,8 @@ contains
 
       do 200 k=1,ngen
 
-         call bcast(egylosa(0:(iy+1),0:(jx+1),k,indxlr_),zero,(iy+2)*(jx+2))
+         !call bcast(egylosa(0:(iy+1),0:(jx+1),k,indxlr_),zero,(iy+2)*(jx+2))
+         egylosa(0:(iy+1),0:(jx+1),k,indxlr_)=zero
          !Note: allocate(egylosa(0:iy+1,0:jx+1,ngen,lrz)
 
 !     Phenomenological:
