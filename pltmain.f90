@@ -409,11 +409,11 @@ contains
     return
   end subroutine gslnsz
   !---------------------------------------------------------------------
-  subroutine gslnst(LS)
+  subroutine gslnst(LS_in)
     ! sets line style: 1-solid, 2-dashed, 3-dotted, 4-dash-dotted, etc.
-    implicit integer (i-n), real(c_double) (a-h,o-z)
-    INTEGER  LS
-            CALL PGSLS(LS)
+    implicit none !integer (i-n), real(c_double) (a-h,o-z)
+    INTEGER  LS_in
+            CALL PGSLS(LS_in)
     ! Set the line style attribute for subsequent plotting. This
     ! attribute affects line primitives only; it does not affect graph
     ! markers, text, or area fill.

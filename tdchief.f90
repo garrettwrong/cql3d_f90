@@ -615,7 +615,7 @@ contains
       do 1 ll=1,ilend   !ilend=setup0%lrz for setup0%cqlpmod.ne.'enabled'
         !determine local variables depending on flux surface (l_,iy,..)
         call tdnflxs(ll) !-> get l_,lr_,...
-        ! Reset time step if (n+1).eq.nondtr1(i). .AND. LRZMAX=1
+        ! Reset time step if (n+1).eq.nondtr1(i). .AND. setup0%lrzmax=1
         do i=1,ndtr1a
            if ((n+1).eq.nondtr1(i)) then
               dtr=dtr1(i)

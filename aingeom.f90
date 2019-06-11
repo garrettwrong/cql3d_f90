@@ -75,7 +75,7 @@ contains
         if (eqsym.ne."none") then
            ! up-dn symmetry: everything is evaluated over 1/2 surface
            symm=2.d0
-           ! Factor symm=2 is because sols(l,ll),solzz(l,ll) is
+           ! Factor symm=2 is because solrz(l,ll),solzz(l,ll) is
            ! over half-surface, and so is ddarea,ddvol,
            ! and also vtau_fow() or tau() are evaluated over half-orbits.
         else

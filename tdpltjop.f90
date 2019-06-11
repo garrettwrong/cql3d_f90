@@ -104,7 +104,7 @@ contains
       RPG1=min(fmin,0.) !Make lower limit 0 when fmin>0
       RPG2=max(fmax,0.)
 
-      DO I=1,LRZMAX
+      DO I=1,setup0%lrzmax
          RLRZAP1(I)=tr(i) ! rho or psi
          RLRZAP11(I)=currtz(i)
          RLRZAP12(I)=currtpz(i)
@@ -114,7 +114,7 @@ contains
 
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
-      RPGmax=RLRZAP1(LRZMAX)
+      RPGmax=RLRZAP1(setup0%lrzmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
 
@@ -179,7 +179,7 @@ contains
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP14(1))
         CALL PGSLS(1) ! Restore solid line
 !yup        ! Total: [YuP: do not plot anymore]
-!yup        DO I=1,LRZMAX
+!yup        DO I=1,setup0%lrzmax
 !yup           RLRZAP13(I)=totcurz(i)
 !yup        ENDDO
 !yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
@@ -266,12 +266,12 @@ contains
       RPG2=fmax
       RPG1=min(fmin,0.) !Make lower limit 0 when fmin>0
 
-      DO I=1,LRZMAX
+      DO I=1,setup0%lrzmax
          RLRZAP1(I)=tr(i)
       ENDDO
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
-      RPGmax=RLRZAP1(LRZMAX)
+      RPGmax=RLRZAP1(setup0%lrzmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
 
@@ -280,17 +280,17 @@ contains
         ENDIF
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP11(I)=currtzi(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP12(I)=currtpzi(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
 !yup        CALL PGSLS(3)
-!yup        DO I=1,LRZMAX
+!yup        DO I=1,setup0%lrzmax
 !yup           RLRZAP13(I)=totcurzi(i)
 !yup        ENDDO
 !yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
@@ -595,12 +595,12 @@ contains
          "Other: RF general species (each) [sorpw_rf]")
       CALL PGUNSA
 
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP1(I)=tr(i)
         ENDDO
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
-      RPGmax=RLRZAP1(LRZMAX)
+      RPGmax=RLRZAP1(setup0%lrzmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
       IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
@@ -609,17 +609,17 @@ contains
       CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         CALL PGSLS(1) ! 1-> solid
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP11(I)=sorpwt(i) ! solid: NBI+RF(all gen.species)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2) ! 2-> dashed
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP12(I)=sorpw_nbi(kfrsou1,I) ! dashed: NBI only
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
       do k=1,ngen ! rf sources for general species
-         DO I=1,LRZMAX
+         DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rf(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
@@ -628,7 +628,7 @@ contains
       !
       CALL PGSLS(1) ! solid
       CALL PGSLW(setup0%lnwidth+1) ! bold
-      DO I=1,LRZMAX
+      DO I=1,setup0%lrzmax
          RLRZAP13(I)=powrft(i)
       ENDDO
       CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
@@ -658,7 +658,7 @@ contains
       CALL PGUNSA
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
-      RPGmax=RLRZAP1(LRZMAX)
+      RPGmax=RLRZAP1(setup0%lrzmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
       ! Vertical axis limits:
@@ -672,7 +672,7 @@ contains
       CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
       CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
       do k=1,ngen ! rf sources for general species
-         DO I=1,LRZMAX
+         DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rf(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
@@ -681,7 +681,7 @@ contains
       !
       CALL PGSLS(1) ! solid
       CALL PGSLW(setup0%lnwidth+1) ! bold
-      DO I=1,LRZMAX
+      DO I=1,setup0%lrzmax
          RLRZAP13(I)=powrft(i)
       ENDDO
       CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
@@ -730,13 +730,13 @@ contains
          "Other: RF general ions (each) [sorpw_rfi]")
         CALL PGUNSA
 
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP1(I)=tr(i)
         ENDDO
 
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
-      RPGmax=RLRZAP1(LRZMAX)
+      RPGmax=RLRZAP1(setup0%lrzmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
 
@@ -746,17 +746,17 @@ contains
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         CALL PGSLS(1) ! 1-> Solid line
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP11(I)=sorpwti(i) ! solid: NBI+RF(all gen.species)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2) ! 2-> dashed
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP12(I)=sorpw_nbii(kfrsou1,I) ! dashed: NBI only
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
       do k=1,ngen ! rf sources for general species
-         DO I=1,LRZMAX
+         DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rfi(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
@@ -764,7 +764,7 @@ contains
       enddo ! k=1,ngen
       CALL PGSLS(1) ! solid
       CALL PGSLW(setup0%lnwidth+1) ! bold
-      DO I=1,LRZMAX
+      DO I=1,setup0%lrzmax
          RLRZAP13(I)=powurfi(i,0) ! = SUM_harmonics{powurfi(l,harmonics)}
       ENDDO
       CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
@@ -804,7 +804,7 @@ contains
 
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
-      RPGmax=RLRZAP1(LRZMAX)
+      RPGmax=RLRZAP1(setup0%lrzmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
 
@@ -816,7 +816,7 @@ contains
       CALL PGSLS(1) ! 1-> Solid line
       !
       do k=1,ngen ! rf sources for general species
-         DO I=1,LRZMAX
+         DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rfi(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
@@ -824,7 +824,7 @@ contains
       enddo ! k=1,ngen
       CALL PGSLS(1) ! solid
       CALL PGSLW(setup0%lnwidth+1) ! bold
-      DO I=1,LRZMAX
+      DO I=1,setup0%lrzmax
          RLRZAP13(I)=powurfi(i,0) ! = SUM_harmonics{powurfi(l,harmonics)}
       ENDDO
       CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf

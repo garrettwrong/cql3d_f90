@@ -107,24 +107,24 @@ contains
         fmax=fmax*1.05 ! extend range, in case the profile is flat
         fmin=0.0 ! Set lower limit to 0.
 
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP1(I)=tr(i)
         ENDDO
         RPG1=fmin
         RPG2=fmax
         CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP11(I)=tr1(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP12(I)=tr2(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
         CALL PGSLS(3)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP13(I)=tr3(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
@@ -190,7 +190,7 @@ contains
         if(fmax1.gt.fmax) fmax=fmax1
         fmax=fmax*1.05 ! extend range, in case the profile is flat
 
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP1(I)=tr(i)
            RLRZAP11(I)=tr1(i)
            RLRZAP12(I)=tr2(i)
@@ -251,7 +251,7 @@ contains
           fmin=0.d0 ! YuP: make lower limit =0.0
           fmax=fmax*1.05 ! extend range, in case the profile is flat
 
-        DO I=1,LSMAX
+        DO I=1,setup0%lsmax
            RLRORSA(I)=z(i,setup0%lrindx(1))
            RLRORSA1(I)=tr1s(i)
         ENDDO
@@ -259,7 +259,7 @@ contains
         RPG2=fmax
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRORSA(1)
-      RPGmax=RLRORSA(LSMAX)
+      RPGmax=RLRORSA(setup0%lsmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
 
@@ -304,7 +304,7 @@ contains
           fmin=0.d0 ! YuP: make lower limit =0.0
           fmax=fmax*1.05 ! extend range, in case the profile is flat
 
-        DO I=1,LSMAX
+        DO I=1,setup0%lsmax
            RLRORSA(I)=z(i,setup0%lrindx(1))
            RLRORSA1(I)=tr1s(i)
         ENDDO
@@ -312,7 +312,7 @@ contains
         RPG2=fmax
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRORSA(1)
-      RPGmax=RLRORSA(LSMAX)
+      RPGmax=RLRORSA(setup0%lsmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
 
@@ -375,24 +375,24 @@ contains
           if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
 
 
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP1(I)=tr(i)
         ENDDO
         RPG1=fmin
         RPG2=fmax
         CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP11(I)=tr1(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
         CALL PGSLS(2)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP12(I)=tr2(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
         CALL PGSLS(3)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP13(I)=tr3(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
@@ -446,7 +446,7 @@ contains
             if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
 
 
-        DO I=1,LSMAX
+        DO I=1,setup0%lsmax
            RLRORSA(I)=z(i,setup0%lrindx(1))
            RLRORSA1(I)=tr1s(i)
            RLRORSA2(I)=tr2s(i)
@@ -456,7 +456,7 @@ contains
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
-        CALL PGSWIN(RLRORSA(1),RLRORSA(LSMAX),RPG1,RPG2)
+        CALL PGSWIN(RLRORSA(1),RLRORSA(setup0%lsmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA1(1))
         CALL PGSLS(2)
@@ -496,7 +496,7 @@ contains
         if (abs(fmin-fmax).lt.fmax*dgts) fmax=fmin+.001*abs(fmin)
         if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
 
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
 !BH090220           RLRZAP1(I)=tr(i)
            RLRZAP1(I)=RBOUND(tr(i))
         ENDDO
@@ -510,7 +510,7 @@ contains
         ENDIF
         CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        DO I=1,LRZMAX
+        DO I=1,setup0%lrzmax
            RLRZAP11(I)=tr1(i)
         ENDDO
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
@@ -542,7 +542,7 @@ contains
             if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
             if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
 
-            DO I=1,LRZMAX
+            DO I=1,setup0%lrzmax
                RLRZAP1(I)=tr(i)
             ENDDO
             RPG1=fmin
@@ -552,7 +552,7 @@ contains
             ENDIF
             CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
             CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-            DO I=1,LRZMAX
+            DO I=1,setup0%lrzmax
                RLRZAP11(I)=tr1(i)
             ENDDO
             CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
@@ -616,7 +616,7 @@ contains
                if (fmin .ge. fmax) fmin=fmax-.1*abs(fmax)-1.e+1
                if(fmax.gt.0.) fmax=fmax*1.05 ! extend the upper range
 
-               DO I=1,LRZMAX
+               DO I=1,setup0%lrzmax
                   RLRZAP1(I)=tr(i)
                ENDDO
                RPG1=fmin
@@ -626,12 +626,12 @@ contains
                ENDIF
                CALL PGSWIN(RLRZAP1(1),RLRZAP1(setup0%lrzmax),RPG1,RPG2)
                CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-               DO I=1,LRZMAX
+               DO I=1,setup0%lrzmax
                   RLRZAP11(I)=tr1(i)
                ENDDO
                CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
                CALL PGSLS(2)
-               DO I=1,LRZMAX
+               DO I=1,setup0%lrzmax
                   RLRZAP12(I)=tr2(i)
                ENDDO
                CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))

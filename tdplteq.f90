@@ -100,7 +100,7 @@ contains
               'Fokker-Planck Flux Surfaces')
       endif
 
-      IF (LRZMAX.GT.200) STOP 'TDPLTEQ: CHECK DIM OF TEXTT'
+      IF (setup0%lrzmax.GT.200) STOP 'TDPLTEQ: CHECK DIM OF TEXTT'
 
       do 10 l=1,setup0%lrzmax
          IF (LORBIT(L).GT.LFIELDA) STOP 'TDPLTEQ: CHECK DIM OF RTAB1/2'

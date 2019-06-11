@@ -499,7 +499,7 @@ contains
         write(t_horiz,'(a6,a8,a1)') 'rho (=', radcoord, ')'
       endif
 
-      DO ir=1,LRZMAX
+      DO ir=1,setup0%lrzmax
          RLRZAP(ir)=rpcon(ir) ! outermost-midplane R of flux surf.
          RLRZAP1(ir)=tr(ir)   ! rho
          !RLRZAP11(ir)= consnp(nonch,ir)
@@ -507,7 +507,7 @@ contains
 
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
-      RPGmax=RLRZAP1(LRZMAX)
+      RPGmax=RLRZAP1(setup0%lrzmax)
       if(RPGmin.le.0.2) RPGmin=0. ! Lower limit in plots: extend to 0.
       if(RPGmax.ge.0.8 .and. RPGmax.lt.1.) RPGmax=1. ! Upper limit: extend to 1.
 
@@ -577,8 +577,8 @@ contains
         CALL PGSLS(1)  ! 1-> solid; 2-> dashed; 3-> -.-.- ;
         DO it=1,n+1 !nonch ! Plot all curves (for all time steps)
            !RNONCHA1(it)=RBOUND(ptime(it,1))
-!BH171231           RLRZAP11(1:LRZMAX)= consnp(it,1:LRZMAX)
-            RLRZAP11(1:LRZ)= consnp(it,1:LRZ)
+!BH171231           RLRZAP11(1:setup0%lrzmax)= consnp(it,1:setup0%lrzmax)
+            RLRZAP11(1:setup0%lrz)= consnp(it,1:setup0%lrz)
 !BH171231           CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
            CALL PGLINE(setup0%lrz,RLRZAP1(1),RLRZAP11(1))
         ENDDO

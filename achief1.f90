@@ -219,7 +219,7 @@ contains
          f_(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
     !     bring background profiles up to time step n
     if(nefiter.eq.1) call profiles
-    ! Reset time step if (n+1).eq.nondtr1(i). .AND. LRZMAX=1
+    ! Reset time step if (n+1).eq.nondtr1(i). .AND. setup0%lrzmax=1
     do i=1,ndtr1a
        if ((n+1).eq.nondtr1(i)) then
           dtr=dtr1(i)
