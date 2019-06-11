@@ -799,7 +799,7 @@ module cqlcomm_mod
   !common /dptr95/ bpolz, btorz
 
   ! YuP: [added Apr/2014] area and volume of a cell associated with each
-  !                     (R,Z) point on flux surface, (R,Z)==(sosetup0%lrz,solzz)
+  !                     (R,Z) point on flux surface, (R,Z)==(sols,solzz)
   real(c_double), pointer :: ddarea(:,:), ddvol(:,:)  !  (lza,setup0%lrzmax)
   !common /dptr95/ ddarea, ddvol
 
