@@ -28,21 +28,6 @@ build:centos7:
     paths:
     - xcql3d_gfortran64
     expire_in: 1 week
-  
-case1:
-  stage: test
-  image: $CONTAINER_TEST_IMAGE
-  script:
-  - cd ci/case1
-  - ../../xcql3d_gfortran64
-  - nccmp -dmgfs reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
-  artifacts:
-    when: always
-    paths:
-    - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
-    - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.ps
-    expire_in: 1 week
-
 
 docker build:
   stage: env
@@ -87,3 +72,19 @@ release-image:
   only:
     changes:
       - ci/Dockerfile.centos7
+
+# test cases shouldn't normally need to change anything above...
+
+case1:
+  stage: test
+  image: $CONTAINER_TEST_IMAGE
+  script:
+  - cd ci/case1
+  - ../../xcql3d_gfortran64
+  - nccmp -dmgfs reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
+  artifacts:
+    when: always
+    paths:
+    - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
+    - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.ps
+    expire_in: 1 week
