@@ -140,11 +140,17 @@ c      character(len=8), dimension(npaproc) :: npa_proc  !automatic var
       data start3/1,1,1/
       data start4/1,1,1,1/
 
-
-      integer :: lrz 
-      integer :: lrzmax 
+      ! another way to do this, when the code is a mess.
+      character(len=8) :: cqlpmod
+      integer :: lrindx(0:lrorsa)
+      integer :: lrz
+      integer :: lrzmax
+      character(len=256) :: mnemonic
+      cqlpmod = setup0%cqlpmod
+      lrindx = setup0%lrindx
       lrz = setup0%lrz
       lrzmax =  setup0%lrzmax
+      mnemonic = setup0%mnemonic
 
 
 Cdeltarhop      data deltap_start/1,1,1/
@@ -333,7 +339,7 @@ c.......................................................................
 cl    1.1.1 create netCDF filename
 c     CLOBber old file, if it exists.
 c     istatus is 0, if no errors.
-      write(t_,1000) setup0%mnemonic(1:length_char(setup0%mnemonic))
+      write(t_,1000) mnemonic(1:length_char(mnemonic))
  1000 format(a,".nc")
 c-YuP:      ncid=nccre(t_,NCCLOB,istatus)
       istatus = NF_CREATE(t_, NF_CLOBBER, ncid) !-YuP: NetCDF-f77
@@ -2055,8 +2061,8 @@ c-YuP:      vid=ncvid(ncid,'version',istatus)
 c-YuP:      vid=ncvid(ncid,'mnemonic',istatus)
       istatus= NF_INQ_VARID(ncid,'mnemonic',vid)  !-YuP: NetCDF-f77 get vid
 c      call ncvptc2(ncid,vid,1,64,mnemonic,64,istatus)
-      ll=length_char(setup0%mnemonic)
-      call ncvptc2(ncid,vid,1,ll,setup0%mnemonic,ll,istatus)
+      ll=length_char(mnemonic)
+      call ncvptc2(ncid,vid,1,ll,mnemonic,ll,istatus)
 
       istatus= NF_INQ_VARID(ncid,'ampfmod',vid)
       ll=length_char(frmodp)
@@ -2693,7 +2699,7 @@ c-YuP:      vid=ncvid(ncid,'temp',istatus)
 
       do ll=1,lrz
          do k=1,ngen
-            tem1(ll+(k-1)*lrz)=wpar(k,setup0%lrindx(ll))
+            tem1(ll+(k-1)*lrz)=wpar(k,lrindx(ll))
          enddo
       enddo
       istatus= NF_INQ_VARID(ncid,'wpar',vid)  !-YuP: NetCDF-f77 get vid
@@ -2701,7 +2707,7 @@ c-YuP:      vid=ncvid(ncid,'temp',istatus)
 
       do ll=1,lrz
          do k=1,ngen
-            tem1(ll+(k-1)*lrz)=wperp(k,setup0%lrindx(ll))
+            tem1(ll+(k-1)*lrz)=wperp(k,lrindx(ll))
          enddo
       enddo
       istatus= NF_INQ_VARID(ncid,'wperp',vid)  !-YuP: NetCDF-f77 get vid
@@ -2717,7 +2723,7 @@ c-YuP:      vid=ncvid(ncid,'temp',istatus)
 
       call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
-         tr(ll)=vfluxz(setup0%lrindx(ll))
+         tr(ll)=vfluxz(lrindx(ll))
       enddo
       istatus= NF_INQ_VARID(ncid,'runaway_rate',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
@@ -2791,11 +2797,11 @@ c
          do ll=1,lrz
             do kk=1,mrfn
                kkk=kk
-               tem1(ll+(kk-1)*lrz)=sorpw_rf(kk,setup0%lrindx(ll))
+               tem1(ll+(kk-1)*lrz)=sorpw_rf(kk,lrindx(ll))
             enddo
-            tem1(ll+kkk*lrz)=sorpw_rfi(1,setup0%lrindx(ll))
-            tem1(ll+(kkk+1)*lrz)=sorpwt(setup0%lrindx(ll))
-            tem1(ll+(kkk+2)*lrz)=sorpwti(setup0%lrindx(ll))
+            tem1(ll+kkk*lrz)=sorpw_rfi(1,lrindx(ll))
+            tem1(ll+(kkk+1)*lrz)=sorpwt(lrindx(ll))
+            tem1(ll+(kkk+2)*lrz)=sorpwti(lrindx(ll))
          enddo
          istatus= NF_INQ_VARID(ncid,'rfpwr',vid) !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start_rfpwr,count_rfpwr,tem1,istatus)
@@ -2814,11 +2820,11 @@ cBH120223:  Removed erroneous divide by dvol(ll) from powrf/powrft
       do ll=1,lrz
          do kk=1,mrfn
             kkk=kk
-            tem1(ll+(kk-1)*lrz)=powrf(setup0%lrindx(ll),kk)
+            tem1(ll+(kk-1)*lrz)=powrf(lrindx(ll),kk)
          enddo
-         tem1(ll+kkk*lrz)=powrft(setup0%lrindx(ll))
-         tem1(ll+(kkk+1)*lrz)=sorpwt(setup0%lrindx(ll))
-         tem1(ll+(kkk+2)*lrz)=sorpwti(setup0%lrindx(ll))
+         tem1(ll+kkk*lrz)=powrft(lrindx(ll))
+         tem1(ll+(kkk+1)*lrz)=sorpwt(lrindx(ll))
+         tem1(ll+(kkk+2)*lrz)=sorpwti(lrindx(ll))
       enddo
 c-YuP:      vid=ncvid(ncid,'rfpwr',istatus)
       istatus= NF_INQ_VARID(ncid,'rfpwr',vid)  !-YuP: NetCDF-f77 get vid
@@ -2837,7 +2843,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
          do kk=1,nmodsa
-            tem1(ll+(kk-1)*lrz)=powrfl(setup0%lrindx(ll),kk)
+            tem1(ll+(kk-1)*lrz)=powrfl(lrindx(ll),kk)
          enddo
       enddo
 
@@ -2853,7 +2859,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
          do kk=1,nmodsa
-            tem1(ll+(kk-1)*lrz)=powrf(setup0%lrindx(ll),kk)
+            tem1(ll+(kk-1)*lrz)=powrf(lrindx(ll),kk)
          enddo
       enddo
       istatus= NF_INQ_VARID(ncid,'powrf',vid)
@@ -2863,7 +2869,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
          do kk=1,nmodsa
-            tem1(ll+(kk-1)*lrz)=powrfc(setup0%lrindx(ll),kk)
+            tem1(ll+(kk-1)*lrz)=powrfc(lrindx(ll),kk)
          enddo
       enddo
       istatus= NF_INQ_VARID(ncid,'powrfc',vid)
@@ -2875,7 +2881,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
 
       call bcast(tem1,zero,lrz)
       do ll=1,lrz
-            tem1(ll)=powrft(setup0%lrindx(ll))
+            tem1(ll)=powrft(lrindx(ll))
       enddo
       istatus= NF_INQ_VARID(ncid,'powrft',vid)
       call ncvpt_doubl2(ncid,vid,start_powrft,count_powrft,tem1,istatus)
@@ -3078,8 +3084,8 @@ cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
             k=1
             do ll=1,lrz
                do j=1,jx
-                  i=j+(setup0%lrindx(ll)-1)*jx
-                  tem1(i)=currv(j,k,setup0%lrindx(ll))/3.e9
+                  i=j+(lrindx(ll)-1)*jx
+                  tem1(i)=currv(j,k,lrindx(ll))/3.e9
                enddo
             enddo
             istatus= NF_INQ_VARID(ncid,'currv',vid)  !-YuP: NetCDF-f77 get vid
@@ -3088,8 +3094,8 @@ cBH110320     1     WRITE(*,*)'netcdfrw2: Tot pwrs only set up for ngen=1'
 c     -YuP:      vid=ncvid(ncid,'pwrrf',istatus)
             do ll=1,lrz
                do j=1,jx
-                  i=j+(setup0%lrindx(ll)-1)*jx
-                  tem1(i)=pwrrf(j,k,setup0%lrindx(ll))
+                  i=j+(lrindx(ll)-1)*jx
+                  tem1(i)=pwrrf(j,k,lrindx(ll))
                enddo
             enddo
             istatus= NF_INQ_VARID(ncid,'pwrrf',vid) !-YuP: NetCDF-f77 get vid
@@ -3100,8 +3106,8 @@ c     -YuP:      vid=ncvid(ncid,'pwrrf',istatus)
          do k=1,ngen
             do ll=1,lrz
                do j=1,jx
-                  i=j+(setup0%lrindx(ll)-1)*jx
-                  tem1(i)=currv(j,k,setup0%lrindx(ll))/3.e9
+                  i=j+(lrindx(ll)-1)*jx
+                  tem1(i)=currv(j,k,lrindx(ll))/3.e9
                enddo
             enddo
             startg(4)=k
@@ -3112,8 +3118,8 @@ c     -YuP:      vid=ncvid(ncid,'pwrrf',istatus)
 c     -YuP:      vid=ncvid(ncid,'pwrrf',istatus)
             do ll=1,lrz
                do j=1,jx
-                  i=j+(setup0%lrindx(ll)-1)*jx
-                  tem1(i)=pwrrf(j,k,setup0%lrindx(ll))
+                  i=j+(lrindx(ll)-1)*jx
+                  tem1(i)=pwrrf(j,k,lrindx(ll))
                enddo
             enddo
             startg(4)=k
@@ -3146,7 +3152,7 @@ cyup      if ( netcdfshort.eq.'longer_f' ) then  !endif at line 3090
             do ll=1,lrz
                do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=f(i,j,1,setup0%lrindx(ll))
+                     temp1(i,j)=f(i,j,1,lrindx(ll))
                   enddo
                enddo
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -3169,7 +3175,7 @@ cyup      if ( netcdfshort.eq.'longer_f' ) then  !endif at line 3090
             do ll=1,lrz
                do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=f(i,j,k,setup0%lrindx(ll))
+                     temp1(i,j)=f(i,j,k,lrindx(ll))
                   enddo
                enddo
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -3201,8 +3207,8 @@ c$$$         istatus= NF_INQ_VARID(ncid,'currv',vid)  !-YuP: NetCDF-f77 get vid
 c$$$         k=1
 c$$$         do ll=1,lrz
 c$$$            do j=1,jx
-c$$$               i=j+(setup0%lrindx(ll)-1)*jx
-c$$$               tem1(i)=currv(j,k,setup0%lrindx(ll))/3.e9
+c$$$               i=j+(lrindx(ll)-1)*jx
+c$$$               tem1(i)=currv(j,k,lrindx(ll))/3.e9
 c$$$            enddo
 c$$$         enddo
 c$$$         call ncvpt_doubl2(ncid,vid,start(2),count(2),tem1,istatus)
@@ -3212,8 +3218,8 @@ c$$$         istatus= NF_INQ_VARID(ncid,'pwrrf',vid)  !-YuP: NetCDF-f77 get vid
 c$$$         k=1
 c$$$         do ll=1,lrz
 c$$$            do j=1,jx
-c$$$               i=j+(setup0%lrindx(ll)-1)*jx
-c$$$               tem1(i)=pwrrf(j,k,setup0%lrindx(ll))
+c$$$               i=j+(lrindx(ll)-1)*jx
+c$$$               tem1(i)=pwrrf(j,k,lrindx(ll))
 c$$$            enddo
 c$$$         enddo
 c$$$         call ncvpt_doubl2(ncid,vid,start(2),count(2),tem1,istatus)
@@ -3243,8 +3249,8 @@ cBH011221: For now, simply stop.
                   if (tavg.eq."disabled") then
                      do j=1,jx
                      do i=1,iy
-                        temp1(i,j)=f(i,j,k,setup0%lrindx(ll))
-                        if(gone(i,j,k,setup0%lrindx(ll)).lt.-0.1) then
+                        temp1(i,j)=f(i,j,k,lrindx(ll))
+                        if(gone(i,j,k,lrindx(ll)).lt.-0.1) then
                            temp1(i,j)=em90
                         endif
                      enddo
@@ -3254,13 +3260,13 @@ cBH011221: For now, simply stop.
                      ! so how can we have favg?
                      do j=1,jx
                      do i=1,iy
-                        temp1(i,j)=favg(i,j,k,setup0%lrindx(ll))
-                     !if(gone(i,j,k,setup0%lrindx(ll)).lt.-0.1) temp1(i,j)=em90
+                        temp1(i,j)=favg(i,j,k,lrindx(ll))
+                     !if(gone(i,j,k,lrindx(ll)).lt.-0.1) temp1(i,j)=em90
                      enddo
                      enddo
                      WRITE(*,'(a,i6,2e13.4)')
      +               'nstop0.netcdfrw2/tavg=en ll,sumij(favg),sumij(f)',
-     +                 ll,sum(temp1),sum(f(:,:,k,setup0%lrindx(ll)))
+     +                 ll,sum(temp1),sum(f(:,:,k,lrindx(ll)))
                   endif  !On tavg
 c                 temp1 dimensnd 0:iyp1,0,jxp1. Pack in to (1:iy,1:jx)
                   call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -3280,7 +3286,7 @@ c                 temp1 dimensnd 0:iyp1,0,jxp1. Pack in to (1:iy,1:jx)
                do ll=1,lrz
                   do j=1,jx
                      do i=1,iy
-                        temp1(i,j)=f(i,j,k,setup0%lrindx(ll))
+                        temp1(i,j)=f(i,j,k,lrindx(ll))
                      enddo
                   enddo
                   call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -3296,7 +3302,7 @@ c                 temp1 dimensnd 0:iyp1,0,jxp1. Pack in to (1:iy,1:jx)
                do ll=1,lrz
                   do j=1,jx
                      do i=1,iy
-                        temp1(i,j)=favg(i,j,k,setup0%lrindx(ll))
+                        temp1(i,j)=favg(i,j,k,lrindx(ll))
                      enddo
                   enddo
                   call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -3495,7 +3501,7 @@ c-YuP:      vid=ncvid(ncid,'temp',istatus)
 
       do ll=1,lrz
          do k=1,ngen
-            tem1(ll+(k-1)*lrz)=wpar(k,setup0%lrindx(ll))
+            tem1(ll+(k-1)*lrz)=wpar(k,lrindx(ll))
          enddo
       enddo
       istatus= NF_INQ_VARID(ncid,'wpar',vid)  !-YuP: NetCDF-f77 get vid
@@ -3503,7 +3509,7 @@ c-YuP:      vid=ncvid(ncid,'temp',istatus)
 
       do ll=1,lrz
          do k=1,ngen
-            tem1(ll+(k-1)*lrz)=wperp(k,setup0%lrindx(ll))
+            tem1(ll+(k-1)*lrz)=wperp(k,lrindx(ll))
          enddo
       enddo
       istatus= NF_INQ_VARID(ncid,'wperp',vid)  !-YuP: NetCDF-f77 get vid
@@ -3521,7 +3527,7 @@ c-YuP:      vid=ncvid(ncid,'edreicer',istatus)
 
       call bcast(tr(1:lrzmax),zero,lrzmax)
       do ll=1,lrz
-         tr(ll)=vfluxz(setup0%lrindx(ll))
+         tr(ll)=vfluxz(lrindx(ll))
       enddo
       istatus= NF_INQ_VARID(ncid,'runaway_rate',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start(3),r_count,tr(1),istatus)
@@ -3591,11 +3597,11 @@ cBH120223:  Removed erroneous divide by dvol(ll) from powrf/powrft
          do ll=1,lrz
             do kk=1,mrfn
                kkk=kk
-               tem1(ll+(kk-1)*lrz)=sorpw_rf(kk,setup0%lrindx(ll))
+               tem1(ll+(kk-1)*lrz)=sorpw_rf(kk,lrindx(ll))
             enddo
-            tem1(ll+kkk*lrz)=sorpw_rfi(1,setup0%lrindx(ll)) !For 1 gen species
-            tem1(ll+(kkk+1)*lrz)=sorpwt(setup0%lrindx(ll))
-            tem1(ll+(kkk+2)*lrz)=sorpwti(setup0%lrindx(ll))
+            tem1(ll+kkk*lrz)=sorpw_rfi(1,lrindx(ll)) !For 1 gen species
+            tem1(ll+(kkk+1)*lrz)=sorpwt(lrindx(ll))
+            tem1(ll+(kkk+2)*lrz)=sorpwti(lrindx(ll))
          enddo
 c     -YuP:      vid=ncvid(ncid,'rfpwr',istatus)
         istatus= NF_INQ_VARID(ncid,'rfpwr',vid) !-YuP: NetCDF-f77 get vid
@@ -3613,11 +3619,11 @@ cBH120223:  Removed erroneous divide by dvol(ll) from powrf/powrft
       do ll=1,lrz
          do kk=1,mrfn
             kkk=kk
-            tem1(ll+(kk-1)*lrz)=powrf(setup0%lrindx(ll),kk)
+            tem1(ll+(kk-1)*lrz)=powrf(lrindx(ll),kk)
          enddo
-         tem1(ll+kkk*lrz)=powrft(setup0%lrindx(ll))
-         tem1(ll+(kkk+1)*lrz)=sorpwt(setup0%lrindx(ll))
-         tem1(ll+(kkk+2)*lrz)=sorpwti(setup0%lrindx(ll))
+         tem1(ll+kkk*lrz)=powrft(lrindx(ll))
+         tem1(ll+(kkk+1)*lrz)=sorpwt(lrindx(ll))
+         tem1(ll+(kkk+2)*lrz)=sorpwti(lrindx(ll))
       enddo
       istatus= NF_INQ_VARID(ncid,'rfpwr',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start_rfpwr,count_rfpwr,tem1,istatus)
@@ -3634,7 +3640,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
          do kk=1,nmodsa
-            tem1(ll+(kk-1)*lrz)=powrfl(setup0%lrindx(ll),kk)
+            tem1(ll+(kk-1)*lrz)=powrfl(lrindx(ll),kk)
          enddo
       enddo
       istatus= NF_INQ_VARID(ncid,'powrfl',vid)  !-YuP: NetCDF-f77 get vid
@@ -3648,7 +3654,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
          do kk=1,nmodsa
-            tem1(ll+(kk-1)*lrz)=powrf(setup0%lrindx(ll),kk)
+            tem1(ll+(kk-1)*lrz)=powrf(lrindx(ll),kk)
          enddo
       enddo
       istatus= NF_INQ_VARID(ncid,'powrf',vid)
@@ -3659,7 +3665,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
       do ll=1,lrz
          do kk=1,nmodsa
-            tem1(ll+(kk-1)*lrz)=powrfc(setup0%lrindx(ll),kk)
+            tem1(ll+(kk-1)*lrz)=powrfc(lrindx(ll),kk)
          enddo
       enddo
 
@@ -3672,7 +3678,7 @@ cBH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
 
       call bcast(tem1,zero,lrz)
       do ll=1,lrz
-            tem1(ll)=powrft(setup0%lrindx(ll))
+            tem1(ll)=powrft(lrindx(ll))
       enddo
       istatus= NF_INQ_VARID(ncid,'powrft',vid)
       call ncvpt_doubl2(ncid,vid,start_powrft,count_powrft,tem1,istatus)
@@ -3939,7 +3945,7 @@ cyup      if ( netcdfshort.eq.'longer_f' ) then
            do ll=1,lrz
               do j=1,jx
                 do i=1,iy
-                  temp1(i,j)=f(i,j,1,setup0%lrindx(ll))
+                  temp1(i,j)=f(i,j,1,lrindx(ll))
                 enddo
               enddo
               call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -3963,7 +3969,7 @@ cyup      if ( netcdfshort.eq.'longer_f' ) then
             do ll=1,lrz
                do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=f(i,j,k,setup0%lrindx(ll))
+                     temp1(i,j)=f(i,j,k,lrindx(ll))
                   enddo
                enddo
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -3997,8 +4003,8 @@ cYuP             with either dims() or dimg(), depending on ngen.
          k=1
          do ll=1,lrz
             do j=1,jx
-               i=j+(setup0%lrindx(ll)-1)*jx
-               tem1(i)=currv(j,k,setup0%lrindx(ll))/3.e9
+               i=j+(lrindx(ll)-1)*jx
+               tem1(i)=currv(j,k,lrindx(ll))/3.e9
             enddo
          enddo
          istatus= NF_INQ_VARID(ncid,'currv',vid)  !-YuP: NetCDF-f77 get vid
@@ -4006,8 +4012,8 @@ cYuP             with either dims() or dimg(), depending on ngen.
 
          do ll=1,lrz
             do j=1,jx
-               i=j+(setup0%lrindx(ll)-1)*jx
-               tem1(i)=pwrrf(j,k,setup0%lrindx(ll))
+               i=j+(lrindx(ll)-1)*jx
+               tem1(i)=pwrrf(j,k,lrindx(ll))
             enddo
          enddo
          istatus= NF_INQ_VARID(ncid,'pwrrf',vid)  !-YuP: NetCDF-f77 get vid
@@ -4018,8 +4024,8 @@ cYuP             with either dims() or dimg(), depending on ngen.
          do k=1,ngen
          do ll=1,lrz
             do j=1,jx
-               i=j+(setup0%lrindx(ll)-1)*jx
-               tem1(i)=currv(j,k,setup0%lrindx(ll))/3.e9
+               i=j+(lrindx(ll)-1)*jx
+               tem1(i)=currv(j,k,lrindx(ll))/3.e9
             enddo
          enddo
          startg(4)=k
@@ -4029,8 +4035,8 @@ cYuP             with either dims() or dimg(), depending on ngen.
 
          do ll=1,lrz
             do j=1,jx
-               i=j+(setup0%lrindx(ll)-1)*jx
-               tem1(i)=pwrrf(j,k,setup0%lrindx(ll))
+               i=j+(lrindx(ll)-1)*jx
+               tem1(i)=pwrrf(j,k,lrindx(ll))
             enddo
          enddo
          startg(4)=k
@@ -4121,8 +4127,8 @@ cBH011221: For now, simply stop.
                if (tavg.eq."disabled") then
                   do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=f(i,j,k,setup0%lrindx(ll))
-                     if(gone(i,j,k,setup0%lrindx(ll)).lt.-0.1) then
+                     temp1(i,j)=f(i,j,k,lrindx(ll))
+                     if(gone(i,j,k,lrindx(ll)).lt.-0.1) then
                         temp1(i,j)=em90
                      endif
                   enddo
@@ -4130,8 +4136,8 @@ cBH011221: For now, simply stop.
                else  !On tavg = enabled
                   do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=favg(i,j,k,setup0%lrindx(ll))
-                     !if(gone(i,j,k,setup0%lrindx(ll)).lt.-0.1) temp1(i,j)=em90
+                     temp1(i,j)=favg(i,j,k,lrindx(ll))
+                     !if(gone(i,j,k,lrindx(ll)).lt.-0.1) temp1(i,j)=em90
                      !Note: because of gone, the saved favg can be
                      !smaller than the original favg (removed loss cone).
                      !Comment the above if(gone...)
@@ -4140,7 +4146,7 @@ cBH011221: For now, simply stop.
                   enddo
                   WRITE(*,'(a,i6,2e13.4)')
      +            'nstop.netcdfrw2/tavg=en. ll, sumij(favg), sumij(f)',
-     +             ll,sum(temp1),sum(f(:,:,k,setup0%lrindx(ll)))
+     +             ll,sum(temp1),sum(f(:,:,k,lrindx(ll)))
                endif  !On tavg
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                start1(3)=ll
@@ -4159,13 +4165,13 @@ cBH011221: For now, simply stop.
                if (tavg.eq."disabled") then
                do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=f(i,j,k,setup0%lrindx(ll))
+                     temp1(i,j)=f(i,j,k,lrindx(ll))
                   enddo
                enddo
                else  !On tavg
                do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=favg(i,j,k,setup0%lrindx(ll))
+                     temp1(i,j)=favg(i,j,k,lrindx(ll))
                   enddo
                enddo
                endif  !On tavg
@@ -4243,7 +4249,6 @@ c.......................................................................
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! save data on mpirank.eq.0 only
 
-
       if (n.ne.nstop) return
       if ((netcdfvecs.eq."irzplt" .and. mplot(l_).eq."enabled")
      +     .or. (netcdfvecs.eq."all")) then
@@ -4308,6 +4313,7 @@ c
 c...................................................................
 
       save
+
       include 'netcdf.inc'
 
       dimension ll_netcdf(lrza),rya_netcdf(lrza),
@@ -4328,8 +4334,20 @@ c...................................................................
       data fluxcmpt/"collisional flux  ","electric fld flux ",
      +              "rf diffusion flux ","sum of fluxes     "/
 
-
       real*8, allocatable :: wkpack(:) ! local working array for pack21
+
+!     another way to do this, when the code is a mess.
+      character(len=8) :: cqlpmod
+      integer :: lrindx(0:lrorsa)
+      integer :: lrz
+      integer :: lrzmax
+      character(len=256) :: mnemonic
+      cqlpmod = setup0%cqlpmod
+      lrindx = setup0%lrindx
+      lrz = setup0%lrz
+      lrzmax =  setup0%lrzmax
+      mnemonic = setup0%mnemonic
+
 
       if ((lefct.lt.1) .or. (lefct.gt.4)) stop 'pltvec:lefct'
 
@@ -4352,7 +4370,7 @@ c     cqlpmod="enabled".
 c...................................................................
 
 
-      if (setup0%cqlpmod.eq."enabled") then
+      if (cqlpmod.eq."enabled") then
          stop "netcdfrw2: Need to adapt sub for cqlpmod.eq.enabled"
       endif
 
@@ -4369,7 +4387,7 @@ c     call for given lefct.
 
          lfirst(lefct)=lefct
 
-         write(t_,235) setup0%mnemonic(1:length_char(setup0%mnemonic)),lefct
+         write(t_,235) mnemonic(1:length_char(mnemonic)),lefct
  235     format(a,"_flux_",i1,".nc")
 
 c-YuP:         ncid=nccre(t_,NCCLOB,istatus)
@@ -4390,18 +4408,18 @@ c        itl_netcdf() and itu_netcdf().
                if (mplot(ll).eq."enabled") then
                   llcount=llcount+1
                   ll_netcdf(llcount)=ll
-                  rya_netcdf(llcount)=rya(setup0%lrindx(ll))
-                  itl_netcdf(llcount)=itl_(setup0%lrindx(ll))
-                  itu_netcdf(llcount)=itu_(setup0%lrindx(ll))
+                  rya_netcdf(llcount)=rya(lrindx(ll))
+                  itl_netcdf(llcount)=itl_(lrindx(ll))
+                  itu_netcdf(llcount)=itu_(lrindx(ll))
                endif
             enddo
          else
             n_netcdf=lrz
             do ll=1,lrz
                ll_netcdf(ll)=ll
-               rya_netcdf(ll)=rya(setup0%lrindx(ll))
-               itl_netcdf(ll)=itl_(setup0%lrindx(ll))
-               itu_netcdf(ll)=itu_(setup0%lrindx(ll))
+               rya_netcdf(ll)=rya(lrindx(ll))
+               itl_netcdf(ll)=itl_(lrindx(ll))
+               itu_netcdf(ll)=itu_(lrindx(ll))
            enddo
          endif
 
@@ -4926,8 +4944,8 @@ c     jpxy*ipxy array and output.
          if (netcdfnm.ne."disabled" .and. n.eq.nstop) then
 
 
-            write(t_,236) setup0%mnemonic(1:length_char(
-     +         setup0%mnemonic)),lefct
+            write(t_,236) mnemonic(1:length_char(
+     +         mnemonic)),lefct
  236        format(a,"_flux_",i1,".nc")
 c     Open the correct netcdf file, to get ncid.
 c-YuP            ncid = ncopn(t_,NCWRITE,istatus)
@@ -4939,8 +4957,8 @@ c     Write some data at head of the file:
 
 c-YuP:                vid=ncvid(ncid,'mnemonic',istatus)
             istatus= NF_INQ_VARID(ncid,'mnemonic',vid)  !-YuP: NetCDF-f77 get vid
-            ll=length_char(setup0%mnemonic)
-            call ncvptc2(ncid,vid,1,ll,setup0%mnemonic,ll,istatus)
+            ll=length_char(mnemonic)
+            call ncvptc2(ncid,vid,1,ll,mnemonic,ll,istatus)
 
 c-YuP:                vid=ncvid(ncid,'grid_type',istatus)
             istatus= NF_INQ_VARID(ncid,'grid_type',vid)  !-YuP: NetCDF-f77 get vid
@@ -5025,8 +5043,8 @@ c-YuP:                vid=ncvid(ncid,'gamma_perp',istatus)
 
 c-YuP:                vid=ncvid(ncid,'mnemonic',istatus)
             istatus= NF_INQ_VARID(ncid,'mnemonic',vid)  !-YuP: NetCDF-f77 get vid
-            ll=length_char(setup0%mnemonic)
-            call ncvptc2(ncid,vid,1,ll,setup0%mnemonic,ll,istatus)
+            ll=length_char(mnemonic)
+            call ncvptc2(ncid,vid,1,ll,mnemonic,ll,istatus)
 
 c-YuP:                vid=ncvid(ncid,'grid_type',istatus)
             istatus= NF_INQ_VARID(ncid,'grid_type',vid)  !-YuP: NetCDF-f77 get vid
@@ -5508,6 +5526,18 @@ c     nv_f4d,nt_f4d are dims of normalized vel and of pitch angle grids.
 
       data start/1,1,1,1/
 
+!     another way to do this, when the code is a mess.
+      character(len=8) :: cqlpmod
+      integer :: lrindx(0:lrorsa)
+      integer :: lrz
+      integer :: lrzmax
+      character(len=256) :: mnemonic
+      cqlpmod = setup0%cqlpmod
+      lrindx = setup0%lrindx
+      lrz = setup0%lrz
+      lrzmax =  setup0%lrzmax
+      mnemonic = setup0%mnemonic
+
 !MPIINSERT_IF_RANK_NE_0_RETURN
 
       count(1)=nr_f4d
@@ -5516,7 +5546,7 @@ c     nv_f4d,nt_f4d are dims of normalized vel and of pitch angle grids.
       count(4)=nt_f4d
 
 c     Create netCDF file
-      write(t_,1000) setup0%mnemonic(1:length_char(setup0%mnemonic))
+      write(t_,1000) mnemonic(1:length_char(mnemonic))
  1000 format(a,"_f4d.nc")
       istatus = NF_CREATE(t_, NF_CLOBBER, ncid)
       call check_err(istatus)
@@ -5688,8 +5718,8 @@ c.......................................................................
       call ncvptc2(ncid,vid,1,ll,version,ll,istatus)
 
       istatus= NF_INQ_VARID(ncid,'mnemonic',vid)
-      ll=length_char(setup0%mnemonic)
-      call ncvptc2(ncid,vid,1,ll,setup0%mnemonic,ll,istatus)
+      ll=length_char(mnemonic)
+      call ncvptc2(ncid,vid,1,ll,mnemonic,ll,istatus)
 
       istatus= NF_INQ_VARID(ncid,'vnorm',vid)
       call ncvpt_doubl2(ncid,vid,(1),1,vnorm,istatus)
