@@ -30,8 +30,8 @@ contains
 !     range of values of lr_=setup0%lrzmax,1,-1.
 !     Alternatively, for setup0%lrzmax=1, it is called from achief1.
 !
-!     aingeom controsetup0%ls the flux surface geometry and sets up magnetic
-!     fields, bpsi=(B(z))/B(0)); it also calsetup0%ls the "eq"uilibrium module
+!     aingeom controls the flux surface geometry and sets up magnetic
+!     fields, bpsi=(B(z))/B(0)); it also calls the "eq"uilibrium module
 !     which utilizes an MHD equilibrium code "eqdsk" file, if required.
 !     A heuristic mirror scenario (supplied by Gary Smith, LLNL) is also
 !     available.

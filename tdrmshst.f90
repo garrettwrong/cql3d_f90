@@ -392,13 +392,13 @@ contains
       ! Interpolate values of dlpgpsii to the OUTER (upper) border
       ! of radial bin; For a bin#ll with center at rpconz(ll),
       ! the upper border is at  rpmconz(ll) .
-      ! Reason: the cumulative integrasetup0%ls over dlpsii(r),
-      ! effectively the integrasetup0%ls over r*dr,
+      ! Reason: the cumulative integrals over dlpsii(r),
+      ! effectively the integrals over r*dr,
       ! are done numerically as SUM(r(ll)*dr(ll)), ll=1:lll
       ! This method gives a larger value than exact value
       ! because of the last point -- r(lll)*dr(lll).
       ! It contains an extra 0.5*r(lll)*dr(lll) value,
-      ! So the values of such integrasetup0%ls correspond to r(lll)+0.5*dr(lll)
+      ! So the values of such integrals correspond to r(lll)+0.5*dr(lll)
       ! rather to r(lll).
       ! Further in calculations,
       ! the values of SUM(r(ll)*dr(ll)) are divided by

@@ -24,7 +24,7 @@ contains
 !..................................................................
 !     This routine computes the density gain (from dF/dt) and compares i
 !     locally to the density gain from the r.h.s. of the F.P. equation.
-!     sumleft and sumright are the integrated totasetup0%ls. error is the
+!     sumleft and sumright are the integrated totals. error is the
 !     normalized difference and should be as close to roundoff as
 !     possible.
 !..................................................................

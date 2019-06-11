@@ -141,7 +141,7 @@ contains
 !MPIINSERT_IF_RANK_EQ_0
          WRITE(*,225)
 !MPIINSERT_ENDIF_RANK
- 225     format(//,'ERROR:  Presently ndeltarho calsetup0%ls are only setup',/ &
+ 225     format(//,'ERROR:  Presently ndeltarho calls are only setup',/ &
                    '        for taunew=enabled',//)
          STOP
       endif
@@ -158,7 +158,7 @@ contains
       if (ndeltarho.ne."disabled" .and. urfdmp.eq."secondd") then
 !MPIINSERT_IF_RANK_EQ_0
          WRITE(*,227)
- 227     format(//,'ERROR:  Presently ndeltarho calsetup0%ls are only setup',/ &
+ 227     format(//,'ERROR:  Presently ndeltarho calls are only setup',/ &
                    '        for urfdmp.ne.disabled',//)
          WRITE(*,228)
 !MPIINSERT_ENDIF_RANK

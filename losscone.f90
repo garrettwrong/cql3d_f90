@@ -28,7 +28,7 @@ contains
 !     the information into gone(i,j,k,indxlr_).
 !     [Subroutine called from ainitial. indxlr_ is set by tdnflxs(ll)
 !      in a loop ll=lrors,1,-1 in tdinitl.]
-!     Several loss modesetup0%ls are available and are invoked by setting
+!     Several loss models are available and are invoked by setting
 !     lossmode(k) to the chosen "string" in the input:
 !     "snk0"= orbits whose energy is less than esink
 !     are lost from the system with characteristic time equal to
@@ -220,7 +220,7 @@ contains
 !                        endif
 !                     endif  ! on lossmode(k).eq.'simplbn2'
 
-!BH160529 There are problems with application of NB for these modesetup0%ls.
+!BH160529 There are problems with application of NB for these models.
 !BH160529 Need to first have NB birth points shifted inwards to their
 !BH160529 BA radius, if they are going to be scraped off at a banana width.
 !BH160529 First, compare delb with deltaRZ calc, which we will subsequently

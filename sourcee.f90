@@ -33,7 +33,7 @@ contains
 !     frmod="enabled"
 !     The "sou" routines are independent of the "fr" routines and vice-
 !     versa.
-!     Also, calsetup0%ls Knock On source modules, if specified.
+!     Also, calls Knock On source modules, if specified.
 !..................................................................
 
       save

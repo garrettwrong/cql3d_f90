@@ -308,7 +308,7 @@ contains
       if (setup0%cqlpmod .ne. "enabled") imax(lz_bmax(lr_),lr_)=iitl
 
 !..................................................................
-!     compute legendre polynomiasetup0%ls and their derivatives along
+!     compute legendre polynomials and their derivatives along
 !     orbits which pierce the midplane at y(i,lmdpln_).
 !..................................................................
 

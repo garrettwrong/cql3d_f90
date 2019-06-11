@@ -88,7 +88,7 @@ contains
 
 !..................................................................
 !     This routine initializes the arrays required by CQL3D.
-!     It also controsetup0%ls the initialization of distribution
+!     It also controls the initialization of distribution
 !     functions and quasilinear coefficients.
 !..................................................................
 

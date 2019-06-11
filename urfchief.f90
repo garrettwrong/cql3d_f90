@@ -31,12 +31,12 @@ contains
       save
 
 !..................................................................
-!     This routine controsetup0%ls the urf module
+!     This routine controls the urf module
 !     The following control variables are used in determining the
 !     action of this subroutine:
 !     nrfstep1, nrfstep2, nrfpwr, nrfitr1, nrfitr2, nrfitr3, urfncoef
 !
-!     nurf=a counter for the number of calsetup0%ls to urfchief which have
+!     nurf=a counter for the number of calls to urfchief which have
 !     resulted in calculation or recalculation of the diffusion
 !     coefficients. (Initialized to 0).
 !     The nurf variable is incremented (at end of urfchief) each time
@@ -51,14 +51,14 @@ contains
 !     diffusion coeffs, using a fraction of the input power
 !     = (1/2)**nrfpwr.
 !     return.
-!     3. Repeat step 2 for next nrfpwr calsetup0%ls, but with fractional input
+!     3. Repeat step 2 for next nrfpwr calls, but with fractional input
 !     power (1/2)**(nrfpwr-1), (1/2)**(nrfpwr-2),.... (1/2)**0.
 !     (This step is a no-op if nrfpwr=0).
-!     4. Iterate step 2 with full input power for next nrfitr1 calsetup0%ls.
+!     4. Iterate step 2 with full input power for next nrfitr1 calls.
 !     (This step is a no-op if nrfitr1=0).
 !     5. Extend extendable rays by nrfstep2 steps.
 !     6. Re-calc damping from ray data and then quasilinear diffusion
-!     coeffs.  Iterate this step nrfitr2 additional calsetup0%ls.
+!     coeffs.  Iterate this step nrfitr2 additional calls.
 !     7. Steps 5 and 6 are carried out nrfitr3 times.
 !
 !     Thus choose

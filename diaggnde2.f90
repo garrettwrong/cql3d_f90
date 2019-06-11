@@ -43,7 +43,7 @@ contains
 !.......................................................................
 
 !..................................................................
-!l    1. Compute integrasetup0%ls for 0th and 1st moments using the same
+!l    1. Compute integrals for 0th and 1st moments using the same
 !     Legendre decomposition as in computing the collision term
 !     Compute the other terms including bounce-averaged term in the same
 !     way as diaggnde.

@@ -309,7 +309,7 @@ contains
         psisp(l)=psifp(z(setup0%lsindx(l),lr_))/bbpsi(lmdpln(indxlr(lr_)),lr_)
  310  continue
 
-!     psiposetup0%ls, solrs, solzs
+!     psipols, solrs, solzs
       i1p(1)=2
       i1p(2)=2
       zd2bpol(1)=0.0

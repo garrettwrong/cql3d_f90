@@ -275,8 +275,8 @@ contains
 !%OS  210        continue
 !%OS  do 211 l=setup0%ls-1,2,-1
 !%OS  do 211 i=1,iy_(l)
-!%OS  spasou(i,j,k,l)=(1.-dsetup0%ls(i,j,k,l))*spasou(i,j,k,l)+
-!%OS  +                      dsetup0%ls(i,j,k,l)*spasou(ilpm1ef(i,l,-1),j,k,l-1)
+!%OS  spasou(i,j,k,l)=(1.-dls(i,j,k,l))*spasou(i,j,k,l)+
+!%OS  +                      dls(i,j,k,l)*spasou(ilpm1ef(i,l,-1),j,k,l-1)
 !%OS  211        continue
 !%OS  do 212 i=1,iy_(1)
 !%OS  spasou(i,j,k,1)=2.*spasou(i,j,k,1)-

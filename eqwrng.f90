@@ -49,7 +49,7 @@ contains
 !MPIINSERT_ENDIF_RANK
 
 10010 format("subroutine eqorbit - do loop 10 error")
-10020 format("subroutine eqorbit - labesetup0%ls 15 to 20 - no convergence")
+10020 format("subroutine eqorbit - labels 15 to 20 - no convergence")
 10030 format("subroutine eqorbit - zstep changed too often")
 10040 format("subroutine eqfndpsi - no convergence")
 10050 format("function eqfn - only psi model allowed is power model.")

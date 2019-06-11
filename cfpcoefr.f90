@@ -190,7 +190,7 @@ contains
         tam10(1)=0.
         tam11(jx)=0.
 !......................................................................:
-!     tam3(jx)->tam6(jx), tam11(jx) and tam12(jx) represent integrasetup0%ls
+!     tam3(jx)->tam6(jx), tam11(jx) and tam12(jx) represent integrals
 !     from xmax of the grid to infinity.
 !     The following coding performs this integration. In this case 21*xmax
 !     represents infinity. The lack of this piece is most obvious when
@@ -424,7 +424,7 @@ contains
             call cfpleg(m,ileff,1)
 
 !.................................................................
-!     Calculate the integrasetup0%ls prior to using them
+!     Calculate the integrals prior to using them
 !..................................................................
             tam2(1) = 0. !-YuP-> added:
             tam3(1) = 0. !-YuP-> clean-up tam2&3(1) from previous usage.
@@ -449,7 +449,7 @@ contains
 !..................................................................
 !     The do loops 302 through 307 seek to take advantage of the
 !     Maxwellian nature of f for v < vth/2. This is employed in
-!     the integrations to obtain the functionasetup0%ls - Thus f is
+!     the integrations to obtain the functionals - Thus f is
 !     assumed to be Maxwellian between velocity mesh points,
 !     not linear.
 !..................................................................
@@ -523,7 +523,7 @@ contains
                   jj=jx+1-j
                   jp=jj+1
                   jm=j-1
-                  ! X-integrasetup0%ls after Eq.(53) Franz Thesis
+                  ! X-integrals after Eq.(53) Franz Thesis
                   tamt1(1,j,l2,l1) =tamt1(1,jm,l2,l1)+tam2(j)
                   tamt1(2,jj,l2,l1)=tamt1(2,jp,l2,l1)+tam2(jp)
                   tamt2(1,j,l2,l1) =tamt2(1,jm,l2,l1)+tam3(j)
@@ -533,7 +533,7 @@ contains
  315        continue   ! l1=0,m+2
 !..................................................................
 !     In this set of loops I need to sum up all the contributions to the
-!     integrasetup0%ls and then just use these in the coefficients
+!     integrals and then just use these in the coefficients
 !..................................................................
             do 309 j=1,jx  !-YuP->: was j=2,jx
               tam1(j)=0.

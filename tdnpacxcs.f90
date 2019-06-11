@@ -29,7 +29,7 @@ contains
 ! BH100423:  Had problem here.
 
         en=enin*1000 !converts to eV
-! uses chebyshev polynomiasetup0%ls
+! uses chebyshev polynomials
 ! ORNL Cheb fitting parameters for cx
        a(1)=-72.6656
        a(2)=-5.49142
@@ -48,7 +48,7 @@ contains
        dum3=log(enmax)-log(enmin)
        x=(dum1-dum2)/dum3
 !       print *,x
-! The chebyshev polynomiasetup0%ls
+! The chebyshev polynomials
        t1=x
        t2=2*x**2-1
        t3=4*x**3-3*x

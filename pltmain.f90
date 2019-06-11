@@ -52,10 +52,10 @@ contains
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
     !
-    !     This routine controsetup0%ls driver plots
+    !     This routine controls driver plots
     !
     !
-    !     Modified some Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
+    !     Modified some Graflib to pgplot calls by Yuri Petrov, 090727,
     !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
     !
     REAL RILIN
@@ -480,7 +480,7 @@ contains
     ! ANGLE  (input)  : angle, in degrees, that the baseline is to make
     !                   with the horizontal, increasing counter-clockwise
     !                   (0.0 is horizontal).
-    ! FJUST  (input)  : controsetup0%ls horizontal justification of the string.
+    ! FJUST  (input)  : controls horizontal justification of the string.
     !                   If FJUST = 0.0, the string will be left-justified
     !                   at the point (X,Y); if FJUST = 0.5, it will be
     !                   centered, and if FJUST = 1.0, it will be right
@@ -502,7 +502,7 @@ contains
 !     constant vs. time., at a given s, distance along the magnetic field.
 !     A cqlp.eq.'enabled' routine.
 !
-!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
@@ -739,7 +739,7 @@ contains
 !     Do combined fluxes, and individual fluxes, per pltflux1 vector.
 !...................................................................
 !
-!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
@@ -836,7 +836,7 @@ contains
 !     Finally to enforce boundary conditions (zero flux in general
 !     except at the pass/trapped boundary) certain coefficients
 !     are zeroed out or suitably averaged at specific mesh points.
-!     The numbers 1,2,3 appearing in the calsetup0%ls below signify
+!     The numbers 1,2,3 appearing in the calls below signify
 !     which coefficient is being treated.
 !
 !     first the velocity flux..
@@ -1090,7 +1090,7 @@ contains
 !mnt  This routine plots the parallel distribution function.
 !...
 !
-!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 !     Need to re-work this a bit, for plot of pitch angle averaged
@@ -1227,7 +1227,7 @@ contains
 !     Plot electron resistivity and related quantities.
 !
 
-!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
@@ -1411,7 +1411,7 @@ contains
 !     in routine pltvec when all physical processes are
 !     included and when the problem is at steady state.
 !
-!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !     YuP[2018-01-04] Adjusted, to make plots of streamlines.
 !
@@ -1535,7 +1535,7 @@ contains
 !     Finally to enforce boundary conditions (zero flux in general
 !     except at the pass/trapped boundary) certain coefficients
 !     are zeroed out or suitably averaged at specific mesh points.
-!     The numbers 1,2,3 appearing in the calsetup0%ls below signify
+!     The numbers 1,2,3 appearing in the calls below signify
 !     which coefficient is being treated.
 !
 !     the theta flux..
@@ -1734,7 +1734,7 @@ contains
          DO I=1,iy
             DMIN=MIN(temp1(I,J),DMIN)
             DMAX=MAX(temp1(I,J),DMAX)
-            RTEMP1(I,J)=temp4(I,J) ! the cont() levesetup0%ls of this function
+            RTEMP1(I,J)=temp4(I,J) ! the cont() levels of this function
             ! will be plotted.
          ENDDO
         ENDDO
@@ -1881,7 +1881,7 @@ contains
 !**********************
 !
 !
-!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
@@ -2036,9 +2036,9 @@ contains
          crnt=xlncur(k,lr_)*zmaxpsii(lr_) ! [ptcl/sec/cm^3]
 
 !BH171231         write(t_,540) crnt_nbi
-!BH171231 540     format("NBI source rate=",1pe11.4," ptcsetup0%ls/cc/sec")
+!BH171231 540     format("NBI source rate=",1pe11.4," ptcls/cc/sec")
          write(t_,540) crnt
- 540     format("Particle source rate=",1pe11.4," ptcsetup0%ls/cc/sec")
+ 540     format("Particle source rate=",1pe11.4," ptcls/cc/sec")
          RILIN=10.
          CALL PGMTXT('B',RILIN,-.2,0.,t_)
          write(t_,542) entr(k,5,l_)
@@ -2360,7 +2360,7 @@ contains
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
 
         write(t_,10041)
-10041   format("(int(0,pi)*S0*2pi*sin(theta0)*dtheta0= ptcsetup0%ls/sec)")
+10041   format("(int(0,pi)*S0*2pi*sin(theta0)*dtheta0= ptcls/sec)")
         RILIN=RILIN+1.
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
 

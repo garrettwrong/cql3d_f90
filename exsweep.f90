@@ -85,7 +85,7 @@ contains
 !     Finally to enforce boundary conditions (zero flux in general
 !     except at the pass/trapped boundary) certain coefficients
 !     are zeroed out or suitably averaged at specific mesh points.
-!     The numbers 1,2,3 appearing in the calsetup0%ls below signify
+!     The numbers 1,2,3 appearing in the calls below signify
 !     which coefficient is being treated.
 !..................................................................
 

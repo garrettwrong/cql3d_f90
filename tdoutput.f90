@@ -698,7 +698,7 @@ print * , l,rovera(l),eps(l),btor0(l),bthr0(l), &
       WRITE(*,*)'               and currpar is sum of Hinton-Hazeltine '
       WRITE(*,*)'               neoclassical current + runaway current.'
       WRITE(*,*)'           Units: statV-cm/statA = seconds'
-      WRITE(*,*)'restp/sptzr=resist_phi/sptzr (sptzr incsetup0%ls ONETWO Zeff)'
+      WRITE(*,*)'restp/sptzr=resist_phi/sptzr (sptzr incls ONETWO Zeff)'
       WRITE(*,*)'resist_neo=<E_parall*B>/<j_parall*B> (seconds)'
       WRITE(*,*)'res_neo/sptzr=<E_parall*B>/<j_parall*B>/sptzr'
       WRITE(*,*)'elecfld(lr_)=toroidal or parallel electric fld (V/cm)'

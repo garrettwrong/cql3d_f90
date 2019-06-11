@@ -34,7 +34,7 @@ contains
 !    The xl-grid is independent of poloidal angle
 !  Presently set up only for single flux surface runs.
 !
-!  Normalization of the output distribution fl is such that it equasetup0%ls
+!  Normalization of the output distribution fl is such that it equals
 !  vnorm*f_cgs(v_parallel).
 !.......................................................................
       save
@@ -237,7 +237,7 @@ contains
 !    at normalized velocity xlm(1:jfl-1).  The xl(1:jfl) give bin bndries.
 !  This calculation is set up for use with multiple flux surface runs.
 !
-!  Normalization of the output distribution fl is such that it equasetup0%ls
+!  Normalization of the output distribution fl is such that it equals
 !  vnorm*f_cgs(v_parallel).
 !.......................................................................
       save
@@ -400,7 +400,7 @@ contains
 !  fl(1:jfl-1) are the relevant (non-zero) entries, each centered
 !    at normalized velocity xlm(1:jfl-1).
 !
-!  Normalization of the output distribution fl is such that it equasetup0%ls
+!  Normalization of the output distribution fl is such that it equals
 !  vnorm*f_cgs(v_parallel).
 !.......................................................................
       save

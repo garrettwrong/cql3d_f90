@@ -29,7 +29,7 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 !..................................................................
-!     This routine "filsetup0%ls in" input data parabolically. It also
+!     This routine "fills in" input data parabolically. It also
 !     computes the normalized radial mesh.
 !..................................................................
 !MPIINSERT_INCLUDE

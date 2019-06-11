@@ -95,8 +95,8 @@ contains
       save
 
 !..................................................................
-!     This routine directs the calculation of CQL3d; it controsetup0%ls
-!     input, output, calsetup0%ls to CQL, calsetup0%ls to WD*, and holds the
+!     This routine directs the calculation of CQL3d; it controls
+!     input, output, calls to CQL, calls to WD*, and holds the
 !     main loops over radius of the toroidal device.
 !..................................................................
 
@@ -179,7 +179,7 @@ contains
 !-YuP: Not used anymore. Use general call to achiefn below, in ll-loop
 !-BH:  Except that some setup0%lrzmax=1 test cases are still used, and
 !-BH:  errors can arise when only only one value of a mesh
-!-BH:  is called  for.  For example, tdrmshst faisetup0%ls.
+!-BH:  is called  for.  For example, tdrmshst fails.
 !-BH:  However, additional functionality, such as sigmamod plotting
 !-BH:  depdends on setup0%lrzmax.ge.4 (BH120308: check this).
       if (setup0%lrzmax.le.1) then
@@ -193,7 +193,7 @@ contains
       endif
 
 !..................................................................
-!     call routine which controsetup0%ls array initialization
+!     call routine which controls array initialization
 !     (and sets n=0, n_(1:lrorsa)=0 though call aindflt1).
 !..................................................................
 
@@ -532,7 +532,7 @@ contains
                ! fh(0:iy+1,0:jx+1,1,1:setup0%lrz), i.e. k=1 index (for now).
                ! If kelec>1, we can get a problem here.
                write(*,'(a,3i4,3e12.4)') &
-                 'after achiefn(3): n,it,ll,integrasetup0%ls f, f-h, g:', &
+                 'after achiefn(3): n,it,ll,integrals f, f-h, g:', &
                   n,it,ll, amp_f, amp_f-amp_h, amp_g
                ! YuP test/printout:
                !Confirmed that f() remains unchanged during
@@ -675,7 +675,7 @@ contains
 !         mpiworker=0
 !      endif
 
-        call achiefn(0)  !--> if implct='enabled', calsetup0%ls impavnc0
+        call achiefn(0)  !--> if implct='enabled', calls impavnc0
 
 
 !MPIINSERT_SEND_RECV

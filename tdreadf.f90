@@ -138,7 +138,7 @@ contains
 
 !.......................................................................
 !l    2. Read f(i,j,k,l) from text distfunc file.
-!     l_.eq.lrors clause detects first of l_=lrors,1,-1 calsetup0%ls
+!     l_.eq.lrors clause detects first of l_=lrors,1,-1 calls
 !.......................................................................
 
  200  continue ! kopt .eq. 2   handle

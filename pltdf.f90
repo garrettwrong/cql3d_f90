@@ -337,7 +337,7 @@ contains
 !**bh
 !
 !     In the case abs(dmin).le.contrmin*dmax, then plot contours
-!     occur at levesetup0%ls:
+!     occur at levels:
 !     cont(j)=dmax * contrmin**(1-(j-.5)/ncont),  j=1,ncont
 !     This can be described as a geometric progression of values
 !     from (near) dmax down to contrmin*dmax.
@@ -471,7 +471,7 @@ contains
       FLOGMIN=LOG10(dmax*contrmin) ! => FLOGMIN=FLOGMAX-LOG10R
       !write(*,*)'FLOGMIN,FLOGMAX=',FLOGMIN,FLOGMAX
       !dmin, dmax are found above, for TEMP1(I,J)=f(I,J) (lin. scale).
-      !      but RCONT() levesetup0%ls are log()
+      !      but RCONT() levels are log()
 
       !Set the coordinate transformation matrix TR(1:6):
       !world coordinate = pixel number.

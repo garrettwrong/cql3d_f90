@@ -26,7 +26,7 @@ contains
 !     pass/trapped boundary. Note that the bounce time is infinite
 !     on the p/t boundary (y(itl,l_)) but the singularity is
 !     integrable.
-!     See the user manual for mathematical detaisetup0%ls.
+!     See the user manual for mathematical details.
 !..................................................................
 
 

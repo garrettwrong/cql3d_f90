@@ -24,11 +24,11 @@ contains
 !     setup0%lrindx: index of radial surface on which equations are solved
 !     indxlr: index of array setup0%lrindx giving lr_=> indxlr(setup0%lrindx(l=1,setup0%lrz))=l.
 !     indxlr used to save space (arrays source, gone, egylosa,..)
-!     (indxlr labesetup0%ls the radial surfaces from 1 to setup0%lrz)
+!     (indxlr labels the radial surfaces from 1 to setup0%lrz)
 !     if setup0%lsdiff.eq."enabled" (operative for setup0%cqlpmod="enabled"):
 !     setup0%lsindx: index of orbit position s on which equ. are solved
-!     indxsetup0%ls: index of array setup0%lsindx giving ls_=> indxsetup0%ls(setup0%lsindx(l=1,setup0%ls))=l.
-!     (indxsetup0%ls labesetup0%ls the orbit position from 1 to setup0%ls).
+!     indxls: index of array setup0%lsindx giving ls_=> indxls(setup0%lsindx(l=1,setup0%ls))=l.
+!     (indxls labels the orbit position from 1 to setup0%ls).
 !     setup0%lrindx(1)=namelist input
 !     setup0%lrindx(2:setup0%ls)=setup0%lrindx(1), indxlr(setup0%lrindx(1))=1
 !

@@ -90,7 +90,7 @@ contains
       if (kopt.eq.0) then
            n=n+1
            n_(l_)=n ! new time-step for this flux surface
-           ! for 2-d (v_par,v_perp) calculation ntloop controsetup0%ls
+           ! for 2-d (v_par,v_perp) calculation ntloop controls
            ! end of run or restart.
            ! Also updates time.
            call ntloop

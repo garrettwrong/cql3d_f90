@@ -42,7 +42,7 @@ contains
 !$$$       print*,'lam: fast neut engy:',en_m(mm)/bnumb(1)
        stopcs=0.
        call bscs(en_m(mm)/bnumb(1),ene(nn), &
-        temp(kelec,nn),zeff(nn),stopcs) ! calsetup0%ls bscs to get cross section
+        temp(kelec,nn),zeff(nn),stopcs) ! calls bscs to get cross section
 !$$$       print*,'cross section:', stopcs
        stoplamda(nn,mm)=1/(ene(nn)*stopcs) ! mean-free path=1/(ne*sigma_stop) in cm
 !$$$       print *,"lam: flux surface",nn,"Energy index",mm

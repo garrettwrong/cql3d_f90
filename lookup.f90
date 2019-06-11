@@ -24,7 +24,7 @@ contains
 !     that xarray(lement).gt.x.
 !     weightu/weightl are the upper/lower weights for xarray
 !     in  x(lement:lement+1).
-!     If x falsetup0%ls outside bounds of the array, weightl/weightu set
+!     If x falls outside bounds of the array, weightl/weightu set
 !     to give constant value at relevant bounds of the array.
 !..................................................................
 
@@ -91,7 +91,7 @@ contains
 !     that xarray(lement).gt.x.
 !     weightu/weightl are the upper/lower weights for xarray
 !     in  x(lement:lement+1).
-!     If x falsetup0%ls outside bounds of the array, weightl/weightu set
+!     If x falls outside bounds of the array, weightl/weightu set
 !     to give constant value at relevant bounds of the array.
 !..................................................................
 

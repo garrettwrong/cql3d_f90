@@ -60,13 +60,13 @@ contains
 !.......................................................................
 
       if (oldiag .ne. "enabled") then
-!     use Legendre decomposition for computing the integrasetup0%ls
+!     use Legendre decomposition for computing the integrals
         call diaggnde2
         return
       endif
 
 !..................................................................
-!     Compute integrasetup0%ls for various moments
+!     Compute integrals for various moments
 !     tam1 will contain midplane density moment
 !     tam2 will contain field line (flux surface averaged) density
 !     tam3 will contain parallel current density - at midplane.
@@ -78,7 +78,7 @@ contains
       currmtp(l_)=0.
 
 !     For setup0%cqlpmod.ne."enabled", default lmdpln_ will take on values
-!       setup0%lrz:1 and successive calsetup0%ls (for given time step).  l_ also
+!       setup0%lrz:1 and successive calls (for given time step).  l_ also
 !       takes on these values, so following if statement is satisfied
 !       at each call diaggnde.
 !     For setup0%cqlpmod.eq."enabled", lmpdpln_ will equal 1 at each call,
@@ -106,7 +106,7 @@ contains
                ! in the loss cone, but tests show that the solution
                ! can become unstable in such case.
                ! So, keep f() non-zero in the loss cone,
-               ! but do not add such f() to the integrasetup0%ls/sums over d3v.
+               ! but do not add such f() to the integrals/sums over d3v.
               tam1(j)=tam1(j)+f(i,j,k,l_)*cynt2(i,l_)
               tam3(j)=tam3(j)+f(i,j,k,l_)*cynt2(i,l_)*coss(i,l_)
 !     include vptb=|cos(th0)| * tau
@@ -260,7 +260,7 @@ contains
 !%OS
           gni=1./gn
           hni=0.0
-          !XXXXXX infinity?  YuP: hn and gn are never 0 - they are integrasetup0%ls over distr.func.
+          !XXXXXX infinity?  YuP: hn and gn are never 0 - they are integrals over distr.func.
           if (l_ .eq. lmdpln_) hni=1./hn
           if (l_ .eq. lmdpln_) hnis(k,lr_)=hni
 

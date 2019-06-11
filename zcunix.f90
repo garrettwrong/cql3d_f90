@@ -128,13 +128,13 @@ contains
 !     called by terp1 and terp2.
 !
 !     usage                  for one-dimensional cubic spline interpolation,
-!     the user first calsetup0%ls coeff1 by
+!     the user first calls coeff1 by
 !
 !     call coeff1 (n,x,f,w,iop,int,wk)
 !
 !     this subroutine returns the coefficients
 !     needed for the subsequent interpolation
-!     in the array w.  the user then calsetup0%ls
+!     in the array w.  the user then calls
 !     subroutine terp1 by
 !
 !     call terp1 (n,x,f,w,y,int,tab,itab)
@@ -146,10 +146,10 @@ contains
 !     performed.  the interpolated values are
 !     returned in tab.  the parameters
 !     n,x,f,w, and int must not be changed
-!     between the subroutine calsetup0%ls.
+!     between the subroutine calls.
 !
 !     for two-dimensional cubic spline interpolation
-!     the user first calsetup0%ls coeff2 by
+!     the user first calls coeff2 by
 !
 !     call coeff2 (nx,x,ny,y,f,fxx,fyy,fxxyy,
 !     idm,ibd,wk)
@@ -157,7 +157,7 @@ contains
 !     this subroutine returns the coefficients
 !     needed for the subsequent interpolation in
 !     the arrays fxx, fyy, fxxyy.  the user then
-!     calsetup0%ls the routine terp2 by
+!     calls the routine terp2 by
 !
 !     r = terp2 (xb,yb,nx,x,ny,y,f,fxx,fyy,fxxyy,
 !     idm,ixd,iyd)
@@ -169,7 +169,7 @@ contains
 !     for the function or one of its partial
 !     derivatives.  the parameters nx,x,ny,y,f,fxx,
 !     fyy,fxxyy, and idm must not be changed
-!     between the calsetup0%ls to coeff2 and terp2.
+!     between the calls to coeff2 and terp2.
 !
 !     special conditions     tables of independent variables must be
 !     arranged in ascending order.  for
@@ -204,7 +204,7 @@ contains
 !     which describes the continuity of the first
 !     derivative and incorporates the given
 !     boundary conditions.  coeff1  sets up this
-!     system and calsetup0%ls subroutine trip to solve it.
+!     system and calls subroutine trip to solve it.
 !
 !     the cubic segment between two adjacent
 !     tabular points is constructed from the
@@ -1680,7 +1680,7 @@ contains
 
       nch = 10
 !mnt  for line printers, use
-!mnt  for data terminasetup0%ls, use
+!mnt  for data terminals, use
 !mnt  1 format (1x,7a10)
       nwords = (nchars+nch-1)/nch
       print 10010,(narray(i),i=1,nwords)
@@ -1697,7 +1697,7 @@ contains
 !mnt  the flags as local variables.
 
 !mnt  *** if local variables are not normally retained between
-!mnt  calsetup0%ls on this system, the variables lnf and lnt can be
+!mnt  calls on this system, the variables lnf and lnt can be
 !mnt  placed in a common block and preset to the following
 !mnt  values in the main program.
 
@@ -1735,8 +1735,8 @@ contains
 !mnt  cases when execution is terminated.
 !mnt  (default value is 0.)
 
-!mnt  *note* -- some calsetup0%ls to zzrchk will cause unconditional
-!mnt  termination of execution.  zzxset has no effect on such calsetup0%ls.
+!mnt  *note* -- some calls to zzrchk will cause unconditional
+!mnt  termination of execution.  zzxset has no effect on such calls.
 
 !mnt  examples
 !mnt  1. to print up to 100 messages as nonfatal warnings use

@@ -63,7 +63,7 @@ contains
 !**bh050820:  Trapped-particle bounce-time factor, trapfac, here set =1.,
 !**bh050820:  accounts for bounce time being twice the transitting bounce
 !**bh091031:  time.  However, bounce-averages are divided by bounce times,
-!**bh091031:  so this trapfac factor cancesetup0%ls out.
+!**bh091031:  so this trapfac factor cancels out.
 !**bh091031:  The symm factor though involves allocating half the ray power
 !**bh091031:  above the midplane (and half mirrored below), for
 !**bh091031:  up-down-symmetric case.
@@ -534,7 +534,7 @@ contains
 !**bh050820:  Trapped-particle bounce-time factor, trapfac, here set =1.,
 !**bh050820:  accounts for bounce time being twice the transitting bounce
 !**bh091031:  time.  However, bounce-averages are divided by bounce times,
-!**bh091031:  so this trapfac factor cancesetup0%ls out.
+!**bh091031:  so this trapfac factor cancels out.
 !.......................................................................
       !YuP[03/26/2015] symm is set in aingeom now
       trapfac=one
@@ -598,7 +598,7 @@ contains
 
       prf_rayel=0.d0 !sum-up contribution from a given ray el., per unit delpwr
 
-      do j=jmn,jx ! Levesetup0%ls of u in res.region, local u-space
+      do j=jmn,jx ! Levels of u in res.region, local u-space
          jp1=min(j+1,jx) !Not exceeding jx (j+/-1 will be used for df/dv)
          jm1=max(j-1,1)  !Not smaller than 1
          uloc=   x(j)*vnorm
@@ -900,7 +900,7 @@ contains
                  ! Accumulate QL diff.coeffs
                  urfb_i(i,l_)= urfb_i(i,l_)+delbw
                  urfc_i(i,l_)= urfc_i(i,l_)+delcc
-                 !Accumulate contributions in (i,l_) midplane grid celsetup0%ls:
+                 !Accumulate contributions in (i,l_) midplane grid cells:
                  sum_dth(i,l_)=sum_dth(i,l_)+del_th0 !for 1/sum_dth averaging
                  ! No need to save <E> and <F> -
                  ! they are expressed through <B>,<C>
@@ -933,7 +933,7 @@ contains
                  prf_rayel_i(i,lr_)= prf_rayel_i(i,lr_)+ xdx*sum_ij
                  ! This is to be saved into urfpwr(), the fractional power
                  ! (per delpwr) (contribution from a given ray element only)
-                 !Accumulate contributions in (i,l_) midplane grid celsetup0%ls:
+                 !Accumulate contributions in (i,l_) midplane grid cells:
                  sum_dth(i,l_)=sum_dth(i,l_)+del_th0 !for 1/sum_dth averaging
                endif
 
@@ -1043,7 +1043,7 @@ contains
          endif
          k1=k2 ! new k1  !  k3=k3 remains same
          goto 5 !-> divide this interval, and check again
-      else  ! Neither of two intervasetup0%ls => no index found.
+      else  ! Neither of two intervals => no index found.
          luf_bin=kn  ! Or should we set to kn+1 ?
          goto 10 ! finish
       endif

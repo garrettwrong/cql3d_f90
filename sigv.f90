@@ -23,7 +23,7 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !..................................................................
-!     sets up calsetup0%ls to sigma-v calculator
+!     sets up calls to sigma-v calculator
 !..................................................................
 
 !MPIINSERT_INCLUDE

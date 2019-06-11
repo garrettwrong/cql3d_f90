@@ -171,10 +171,10 @@ contains
         ! or general ions + screening current from e; see eleccomp='enabled' option]:
         CALL PGSLS(2) ! ---
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
-        ! Bootstrap for e, based on jhirsh88/99 modesetup0%ls:
+        ! Bootstrap for e, based on jhirsh88/99 models:
         CALL PGSLS(3) ! -.-
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
-        ! Bootstrap for ions, based on jhirsh88/99 modesetup0%ls:
+        ! Bootstrap for ions, based on jhirsh88/99 models:
         CALL PGSLS(4) ! ...
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP14(1))
         CALL PGSLS(1) ! Restore solid line
@@ -203,10 +203,10 @@ contains
         ! or general ions + screening current from e; see eleccomp='enabled' option]:
         CALL PGSLS(2) ! ---
         CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP12(1))
-        ! Bootstrap for e, based on jhirsh88/99 modesetup0%ls:
+        ! Bootstrap for e, based on jhirsh88/99 models:
         CALL PGSLS(3) ! -.-
         CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP13(1))
-        ! Bootstrap for ions, based on jhirsh88/99 modesetup0%ls:
+        ! Bootstrap for ions, based on jhirsh88/99 models:
         CALL PGSLS(4) ! ...
         CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP14(1))
         CALL PGSLS(1) ! Restore solid line

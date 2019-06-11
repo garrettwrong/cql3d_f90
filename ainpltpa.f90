@@ -180,7 +180,7 @@ contains
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
 
       write(t_,13027)
-13027 format("ndtr1a is maximum number of time step intervasetup0%ls dtr1().")
+13027 format("ndtr1a is maximum number of time step intervals dtr1().")
       RILIN=RILIN+1.
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
 

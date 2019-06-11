@@ -755,8 +755,8 @@ contains
 !$$$      npfi=100  ! and canonical momentum Pfi;
 !$$$                ! to setup COM->R lookup table.
 !$$$      nsteps_orb=50000 ! Max.number of time steps for orbit integration.
-!$$$                ! Also used to trace Pfi=const levesetup0%ls for COM->R table
-!$$$                ! in order to find intersections with mu=const levesetup0%ls.
+!$$$                ! Also used to trace Pfi=const levels for COM->R table
+!$$$                ! in order to find intersections with mu=const levels.
 !$$$      nptsorb=1 ! Number of points on a complete orbit
 !$$$                ! (ityp=0 "main" orbit)
 !$$$                ! from which ityp=1 "secondary" orbits are launched.

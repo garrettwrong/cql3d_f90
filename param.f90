@@ -43,7 +43,7 @@
   !     nbctimea is max number of points in arrays supplying time
   !     dependent profile information.
   !
-  !     ndtr1a is maximum number of time step intervasetup0%ls dtr1().
+  !     ndtr1a is maximum number of time step intervals dtr1().
   !
   !     nplota is maximum number of plot times for 2d and 3d plots.
   !

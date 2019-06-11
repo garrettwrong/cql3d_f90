@@ -26,7 +26,7 @@ contains
 !..................................................................
 !     Routine computes three Bessel tables, J_nharm-1,J_nharm, and
 !     J_nharm+1. Space is allocated. Once tables are created, subsequent
-!     calsetup0%ls check to see if the maximum argument has increased beyond
+!     calls check to see if the maximum argument has increased beyond
 !     table limits. If so, table is augmented.
 !..................................................................
 

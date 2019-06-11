@@ -28,7 +28,7 @@ contains
 !     If analegco="disabled":
 !     The integral is computed using a ngauss-point Gaussian quadrature
 !     where f at the Gauss points is obtained using a nlagran-point
-!     Lagrangian interpolation with polynomiasetup0%ls (see 25.2.2 p.878,
+!     Lagrangian interpolation with polynomials (see 25.2.2 p.878,
 !     Abramowitz and Stegun). For the weights, we use the actual
 !     value of P_m(cos(th))*sin(th) at the Gauss points, multiplied
 !     by the Gaussian weights. Thus only f is interpolated.
@@ -73,7 +73,7 @@ contains
 
       if (analegco .eq. "enabled") go to 200
 
-!     CQL3D: imax points in two intervasetup0%ls [1,imax] and [iy+1-imax,iy]
+!     CQL3D: imax points in two intervals [1,imax] and [iy+1-imax,iy]
       ipoints=imax(klpar,klrad)
       iistart=iy_(klmesh)+1-ipoints
       iigstrt=(iistart-1)*ngauss+1
@@ -131,7 +131,7 @@ contains
             zxgh(ig,0)=zxgh(ig,0)*sin(zxg(ig))
  112      continue
         endif
-!     construct Legendre polynomiasetup0%ls for m=2 to mmx
+!     construct Legendre polynomials for m=2 to mmx
 !     m=2 and 3: explicit formula
         do 113 ig=ig0+1,ig0+inxgau
           zxgh(ig,2)=0.5*(3.*zxgh(ig,1)**2-1.)

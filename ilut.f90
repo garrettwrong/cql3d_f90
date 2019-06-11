@@ -81,7 +81,7 @@ contains
 !           EARLIER VERSIONS.
 !
 ! droptol = real(c_double). Sets the threshold for dropping small terms in the
-!           factorization. See below for detaisetup0%ls on dropping strategy.
+!           factorization. See below for details on dropping strategy.
 !
 !
 ! iwk     = integer. The lengths of arrays alu and jlu. If the arrays
@@ -141,7 +141,7 @@ contains
 ! droptol .ne.  0 but lfil=n will give  the usual threshold strategy   *
 ! (however, fill-in is then mpredictible).                             *
 !----------------------------------------------------------------------*
-!     locasetup0%ls
+!     locals
       integer ju0,k,j1,j2,j,ii,i,lenl,lenu,jj,jrow,jpos,len
       real(c_double) tnorm, t, abs, s, fact
       if (lfil .lt. 0) goto 998
@@ -422,7 +422,7 @@ contains
 !----------------------------------------------------------------------*
 ! This is a simple version of the ILUT preconditioned GMRES algorithm. *
 ! The ILUT preconditioner uses a dual strategy for dropping elements   *
-! instead  of the usual level of-fill-in approach. See detaisetup0%ls in ILUT *
+! instead  of the usual level of-fill-in approach. See details in ILUT *
 ! subroutine documentation. PGMRES uses the L and U matrices generated *
 ! from the subroutine ILUT to precondition the GMRES algorithm.        *
 ! The preconditioning is applied to the right. The stopping criterion  *

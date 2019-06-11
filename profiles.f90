@@ -535,7 +535,7 @@ contains
 
 
 !--------------------------------------------------------------------
-      if (ipronn.eq."spline-t") then ! time-dep. neutrasetup0%ls or impurities
+      if (ipronn.eq."spline-t") then ! time-dep. neutrals or impurities
 
          ! For NPA:
          do kkk=1,npaproc

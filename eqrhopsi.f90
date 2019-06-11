@@ -55,7 +55,7 @@ contains
 
     !......................................................................
     !     General, non-circular flux-surface psi values, epsi, have been
-    !     set up from eqdsk, topeol, or elliptical plasma modesetup0%ls, depending
+    !     set up from eqdsk, topeol, or elliptical plasma models, depending
     !     on eqmod.ne.'disabled' and eqsource.  epsi, at this point is an
     !     decreasing function from the magnetic axis to the plasam edge.
     !     For eqmod.ne.'disabled', namelist eqsource gives the source of
@@ -74,7 +74,7 @@ contains
     !             below has been moved up from subroutine eqorbit,
     !             to facilitate de-updown-symmetrization.
     !
-    !     Calsetup0%ls to the current subroutine eqrhospi are from eqcoord, in
+    !     Calls to the current subroutine eqrhospi are from eqcoord, in
     !     descending order lr_=setup0%lrzmax,1,-1.
     !......................................................................
 

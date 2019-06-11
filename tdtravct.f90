@@ -76,7 +76,7 @@ contains
       if (setup0%lrz.ne.setup0%lrzmax) stop 'tdtravct: Fixes reqd for setup0%lrz.ne.setup0%lrzmax'
 
 !..............................................................
-!     Compute two integrasetup0%ls that are defined on mid-mesh points.
+!     Compute two integrals that are defined on mid-mesh points.
 !..............................................................
 
       if (pinch.eq.'disabled')  return

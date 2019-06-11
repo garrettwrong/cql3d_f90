@@ -21,7 +21,7 @@ contains
 !
 !     Plot contours of the loss region..
 !
-!     Modified from Graflib to pgplot calsetup0%ls by Yuri Petrov, 090727,
+!     Modified from Graflib to pgplot calls by Yuri Petrov, 090727,
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 

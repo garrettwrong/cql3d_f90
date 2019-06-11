@@ -291,7 +291,7 @@ contains
 !     If this is a mirror  calculation with a loss region
 !     delete the particles on loss orbits..
       if (lossmode(k) .eq. "mirrorcc") then
-         ! YuP: how about other modesetup0%ls, "mirrsnk" and "mirrsnk1" ?
+         ! YuP: how about other models, "mirrsnk" and "mirrsnk1" ?
          call lossorbm(ephicc,k)
          do 100 j=1,jx
             do 90 i=1,iy

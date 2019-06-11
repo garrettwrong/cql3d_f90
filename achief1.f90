@@ -233,7 +233,7 @@ contains
     if(nefiter.eq.1) then
        n=n+1
        n_(1)=n ! new time-step for this flux surface
-       ! for 2-d (v_par,v_perp) calculation ntloop controsetup0%ls
+       ! for 2-d (v_par,v_perp) calculation ntloop controls
        ! end of run or restart.
        ! Also updates time.
        call ntloop

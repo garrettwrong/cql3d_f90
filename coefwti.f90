@@ -152,7 +152,7 @@ contains
       endif
 
 !.......................................................................
-!     Ensures correct differentiation at end of intervasetup0%ls
+!     Ensures correct differentiation at end of intervals
 !.......................................................................
 
       do 3 j=1,jx

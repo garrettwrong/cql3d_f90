@@ -322,7 +322,7 @@ contains
 
 !.......................................................................
 !l    3.1 Define the mesh point centered integration coefficients
-!     employed for orbit field line integrasetup0%ls, z mesh defined in micxiniz
+!     employed for orbit field line integrals, z mesh defined in micxiniz
 !.......................................................................
 
       do 310 l=2,lz-1

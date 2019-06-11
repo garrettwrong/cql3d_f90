@@ -60,7 +60,7 @@ contains
 
 !..................................................................
 !     Compute the total RF power absorbed.
-!     Also compute the integrasetup0%ls of the perpendicular and
+!     Also compute the integrals of the perpendicular and
 !     parallel energy (units changed from ergs to joules).
 !..................................................................
 

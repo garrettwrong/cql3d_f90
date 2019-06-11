@@ -51,7 +51,7 @@ contains
 
       ampfarl= (4.d0*pi*(-charge*vnorm))/ &
 !BH131110     +        vnorm*drpmconz(ll)*dlpsii(ll)*cn
-!BH131110, BUT think vnorm* is correct, cancesetup0%ls vnorm in impanvc0:dfdvz &
+!BH131110, BUT think vnorm* is correct, cancels vnorm in impanvc0:dfdvz &
               (clight*dtr) *cn    ! now [statA/cm^2 /cm]
         !YuP[02-2017] removed drpmconz(ll) factor.
         !YuP[03-2017] Removed symm factor next to dlpgpsii(ll) :

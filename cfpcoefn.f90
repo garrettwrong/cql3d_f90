@@ -140,7 +140,7 @@ contains
         tam7(1)=0.
         tam9(1)=0.
 !..................................................................
-!     tam2(jx) and tam6(jx) represent integrasetup0%ls from xmax to infinity
+!     tam2(jx) and tam6(jx) represent integrals from xmax to infinity
 !     The following coding performs this integration. In this case 21*xmax
 !     represents infinity. The lack of this piece is most obvious when
 !     ions are a general species and electrons are fixed Maxwellians.
@@ -428,7 +428,7 @@ contains
 !..................................................................
 !     The do loops 302 through 307 seek to take advantage of the
 !     Maxwellian nature of f for v < vth/2. This is employed in
-!     the integrations to obtain the functionasetup0%ls - Thus f is
+!     the integrations to obtain the functionals - Thus f is
 !     assumed to be Maxwellian between velocity mesh points,
 !     not linear. (not used)
 !..................................................................

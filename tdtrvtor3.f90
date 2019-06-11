@@ -27,7 +27,7 @@ contains
 !     with vp and vp_ being the weights for f1 and f2 respectively.
 !     That is: sum(f1(i)*vp(i)) = sum(f2(i)*vp_(i)), i=1,iy_(l)
 !
-!     This new version of tdtrvtor is such that two successive calsetup0%ls
+!     This new version of tdtrvtor is such that two successive calls
 !     to tdtrvtor2(f1,f2,.,.,iopt) and then tdtrrtov2(f2,f1b,.,.,iopt)
 !     gives f1b = f1 at each point i=1,iy_(l)
 !
