@@ -368,7 +368,7 @@ contains
       do ll=lrors,1,-1
         call tdnflxs(ll)
         call micxinil ! integration coefficients, mostly for cfpcoefn:
-        ! gamma,alphan,cog,cosz,zmaxpsi (uses bbpsi,sols from micxiniz)
+        ! gamma,alphan,cog,cosz,zmaxpsi (uses bbpsi,solrz from micxiniz)
         if (l_ .eq. lmdpln_) then
            ! calculate tau()==v*tauB_ZOW [also dtau(), vptb()]
            if(taunew.eq."enabled") then

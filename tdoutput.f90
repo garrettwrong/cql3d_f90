@@ -25,7 +25,7 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
       integer :: kopt
       integer :: l, ll
-      real(c_double) :: sqrt_pasinorm
+      real(c_double) :: sqrt_psinorm
       !implicit none
 
 !..................................................................
@@ -128,9 +128,9 @@ contains
       else
         sqrt_psinorm=0.d0
       endif
-! xxx can we get past this line, then dies at 147
-!      WRITE(6,91111) 
-print * , l,rovera(l),eps(l),btor0(l),bthr0(l), &
+! xxx can we get past this line, then dies at 147 !YuP: not seeing any problem: i3, then 10 values e13.4
+      ! Note: 91111 is format(i3,1p10e13.4)
+      WRITE(6,91111) l,rovera(l),eps(l),btor0(l),bthr0(l), &
         bmod0(l),btor0(l)/bmod0(l),qsafety(l),psimx(l), &
         equilpsi(l),  sqrt_psinorm
       enddo

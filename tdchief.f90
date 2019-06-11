@@ -159,7 +159,11 @@ contains
         call ainplt
 
         ! XXX why we would immediately need do this again is totally lost on me
-        !      care to enlighten?
+        !      care to enlighten?   YuP: maybe because subr. ainplt (5 lines above)
+        !                           goes through lines in cqlinput?
+        ! See "1    continue   ! loop in reading lines in cqlinput file" in ainplt
+        ! By reading "setup0" we simply make sure that we are back to the 1st line of cqlinput file?
+        ! Not sure about this. Maybe Bob could comment.
         call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
 
         call ainsetpa          !  re-set according to setup0 nml
