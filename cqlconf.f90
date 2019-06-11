@@ -7,6 +7,7 @@ module cqlconf_mod
   logical :: nml_file_open = .FALSE.
   integer, save:: nml_fd = -1
   public get_setup0_from_nml
+  public print_setup0
   public set_setup0
   public nml_close
 
@@ -63,10 +64,11 @@ contains
     end if
   end subroutine nml_close
 
-  subroutine get_setup0_from_nml(nml_file, close_nml_file)
+  subroutine get_setup0_from_nml(nml_file, close_nml_file, debug_print)
     implicit none
     character(len=*), intent(in) :: nml_file
     logical, intent(in), optional :: close_nml_file
+    logical, intent(in), optional :: debug_print
 
     ! make private local variables to read in the namelist
 
@@ -100,9 +102,9 @@ contains
     ! copy defaults to local vars
 
     mnemonic = setup0_%mnemonic
-    ioutput(2) = setup0_%ioutput(2)
+    ioutput = setup0_%ioutput
     iuser = setup0_%iuser
-    ibox(3) = setup0_%ibox(3)
+    ibox = setup0_%ibox
     noplots = setup0_%noplots
     lnwidth = setup0_%lnwidth
     nmlstout = setup0_%nmlstout
@@ -111,11 +113,11 @@ contains
     lrz = setup0_%lrz
     lrzdiff = setup0_%lrzdiff
     lrzmax = setup0_%lrzmax
-    lrindx(0:lrorsa) = setup0_%lrindx(0:lrorsa)
+    lrindx = setup0_%lrindx
     ls = setup0_%ls
     lsmax = setup0_%lsmax
     lsdiff = setup0_%lsdiff
-    lsindx(0:lrorsa) = setup0_%lsindx(0:lrorsa)
+    lsindx = setup0_%lsindx
     nlrestrt = setup0_%nlrestrt
     nlwritf = setup0_%nlwritf
 
@@ -128,7 +130,7 @@ contains
     ! external codes can call this, which packs the setup0 derived type.
     call set_setup0(mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
          nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
-         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf)
+         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf, debug_print)
 
     ! we optionally close the nml file.
     if (present(close_nml_file)) then
@@ -141,26 +143,28 @@ contains
 
   subroutine set_setup0(mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
          nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
-         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf)
-    character(len=256), optional :: mnemonic
-    integer, optional :: ioutput(2)
-    character(len=8), optional :: iuser
-    character(len=8), optional :: ibox(3)
-    character(len=8), optional :: noplots
-    integer, optional :: lnwidth
-    character(len=8), optional :: nmlstout
-    character(len=8), optional :: special_calls
-    character(len=8), optional :: cqlpmod
-    integer, optional :: lrz
-    character(len=8), optional :: lrzdiff
-    integer, optional :: lrzmax
-    integer, optional :: lrindx(0:lrorsa)
-    integer, optional :: ls
-    integer, optional :: lsmax
-    character(len=8), optional :: lsdiff
-    integer, optional :: lsindx(0:lrorsa)
-    character(len=8), optional :: nlrestrt
-    character(len=8), optional :: nlwritf
+         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf, &
+         debug_print)
+    character(len=256), intent(in), optional :: mnemonic
+    integer, intent(in), optional :: ioutput(2)
+    character(len=8), intent(in), optional :: iuser
+    character(len=8), intent(in), optional :: ibox(3)
+    character(len=8), intent(in), optional :: noplots
+    integer, intent(in), optional :: lnwidth
+    character(len=8), intent(in), optional :: nmlstout
+    character(len=8), intent(in), optional :: special_calls
+    character(len=8), intent(in), optional :: cqlpmod
+    integer, intent(in), optional :: lrz
+    character(len=8), intent(in), optional :: lrzdiff
+    integer, intent(in), optional :: lrzmax
+    integer, intent(in), optional :: lrindx(0:lrorsa)
+    integer, intent(in), optional :: ls
+    integer, intent(in), optional :: lsmax
+    character(len=8), intent(in), optional :: lsdiff
+    integer, intent(in), optional :: lsindx(0:lrorsa)
+    character(len=8), intent(in), optional :: nlrestrt
+    character(len=8), intent(in), optional :: nlwritf
+    logical, intent(in), optional :: debug_print
 
     ! All this code should do is override the defaults
     ! in setup0 with optional args.
@@ -178,7 +182,7 @@ contains
        setup0%ibox = ibox
     end if
     if (present(noplots)) then
-       noplots = noplots
+       setup0%noplots = noplots
     end if
     if (present(lnwidth)) then
        setup0%lnwidth = lnwidth
@@ -224,8 +228,20 @@ contains
     if (present(nlwritf)) then
        setup0%nlwritf = nlwritf
     end if
- 
+
+    if ( present(debug_print)) then
+       if (debug_print) call print_setup0
+    end if
+
   end subroutine set_setup0
+
+  subroutine print_setup0()
+    namelist /setup0_nml/ setup0
+    WRITE(*, *) "!----  BEGIN SETUP0 DUMP"
+    WRITE(*, nml = setup0_nml)
+    WRITE(*, *)  "!----  END SETUP0 DUMP"
+  end subroutine print_setup0
+
 
   integer function newunit(unit)
     ! Thanks fortran wiki !

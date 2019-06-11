@@ -75,6 +75,7 @@ contains
     use param_mod
     use cqlcomm_mod
     use cqlconf_mod, only : nml_close
+    use cqlconf_mod, only : print_setup0
     use cqlconf_mod, only : setup0
     use cqlconf_mod, only : get_setup0_from_nml
       use netcdfrf_mod, only : netcdfrf
@@ -126,7 +127,7 @@ contains
 !     Set default values for setup0 namelist
 !     Read in first namelist, setup0: determines type of run, etc.
 !..................................................................
-      call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
+      call get_setup0_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
 
 !MPIINSERT_BARRIER
 

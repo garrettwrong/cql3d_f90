@@ -43,6 +43,7 @@ contains
 
   subroutine achief1
     use param_mod
+    use cqlconf_mod, only : print_setup0
     use cqlconf_mod, only : setup0
     use cqlcomm_mod
     use pltmain_mod, only : pltmain
@@ -112,7 +113,7 @@ contains
 
     if (setup0%nmlstout.eq."enabled") then
        write(6,*)'  In achief1: '
-       !name now private, can write from setter write(6,setup0)
+       call print_setup0
        write(6,setup)
        write(6,trsetup)
        write(6,sousetup)
