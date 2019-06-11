@@ -11,7 +11,7 @@ module cqlconf_mod
   public set_setup0
   public nml_close
 
-  type setup0_t
+  type, public ::  setup0_t
      character(len=256) :: mnemonic = "default_output"
      integer :: ioutput(2) = (/ 6, 0 /)
      character(len=8) :: iuser = "unset"
