@@ -41,12 +41,9 @@ case1:
     - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
     - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.ps
     expire_in: 1 week
-
   dependencies:
   - build:centos7
 
-before_script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
 docker build:
   stage: build
@@ -54,12 +51,27 @@ docker build:
   services:
   - docker:dind
   script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - docker pull $CONTAINER_RELEASE_IMAGE || true
   - docker build -f Dockerfile.centos7  --cache-from $CONTAINER_RELEASE_IMAGE -t $CONTAINER_TEST_IMAGE .
   - docker push $CONTAINER_TEST_IMAGE
   only:
     changes:
       - ci/Dockerfile.centos7
+
+docker stub tag:
+  stage: build
+  image: docker:stable
+  services:
+  - docker:dind
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker tag $CONTAINER_RELEASE_IMAGE $CONTAINER_TEST_IMAGE
+  - docker push $CONTAINER_TEST_IMAGE
+  except:
+    changes:
+      - ci/Dockerfile.centos7
+
 
 
 release-image:
@@ -68,6 +80,7 @@ release-image:
   services:
   - docker:dind
   script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $CONTAINER_TEST_IMAGE
     - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
     - docker push $CONTAINER_RELEASE_IMAGE
