@@ -128,7 +128,6 @@ contains
       else
         sqrt_psinorm=0.d0
       endif
-! xxx can we get past this line, then dies at 147 !YuP: not seeing any problem: i3, then 10 values e13.4
       ! Note: 91111 is format(i3,1p10e13.4)
       WRITE(6,91111) l,rovera(l),eps(l),btor0(l),bthr0(l), &
         bmod0(l),btor0(l)/bmod0(l),qsafety(l),psimx(l), &
