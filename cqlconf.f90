@@ -3,6 +3,7 @@ module cqlconf_mod
   implicit none
 
   private
+  integer :: ll
   logical :: nml_file_open = .FALSE.
   integer, save:: nml_fd = -1
   public get_setup0_from_nml
@@ -10,25 +11,31 @@ module cqlconf_mod
   public nml_close
 
   type setup0_t
-     character(len=256) :: mnemonic
-     integer :: ioutput(2)
-     character(len=8) :: iuser
-     character(len=8) :: ibox(3)
-     character(len=8) :: noplots
-     integer :: lnwidth
-     character(len=8) :: nmlstout
-     character(len=8) :: special_calls
-     character(len=8) :: cqlpmod
-     integer :: lrz
-     character(len=8) :: lrzdiff
-     integer :: lrzmax
-     integer :: lrindx(0:lrorsa)
-     integer :: ls
-     integer :: lsmax
-     character(len=8) :: lsdiff
-     integer :: lsindx(0:lrorsa)
-     character(len=8) :: nlrestrt
-     character(len=8) :: nlwritf
+     character(len=256) :: mnemonic = "default_output"
+     integer :: ioutput(2) = (/ 6, 0 /)
+     character(len=8) :: iuser = "unset"
+     character(len=8) :: ibox(3) = (/ "unset", "unset", "unset" /)
+     character(len=8) :: noplots = "disabled"
+     integer :: lnwidth = 3
+     character(len=8) :: nmlstout = "trnscrib"
+     character(len=8) :: special_calls = "enabled"
+     !     Avoid some special calls, if setup0%special_calls=disabled in
+     !     &setup0 namelist.
+     !     [System calls not supported on some machines.]
+     !     [Could use this for other system dependent branching, in future....]
+
+     !     main parameters (used to allocate memory and determine model)
+     character(len=8) :: cqlpmod = "disabled"
+     integer :: lrz = 0
+     character(len=8) :: lrzdiff = "disabled"
+     integer :: lrzmax = 0
+     integer :: lrindx(0:lrorsa) =  (/ (ll, ll=0,lrorsa) /)
+     integer :: ls = 0
+     integer :: lsmax = 0
+     character(len=8) :: lsdiff = "disabled"
+     integer :: lsindx(0:lrorsa) =  (/ (ll, ll=0,lrorsa) /)
+     character(len=8) :: nlrestrt = "disabled"
+     character(len=8) :: nlwritf = "disabled"
   end type setup0_t
 
   ! rest of cql3d will access this
@@ -61,6 +68,8 @@ contains
     character(len=*), intent(in) :: nml_file
     logical, intent(in), optional :: close_nml_file
 
+    ! make private local variables to read in the namelist
+
     character(len=256) :: mnemonic
     integer :: ioutput(2)
     character(len=8) :: iuser
@@ -81,15 +90,15 @@ contains
     character(len=8) :: nlrestrt
     character(len=8) :: nlwritf
 
+    ! state the namelist, with associated vars
+
     namelist/setup0/ mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
          nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
          ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf
 
-    ! for now, we take thse from setup0,
-    ! because there is existing defaulting code earlier.
-    ! Ideally that code would live with the config setters and getters,
-    ! and this goes away.
-    ! To my knowledge fortran does not provide a better facility
+
+    ! copy defaults to local vars
+
     mnemonic = setup0_%mnemonic
     ioutput(2) = setup0_%ioutput(2)
     iuser = setup0_%iuser
@@ -110,16 +119,18 @@ contains
     nlrestrt = setup0_%nlrestrt
     nlwritf = setup0_%nlwritf
 
+    ! read the nml, which will write into the local vars
 
     call maybe_nml_open(nml_file)
+    ! unfortunate name collision (why we use setup0_ hack)
     read(nml_fd, setup0)
 
-
-    ! external codes can call this
+    ! external codes can call this, which packs the setup0 derived type.
     call set_setup0(mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
          nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
          ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf)
 
+    ! we optionally close the nml file.
     if (present(close_nml_file)) then
        if(close_nml_file .eqv. .TRUE.) then
           call nml_close()
@@ -151,109 +162,69 @@ contains
     character(len=8), optional :: nlrestrt
     character(len=8), optional :: nlwritf
 
-    ! Note, for all of these, we should collect old cql3d
-    ! default logic sprinkled around the code, and condense
-    ! it here
+    ! All this code should do is override the defaults
+    ! in setup0 with optional args.
 
     if (present(mnemonic)) then
        setup0%mnemonic = mnemonic
-    else
-       setup0%mnemonic = 'default_output.nc'
     end if
     if (present(ioutput)) then
        setup0%ioutput = ioutput
-    else
-       ! setup0%ioutput = ! default(s) somewhere deep in code
     end if
     if (present(iuser)) then
        setup0%iuser = iuser
-    else
-       setup0%iuser = 'default_user'
     end if
     if (present(ibox)) then
        setup0%ibox = ibox
-    else
-       ! setup0%ibox =! default(s) somewhere deep in code
     end if
     if (present(noplots)) then
        noplots = noplots
-    else
-       !setup0%noplots = im not convinced this works the way I thought
     end if
     if (present(lnwidth)) then
        setup0%lnwidth = lnwidth
-    else
-       ! setup0%lnwidth =! default(s) somewhere deep in code
     end if
     if (present(nmlstout)) then
        setup0%nmlstout = nmlstout
-    else
-       setup0%nmlstout = 'disabled'
     end if
     if (present(special_calls)) then
        setup0%special_calls = special_calls
-    else
-       setup0%special_calls = 'disabled'
     end if
     if (present(cqlpmod)) then
        setup0%cqlpmod = cqlpmod
-    else
-       setup0%cqlpmod = 'disabled'
     end if
     if (present(lrz)) then
        setup0%lrz = lrz
     else
-       print *, 'setup0%lrz is required'
-       call abort
+       stop 'setup0%lrz is required'
     end if
     if (present(lrzdiff)) then
        setup0%lrzdiff = lrzdiff
-    else
-       !setup0%lrzdiff = ! default(s) somewhere deep in code
     end if
     if (present(lrzmax)) then
        setup0%lrzmax = lrzmax
-    else
-       !setup0%lrzmax = ! default(s) somewhere deep in code
     end if
     if (present(lrindx)) then
        setup0%lrindx = lrindx
-    else
-       !setup0%lrindx = ! default(s) somewhere deep in code
     end if
     if (present(ls)) then
        setup0%ls = ls
-    else
-       !setup0%ls = ! default(s) somewhere deep in code
     end if
     if (present(lsmax)) then
        setup0%lsmax = lsmax
-    else
-       !setup0%lsmax = ! default(s) somewhere deep in code
     end if
     if (present(lsdiff)) then
        setup0%lsdiff = lsdiff
-    else
-       !setup0%lsdiff = ! default(s) somewhere deep in code
     end if
     if (present(lsindx)) then
        setup0%lsindx = lsindx
-    else
-       !setup0%lsindx = ! default(s) somewhere deep in code
     end if
     if (present(nlrestrt)) then
        setup0%nlrestrt = nlrestrt
-    else
-       ! this and nlwritf relate to dumping distribution
-       ! function in nc files for restarts
-       ! we may want for diagnostic debug etc
-       !setup0%nlrestrt =! default(s) somewhere deep in code
     end if
     if (present(nlwritf)) then
        setup0%nlwritf = nlwritf
-    else
-       !setup0%nlwritf = ! default(s) somewhere deep in code
     end if
+ 
   end subroutine set_setup0
 
   integer function newunit(unit)

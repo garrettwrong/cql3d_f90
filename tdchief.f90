@@ -9,7 +9,6 @@ module tdchief_mod
   use aclear_mod, only : aclear
   use aindfpa_mod, only : ainadjnl
   use aindfpa_mod, only : ainadjnl_fsetup_setup0
-  use aindfpa_mod, only : aindfpa
   use ainplt_mod, only : ainplt
   use ainpltpa_mod, only : ainpltpa
   use ainsetpa_mod, only : ainsetpa
@@ -86,7 +85,7 @@ contains
       use ainsetpa_mod, only : ainsetpa
       use ainpltpa_mod, only : ainpltpa
       use ainplt_mod, only : ainplt
-      use aindfpa_mod, only : aindfpa, ainadjnl_fsetup_setup0, ainadjnl
+      use aindfpa_mod, only : ainadjnl_fsetup_setup0, ainadjnl
       use aclear_mod, only : aclear
       use achiefn_mod, only : achiefn
       use achief1_mod, only : achief1
@@ -122,15 +121,11 @@ contains
       call ainadjnl_fsetup_setup0(0) !at mpirank=0 (but it can change cqlinput)
       !pause
 !MPIINSERT_BARRIER
+
 !.......................................................................
 !     Set default values for setup0 namelist
-!.......................................................................
-      call aindfpa
-
-!..................................................................
 !     Read in first namelist, setup0: determines type of run, etc.
 !..................................................................
-      !print *,'yyy', setup0%lrzmax
       call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
 
 !MPIINSERT_BARRIER
@@ -161,11 +156,11 @@ contains
       if (setup0%noplots.ne."enabled1") then
         call pltinit   ! Initiates PGPLOT
         call ainplt
-        !xxx add something do force re-read or not etc
-        !xxx open(unit=2,file='cqlinput',status='old')
+
+        ! XXX why we would immediately need do this again is totally lost on me
+        !      care to enlighten?
         call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
-        !read(2,setup0)         !  re-read 1st (i.e., setup0) namelist
-        !close(2)
+
         call ainsetpa          !  re-set according to setup0 nml
         call ainpltpa ! plots out the parameters
       endif

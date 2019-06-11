@@ -6,73 +6,8 @@ module aindfpa_mod
 
   !---END USE
 
-!
-!
 
 contains
-
-  subroutine aindfpa
-    use cqlconf_mod, only : setup0
-      use param_mod
-      use cqlcomm_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
-
-!..................................................................
-!     Set defaults for input of variables in first namelist setup,
-!     now (as of 2007) also explicitly named setup0.
-!     As of 2017, also can denote the first setup as namelist fsetup.
-!     (fsetup worked around a problem with the pathscale compiler.)
-!     Warning: In this subroutine, should set only variables read
-!     in first namelist setup/setup0/fsetup.
-!     This also shows which variables belong to the 1st namelist setup.
-!..................................................................
-
-!.......................................................................
-
-      setup0%ibox(1)="unset"
-      setup0%ibox(2)="unset"
-      setup0%ibox(3)="unset"
-      setup0%iuser="unset"
-      setup0%ioutput(1)=6
-      setup0%ioutput(2)=0
-      setup0%mnemonic="mnemonic"
-
-!     Avoid some special calls, if setup0%special_calls=disabled in
-!     &setup0 namelist.
-!     [System calls not supported on some machines.]
-!     [Could use this for other system dependent branching, in future....]
-
-      setup0%special_calls="enabled"
-
-!     main parameters (used to allocate memory and determine model)
-      setup0%lrz=0
-      setup0%lrzmax=0
-      setup0%lrzdiff="disabled"
-      setup0%cqlpmod="disabled"
-      setup0%ls=0
-      setup0%lsmax=0
-      setup0%lsdiff="disabled"
-      do 100 ll=0,lrorsa
-        setup0%lrindx(ll)=ll
-        setup0%lsindx(ll)=ll
- 100  continue
-
-      setup0%noplots="disabled"
-      setup0%nmlstout="trnscrib"
-      setup0%lnwidth=3  ! Plot line width in units of 0.005 inches
-
-!      nlwritf=.false.
-!      nlrestrt=.false.
-
-      setup0%nlwritf="disabled"
-      setup0%nlrestrt="disabled"
-
-      return
-      end subroutine aindfpa
-!
-!
-!==================================================================
-
 
       subroutine ainadjnl(kopt)
       implicit integer (i-n), real(c_double) (a-h,o-z)

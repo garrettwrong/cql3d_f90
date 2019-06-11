@@ -22,7 +22,7 @@ contains
       use param_mod
       use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
-      use aindfpa_mod, only : aindfpa, ainadjnl_fsetup_setup0, ainadjnl
+      use aindfpa_mod, only : ainadjnl_fsetup_setup0, ainadjnl
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
