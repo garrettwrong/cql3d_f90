@@ -40,8 +40,8 @@ module cqlconf_mod
   end type setup0_t
 
   ! rest of cql3d will access this
-  type(setup0_t), target, public :: setup0
-  type(setup0_t), pointer, private :: setup0_=>setup0! hack
+  type(setup0_t), public :: setup0
+
   !..................................................................
   !     NAMELIST (SETUP0) DECLARATION FOR INPUT
   !..................................................................
@@ -69,6 +69,8 @@ contains
     character(len=*), intent(in) :: nml_file
     logical, intent(in), optional :: close_nml_file
     logical, intent(in), optional :: debug_print
+    ! local
+    type(setup0_t) :: setup0_
 
     ! make private local variables to read in the namelist
 
@@ -124,7 +126,6 @@ contains
     ! read the nml, which will write into the local vars
 
     call maybe_nml_open(nml_file)
-    ! unfortunate name collision (why we use setup0_ hack)
     read(nml_fd, setup0)
 
     ! external codes can call this, which packs the setup0 derived type.
