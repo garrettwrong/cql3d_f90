@@ -27,6 +27,9 @@ build:centos7:
     paths:
     - xcql3d_gfortran64
     expire_in: 1 week
+  dependencies:
+  - build:docker build
+
 
 case1:
   stage: test
@@ -41,8 +44,6 @@ case1:
     - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
     - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.ps
     expire_in: 1 week
-  dependencies:
-  - build:centos7
 
 
 docker build:
