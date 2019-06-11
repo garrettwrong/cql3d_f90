@@ -1,5 +1,6 @@
 stages:
   - lint
+  - env
   - build
   - test
   - release
@@ -27,10 +28,7 @@ build:centos7:
     paths:
     - xcql3d_gfortran64
     expire_in: 1 week
-  dependencies:
-  - build:docker build
-
-
+  
 case1:
   stage: test
   image: $CONTAINER_TEST_IMAGE
@@ -47,7 +45,7 @@ case1:
 
 
 docker build:
-  stage: build
+  stage: env
   image: docker:stable
   services:
   - docker:dind
@@ -61,7 +59,7 @@ docker build:
       - ci/Dockerfile.centos7
 
 docker stub tag:
-  stage: build
+  stage: env
   image: docker:stable
   services:
   - docker:dind
@@ -72,7 +70,6 @@ docker stub tag:
   except:
     changes:
       - ci/Dockerfile.centos7
-
 
 
 release-image:
