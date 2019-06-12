@@ -21,13 +21,13 @@ c     using the fortran intrinsic len().
       use prppr_mod, only : prppr
       use r8subs_mod, only : dcopy
       use zcunix_mod, only : terp1
-      implicit none
+      implicit integer (i-n), real*8 (a-h,o-z)
       save
 
       integer :: kopt
       integer :: i, ii, ielem, istat, iyy
       integer :: jj
-      integer :: k, kk, kk, kbdim, kedim, kzdim
+      integer :: k, kk, kkk, kbdim, kedim, kzdim
       integer :: l, ll, lrzadim, lsig
       integer :: nampfmax_dim, ngenadim, nonch_dim, nrho_dim, nrho_dim1
       integer :: numrec1, numrecsave, nwkpack
@@ -4242,6 +4242,7 @@ c
       end subroutine netcdfrw2
 c
 c
+
       subroutine check_err(iret)
       integer iret
       include 'netcdf.inc'
@@ -5792,3 +5793,4 @@ c.......................................................................
       return
 
       end subroutine ncwritef4d
+
