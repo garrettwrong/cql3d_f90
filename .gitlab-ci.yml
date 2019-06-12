@@ -17,10 +17,13 @@ build:centos7:
   stage: build
   image: garrettwrong/cql3d_f90_centos-7
   script:
-  - make -f  makefile_gfortran64.CentOS7
+  - make -f  makefile_gfortran64.CentOS7 all
   artifacts:
     paths:
     - xcql3d_gfortran64
+    - xcql3d_gfortran64_shared
+    - libxcql3d_gfortran64.so
+    - libxcql3d_gfortran64.a
     expire_in: 1 week
 
 case1:
@@ -36,6 +39,24 @@ case1:
     - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
     - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.ps
     expire_in: 1 week
-
   dependencies:
   - build:centos7
+
+case1_shared:
+  stage: test
+  image: garrettwrong/cql3d_f90_centos-7
+  script:
+  - export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
+  - cd ci/case1
+  - ../../xcql3d_gfortran64_shared
+  - nccmp -dmgfs reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
+  artifacts:
+    when: always
+    paths:
+    - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
+    - ci/case1/mst_stand_lh00001.MergedCQL3D_direct_lh-dis.ps
+    expire_in: 1 week
+  dependencies:
+  - build:centos7
+
+
