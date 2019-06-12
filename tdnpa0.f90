@@ -733,8 +733,8 @@ contains
 !     Obtain energy flux for each energy and sightline
 !.......................................................................
 
-        call bcast(emitnpa,zero,nen_npa*npaproc)
-        call bcast(efluxwk(1,1),zero,nen_npa*setup0%lrzmax)
+        emitnpa=zero !YuP[2019-06-08]was call bcast(emitnpa,zero,nen_npa*npaproc)
+        efluxwk=zero !YuP[2019-06-08]was call bcast(efluxwk(1,1),zero,nen_npa*lrzmax)
         mpisz= nen_npa ! number of elements in efluxwk(:,i)
 
 !       set atten bins that will be double counted to some
@@ -793,7 +793,7 @@ contains
 !MPIINSERT_SEND_EFLUXWK
         enddo ! i=1,setup0%lrzmax
 
-        call bcast(eflux_npa(1,nn),zero,nen_npa)
+        call bcast(eflux_npa(1:nen_npa,nn),zero,nen_npa) ! YuP:range 1:nen_npa
 
         do ien=1,nen_npa  ! for each energy bin
         do i=1,setup0%lrzmax ! sum-up contributions from all flux surfaces

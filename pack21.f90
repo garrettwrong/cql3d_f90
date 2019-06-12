@@ -65,7 +65,7 @@ end module pack21_mod
       dimension a(ibot:itop,jbot:jtop)
       dimension b(iy*jx)
       zero=0.
-      call bcast(a,zero,(itop-ibot+1)*(jtop-jbot+1))
+      a=zero !YuP[2019-06-08]was call bcast(a,zero,(itop-ibot+1)*(jtop-jbot+1))
       do 1 j=1,jx
         i1=(j-1)*iy+1
         call dcopy(iy,b(i1:i1+iy),1,a(1:iy,j),1)

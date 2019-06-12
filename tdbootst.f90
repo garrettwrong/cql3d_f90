@@ -79,9 +79,9 @@ contains
         call terp1(setup0%lrzmax,tr1(1),tedst,d2te,tr1(l),1,tab,itab)
         tedrv(l)=tab(2)
  11   continue
-      call bcast(tr(1),zero,setup0%lrzmax)
-      call bcast(tr2(1),zero,setup0%lrzmax)
-      call bcast(tr3(1),zero,setup0%lrzmax)
+      tr=zero !YuP[2019-06-08]was call bcast(tr(1),zero, setup0%lrzmax)
+      tr2=zero !YuP[2019-06-08]was call bcast(tr2(1),zero, setup0%lrzmax)
+      tr3=zero !YuP[2019-06-08]was call bcast(tr3(1),zero, setup0%lrzmax)
 
 !..................................................................
 !     Determine average ion temperature over all background species

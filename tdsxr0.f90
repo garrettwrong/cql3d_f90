@@ -629,7 +629,7 @@ contains
 !     Obtain energy flux for each energy and sightline
 !.......................................................................
 
-        call bcast(efluxwk(1,1),zero,nen*setup0%lrzmax)
+        efluxwk=zero !YuP[2019-06-08]was call bcast(efluxwk(1,1),zero,nen*lrzmax)
         mpisz= nen ! number of elements in efluxwk(nen,i)
 
         do i=1,setup0%lrzmax
@@ -652,7 +652,7 @@ contains
 !MPIINSERT_SEND_EFLUXWK
         enddo ! i=1,setup0%lrzmax
 
-        call bcast(eflux(1,nn),zero,nen)
+        call bcast(eflux(1:nen,nn),zero,nen) !YuP[2019-06-08] range 1:nen
 
         do ien=1,nen  ! for each energy bin
         do i=1,setup0%lrzmax ! sum-up contributions from all flux surfaces

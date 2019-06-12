@@ -57,8 +57,8 @@ contains
 
       if (transp.eq."disabled") return
 
-      call bcast(d_rr,zero,iyjx2*ngen*(setup0%lrz+1))
-      call bcast(drshape(0),zero,setup0%lrz+1)
+      d_rr=zero !YuP[2019-06-08]was call bcast(d_rr,zero,iyjx2*ngen*(lrz+1))
+      drshape=zero !YuP[2019-06-08]was call bcast(drshape(0),zero,lrz+1)
 
 !      write(*,*)'tdtrdfus: difus_type(),',(difus_type(k),k=1,ngen)
 

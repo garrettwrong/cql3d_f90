@@ -209,12 +209,14 @@ contains
 
 !MPIINSERT_IF_RANK_EQ_0
       nsavet=0 !YuP[2019-06-07] Should be defined in any case of netcdfshort
+      isave=0  !YuP[2019-06-08] Initialize here: Index for nonzero values of increasing nsave(1:nsavea)
       ! And for 'lngshrtf', it is set below:
       if (netcdfshort.eq.'lngshrtf') then
-         isave=0  !Index for nonzero values of increasing nsave(1:nsavea)
          do i=1,nsavea
-            if (nsave(i).ge.0 .and. nsave(i).le.nstop) &
-                 nsavet=nsavet+1
+            if (nsave(i).ge.0 .and. nsave(i).le.nstop) then
+              isave=i ! Indicator that there are time frames to be saved
+              nsavet=nsavet+1
+            endif 
          enddo
       endif
       
