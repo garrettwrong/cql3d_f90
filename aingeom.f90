@@ -27,8 +27,8 @@ contains
 
 !..................................................................
 !     This routine is called repeatedly from tdinitl, for the
-!     range of values of lr_=lrzmax,1,-1.
-!     Alternatively, for lrzmax=1, it is called from achief1.
+!     range of values of lr_=setup0%lrzmax,1,-1.
+!     Alternatively, for setup0%lrzmax=1, it is called from achief1.
 !
 !     aingeom controls the flux surface geometry and sets up magnetic
 !     fields, bpsi=(B(z))/B(0)); it also calls the "eq"uilibrium module
@@ -47,8 +47,8 @@ contains
 !BH151202      if (machine.eq."toroidal") then
       if (machine.eq."toroidal".or.machine.eq."mirror") then
 
-!Following makes more sense[BH:990816]    if (l_.eq.lrzmax) call eqalloc
-        if (lr_.eq.lrzmax) call eqalloc
+!Following makes more sense[BH:990816]    if (l_.eq.setup0%lrzmax) call eqalloc
+        if (lr_.eq.setup0%lrzmax) call eqalloc
 
 !..................................................................
 !     If the "eq"uilibrium module is utilized...

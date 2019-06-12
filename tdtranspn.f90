@@ -52,23 +52,23 @@ contains
 !     set equal to f(i=iy,j=1, l) in the velocity-space setting
 !     of coefficients (in impanvnc0.f). [lbdry()="conserv"]
 !     For each theta point (i) on the mesh at the outermost
-!     radial bin (l=lrz), there is a smallest minor radius
+!     radial bin (l=setup0%lrz), there is a smallest minor radius
 !     l_lower(i) with corresponding i mesh point.
 !     [Presently, only use ymesh="fixed_y" (not "fixed_mu) is fully
 !     implemented, which gives l_lower(i)=1.]
 !     Boundary conditions are zero-radial-flux at the inner
 !     edge of the rya(l=l_lower(i)) radial bin, and a specified
-!     Maxwellian at the outer radius rya(l=lrz).
+!     Maxwellian at the outer radius rya(l=setup0%lrz).
 !     Better BCs might be future mod [BH071107]:
 !        Boundary conditions presently are zero-radial-flux at the
 !        inner edge of the rya(l=l_lower(i)) radial bin, and a
-!        specified Maxwellian at the outer radius rya(l=lrz+1/2)=1.0
+!        specified Maxwellian at the outer radius rya(l=setup0%lrz+1/2)=1.0
 !        [The outer bc is slightly different from the splitting method
-!        setup, in which the distribution at rya(l=lrz) is taken
+!        setup, in which the distribution at rya(l=setup0%lrz) is taken
 !        to be Maxwellian for the radial split (but general for the
 !        velocity split).]
 !
-!     At the outer radius, l=lrz, the trapping fraction is
+!     At the outer radius, l=setup0%lrz, the trapping fraction is
 !     greater than towards the magnetic axis.  Therefore, some of the
 !     i-points will transform from trapped particles (for which
 !     the distribution is symetric about theta=pi/2) to passing
@@ -85,7 +85,7 @@ contains
 !.......................................................................
 !  Copy fvn to frn as in tdtransp, although they are now on same grid
 !.......................................................................
-      !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or lrz)
+      !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or setup0%lrz)
       call tdtrvtor(fvn,frn)
 
 !..............................................................
@@ -133,7 +133,7 @@ contains
 !.......................................................................
       if (ifirst.eq.1) then
 
-         do l=1,lrz
+         do l=1,setup0%lrz
             itl=itl_(l)
             itu=itu_(l)
             iyh=iyh_(l)
@@ -182,7 +182,7 @@ contains
       ieq=0     !equation counter
       icoeff=0  !CSR coefficient counter
 
-      do l=1,lrz   !loop over flux surfaces
+      do l=1,setup0%lrz   !loop over flux surfaces
 
 !         write(*,*)'tdtranspn: l,ieq+1,ieq_(l),icoeff',
 !     +                         l,ieq+1,ieq_(l),icoeff
@@ -269,7 +269,7 @@ contains
                  endif
 
 
-              elseif (l.lt.lrz) then  !i.e., 1<l<lrz
+              elseif (l.lt.setup0%lrz) then  !i.e., 1<l<setup0%lrz
                  if (j.eq.1 .and. ((ieq-(ieq_(l)-1)).lt.inew &
                                 .or. lbdry(k).ne."conserv")) then
                        icoeff=icoeff+1
@@ -320,7 +320,7 @@ contains
 
                  endif
 
-              elseif (l.eq.lrz) then  !no transp for now, just vel distn bc.
+              elseif (l.eq.setup0%lrz) then  !no transp for now, just vel distn bc.
                                       !Put placeholders in the CSR matrix
 
                  icoeff=icoeff+1

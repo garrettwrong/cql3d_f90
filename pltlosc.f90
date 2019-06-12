@@ -13,7 +13,8 @@ module pltlosc_mod
 
 contains
 
-      subroutine pltlosc
+  subroutine pltlosc
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -24,7 +25,7 @@ contains
 !     using PGPLOT + GRAFLIBtoPGPLOT.f routines (put in pltmain.f).
 !
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       do 100 k=1,ngen
         suu=0.

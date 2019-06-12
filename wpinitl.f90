@@ -35,8 +35,8 @@ contains
 
       do 100 k=1,ngen
         do 110 j=1,jx
-          do 120 l=0,ls+1
-            do 130 i=1,iy_(ls)
+          do 120 l=0,setup0%ls+1
+            do 130 i=1,iy_(setup0%ls)
               dls(i,j,k,l)=.5
  130        continue
  120      continue
@@ -50,9 +50,9 @@ contains
       if (sbdry .ne. "periodic") then
         do 140 k=1,ngen
           do 141 j=1,jx
-            do 142 i=1,iy_(ls)
+            do 142 i=1,iy_(setup0%ls)
               dls(i,j,k,0)=0.
-              dls(i,j,k,ls)=1.
+              dls(i,j,k,setup0%ls)=1.
  142        continue
  141      continue
  140    continue
@@ -63,33 +63,33 @@ contains
 !     points s(l) is changed, before solving the matrix problem, in
 !     order to keep a band-type matrix. The new points are indexed
 !     as follows:
-!     1, 2, ls, 3, ls-1, ..., ls/2, ls-(ls/2-2), ls/2+1
+!     1, 2, setup0%ls, 3, setup0%ls-1, ..., setup0%ls/2, setup0%ls-(setup0%ls/2-2), setup0%ls/2+1
 !     Thus, the band-width is only twice the natural width. The following
 !     arrays define the above transformation between the periodic and the
 !     bounded mesh and vice versa (like points anti-clockwise on circle):
-!     lsbtopr(1:ls)= 1, 2, 4, 6, .., ls, ls-1, ls-3, .., 5, 3
-!     lsprtob(1:ls)= 1, 2, ls, 3, ls-1, ..., ls/2, ls-(ls/2-2), ls/2+1
+!     lsbtopr(1:setup0%ls)= 1, 2, 4, 6, .., setup0%ls, setup0%ls-1, setup0%ls-3, .., 5, 3
+!     lsprtob(1:setup0%ls)= 1, 2, setup0%ls, 3, setup0%ls-1, ..., setup0%ls/2, setup0%ls-(setup0%ls/2-2), setup0%ls/2+1
 !
-!     If 10<nummods<21, then solve a periodic system with 2(ls-1) points
+!     If 10<nummods<21, then solve a periodic system with 2(setup0%ls-1) points
 !.......................................................................
 
       if (sbdry .eq. "periodic") then
-        do 200 l=2,ls/2
+        do 200 l=2,setup0%ls/2
           lsbtopr(l)=(l-1)*2
-          lsbtopr(ls+2-l)=lsbtopr(l)+1
+          lsbtopr(setup0%ls+2-l)=lsbtopr(l)+1
           lsprtob((l-1)*2)=l
-          lsprtob((l-1)*2+1)=ls+2-l
+          lsprtob((l-1)*2+1)=setup0%ls+2-l
  200    continue
         lsbtopr(1)=1
-        lsbtopr(ls/2+1)=ls
+        lsbtopr(setup0%ls/2+1)=setup0%ls
         lsprtob(1)=1
-        lsprtob(ls)=ls/2+1
-!     extra points: s(0)=s(ls) and s(ls+1)=s(1)
+        lsprtob(setup0%ls)=setup0%ls/2+1
+!     extra points: s(0)=s(setup0%ls) and s(setup0%ls+1)=s(1)
         lsbtopr(0)=3
-        lsbtopr(ls+1)=1
+        lsbtopr(setup0%ls+1)=1
       else
 !     bounded case: one-to-one correspondance
-        do 220 l=0,ls+1
+        do 220 l=0,setup0%ls+1
           lsbtopr(l)=l
           lsprtob(l)=l
  220    continue
@@ -105,7 +105,7 @@ contains
 !.......................................................................
 
       call ibcast(l_lower,1,iymax)
-      if (iy_(1).ne.iy_(ls) .or. iy_(1).ne.iy_(ls/2)) then
+      if (iy_(1).ne.iy_(setup0%ls) .or. iy_(1).ne.iy_(setup0%ls/2)) then
 !     cannot have periodic mesh and not full l mesh
 !%OS  if (sbdry .eq. "periodic") call wpwrng(2)
         illend=lrors
@@ -123,8 +123,8 @@ contains
 !     index i is defined on the local transport pitch angle mesh.
 !.......................................................................
 
-      call ibcast(l_upper,ls,iymax)
-      if (iy_(1).ne.iy_(ls) .or. iy_(1).ne.iy_(ls/2)) then
+      call ibcast(l_upper,setup0%ls,iymax)
+      if (iy_(1).ne.iy_(setup0%ls) .or. iy_(1).ne.iy_(setup0%ls/2)) then
         illend=lrors
         if (sbdry .eq. "periodic") illend=lrors/2+1
         do 320 l=illend-1,1,-1
@@ -140,7 +140,7 @@ contains
 !     So far one assumes that l=1 is where all the particles pass (min. B)
 !     => l_lower(i)=1 for all i
 !     For l_upper, one should have i=iyh_(l) at l=l_upper(i), i>itl_(1)
-!     and l_upper(i)=ls for i<=itl_(1)
+!     and l_upper(i)=setup0%ls for i<=itl_(1)
 !.......................................................................
 
       if (iymax .ne. iy_(1)) call wpwrng(11)
@@ -149,8 +149,8 @@ contains
  330  continue
 
       do 335 i=1,itl_(1)
-        if (l_upper(i) .ne. ls) call wpwrng(13)
-        if (l_upper(iymax+1-i) .ne. ls) call wpwrng(13)
+        if (l_upper(i) .ne. setup0%ls) call wpwrng(13)
+        if (l_upper(iymax+1-i) .ne. setup0%ls) call wpwrng(13)
  335  continue
       do 336 i=itl_(1)+1,iyh_(1)
         if (l_upper(min(i+1,iyh_(1))) .ne. l_upper(i)) then
@@ -185,44 +185,44 @@ contains
 !l    4.2 electrostatic electric field
 !.......................................................................
 
-      call bcast(elparnw(0:ls+1),elpar0,ls+2)
+      call bcast(elparnw(0:setup0%ls+1),elpar0,setup0%ls+2)
 
 !.......................................................................
-!l    4.3 Effective value of l-1,l,l+1 for a given l (ex:ls+1->1 if period.)
+!l    4.3 Effective value of l-1,l,l+1 for a given l (ex:setup0%ls+1->1 if period.)
 !.......................................................................
 
-      do 430 l=2,ls-1
+      do 430 l=2,setup0%ls-1
         lpm1eff(l,-1)=l-1
         lpm1eff(l, 0)=l
         lpm1eff(l,+1)=l+1
  430  continue
       if (sbdry .eq. "periodic") then
-        lpm1eff(0,-1)=ls-1
-        lpm1eff(0, 0)=ls
+        lpm1eff(0,-1)=setup0%ls-1
+        lpm1eff(0, 0)=setup0%ls
         lpm1eff(0,+1)=1
-        lpm1eff(1,-1)=ls
+        lpm1eff(1,-1)=setup0%ls
         lpm1eff(1, 0)=1
         lpm1eff(1,+1)=2
-        lpm1eff(ls,-1)=ls-1
-        lpm1eff(ls, 0)=ls
-        lpm1eff(ls,+1)=1
-        lpm1eff(ls+1,-1)=ls
-        lpm1eff(ls+1, 0)=1
-        lpm1eff(ls+1,+1)=2
+        lpm1eff(setup0%ls,-1)=setup0%ls-1
+        lpm1eff(setup0%ls, 0)=setup0%ls
+        lpm1eff(setup0%ls,+1)=1
+        lpm1eff(setup0%ls+1,-1)=setup0%ls
+        lpm1eff(setup0%ls+1, 0)=1
+        lpm1eff(setup0%ls+1,+1)=2
       else
-!     assumes 0->1 and ls+1->ls
+!     assumes 0->1 and setup0%ls+1->setup0%ls
         lpm1eff(0,-1)=1
         lpm1eff(0, 0)=1
         lpm1eff(0,+1)=2
         lpm1eff(1,-1)=1
         lpm1eff(1, 0)=1
         lpm1eff(1,+1)=2
-        lpm1eff(ls,-1)=ls-1
-        lpm1eff(ls, 0)=ls
-        lpm1eff(ls,+1)=ls
-        lpm1eff(ls+1,-1)=ls-1
-        lpm1eff(ls+1, 0)=ls
-        lpm1eff(ls+1,+1)=ls
+        lpm1eff(setup0%ls,-1)=setup0%ls-1
+        lpm1eff(setup0%ls, 0)=setup0%ls
+        lpm1eff(setup0%ls,+1)=setup0%ls
+        lpm1eff(setup0%ls+1,-1)=setup0%ls-1
+        lpm1eff(setup0%ls+1, 0)=setup0%ls
+        lpm1eff(setup0%ls+1,+1)=setup0%ls
       endif
 
 !.......................................................................
@@ -232,7 +232,7 @@ contains
 !.......................................................................
 
       dp999=-999
-      do 440 l=0,ls+1
+      do 440 l=0,setup0%ls+1
         do 441 i=1,iyh_(lpm1eff(l,0))
           dpi=i
           ilpm1ef(i,l,-1)=cvmgt(dpi,-dp999,i.le.iyh_(lpm1eff(l,-1)))

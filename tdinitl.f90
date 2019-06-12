@@ -68,7 +68,8 @@ module tdinitl_mod
 contains
 
       subroutine tdinitl ! called only at n=0
-      use param_mod
+        use param_mod
+        use cqlconf_mod, only : setup0
       use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use ampfar_mod, only : ampfalloc
@@ -116,8 +117,8 @@ contains
 !     This call will position pointer in file distrfunc to next read f.
 !.......................................................................
 
-!BH110201      if (nlrestrt.ne."disabled") call tdreadf(1)
-      if (nlrestrt.eq."enabled") call tdreadf(1)
+!BH110201      if (setup0%nlrestrt.ne."disabled") call tdreadf(1)
+      if (setup0%nlrestrt.eq."enabled") call tdreadf(1)
 
 !..................................................................
 !     read in namelist input for CQL3D
@@ -132,7 +133,7 @@ contains
 
       if (partner.eq."selene") then
         open(unit=18,file='kcqlsel',status='old')
-        read(18,2) ncount,noplots
+        read(18,2) ncount,setup0%noplots
         eqdskalt="enabled"
         close(unit=18)
       endif
@@ -157,32 +158,32 @@ contains
 !.......................................................................
 
       call ainalloc
-      if (ampfmod.eq."enabled" .and.cqlpmod.ne."enabled") call ampfalloc
+      if (ampfmod.eq."enabled" .and.setup0%cqlpmod.ne."enabled") call ampfalloc
 
-      if (transp.eq."enabled" .and. cqlpmod.ne."enabled") call tdtraloc
+      if (transp.eq."enabled" .and. setup0%cqlpmod.ne."enabled") call tdtraloc
 !%OS  if (transp.eq."enabled") call tdtraloc
-      if (transp.eq."enabled" .and. cqlpmod.eq."enabled") call wpalloc
+      if (transp.eq."enabled" .and. setup0%cqlpmod.eq."enabled") call wpalloc
 
 !.......................................................................
 !     print namelists
 !.......................................................................
 
-      if (nmlstout.eq."enabled") then
+      if (setup0%nmlstout.eq."enabled") then
          open(unit=2,file='cqlinput',delim='apostrophe',status='old')
          write(6,*)'  In tdinitl: '
-         write(6,setup0)
+         ! nml name now private, can be written from module write(6,setup0)
          write(6,setup)
          write(6,trsetup)
          write(6,sousetup)
          write(6,eqsetup)
          write(6,rfsetup)
          close(2)
-      elseif (nmlstout.eq."trnscrib") then
+      elseif (setup0%nmlstout.eq."trnscrib") then
          write(6,*)'  In tdinitl: '
          call ain_transcribe("cqlinput")
       else
          write(6,*)
-         write(6,*) 'mnemonic = ',mnemonic
+         write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
          write(6,*)
       endif
 
@@ -193,11 +194,11 @@ contains
       call urfinitl ! mrfn= is set here also
       call frinitl
       open(unit=2,file='cqlinput',delim='apostrophe',status='old')
-      call frset(lrz,noplots,nmlstout)   ! Uses unit 2
+      call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
       close(2)
 
       if (machine .ne. "toroidal") call tdwrng(1)
-      if (lrzdiff.eq."enabled" .and. frmodp.eq."enabled") &
+      if (setup0%lrzdiff.eq."enabled" .and. frmodp.eq."enabled") &
         call diagwrng(18)
 
 !.....................................................................
@@ -213,7 +214,7 @@ contains
 !     parameters arrays.
 !.....................................................................
 
-      if(lrzmax.gt.1) call tdxinitl
+      if(setup0%lrzmax.gt.1) call tdxinitl
 
 !.....................................................................
 !     Call routines to initialize any time-dependent (parabolic)
@@ -232,22 +233,22 @@ contains
       call ainvnorm
 
 !.......................................................................
-!l    1.1 Loop over all radial mesh points lr=1,..,lrzmax to determine
+!l    1.1 Loop over all radial mesh points lr=1,..,setup0%lrzmax to determine
 !     the plasma and equilibrium parameters on the full radial mesh
 !     Also determine the mesh parallel to the magnetic field line
 !.......................................................................
 
-      if (cqlpmod.eq."enabled" .and. numclas.eq.1 .and. ls.eq.lsmax)then
+      if (setup0%cqlpmod.eq."enabled" .and. numclas.eq.1 .and. setup0%ls.eq.setup0%lsmax)then
         lz=lz/2+1
-        lsmax=lsmax/2+1
-        ls=ls/2+1
+        setup0%lsmax=setup0%lsmax/2+1
+        setup0%ls=setup0%ls/2+1
       endif
 
-      do 110 ll=lrzmax,1,-1
+      do 110 ll=setup0%lrzmax,1,-1
 
 !.......................................................................
-!     Sets up the parameters on each lrzmax flux surface. Thus does not
-!     define lr_=lrindx(l_), but lr_=l_, l_=1,lrzmax
+!     Sets up the parameters on each setup0%lrzmax flux surface. Thus does not
+!     define lr_=setup0%lrindx(l_), but lr_=l_, l_=1,setup0%lrzmax
 !     (Not like in tdnflxs)
 !......................................................................
 
@@ -267,7 +268,7 @@ contains
              ! solr(l,lr_), solz(l,lr_) are R,Z coords. of flux surface
 !.......................................................................
 !     Initialize mesh along the magnetic field line, as well as
-!     density and temperature profiles if cqlpmod=enabled
+!     density and temperature profiles if setup0%cqlpmod=enabled
 !.......................................................................
 
         call micxiniz
@@ -278,10 +279,10 @@ contains
 
         call tdtoarad
 
- 110  continue ! ll=lrzmax,1,-1
+ 110  continue ! ll=setup0%lrzmax,1,-1
 
 !MPIINSERT_IF_RANK_EQ_0
-      do ir=1,lrz
+      do ir=1,setup0%lrz
          WRITE(*,'(a,i3,4e13.5)')'ir,rya,rpcon,rmcon,equilpsi=', &
                       ir,rya(ir),rpcon(ir),rmcon(ir),equilpsi(ir)
       enddo
@@ -292,13 +293,13 @@ contains
 
 !.......................................................................
 !     Determine equilibrium parameters at lower half of cross-section
-!     on lrindx(1) flux surface
+!     on setup0%lrindx(1) flux surface
 !.......................................................................
 
-      if (cqlpmod.eq."enabled" .and. numclas.eq.1 .and. ls.eq.lsmax)then
+      if (setup0%cqlpmod.eq."enabled" .and. numclas.eq.1 .and. setup0%ls.eq.setup0%lsmax)then
         lz=2*(lz-1)
-        lsmax=2*(lsmax-1)
-        ls=2*(ls-1)
+        setup0%lsmax=2*(setup0%lsmax-1)
+        setup0%ls=2*(setup0%ls-1)
         call wploweq
       endif
 
@@ -306,11 +307,11 @@ contains
 !     Redefines mu-mesh at midplane if needed
 !.....................................................................
 
-      if (cqlpmod.eq."enabled" .and. meshy.eq."fixed_mu" .and. &
+      if (setup0%cqlpmod.eq."enabled" .and. meshy.eq."fixed_mu" .and. &
         tfac.lt.0.0) call wptrmuy
 
 !.......................................................................
-!l    1.1.2 Initialize some plasma parameters on entire lrzmax mesh
+!l    1.1.2 Initialize some plasma parameters on entire setup0%lrzmax mesh
 !.......................................................................
 
       call ainpla
@@ -423,8 +424,8 @@ contains
 !..................................................................
 
 !     Tried following, but gives problem of code stopping?? [BH041111].
-!        if (cqlpmod.ne."enabled".and.urfmod.ne."disabled") call urfsetup
-        if (cqlpmod.ne."enabled") call urfsetup ! mrfn= is set here also
+!        if (setup0%cqlpmod.ne."enabled".and.urfmod.ne."disabled") call urfsetup
+        if (setup0%cqlpmod.ne."enabled") call urfsetup ! mrfn= is set here also
 
 !..................................................................
 !     Copy some diagnostic quantities
@@ -463,8 +464,8 @@ contains
 !....................................................................
 
       if (transp.eq."enabled") then
-        if (cqlpmod .ne. "enabled") then
-!     warning: these routines use lrors, not lrzmax
+        if (setup0%cqlpmod .ne. "enabled") then
+!     warning: these routines use lrors, not setup0%lrzmax
           call tdtrvint
 
 !         Obtain radial diffusion d_rr, and optionally
@@ -521,12 +522,12 @@ contains
 !     Set up soft X-ray and NPA diagnostic.
 !.....................................................................
 
-      if (lrzmax .ge. 3) then
+      if (setup0%lrzmax .ge. 3) then
 !**bh if (softxry.eq."enabled".and.kelecg.gt.0.and.eqmod.ne."enabled")
         if (softxry.ne."disabled".and.kelecg.gt.0) &
           then
           icall="first"
-          if (noplots.ne."enabled1") then
+          if (setup0%noplots.ne."enabled1") then
              iplotsxr='yes'
           else
              iplotsxr='no'
@@ -548,7 +549,7 @@ contains
 
       write(*,*)'tdinitl:call frnfreya, n=',n,'time=',timet
       call frnfreya(frmodp,fr_gyrop,beamplsep,beamponp,beampoffp, &
-                    hibrzp,mfm1p,noplots)
+                    hibrzp,mfm1p,setup0%noplots)
        write(*,*) 'mfm1 (freya) = ',mfm1p
 !       write(*,*) 'hibrzp(i,1,1),hibrzp(i,2,1),hibrzp(i,3,1)'
 !       do i=1,mfm1p
@@ -571,7 +572,7 @@ contains
 !..................................................................
 !     Plot out initial radial profiles
 !..................................................................
-      if (noplots.ne."enabled1") call tdpltmne
+      if (setup0%noplots.ne."enabled1") call tdpltmne
 
 !..................................................................
 !     Read RF diffusion coefficient data for multiple flux
@@ -587,7 +588,7 @@ contains
 !     print initial output and plot equilibrium surfaces
 !..................................................................
       call tdoutput(1)
-      if (noplots.ne."enabled1" .and. eqmod.eq."enabled") then
+      if (setup0%noplots.ne."enabled1" .and. eqmod.eq."enabled") then
          call tdplteq(0) !'0' means no rays (Here, no data on rays yet)
       endif
 !$$$      if (eqmod .eq. "enabled") call tdplteq

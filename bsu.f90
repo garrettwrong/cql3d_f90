@@ -17,25 +17,25 @@ contains
     use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
-    !      dimension f_(0:iy+1,0:jx+1,ngen,lrz)
+    !      dimension f_(0:iy+1,0:jx+1,ngen,setup0%lrz)
     !      f_ is passed in common
     allocatable :: bsu_s(:,:)
 
     !.........................................................................
     !     This routine is used to compute the skewing effect at the p/t bndry
     !     due to the bootstrap effect. It is not used if bootcalc="disabled",
-    !     or if advnce="explicit" or if lrz=1
+    !     or if advnce="explicit" or if setup0%lrz=1
     !     Subroutine bsu is for the upper theta tp-bndry at i=itu.
     !     There is also a separate subroutine bsl for the lower itl bndry.
     !.........................................................................
 
     bsu=0.
     if (bootcalc.eq."disabled") return
-    if (implct.ne."enabled" .or. lrz.eq.1 .or. n.lt.nonboot) return
+    if (implct.ne."enabled" .or. setup0%lrz.eq.1 .or. n.lt.nonboot) return
 
     if (.NOT. ALLOCATED(bsu_s)) then
-       allocate( bsu_s(0:jx+1,lrz) )
-       call bcast(bsu_s,zero,(jx+2)*lrz)
+       allocate( bsu_s(0:jx+1,setup0%lrz) )
+       call bcast(bsu_s,zero,(jx+2)*setup0%lrz)
     endif
 
     qb_mc=bnumb(kk)*charge*bthr(ll)/(fmass(kk)*clight)
@@ -56,7 +56,7 @@ contains
              dfdr=-(p1+p3)/(p1*p3)*f_(itu_(ll),jj,kk,ll) &
                   +p3/(p1*p2)*f_(itu_(ll+1),jj,kk,ll+1) &
                   -p1/(p2*p3)*f_(itu_(ll+2),jj,kk,ll+2)
-          elseif (ll.eq.lrz) then
+          elseif (ll.eq.setup0%lrz) then
              !            dfdr=(f_(itu_(ll),jj,kk,ll)-f_(itu_(ll-1),jj,kk,ll-1))/
              !     1      (rz(ll)-rz(ll-1))
              p1=rz(ll-1)-rz(ll-2)
@@ -96,12 +96,12 @@ contains
 
        !       Assuming positive current here (should be generalized).
        rrr=rz(ll)-rban
-       if (rrr.gt.rz(lrzmax)) rrr=rz(lrzmax)
+       if (rrr.gt.rz(setup0%lrzmax)) rrr=rz(setup0%lrzmax)
        !BH080714:  rz dimensioned 0:lrza
-       call lookup(rrr,rz(1),lrzmax,weightu,weightl,irrr)
+       call lookup(rrr,rz(1),setup0%lrzmax,weightu,weightl,irrr)
        !BH051101        if (irrr.eq.lzrmax+1) then
-       !$$$        if (irrr.ge.lrzmax+1) then
-       !$$$          irrr=lrzmax+1
+       !$$$        if (irrr.ge.setup0%lrzmax+1) then
+       !$$$          irrr=setup0%lrzmax+1
        !$$$          bsu=f_(itu_(irrr-1),jj,kk,irrr-1)-f_(itu_(ll),jj,kk,ll)
        !$$$        else
        bsu=weightl*f_(itu_(irrr-1),jj,kk,irrr-1) &

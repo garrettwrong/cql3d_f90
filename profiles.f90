@@ -31,7 +31,7 @@ contains
 
       real(c_double):: tmpt(njene)  !Temporary array
       dimension ztr(lrza)   !For tdoutput-like printout
-      dimension rban_vth(lrzmax) ! for print-out
+      dimension rban_vth(setup0%lrzmax) ! for print-out
       character*8 ztext
 
       if (nbctime.le.0) return
@@ -72,7 +72,7 @@ contains
                   temp(k,1)=tempb(nbctime,k)
                endif
 
-               !YuP: called later: call tdxin13d(temp,rya,lrzmax,ntotala,k,npwr(k),mpwr(k))
+               !YuP: called later: call tdxin13d(temp,rya,setup0%lrzmax,ntotala,k,npwr(k),mpwr(k))
 
             elseif (tmdmeth.eq."method2")  then
 
@@ -81,7 +81,7 @@ contains
 
             endif
 
-            call tdxin13d(temp,rya,lrzmax,ntotala,k,npwr(k),mpwr(k))
+            call tdxin13d(temp,rya,setup0%lrzmax,ntotala,k,npwr(k),mpwr(k))
 
  5       continue
       endif ! iprote=prbola-t
@@ -109,9 +109,9 @@ contains
          do 16  k=1,ntotal
             if(bnumb(k).eq.-1.)  then
                call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
-                    tr(1),lrzmax)
+                    tr(1),setup0%lrzmax)
                tr(0)=tmpt(1)
-               do 19  ll=0,lrzmax
+               do 19  ll=0,setup0%lrzmax
                   temp(k,ll)=tr(ll)
                   if(temp(k,ll).le.0.001)then
                    write(*,*)'temp<0.001.  tmpt(1:njene)=',tmpt
@@ -143,16 +143,16 @@ contains
          do 26  k=1,ntotal
             if(bnumb(k).ne.-1.)  then
                call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
-                    tr(1),lrzmax)
+                    tr(1),setup0%lrzmax)
                tr(0)=tmpt(1)
-               do 29  ll=0,lrzmax
+               do 29  ll=0,setup0%lrzmax
                   temp(k,ll)=tr(ll)
  29            continue
             endif
  26      continue
       endif  ! (iproti.eq."spline-t")
 
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
       if (tempc(l,kelec).le.zero .and. tein_t(l,1).le.zero) then
          WRITE(*,*) "Time-dependent Te profile input problem at l=",l
          STOP
@@ -160,7 +160,7 @@ contains
       enddo
 
 !     Assume any time dep in tempc is in first ion species.
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
       if (tempc(l,kionn).le.zero .and. tiin_t(l,1).le.zero) then
          WRITE(*,*) "Time-dependent Ti profile input problem at l=",l
          STOP
@@ -170,15 +170,15 @@ contains
 !     Renormalize temperatures using tescal/tiscal
       do k=1,ntotal
          if (bnumb(k).eq.-1.) then
-            do l=0,lrzmax
+            do l=0,setup0%lrzmax
                temp(k,l)=tescal*temp(k,l)
             enddo
          else
-            do l=0,lrzmax
+            do l=0,setup0%lrzmax
                temp(k,l)=tiscal*temp(k,l)
             enddo
          endif
-         do l=1,lrzmax
+         do l=1,setup0%lrzmax
             if (temp(k,l).le.zero) then
               WRITE(*,*) "profiles.f: temp(k,l)<0 at k,l=",k,l
               STOP
@@ -196,7 +196,7 @@ contains
 !     in lossegy, efield, restvty, sourceko, tdnpa, tdtrdfus,
 !     tdoutput, and vlf*,vlh* subroutines].
       do k=1,ntotal
-         do l=1,lrzmax
+         do l=1,setup0%lrzmax
            vth(k,l)=(temp(k,l)*ergtkev/fmass(k))**.5
            if (k .eq. kelec) vthe(l)=vth(kelec,l)
          enddo
@@ -212,7 +212,7 @@ contains
       WRITE(*,*)'profiles.f: time step n, timet=',n,timet
 !MPIINSERT_ENDIF_RANK
       do k=1,ngen
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
          j_thermal=1 ! to initialize
          do j=jx,1,-1 ! scan backward
            !write(*,*) j, vth(k,l)/vnorm, x(j)
@@ -233,7 +233,7 @@ contains
            !pause !-------
          endif
 !MPIINSERT_ENDIF_RANK
-      enddo ! l=1,lrzmax
+      enddo ! l=1,setup0%lrzmax
       enddo ! k=1,ngen
       endif ! n>0
 
@@ -245,7 +245,7 @@ contains
 !     species only.
       do k=ngen+1,ntotal
          rstmss=fmass(k)*clite2/ergtkev
-         do l=1,lrzmax
+         do l=1,setup0%lrzmax
           thta=rstmss/temp(k,l)
           if (thta.gt.100. .or. relativ.eq."disabled") then
             energy(k,l)=1.5*temp(k,l)
@@ -300,7 +300,7 @@ contains
             endif
 
 
-            call tdxin13d(reden,rya,lrzmax,ntotala,k,npwr(0),mpwr(0))
+            call tdxin13d(reden,rya,setup0%lrzmax,ntotala,k,npwr(0),mpwr(0))
 
          endif
 
@@ -334,13 +334,13 @@ contains
             endif
 
             call tdinterp("zero","linear",ryain,tmpt,njene, &
-                 rya(1),tr(1),lrzmax)
+                 rya(1),tr(1),setup0%lrzmax)
             tr(0)=tmpt(1)
-            do 13 ll=0,lrzmax
+            do 13 ll=0,setup0%lrzmax
                reden(k,ll)=tr(ll)
  13         continue
          else
-            do 9  ll=0,lrzmax
+            do 9  ll=0,setup0%lrzmax
                reden(k,ll)=tr(ll)/abs(bnumb(k))
  9          continue
          endif
@@ -382,7 +382,7 @@ contains
             endif  !On zeffc(1)
 
             dratio=zeffin(1)/zeffin(0)
-            do ll=1,lrzmax
+            do ll=1,setup0%lrzmax
                call profaxis(rn,npwrzeff,mpwrzeff,dratio,rya(ll))
                zeff(ll)=zeffin(0)*rn
             enddo
@@ -406,14 +406,14 @@ contains
                   enddo
                endif
                call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
-                    tr(1),lrzmax)
-               do  ll=1,lrzmax
+                    tr(1),setup0%lrzmax)
+               do  ll=1,setup0%lrzmax
                   zeff(ll)=tr(ll)
                enddo
          endif
 
 !     Scale zeff
-         do ll=1,lrzmax
+         do ll=1,setup0%lrzmax
             zeff(ll)=zeffscal*zeff(ll)
          enddo
 
@@ -424,7 +424,7 @@ contains
             fmaxx=max(fmaxx,bnumb(kionm(k)))
             fminn=min(fminn,bnumb(kionm(k)))
          enddo
-         do 121 ll=1,lrzmax
+         do 121 ll=1,setup0%lrzmax
             if(zeff(ll).gt.fmaxx .or. zeff(ll).lt.fminn) then
                WRITE(*,*)'profiles.f: ', &
                     'Adjust bnumb(kion) for compatibility with zeff'
@@ -444,7 +444,7 @@ contains
 
 !BH120627:  This appears to be already done above:
 !BH120627:c    Interpolate input ion densities onto rya grid
-!BH120627:     call tdxin13d(reden,rya,lrzmax,ntotala,k,npwr(0),mpwr(0))
+!BH120627:     call tdxin13d(reden,rya,setup0%lrzmax,ntotala,k,npwr(0),mpwr(0))
 
 
 
@@ -459,7 +459,7 @@ contains
                                   !Equal-bnumb() species at beginning of
                                   !Maxl ions.
 !        Renormalizing the density ratios as fractions for equal-bnumb:
-            do ll=1,lrzmax
+            do ll=1,setup0%lrzmax
                dsum=0.
                do k=1,nsame_bnumb
                   dsum=dsum+reden(kionm(k),ll)
@@ -474,7 +474,7 @@ contains
 !     Set rest of ion densities to 1.
       do kk=nsame_bnumb,nionm
          k=kionm(kk)
-         do l=0,lrzmax
+         do l=0,setup0%lrzmax
             reden(k,l)=one
          enddo
       enddo
@@ -497,7 +497,7 @@ contains
          !YuP: From the above, reden can be a small negative value,
          !because of a rounding error. Add lower limit =0.d0
          reden(k,0)=max(reden(k,0),zero) !YuP[2018-09-18] added
-         do 142 ll=1,lrzmax
+         do 142 ll=1,setup0%lrzmax
                reden(k,ll)=reden(kelec,ll)*reden(k,ll)*(zeff(ll) &
                     -bnumb(k2))/(bnumb(k1)-bnumb(k2))/bnumb(k1)
             !YuP: From the above, reden can be a small negative value,
@@ -516,7 +516,7 @@ contains
 
          do k=1,niong
             if (nionm.ge.niong) then
-               do l=0,lrzmax
+               do l=0,setup0%lrzmax
                   reden(kiong(k),l)=reden(kionm(k),l)
                enddo
             endif
@@ -527,7 +527,7 @@ contains
 
 !     Renormalize densities using enescal
       do k=1,ntotal
-         do l=0,lrzmax
+         do l=0,setup0%lrzmax
             reden(k,l)=enescal*reden(k,l)
          enddo
       enddo
@@ -557,8 +557,8 @@ contains
                endif
                !------------
                call tdinterp("zero","linear",ryain,tmpt,njene, &
-                    rya(1),tr(1),lrzmax)
-               do ll=1,lrzmax
+                    rya(1),tr(1),setup0%lrzmax)
+               do ll=1,setup0%lrzmax
                enn(ll,kkk)= ennscal(kkk)*tr(ll) ! for tdnpa
                enddo
             endif ! npa_process(kkk).ne.'notset'.and.kkk.ne.5
@@ -566,7 +566,7 @@ contains
          ! For NPA, process#5 (recombination with electrons):
          if (npa_process(5).eq.'radrecom') then
              k=max(kelecg,kelecm)  !I.e., using bkgrnd distn, if avail.
-             do ll=1,lrzmax
+             do ll=1,setup0%lrzmax
                 enn(ll,5)= ennscal(5)*reden(k,ll)
                 ! Note: reden is defined above (can be time-dependent)
              enddo
@@ -626,7 +626,7 @@ contains
             endif
 
             dratio=elecfld(1)/elecfld(0)
-            do 17 ll=1,lrzmax
+            do 17 ll=1,setup0%lrzmax
                call profaxis(rn,npwrelec,mpwrelec,dratio,rya(ll))
                elecfld(ll)=elecfld(0)*rn
  17            continue
@@ -652,8 +652,8 @@ contains
                   enddo
                endif
                call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
-                    tr(1),lrzmax)
-               do  ll=1,lrzmax
+                    tr(1),setup0%lrzmax)
+               do  ll=1,setup0%lrzmax
                   elecfld(ll)=tr(ll)
                enddo
 !              Assume ryain(1)=0 (or close) to get central elecfld
@@ -666,7 +666,7 @@ contains
          endif  !On iproelec.eq.spline-t
 
 !100126  Scale elecfld
-         do ll=1,lrzmax
+         do ll=1,setup0%lrzmax
             elecfld(ll)=elecscal*elecfld(ll)
          enddo
          elecfldc=elecscal*elecfldc
@@ -704,7 +704,7 @@ contains
 
 
             dratio=currxj(1)/currxj(0)
-            do 60 ll=1,lrzmax
+            do 60 ll=1,setup0%lrzmax
                call profaxis(rn,npwrxj,mpwrxj,dratio,rya(ll))
                currxj(ll)=currxj(0)*rn
  60         continue
@@ -728,8 +728,8 @@ contains
                   enddo
                endif
                call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
-                    tr(1),lrzmax)
-               do  ll=1,lrzmax
+                    tr(1),setup0%lrzmax)
+               do  ll=1,setup0%lrzmax
                   currxj(ll)=tr(ll)
                enddo
             endif  !On tmdmeth
@@ -747,10 +747,10 @@ contains
 
       if (ampfmod.eq.'enabled' .and. n.le.nonampf) then !Fill in for plots
          do it=0,nampfmax
-            do ll=0,lrz
+            do ll=0,setup0%lrz
                elecfldn(ll,n,it)=elecfld(ll)/300.d0
             enddo
-            elecfldn(lrz+1,n,it)=elecfldb/300.d0
+            elecfldn(setup0%lrz+1,n,it)=elecfldb/300.d0
          enddo
       endif
 
@@ -776,10 +776,10 @@ contains
 
 !     Renormalize currxj
          currxjtot=0.
-         do 80 ll=1,lrzmax
+         do 80 ll=1,setup0%lrzmax
             currxjtot=currxjtot+darea(ll)*currxj(ll)
  80      continue
-         do 81 ll=1,lrzmax
+         do 81 ll=1,setup0%lrzmax
             currxj(ll)=totcurtt/currxjtot*currxj(ll)
  81      continue
 
@@ -813,7 +813,7 @@ contains
          endif
 
          dratio=vphiplin(1)/vphiplin(0)
-         do 90 ll=1,lrzmax
+         do 90 ll=1,setup0%lrzmax
             call profaxis(rn,npwrvphi,mpwrvphi,dratio,rya(ll))
             vphipl(ll)=vphiscal*vphiplin(0)*rn
 
@@ -838,8 +838,8 @@ contains
                enddo
             endif
             call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
-                 tr(1),lrzmax)
-            do  ll=1,lrzmax
+                 tr(1),setup0%lrzmax)
+            do  ll=1,setup0%lrzmax
                vphipl(ll)=vphiscal*tr(ll)
             enddo
          endif                  !On tmdmeth
@@ -856,12 +856,12 @@ contains
 !.......................................................................
       if (pltvs .ne. "psi") then
         ztext=" rovera "
-        do l=1,lrzmax
+        do l=1,setup0%lrzmax
           ztr(l)=rovera(l)
         enddo
       else
         ztext=pltvs
-        do l=1,lrzmax
+        do l=1,setup0%lrzmax
           ztr(l)=(equilpsi(0)-equilpsi(l))/equilpsi(0)
         enddo
       endif
@@ -878,12 +878,12 @@ contains
            ! At n=0, profiles() is called before aingeom(),
            ! and so bthr(ll) is not defined yet.
            ! Then, rban_vth=NaN
-           do ll=1,lrzmax
+           do ll=1,setup0%lrzmax
              qb_mc=bnumb(jk)*charge*bthr(ll)/(fmass(jk)*clight)
              ! Banana width (for v=vthermal, at t-p bndry):
-             ! BH171230: For lrzdiff=enabled, lrz<lrzmax, the default
-             ! values of itl_(ll>lrz) can cause out-of-bounds coss.
-             if (ll.le.lrz) then
+             ! BH171230: For setup0%lrzdiff=enabled, setup0%lrz<setup0%lrzmax, the default
+             ! values of itl_(ll>setup0%lrz) can cause out-of-bounds coss.
+             if (ll.le.setup0%lrz) then
              rban_vth(ll)= abs(vth(jk,ll)*coss(itl_(ll),ll)/qb_mc) ! cm
              else
                 rban_vth(ll)= zero
@@ -899,11 +899,11 @@ contains
                         iprovphi.ne.'disabled') then
             WRITE(6,9126) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
             WRITE(6,9127) (il,ztr(il),reden(jk,il),temp(jk,il), &
-                 vth(jk,il),energy(jk,il),vphipl(il),il=1,lrzmax)
+                 vth(jk,il),energy(jk,il),vphipl(il),il=1,setup0%lrzmax)
             else
             WRITE(6,9120) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
             WRITE(6,9121) (il,ztr(il),reden(jk,il),temp(jk,il), &
-                 vth(jk,il),energy(jk,il),rban_vth(il), il=1,lrzmax)
+                 vth(jk,il),energy(jk,il),rban_vth(il), il=1,setup0%lrzmax)
             endif
          elseif (nnspec.eq.jk) then
             if(kspeci(2,jk).eq.'general' .and. &
@@ -911,11 +911,11 @@ contains
             WRITE(6,9128) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
             WRITE(6,9129) (il,ztr(il),reden(jk,il),temp(jk,il), &
                  vth(jk,il),energy(jk,il),enn(il,1),vphipl(il), &
-                 il=1,lrzmax)
+                 il=1,setup0%lrzmax)
             else
             WRITE(6,9122) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
             WRITE(6,9123) (il,ztr(il),reden(jk,il),temp(jk,il), &
-                 vth(jk,il),energy(jk,il),enn(il,1),il=1,lrzmax)
+                 vth(jk,il),energy(jk,il),enn(il,1),il=1,setup0%lrzmax)
             endif
          endif
  123  continue
@@ -929,7 +929,7 @@ contains
         ,/,1x,15("="),//,"  l",4x,a8,5x,"density",4x, &
         "temperature",6x,"vth",9x,"energy",4x,"neutral den")
  9123 format(i3,1p6e13.5)
- 9125 format(/," along magnetic field line, at lrindx=",i3,":",/, &
+ 9125 format(/," along magnetic field line, at setup0%lrindx=",i3,":",/, &
         9x,"s",/,(i3,1p5e13.5))
  9126 format(/" species no. ",i3,2x,a,a8,"    charge number: ",f6.2 &
         ,/,1x,15("="),//,"  l",4x,a8,5x,"density",4x, &
@@ -942,7 +942,7 @@ contains
  9129 format(i3,1p7e13.5)
 
       write(*,*)
-      write(*,*)'profiles: zeff(1:lrzmax)=',(zeff(il), il=1,lrzmax)
+      write(*,*)'profiles: zeff(1:setup0%lrzmax)=',(zeff(il), il=1,setup0%lrzmax)
       write(*,*)
 
 !

@@ -66,7 +66,7 @@ contains
         k=nrfspecies(krfn(krf))
         bcnst=abs(bnumb(k))*charge/(fmass(k)*clight)
 
-        do 9 l=1,lrz
+        do 9 l=1,setup0%lrz
           call tdnflxs(lmdpln(l))
 
 !..................................................................
@@ -681,7 +681,7 @@ contains
 !.......................................................................
 !     end of loop over flux surfaces
 !.......................................................................
- 9      continue !  l=1,lrz
+ 9      continue !  l=1,setup0%lrz
 
         do 50 iray=1,nray(krf)
           lrayelt(iray,krf)=nrayelt(iray,krf)

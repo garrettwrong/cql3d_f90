@@ -14,7 +14,8 @@ module tdnpadiag_mod
 contains
 
       subroutine tdnpadiag(icall)
-      use param_mod
+        use cqlconf_mod, only : setup0
+        use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
       character*8 icall
@@ -31,13 +32,13 @@ contains
 
 !     Call npa routines to calc and plot output....
 
-      if (noplots.eq."enabled1") then
+      if (setup0%noplots.eq."enabled1") then
          iplotnbi='no'
       else
          iplotnbi='yes'
       endif
 
-      do 1 l=1,lrzmax
+      do 1 l=1,setup0%lrzmax
         tr1(l)=reden(kelec,l)
  1    continue
       call tdnpa0(rrz,tr1(1),icall,iplotnbi)

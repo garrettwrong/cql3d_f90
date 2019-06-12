@@ -14,7 +14,8 @@ module esefld_mod
 
 contains
 
-      subroutine efld_cd(dz,ls,vnorm,flux1,flux2,elparnw,flux0)
+  subroutine efld_cd(dz,ls,vnorm,flux1,flux2,elparnw,flux0)
+    use cqlconf_mod, only : setup0
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
@@ -26,14 +27,14 @@ contains
 !.......................................................................
 
 
-!..... input: ls,dz,flux0,flux1,flux2
+!..... input: setup0%ls,dz,flux0,flux1,flux2
 
-      dimension dz(1:ls),flux1(0:ls+1),flux2(0:ls+1)
+      dimension dz(1:setup0%ls),flux1(0:setup0%ls+1),flux2(0:setup0%ls+1)
          !YuP[2019-05-30] corrected sub.efld_cd
          !                so that dz argument starts with index 1.
 
 !.....input/output:
-      dimension elparnw(0:ls+1)
+      dimension elparnw(0:setup0%ls+1)
 
 !.......................................................................
 !
@@ -42,14 +43,14 @@ contains
 
       sum1=0.d0
       sum2=0.d0
-      do kk=1,ls
+      do kk=1,setup0%ls
          sum1=sum1 + flux1(kk)*dz(kk)/flux2(kk)
          sum2=sum2 + dz(kk)/flux2(kk)
       enddo
 
       flux0=vnorm*sum1/sum2
 
-      do kk=1,ls
+      do kk=1,setup0%ls
          delparnw=(flux0-flux1(kk)*vnorm)/(flux2(kk)*vnorm)
          elparnw(kk)=elparnw(kk) +300.d0*delparnw
       enddo

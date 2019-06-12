@@ -50,7 +50,7 @@ contains
 
       if(x.ge.xarray(length)) then
          ! YuP: this case:
-         ! orbit gets outside of equilpsi(lrz), the surface #lrz.
+         ! orbit gets outside of equilpsi(setup0%lrz), the surface #setup0%lrz.
          if ((abs(xarray(length)-x)/ &
               max(abs(xarray(length)),abs(x))).gt.em12) then
 !           write if outside roundoff limits:
@@ -119,7 +119,7 @@ contains
 
       if(x.ge.xarray(length)) then
          ! YuP: this case:
-         ! orbit gets outside of equilpsi(lrz), the surface #lrz.
+         ! orbit gets outside of equilpsi(setup0%lrz), the surface #setup0%lrz.
 !         if ((abs(xarray(length)-x)/
 !     1        max(abs(xarray(length)),abs(x))).gt.em12) then
 !           write if outside roundoff limits:

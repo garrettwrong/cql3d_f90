@@ -13,7 +13,8 @@ module coefrfad_mod
 
 contains
 
-      subroutine coefrfad(k,xrf)
+  subroutine coefrfad(k,xrf)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -33,7 +34,7 @@ contains
       call bcast(dbb(1:iy,0:jx),zero,iyjxp1)
       call bcast(dff(0:iy,1:jx),zero,iyp1jx)
 
-      if (cqlpmod.ne."enabled") then
+      if (setup0%cqlpmod.ne."enabled") then
       if (vlhmod.eq."enabled" .or. vlfmod.eq."enabled") then
 !     vlhmod and vlfmod are only set up for nrf=1
       if (nrf.gt.1) then
@@ -59,7 +60,7 @@ contains
  10   continue
       endif   ! On vlhmod.or.vlfmod enabled
 
-      elseif (cqlpmod.eq."enabled" .and. vlfmod.eq."enabled") then
+      elseif (setup0%cqlpmod.eq."enabled" .and. vlfmod.eq."enabled") then
 
       do 20 kk=1,nrf
 !cc YuP-101220: Commenting next line, because wcqlb-wcqlf
@@ -88,7 +89,7 @@ contains
 !cc      endif   ! On vlhmod,vlfmod enabled
  20   continue
 
-      endif   ! On cqlpmod,vlfmod enabled
+      endif   ! On setup0%cqlpmod,vlfmod enabled
 
 !..................................................................
 !     urf module contribution next

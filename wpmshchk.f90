@@ -55,7 +55,7 @@ contains
           ,sqrt(1.-psis(l)*sinn(i,1)**2),l=1,l_upper(i))
  1011 continue
       print *,'  l',' sin*dth','  (dthp)'
-      do 102 l=1,ls
+      do 102 l=1,setup0%ls
         zsum0=0.
         zsums=0.
         do 103 i=1,iyh_(l)
@@ -68,7 +68,7 @@ contains
         write(6,'(i3,1p2e12.3)') l,zsums,zsum0
  102  continue
 
-      if (ls.gt.10 .or. cqlpmod.ne."enabled" .or. transp.ne."enabled") &
+      if (setup0%ls.gt.10 .or. setup0%cqlpmod.ne."enabled" .or. transp.ne."enabled") &
         go to 999
 
       print *,' dy adjusted and dy at iyh'
@@ -76,7 +76,7 @@ contains
       do 1031 i=1,iyh_(1)
         zsum0=zsum0+cynt2(i,1)
  1031 continue
-      do 1032 l=2,ls/2+1
+      do 1032 l=2,setup0%ls/2+1
         zsum1=0.0
         do 1033 i=1,iyh_(l)-1
           zsum1=zsum1+cynt2(i,l)
@@ -88,7 +88,7 @@ contains
       l=1
       write(6,'(/," y(i+1)-y(i)(l),dyp5(l); l=",i3,/,(1p10e12.4))') &
         l,(y(i+1,l)-y(i,l),dyp5(i,l),i=1,iyh_(l))
-      do 104 l=2,ls
+      do 104 l=2,setup0%ls
         do 105 i=2,iyh_(l)
           ii=iy_(l)-i+1
           dyp5(i,l)=dyp5(i,1)*psis(l)*sinn(i,1)*coss(i,1)/coss(i,l)/ &
@@ -115,7 +115,7 @@ contains
  104  continue
       print *,' '
       print *,'  l',' sum(2*pi*sin*dth)(l)',' sum (dth0) with new dy(l)'
-      do 1021 l=1,ls
+      do 1021 l=1,setup0%ls
         zsum0=0.
         zsums=0.
         do 1022 i=1,iyh_(l)
@@ -132,7 +132,7 @@ contains
  9101 format(i3,1p10e12.4,/,(/,3x,1p10e12.4))
  9102 format(i3,1p9e12.4,/,(3x,1p9e12.4))
 
-      if (ls .le. 10) stop 'wpmshchk: Need to set ls>10'
+      if (setup0%ls .le. 10) stop 'wpmshchk: Need to set setup0%ls>10'
 
  999  return
       end subroutine wpmshchk

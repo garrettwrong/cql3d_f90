@@ -13,7 +13,8 @@ module pltvflux_mod
 
 contains
 
-      subroutine pltvflux
+  subroutine pltvflux
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : luf
@@ -33,7 +34,7 @@ contains
       real(c_double) wkd(jx)
       character*64 tx_
 !
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots .eq."enabled1") return
 
       do 100 k=1,ngen !-----------------------------------------
 

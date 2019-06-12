@@ -18,7 +18,8 @@ module tdsxr_mod
 
 contains
 
-      subroutine tdsxr(ien,chi,thpol,ll,edotei,edotee)
+  subroutine tdsxr(ien,chi,thpol,ll,edotei,edotee)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : dcopy
@@ -58,24 +59,24 @@ contains
 
 !..................................................................
 !     Set up variables local to flux surface ll
-!     Special treatment if f not solved on ll (case lrzdiff=enabled)
+!     Special treatment if f not solved on ll (case setup0%lrzdiff=enabled)
 !...................................................................
 
-      if (lrzdiff .ne. "enabled") then
-        illcal=1  ! No lrzdiff
+      if (setup0%lrzdiff .ne. "enabled") then
+        illcal=1  ! No setup0%lrzdiff
         go to 1
       else
-        illcal=0  ! lrzdiff
+        illcal=0  ! setup0%lrzdiff
       endif
 
-      do 2 il=1,lrz
-        if (lrindx(il) .eq. ll) illcal=1  !No lrzdiff for this ll
-        if (lrindx(il) .gt. ll) go to 3
+      do 2 il=1,setup0%lrz
+        if (setup0%lrindx(il) .eq. ll) illcal=1  !No setup0%lrzdiff for this ll
+        if (setup0%lrindx(il) .gt. ll) go to 3
  2    continue
  3    if (illcal .eq. 1) go to 1
-      ilplus=il-1/(lrz+2-il)
-      ilrrigt=lrindx(ilplus)
-      ilrleft=lrindx(ilplus-1+1/ilplus)
+      ilplus=il-1/(setup0%lrz+2-il)
+      ilrrigt=setup0%lrindx(ilplus)
+      ilrleft=setup0%lrindx(ilplus-1+1/ilplus)
       if (abs(rz(ilrrigt)-rz(ll)) .le. abs(rz(ilrleft)-rz(ll))) then
         ilrnear=ilrrigt
       else
@@ -103,7 +104,7 @@ contains
 !     Copy the electron distribution function into a temporary array
 !     used for Legendre coefficient calculation, and obtain poloidal
 !     bin index lll.
-!     If distribution not computed (ll not in lrindx) then assume a
+!     If distribution not computed (ll not in setup0%lrindx) then assume a
 !     non-relativistic Maxwellian distribution function.
 !....................................................................
 
@@ -135,7 +136,7 @@ contains
  600  continue
 
 !.......................................................................
-!     Compute Legendre coefficient for temp2=f (if lr in lrindx only)
+!     Compute Legendre coefficient for temp2=f (if lr in setup0%lrindx only)
 !.......................................................................
 
       if (illcal .eq. 0) go to 700

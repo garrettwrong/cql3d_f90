@@ -83,7 +83,7 @@ contains
 !     Redefine da and db at the pass-trapped boundaries
 !..................................................................
 
-      if (nn.ne.3 .and. cqlpmod.ne."enabled") then
+      if (nn.ne.3 .and. setup0%cqlpmod.ne."enabled") then
         do 5 j=1,jx
           temp1(itl,j)=.25*( temp1(itl-1,j)/vptb(itl-1,lr_)+ &
                           2.*temp1(itl+1,j)/vptb(itl+1,lr_)+ &

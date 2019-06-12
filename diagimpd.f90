@@ -328,7 +328,7 @@ contains
        'diagimpd AFTER  f update. n,l_,MIN(f),MAX(f),SUM(f)=', &
                 n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 !MPIINSERT_ENDIF_RANK
-      !!!if(l_.eq.lrz)  pause
+      !!!if(l_.eq.setup0%lrz)  pause
 
       if (n .gt. 0 .and. n/nchec*nchec .eq. n) then
         call diagentr(9,k)

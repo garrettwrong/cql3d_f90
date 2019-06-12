@@ -24,7 +24,7 @@ contains
 
       character*8 icall,iplotsxr
 
-      do 1 l=1,lrzmax
+      do 1 l=1,setup0%lrzmax
         tr1(l)=reden(kelec,l)
  1    continue
 !BH081106:  In some radcoord cases, rrz contains normalized radial

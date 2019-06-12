@@ -43,7 +43,7 @@ contains
 !     resist=Resistivity, calc'd from distn fnctn results
 !                  =<E_phi/R>/<j_phi/R>, is a "toroidal" resistivity.
 !                  Except, if efswtchn.eq."neo_hh" .and.
-!                    cqlpmod.ne."enabled" ==>
+!                    setup0%cqlpmod.ne."enabled" ==>
 !                    resist=(pol cross-section-area avg of E)/currpar
 !                    and currpar is sum of Hinton-Hazeltine neoclassical
 !                    current + runaway current.
@@ -53,9 +53,9 @@ contains
 !
 !
 !     rovsloc is the local resistivity E_par/j_par(no flux averaged),
-!     meaningful in cqlpmod only
+!     meaningful in setup0%cqlpmod only
 !
-!     If efswtchn="neo_hh" and cqlpmod.ne."enabled":
+!     If efswtchn="neo_hh" and setup0%cqlpmod.ne."enabled":
 !                           resist= (area avg of E)/currpar
 !                           rovs = resist/(H&H neoclassical value).
 !.......................................................................
@@ -73,7 +73,7 @@ contains
 
             if (efflag.ne."parallel") then
 
-            if (efswtchn.eq."neo_hh" .and. cqlpmod.ne."enabled") then
+            if (efswtchn.eq."neo_hh" .and. setup0%cqlpmod.ne."enabled") then
             resist=elecfld(lr_) / 300. /(currpar(lr_)*3.e9)  * rmag * &
                  fpsi(lr_)  / bmod0(lr_) * onovrp(2,lr_)/ &
                  psiavg(2,lr_)
@@ -87,7 +87,7 @@ contains
 
             else                          !I.E., efflag.eq."parallel"
 
-            if (efswtchn.eq."neo_hh" .and. cqlpmod.ne."enabled") then
+            if (efswtchn.eq."neo_hh" .and. setup0%cqlpmod.ne."enabled") then
                resist=elecfld(lr_)/300.*rmag*onovrp(2,lr_)/onovrp(1,lr_) &
                     /(currpar(lr_)*3.e9)
             else
@@ -101,7 +101,7 @@ contains
 
          endif
 
-         if (cqlpmod .eq. "enabled") then   !Local along fld line resist
+         if (setup0%cqlpmod .eq. "enabled") then   !Local along fld line resist
 !%OS  if (mod(nummods,10).le.4 .or. n.ge.nontran) then
             resistlo=elecfld(lr_)/300.*rmag*fpsi(lr_)/bmidplne(lr_)/ &
                  (psis(l_)*solrs(l_)**2) / currm(kelec,l_)
@@ -122,7 +122,7 @@ contains
 !..................................................................
 
       if (l_ .eq. lmdpln_) then
-         if (efswtchn.eq."neo_hh" .and. cqlpmod.ne."enabled") then
+         if (efswtchn.eq."neo_hh" .and. setup0%cqlpmod.ne."enabled") then
             rovs(lr_)=resist/(zreshin(lr_)*sptzr(lmdpln_)+em90)
          else
             rovs(lr_)=resist/(sptzr(lmdpln_)+em90)

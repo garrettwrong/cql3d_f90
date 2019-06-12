@@ -1,14 +1,6 @@
 !     name.h
 
 !..................................................................
-!     NAMELIST (SETUP0) DECLARATION FOR INPUT
-!..................................................................
-
-      namelist/setup0/mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
-	nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
-	ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf
-
-!..................................................................
 !     NAMELIST (SETUP) DECLARATION FOR INPUT
 !..................................................................
 

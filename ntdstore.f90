@@ -27,7 +27,7 @@ contains
       if (n .eq. 0) nch(l_)=1
       ptime(nch(l_),l_)=timet
       do 30 k=1,ngen
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
           pdens(nch(l_),k,l_)=xlndn(k,lr_)/zmaxpsi(lr_) ! <n>_FSA ZOW only
 
           pdenm(nch(l_),k,l_)=reden(k,lr_)   !  n_midplane
@@ -51,7 +51,7 @@ contains
  20     continue
  30   continue
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
          k=1
          pdenra(nch(l_),l_)=denra(k,lr_)
          pcurra(nch(l_),l_)=curra(k,lr_)/3.e9
@@ -72,10 +72,10 @@ contains
         restp(nch(l_),lr_)=resist
         restnp(nch(l_),lr_)=resistn
         sptzrp(nch(l_),l_)=sptzr(l_)
-        if (cqlpmod .ne. "enabled") rovsp(nch(l_),lr_)=rovs(lr_)
+        if (setup0%cqlpmod .ne. "enabled") rovsp(nch(l_),lr_)=rovs(lr_)
         vpov(nch(l_),lr_)=vpovth
       endif
-      if (cqlpmod .eq. "enabled") rovsp(nch(l_),ls_)=rovsloc(l_)
+      if (setup0%cqlpmod .eq. "enabled") rovsp(nch(l_),ls_)=rovsloc(l_)
  70   continue
 
       return

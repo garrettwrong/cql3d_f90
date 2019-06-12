@@ -34,7 +34,7 @@ contains
 !.......................................................................
       czero = (0.0,0.0)
 
-      lniylz=iy*lz*lrzmax
+      lniylz=iy*lz*setup0%lrzmax
       lnj=jx
       lni=iy
       lnjj=jjx
@@ -46,7 +46,7 @@ contains
 
 !BH031009      lnurfdum=lniylz+10*lnj+3*2*lni+2*lnjj
       lnurfdum=lniylz+8*lnj+(3*2+1)*lni+4*lnjj
-      allocate(cosmz(iy,lz,lrzmax),STAT=istat)
+      allocate(cosmz(iy,lz,setup0%lrzmax),STAT=istat)
       call bcast(cosmz,zero,SIZE(cosmz))
       allocate(alfag(jx),STAT=istat)
       call bcast(alfag,zero,SIZE(alfag))

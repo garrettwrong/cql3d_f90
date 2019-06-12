@@ -25,8 +25,8 @@ contains
 
       ztfac=abs(tfac)
       iyhtr=iymax/2
-      ilshalf=ls
-      if (sbdry .eq. "periodic") ilshalf=ls/2+1
+      ilshalf=setup0%ls
+      if (sbdry .eq. "periodic") ilshalf=setup0%ls/2+1
       itrap=ilshalf-1
       if (ztfac .le. 1.0) then
         do 110 l=2,ilshalf

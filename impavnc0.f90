@@ -45,6 +45,7 @@ module impavnc0_mod
 contains
 
   subroutine impavnc0(kopt)
+    use cqlconf_mod, only : setup0
     use param_mod
     use cqlcomm_mod
     use advnce_mod !here: in impavnc0(). To get many functions
@@ -168,8 +169,8 @@ contains
     icount_imp=icount_imp+1
     ifirst_lr=0
     ilast_lr=0
-    if (l_.eq.1 .or. lrz.eq.1) ifirst_lr=1
-    if (l_.eq.lrz) ilast_lr=1
+    if (l_.eq.1 .or. setup0%lrz.eq.1) ifirst_lr=1
+    if (l_.eq.setup0%lrz) ilast_lr=1
     !write(*,'(a,4i5)')'impavnc0: n,icount_imp,ifirst_lr,ilast_lr', &
     !n,icount_imp,ifirst_lr,ilast_lr
 
@@ -237,7 +238,7 @@ contains
 
     ml=inew+2
     mu=inew+2
-    if (symtrap.ne."enabled" .and. cqlpmod.ne."enabled") then
+    if (symtrap.ne."enabled" .and. setup0%cqlpmod.ne."enabled") then
        !     itu+1 contributes to the equation for itl
        ml=inew+3
        mu=inew+3
@@ -388,7 +389,7 @@ contains
     elseif (soln_method.eq.'it3drv') then
        if (ifirst_lr.eq.1) then
           !BH080429   Problem:  ipofi only calculated once in code, in tdtranspn.
-          !BH080429            call ibcast(ipofi(1,1),0,iy*lrz)
+          !BH080429            call ibcast(ipofi(1,1),0,iy*setup0%lrz)
           call bcast(a_csr(1:icsrij),zero,icsrij)
           call ibcast(ja_csr(1:icsrij),0,icsrij)
           call ibcast(ia_csr(1:icsrip),0,icsrip)
@@ -632,7 +633,7 @@ contains
        if (factor.eq."disabled") then   !Using prior factorization...
           !endif on factor at line 1834
           if (.not.(ampfmod.eq."enabled" .and. kopt.eq.3 &
-               .and.cqlpmod.ne."enabled" .and. k.eq.kelec)) then
+               .and.setup0%cqlpmod.ne."enabled" .and. k.eq.kelec)) then
 
              !write(*,*)'impavnc0:  factor.eq."disabled", OK?'
              ipassbnd=iyh+1-itl
@@ -675,7 +676,7 @@ contains
                       !.......................................................................
 
                       rhs(ieq)=z00(i,j,k)
-                      if (cqlpmod.eq."enabled".and.eseswtch.eq."enabled") then
+                      if (setup0%cqlpmod.eq."enabled".and.eseswtch.eq."enabled") then
                          cnst=-bnumb(k)/fmass(k)*charge/vnorm
                          if (j.ne.1.or.j.ne.jx) then
                             dfdvz=half*(f(i,j+1,k,l_)-f(i,j-1,k,l_)) &
@@ -695,7 +696,7 @@ contains
                                  *sinn(i,l_)*xi(j)*dyi(i,l_)
                          endif
                          rhs(ieq)=cnst*dfdvz
-                      endif  !  On cqlpmod/eseswtch
+                      endif  !  On setup0%cqlpmod/eseswtch
 
                       rhs(ieq)=rhs(ieq)*scal(neq,l_)
 
@@ -716,7 +717,7 @@ contains
           !.......................................................................
 
           if (ampfmod.eq."enabled" .and. kopt.eq.3 .and.icount_ampf.eq.2 &
-               .and.cqlpmod.ne."enabled" .and. k.eq.kelec) then
+               .and.setup0%cqlpmod.ne."enabled" .and. k.eq.kelec) then
              !$$$                   cnst=-bnumb(k)/fmass(k)*charge/vnorm
              !$$$                   if (j.ne.1.or.j.ne.jx) then
              !$$$                      dfdvz=half*(f(i,j+1,k,l_)-f(i,j-1,k,l_))
@@ -752,7 +753,7 @@ contains
 
              !   Set up the ampfda/ampfdd coeffs, and shift to bin bndries
              !   (Following coefedad, and above.  See, also, 131231 notes.)
-             !   (Could dimension by 1:lrz also, and set up once for all l_.)
+             !   (Could dimension by 1:setup0%lrz also, and set up once for all l_.)
              do j=1,jx
                 do i=1,iy
                    !YuP170227                   ampfda(i,j)=bnumb(k)/fmass(k)*cex(i,j,l_)
@@ -810,7 +811,7 @@ contains
                       fhp0=fh(i+1,j,1,l_)+fh(i,j,1,l_)
                       fhm0=fh(i,j,1,l_)+fh(i-1,j,1,l_)
                       !YuP[2019-05-30] Note that fh() and fg() are allocated as
-                      ! fh(0:iy+1,0:jx+1,1,1:lrz), i.e. k=1 index only, for now.
+                      ! fh(0:iy+1,0:jx+1,1,1:setup0%lrz), i.e. k=1 index only, for now.
 
                       !BH170407  Following had very small effect on a test (see a_change),
                       !BH170407  and have concern it could affect stability of the solution.
@@ -1006,14 +1007,14 @@ contains
                    if (j .eq. 1) go to 2
                 endif
 
-                if (i.eq.itu .and. cqlpmod.ne."enabled") go to 31
+                if (i.eq.itu .and. setup0%cqlpmod.ne."enabled") go to 31
                 if (i.eq.itu .and. nadjoint.eq.1.and.symtrap.eq."enabled") &
                      go to 31
                 if (j .eq. jx) go to 1
                 if (j .eq. 1) go to 2
                 if (i .eq. 1) go to 3
                 if (i .eq. iy) go to 4
-                if (i.eq.itl .and. cqlpmod.ne."enabled") go to 5
+                if (i.eq.itl .and. setup0%cqlpmod.ne."enabled") go to 5
                 if (i.eq.iyh .and. symtrap.eq."enabled") goto 998
 
                 !.................................................................
@@ -1206,7 +1207,7 @@ contains
                    !     j=1 ,i=itl
                    !.................................................................
 
-                elseif (i.eq.itl .and. cqlpmod.ne."enabled") then
+                elseif (i.eq.itl .and. setup0%cqlpmod.ne."enabled") then
                    rhs(ieq)=z00(i,j,k)
 
                    janelt(1)=ieq+idistr
@@ -1396,7 +1397,7 @@ contains
                 !     if pass/trapped boundary (and j=jx) then go to 7
                 !.................................................................
 
-                if (i.eq.itl .and. cqlpmod.ne."enabled") go to 7
+                if (i.eq.itl .and. setup0%cqlpmod.ne."enabled") go to 7
 
                 !.................................................................
                 !     if theta=pi go to 14; if theta=0 go to 13
@@ -2025,8 +2026,8 @@ contains
                      icsrijc,jw_ilu,ierr)
 
 !MPIINSERT_IF_RANK_EQ_0
-                WRITE(*,*)'impavnc0 aft.aplb: ieq_tot, iyjx*lrz, ierr', &
-                     ieq_tot,iyjx*lrz,ierr
+                WRITE(*,*)'impavnc0 aft.aplb: ieq_tot, iyjx*setup0%lrz, ierr', &
+                     ieq_tot,iyjx*setup0%lrz,ierr
 !MPIINSERT_ENDIF_RANK
 
                 ieqp=54
@@ -2106,10 +2107,10 @@ contains
                 i2=0  !end of coeff print for given surface
                 l1=1  !eqn number at beginning of given flux surface
                 l2=1  !eqn number at beginning of next flux surface
-                do ll=1,lrz
+                do ll=1,setup0%lrz
                    i1=i2+1
                    l1=l2
-                   if (ll.lt.lrz) then
+                   if (ll.lt.setup0%lrz) then
                       l2=ieq_(ll+1)
                       i2=ia_csr(l2)-1
                    else
@@ -2143,7 +2144,7 @@ contains
                 !
                 !
                 !  For soln_method .eq. 'it3dv' or 'it3drv', only call at end
-                !  of coeff setup over ll=1,lrz flux surfaces.
+                !  of coeff setup over ll=1,setup0%lrz flux surfaces.
                 ! Additional arguments used in ilutp:
                 permtol= 0.5d0 ! 0.d0 -> means never permute
                 mbloc=   n_rows_A
@@ -2163,7 +2164,7 @@ contains
                       !pgmres modifies this input.
                    enddo
                 elseif(soln_method.eq.'it3dv') then
-                   ! perform soln only at last flux surface (l_=lrz)
+                   ! perform soln only at last flux surface (l_=setup0%lrz)
                    if ( ilast_lr.eq.1 ) then
                       call ilut (n_rows_A,a_csr,ja_csr,ia_csr,lfil0, &
                            droptol,alu,jlu,ju,iwk_ilu,w_ilu, &
@@ -2181,7 +2182,7 @@ contains
                       enddo
                    endif
                 elseif(soln_method.eq.'it3drv') then
-                   ! perform soln only at last flux surface (l_=lrz)
+                   ! perform soln only at last flux surface (l_=setup0%lrz)
                    if ( ilast_lr.eq.1 ) then
                       call ilut (n_rows_A,ac_csr,jac_csr,iac_csr,lfil0, &
                            droptol,alu,jlu,ju,iwk_ilu,w_ilu, &
@@ -2236,10 +2237,10 @@ contains
 
                 elseif(soln_method.eq.'it3dv' .or. soln_method.eq.'it3drv') then
                    ! perform soln
-                   ! only at last flux surface (l_=lrz).
+                   ! only at last flux surface (l_=setup0%lrz).
                    if ( ilast_lr.eq.1 ) then
                       l1=1
-                      l2=lrz
+                      l2=setup0%lrz
                    else
                       l1=0
                       l2=-1              !i.e., following ll do-loop is no-op
@@ -2333,7 +2334,7 @@ contains
                    rhs(1:n_rows_A)=sol(1:n_rows_A)
                 elseif(soln_method.eq.'it3dv') then
                    ! perform soln
-                   ! only at last flux surface (l_=lrz).
+                   ! only at last flux surface (l_=setup0%lrz).
                    if ( ilast_lr.eq.1 ) then
 !MPIINSERT_IF_RANK_EQ_0
                       !WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
@@ -2351,7 +2352,7 @@ contains
                    endif
                 elseif(soln_method.eq.'it3drv') then
                    ! perform soln
-                   ! only at last flux surface (l_=lrz).
+                   ! only at last flux surface (l_=setup0%lrz).
                    if ( ilast_lr.eq.1 ) then
 
 !MPIINSERT_IF_RANK_EQ_0
@@ -2478,7 +2479,7 @@ contains
                 !write(*,*)'impavnc0: n,ilast_lr or rhs=>f',n,ilast_lr
                 if ( ilast_lr.eq.1 ) then
                    l1=1
-                   l2=lrz
+                   l2=setup0%lrz
                 else
                    l1=0
                    l2=-1           !i.e., following ll do-loop is no-op
@@ -2587,7 +2588,7 @@ contains
                 !BH-YuP:         endif ! "scale"
 
                 if (  ampfmod.eq."enabled" .and. kopt.eq.3 &
-                     .and. cqlpmod.ne."enabled") then
+                     .and. setup0%cqlpmod.ne."enabled") then
                    if(icount_ampf.eq.2)then ! this is fg=='g' function
                       f(1:iy,1,k,ll)=0.d0 !this is 'g' function: should be 0 at j=1
                       f(1:iy,0,k,ll)=0.d0 !this is 'g' function: should be 0 at j=0
@@ -2615,15 +2616,15 @@ contains
              !     fluxes for quasi-neutral electrostatic field.
              !.......................................................................
 
-             if (cqlpmod.eq."enabled" .and. eseswtch.eq."enabled") then
+             if (setup0%cqlpmod.eq."enabled" .and. eseswtch.eq."enabled") then
 
                 if (icount_ese.eq.1) then
 
                    !             Store new f into fh
                    call dcopy(iyjx2*ngen,f(0:iy+1,0:jx+1,1:ngen,l_),1, &
                                         fh(0:iy+1,0:jx+1,1:ngen,l_),1)
-                   !YuP[2019-05-30] Note that in case of cqlpmod.eq."enabled",
-                   ! fh() is allocated as fh(0:iy+1,0:jx+1,1:ngen,0:ls+1) in wpalloc
+                   !YuP[2019-05-30] Note that in case of setup0%cqlpmod.eq."enabled",
+                   ! fh() is allocated as fh(0:iy+1,0:jx+1,1:ngen,0:setup0%ls+1) in wpalloc
                    factor="disabled"
                    icount_ese=2
                    go to 10
@@ -2652,7 +2653,7 @@ contains
              !.......................................................................
 
              if (  ampfmod.eq."enabled" .and. kopt.eq.3 &
-                  .and. cqlpmod.ne."enabled") then
+                  .and. setup0%cqlpmod.ne."enabled") then
 
                 if (icount_ampf.eq.1) then
 
@@ -2873,9 +2874,9 @@ contains
 !     Storage is allocated depending on the settings of soln_method.
 !     Storage is provided for coefficient matrix for up to the complete
 !     set of equations:
-!     soln_method='it3dv'  ==> number of eqns = sum l_=1:lrz {inew*jx},
+!     soln_method='it3dv'  ==> number of eqns = sum l_=1:setup0%lrz {inew*jx},
 !         where inew=iyh_(l_) + itl_(l_) - 1
-!         The number of columns = sum l_=1:lrz {inew*jx*9}
+!         The number of columns = sum l_=1:setup0%lrz {inew*jx*9}
 !         (Usually there are 9 coeffs per eqn; the few 12 coeff cases
 !          are more than offset the few 2 and 3 coeff cases.)
 !     soln_method='it3drv' ==>
@@ -2920,7 +2921,7 @@ contains
          i2=11
          if (soln_method .eq. 'it3drv') then
             write(*,*)'icsrijr,icsrijc = ',icsrijr,icsrijc
-            allocate(ipofi(iy,lrz),stat=istat(12))
+            allocate(ipofi(iy,setup0%lrz),stat=istat(12))
             allocate( ar_csr(icsrijr),stat=istat(13))
             allocate(jar_csr(icsrijr),stat=istat(14))
             allocate(iar_csr(icsrip),stat=istat(15))

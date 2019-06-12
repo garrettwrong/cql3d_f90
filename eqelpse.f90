@@ -38,7 +38,7 @@ contains
 !..................................................................
 
       data ifirst /"first"/
-      if (lr_.ne.lrzmax) return
+      if (lr_.ne.setup0%lrzmax) return
       if (ifirst.eq."first") then
         zst=zbox/(nnz-1)
         rst=rbox/(nnr-1)

@@ -15,7 +15,7 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	cfpmodbe.f90  cfpsymt.f90  coefefad.f90  coefefld.f90  coefegad.f90  \
 	coeffpad.f90  coefload.f90  coefmidt.f90  coefmidv.f90   \
 	coefrfad.f90  coefstup.f90  coefsyad.f90  coefwti.f90  \
-	coefwtj.f90  diag.f90  diagcfac.f90   \
+	coefwtj.f90  cqlconf.f90 diag.f90  diagcfac.f90   \
 	diagdens.f90  diagdenz.f90  diagentr.f90  diagescl.f90  diaggnde.f90  \
 	diaggnde2.f90  diagimpd.f90  diagscal.f90  diagwrng.f90  diagxswt.f90   \
 	diagxswx.f90  dsk_gr.f90 dskout.f90  efield.f90  eflditer.f90 eqalloc.f90   \

@@ -108,7 +108,7 @@ contains
 
       do k=ngen+1,ntotal
       if (k.eq.kelecm) then
-        do l=1,lrzmax
+        do l=1,setup0%lrzmax
            tempofr(l,1,1,1)=temp(k,l)
            presofr(l,1,1,1)=reden(k,l)*temp(k,l)
            tr(l)=rz(l)*.01
@@ -116,19 +116,19 @@ contains
       endif
       enddo
 
-      call coeff1(lrzmax,tr(1),tempofr(1,1,1,1),tempofr(1,1,1,3), &
+      call coeff1(setup0%lrzmax,tr(1),tempofr(1,1,1,1),tempofr(1,1,1,3), &
            i1p,1,workk)
-      call coeff1(lrzmax,tr(1),presofr(1,1,1,1),presofr(1,1,1,3), &
+      call coeff1(setup0%lrzmax,tr(1),presofr(1,1,1,1),presofr(1,1,1,3), &
            i1p,1,workk)
 
       itab(1)=0
       itab(2)=1
       itab(3)=0
-      do l=1,lrzmax
-         call terp1(lrzmax,tr(1),tempofr(1,1,1,1),tempofr(1,1,1,3), &
+      do l=1,setup0%lrzmax
+         call terp1(setup0%lrzmax,tr(1),tempofr(1,1,1,1),tempofr(1,1,1,3), &
               tr(l),1,tab,itab)
          tempofr(l,1,1,2)=tab(2)/tempofr(l,1,1,1)
-         call terp1(lrzmax,tr(1),presofr(1,1,1,1),presofr(1,1,1,3), &
+         call terp1(setup0%lrzmax,tr(1),presofr(1,1,1,1),presofr(1,1,1,3), &
               tr(l),1,tab,itab)
          presofr(l,1,1,2)=tab(2)/presofr(l,1,1,1)
       enddo
@@ -147,7 +147,7 @@ contains
       do k=ngen+1,ntotal
       do kk=1,nionm
          if (k.eq.kionm(kk)) then
-            do l=1,lrzmax
+            do l=1,setup0%lrzmax
                tempofr(l,2,1,1)=tempofr(l,2,1,1)+reden(k,l)
                presofr(l,2,1,1)=presofr(l,2,1,1)+reden(k,l)*temp(k,l)
             enddo
@@ -155,27 +155,27 @@ contains
       enddo
       enddo
 
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
          tempofr(l,2,1,1)=presofr(l,2,1,1)/tempofr(l,2,1,1)
          tr(l)=rz(l)*.01
       enddo
 
 
 
-      call coeff1(lrzmax,tr(1),tempofr(1,2,1,1),tempofr(1,2,1,3), &
+      call coeff1(setup0%lrzmax,tr(1),tempofr(1,2,1,1),tempofr(1,2,1,3), &
            i1p,1,workk)
-      call coeff1(lrzmax,tr(1),presofr(1,2,1,1),presofr(1,2,1,3), &
+      call coeff1(setup0%lrzmax,tr(1),presofr(1,2,1,1),presofr(1,2,1,3), &
            i1p,1,workk)
 
       itab(1)=0
       itab(2)=1
       itab(3)=0
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
 
-         call terp1(lrzmax,tr(1),tempofr(1,2,1,1),tempofr(1,2,1,3), &
+         call terp1(setup0%lrzmax,tr(1),tempofr(1,2,1,1),tempofr(1,2,1,3), &
               tr(l),1,tab,itab)
          tempofr(l,2,1,2)=tab(2)/tempofr(l,2,1,1)
-         call terp1(lrzmax,tr(1),presofr(1,2,1,1),presofr(1,2,1,3), &
+         call terp1(setup0%lrzmax,tr(1),presofr(1,2,1,1),presofr(1,2,1,3), &
               tr(l),1,tab,itab)
          presofr(l,2,1,2)=tab(2)/presofr(l,2,1,1)
       enddo
@@ -193,7 +193,7 @@ contains
 
       do k=1,ngen
       if (k.eq.kelecg) then
-        do l=1,lrzmax
+        do l=1,setup0%lrzmax
            tempofr(l,1,2,1)=(2./3.)*energy(k,l)
            presofr(l,1,2,1)=reden(k,l)*(2./3.)*energy(k,l)
            tr(l)=rz(l)*.01
@@ -201,19 +201,19 @@ contains
       endif
       enddo
 
-      call coeff1(lrzmax,tr(1),tempofr(1,1,2,1),tempofr(1,1,2,3), &
+      call coeff1(setup0%lrzmax,tr(1),tempofr(1,1,2,1),tempofr(1,1,2,3), &
            i1p,1,workk)
-      call coeff1(lrzmax,tr(1),presofr(1,1,2,1),presofr(1,1,2,3), &
+      call coeff1(setup0%lrzmax,tr(1),presofr(1,1,2,1),presofr(1,1,2,3), &
            i1p,1,workk)
 
       itab(1)=0
       itab(2)=1
       itab(3)=0
-      do l=1,lrzmax
-         call terp1(lrzmax,tr(1),tempofr(1,1,2,1),tempofr(1,1,2,3), &
+      do l=1,setup0%lrzmax
+         call terp1(setup0%lrzmax,tr(1),tempofr(1,1,2,1),tempofr(1,1,2,3), &
               tr(l),1,tab,itab)
          tempofr(l,1,2,2)=tab(2)/tempofr(l,1,2,1)
-         call terp1(lrzmax,tr(1),presofr(1,1,2,1),presofr(1,1,2,3), &
+         call terp1(setup0%lrzmax,tr(1),presofr(1,1,2,1),presofr(1,1,2,3), &
               tr(l),1,tab,itab)
          presofr(l,1,2,2)=tab(2)/presofr(l,1,2,1)
       enddo
@@ -232,7 +232,7 @@ contains
       do k=1,ngen
       do kk=1,niong
          if (k.eq.kiong(kk)) then
-            do l=1,lrzmax
+            do l=1,setup0%lrzmax
                tempofr(l,2,2,1)=tempofr(l,2,2,1)+reden(k,l)
                presofr(l,2,2,1)=presofr(l,2,2,1) &
                             +reden(k,l)*(2./3.)*energy(k,l)
@@ -241,25 +241,25 @@ contains
       enddo
       enddo
 
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
          tempofr(l,2,2,1)=presofr(l,2,2,1)/tempofr(l,2,2,1)
          tr(l)=rz(l)*.01
       enddo
 
-      call coeff1(lrzmax,tr(1),tempofr(1,2,2,1),tempofr(1,2,2,3), &
+      call coeff1(setup0%lrzmax,tr(1),tempofr(1,2,2,1),tempofr(1,2,2,3), &
            i1p,1,workk)
-      call coeff1(lrzmax,tr(1),presofr(1,2,2,1),presofr(1,2,2,3), &
+      call coeff1(setup0%lrzmax,tr(1),presofr(1,2,2,1),presofr(1,2,2,3), &
            i1p,1,workk)
 
       itab(1)=0
       itab(2)=1
       itab(3)=0
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
 
-         call terp1(lrzmax,tr(1),tempofr(1,2,2,1),tempofr(1,2,2,3), &
+         call terp1(setup0%lrzmax,tr(1),tempofr(1,2,2,1),tempofr(1,2,2,3), &
               tr(l),1,tab,itab)
          tempofr(l,2,2,2)=tab(2)/tempofr(l,2,2,1)
-         call terp1(lrzmax,tr(1),presofr(1,2,2,1),presofr(1,2,2,3), &
+         call terp1(setup0%lrzmax,tr(1),presofr(1,2,2,1),presofr(1,2,2,3), &
               tr(l),1,tab,itab)
          presofr(l,2,2,2)=tab(2)/presofr(l,2,2,1)
       enddo
@@ -279,7 +279,7 @@ contains
       cnst=-1.6022e-10
 
 
-      do l=1,lrzmax
+      do l=1,setup0%lrzmax
 
 !        k refers to electrons or ions.  kk to thermal or nonthermal.
 

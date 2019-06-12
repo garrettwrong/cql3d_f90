@@ -34,7 +34,7 @@ contains
 !..............................................................
 
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         if (kopt .eq. 1) then
           call dcopy(iyjx2*ngen,  f(0:iy+1,0:jx+1,1:ngen,l_),1, &
                                  f_(0:iy+1,0:jx+1,1:ngen,l_),1)

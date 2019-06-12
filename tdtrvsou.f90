@@ -25,7 +25,7 @@ contains
 !     f_n+1/2, needed for the transport equation solved with ADI.
 !
 !     For up/down symmetry cases, also compute the value of f
-!     at l_=1 and ls (if sbdry.ne."periodic")
+!     at l_=1 and setup0%ls (if sbdry.ne."periodic")
 !..............................................................
 
       dimension zdns(lrorsa),zdns1(lrorsa)
@@ -45,7 +45,7 @@ contains
 !.......................................................................
 
       do 100 i=1,iy
-        if ((i.eq.itl.or.i.eq.itu) .and. cqlpmod.ne."enabled") go to 100
+        if ((i.eq.itl.or.i.eq.itu) .and. setup0%cqlpmod.ne."enabled") go to 100
 !%OS  should be j=2,jx-1? may depend on lbdry
 !%OS  do 110 j=1,jx
         do 110 j=2,jx-1
@@ -57,7 +57,7 @@ contains
           zdns(l_)=zdns(l_)+velsou(i,j,k,l_)*cynt2(i,l_)*cint2(j)
           zdns1(l_)=zdns1(l_)+velsou2(i,j,k,l_)*cynt2(i,l_)*cint2(j)
  110    continue
-        if (cqlpmod.eq."enabled" .and. updown.eq."symmetry" .and. &
+        if (setup0%cqlpmod.eq."enabled" .and. updown.eq."symmetry" .and. &
           sbdry.ne."periodic") then
           if (l_ .le. 2) then
             do 111 j=2,jx-1
@@ -70,9 +70,9 @@ contains
           else if (l_ .ge. lrors-1) then
             do 112 j=2,jx-1
 !%OS  fedge(i,j,k,l_-lrors+4)=velsou(i,j,k,l_)*dtreff-
-!%OS  -                     (dtreff+0.5*dszm5(ls)/vnorm/x(j)/coss(i,l_))*
+!%OS  -                     (dtreff+0.5*dszm5(setup0%ls)/vnorm/x(j)/coss(i,l_))*
 !%OS  *                          cthta(i,j)*(fpithta(i,j)-fpithta(i-1,j))
-              fedge(i,j,k,l_-lrors+4)=-dszm5(ls)/vnorm/x(j)/ &
+              fedge(i,j,k,l_-lrors+4)=-dszm5(setup0%ls)/vnorm/x(j)/ &
                 coss(i,l_)*cthta(i,j)*(fpithta(i,j)-fpithta(i-1,j))
  112        continue
           endif
@@ -83,7 +83,7 @@ contains
 !l    2. Compute velsou at pass/trapped boundary
 !..................................................................
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         do 200 j=1,jx
           velsou(itl,j,k,l_)=qz(j)*(gfi(itl,j,k)-gfi(itl,j-1,k))+ &
             r2y(j,l_)*(-hfi(itl-1,j,k,l_)+2.*hfi(itl,j,k,l_)+hfi(itu,j,k,l_))+ &
@@ -109,7 +109,7 @@ contains
 !l    over velocity conserved (for radial transport case)
 !.......................................................................
 
-      if (cqlpmod .ne. "enabled") &
+      if (setup0%cqlpmod .ne. "enabled") &
         call tdtrvtor3(velsou(0:iyp1,0:jxp1,1:ngen,1), &
                        velsou(0:iyp1,0:jxp1,1:ngen,1), cynt2,cynt2_,2,k)
       !YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen, [for given l_]

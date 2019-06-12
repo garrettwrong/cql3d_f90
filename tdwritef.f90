@@ -11,7 +11,8 @@ module tdwritef_mod
 
 contains
 
-      subroutine tdwritef
+  subroutine tdwritef
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -37,15 +38,15 @@ contains
 !     skip when reading this file). [innamlin NOT USED, BH070508].]
 !.......................................................................
 
-      write(iunwrif,9100) lrors+5,n,dtr,lrors,lrz,cqlpmod
-      if (cqlpmod .ne. "enabled") then
+      write(iunwrif,9100) lrors+5,n,dtr,lrors,setup0%lrz,setup0%cqlpmod
+      if (setup0%cqlpmod .ne. "enabled") then
 
         write(iunwrif,9101)
         do k=1,ngen
         do 101 l=1,lrors
-!BH070408 write(iunwrif,9102) l,rovera(l),iy_(l),reden(kelecg,lrindx(l))
-          write(iunwrif,9102) l,rovera(l),iy_(l),reden(k,lrindx(l)) &
-            ,energy(k,lrindx(l)),totcurz(lrindx(l)),rovs(lrindx(l))
+!BH070408 write(iunwrif,9102) l,rovera(l),iy_(l),reden(kelecg,setup0%lrindx(l))
+          write(iunwrif,9102) l,rovera(l),iy_(l),reden(k,setup0%lrindx(l)) &
+            ,energy(k,setup0%lrindx(l)),totcurz(setup0%lrindx(l)),rovs(setup0%lrindx(l))
  101    continue
         enddo
 !MPIINSERT_IF_RANK_EQ_0
@@ -62,9 +63,9 @@ contains
         write(iunwrif,9103)
         do k=1,ngen
         do 102 l=1,lrors
-!BH070408 write(iunwrif,9102) l,sz(l),iy_(l),denpar(kelecg,lsindx(l)),
-          write(iunwrif,9102) l,sz(l),iy_(l),denpar(k,lsindx(l)), &
-            enrgypa(k,lsindx(l)),currmtpz(l),rovsloc(l)
+!BH070408 write(iunwrif,9102) l,sz(l),iy_(l),denpar(kelecg,setup0%lsindx(l)),
+          write(iunwrif,9102) l,sz(l),iy_(l),denpar(k,setup0%lsindx(l)), &
+            enrgypa(k,setup0%lsindx(l)),currmtpz(l),rovsloc(l)
  102    continue
         enddo
 
@@ -75,7 +76,7 @@ contains
 !.......................................................................
 
       write(iunwrif,'(" ")')
-      write(iunwrif,setup0)
+      ! nml name now private, can be called from module write(iunwrif,setup0)
       write(iunwrif,setup)
       write(iunwrif,trsetup)
       write(iunwrif,sousetup)
@@ -95,10 +96,10 @@ contains
 !.......................................................................
 
 !     Don't bother writing f, if nlwritf="ncdfdist", indicating
-!     will use the netcdf mnemonic.nc file as source for f for
+!     will use the netcdf setup0%mnemonic.nc file as source for f for
 !     restart (nlrestrt="ncdfdist").
 
-      if (nlwritf.ne."ncdfdist") then
+      if (setup0%nlwritf.ne."ncdfdist") then
 
 !MPIINSERT_IF_RANK_EQ_0
          WRITE(*,*) &
@@ -123,7 +124,7 @@ contains
 
       endif ! nlwritf.ne."ncdfdist"
 
-      if (cqlpmod.eq."enabled") then
+      if (setup0%cqlpmod.eq."enabled") then
 !.......................................................................
 !l    2.3 Spatial source term: spasou(i,j,k,l)
 !.......................................................................
@@ -144,12 +145,12 @@ contains
  242           continue
  241        continue
  240     continue
-      endif ! cqlpmod=enabled
+      endif ! setup0%cqlpmod=enabled
 
 !.......................................................................
  9100 format(i3," more lines to skip before reading namelist and f",//, &
-        "time-step n=",i4," dtr=",1pe12.5," lrors=",i3," lrz=",i3, &
-        " cqlpmod=",a)
+        "time-step n=",i4," dtr=",1pe12.5," lrors=",i3," setup0%lrz=",i3, &
+        " setup0%cqlpmod=",a)
  9101 format(/,"  l",3x,"rovera",4x," iy ",3x,"density",5x,"energy",4x, &
         "tot.curr.",2x,"res/spitzr")
  9102 format(i3,1pe12.4,i4,4e12.4)

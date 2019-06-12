@@ -18,6 +18,7 @@ contains
       subroutine tdtrrsou
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use r8subs_mod, only : cvmgt
 
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -36,7 +37,7 @@ contains
 !     interpolate f_ on the transport velocity mesh, such that:
 !     int(vptp*f_*d3u0) is constant
 !.......................................................................
-      ! YuP: This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+      ! YuP: This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or setup0%lrz)
       call tdtrvtor2(  f(0:iyp1,0:jxp1,1:ngen,1), &
                      frn(0:iyp1,0:jxp1,1:ngen,1), vpint,vpint_,1)
 
@@ -55,8 +56,8 @@ contains
           do 30 i=1,iytr(lrors)
             do 40 l=l_lower(i),lrors-1
 !%OS  do 40 l=l_lower(i),lrors
-              ilr=lrindx(l)
-              ilrm1=lrindx(l-1)
+              ilr=setup0%lrindx(l)
+              ilrm1=setup0%lrindx(l-1)
               id=idx(i,l)
               ie=idx(i,l-1)
               if (l.ne.lpt(i).or. nobind.eq."enabled") then
@@ -99,7 +100,7 @@ contains
 !     interpolate source on itl-2,...,itl+2 points such that the integral
 !     over velocity is conserved
 !.......................................................................
-      !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+      !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or setup0%lrz)
       call tdtrrtov2(spasou(0:ipy1,0:jxp1,1:ngen,1), &
                      spasou(0:ipy1,0:jxp1,1:ngen,1), cynt2,cynt2_,3)
 

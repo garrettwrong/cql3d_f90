@@ -49,7 +49,7 @@ contains
 !     numclas = 0: normal case
 !     1: assumes up/down symmetric case and periodic condition
 !     but compute equil. parameters on top half cross-section
-!     on ls/2+1 points and then copy the rest in sub. wploweq
+!     on setup0%ls/2+1 points and then copy the rest in sub. wploweq
 !     Otherwise, same as numclas=0 with sbdry="periodic"
 !     In each class, nummods is divided into two groups:
 !     mod(nummods,10) < 5: 2-D FP velocity equ. solved on nodal s points
@@ -59,7 +59,7 @@ contains
 !     If numindx = 0,1: use backward diff. scheme + bound. cond at l=1
 !     2: "  back/forward depending on sign(cos(theta))
 !     and on numixts
-!     3: " forward diff. + bound cond at l=ls
+!     3: " forward diff. + bound cond at l=setup0%ls
 !     4: " centered diff. + bound. cond. at l=1
 !     Note: if sbdry="periodic" there might not be any extra boundary
 !     conditions imposed (see wpbdry)
@@ -89,7 +89,7 @@ contains
       ipshft2=0
       ipshft1=-1
       ilstart=2
-      ilend=ls
+      ilend=setup0%ls
       imshft2=0
       imshft1=-1
       if (numindx .eq. 2) then
@@ -98,25 +98,25 @@ contains
         imshft2=-(numixts-1)/2
         imshft1=-(numixts+1)/2
         ilstart=1
-        ilend=ls
+        ilend=setup0%ls
       else if (numindx .eq. 3) then
         ipshft2=+1
         ipshft1=0
         ilstart=1
-        ilend=ls-1
+        ilend=setup0%ls-1
         imshft2=+1
         imshft1=0
       else if (numindx .eq. 4) then
         ipshft2=+1
         ipshft1=-1
         ilstart=2
-        ilend=ls-1
+        ilend=setup0%ls-1
         imshft2=+1
         imshft1=-1
       endif
       if (sbdry .eq. "periodic") then
         ilstart=1
-        ilend=ls
+        ilend=setup0%ls
       endif
       zip1p2=ipshft1+ipshft2
       zim1p2=imshft1+imshft2
@@ -125,7 +125,7 @@ contains
 !l    2. Construct the matrix. The equations are solved at a given species k
 !     and momentum j, but "simultaneously" for all pitch-angle i. This
 !     way, one can have longer inner loops over i than over l, as in
-!     general iy > ls. The index i was chosen instead of j, because
+!     general iy > setup0%ls. The index i was chosen instead of j, because
 !     most of the (i,j) arrays have i as first index.
 !.......................................................................
 
@@ -137,22 +137,22 @@ contains
                              fnhalf(0:iy+1,0:jx+1,1:ngen,1:lrors),1)
       if (sbdry .eq. "periodic") then
         call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
-                              fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
-        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
                               fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
         call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,1   ),1, &
-                              velsou(0:iy+1,0:jx+1,1:ngen,ls+1),1)
-        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                              velsou(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
                               velsou(0:iy+1,0:jx+1,1:ngen,0   ),1)
       else
         call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
                               fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
-        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
-                              fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+        call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
+                              fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
         call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,1   ),1, &
                               velsou(0:iy+1,0:jx+1,1:ngen,0   ),1)
-        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
-                              velsou(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+        call dcopy(iyjx2*ngen,velsou(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
+                              velsou(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
       endif
 
 !.......................................................................
@@ -164,8 +164,8 @@ contains
       if (mod(nummods,10).le.4 .and. numindx.ne.4) then
         do 2120 k=1,ngen
           do 2121 j=1,jx
-            do 2122 l=1,ls
-              do 2123 i=1,iy_(min(ls,l+1))
+            do 2122 l=1,setup0%ls
+              do 2123 i=1,iy_(min(setup0%ls,l+1))
                 fnhalf(i,j,k,l)=0.5*(fnhalf(i,j,k,l)+fnhalf(i,j,k,l+1))
  2123         continue
  2122       continue
@@ -173,14 +173,14 @@ contains
  2120   continue
         if (sbdry .eq. "periodic") then
           call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
-                                fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
-          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                                fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
                                 fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
         else
           call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,1   ),1, &
                                 fnhalf(0:iy+1,0:jx+1,1:ngen,0   ),1)
-          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
-                                fnhalf(0:iy+1,0:jx+1,1:ngen,ls+1),1)
+          call dcopy(iyjx2*ngen,fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
+                                fnhalf(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
         endif
       endif
       ivelmid=1
@@ -194,7 +194,7 @@ contains
 
 !     j=1 => zeroth order eq. to be solved, assuming velsou(j=1)=0
 !     => f_n+1(j=1)=f_n+1/2(j=1)
-        do 221 ll=0,ls+1
+        do 221 ll=0,setup0%ls+1
           call bcast(fnp1(0:iyp1,1,k,ll),f(1,1,k,ll),iyp1+1)
  221    continue
 
@@ -220,7 +220,7 @@ contains
             isdiag=ileft+1
             isp1=iband
             ilsrow=lsbtopr(l)
-            if (sbdry.eq."periodic" .and. (l.le.2.or. l.gt.ls/2)) then
+            if (sbdry.eq."periodic" .and. (l.le.2.or. l.gt.setup0%ls/2)) then
               if (l .eq. 1) then
                 ism1=iband
                 isp1=iband-1
@@ -241,7 +241,7 @@ contains
 !l    2.3.1.2 Construct matrix in case of cst y mesh: iy_(l)=cst, all l
 !.......................................................................
 
-            if (numindx.eq.2 .and. l.eq.(ipshft2*ls-ipshft1) .and. &
+            if (numindx.eq.2 .and. l.eq.(ipshft2*setup0%ls-ipshft1) .and. &
               sbdry.ne."periodic") go to 23120
 
 !     cos(theta)>0 schemes
@@ -260,7 +260,7 @@ contains
                 ,ivelmid.eq.1 .or. (ipshft1+ipshft2).eq.0)
 23121       continue
 
-            if (numindx.ne.2 .and. l.eq.(imshft2*ls-imshft1) .and. &
+            if (numindx.ne.2 .and. l.eq.(imshft2*setup0%ls-imshft1) .and. &
               sbdry.ne."periodic") go to 231
 
 !     cos(theta)<0 schemes
@@ -297,7 +297,7 @@ contains
 
           do 233 i=1,iymax
 
-            ilslen=ls
+            ilslen=setup0%ls
 
 !.......................................................................
 !l    2.3.3.1 Arrange matrix according to band matrix solver used
@@ -403,8 +403,8 @@ contains
  220  continue
 
       call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,1   ),1, &
-                            fnp1(0:iy+1,0:jx+1,1:ngen,ls+1),1)
-      call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,ls  ),1, &
+                            fnp1(0:iy+1,0:jx+1,1:ngen,setup0%ls+1),1)
+      call dcopy(iyjx2*ngen,fnp1(0:iy+1,0:jx+1,1:ngen,setup0%ls  ),1, &
                             fnp1(0:iy+1,0:jx+1,1:ngen,0   ),1)
 
 !.......................................................................
@@ -420,7 +420,7 @@ contains
       if (nonadi .ne. 3) then
 
         do 400 k=1,ngen
-          do 410 l=1,ls
+          do 410 l=1,setup0%ls
             zs=0.
             zt=0.
             do 420 i=1,iy_(l)
@@ -433,10 +433,10 @@ contains
  410      continue
 
           if (sbdry .eq. "periodic") then
-!     Assumes ilspts=ls, i.e. solution at 0 and ls+1 not yet calculated
+!     Assumes ilspts=setup0%ls, i.e. solution at 0 and setup0%ls+1 not yet calculated
             call dcopy(iyp1+1,fnp1(0:iyp1,1,k,1   ),1, &
-                              fnp1(0:iyp1,1,k,ls+1),1)
-            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,ls  ),1, &
+                              fnp1(0:iyp1,1,k,setup0%ls+1),1)
+            call dcopy(iyp1+1,fnp1(0:iyp1,1,k,setup0%ls  ),1, &
                               fnp1(0:iyp1,1,k,0   ),1)
           endif
 

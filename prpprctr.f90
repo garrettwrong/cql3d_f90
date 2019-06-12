@@ -121,7 +121,7 @@ contains
       call GSLNSZ(0.)
 
       CALL PGSLS(1) ! restore: solid line
-      CALL PGSLW(lnwidth) ! restore linewidth
+      CALL PGSLW(setup0%lnwidth) ! restore linewidth
 
       return
       end subroutine prpprctr

@@ -1,10 +1,10 @@
 module tdsxrplt_mod
 
   !---BEGIN USE
-  use iso_c_binding, only : c_float
-  use iso_c_binding, only : c_double
 
   use aminmx_mod, only : aminmx
+  use iso_c_binding, only : c_float
+  use iso_c_binding, only : c_double
 
   !---END USE
 
@@ -163,8 +163,9 @@ contains
 !
 !
       subroutine tdsxrvw(tempp4,tempp5,tempp6)
-      use param_mod
-      use cqlcomm_mod, only : eqsym, softxry, ez, er, iyjx
+        use cqlconf_mod, only : setup0
+        use param_mod
+      use cqlcomm_mod, only : eqsym, softxry, ez, er, iyjx, lorbit, solr, solz
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
 
@@ -221,7 +222,7 @@ contains
               'Flux Surfaces and NPA Chords')
       endif
 
-      do 10 l=1,lrzmax
+      do 10 l=1,setup0%lrzmax
          IF (LORBIT(L).GT.LFIELDA) STOP 'tdsxrvw: CHECK DIM OF RTAB1/2'
 
         if(eqsym.ne."none") then

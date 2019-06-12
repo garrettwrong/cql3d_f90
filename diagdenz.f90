@@ -84,7 +84,7 @@ contains
 !     densz(l,k,ny,lr_) will contain the local density at z(l,lr_) (partic
 !..................................................................
 
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         iorbstr=1
         iorbend=lz
       else
@@ -96,7 +96,7 @@ contains
         call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp3(0:iy+1,0:jx+1),1)
         do 11 l=iorbstr,iorbend
           ileff=l
-          if (cqlpmod .eq. "enabled") ileff=ls_
+          if (setup0%cqlpmod .eq. "enabled") ileff=ls_
           call cfpleg(0,ileff,1)
           do 40 ny=1,negyrg
             if (jegy(ny,1,k,lr_).eq.0 .or. eegy(ny,2,k,lr_).lt.1.e-15) &
@@ -126,7 +126,7 @@ contains
       do 20 l=iorbstr,iorbend
         densz(l,ngen+1,nw,lr_)=0.0
         ileff=l
-        if (cqlpmod .eq. "enabled") ileff=ls_
+        if (setup0%cqlpmod .eq. "enabled") ileff=ls_
         do 30 k=1,ngen
           densz(l,ngen+1,nw,lr_)=densz(l,ngen+1,nw,lr_) &
             +densz(l,k,nw,lr_)*bnumb(k)

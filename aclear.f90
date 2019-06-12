@@ -177,7 +177,7 @@ contains
         do 202 l=0,lsa1
           enrgypa(k,l)=0.0
           vthpar(k,l)=0.0
-          if (cqlpmod .eq. "enabled") then
+          if (setup0%cqlpmod .eq. "enabled") then
             denpar(k,l)=0.0
             temppar(k,l)=0.0
           endif

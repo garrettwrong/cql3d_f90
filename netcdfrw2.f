@@ -1,6 +1,7 @@
 c
 c
       subroutine netcdfrw2(kopt)
+      use cqlconf_mod, only : setup0
       use advnce_mod !here: in netcdfrw2().
       use bcast_mod, only : bcast
       use cqlcomm_mod
@@ -11,7 +12,6 @@ c
       use zcunix_mod, only : terp1
       implicit integer (i-n), real*8 (a-h,o-z)
       save
-
 !MPIINSERT_INCLUDE
 
 c     This subroutine is only called from MPI rank=0.
@@ -139,6 +139,19 @@ c      character(len=8), dimension(npaproc) :: npa_proc  !automatic var
       data start2/1,1/
       data start3/1,1,1/
       data start4/1,1,1,1/
+
+      ! another way to do this, when the code is a mess.
+      character(len=8) :: cqlpmod
+      integer :: lrindx(0:lrorsa)
+      integer :: lrz
+      integer :: lrzmax
+      character(len=256) :: mnemonic
+      cqlpmod = setup0%cqlpmod
+      lrindx = setup0%lrindx
+      lrz = setup0%lrz
+      lrzmax =  setup0%lrzmax
+      mnemonic = setup0%mnemonic
+
 
 Cdeltarhop      data deltap_start/1,1,1/
 c
@@ -673,7 +686,6 @@ c     +          'Indicates output for 3D distn/ separate file',istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,38,
      +          'Number of radial bins(=r0dim, .ge.lrz)',istatus)
       call check_err(istatus)
-
       vid=ncvdef2(ncid,'radcoord',NCCHAR,1,chardim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,45,
      +          'Radial coordinate is proportional to radcoord',istatus)
@@ -682,13 +694,13 @@ c     +          'Indicates output for 3D distn/ separate file',istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,37,
      +           'Normalized radial mesh at bin centers',istatus)
 
-      vid=ncvdef2(ncid,'Rp',NCDOUBLE,1,r0dim,istatus)   ! rpcon(lrz) array
+      vid=ncvdef2(ncid,'Rp',NCDOUBLE, 1, r0dim, istatus)   ! rpcon(lrz) array
       call check_err(istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +           'Major radius of bin centers at outerboard',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'Rm',NCDOUBLE,1,r0dim,istatus)   ! rmcon(lrz) array
+      vid=ncvdef2(ncid,'Rm',NCDOUBLE, 1, r0dim,istatus)   ! rmcon(lrz) array
       call check_err(istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +           'Major radius of bin centers at innerboard',istatus)
@@ -2241,7 +2253,7 @@ c-YuP:      vid=ncvid(ncid,'lrz',istatus)
 
 c-YuP:      vid=ncvid(ncid,'lrindx',istatus)
       istatus= NF_INQ_VARID(ncid,'lrindx',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,lrz,lrindx(1),istatus)
+      call ncvpt_int2(ncid,vid,1,lrz,setup0%lrindx(1),istatus)
 
 c-YuP:      vid=ncvid(ncid,'jx',istatus)
       istatus= NF_INQ_VARID(ncid,'jx',vid)  !-YuP: NetCDF-f77 get vid
@@ -3238,7 +3250,9 @@ cBH011221: For now, simply stop.
                      do j=1,jx
                      do i=1,iy
                         temp1(i,j)=f(i,j,k,lrindx(ll))
-                     if(gone(i,j,k,lrindx(ll)).lt.-0.1) temp1(i,j)=em90
+                        if(gone(i,j,k,lrindx(ll)).lt.-0.1) then
+                           temp1(i,j)=em90
+                        endif
                      enddo
                      enddo
                   else  !On tavg = enabled
@@ -4114,7 +4128,9 @@ cBH011221: For now, simply stop.
                   do j=1,jx
                   do i=1,iy
                      temp1(i,j)=f(i,j,k,lrindx(ll))
-                     if(gone(i,j,k,lrindx(ll)).lt.-0.1) temp1(i,j)=em90
+                     if(gone(i,j,k,lrindx(ll)).lt.-0.1) then
+                        temp1(i,j)=em90
+                     endif
                   enddo
                   enddo
                else  !On tavg = enabled
@@ -4212,7 +4228,7 @@ c
       if (iret .ne. NF_NOERR) then
          PRINT *, 'netCDF error:', iret
          PRINT *, NF_STRERROR(iret) ! print error explanation
-      stop 'netCDF error'
+         call abort
       endif
       end subroutine check_err
 
@@ -4232,7 +4248,6 @@ c.......................................................................
 
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! save data on mpirank.eq.0 only
-
 
       if (n.ne.nstop) return
       if ((netcdfvecs.eq."irzplt" .and. mplot(l_).eq."enabled")
@@ -4298,6 +4313,7 @@ c
 c...................................................................
 
       save
+
       include 'netcdf.inc'
 
       dimension ll_netcdf(lrza),rya_netcdf(lrza),
@@ -4318,8 +4334,20 @@ c...................................................................
       data fluxcmpt/"collisional flux  ","electric fld flux ",
      +              "rf diffusion flux ","sum of fluxes     "/
 
-
       real*8, allocatable :: wkpack(:) ! local working array for pack21
+
+!     another way to do this, when the code is a mess.
+      character(len=8) :: cqlpmod
+      integer :: lrindx(0:lrorsa)
+      integer :: lrz
+      integer :: lrzmax
+      character(len=256) :: mnemonic
+      cqlpmod = setup0%cqlpmod
+      lrindx = setup0%lrindx
+      lrz = setup0%lrz
+      lrzmax =  setup0%lrzmax
+      mnemonic = setup0%mnemonic
+
 
       if ((lefct.lt.1) .or. (lefct.gt.4)) stop 'pltvec:lefct'
 
@@ -4916,7 +4944,8 @@ c     jpxy*ipxy array and output.
          if (netcdfnm.ne."disabled" .and. n.eq.nstop) then
 
 
-            write(t_,236) mnemonic(1:length_char(mnemonic)),lefct
+            write(t_,236) mnemonic(1:length_char(
+     +         mnemonic)),lefct
  236        format(a,"_flux_",i1,".nc")
 c     Open the correct netcdf file, to get ncid.
 c-YuP            ncid = ncopn(t_,NCWRITE,istatus)
@@ -5496,6 +5525,18 @@ c     nv_f4d,nt_f4d are dims of normalized vel and of pitch angle grids.
       character*128 ltitle
 
       data start/1,1,1,1/
+
+!     another way to do this, when the code is a mess.
+      character(len=8) :: cqlpmod
+      integer :: lrindx(0:lrorsa)
+      integer :: lrz
+      integer :: lrzmax
+      character(len=256) :: mnemonic
+      cqlpmod = setup0%cqlpmod
+      lrindx = setup0%lrindx
+      lrz = setup0%lrz
+      lrzmax =  setup0%lrzmax
+      mnemonic = setup0%mnemonic
 
 !MPIINSERT_IF_RANK_NE_0_RETURN
 

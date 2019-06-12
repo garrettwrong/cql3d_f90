@@ -76,7 +76,7 @@ contains
 !     this will decrease guess.
 !..................................................................
 
-!        bvalmin=fpsiz(lrindx(lrors))/er(nnr)
+!        bvalmin=fpsiz(setup0%lrindx(lrors))/er(nnr)
 !c**bh930729wcemin=charge*bvalmin/(fmass(kelecg)*clight)
 !        wcemin=abs(bnumb(1))*charge*bvalmin/(fmass(1)*clight)
 !**bh970620  Using ray data to get bvalmin:

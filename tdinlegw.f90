@@ -79,7 +79,7 @@ contains
       iigstrt=(iistart-1)*ngauss+1
       iparts=2
 !     CQLP: one interval [1,iy]
-      if (cqlpmod .eq. "enabled") then
+      if (setup0%cqlpmod .eq. "enabled") then
         ipoints=iy_(klmesh)
         iistart=0
         iigstrt=0
@@ -119,7 +119,7 @@ contains
         if (iside .eq. 2) zfact=-1.0
 
 !     compute m=1 (i.e. cos(th)) and total weight
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
           do 111 ig=ig0+1,ig0+inxgau
             zxgh(ig,1)=zfact*sqrt(1.-bbpsi(klpar,klrad)*sin(zxg(ig))**2)
             zxgh(ig,0)=zxgh(ig,0)*bbpsi(klpar,klrad)*sin(zxg(ig))* &
@@ -223,7 +223,7 @@ contains
 !l    and the turning-point, computed in dpcosz(imax)
 !.......................................................................
 
-      if (cqlpmod .eq. "enabled") return
+      if (setup0%cqlpmod .eq. "enabled") return
 
       iimax=iy_(klmesh)+1-imax(klpar,klrad)
       do 140 m=0,mmx
@@ -251,7 +251,7 @@ contains
  200  continue
 
       iend=imax(klpar,klrad)-1
-      if (cqlpmod .eq. "enabled") iend=iyh_(klmesh)-1
+      if (setup0%cqlpmod .eq. "enabled") iend=iyh_(klmesh)-1
 
       do 201 m=0,mmx
         do 202 i=2,iend

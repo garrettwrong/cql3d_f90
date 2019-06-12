@@ -33,7 +33,7 @@
 !MPIINSERT_FINISH
       call close_mpi
 !MPIINSERT_MPIWORKER
-      if(soln_method.eq.'direct' .and. lrzmax.gt.1) then
+      if(soln_method.eq.'direct' .and. setup0%lrzmax.gt.1) then
          ! Parallelization for the impavnc0 solver is limited
          ! for soln_method='direct' (for now)
          if(mpisize.gt.1) then
@@ -207,7 +207,7 @@
       if(mpirank.eq.mpiworker) then
 
 !MPIINSERT_SEND_RECV
-      if(soln_method.eq.'direct' .and. lrzmax.gt.1) then
+      if(soln_method.eq.'direct' .and. setup0%lrzmax.gt.1) then
       ! Parallelization for the impavnc0 solver is limited
       ! for soln_method='direct' (for now)
       if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
@@ -281,25 +281,25 @@
 
 !MPIINSERT_SEND_URFB0
       if(mpirank.eq.mpiworker) then !-----------------------------------
-        mpisz=iyjx*lrz ! number of elements in urfb(i,j,lr)
-        call dcopy(mpisz,urfb(1:iy,1:jx,1:lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
-        call dcopy(mpisz,urfc(1:iy,1:jx,1:lrz,krf),1,urfbwk(1*mpisz+1),1) ! 1*mpisz+1 : 2*mpisz
-        ! urfb and urfc are dimensioned as (1:iy,1:jx,1:lrz,1:mrfn)
+        mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
+        call dcopy(mpisz,urfb(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
+        call dcopy(mpisz,urfc(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(1*mpisz+1),1) ! 1*mpisz+1 : 2*mpisz
+        ! urfb and urfc are dimensioned as (1:iy,1:jx,1:setup0%lrz,1:mrfn)
         mpisz3=2*mpisz ! the last elem. in above
-        urfbwk(mpisz3+0*lrz+1 : mpisz3+1*lrz) = powrfl(1:lrz,krf) !linear damp.
-        urfbwk(mpisz3+1*lrz+1 : mpisz3+2*lrz) = powrfc(1:lrz,krf) !coll.damp.
+        urfbwk(mpisz3+0*setup0%lrz+1 : mpisz3+1*setup0%lrz) = powrfl(1:setup0%lrz,krf) !linear damp.
+        urfbwk(mpisz3+1*setup0%lrz+1 : mpisz3+2*setup0%lrz) = powrfc(1:setup0%lrz,krf) !coll.damp.
         mpitag= krf ! wave-mode
-        call MPI_SEND(urfbwk,mpisz3+2*lrz,MPI_DOUBLE_PRECISION,0,mpitag,MPI_COMM_WORLD,mpiierr)
+        call MPI_SEND(urfbwk,mpisz3+2*setup0%lrz,MPI_DOUBLE_PRECISION,0,mpitag,MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
 !MPIINSERT_RECV_URFB0
       if(mpirank.eq.0) then !-------------------------------------------
-        mpisz=iyjx*lrz ! number of elements in urfb(i,j,lr)
+        mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
         mpisz3=2*mpisz ! storage size for urfb,urfc
-        call MPI_RECV(urfbwk, mpisz3+2*lrz,MPI_DOUBLE_PRECISION,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
+        call MPI_RECV(urfbwk, mpisz3+2*setup0%lrz,MPI_DOUBLE_PRECISION,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
         mpitag=mpistatus(MPI_TAG)
         mpikrf=mpitag ! determine which krf wave mode
         ij=0
-        do ll=1,lrz
+        do ll=1,setup0%lrz
         call tdnflxs(lmdpln(ll))
         do j=1,jx
         do i=1,iy
@@ -312,13 +312,13 @@
       endif !-----------------------------------------------------------
 
 !MPIINSERT_BCAST_URFB0
-      call MPI_BCAST(urfb,iyjx*lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-      call MPI_BCAST(urfc,iyjx*lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
+      call MPI_BCAST(urfb,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
+      call MPI_BCAST(urfc,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
 !MPIINSERT_SEND_EFLUXWK
       if(mpirank.eq.mpiworker) then !-----------------------------------
-        call dcopy(mpisz,efluxwk(1,i),1,tem2(1),1)
-        mpitag= i ! i=1,lrzmax
+        call dcopy(mpisz,efluxwk(1:mpisz,i),1,tem2(1:mpisz),1)
+        mpitag= i ! i=1,setup0%lrzmax
         call MPI_SEND(tem2, mpisz,MPI_DOUBLE_PRECISION,0,mpitag,MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
 !MPIINSERT_RECV_EFLUXWK
@@ -326,17 +326,17 @@
         call MPI_RECV(tem2, mpisz,MPI_DOUBLE_PRECISION,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
         mpitag=mpistatus(MPI_TAG)
         mpil_=mpitag ! determine which radial surface sent the data
-        call dcopy(mpisz,tem2(1),1,efluxwk(1,mpil_),1)
+        call dcopy(mpisz,tem2(1:mpisz),1,efluxwk(1:mpisz,mpil_),1)
       endif !-----------------------------------------------------------
 
 !MPIINSERT_SEND_FUS
       if(mpirank.eq.mpiworker) then !-----------------------------------
         mpisz=4
-        call dcopy(mpisz, fuspwrv(1,lr_), 1,buff(0*mpisz+1),1)
-        call dcopy(mpisz, fuspwrm(1,lr_), 1,buff(1*mpisz+1),1)
-        call dcopy(mpisz, sigf(1,lr_),    1,buff(2*mpisz+1),1)
-        call dcopy(mpisz, sigm(1,lr_),    1,buff(3*mpisz+1),1)
-        mpitag= lr_ ! over flux surfaces =1,lrz
+        call dcopy(mpisz, fuspwrv(1:mpisz,lr_), 1,buff(0*mpisz+1),1)
+        call dcopy(mpisz, fuspwrm(1:mpisz,lr_), 1,buff(1*mpisz+1),1)
+        call dcopy(mpisz, sigf(1:mpisz,lr_),    1,buff(2*mpisz+1),1)
+        call dcopy(mpisz, sigm(1:mpisz,lr_),    1,buff(3*mpisz+1),1)
+        mpitag= lr_ ! over flux surfaces =1,setup0%lrz
         call MPI_SEND(buff, mpisz*4,MPI_DOUBLE_PRECISION,0,mpitag,MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
 !MPIINSERT_RECV_FUS
@@ -345,23 +345,23 @@
         call MPI_RECV(buff, mpisz*4,MPI_DOUBLE_PRECISION,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
         mpitag=mpistatus(MPI_TAG)
         mpil_=mpitag ! determine which radial surface sent the data
-        call dcopy(mpisz, buff(0*mpisz+1),1, fuspwrv(1,mpil_),1)
-        call dcopy(mpisz, buff(1*mpisz+1),1, fuspwrm(1,mpil_),1)
-        call dcopy(mpisz, buff(2*mpisz+1),1, sigf(1,mpil_),   1)
-        call dcopy(mpisz, buff(3*mpisz+1),1, sigm(1,mpil_),   1)
+        call dcopy(mpisz, buff(0*mpisz+1),1, fuspwrv(1:mpisz,mpil_),1)
+        call dcopy(mpisz, buff(1*mpisz+1),1, fuspwrm(1:mpisz,mpil_),1)
+        call dcopy(mpisz, buff(2*mpisz+1),1, sigf(1:mpisz,mpil_),   1)
+        call dcopy(mpisz, buff(3*mpisz+1),1, sigm(1:mpisz,mpil_),   1)
       endif !-----------------------------------------------------------
 
 !MPIINSERT_BCAST_EFLUX
-      call MPI_BCAST(eflux(1,nn),nena,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
+      call MPI_BCAST(eflux(1:nena,nn),nena,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
 !MPIINSERT_BCAST_EFLUX_NPA
-      call MPI_BCAST(eflux_npa(1,nn),nen_npa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
+      call MPI_BCAST(eflux_npa(1:nen_npa,nn),nen_npa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
 !MPIINSERT_BCAST_FUS
-      call MPI_BCAST(fuspwrv(1,1),4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-      call MPI_BCAST(fuspwrm(1,1),4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-      call MPI_BCAST(sigf(1,1),4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-      call MPI_BCAST(sigm(1,1),4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
+      call MPI_BCAST(fuspwrv,4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
+      call MPI_BCAST(fuspwrm,4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
+      call MPI_BCAST(sigf,4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
+      call MPI_BCAST(sigm,4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
 !MPIINSERT_STARTTIME
       if(mpirank.eq.0) then

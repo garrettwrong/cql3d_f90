@@ -15,7 +15,8 @@ module cfpleg_mod
 contains
 
       subroutine cfpleg(m,l,jzval)
-      use param_mod
+        use cqlconf_mod, only : setup0
+        use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : dscal
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -62,7 +63,7 @@ contains
 !.......................................................................
 
       iend=itl
-      if (cqlpmod .eq. "enabled") iend=iyh
+      if (setup0%cqlpmod .eq. "enabled") iend=iyh
 
 !     passing particles
       do 100 i=1,iend
@@ -73,7 +74,7 @@ contains
  110    continue
  100  continue
 
-      if (cqlpmod .eq. "enabled") go to 200
+      if (setup0%cqlpmod .eq. "enabled") go to 200
       if (l.eq.lz .or. imax(l,lr_).eq.itl) go to 200
 
 !     particles in trapped region but passing poloidal position l

@@ -62,7 +62,7 @@ contains
  1000 continue
  555  format(5i16)
  560  format(5e16.8)
-      if(ll.eq.lrz)  close(unit=31)
+      if(ll.eq.setup0%lrz)  close(unit=31)
 
       return
       end subroutine urfdout

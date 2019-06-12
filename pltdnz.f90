@@ -14,7 +14,8 @@ module pltdnz_mod
 
 contains
 
-      subroutine pltdnz
+  subroutine pltdnz
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -31,7 +32,7 @@ contains
       CALL PGSAVE
 
 !
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       if (pltdn .eq. "disabled") return
       do 100 k=1,ngen
         fu=.99999

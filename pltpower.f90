@@ -13,7 +13,8 @@ module pltpower_mod
 
 contains
 
-      subroutine pltpower
+  subroutine pltpower
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -27,7 +28,7 @@ contains
       REAL RNONCHA1(nonch),RNONCHA2(nonch)
 
 !
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       do 100 k=1,ngen
         if (colmodl.eq.4 .and. k.eq.ngen) goto 100
