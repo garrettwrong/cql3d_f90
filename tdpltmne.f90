@@ -117,17 +117,17 @@ contains
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
         CALL PGSLS(2)
         DO I=1,setup0%lrzmax
            RLRZAP12(I)=tr2(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
         CALL PGSLS(3)
         DO I=1,setup0%lrzmax
            RLRZAP13(I)=tr3(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
         CALL PGSLS(1)
         write(t_,4050) pltvs
  4050   format(a8)
@@ -203,13 +203,13 @@ contains
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
 
         CALL PGSLS(1)  !solid
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
 
         CALL PGSLS(2)  !Set dashed line style
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
 
         CALL PGSLS(3)  !Set dot-dash line style
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
 
         CALL PGSLS(1)  !Re-set solid line style for annotation
 
@@ -268,7 +268,7 @@ contains
         ENDIF
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA1(1))
+        CALL PGLINE(setup0%lsmax,RLRORSA(1:setup0%lsmax),RLRORSA1(1:setup0%lsmax))
 
           write(t_,4051)
  4051     format("s (cms)")
@@ -321,7 +321,7 @@ contains
         ENDIF
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA1(1))
+        CALL PGLINE(setup0%lsmax,RLRORSA(1:setup0%lsmax),RLRORSA1(1:setup0%lsmax))
 
           write(t_,4051)
 
@@ -385,17 +385,17 @@ contains
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
         CALL PGSLS(2)
         DO I=1,setup0%lrzmax
            RLRZAP12(I)=tr2(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
         CALL PGSLS(3)
         DO I=1,setup0%lrzmax
            RLRZAP13(I)=tr3(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
         CALL PGSLS(1) ! restore solid line
         write(t_,4050) pltvs
         CALL PGLAB(t_,'Curr Den (A/cm\u2\d)',' ')
@@ -458,9 +458,9 @@ contains
         ENDIF
         CALL PGSWIN(RLRORSA(1),RLRORSA(setup0%lsmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
-        CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA1(1))
+        CALL PGLINE(setup0%lsmax,RLRORSA(1:setup0%lsmax),RLRORSA1(1:setup0%lsmax))
         CALL PGSLS(2)
-        CALL PGLINE(setup0%lsmax,RLRORSA(1),RLRORSA2(1))
+        CALL PGLINE(setup0%lsmax,RLRORSA(1:setup0%lsmax),RLRORSA2(1:setup0%lsmax))
         CALL PGSLS(1)
         write(t_,4051)
         CALL PGLAB(t_,'Curr Den (A/cm\u2\d',' ')
@@ -513,7 +513,7 @@ contains
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=tr1(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
         CALL PGLAB('Radius','RF Power (W/cm\u3\d)',' ')
 
 
@@ -555,7 +555,7 @@ contains
             DO I=1,setup0%lrzmax
                RLRZAP11(I)=tr1(i)
             ENDDO
-            CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+            CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
             CALL PGLAB('Radius','Synch Power (W/cm\u3\d)',' ')
 
           endif ! syncrad.ne."disabled" .and. k.eq.kelecg
@@ -629,12 +629,12 @@ contains
                DO I=1,setup0%lrzmax
                   RLRZAP11(I)=tr1(i)
                ENDDO
-               CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+               CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
                CALL PGSLS(2)
                DO I=1,setup0%lrzmax
                   RLRZAP12(I)=tr2(i)
                ENDDO
-               CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+               CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
                CALL PGSLS(1)
                CALL PGSAVE
                CALL PGSCH(1.44)

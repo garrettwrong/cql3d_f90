@@ -579,8 +579,8 @@ contains
            !RNONCHA1(it)=RBOUND(ptime(it,1))
 !BH171231           RLRZAP11(1:setup0%lrzmax)= consnp(it,1:setup0%lrzmax)
             RLRZAP11(1:setup0%lrz)= consnp(it,1:setup0%lrz)
-!BH171231           CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
-           CALL PGLINE(setup0%lrz,RLRZAP1(1),RLRZAP11(1))
+!BH171231           CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
+           CALL PGLINE(setup0%lrz,RLRZAP1(1:setup0%lrz),RLRZAP11(1:setup0%lrz))
         ENDDO
         CALL PGSAVE
         CALL PGSCH(1.)

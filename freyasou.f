@@ -41,6 +41,18 @@ c
       dimension pr(:)
       pointer pr
 
+      ! YuP[2019-06-12] Getting lrz and lrzmax from setup0 type:
+      !character(len=8) :: cqlpmod
+      !integer :: lrindx(0:lrorsa)
+      integer :: lrz
+      integer :: lrzmax
+      !character(len=256) :: mnemonic
+      !cqlpmod = setup0%cqlpmod
+      !lrindx = setup0%lrindx
+      lrz = setup0%lrz
+      lrzmax =  setup0%lrzmax
+      !mnemonic = setup0%mnemonic
+
 c
 c..................................................................
 c

@@ -166,23 +166,23 @@ contains
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         ! fi (general ions):
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
         ! fi+e [can be general ions (if any) + general electrons,
         ! or general ions + screening current from e; see eleccomp='enabled' option]:
         CALL PGSLS(2) ! ---
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
         ! Bootstrap for e, based on jhirsh88/99 models:
         CALL PGSLS(3) ! -.-
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
         ! Bootstrap for ions, based on jhirsh88/99 models:
         CALL PGSLS(4) ! ...
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP14(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP14(1:setup0%lrzmax))
         CALL PGSLS(1) ! Restore solid line
 !yup        ! Total: [YuP: do not plot anymore]
 !yup        DO I=1,setup0%lrzmax
 !yup           RLRZAP13(I)=totcurz(i)
 !yup        ENDDO
-!yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
+!yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
         CALL PGSAVE
         CALL PGSCH(1.44)
         CALL PGLAB(' ','curr density (A/cm\u2\d)',' ')
@@ -198,17 +198,17 @@ contains
         CALL PGSWIN(RPGmin,RLRZAP(setup0%lrzmax),RPG1,RPG2)
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
         ! fi (general ions):
-        CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
         ! fi+e [can be general ions (if any) + general electrons,
         ! or general ions + screening current from e; see eleccomp='enabled' option]:
         CALL PGSLS(2) ! ---
-        CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
         ! Bootstrap for e, based on jhirsh88/99 models:
         CALL PGSLS(3) ! -.-
-        CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP13(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
         ! Bootstrap for ions, based on jhirsh88/99 models:
         CALL PGSLS(4) ! ...
-        CALL PGLINE(setup0%lrzmax,RLRZAP(1),RLRZAP14(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP(1:setup0%lrzmax),RLRZAP14(1:setup0%lrzmax))
         CALL PGSLS(1) ! Restore solid line
         CALL PGSAVE
         CALL PGSCH(1.44)
@@ -283,17 +283,17 @@ contains
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=currtzi(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
         CALL PGSLS(2)
         DO I=1,setup0%lrzmax
            RLRZAP12(I)=currtpzi(i)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
 !yup        CALL PGSLS(3)
 !yup        DO I=1,setup0%lrzmax
 !yup           RLRZAP13(I)=totcurzi(i)
 !yup        ENDDO
-!yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1))
+!yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
         CALL PGSLS(1)
         CALL PGSAVE
         CALL PGSCH(1.44)
@@ -612,18 +612,18 @@ contains
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=sorpwt(i) ! solid: NBI+RF(all gen.species)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
         CALL PGSLS(2) ! 2-> dashed
         DO I=1,setup0%lrzmax
            RLRZAP12(I)=sorpw_nbi(kfrsou1,I) ! dashed: NBI only
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
       do k=1,ngen ! rf sources for general species
          DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rf(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
-         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
       enddo ! k=1,ngen
       !
       CALL PGSLS(1) ! solid
@@ -631,7 +631,7 @@ contains
       DO I=1,setup0%lrzmax
          RLRZAP13(I)=powrft(i)
       ENDDO
-      CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
+      CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax)) !solid bold: total rf
       CALL PGSLS(1)
       CALL PGSLW(setup0%lnwidth) !
       CALL PGSAVE
@@ -676,7 +676,7 @@ contains
             RLRZAP12(I)=sorpw_rf(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
-         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
       enddo ! k=1,ngen
       !
       CALL PGSLS(1) ! solid
@@ -684,7 +684,7 @@ contains
       DO I=1,setup0%lrzmax
          RLRZAP13(I)=powrft(i)
       ENDDO
-      CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
+      CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax)) !solid bold: total rf
       CALL PGSLS(1)
       CALL PGSLW(setup0%lnwidth) !
       CALL PGSAVE
@@ -749,25 +749,25 @@ contains
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=sorpwti(i) ! solid: NBI+RF(all gen.species)
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
         CALL PGSLS(2) ! 2-> dashed
         DO I=1,setup0%lrzmax
            RLRZAP12(I)=sorpw_nbii(kfrsou1,I) ! dashed: NBI only
         ENDDO
-        CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
       do k=1,ngen ! rf sources for general species
          DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rfi(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
-         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
       enddo ! k=1,ngen
       CALL PGSLS(1) ! solid
       CALL PGSLW(setup0%lnwidth+1) ! bold
       DO I=1,setup0%lrzmax
          RLRZAP13(I)=powurfi(i,0) ! = SUM_harmonics{powurfi(l,harmonics)}
       ENDDO
-      CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
+      CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax)) !solid bold: total rf
       CALL PGSLS(1) ! restore: solid line
       CALL PGSLW(setup0%lnwidth) ! restore
       CALL PGSAVE
@@ -820,14 +820,14 @@ contains
             RLRZAP12(I)=sorpw_rfi(k,I)
          ENDDO
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
-         CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP12(1))
+         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
       enddo ! k=1,ngen
       CALL PGSLS(1) ! solid
       CALL PGSLW(setup0%lnwidth+1) ! bold
       DO I=1,setup0%lrzmax
          RLRZAP13(I)=powurfi(i,0) ! = SUM_harmonics{powurfi(l,harmonics)}
       ENDDO
-      CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP13(1)) !solid bold: total rf
+      CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax)) !solid bold: total rf
       CALL PGSLS(1) ! restore: solid line
       CALL PGSLW(setup0%lnwidth) ! restore
       CALL PGSAVE
