@@ -146,7 +146,7 @@ contains
       ! eventually totally handled by the config module
       open(unit=2,file='cqlinput',status='old')
       read(2,setup)  ! Gets pltinput variable, for ainplt routine.
-
+      rewind(2)
       sumdtr=zero
 
 !.................................................................
@@ -164,6 +164,7 @@ contains
         ! See "1    continue   ! loop in reading lines in cqlinput file" in ainplt
         ! By reading "setup0" we simply make sure that we are back to the 1st line of cqlinput file?
         ! Not sure about this. Maybe Bob could comment.
+        ! (GBW) You just needed to seek/rewind the file, not open and close it in different places.
         call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
 
         call ainsetpa          !  re-set according to setup0 nml

@@ -14,6 +14,7 @@ contains
       subroutine ainsetpa
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
