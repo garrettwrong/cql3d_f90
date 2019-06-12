@@ -48,7 +48,7 @@ contains
     !     The eqpsi array can be provided externally
     !     (generate="disabled") or it can be generated within
     !     this routine (generate="enabled"). [It is called with
-    !     generate="enabled" from eqcoord when lr_.eq.lrzmax.]
+    !     generate="enabled" from eqcoord when lr_.eq.setup0%lrzmax.]
     !     Also, determines some approximate geometric quantities
     !     of the eqdsk.
     !..................................................................
@@ -75,12 +75,12 @@ contains
     !             to facilitate de-updown-symmetrization.
     !
     !     Calls to the current subroutine eqrhospi are from eqcoord, in
-    !     descending order lr_=lrzmax,1,-1.
+    !     descending order lr_=setup0%lrzmax,1,-1.
     !......................................................................
 
 
     !      if (eqcall.eq."enabled") then   !Called on first run through.
-    if (lr_.eq.lrzmax) then   !Called on first run through.
+    if (lr_.eq.setup0%lrzmax) then   !Called on first run through.
        ibd(1)=4
        ibd(2)=4
        ibd(3)=4
@@ -232,7 +232,7 @@ contains
 
     !..................................................................
     !     This routine  is called with generate="enabled" from eqcoord
-    !     when lr_.eq.lrzmax.  radcoord is namelist input indicating
+    !     when lr_.eq.setup0%lrzmax.  radcoord is namelist input indicating
     !     the specific definition of the radial coordinate.
     !..................................................................
 

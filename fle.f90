@@ -45,7 +45,7 @@ contains
       character*8 ifirst
       data ifirst/"first"/
 
-      if (lrz.gt.1) stop 'in fle_pol: only set up for lrz=1.'
+      if (setup0%lrz.gt.1) stop 'in fle_pol: only set up for setup0%lrz=1.'
 
 !     At the first call, set up the mesh, binning and weighting factors.
 !     The mesh is the same for each poloidal angle, but the factors
@@ -118,10 +118,10 @@ contains
 !          contribute to parallel velocity bin jflbin(i,j,ll) with
 !          weight wtfl0(i,j,ll) and to bin jflbin(i,j,ll)-1 with
 !          weight wtflm(i,j,ll).
-!         do 204 ll=1,lrz
+!         do 204 ll=1,setup0%lrz
          ll=1
 
-         if (lrz.ne.1) stop 'lrz.ne.1 in fle_pol'
+         if (setup0%lrz.ne.1) stop 'setup0%lrz.ne.1 in fle_pol'
 
          do 2041 l=1,lz
          do 205 j=1,jx
@@ -245,7 +245,7 @@ contains
       character*8 ifirst
       data ifirst/"first"/
 
-      if (lrz.gt. lz) stop 'in fle_fsa:  Need to adjust lrz.le.lz'
+      if (setup0%lrz.gt. lz) stop 'in fle_fsa:  Need to adjust setup0%lrz.le.lz'
 
       if (setup.eq."setup") then
 !     At the first call, set up the mesh, binning and weighting factors.
@@ -309,7 +309,7 @@ contains
 !          contribute to parallel velocity bin jflbin(i,j,ll) with
 !          weight wtfl0(i,j,ll) and to bin jflbin(i,j,ll)-1 with
 !          weight wtflm(i,j,ll).
-         do 204 ll=1,lrz
+         do 204 ll=1,setup0%lrz
 
          do 205 j=1,jx
          do 206 i=1,iyh_(ll)
@@ -411,7 +411,7 @@ contains
       character*8 ifirst
       data ifirst/"first"/
 
-      if (lrz.gt. lz) stop 'in fle:  Need to adjust lrz.le.lz'
+      if (setup0%lrz.gt. lz) stop 'in fle:  Need to adjust setup0%lrz.le.lz'
 
       if (setup.eq."setup") then
 !     At the first call, set up the mesh.  This is independent of lp.

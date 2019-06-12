@@ -43,18 +43,18 @@ contains
       cei=(0.,1.)
 
       if (.NOT. ALLOCATED(urfbwk)) then
-        allocate( urfbwk(iyjx*lrz*4) )  ! used for MPI send/recv
-        call bcast(urfbwk,zero,iyjx*lrz*4)
+        allocate( urfbwk(iyjx*setup0%lrz*4) )  ! used for MPI send/recv
+        call bcast(urfbwk,zero,iyjx*setup0%lrz*4)
       endif
 
 !..................................................................
 !     Zero out the coefficients: all flux surfaces
 !..................................................................
-      call bcast(urfb,zero,iyjx*lrz*mrfn)
-      call bcast(urfc,zero,iyjx*lrz*mrfn)
-      ! urfb and urfc are dimensioned as (1:iy,1:jx,1:lrz,1:mrfn)
-      !call bcast(urfe(1,1,1,1),zero,iyjx*lrz*mrfn)
-      !call bcast(urff(1,1,1,1),zero,iyjx*lrz*mrfn)
+      call bcast(urfb,zero,iyjx*setup0%lrz*mrfn)
+      call bcast(urfc,zero,iyjx*setup0%lrz*mrfn)
+      ! urfb and urfc are dimensioned as (1:iy,1:jx,1:setup0%lrz,1:mrfn)
+      !call bcast(urfe(1,1,1,1),zero,iyjx*setup0%lrz*mrfn)
+      !call bcast(urff(1,1,1,1),zero,iyjx*setup0%lrz*mrfn)
 !YuP[03/18/2015] urfe,urff are expressed through urfb,urfc
 
 !..................................................................
@@ -399,7 +399,7 @@ contains
       do krf=1,mrfn
          k=  nrfspecies(krfn(krf))
          fm= fmass(k)*symm/(vnorm*twopi)
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          call tdnflxs(lmdpln(ll)) !-> l_ and lr_
          !lr0=ll
          !lp1=min(ll+1,lrfow)
@@ -462,7 +462,7 @@ contains
 !MPIINSERT_IF_RANK_EQ_0
 !      WRITE(*,'(a,2i5,e12.3)')'sum_test for urfb0:', ll,krf,sum_test
 !MPIINSERT_ENDIF_RANK
-      enddo             ! ll=1,lrz
+      enddo             ! ll=1,setup0%lrz
       enddo             ! krf=1,mrfn
 
 !MPIINSERT_IF_RANK_EQ_0
@@ -505,8 +505,8 @@ contains
 !..................................................................
 
       complex*16 cwz,cwxyp,cwxym,cei
-      real(c_double) sum_dth(iy,lrz)
-      real(c_double) urfb_i(iy,lrz),urfc_i(iy,lrz),prf_rayel_i(iy,lrz)
+      real(c_double) sum_dth(iy,setup0%lrz)
+      real(c_double) urfb_i(iy,setup0%lrz),urfc_i(iy,setup0%lrz),prf_rayel_i(iy,setup0%lrz)
 
       cei=(0.,1.)
       vnorm2i= one/vnorm2
@@ -545,12 +545,12 @@ contains
       !bphib_loc= bphib_rz(R_loc,Z_loc) ! Bphi/B local
       !bbRloc=    bphib_loc*R_loc  ! (Bphi/B)R local
 
-      sum_dth=0.d0 ! Initialize, for all iy,lrz
+      sum_dth=0.d0 ! Initialize, for all iy,setup0%lrz
       if(iurfb.eq.0) then
-         urfb_i=0.d0 ! All (iy,lrz)
-         urfc_i=0.d0 ! All (iy,lrz)
+         urfb_i=0.d0 ! All (iy,setup0%lrz)
+         urfc_i=0.d0 ! All (iy,setup0%lrz)
       else
-         prf_rayel_i=0.d0 ! All (iy,lrz)
+         prf_rayel_i=0.d0 ! All (iy,setup0%lrz)
       endif
 
       !YuP[04-2016] Definition of dveps is moved to urfsetup/comm.h
@@ -634,10 +634,10 @@ contains
          ! The ranges for i,lr_ where the ray element contributed to urfb
          ! will be found in do loop below.
          ! The ranges i_mn:i_mx,lrmn:lrmx will be used to reset
-         ! arrays(iy,lrz) (instead of the whole ranges, to save cpu time)
+         ! arrays(iy,setup0%lrz) (instead of the whole ranges, to save cpu time)
          i_mn=iy
          i_mx=1
-         lrmn=lrz
+         lrmn=setup0%lrz
          lrmx=1
 
          !YuP[04-2016] Added averaging of |upar_loc|.

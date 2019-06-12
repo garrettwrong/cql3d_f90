@@ -41,10 +41,10 @@ contains
       if(ASSOCIATED(cqlb)) then
         ! cqlb-cqlf are already allocated => do nothing
       else ! Not allocated yet
-        allocate(cqlb(iy,jx,lrz,mrfn),STAT=istat)
-        allocate(cqlc(iy,jx,lrz,mrfn),STAT=istat)
-        allocate(cqle(iy,jx,lrz,mrfn),STAT=istat)
-        allocate(cqlf(iy,jx,lrz,mrfn),STAT=istat)
+        allocate(cqlb(iy,jx,setup0%lrz,mrfn),STAT=istat)
+        allocate(cqlc(iy,jx,setup0%lrz,mrfn),STAT=istat)
+        allocate(cqle(iy,jx,setup0%lrz,mrfn),STAT=istat)
+        allocate(cqlf(iy,jx,setup0%lrz,mrfn),STAT=istat)
       endif
       cqlb_size=size(cqlb)
       call bcast(cqlb,zero,cqlb_size)

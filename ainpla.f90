@@ -28,7 +28,7 @@ contains
 
     !..........................................................
     !     This routine initialize some plasma parameter profiles
-    !     on the whole lrzmax radial mesh
+    !     on the whole setup0%lrzmax radial mesh
     !     (some where defined in diaggnde before)
     !.............................................................
 
@@ -41,7 +41,7 @@ contains
 
     do 110 k=1,ntotal
        rstmss=fmass(k)*clite2/ergtkev
-       do 111 l=1,lrzmax
+       do 111 l=1,setup0%lrzmax
           thta=rstmss/temp(k,l)
           if (thta.gt.100. .or. relativ.eq."disabled") then
              energy(k,l)=1.5*temp(k,l)
@@ -61,11 +61,11 @@ contains
     !l    1.2 parallel mesh
     !.......................................................................
 
-    if (cqlpmod .eq. "enabled") then
+    if (setup0%cqlpmod .eq. "enabled") then
 
        do 120 k=1,ntotal
           rstmss=fmass(k)*clite2/ergtkev
-          do 121 l=1,lsmax
+          do 121 l=1,setup0%lsmax
              thta=rstmss/temppar(k,l)
              if (thta.gt.100. .or. relativ.eq."disabled") then
                 enrgypa(k,l)=1.5*temppar(k,l)
@@ -76,10 +76,10 @@ contains
              vthpar(k,l)=((temppar(k,l)*ergtkev)/fmass(k))**.5
 121       end do
           if (sbdry.eq."periodic" .and. transp.eq."enabled") then
-             enrgypa(k,0)=enrgypa(k,lsmax)
-             enrgypa(k,lsmax+1)=enrgypa(k,1)
-             vthpar(k,0)=vthpar(k,lsmax)
-             vthpar(k,lsmax+1)=vthpar(k,1)
+             enrgypa(k,0)=enrgypa(k,setup0%lsmax)
+             enrgypa(k,setup0%lsmax+1)=enrgypa(k,1)
+             vthpar(k,0)=vthpar(k,setup0%lsmax)
+             vthpar(k,setup0%lsmax+1)=vthpar(k,1)
           endif
 120    end do
 
@@ -93,7 +93,7 @@ contains
      else
         k1=1
      endif
-     do 200 l=1,lrzmax
+     do 200 l=1,setup0%lrzmax
         zeff(l)=0.
         zeff1=0.
         zeff4(l)=0.d0 !Yup[2014-05-27] Initialize to 0.

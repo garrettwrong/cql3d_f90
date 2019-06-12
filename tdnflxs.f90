@@ -12,6 +12,7 @@ module tdnflxs_mod
 contains
 
   subroutine tdnflxs(ll)
+    use cqlconf_mod, only : setup0
     !implicit integer (i-n), real(c_double) (a-h,o-z)
     implicit none
     save
@@ -35,10 +36,10 @@ contains
 
     !
     l_=ll
-    lr_=lrindx(l_)
+    lr_=setup0%lrindx(l_)
     indxlr_=indxlr(lr_)
     lmdpln_=lmdpln(indxlr_)
-    ls_=lsindx(l_)
+    ls_=setup0%lsindx(l_)
     indxls_=indxls(ls_)
 
     itl=itl_(l_)

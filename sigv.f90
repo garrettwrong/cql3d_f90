@@ -45,7 +45,7 @@ contains
       call bcast(sigft,zero,4)
       call bcast(sigmt,zero,4)
 
-      do 100  i=1,lrz           ! keep index 'i' - used by mpiworker_i below
+      do 100  i=1,setup0%lrz           ! keep index 'i' - used by mpiworker_i below
 !MPIINSERT_MPIWORKER_I
 !MPIINSERT_IF_RANK_EQ_MPIWORKER
          call tdnflxs(i)        !-> determine flux surface index lr_
@@ -59,7 +59,7 @@ contains
 !MPIINSERT_ENDIF_RANK
 !MPIINSERT_RECV_FUS
 !MPIINSERT_SEND_FUS
- 100  continue                  ! on i=1,lrz
+ 100  continue                  ! on i=1,setup0%lrz
 
 !MPIINSERT_BARRIER
 !MPIINSERT_BCAST_FUS
@@ -69,7 +69,7 @@ contains
 !         fuspwrv = fusion power density (from general species)
 !         fuspwrm = fusion power density (Maxwellian with same density
 !                                         energy as the gen. species)
-      do ll=1,lrz
+      do ll=1,setup0%lrz
           call tdnflxs(ll)
           do 90 knumb=1,4
             fuspwrvt(knumb)=fuspwrvt(knumb) &

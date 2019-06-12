@@ -19,7 +19,8 @@ module tdsxr0_mod
 
 contains
 
-      subroutine tdsxr0(rb,ene,icall,iplotsxr)
+  subroutine tdsxr0(rb,ene,icall,iplotsxr)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -54,8 +55,8 @@ contains
 !        It is only used in the circular plasma case, and/or for
 !        determination of the step size along the sight line for
 !        both circ and eqdsk equilibria.
-!     Dimension is 0:lrzmax.
-!     zeff=array of effective charge, dimension lrzmax.
+!     Dimension is 0:setup0%lrzmax.
+!     zeff=array of effective charge, dimension setup0%lrzmax.
 !     nv = number of viewing chords.
 !     x_sxr(1:nv) = x-coordinate of detector
 !     z_sxr(1:nv) = z-coordinate of detector
@@ -91,8 +92,8 @@ contains
 !MPIINSERT_INCLUDE
 
       character*8 icall,iplotsxr,icalls
-      dimension rb(0:lrzmax),ene(lrzmax)
-      dimension efluxwk(nen,lrzmax) ! local working array
+      dimension rb(0:setup0%lrzmax),ene(setup0%lrzmax)
+      dimension efluxwk(nen,setup0%lrzmax) ! local working array
       real(c_double), allocatable, dimension(:):: tempp4,tempp5,tempp6
 
       if(nv.gt.nva) stop 'nv.gt.nva in tdsxr0'
@@ -100,8 +101,8 @@ contains
 !.......................................................................
 !     Allocate temporary storage, to be deallocated at end of subroutine
 !.......................................................................
-!BH121115      itempp=int(25*lrzmax*nv/fds)
-      itempp=int(100*lrzmax*nv/fds)
+!BH121115      itempp=int(25*setup0%lrzmax*nv/fds)
+      itempp=int(100*setup0%lrzmax*nv/fds)
       allocate(tempp4(itempp),STAT=istat4)
       allocate(tempp5(itempp),STAT=istat5)
       allocate(tempp6(itempp),STAT=istat6)
@@ -148,13 +149,13 @@ contains
 !.......................................................................
 
         if(fds.ge.1.)  stop 'fds step size in sxr too large'
-        ibin1=lrzmax
+        ibin1=setup0%lrzmax
         ibin2=1
 
 !.......................................................................
 !     ibin1= the radial bin of the source point along the viewing cord,
 !     numbered from 1 for the bin with inner edge at the magnetic
-!     axis, to lrzmax for the bin with outer limit equal to radmin.
+!     axis, to setup0%lrzmax for the bin with outer limit equal to radmin.
 !     (Bin ibin occupies the region from .ge.rb(ibin-1) to
 !     .lt.rb(ibin)).
 !     Emission will only be calculated for each crossing of a radial
@@ -172,7 +173,7 @@ contains
         istart=1
         istep=0
         do 99  j=1,4
-          do 991  i=1,lrzmax
+          do 991  i=1,setup0%lrzmax
             ibin(i,j)=0
             sxry(i,j)=0.0
             sang(i,j)=0.0
@@ -186,9 +187,9 @@ contains
 
  100    continue
 
-!990131        ds=fds*amin1(rb(ibin1)-rb(ibin1-1),radmin/lrzmax)
-!BH081106        ds=fds*min(rb(ibin1)-rb(ibin1-1),radmin/lrzmax)
-        ds=fds*min(rb(ibin1)-rb(ibin1-1),(rb(ibin1)-rb(0))/lrzmax)
+!990131        ds=fds*amin1(rb(ibin1)-rb(ibin1-1),radmin/setup0%lrzmax)
+!BH081106        ds=fds*min(rb(ibin1)-rb(ibin1-1),radmin/setup0%lrzmax)
+        ds=fds*min(rb(ibin1)-rb(ibin1-1),(rb(ibin1)-rb(0))/setup0%lrzmax)
         s=s+ds
         istep=istep+1  ! counts for each view chord
         do 102  j=1,3
@@ -312,7 +313,7 @@ contains
 !.......................................................................
 
           ibin1=ibin1+1
-          if(ibin1.gt.lrzmax)  stop 'stop 2 in tdsxr0'
+          if(ibin1.gt.setup0%lrzmax)  stop 'stop 2 in tdsxr0'
           go to 150
 
 !.......................................................................
@@ -373,7 +374,7 @@ contains
 
           if ((psimag-psilim).le.0.0) stop 'psimag.lt.psilim in tdsxr0'
           tr(0)=zero
-          do 160  l=1,lrzmax
+          do 160  l=1,setup0%lrzmax
  160      tr(l)=psimag-psivalm(l)  !Increases from 0. to psimag-psilim at edge.
           xx=xs_(1)
           yy=xs_(2)
@@ -435,7 +436,7 @@ contains
 !     Check if in the same bin as previous step.
 !.......................................................................
 
-          rs1=apsi-tr(ibin1)     !  ibin1 is initialized = lrzmax
+          rs1=apsi-tr(ibin1)     !  ibin1 is initialized = setup0%lrzmax
           rs2=apsi-tr(ibin1-1)
           if(rs1*rs2.le.zero.and.rs1.ne.zero) go to 190 !in [ibin1,ibin1+1)
 
@@ -482,7 +483,7 @@ contains
 !.......................................................................
 
           ibin1=ibin1+1
-          if(ibin1.gt.lrzmax)  stop 'stop 5 in tdsxr0'
+          if(ibin1.gt.setup0%lrzmax)  stop 'stop 5 in tdsxr0'
           go to 190
 
 !.......................................................................
@@ -581,11 +582,11 @@ contains
 
 !.......................................................................
 !     Obtain weighted angle between viewing and toroidal directions,
-!     and poloidal angle, in each or the lrzmax radial bins.
+!     and poloidal angle, in each or the setup0%lrzmax radial bins.
 !.......................................................................
 
         do 210  j=1,ibin2
-          do 211  i=1,lrzmax
+          do 211  i=1,setup0%lrzmax
             if(sxry(i,j).eq.zero)  go to 211
             sang(i,j)=sang(i,j)/sxry(i,j)
             spol(i,j)=spol(i,j)/sxry(i,j)
@@ -631,7 +632,7 @@ contains
         efluxwk=zero !YuP[2019-06-08]was call bcast(efluxwk(1,1),zero,nen*lrzmax)
         mpisz= nen ! number of elements in efluxwk(nen,i)
 
-        do i=1,lrzmax
+        do i=1,setup0%lrzmax
 !MPIINSERT_MPIWORKER_I
 !MPIINSERT_IF_RANK_EQ_MPIWORKER
         do j=1,ibin2
@@ -649,14 +650,14 @@ contains
 !MPIINSERT_ENDIF_RANK
 !MPIINSERT_RECV_EFLUXWK
 !MPIINSERT_SEND_EFLUXWK
-        enddo ! i=1,lrzmax
+        enddo ! i=1,setup0%lrzmax
 
         call bcast(eflux(1:nen,nn),zero,nen) !YuP[2019-06-08] range 1:nen
 
         do ien=1,nen  ! for each energy bin
-        do i=1,lrzmax ! sum-up contributions from all flux surfaces
+        do i=1,setup0%lrzmax ! sum-up contributions from all flux surfaces
           eflux(ien,nn)= eflux(ien,nn) + efluxwk(ien,i)
-        enddo ! i=1,lrzmax
+        enddo ! i=1,setup0%lrzmax
         enddo ! ien=1,nen
 
 !MPIINSERT_BARRIER
@@ -715,7 +716,7 @@ contains
       nenaa=nena
       if (iplotsxr.eq.'yes') &
           call tdsxrplt(en_,eflux,nen,nenaa, &
-                  efluxt,nv,inegsxr,softxry,lnwidth)
+                  efluxt,nv,inegsxr,softxry,setup0%lnwidth)
 
 !.......................................................................
 !     Plot SXR view cords in poloidal cross-section, if eqmod="enabled"

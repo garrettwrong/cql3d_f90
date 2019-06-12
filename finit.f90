@@ -14,7 +14,8 @@ module finit_mod
 
 contains
 
-      subroutine finit
+  subroutine finit
+    use cqlconf_mod, only : setup0
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
@@ -35,7 +36,7 @@ contains
 !     of l_=lrors,1,-1 sequence.
 !.......................................................................
 
-      if (nlrestrt.ne."disabled") then
+      if (setup0%nlrestrt.ne."disabled") then
          ireturn=1
          call tdreadf(2)
       endif
@@ -80,7 +81,7 @@ contains
 
         if ((n.eq.0) .and. (fpld(1,1).ne.-1.0)) then
         thta=fmass(k)*clite2/(temp(k,lr_)*ergtkev)
-        if (cqlpmod .eq. "enabled") &
+        if (setup0%cqlpmod .eq. "enabled") &
           thta=fmass(k)*clite2/(temppar(k,ls_)*ergtkev)
         do 2 j=1,jx
            !XXXXXXXXX whole lotta underflow here. YuP: this is a standard Maxw.distr. Usually ok.

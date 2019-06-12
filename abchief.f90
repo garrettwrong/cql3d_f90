@@ -12,11 +12,13 @@ module abchief_mod
 
 contains
 
-  subroutine abchief
+  subroutine abchief(nml_file)
     use param_mod
     use cqlcomm_mod
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
+
+    character(len=*), intent(in), optional :: nml_file
 
     !
     !      cputime=second()
@@ -24,7 +26,7 @@ contains
     !.......................................................................
     !     2d code controlled by achief1, called at beginning of tdchief
     !.......................................................................
-    call tdchief
+    call tdchief(nml_file)
     return
   end subroutine abchief
 

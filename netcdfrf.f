@@ -15,6 +15,7 @@ c
       contains
 
       subroutine netcdfrf(kopt,krf)
+      use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -123,7 +124,8 @@ c --- begin if ---
       IF(krf.GE.10  .AND. krf.LE.99 ) WRITE(krf_index(2:3),'(I2)') krf
       IF(krf.GE.100 .AND. krf.LE.999) WRITE(krf_index(1:3),'(I3)') krf
       if(krf.GE.1000) stop "Not setup for krf>999"
-      t_= mnemonic(1:length_char(mnemonic))//'_krf'//krf_index//'.nc'
+      t_= setup0%mnemonic(1:length_char(setup0%mnemonic))
+     & //'_krf'//krf_index//'.nc'
       !---- This file is created-then-closed at n=0,
       !---- opened-then-closed for writing data at n>0,
       !---- and opened-then-closed at n=nstop
@@ -131,14 +133,14 @@ c --- begin if ---
 C-----------------------------------------------------------------------
 C     Only set up for cqlpmod.ne."enabled",ngen=1, for the time being.
 C-----------------------------------------------------------------------
-      if (cqlpmod.eq."enabled" ) then  !-YuP: removed  .or. ngen.ne.1   ???
+      if (setup0%cqlpmod.eq."enabled" ) then  !-YuP: removed  .or. ngen.ne.1   ???
          WRITE(*,*) 'WARNING: netcdfrf subroutine not implemented'
          return
       endif
 
 c     Maximum iy as function of radius:
 c$$$      iy=0
-c$$$      do l=1,lrz
+c$$$      do l=1,setup0%lrz
 c$$$         iy=max(iy,iy_(l))
 c$$$      enddo
 
@@ -155,7 +157,7 @@ c     in each call to the subroutine.
 c$$$      count(1)=iy
       count(1)=iymax
       count(2)=jx
-      count(3)=lrz
+      count(3)=setup0%lrz
       count(4)=1
 
 c$$$      count1(1)=iy
@@ -168,15 +170,15 @@ c$$$      count1(1)=iy
       ray_count(2)=nray(krf) !-YuP: nray(1) -> nray(krf)
       ray_count(3)=2
 
-      r0_count(1)=lrzmax
+      r0_count(1)=setup0%lrzmax
       r0_count(2)=1
 
 c$$$      y_count(1)=iy
       y_count(1)=iymax
-      y_count(2)=lrz
+      y_count(2)=setup0%lrz
 
       tau_count(1)=iy
-      tau_count(2)=lrzmax
+      tau_count(2)=setup0%lrzmax
 
 
 c.......................................................................
@@ -212,8 +214,8 @@ c       returns dimension id.
 
 c-YuP:      xdim=ncddef(ncid,'x',jx,istatus)
 c-YuP:      ydim=ncddef(ncid,'y',iymax,istatus)
-c-YuP:      rdim=ncddef(ncid,'r',lrz,istatus)
-c-YuP:      r0dim=ncddef(ncid,'r0',lrzmax,istatus)
+c-YuP:      rdim=ncddef(ncid,'r',setup0%lrz,istatus)
+c-YuP:      r0dim=ncddef(ncid,'r0',setup0%lrzmax,istatus)
 c-YuP:      twodim=ncddef(ncid,'two',2,istatus)
 c-YuP:      neltdim=ncddef(ncid,'neltmax',neltmax,istatus)
 c-YuP:      nraydim=ncddef(ncid,'nrays',nray(1),istatus)
@@ -221,8 +223,8 @@ c-YuP:      cdim=ncddef(ncid,'cdim',8,istatus)
 
       istatus= NF_DEF_DIM(ncid, 'x',      jx ,      xdim)  !-YuP: NetCDF-f77
       istatus= NF_DEF_DIM(ncid, 'y',      iymax,    ydim)
-      istatus= NF_DEF_DIM(ncid, 'r',      lrz,      rdim)
-      istatus= NF_DEF_DIM(ncid, 'r0',     lrzmax,   r0dim)
+      istatus= NF_DEF_DIM(ncid, 'r',      setup0%lrz,      rdim)
+      istatus= NF_DEF_DIM(ncid, 'r0',     setup0%lrzmax,   r0dim)
       istatus= NF_DEF_DIM(ncid, 'two',    2,        twodim)
       istatus= NF_DEF_DIM(ncid, 'neltmax',neltmax,  neltdim) ! depends on krf
       istatus= NF_DEF_DIM(ncid, 'nrays',  nray(krf),nraydim) ! (1) -> (krf)
@@ -233,7 +235,7 @@ c     ncddef(ncid,'time',NF_UNLIMITED,error_code)
 c-YuP:      tdim=ncddef(ncid,'time',NCUNLIM,istatus)
       istatus= NF_DEF_DIM(ncid, 'time',NF_UNLIMITED,tdim) !-YuP: NetCDF-f77
 
-c     define vector of dimensions [for urfb(1:iy,1:jx,1:lrz,krf)], unlimited last
+c     define vector of dimensions [for urfb(1:iy,1:jx,1:setup0%lrz,krf)], unlimited last
       dims(1)=ydim
       dims(2)=xdim
       dims(3)=rdim
@@ -589,11 +591,11 @@ c--------------------------
 
 c-YuP:      vid=ncvid(ncid,'lrzmax',istatus)
       istatus= NF_INQ_VARID(ncid,'lrzmax',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,1,lrzmax,istatus)
+      call ncvpt_int2(ncid,vid,1,1,setup0%lrzmax,istatus)
 
 c-YuP:      vid=ncvid(ncid,'rya',istatus)
       istatus= NF_INQ_VARID(ncid,'rya',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,(1),lrzmax,rya(1),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),setup0%lrzmax,rya(1),istatus)
 
 c-YuP:      vid=ncvid(ncid,'rhomax',istatus)
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
@@ -601,11 +603,11 @@ c-YuP:      vid=ncvid(ncid,'rhomax',istatus)
 
 c-YuP:      vid=ncvid(ncid,'lrz',istatus)
       istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,1,lrz,istatus)
+      call ncvpt_int2(ncid,vid,1,1,setup0%lrz,istatus)
 
 c-YuP:      vid=ncvid(ncid,'lrindx',istatus)
       istatus= NF_INQ_VARID(ncid,'lrindx',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,lrz,lrindx(1),istatus)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,setup0%lrindx(1),istatus)
 
 c-YuP:      vid=ncvid(ncid,'jx',istatus)
       istatus= NF_INQ_VARID(ncid,'jx',vid)  !-YuP: NetCDF-f77 get vid
@@ -653,7 +655,7 @@ c-YuP:      vid=ncvid(ncid,'itu',istatus)
       istatus= NF_INQ_VARID(ncid,'itu',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_int2(ncid,vid,1,count(3),itu_,istatus)
 
-      call pack21(tau,1,iy,1,lrzmax,tem1,iy,lrzmax)
+      call pack21(tau,1,iy,1,setup0%lrzmax,tem1,iy,setup0%lrzmax)
 c-YuP:      vid=ncvid(ncid,'tau',istatus)
       istatus= NF_INQ_VARID(ncid,'tau',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start,tau_count,tem1,istatus)
@@ -671,10 +673,10 @@ c-YuP:      vid=ncvid(ncid,'time',istatus)
       if ( netcdfshort.eq.'longer_b' ) then
 c-YuP:          vid=ncvid(ncid,'urfb',istatus)
          istatus= NF_INQ_VARID(ncid,'urfb',vid)  !-YuP: NetCDF-f77 get vid
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             start1(3)=ll
             call ncvpt_doubl2(ncid,vid,start1,count1,
-     +           urfb(1,1,lrindx(ll),krf), istatus) !-YuP: (1)->(krf)
+     +           urfb(1,1,setup0%lrindx(ll),krf), istatus) !-YuP: (1)->(krf)
          enddo
       endif
 
@@ -774,10 +776,10 @@ c-YuP:      vid=ncvid(ncid,'time',istatus)
       if ( netcdfshort.eq.'longer_b' ) then
 c-YuP:          vid=ncvid(ncid,'urfb',istatus)
          istatus= NF_INQ_VARID(ncid,'urfb',vid)  !-YuP: NetCDF-f77 get vid
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             start1(3)=ll
             call ncvpt_doubl2(ncid,vid,start1,count1,
-     +           urfb(1,1,lrindx(ll),krf), istatus) !-YuP: (1)->(krf)
+     +           urfb(1,1,setup0%lrindx(ll),krf), istatus) !-YuP: (1)->(krf)
          enddo
       endif
 cUNNECESSARY      call ncclos(ncid,istatus)
@@ -1016,30 +1018,30 @@ c --- full update of data file (last time-step only) ---
 
       if (netcdfshort.ne.'enabled' .and. netcdfshort.ne.'longer_b') then
          istatus= NF_INQ_VARID(ncid,'urfb',vid)  !-YuP: NetCDF-f77 get vid
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             start1(3)=ll
             call ncvpt_doubl2(ncid,vid,start1,count1,
-     +           urfb(1,1,lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
+     +           urfb(1,1,setup0%lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
          enddo
 
          if (netcdfshort.eq.'long_urf') then
             istatus= NF_INQ_VARID(ncid,'urfc',vid) !-YuP: NetCDF-f77 get vid
-            do ll=1,lrz
+            do ll=1,setup0%lrz
                start1(3)=ll
                call ncvpt_doubl2(ncid,vid,start1,count1,
-     +              urfc(1,1,lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
+     +              urfc(1,1,setup0%lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
             enddo
 c            istatus= NF_INQ_VARID(ncid,'urfe',vid) !-YuP: NetCDF-f77 get vid
-c            do ll=1,lrz
+c            do ll=1,setup0%lrz
 c               start1(3)=ll
 c               call ncvpt_doubl2(ncid,vid,start1,count1,
-c     +              urfe(1,1,lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
+c     +              urfe(1,1,setup0%lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
 c            enddo
 c            istatus= NF_INQ_VARID(ncid,'urff',vid) !-YuP: NetCDF-f77 get vid
-c            do ll=1,lrz
+c            do ll=1,setup0%lrz
 c               start1(3)=ll
 c               call ncvpt_doubl2(ncid,vid,start1,count1,
-c     +              urff(1,1,lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
+c     +              urff(1,1,setup0%lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
 c            enddo
 !YuP[03/18/2015] urfe,urff are expressed through urfb,urfc
 ! No need to save them.
@@ -1478,6 +1480,7 @@ C==========================================================================
 
 
       subroutine netcdf_rdcb(krf)
+      use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -1514,7 +1517,7 @@ c --- some stuff for netCDF file ---
       WRITE(*,*)'Begin of netcdf_rdc, krf=',krf
 
 c$$$C-----------------------------------------------------------------------
-c$$$C     Only set up for cqlpmod.ne."enabled",ngen=1, for the time being.
+c$$$C     Only set up for setup0%cqlpmod.ne."enabled",ngen=1, for the time being.
 c$$$C-----------------------------------------------------------------------
 c$$$
 c$$$      if (ngen.ne.1) then
@@ -1531,7 +1534,7 @@ c     in each call to the subroutine.
 
       count(1)=iymax
       count(2)=jx
-      count(3)=lrz
+      count(3)=setup0%lrz
       count(4)=1
 
       count1(1)=iymax
@@ -1539,10 +1542,10 @@ c     in each call to the subroutine.
       count1(3)=1
 
       y_count(1)=iymax
-      y_count(2)=lrz
+      y_count(2)=setup0%lrz
 
       tau_count(1)=iy
-      tau_count(2)=lrzmax
+      tau_count(2)=setup0%lrzmax
 
 
 c.......................................................................
@@ -1552,7 +1555,7 @@ c     Ref to page 46 of NetCDF-2 manual.
 c     CLOBber old file, if it exists.
 c     istatus is 0, if no errors.
 
-      write(t_,100) mnemonic(1:length_char(mnemonic)),krf
+      write(t_,100) setup0%mnemonic(1:length_char(setup0%mnemonic)),krf
  100  format(a,"_rdc.",i1,".nc")
       WRITE(*,*)'netcdf_rdcb:t_ = ',t_(1:length_char(t_))
 c-YuP:      ncid=nccre(t_,NCCLOB,istatus)
@@ -1567,12 +1570,12 @@ c       returns dimension id.
 
 c-YuP:      xdim=ncddef(ncid,'x',jx,istatus)
 c-YuP:      ydim=ncddef(ncid,'y',iymax,istatus)
-c-YuP:      rdim=ncddef(ncid,'r',lrz,istatus)
-c-YuP:      r0dim=ncddef(ncid,'r0',lrzmax,istatus)
+c-YuP:      rdim=ncddef(ncid,'r',setup0%lrz,istatus)
+c-YuP:      r0dim=ncddef(ncid,'r0',setup0%lrzmax,istatus)
       istatus= NF_DEF_DIM(ncid, 'x',  jx ,    xdim)  !-YuP: NetCDF-f77
       istatus= NF_DEF_DIM(ncid, 'y',  iymax,  ydim)
-      istatus= NF_DEF_DIM(ncid, 'r',  lrz,    rdim)
-      istatus= NF_DEF_DIM(ncid, 'r0', lrzmax, r0dim) !-YuP: NetCDF-f77
+      istatus= NF_DEF_DIM(ncid, 'r',  setup0%lrz,    rdim)
+      istatus= NF_DEF_DIM(ncid, 'r0', setup0%lrzmax, r0dim) !-YuP: NetCDF-f77
 
 
 c     unlimited dimension for time, dimension name= 'time'
@@ -1580,7 +1583,7 @@ c     ncddef(ncid,'time',NF_UNLIMITED,error_code)
 c-YuP:      tdim=ncddef(ncid,'time',NCUNLIM,istatus)
       istatus= NF_DEF_DIM(ncid, 'time',NF_UNLIMITED,tdim) !-YuP: NetCDF-f77
 
-c     define vector of dimensions [for urfb(iy,jx,lrz,mrfn)], unlimited last
+c     define vector of dimensions [for urfb(iy,jx,setup0%lrz,mrfn)], unlimited last
       dims(1)=ydim
       dims(2)=xdim
       dims(3)=rdim
@@ -1744,7 +1747,7 @@ c--------------------------
 
 c-YuP:      vid=ncvid(ncid,'lrzmax',istatus)
       istatus= NF_INQ_VARID(ncid,'lrzmax',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,1,lrzmax,istatus)
+      call ncvpt_int2(ncid,vid,1,1,setup0%lrzmax,istatus)
 
 c-YuP:      vid=ncvid(ncid,'rya',istatus)
       istatus= NF_INQ_VARID(ncid,'rya',vid)  !-YuP: NetCDF-f77 get vid
@@ -1760,11 +1763,11 @@ c-YuP:      vid=ncvid(ncid,'rhomax',istatus)
 
 c-YuP:      vid=ncvid(ncid,'lrz',istatus)
       istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,1,lrz,istatus)
+      call ncvpt_int2(ncid,vid,1,1,setup0%lrz,istatus)
 
 c-YuP:      vid=ncvid(ncid,'lrindx',istatus)
       istatus= NF_INQ_VARID(ncid,'lrindx',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,lrz,lrindx(1),istatus)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,setup0%lrindx(1),istatus)
 
 c-YuP:      vid=ncvid(ncid,'jx',istatus)
       istatus= NF_INQ_VARID(ncid,'jx',vid)  !-YuP: NetCDF-f77 get vid
@@ -1786,7 +1789,9 @@ c-YuP:      vid=ncvid(ncid,'iy',istatus)
       istatus= NF_INQ_VARID(ncid,'iy',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_int2(ncid,vid,1,1,iymax,istatus)
 
-      if (iy*lrors.gt.iyjx2) stop 'netcdfrf:  Need to set jx>lrza'
+      if (iy*lrors.gt.iyjx2) then
+         stop 'netcdfrf:  Need to set jx>setup0%lrza'
+      endif
       call pack21(y,1,iy,1,lrors,tem1,iymax,lrors)
 c-YuP:      vid=ncvid(ncid,'y',istatus)
       istatus= NF_INQ_VARID(ncid,'y',vid)  !-YuP: NetCDF-f77 get vid
@@ -1794,17 +1799,17 @@ c-YuP:      vid=ncvid(ncid,'y',istatus)
 
 c-YuP:      vid=ncvid(ncid,'iy_',istatus)
       istatus= NF_INQ_VARID(ncid,'iy_',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,lrz,iy_,istatus)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,iy_,istatus)
 
 c-YuP:      vid=ncvid(ncid,'itl',istatus)
       istatus= NF_INQ_VARID(ncid,'itl',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,lrz,itl_,istatus)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,itl_,istatus)
 
 c-YuP:      vid=ncvid(ncid,'itu',istatus)
       istatus= NF_INQ_VARID(ncid,'itu',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_int2(ncid,vid,1,lrz,itu_,istatus)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,itu_,istatus)
 
-      call pack21(tau,1,iy,1,lrzmax,tem1,iy,lrzmax)
+      call pack21(tau,1,iy,1,setup0%lrzmax,tem1,iy,setup0%lrzmax)
 c-YuP:      vid=ncvid(ncid,'tau',istatus)
       istatus= NF_INQ_VARID(ncid,'tau',vid)  !-YuP: NetCDF-f77 get vid
       call ncvpt_doubl2(ncid,vid,start,tau_count,tem1,istatus)
@@ -1813,10 +1818,11 @@ c     rdcb coefficient write
 
 c-YuP:      vid=ncvid(ncid,'rdcb',istatus)
       istatus= NF_INQ_VARID(ncid,'rdcb',vid)  !-YuP: NetCDF-f77 get vid
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          start1(3)=ll
-         call ncvpt_doubl2(ncid,vid,start1,count1,rdcb(1,1,lrindx(ll),
-     +              krf),istatus)
+         call ncvpt_doubl2(ncid,vid,start1,count1,
+     +        rdcb(1,1,setup0%lrindx(ll),
+     +        krf),istatus)
          if (istatus.ne.NF_NOERR) WRITE(*,*) 'netcdf_rdc, ll= :',ll
          call check_err(istatus)
       enddo
@@ -1825,28 +1831,31 @@ c     Additional rfc.... coefficients write
       if (netcdfshort.eq.'long_urf') then
 
       istatus= NF_INQ_VARID(ncid,'rdcc',vid)  !-YuP: NetCDF-f77 get vid
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          start1(3)=ll
-         call ncvpt_doubl2(ncid,vid,start1,count1,rdcc(1,1,lrindx(ll),
-     +              krf),istatus)
+         call ncvpt_doubl2(ncid,vid,start1,count1,
+     +        rdcc(1,1,setup0%lrindx(ll),
+     +        krf),istatus)
          if (istatus.ne.NF_NOERR) WRITE(*,*) 'netcdf_rdc, ll= :',ll
          call check_err(istatus)
       enddo
 
       istatus= NF_INQ_VARID(ncid,'rdce',vid)  !-YuP: NetCDF-f77 get vid
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          start1(3)=ll
-         call ncvpt_doubl2(ncid,vid,start1,count1,rdce(1,1,lrindx(ll),
-     +              krf),istatus)
+         call ncvpt_doubl2(ncid,vid,start1,count1,rdce(1,1,
+     +        setup0%lrindx(ll),
+     +        krf),istatus)
          if (istatus.ne.NF_NOERR) WRITE(*,*) 'netcdf_rdc, ll= :',ll
          call check_err(istatus)
       enddo
 
       istatus= NF_INQ_VARID(ncid,'rdcf',vid)  !-YuP: NetCDF-f77 get vid
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          start1(3)=ll
-         call ncvpt_doubl2(ncid,vid,start1,count1,rdcf(1,1,lrindx(ll),
-     +              krf),istatus)
+         call ncvpt_doubl2(ncid,vid,start1,count1,
+     +        rdcf(1,1,setup0%lrindx(ll),
+     +        krf),istatus)
          if (istatus.ne.NF_NOERR) WRITE(*,*) 'netcdf_rdc, ll= :',ll
          call check_err(istatus)
       enddo

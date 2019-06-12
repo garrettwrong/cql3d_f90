@@ -20,7 +20,7 @@ contains
 !     Adapt dyp5(iyh) and dy(iyh) and related quantities, such that
 !
 !     sum(i=1,iyh) [cynt2(i,l_)] = sum(i=1,iyh) [cynt2(i,ll)]
-!     where ll=1 for CQLP and lrz for CQL3D. This may be useful for
+!     where ll=1 for CQLP and setup0%lrz for CQL3D. This may be useful for
 !     meshy=fixed_mu option
 !.......................................................................
 
@@ -29,7 +29,7 @@ contains
 !.......................................................................
 
       ilref=1
-      if (cqlpmod .ne. "enabled") ilref=lrz
+      if (setup0%cqlpmod .ne. "enabled") ilref=setup0%lrz
       if (l_ .eq. ilref) go to 999
 
       zsum0=0.0

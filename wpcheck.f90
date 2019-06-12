@@ -123,7 +123,7 @@ contains
         sumrigt=0.
 !     j=1:
         j=1
-        do 101 l=1,ls
+        do 101 l=1,setup0%ls
           do 102 i=1,iyh_(l)
             ii=iy_(l)+1-i
             zdns1(l)=zdns1(l)+cint2(j)*(fnp1(i,j,k,l)*cynt2(i,l)+ &
@@ -157,17 +157,17 @@ contains
 !.......................................................................
 
             if (sbdry.eq."periodic" .and. laddbnd.eq.1 .and. &
-              l.eq.l_upper(i) .and. l_upper(i).ne.ls) then
+              l.eq.l_upper(i) .and. l_upper(i).ne.setup0%ls) then
               iief=iy_(l)+1-i
               ii=iymax+1-i
-              ll=ls+2-l_upper(i)
+              ll=setup0%ls+2-l_upper(i)
               ztra2=cynt2(i,l)*(ipshft2*dszp5(l)-ipshft1*dszm5(l))/ &
                 dtreff
               ztra2l=cynt2(i,ll)*(ipshft2*dszp5(ll)-ipshft1*dszm5(ll))/ &
                 dtreff
               iief=iy_(l)+1-i
               ii=iymax+1-i
-              ll=ls+2-l_upper(i)
+              ll=setup0%ls+2-l_upper(i)
               do 401 j=2,jx
 !     points A_i and A_ii (notes p. Num(13))
                 f(i,j,k,l)=(fnp1(i,j,k,l)-fnhalf(i,j,k,l))*ztra2* &
@@ -298,16 +298,16 @@ contains
                 *cint2(j)
  412        continue
 
- 320        if (sbdry.ne."periodic" .or. l_upper(i).eq.ls .or. l.eq.1) &
+ 320        if (sbdry.ne."periodic" .or. l_upper(i).eq.setup0%ls .or. l.eq.1) &
               go to 300
 
 !.......................................................................
-!l    3.2 point ll=ls+2-l, i.e. bottom half cross-section. Not yet treated
+!l    3.2 point ll=setup0%ls+2-l, i.e. bottom half cross-section. Not yet treated
 !     in 3.1 if particle is trapped.
-!     Thus: l in [ls+2-l_upper(i),ls]
+!     Thus: l in [setup0%ls+2-l_upper(i),setup0%ls]
 !.......................................................................
 
-            ll=ls+2-l
+            ll=setup0%ls+2-l
 
             itest2=0
             if (ilpm1ef(i,ll,ipshft1).eq.-999 .or. &
@@ -315,7 +315,7 @@ contains
             itest2=1
 
 !.......................................................................
-!l    3.2.1 cos(theta)>0, ll>ls/2+1
+!l    3.2.1 cos(theta)>0, ll>setup0%ls/2+1
 !.......................................................................
 
             ztra1=cynt2(i,ll)*(ipshft2*dszp5(ll)-ipshft1*dszm5(ll))
@@ -352,7 +352,7 @@ contains
  421        continue
 
 !.......................................................................
-!l    3.2.2 cos(theta) < 0, ll>ls/2+1
+!l    3.2.2 cos(theta) < 0, ll>setup0%ls/2+1
 !.......................................................................
 
  322        continue
@@ -458,7 +458,7 @@ contains
  432            continue
               endif
             endif
-!     ll=ls+2-l
+!     ll=setup0%ls+2-l
             if (itest2 .ne. 11) then
 !     missing point theta<pi/2, ll
               if (itest2.eq.0 .or. itest2.eq.10) then
@@ -522,14 +522,14 @@ contains
 
 !%OS
 !     compute highest errors
-        do 900 l=1,ls
+        do 900 l=1,setup0%ls
           do 9001 i=1,10
             zermx(i,l) = 0.0
             zermxii(i,l) = 0.0
  9001     continue
  900    continue
 !
-        do 901 ll=1,ls
+        do 901 ll=1,setup0%ls
           do 902 i=1,iyh_(ll)
             ii=iymax+1-i
             zsumj3(i,ll) = 0.0

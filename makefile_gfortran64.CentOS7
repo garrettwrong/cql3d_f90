@@ -1,12 +1,15 @@
-# makefile for CQL3D using gfortran64 on bob8 (Intel core 2)
+# makefile for CQL3D using gfortran64 on Centos7
 
 SHELL     = /bin/sh
 NAME      = xcql3d_gfortran64
-COMPILER=	gfortran
-BUILDER=	$(COMPILER)
+COMPILER  = gfortran
+BUILDER   = $(COMPILER)
+LIBTOOL   = ar rcs
 
 # INCLUDE line
 include include_dependency.mk
+# Check if inlude files have changed i guess
+$(SOURCES):        $(INCLUDES)
 
 # SOURCE line
 include source_dependency.mk
@@ -15,35 +18,49 @@ F90OBJECTS = $(filter %.o,$(SOURCES:.f90=.o))
 OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
 
 LOCATION  =   -L/usr/lib64   -L${PGPLOT_DIR}
-LIBRARIES=   -lX11 -lnetcdff -lnetcdf -lpgplot
+LIBRARIES =   -lX11 -lnetcdff -lnetcdf -lpgplot
 INCLUDE=/usr/include
 
 DEBUG     = -g -fbacktrace
+#common gfortran dbg flags
+#-g -Wall -Wextra -Warray-temporaries -Wconversion -fimplicit-none -fbacktrace -ffree-line-length-0 -fcheck=all -ffpe-trap=zero,overflow,underflow -finit-real=nan
 OPTIMIZE  = -O1
-LISTING   = -Mlist
-#CSPECIAL  = -finit-local-zero #Need gfortran 4.3 for zeroing
-#CSPECIAL  = -Wno-padded
 CSPECIAL  =
-SPECIAL   = -byteswapio -Mbackslash
-#LDSPECIAL = -Wl,-noinhibit-exec -finit-local-zero #Need gfortran 4.3 for zeroing
+#force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL = -Wl,-noinhibit-exec
-COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
+COMPILE   = $(COMPILER) -fPIC -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
 LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
 DELETE    = rm -f
 
-# The following gives suffixes to be used in checking for suffix rules.
-# Written without dependencies, it may be useful to turn of such checking?
-.SUFFIXES:
+standalone: $(NAME)
+libs: $(NAME)_shared lib$(NAME).a
+all: standalone libs
 
 $(NAME):           $(F90OBJECTS) $(OBJECTS)
-	$(LOAD)    $(F90OBJECTS) $(OBJECTS)  $(LOCATION) $(LIBRARIES)
+	$(LOAD)    $^  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
+
+# For the libraries, we do not want a main
+LIBOBJS = $(filter-out a_cqlp.o, $(F90OBJECTS) $(OBJECTS))
+lib$(NAME).so: $(LIBOBJS)
+	$(BUILDER) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $@
+
+lib$(NAME).a: $(LIBOBJS)
+	$(LIBTOOL) -o $@ $^
+	$(PROTECT) $@
+
+$(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
+	$(BUILDER) -o $@ $(LDSPECIAL) $(DEBUG)	a_cqlp.o -L. -l$< $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $@
+
 
 # Following use of pattern matching works;
 # it is based on statements in Sect. 10.7 of gmake Manual
 # by Stallman and McGrath.
 # However, the two rules following this seem clearer to me (BobH).
+# Me too BobH, me too. ;)  (GBW).
 #%.o:               %.f        $(INCLUDES)
 #	$(COMPILE) $< -o $@
 
@@ -62,10 +79,11 @@ include module_dependency.mk
 
 # see Sect. 4.10.1, Static Pattern Rules.
 $(filter %.o,$(F90OBJECTS)): %.o: %.f90 $(INCLUDES)
-	$(COMPILE) $< -o $@ 
+	$(COMPILE) $< -o $@
 
 $(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
 	$(COMPILE) $< -o $@
+
 
 rebuild:
 	$(COMPILE) $(SOURCES) $(F90SOURCES)
@@ -74,3 +92,10 @@ rebuild:
 clean:
 	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
 	$(DELETE) *.mod
+	$(DELETE) *.so *.a
+
+.PHONY: all
+.PHONY: clean
+.PHONY: libs
+.PHONY: rebuild
+.PHONY: standalone

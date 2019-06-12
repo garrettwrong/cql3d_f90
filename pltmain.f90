@@ -45,6 +45,7 @@ module pltmain_mod
 contains
 
   subroutine pltmain
+    use cqlconf_mod, only : setup0
     use param_mod
     use cqlcomm_mod
     use pltdf_mod, only: pltdf
@@ -64,8 +65,8 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
     ! make plots on mpirank.eq.0 only
 
-    if (noplots.eq."enabled1") return
-    if (n.eq.0 .and. lrzmax.gt.1) return
+    if (setup0%noplots.eq."enabled1") return
+    if (n.eq.0 .and. setup0%lrzmax.gt.1) return
     if (mplot(l_).eq."disabled") return
 
     rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
@@ -77,7 +78,7 @@ contains
     !(sometimes font is too big from previous plot)
 
     RILIN=0.
-    if (cqlpmod .ne. "enabled") then
+    if (setup0%cqlpmod .ne. "enabled") then
                 CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL RADIAL QUANTITIES")
     else
                 CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL PARALLEL QUANTITIES")
@@ -87,7 +88,7 @@ contains
     write(t_,150) n,timet
     RILIN=RILIN+1.
           CALL PGMTXT('T',-RILIN,0.,0.,t_)
-    write(t_,1501) lr_,lrz
+    write(t_,1501) lr_,setup0%lrz
     RILIN=RILIN+1.
           CALL PGMTXT('T',-RILIN,0.,0.,t_)
     write(t_,151) rovera(lr_),rr
@@ -101,7 +102,7 @@ contains
 151 format("r/a=",1pe10.3,5x,"radial position (R)=",1pe12.4," cms")
 153 format("rya=",1pe10.3,5x,"R=rpcon=",1pe10.3," cm")
 
-    if (cqlpmod .eq. "enabled") then
+    if (setup0%cqlpmod .eq. "enabled") then
        write(t_,152) l_,sz(l_)
        RILIN=RILIN+1.
                CALL PGMTXT('T',-RILIN,0.,0.,t_)
@@ -145,7 +146,7 @@ contains
 162 format("vthe (sqrt(te/me))/c = ",f15.7)
 163 format("vthe/vnorm = ",f15.7)
 
-    if (cqlpmod .eq. "enabled") then
+    if (setup0%cqlpmod .eq. "enabled") then
        zvthes=vth(kelec,l_)/clight
        zvtheon=vth(kelec,l_)/vnorm
        write(t_,164) zvthes
@@ -163,8 +164,8 @@ contains
     !     time
     !
     if (pltend.ne."disabled" .and. nch(l_).ge.2) then
-       if (cqlpmod .ne. "enabled") call pltendn
-       if (cqlpmod .eq. "enabled") call pltends
+       if (setup0%cqlpmod .ne. "enabled") call pltendn
+       if (setup0%cqlpmod .eq. "enabled") call pltends
     endif
     !
     !     Plot ion source if marker is engaged.
@@ -230,7 +231,7 @@ contains
     !     Plot the density as a function of poloidal angle for a
     !     set of energy ranges..
     !
-    if (n.ne.0 .and. pltdn.ne."disabled" .and. cqlpmod.ne."enabled") call pltdnz
+    if (n.ne.0 .and. pltdn.ne."disabled" .and. setup0%cqlpmod.ne."enabled") call pltdnz
     !
     !     plot contours of df/dt next..
     !
@@ -408,11 +409,11 @@ contains
     return
   end subroutine gslnsz
   !---------------------------------------------------------------------
-  subroutine gslnst(LS)
+  subroutine gslnst(LS_in)
     ! sets line style: 1-solid, 2-dashed, 3-dotted, 4-dash-dotted, etc.
-    implicit integer (i-n), real(c_double) (a-h,o-z)
-    INTEGER  LS
-            CALL PGSLS(LS)
+    implicit none !integer (i-n), real(c_double) (a-h,o-z)
+    INTEGER  LS_in
+            CALL PGSLS(LS_in)
     ! Set the line style attribute for subsequent plotting. This
     ! attribute affects line primitives only; it does not affect graph
     ! markers, text, or area fill.
@@ -490,7 +491,8 @@ contains
   end subroutine gptx2d
   !---------------------------------------------------------------------
 
-      subroutine pltends
+  subroutine pltends
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -507,7 +509,7 @@ contains
       REAL RILIN !-> For PGPLOT (text output positioning)
       dimension wk_nch(nonch)
 !
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       if (pltend.eq."disabled") return
       dgts=1.e-8
       rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
@@ -1078,7 +1080,8 @@ contains
 
   !from pltprppr
 
-  subroutine pltprppr
+      subroutine pltprppr
+        use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -1097,7 +1100,7 @@ contains
       REAL RILIN !-> For PGPLOT (text output positioning)
 
       character*8 target
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
 !     Return, if using a theta average distribution
 !     (which may conflict with call fle_fsa or fle_pol, below).
@@ -1123,7 +1126,7 @@ contains
         if (knockon.ne."disabled") then
 !           call fle("setup",0)
 !           call fle("calc",1)
-        elseif (lrz.eq.1) then
+        elseif (setup0%lrz.eq.1) then
            call fle_pol("setup",0)
            call fle_pol("calc",1)
         else
@@ -1214,7 +1217,8 @@ contains
 
    !from pltrstv
 
-   subroutine pltrstv
+      subroutine pltrstv
+        use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -1230,7 +1234,7 @@ contains
       REAL RILIN !-> For PGPLOT (text output positioning)
 
 !
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       if (kelecg .eq. 0 .or. abs(elecfld(lr_)) .lt. 1.e-10) go to 190
 
@@ -1266,7 +1270,7 @@ contains
       CALL PGMTXT('T',RILIN,0.,0.,t_)
 
       illeff=lr_
-      if (cqlpmod .eq. "enabled") illeff=ls_
+      if (setup0%cqlpmod .eq. "enabled") illeff=ls_
       call aminmx(rovsp(2:nch(l_),illeff),1,nch(l_)-1, &
             1,emin,emax,kmin,kmax)
 
@@ -1383,6 +1387,7 @@ contains
 
   ! pltstrml
       subroutine pltstrml
+        use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use advnce_mod !here: in  pltstrml.  To get gfi(),hfi(),hfu()
@@ -1428,7 +1433,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 
       !mcont=ncont ! ncont is set in cqlinput (default is 25)
       mcont=60 !YuP: looks like, from setup below,
@@ -1814,7 +1819,7 @@ contains
         CALL PGSLS(4)
         CALL PGLINE(iy,RTAB1,RTAB2) ! v=vth line
         CALL PGSLS(1) ! 1-> restore solid line
-        CALL PGSLW(lnwidth) !lnwidth=3 line width in units of 0.005
+        CALL PGSLW(setup0%lnwidth) !setup0%lnwidth=3 line width in units of 0.005
         !--------------------------------------------------------
         CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,mcont,PGFUNC1)
         !subr.PGFUNC1(VISBLE,yplt,xplt,zplt) uses /PGLOCAL1/wx,wy,IIY,JXQ
@@ -1853,7 +1858,7 @@ contains
         enddo
 
         CALL PGSLS(1) ! restore: solid line
-        CALL PGSLW(lnwidth) ! restore linewidth
+        CALL PGSLW(setup0%lnwidth) ! restore linewidth
         CALL PGSCH(1.0) ! recover default 1.0 fontsize
 
  500  continue ! k species ------------------------------------------

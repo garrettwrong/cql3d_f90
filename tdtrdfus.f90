@@ -23,8 +23,9 @@ module tdtrdfus_mod
 contains
 
       subroutine tdtrdfus
-      use param_mod
-      use cqlcomm_mod, only : d_rr, mnemonic, lrz
+        use param_mod
+        use cqlconf_mod, only : setup0
+      use cqlcomm_mod, only : d_rr
       use cqlcomm_mod, only : transp, difus_io, difus_type
       use cqlcomm_mod, only : enerkev
       use cqlcomm_mod, only : ryain
@@ -52,7 +53,7 @@ contains
 !..............................................................
 
 !%OS
-      dimension drshape(0:lrz), rhotr(0:lrz)
+      dimension drshape(0:setup0%lrz), rhotr(0:setup0%lrz)
 
       if (transp.eq."disabled") return
 
@@ -70,8 +71,8 @@ contains
               .or. difus_type(k) .eq. "neo_trap" &
               .or. difus_type(k) .eq. "neo_trpp" ) then
 
-      do l=0,lrz-1
-         ilr=lrindx(l)+1        !Need to check why index is 0,lrz-1 below.
+      do l=0,setup0%lrz-1
+         ilr=setup0%lrindx(l)+1        !Need to check why index is 0,setup0%lrz-1 below.
                                 !BH051101: bndry condition is zero flux at
                                 !rho=0, and Maxwl distn at rho=a.
                                 !Zero flux at rho=0 is implemented with
@@ -135,19 +136,19 @@ contains
         rsum = rsum+abs(difin(ii))
       enddo
 !   mesh to compute drshape on from difin(ryain)
-      do ii=0,lrz
+      do ii=0,setup0%lrz
         rhotr(ii) = rrz(ii)/radmin
       enddo
 
       rdefr = -1.
       if (rsum.gt.0.) then
         rdefr = 1.
-        call ryaintorz(njene,ryain(1),difin(1),lrz,rhotr(0),drshape(0))
+        call ryaintorz(njene,ryain(1),difin(1),setup0%lrz,rhotr(0),drshape(0))
       endif
 
-      do l=0,lrz-1
-         ilr=lrindx(l)
-         if (l.eq.0) then   !lrindx(0)=0
+      do l=0,setup0%lrz-1
+         ilr=setup0%lrindx(l)
+         if (l.eq.0) then   !setup0%lrindx(0)=0
             difusr1=0.
             rshape=0.
             rshape1=0.
@@ -235,7 +236,7 @@ contains
 
          tdtrrshape=0.
 
-      elseif (lr.le.lrzmax-1) then
+      elseif (lr.le.setup0%lrzmax-1) then
 
          if (kelecm.ne.0) then  !kelecm=0 when colmodl=1
             kk=kelecm
@@ -256,7 +257,7 @@ contains
 
          tdtrrshape=(difus_rshape(1)+difus_rshape(2)* &
                     (rrz(lr)/radmin)**difus_rshape(3))**difus_rshape(4)
-!        Simply use last (lrzmax) value of density....
+!        Simply use last (setup0%lrzmax) value of density....
          tdtrrshape=tdtrrshape* &
                     (reden(kk,lr)/reden(kk,0))**difus_rshape(5)
          tdtrrshape=tdtrrshape* &
@@ -287,7 +288,7 @@ contains
 
          tdtrrshape1=0.
 
-      elseif (lr.le.lrzmax-1) then
+      elseif (lr.le.setup0%lrzmax-1) then
 
          ravg=0.5*(rya(lr)+rya(lr+1))
 
@@ -340,7 +341,7 @@ contains
 
       real(c_double) l_autocorr,lambda_mfp
 
-      lr=lrindx(l)
+      lr=setup0%lrindx(l)
       l_autocorr=pi*qsafety(lr)*radmaj
 
       call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
@@ -474,8 +475,8 @@ contains
 
       subroutine diffus_io(kopt)
       use param_mod
-      use cqlcomm_mod, only : difus_io, d_rr, d_r, rya, rpconz, lrindx
-      use cqlcomm_mod, only : temp1, difus_io_file, mnemonic, t_, iy, iy_, y
+      use cqlcomm_mod, only : difus_io, d_rr, d_r, rya, rpconz
+      use cqlcomm_mod, only : temp1, difus_io_file, t_, iy, iy_, y
       use cqlcomm_mod, only : tem1
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
@@ -511,7 +512,7 @@ contains
 
 !     Maximum iy as function of radius:
       iyy=0
-      do l=1,lrz
+      do l=1,setup0%lrz
          iyy=max(iyy,iy_(l))
       enddo
       if(iyy.gt.iy) stop 'difus_io: iy_(l) should not exceed iy'
@@ -536,7 +537,7 @@ contains
       countg(4)=1  !species index, 1 at at time
 
       y_count(1)=iymax
-      y_count(2)=lrz  ! lrz radii at a time
+      y_count(2)=setup0%lrz  ! setup0%lrz radii at a time
 
 !.......................................................................
 !l    1.1.1 create netCDF filename.
@@ -544,8 +545,8 @@ contains
 !     istatus is 0, if no errors.
 !     ncid is created file id.
 
-      if (difus_io_file.eq."mnemonic") then
-         write(t_,1000) mnemonic(1:length_char(mnemonic))
+      if (difus_io_file.eq."setup0%mnemonic") then
+         write(t_,1000) setup0%mnemonic(1:length_char(setup0%mnemonic))
  1000    format(a,"_difus_io.nc")
       else
 !         write(t_,1001)
@@ -560,8 +561,8 @@ contains
 
       istatus= NF_DEF_DIM(ncid, 'xdim',     jx,       xdim)
       istatus= NF_DEF_DIM(ncid, 'ydim',     iymax,    ydim)
-      istatus= NF_DEF_DIM(ncid, 'rdim',     lrz,      rdim)
-      istatus= NF_DEF_DIM(ncid, 'r0dim', lrzmax, r0dim)
+      istatus= NF_DEF_DIM(ncid, 'rdim',     setup0%lrz,      rdim)
+      istatus= NF_DEF_DIM(ncid, 'r0dim', setup0%lrzmax, r0dim)
 !     Number of general species treated by the _difus_io.nc file
       n_d_rr=0
       do k=1,ngen
@@ -600,13 +601,13 @@ contains
       call ncaptc2(ncid,vid,'long_name',NCCHAR,20, &
                 'CQL3D version number',istatus)
 
-      vid=ncvdef2(ncid,'mnemonic',NCCHAR,1,char64dim,istatus)
+      vid=ncvdef2(ncid,'setup0%mnemonic',NCCHAR,1,char64dim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,23, &
                 'Mnemonic run identifier',istatus)
 
 !  Mesh related quantities
 
-      vid=ncvdef2(ncid,'lrzmax',NCLONG,0,0,istatus)
+      vid=ncvdef2(ncid,'setup0%lrzmax',NCLONG,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,25, &
                   'Number of radial surfaces',istatus)
       call check_err(istatus)
@@ -626,12 +627,12 @@ contains
                  'cms',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'lrz',NCLONG,0,0,istatus)
+      vid=ncvdef2(ncid,'setup0%lrz',NCLONG,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,29, &
                   'Number of FPd radial surfaces',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'lrindx',NCLONG,1,rdim,istatus)
+      vid=ncvdef2(ncid,'setup0%lrindx',NCLONG,1,rdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,30, &
                  'Radial indices of FPd surfaces',istatus)
 
@@ -741,34 +742,34 @@ contains
 
       istatus=NF_OPEN(t_, NF_WRITE, ncid)
 
-!  Write version, mnemonic,and grid related quantities
+!  Write version, setup0%mnemonic,and grid related quantities
 
       istatus= NF_INQ_VARID(ncid,'version',vid)
       ll=length_char(version)
       call ncvptc2(ncid,vid,1,ll,version,ll,istatus)
 
-      istatus= NF_INQ_VARID(ncid,'mnemonic',vid)
-      ll=length_char(mnemonic)
-      call ncvptc2(ncid,vid,1,ll,mnemonic,ll,istatus)
+      istatus= NF_INQ_VARID(ncid,'setup0%mnemonic',vid)
+      ll=length_char(setup0%mnemonic)
+      call ncvptc2(ncid,vid,1,ll,setup0%mnemonic,ll,istatus)
 
 
-      istatus= NF_INQ_VARID(ncid,'lrzmax',vid)
-      call ncvpt_int2(ncid,vid,1,1,lrzmax,istatus)
+      istatus= NF_INQ_VARID(ncid,'setup0%lrzmax',vid)
+      call ncvpt_int2(ncid,vid,1,1,setup0%lrzmax,istatus)
 
       istatus= NF_INQ_VARID(ncid,'rya',vid)
-      call ncvpt_doubl2(ncid,vid,(1),lrzmax,rya(1),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),setup0%lrzmax,rya(1),istatus)
 
       istatus= NF_INQ_VARID(ncid,'rpconz',vid)
-      call ncvpt_doubl2(ncid,vid,(1),lrzmax,rpconz(1),istatus)
+      call ncvpt_doubl2(ncid,vid,(1),setup0%lrzmax,rpconz(1),istatus)
 
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)
       call ncvpt_doubl2(ncid,vid,(1),1,rhomax,istatus)
 
-      istatus= NF_INQ_VARID(ncid,'lrz',vid)
-      call ncvpt_int2(ncid,vid,1,1,lrz,istatus)
+      istatus= NF_INQ_VARID(ncid,'setup0%lrz',vid)
+      call ncvpt_int2(ncid,vid,1,1,setup0%lrz,istatus)
 
-      istatus= NF_INQ_VARID(ncid,'lrindx',vid)
-      call ncvpt_int2(ncid,vid,1,lrz,lrindx(1),istatus)
+      istatus= NF_INQ_VARID(ncid,'setup0%lrindx',vid)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,setup0%lrindx(1),istatus)
 
       istatus= NF_INQ_VARID(ncid,'jx',vid)
       call ncvpt_int2(ncid,vid,1,1,jx,istatus)
@@ -791,22 +792,22 @@ contains
       call ncvpt_doubl2(ncid,vid,start1,y_count,tem1,istatus)
 
       istatus= NF_INQ_VARID(ncid,'iy_',vid)
-      call ncvpt_int2(ncid,vid,1,lrz,iy_,istatus)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,iy_,istatus)
 
       istatus= NF_INQ_VARID(ncid,'itl',vid)
-      call ncvpt_int2(ncid,vid,1,lrz,itl_,istatus)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,itl_,istatus)
 
       istatus= NF_INQ_VARID(ncid,'itu',vid)
-      call ncvpt_int2(ncid,vid,1,lrz,itu_,istatus)
+      call ncvpt_int2(ncid,vid,1,setup0%lrz,itu_,istatus)
 
 !  n_d_rr is the number of diffused general species
       if (n_d_rr.eq.1) then
 
       istatus= NF_INQ_VARID(ncid,'d_rr',vid)
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             do j=1,jx
                do i=1,iy
-                  temp1(i,j)=d_rr(i,j,1,lrindx(ll))
+                  temp1(i,j)=d_rr(i,j,1,setup0%lrindx(ll))
                enddo
             enddo
             call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -815,10 +816,10 @@ contains
          enddo
          if (kopt.eq.2) then
          istatus= NF_INQ_VARID(ncid,'d_r',vid)
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             do j=1,jx
                do i=1,iy
-                  temp1(i,j)=d_r(i,j,1,lrindx(ll))
+                  temp1(i,j)=d_r(i,j,1,setup0%lrindx(ll))
                enddo
             enddo
             call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -831,10 +832,10 @@ contains
 
          istatus= NF_INQ_VARID(ncid,'d_rr',vid)
          do k=1,n_d_rr
-            do ll=1,lrz
+            do ll=1,setup0%lrz
                do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=d_rr(i,j,k,lrindx(ll))
+                     temp1(i,j)=d_rr(i,j,k,setup0%lrindx(ll))
                   enddo
                enddo
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -846,10 +847,10 @@ contains
          if (kopt.eq.2) then
          istatus= NF_INQ_VARID(ncid,'d_r',vid)
          do k=1,n_d_rr
-            do ll=1,lrz
+            do ll=1,setup0%lrz
                do j=1,jx
                   do i=1,iy
-                     temp1(i,j)=d_r(i,j,k,lrindx(ll))
+                     temp1(i,j)=d_r(i,j,k,setup0%lrindx(ll))
                   enddo
                enddo
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
@@ -871,8 +872,8 @@ contains
 
       if (kopt.eq.3 .or. kopt.eq.4) then
 
-      if (difus_io_file.eq."mnemonic") then
-         t_=mnemonic//"_difus_io.nc"
+      if (difus_io_file.eq."setup0%mnemonic") then
+         t_=setup0%mnemonic//"_difus_io.nc"
       else
          t_=difus_io_file
       endif
@@ -901,7 +902,7 @@ contains
 
 !     Check the data dimensions in the input file
 
-      if (jx*iy*lrz*n_d_rr.ne.jx_file*iy_file*lrz_file*n_d_rr_file) then
+      if (jx*iy*setup0%lrz*n_d_rr.ne.jx_file*iy_file*lrz_file*n_d_rr_file) then
          write(*,*)
          write(*,*)'  WRONG DIMENSIONS IN _difus_io.nc file: STOP'
          STOP
@@ -922,26 +923,26 @@ contains
       count1(3)=1
 
       istatus= NF_INQ_VARID(ncid,'d_rr',vid)
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          start1(3)=ll
          istatus= NF_GET_VARA_DOUBLE(ncid,vid,start1,count1,wkpack)
          call unpack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
          do j=1,jx
             do i=1,iy
-               d_rr(i,j,1,lrindx(ll))=temp1(i,j)
+               d_rr(i,j,1,setup0%lrindx(ll))=temp1(i,j)
             enddo
          enddo
       enddo  !On ll
 
       if (kopt.eq.4) then
       istatus= NF_INQ_VARID(ncid,'d_r',vid)
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          start1(3)=ll
          istatus= NF_GET_VARA_DOUBLE(ncid,vid,start1,count1,wkpack)
          call unpack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
          do j=1,jx
             do i=1,iy
-               d_r(i,j,1,lrindx(ll))=temp1(i,j)
+               d_r(i,j,1,setup0%lrindx(ll))=temp1(i,j)
             enddo
          enddo
       enddo  !On ll
@@ -958,13 +959,13 @@ contains
       istatus= NF_INQ_VARID(ncid,'d_rr',vid)
       do k=1,n_d_rr
          startg(4)=k
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             startg(3)=ll
             istatus= NF_GET_VARA_DOUBLE(ncid,vid,startg,countg,wkpack)
             call unpack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
             do j=1,jx
                do i=1,iy
-                  d_rr(i,j,1,lrindx(ll))=temp1(i,j)
+                  d_rr(i,j,1,setup0%lrindx(ll))=temp1(i,j)
                enddo
             enddo
          enddo
@@ -974,13 +975,13 @@ contains
       istatus= NF_INQ_VARID(ncid,'d_r',vid)
       do k=1,n_d_rr
          startg(4)=k
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             startg(3)=ll
             istatus= NF_GET_VARA_DOUBLE(ncid,vid,startg,countg,wkpack)
             call unpack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
             do j=1,jx
                do i=1,iy
-                  d_r(i,j,1,lrindx(ll))=temp1(i,j)
+                  d_r(i,j,1,setup0%lrindx(ll))=temp1(i,j)
                enddo
             enddo
          enddo

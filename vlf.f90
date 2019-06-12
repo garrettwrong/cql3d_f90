@@ -19,7 +19,8 @@ module vlf_mod
 
 contains
 
-      subroutine vlf(action)
+  subroutine vlf(action)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : luf, dcopy
@@ -53,11 +54,11 @@ contains
 !
 !     subroutine vlf requires (nrf.eq.1 .and. vlfmod.eq."enabled")
 !
-!     With cqlpmod.ne."enabled", it provides bounce-averaged
+!     With setup0%cqlpmod.ne."enabled", it provides bounce-averaged
 !     QL Fokker-Planck coefficients.
 !
 !     990317:  It has been generalized to work with the
-!              cqlpmod="enabled" option, to facilitate examination
+!              setup0%cqlpmod="enabled" option, to facilitate examination
 !              of finite-length effects on RFCD efficiency.
 !.................................................................
 !
@@ -74,8 +75,8 @@ contains
       call vlfsetup ! determines mrfn
 
       ! YuP-101220: Now mrfn is known; allocate wcqlb(), cqlb(), etc.
-      if (cqlpmod.eq."enabled") then
-        allocate(wcqlb(iy,jx,mrfn,lz),STAT=istat) ! ls  or lz ?
+      if (setup0%cqlpmod.eq."enabled") then
+        allocate(wcqlb(iy,jx,mrfn,lz),STAT=istat) ! setup0%ls  or lz ?
         allocate(wcqlc(iy,jx,mrfn,lz),STAT=istat)
         allocate(wcqle(iy,jx,mrfn,lz),STAT=istat)
         allocate(wcqlf(iy,jx,mrfn,lz),STAT=istat)
@@ -88,10 +89,10 @@ contains
       if(ASSOCIATED(cqlb)) then
         ! cqlb-cqlf are already allocated => do nothing
       else ! Not allocated yet
-        allocate(cqlb(iy,jx,lrz,mrfn),STAT=istat)
-        allocate(cqlc(iy,jx,lrz,mrfn),STAT=istat)
-        allocate(cqle(iy,jx,lrz,mrfn),STAT=istat)
-        allocate(cqlf(iy,jx,lrz,mrfn),STAT=istat)
+        allocate(cqlb(iy,jx,setup0%lrz,mrfn),STAT=istat)
+        allocate(cqlc(iy,jx,setup0%lrz,mrfn),STAT=istat)
+        allocate(cqle(iy,jx,setup0%lrz,mrfn),STAT=istat)
+        allocate(cqlf(iy,jx,setup0%lrz,mrfn),STAT=istat)
         cqlb_size=size(cqlb)
         call bcast(cqlb,zero,cqlb_size)
         call bcast(cqlc,zero,cqlb_size)
@@ -197,7 +198,7 @@ contains
       !write(*,*)'vlf: starting l=1:lz at lr,nharm=', lr_,nharm(krfmode)
       do 20 l=1,lz
 
-        if (cqlpmod.eq."enabled")then !should be one surface: indxlr_=1
+        if (setup0%cqlpmod.eq."enabled")then !should be one surface: indxlr_=1
            call bcast(cqlb(1:iy,1:jx,indxlr_,krfmode),zero,iyjx)
            call bcast(cqlc(1:iy,1:jx,indxlr_,krfmode),zero,iyjx)
            call bcast(cqle(1:iy,1:jx,indxlr_,krfmode),zero,iyjx)
@@ -701,8 +702,8 @@ contains
                 endif
 
 
-!     Bounce average factor:  (=1. for cqlpmod.eq."enabled"? CHECK IT)
-              if (cqlpmod.ne."enabled") then
+!     Bounce average factor:  (=1. for setup0%cqlpmod.eq."enabled"? CHECK IT)
+              if (setup0%cqlpmod.ne."enabled") then
 !BH091031                 if (l.eq.lz.or.lmax(i,lr_).ne.l) then
 !BH091031                    ax=dtau(i,l,lr_)/tau(i,lr_)
 !BH091031                 else
@@ -733,7 +734,7 @@ contains
                       ax=dtau(i,l,lr_)/tau(i,lr_)
                    endif
                 endif
-              elseif (cqlpmod.eq."enabled") then
+              elseif (setup0%cqlpmod.eq."enabled") then
                  ax=1.
               endif
 
@@ -799,10 +800,10 @@ contains
  70         continue ! j loop
 
 !..................................................................
-!     Transfer coeffs to wcqlb,..., if cqlpmod.eq."enabled"
+!     Transfer coeffs to wcqlb,..., if setup0%cqlpmod.eq."enabled"
 !..................................................................
 
-           if (cqlpmod.eq."enabled") then ! should be one surface
+           if (setup0%cqlpmod.eq."enabled") then ! should be one surface
            call dcopy(iyjx,cqlb(1:iy,1:jx,1,krfmode),1, &
                           wcqlb(1:iy,1:jx,krfmode,l),1)
            call dcopy(iyjx,cqlc(1:iy,1:jx,1,krfmode),1, &
@@ -819,10 +820,10 @@ contains
  20   continue
 
 !..................................................................
-!     Store coeffs in cqlb...or wcqlb..., depending on cqlpmod.
+!     Store coeffs in cqlb...or wcqlb..., depending on setup0%cqlpmod.
 !..................................................................
 
-      if (cqlpmod.ne."enabled") then
+      if (setup0%cqlpmod.ne."enabled") then
 
 
 !..................................................................
@@ -895,10 +896,10 @@ contains
       endif
 
 !..................................................................
-!     Store coeffs in cqlb...or wcqlb..., depending on cqlpmod.
+!     Store coeffs in cqlb...or wcqlb..., depending on setup0%cqlpmod.
 !..................................................................
 
-      elseif (cqlpmod.eq."enabled") then
+      elseif (setup0%cqlpmod.eq."enabled") then
 
 
 !..................................................................
@@ -939,7 +940,7 @@ contains
  200  continue
 
 !..................................................................
-!     End of if on cqlpmod
+!     End of if on setup0%cqlpmod
 !..................................................................
 
       endif

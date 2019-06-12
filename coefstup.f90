@@ -121,7 +121,7 @@ contains
 !     Add contribution of theta operator due to (mu*grad_parallel B) force
 !.......................................................................
 
-!%OS  if (cqlpmod.eq."enabled" .and. transp.eq."enabled" .and.
+!%OS  if (setup0%cqlpmod.eq."enabled" .and. transp.eq."enabled" .and.
 !%OS  +                                             n.ge.nontran+1)  then
 !%OS  call wpcthta
 !%OS  else

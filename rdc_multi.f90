@@ -47,28 +47,28 @@ contains
       write(*,*) 'Begin rdc_multi'
 
     !.................................................................
-    !     Allocate rdc diffusion arrays on iy,jx,lrz grid
+    !     Allocate rdc diffusion arrays on iy,jx,setup0%lrz grid
     !     (pointer statements in comm.h so can use variables elsewhere).
     !.................................................................
 
-    allocate (rdcb(iy,jx,lrz,nrdc),STAT = istat)
+    allocate (rdcb(iy,jx,setup0%lrz,nrdc),STAT = istat)
     if(istat .ne. 0) call allocate_error("rdcb, sub rdc_multi",0,istat)
     call bcast(rdcb,zero,SIZE(rdcb))
 
-    allocate (rdcc(iy,jx,lrz,nrdc),STAT = istat)
+    allocate (rdcc(iy,jx,setup0%lrz,nrdc),STAT = istat)
     if(istat .ne. 0) call allocate_error("rdcc, sub rdc_multi",0,istat)
     call bcast(rdcc,zero,SIZE(rdcc))
 
-    allocate (rdce(iy,jx,lrz,nrdc),STAT = istat)
+    allocate (rdce(iy,jx,setup0%lrz,nrdc),STAT = istat)
     if(istat .ne. 0) call allocate_error("rdce, sub rdc_multi",0,istat)
     call bcast(rdce,zero,SIZE(rdce))
 
-    allocate (rdcf(iy,jx,lrz,nrdc),STAT = istat)
+    allocate (rdcf(iy,jx,setup0%lrz,nrdc),STAT = istat)
     if(istat .ne. 0) call allocate_error("rdcf, sub rdf_multi",0,istat)
     call bcast(rdcf,zero,SIZE(rdcf))
 
     !.................................................................
-    !     Read rdc diffusion arrays on u_par,u_prp,lrz grid:
+    !     Read rdc diffusion arrays on u_par,u_prp,setup0%lrz grid:
     !     first read dimensions, then allocate space, then read.
     !.................................................................
 
@@ -349,19 +349,19 @@ contains
 
    !.................................................................
    !     The rho_a radial mesh and associated coeffc will be reduced
-   !     by a factor of 2, if lrz.eq.n_psi/2, enabling cql3d to run
+   !     by a factor of 2, if setup0%lrz.eq.n_psi/2, enabling cql3d to run
    !     on half the number of flux surfaces used in the full-wave code.
-   !     Check if n_psi.eq.lrz.
-   !     If not, check n_psi/2.eq.lrz.  If so, omit every 2nd radial point
+   !     Check if n_psi.eq.setup0%lrz.
+   !     If not, check n_psi/2.eq.setup0%lrz.  If so, omit every 2nd radial point
    !       of the diffusion coeff grid and coeffs, and reset n_psi.
    !       This enables factor of 2 reduction of the cql3d radial mesh.
    !       The cql3d and du0u0_input radial meshes are assumed to be
    !         the same (or close).
    !       Future modification:  Interpolate the du0u0_input radial mesh
    !                             to the cql3d radial mesh.
-   !     Check if n_psi.eq.lrz:  if not, STOP
+   !     Check if n_psi.eq.setup0%lrz:  if not, STOP
 
-   if (n_psi.ne.lrz .and. int((n_psi+1.1)/2) .eq. lrz) then
+   if (n_psi.ne.setup0%lrz .and. int((n_psi+1.1)/2) .eq. setup0%lrz) then
 
       !.................................................................
       !     Adjust the radial mesh to use every second one ==> 32 radial
@@ -369,7 +369,7 @@ contains
       !.................................................................
 
          n_psi=n_psi/2
-         write(*,*)'rdc_multi: n_psi,lrz=',n_psi,lrz
+         write(*,*)'rdc_multi: n_psi,setup0%lrz=',n_psi,setup0%lrz
          do i_psi=1,n_psi
             rho_a(i_psi)=rho_a(2*i_psi)
             do i_upar=1,n_upar
@@ -390,8 +390,8 @@ contains
 
       endif
 
-      if (n_psi.ne.lrz) then
-         WRITE(*,*)'rdc_multi:  n_psi.ne.lrz'
+      if (n_psi.ne.setup0%lrz) then
+         WRITE(*,*)'rdc_multi:  n_psi.ne.setup0%lrz'
          STOP
       endif
 
@@ -652,7 +652,7 @@ contains
       !   symm=two
       !endif
 
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          do j=1,jx
             do i=1,iy
                xupar=x(j)*coss(i,ll)
@@ -705,7 +705,7 @@ contains
       !     Printing max diffusion coefficient, as check
       !.................................................................
       rdcbmax=0.d0
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          do j=1,jx
             do i=1,iy
                rdcbmax=max(rdcbmax,rdcb(i,j,ll,krf))
@@ -718,7 +718,7 @@ contains
       !     Scaling diffusion coeffs
       !.................................................................
 
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          do j=1,jx
             do i=1,iy
                rdcb(i,j,ll,krf)=rdcscale(krf)*rdcb(i,j,ll,krf)
@@ -742,7 +742,7 @@ contains
       sum_neg_duu=0.d0
       sum_pos_dtt=0.d0
       sum_neg_dtt=0.d0
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          do j=1,jx
             do i=1,iy
                sum_pos_duu= sum_pos_duu+cynt2(i,ll)*cint2(j)* &
@@ -762,7 +762,7 @@ contains
 
       !$$$c     Non-symmetry of rdcc,rdce  [Visual exam shows
       !$$$c       this non-symmetry is general].
-      !$$$      do ll=1,lrz
+      !$$$      do ll=1,setup0%lrz
       !$$$      do j=1,jx
       !$$$         do i=1,iy
       !$$$         if (rdcc(i,j,ll).ne.rdce(i,j,ll)) then
@@ -775,7 +775,7 @@ contains
 
 
       !     Non-parabolic cross-coeffs
-      !$$$      do ll=1,lrz
+      !$$$      do ll=1,setup0%lrz
       !$$$      do j=1,jx
       !$$$         do i=1,iy
       !$$$         if (rdcc(i,j,ll)*rdce(i,j,ll) .gt.
@@ -795,7 +795,7 @@ contains
       !     Symmetrize about pi/2 in the pass/trapped boundary.
       !..................................................................
 
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          call tdnflxs(ll)
          do 56 j=1,jx
             do 57 i=itl,itu
@@ -822,7 +822,7 @@ contains
       !.................................................................
       !      goto 100 !!!!!!!!!!!!!!!!!!!!!!!! skip adjustments ------------------------
 
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          call tdnflxs(ll)
          do j=1,jx
             do i=1,iy
@@ -897,7 +897,7 @@ contains
       !..................................................................
 
       rdcbmax0=0.d0
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          do j=1,jx
             do i=1,iy
                rdcbmax0=max(rdcbmax0,rdcb(i,j,ll,krf))
@@ -908,7 +908,7 @@ contains
 
       if (ineg.eq."trunc_d") then
          if (jx.le.11) stop 'rdc_multi:  Need jx>11'
-         do ll=1,lrz
+         do ll=1,setup0%lrz
             do 90 j=jx-11,jx
                do 91 i=1,iy
                   rdcb(i,j,ll,krf)=truncd(j)*rdcb(i,j,ll,krf)
@@ -923,7 +923,7 @@ contains
       !     Printing max diffusion coefficient, as check
       !.................................................................
       rdcbmax=0.d0
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          do j=1,jx
             do i=1,iy
                rdcbmax=max(rdcbmax,rdcb(i,j,ll,krf))
@@ -937,7 +937,7 @@ contains
       !.................................................................
       mrfn=1
 
-      do ll=1,lrz
+      do ll=1,setup0%lrz
          call tdnflxs(ll)
          if(pltrdc.ne."disabled") then
             if (pltrdc.eq."one" .or. pltrdc.eq."enabled") then

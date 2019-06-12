@@ -14,7 +14,8 @@ module wpalloc_mod
 
 contains
 
-      subroutine wpalloc
+  subroutine wpalloc
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -36,7 +37,7 @@ contains
 
       ! YuP-101220: allocation of wcqlb-wcqlf is moved to vlf.f
 
-      lnyxgs2=(iyp1+1)*(jxp1+1)*ngen*(ls+2)
+      lnyxgs2=(iyp1+1)*(jxp1+1)*ngen*(setup0%ls+2)
       lny2gx=iy*jx*ngen*4
       lnsbn2y=(lsa+nbanda+2)*max(iy,jx)*2
       lnys2bn=max(iy,jx)*(lsa+2)*nbanda*2
@@ -44,7 +45,7 @@ contains
       lndums=5*lnyxgs2+lny2gx+lnsbn2y+lnys2bn
 
       if (vlfmod.eq."enabled") then
-         lnyxms=iy*jx*nmodsa*ls
+         lnyxms=iy*jx*nmodsa*setup0%ls
          lndums=lndums+4*lnyxms
       endif
 
@@ -53,11 +54,11 @@ contains
       call ibcast(l_upper,0,SIZE(l_upper))
       call ibcast(ilpm1ef,0,SIZE(ilpm1ef))
 
-      allocate(fnhalf(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
+      allocate(fnhalf(0:iy+1,0:jx+1,ngen,0:setup0%ls+1),STAT=istat)
       call bcast(fnhalf,zero,SIZE(fnhalf))
-      allocate(fnp0(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
+      allocate(fnp0(0:iy+1,0:jx+1,ngen,0:setup0%ls+1),STAT=istat)
       call bcast(fnp0,zero,SIZE(fnp0))
-      allocate(fnp1(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
+      allocate(fnp1(0:iy+1,0:jx+1,ngen,0:setup0%ls+1),STAT=istat)
       call bcast(fnp1,zero,SIZE(fnp1))
       allocate(dls(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
       call bcast(dls,zero,SIZE(dls))

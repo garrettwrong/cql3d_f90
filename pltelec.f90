@@ -14,7 +14,8 @@ module pltelec_mod
 
 contains
 
-      subroutine pltelec
+  subroutine pltelec
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use aminmx_mod, only : aminmx
@@ -28,7 +29,7 @@ contains
       REAL RPGMIN,RPGMAX
       REAL RILIN
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 !$$$      call gxglfr(0)
       call aminmx(densz(1:lz,ngen+1,negyrg,lr_), &
        1,lz,1,fmin,fmax,kmin,kmax)

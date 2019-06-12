@@ -126,27 +126,27 @@ contains
                  .or. lossmode(k).eq."simplbn2") then
 !$$$            if (ionce.eq.0) then
 !$$$                 ionce=1
-!$$$                 write(*,*)'losscone:bthr(ll),ll=1,lrzmax',
-!$$$     +                               (bthr(ll),ll=1,lrzmax)
-!$$$                 write(*,*)'losscone:bthr0(ll),ll=1,lrzmax',
-!$$$     +                               (bthr0(ll),ll=1,lrzmax)
-!$$$                 write(*,*)'Losscone:ll,eqbpol(1:lorbit,ll=1,lrzmax)'
-!$$$                 do ll=1,lrzmax
+!$$$                 write(*,*)'losscone:bthr(ll),ll=1,setup0%lrzmax',
+!$$$     +                               (bthr(ll),ll=1,setup0%lrzmax)
+!$$$                 write(*,*)'losscone:bthr0(ll),ll=1,setup0%lrzmax',
+!$$$     +                               (bthr0(ll),ll=1,setup0%lrzmax)
+!$$$                 write(*,*)'Losscone:ll,eqbpol(1:lorbit,ll=1,setup0%lrzmax)'
+!$$$                 do ll=1,setup0%lrzmax
 !$$$                    write(*,*) ll,(eqbpol(lll,ll),lll=1,lorbit(lr_))
 !$$$                 enddo
 !$$$            endif
 
 !         Project to (Last Closed Flux Surface)*simpbfac from flux
 !         surface radii tabulated on the rya() mesh
-            rpconz_max=rpconz(lrzmax)+(simpbfac-rya(lrzmax))* &
-                       (rpconz(lrzmax)-rpconz(lrzmax-1))/ &
-                       (rya(lrzmax)-rya(lrzmax-1))
-            bthr0edge=abs(bthr0(lrzmax)+(simpbfac-rya(lrzmax))* &
-                       (bthr0(lrzmax)-bthr0(lrzmax-1))/ &
-                       (rya(lrzmax)-rya(lrzmax-1)))
-            bmod0edge=abs(bmod0(lrzmax)+(simpbfac-rya(lrzmax))* &
-                       (bmod0(lrzmax)-bmod0(lrzmax-1))/ &
-                       (rya(lrzmax)-rya(lrzmax-1)))
+            rpconz_max=rpconz(setup0%lrzmax)+(simpbfac-rya(setup0%lrzmax))* &
+                       (rpconz(setup0%lrzmax)-rpconz(setup0%lrzmax-1))/ &
+                       (rya(setup0%lrzmax)-rya(setup0%lrzmax-1))
+            bthr0edge=abs(bthr0(setup0%lrzmax)+(simpbfac-rya(setup0%lrzmax))* &
+                       (bthr0(setup0%lrzmax)-bthr0(setup0%lrzmax-1))/ &
+                       (rya(setup0%lrzmax)-rya(setup0%lrzmax-1)))
+            bmod0edge=abs(bmod0(setup0%lrzmax)+(simpbfac-rya(setup0%lrzmax))* &
+                       (bmod0(setup0%lrzmax)-bmod0(setup0%lrzmax-1))/ &
+                       (rya(setup0%lrzmax)-rya(setup0%lrzmax-1)))
             bthr0avg=0.5*(abs(bthr0(lr_))+bthr0edge)
             x_loss=abs(bnumb(k)*charge) &
                  *(rpconz_max-rpconz(lr_))/(fmass(k)*vnorm*clight)
@@ -162,11 +162,11 @@ contains
 !BH160403: Linearly interpolate for bmod0 at outside of the the banana.
 
             drpconz0=(rpconz(2)-rpconz(1))/(rya(2)-rya(1))
-            drpconz1=(rpconz(lrzmax)-rpconz(lrzmax-1))/ &
-                     (rya(lrzmax)-rya(lrzmax-1))
+            drpconz1=(rpconz(setup0%lrzmax)-rpconz(setup0%lrzmax-1))/ &
+                     (rya(setup0%lrzmax)-rya(setup0%lrzmax-1))
             dbmod00=(bmod0(2)-bmod0(1))/(rya(2)-rya(1))
-            dbmod01=(bmod0(lrzmax)-bmod0(lrzmax-1))/ &
-                     (rya(lrzmax)-rya(lrzmax-1))
+            dbmod01=(bmod0(setup0%lrzmax)-bmod0(setup0%lrzmax-1))/ &
+                     (rya(setup0%lrzmax)-rya(setup0%lrzmax-1))
             do 50  i=1,iy
                do 51  j=3,jx    !was j=1,jx ! YuP
                   ! YuP[7-22-2014] skip j=1:2 (do not apply a loss cone)
@@ -190,7 +190,7 @@ contains
 ! YuP  because subr. deltar is setup/called for one general species only,
 ! YuP  and so all deltar* arrays are saved for k=1 gen.species only.
 !                     delb1=x(j)*abs(coss(i,indxlr_))/(omcnst*bthr0(lr_))
-!                     call lookup(rpconz(lr_)+delb1,rpconz,lrzmax,
+!                     call lookup(rpconz(lr_)+delb1,rpconz,setup0%lrzmax,
 !     +                           wtu,wtl,linterp)
 !                     rpconz1=wtl*rpconz(linterp-1)+wtu*rpconz(linterp)
 !                     bmod01=wtl*bmod0(linterp-1)+wtu*bmod0(linterp)
@@ -239,9 +239,9 @@ contains
                   !     the bounce. deltarho is anti-symmetric about pi/2.
 !YuP                     if (rho1.lt.zero) rho1=zero
 !YuP                     if (rho1.gt.1.1d0) rho1=1.1d0
-!YuP                     call lookup(rho1,rya(1),lrzmax,wtu,wtl,linterp)
+!YuP                     call lookup(rho1,rya(1),setup0%lrzmax,wtu,wtl,linterp)
 !YuP                    !Interpolate, or extrapolate a bit.
-!YuP                     if (linterp.eq. lrzmax .and. wtu.eq.1d0) then
+!YuP                     if (linterp.eq. setup0%lrzmax .and. wtu.eq.1d0) then
 !YuP                        R1=rpconz(linterp)+(rho1-rya(linterp))*drpconz1
 !YuP                        b1=bmod0(linterp)+(rho1-rya(linterp))*dbmod01
 !YuP                     elseif(linterp.eq.2 .and. wtl.eq.1d0) then
@@ -386,20 +386,20 @@ contains
 
 !.................................................................
 !     The rho_a radial mesh and associated coeffc will be reduced
-!     by a factor of 2, if lrz.eq.n_psi/2, enabling cql3d to run
+!     by a factor of 2, if setup0%lrz.eq.n_psi/2, enabling cql3d to run
 !     on half the number of flux surfaces used in the full-wave code.
-!     Check if n_psi.eq.lrz.
-!     If not, check n_psi/2.eq.lrz.  If so, omit every 2nd radial point
+!     Check if n_psi.eq.setup0%lrz.
+!     If not, check n_psi/2.eq.setup0%lrz.  If so, omit every 2nd radial point
 !       of the diffusion coeff grid and coeffs, and reset n_psi.
 !       This enables factor of 2 reduction of the cql3d radial mesh.
 !       The cql3d and du0u0_input radial meshes are assumed to be
 !         the same (or close).
 !       Future modification:  Interpolate the du0u0_input radial mesh
 !                             to the cql3d radial mesh.
-!     Check if n_psi.eq.lrz:  if not, STOP
+!     Check if n_psi.eq.setup0%lrz:  if not, STOP
 
-      if (n_psi.ne.lrz .and. &
-          int((n_psi+1.1)/2) .eq. lrz) then
+      if (n_psi.ne.setup0%lrz .and. &
+          int((n_psi+1.1)/2) .eq. setup0%lrz) then
 
 !.................................................................
 !     Adjust the radial mesh to use every second one ==> 32 radial
@@ -407,7 +407,7 @@ contains
 !.................................................................
 
          n_psi=n_psi/2
-         write(*,*)'losscone: n_psi,lrz=',n_psi,lrz
+         write(*,*)'losscone: n_psi,setup0%lrz=',n_psi,setup0%lrz
          do i_psi=1,n_psi
             rho_a(i_psi)=rho_a(2*i_psi)
             do i_upar=1,n_upar
@@ -423,8 +423,8 @@ contains
 
       endif
 
-      if (n_psi.ne.lrz) then
-         WRITE(*,*)'losscone:  n_psi.ne.lrz'
+      if (n_psi.ne.setup0%lrz) then
+         WRITE(*,*)'losscone:  n_psi.ne.setup0%lrz'
          STOP
       endif
 
@@ -471,7 +471,7 @@ contains
          enddo
       enddo
 
-      do ll=1,lrz
+      do ll=1,setup0%lrz
       do j=1,jx
          do i=1,iy
             xupar=x(j)*coss(i,ll)

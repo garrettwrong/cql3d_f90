@@ -31,7 +31,7 @@ contains
 
 !MPIINSERT_IF_RANK_NE_0_RETURN
 
-      if (lrzmax.le.1) then
+      if (setup0%lrzmax.le.1) then
         if((idskf.eq. "disabled".and.idskrf.eq."disabled") &
           .or. n.ne.nstop+1)  return
       else
@@ -69,17 +69,17 @@ contains
 !     This subroutine is called to write data for each FP'd
 !          flux surface.
 !     ll=  FP flux surface number
-!          (ll=1:lrors, lrors.le.lrzmax, see cqlinput_help))
-!          (lrindx(ll) gives flux surface number on the full
-!                     radial mesh.(lrindx(ll)=ll if lrors=lrzmax,
-!                     and using cql3d mode(cqlpmod="disabled"))).
+!          (ll=1:lrors, lrors.le.setup0%lrzmax, see cqlinput_help))
+!          (setup0%lrindx(ll) gives flux surface number on the full
+!                     radial mesh.(setup0%lrindx(ll)=ll if lrors=setup0%lrzmax,
+!                     and using cql3d mode(setup0%cqlpmod="disabled"))).
 !     iy,jx= dimensions in theta and u(momentum/mass)
 !           (In the case where iy varies with ll, iy(1) will be greatest.)
 !     lrors= number of flux surfaces FP'd.
-!     lrzmax= number of flux surfaces, including any not FP'd.
+!     setup0%lrzmax= number of flux surfaces, including any not FP'd.
 !     x = momentum-per-mass(nomalized to maximum 1.)
-!         at  each flux surface lrindx(ll)
-!     y = theta(radians) mesh at  each flux surface lrindx(ll)
+!         at  each flux surface setup0%lrindx(ll)
+!     y = theta(radians) mesh at  each flux surface setup0%lrindx(ll)
 !     rovera= normalized radius (ll)
 !             (rho, see Hinton and Haseltine for non-circ).
 !             (generally ~sqrt(tor. flux), other coords available.)
@@ -102,17 +102,17 @@ contains
 !..................................................................
 
       if(idskf.ne."disabled") then
-        write(4,1004)  ll, iy,jx,lrors,lrzmax,ngen
+        write(4,1004)  ll, iy,jx,lrors,setup0%lrzmax,ngen
         write(4,1004)  itl,itu
         write(4,1005)  (x(j),j=1,jx)
         write(4,1005)  (y(i,ll),i=1,iy)
         do 1000 k=1,ngen
           write(4,1005)  bnumb(k),fmass(k)
-          write(4,1005)  rovera(lrindx(ll)),elecfld(lrindx(ll)), &
-                         bthr(lrindx(ll)),btoru(lrindx(ll))
-          write(4,1005)  bthr0(lrindx(ll)),btor0(lrindx(ll)), &
-                         reden(k,lrindx(ll)),temp(k,lrindx(ll))
-          vmaxdvt=vnorm/(4.19e7*sqrt(2.*1000.*temp(k,lrindx(ll))))
+          write(4,1005)  rovera(setup0%lrindx(ll)),elecfld(setup0%lrindx(ll)), &
+                         bthr(setup0%lrindx(ll)),btoru(setup0%lrindx(ll))
+          write(4,1005)  bthr0(setup0%lrindx(ll)),btor0(setup0%lrindx(ll)), &
+                         reden(k,setup0%lrindx(ll)),temp(k,setup0%lrindx(ll))
+          vmaxdvt=vnorm/(4.19e7*sqrt(2.*1000.*temp(k,setup0%lrindx(ll))))
           write(4,1005)  radmin,vnorm,vmaxdvt,eovedd
           write(4,1005)  ((f(i,j,k,ll),i=1,iy),j=1,jx)
  1000   continue
@@ -127,22 +127,22 @@ contains
 !     temp1 is the bounce averaged uu-diffusion coefficient (cgs units).
 !..................................................................
       if(idskrf.ne."disabled") then
-        write(5,1004)  ll,iy,jx,lrors,lrzmax
+        write(5,1004)  ll,iy,jx,lrors,setup0%lrzmax
         write(5,1005)  (y(i,ll),i=1,iy)
         write(5,1005)  (x(j),j=1,jx)
-        write(5,1005)  rovera(lrindx(ll)),vnorm
-        write(5,1005)  (vptb(i,lrindx(ll)),i=1,iy)
+        write(5,1005)  rovera(setup0%lrindx(ll)),vnorm
+        write(5,1005)  (vptb(i,setup0%lrindx(ll)),i=1,iy)
         vn2=vnorm*vnorm
         do 10 k=1,mrfn
-          vmaxdvt=vnorm/(4.19e7*sqrt(2.*1000.*temp(k,lrindx(ll))))
-          write(5,1005) reden(k,lrindx(ll)),temp(k,lrindx(ll)),vmaxdvt
+          vmaxdvt=vnorm/(4.19e7*sqrt(2.*1000.*temp(k,setup0%lrindx(ll))))
+          write(5,1005) reden(k,setup0%lrindx(ll)),temp(k,setup0%lrindx(ll)),vmaxdvt
           do 11 i=1,iy
  11       temp1(i,1)=0.0
           do 12 j=2,jx
             x2=x(j)**2
             do 13 i=1,iy
- 13         temp1(i,j)=urfb(i,j,indxlr(lrindx(ll)),k)*vn2/ &
-                (vptb(i,lrindx(ll))*x2)
+ 13         temp1(i,j)=urfb(i,j,indxlr(setup0%lrindx(ll)),k)*vn2/ &
+                (vptb(i,setup0%lrindx(ll))*x2)
  12       continue
           write(5,1005) ((temp1(i,j),i=1,iy),j=1,jx)
  10     continue

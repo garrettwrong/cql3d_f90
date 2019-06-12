@@ -503,7 +503,7 @@ contains
            temp(k,ll)=1.
         enddo
         do ll=2,lza+1
-          if (cqlpmod .ne. "enabled") then
+          if (setup0%cqlpmod .ne. "enabled") then
             denpar(k,ll)=1.
             temppar(k,ll)=1.
           endif

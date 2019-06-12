@@ -34,7 +34,8 @@ module tdreadf_mod
 
 contains
 
-      subroutine tdreadf(kopt)
+  subroutine tdreadf(kopt)
+    use cqlconf_mod, only : setup0
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
@@ -43,7 +44,7 @@ contains
 !       a previous run.
 !     kopt = 1: Read namelists from text file distrfunc (should be first
 !               call, to place file pointer at beginning of f).
-!               Only called if nlrestrt="enabled", otherwise distrfunc
+!               Only called if setup0%nlrestrt="enabled", otherwise distrfunc
 !               not needed.
 !          = 2: Read f
 !.......................................................................
@@ -109,28 +110,28 @@ contains
 
 !BH080204:  Will work towards putting all necessary restart data
 !BH080204:  into the netcdf file, for netcdf restart case.
-      if (nlrestrt.ne."ncdfdist" .and. nlrestrt.ne."ncregrid") then !BH080204
+      if (setup0%nlrestrt.ne."ncdfdist" .and. setup0%nlrestrt.ne."ncregrid") then !BH080204
 
-      ilrestrt=nlrestrt
-!      read(iunwrif,setup0)  !Commented out, so mnemonic set by cqlinput
+      ilrestrt=setup0%nlrestrt
+!      read(iunwrif,setup0)  !Commented out, so setup0%mnemonic set by cqlinput
       read(iunwrif,setup)
       read(iunwrif,trsetup)
       read(iunwrif,sousetup)
       read(iunwrif,eqsetup)
       read(iunwrif,rfsetup)
       read(iunwrif,frsetup)
-      nlrestrt=ilrestrt
+      setup0%nlrestrt=ilrestrt
 
-      if ((lrors.ne.lrz .and. cqlpmod.ne."enabled") .or. &
-        (lrors.ne.ls  .and. cqlpmod.eq."enabled")) then
+      if ((lrors.ne.setup0%lrz .and. setup0%cqlpmod.ne."enabled") .or. &
+        (lrors.ne.setup0%ls  .and. setup0%cqlpmod.eq."enabled")) then
 !MPIINSERT_IF_RANK_EQ_0
         PRINT *,' current lrors=',lrors,' does not correspond to old ', &
-          'lrz=',lrz,' or ls=',ls
+          'setup0%lrz=',setup0%lrz,' or setup0%ls=',setup0%ls
 !MPIINSERT_ENDIF_RANK
         stop 'tdreadf'
       endif
 
-      endif ! on nlrestrt
+      endif ! on setup0%nlrestrt
 
       close(unit=iunwrif)
       return
@@ -143,7 +144,7 @@ contains
  200  continue ! kopt .eq. 2   handle
       ! Note: tdreadf(2) is called for each l_ , which is in comm.h
 
-      if (nlrestrt.eq."enabled" .and. l_.eq.lrors) then  !elseif, ln 145
+      if (setup0%nlrestrt.eq."enabled" .and. l_.eq.lrors) then  !elseif, ln 145
 
 !MPIINSERT_IF_RANK_EQ_0
          WRITE(*,*)'tdreadf:  Reading distfunc (text f)'
@@ -157,10 +158,10 @@ contains
  210     continue  !On k
 
 !.......................................................................
-!l    2.2 Read spasou(i,j,k,l);  only works for nlrestrt.eq.'enabled'
+!l    2.2 Read spasou(i,j,k,l);  only works for setup0%nlrestrt.eq.'enabled'
 !.......................................................................
 
-         if (cqlpmod.eq."enabled") then
+         if (setup0%cqlpmod.eq."enabled") then
             do 220 k=1,ngen
                do 221 il=1,lrors
                   do 222 j=1,jx
@@ -179,7 +180,7 @@ contains
 !     Read distribution function from NetCDF file, v-mesh UNchanged
 !.......................................................................
 
-      elseif (nlrestrt.eq."ncdfdist" .and. l_.eq.lrors) then
+      elseif (setup0%nlrestrt.eq."ncdfdist" .and. l_.eq.lrors) then
                                                        !elseif, line 290
 
          !YuP[2019-02-07] added wkpack and temp_rstrt
@@ -205,37 +206,37 @@ contains
 !$$$         endif
 
 !     Open existing netCDF file [Typically, the distrfunc.nc is linked
-!     to the mnemonic.nc file from an earlier cql3d run.]
+!     to the setup0%mnemonic.nc file from an earlier cql3d run.]
 !MPIINSERT_IF_RANK_EQ_0
          WRITE(*,*) &
-         'tdreadf[nlrestrt="ncdfdist"]: Reading distrfunc.nc (netcdf)'
+         'tdreadf[setup0%nlrestrt="ncdfdist"]: Reading distrfunc.nc (netcdf)'
 !MPIINSERT_ENDIF_RANK
 
          istatus = NF_OPEN('distrfunc.nc', 0, ncid)
          if (istatus .NE. NF_NOERR) then
-            t_=trim(mnemonic(1:length_char(mnemonic)))//'.nc' !YuP added trim
+            t_=trim(setup0%mnemonic(1:length_char(setup0%mnemonic)))//'.nc' !YuP added trim
 !MPIINSERT_IF_RANK_EQ_0
             WRITE(*,*)'tdreadf: distrfunc.nc missing/problem'
-            WRITE(*,*)'tdreadf: CHECKING for mnemonic file : ',t_
+            WRITE(*,*)'tdreadf: CHECKING for setup0%mnemonic file : ',t_
             WRITE(*,*)'tdreadf: BUT BE CAREFUL, the file will be '
             WRITE(*,*)'tdreadf:     overwritten at end of present run. '
 !MPIINSERT_ENDIF_RANK
             ! YuP[03-01-2016] Added: if distrfunc.nc is missing,
-            ! try reading the mnemonic.nc file.
+            ! try reading the setup0%mnemonic.nc file.
             ! But be careful: the file will be overwritten by the end
             ! of present run !
             istatus = NF_OPEN(t_, 0, ncid)
             if (istatus .NE. NF_NOERR) then
 !MPIINSERT_IF_RANK_EQ_0
                WRITE(*,*)
-               WRITE(*,*)'tdreadf: Cannot open/missing mnemonic.nc'// &
+               WRITE(*,*)'tdreadf: Cannot open/missing setup0%mnemonic.nc'// &
                     ' for which opening has been attempted in lieu'// &
                     ' of distrfunc.nc'
                WRITE(*,*)
 !MPIINSERT_ENDIF_RANK
             else ! found the file
 !MPIINSERT_IF_RANK_EQ_0
-               WRITE(*,*)'tdreadf: found mnemonic file: ',t_
+               WRITE(*,*)'tdreadf: found setup0%mnemonic file: ',t_
 !MPIINSERT_ENDIF_RANK
             endif
          endif
@@ -255,10 +256,10 @@ contains
 
          if (iy_rstrt.ne.iy &
               .or. jx_rstrt.ne.jx &
-              .or. lrz_rstrt.ne.lrz .or. ngen_rstrt.ne.ngen) then
+              .or. lrz_rstrt.ne.setup0%lrz .or. ngen_rstrt.ne.ngen) then
 !MPIINSERT_IF_RANK_EQ_0
             WRITE(*,*)'Problem with distrfunc.nc file'
-            WRITE(*,*)'  iy,jx,lrz,ngen=',iy,jx,lrz,ngen, &
+            WRITE(*,*)'  iy,jx,setup0%lrz,ngen=',iy,jx,setup0%lrz,ngen, &
                  ' iy_rstrt,jx_rstrt,lrz_rstrt,ngen_rstrt=', &
                  iy_rstrt,jx_rstrt,lrz_rstrt,ngen_rstrt
 !MPIINSERT_ENDIF_RANK
@@ -268,9 +269,9 @@ contains
 !-----pitch angle variable y
 !-YuP:         vid = ncvid(ncid,'iy_',istatus)
          istatus= NF_INQ_VARID(ncid,'iy_',vid)  !-YuP: NetCDF-f77 get vid
-!-YuP:         call ncvgt(ncid,vid,1,lrz,iy_,istatus)
-         istatus= NF_GET_VARA_INT(ncid,vid,(1),(lrz),iy_) !-YuP: NetCDF-f77
-         do ll=1,lrz
+!-YuP:         call ncvgt(ncid,vid,1,setup0%lrz,iy_,istatus)
+         istatus= NF_GET_VARA_INT(ncid,vid,(1),(setup0%lrz),iy_) !-YuP: NetCDF-f77
+         do ll=1,setup0%lrz
             if (iy_(ll).ne.iy) then
 !MPIINSERT_IF_RANK_EQ_0
                WRITE(*,*)'tdreadf:Variable iy_(ll), but only cnst setup'
@@ -314,7 +315,7 @@ contains
          endif
 
 
-         !The structure of 'f' in mnemonic.nc file can be different
+         !The structure of 'f' in setup0%mnemonic.nc file can be different
          !depending on ngen and on netcdfshort settings.
          !YuP[2019-02-07] See netcdfrw2: 'f' can be 3D, or 4D, or 5D.
          !
@@ -376,7 +377,7 @@ contains
          call bcast(f,zero,(iy+2)*(jx+2)*ngen*lrors)  !This f is f_code
 
 !         do k=1,ngen
-!         do ll=1,lrz
+!         do ll=1,setup0%lrz
 !            start(3)=ll
 !            start(4)=k
 !            count(3)=1
@@ -400,7 +401,7 @@ contains
          !and each time step (if more than one).
          !So now we unpack it in exactly same way.
          do k=1,ngen
-         do ll=1,lrz
+         do ll=1,setup0%lrz
            ! These values (3-4) can be different, dep. on cases
            start(3)=ll
            start(4)=k !in case of ngen=1, start(4)=1,
@@ -442,7 +443,7 @@ contains
 !need flux surface geometry quantities zmaxpsi(lr_) and tau(lr_)
 !which are also calculated one flux surface at a time.
 
-      elseif (nlrestrt.eq."ncregrid") then !re-grid mod option
+      elseif (setup0%nlrestrt.eq."ncregrid") then !re-grid mod option
                                            !endif, line 645
 
          if (l_.eq.lrors) then  !That is, first l_ call of tdreadf
@@ -490,12 +491,12 @@ contains
 
 !        for nlrestrt.eq.'ncregrid', jx_rstrt can be different from jx
 !        Also enforce that ngen is .le. gen_species_dim.
-         if (iy_rstrt.ne.iy .or. lrz_rstrt.ne.lrz .or. ngen_rstrt.ne.ngen) then
+         if (iy_rstrt.ne.iy .or. lrz_rstrt.ne.setup0%lrz .or. ngen_rstrt.ne.ngen) then
 !     1        .or. jx_rstrt.ne.jx
 
 !MPIINSERT_IF_RANK_EQ_0
             WRITE(*,*)'Problem with distrfunc.nc file'
-            WRITE(*,*)'  iy,lrz,ngen=',iy,lrz,ngen, &
+            WRITE(*,*)'  iy,setup0%lrz,ngen=',iy,setup0%lrz,ngen, &
                  ' iy_rstrt,lrz_rstrt,ngen_rstrt=', &
                  iy_rstrt,lrz_rstrt,ngen_rstrt
 !MPIINSERT_ENDIF_RANK
@@ -504,8 +505,8 @@ contains
 
 !-----pitch angle variable y
          istatus= NF_INQ_VARID(ncid,'iy_',vid)
-         istatus= NF_GET_VARA_INT(ncid,vid,(1),(lrz),iy_)
-         do ll=1,lrz
+         istatus= NF_GET_VARA_INT(ncid,vid,(1),(setup0%lrz),iy_)
+         do ll=1,setup0%lrz
             if (iy_(ll).ne.iy) then
 !MPIINSERT_IF_RANK_EQ_0
                WRITE(*,*)'tdreadf: Variable iy_(ll), only cnst setup'
@@ -521,8 +522,8 @@ contains
 !                      in and restored.
 
 !     Allocate temporary space
-!         allocate (f_rstrt(iy,jx_rstrt,lrz,ngen),STAT = istat)   !Can't do this: f_rstrt has 3 dims
-         allocate (f_rstrt(iy,jx_rstrt,lrz),STAT = istat)
+!         allocate (f_rstrt(iy,jx_rstrt,setup0%lrz,ngen),STAT = istat)   !Can't do this: f_rstrt has 3 dims
+         allocate (f_rstrt(iy,jx_rstrt,setup0%lrz),STAT = istat)
          if(istat .ne. 0) &
               call allocate_error("f_rstrt, sub tdreadf",0,istat)
          call bcast(f_rstrt,zero,SIZE(f_rstrt))
@@ -645,7 +646,7 @@ contains
 
 !.......................................................................
 !        Read in and process f_rstrt one gen species at a time
-!        f_rstrt dimensioned (1:iy,1:jx,1:lrz)
+!        f_rstrt dimensioned (1:iy,1:jx,1:setup0%lrz)
 !BH180602:  Read does not exactly mirror the write in netcdfrw2.
 !BH180602:  Check that it is OK!
 !.......................................................................
@@ -673,7 +674,7 @@ contains
          !endif  !on ngen
          !
          !---2--- Case of saving f only at the end of run
-         ! (and it is favg that was saved into mnemonic.nc file)
+         ! (and it is favg that was saved into setup0%mnemonic.nc file)
          !if (ngen.eq.1) then
          ! 'f' is 3D, NCDOUBLE,3, dimsf(1:3)={ydim,xdim,rdim}
          !                        start1(3)=ll (in do loop)

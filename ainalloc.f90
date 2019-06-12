@@ -14,7 +14,8 @@ module ainalloc_mod
 
 contains
 
-      subroutine ainalloc
+  subroutine ainalloc
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -42,38 +43,38 @@ contains
 
       lnyxgrs=(iyp1+1)*(jxp1+1)*ngen*lrors
       lyxgsp2=(iyp1+1)*(jxp1+1)*ngen*(lrors+2)
-      lnyxgrz=(iyp1+1)*(jxp1+1)*ngen*lrz
+      lnyxgrz=(iyp1+1)*(jxp1+1)*ngen*setup0%lrz
       lnyxnrs=iy*jx*ngen*lrors
       lnyxnrs2=iy*jx*ngen*lrors*2
       lnyxrs=iy*jx*lrors
-      lnyxrz=iy*jx*lrz
-      lnefnorz=nefitera*nonch*lrz
+      lnyxrz=iy*jx*setup0%lrz
+      lnefnorz=nefitera*nonch*setup0%lrz
       lnypx2=(iy+1)*(jxp1+1)*lrors
       lny2xp=(iyp1+1)*(jx+1)*lrors
       lniyp=(iy+1)*lrors
       lniy=iy*lrors
-      lniyrmx=iy*lrzmax
+      lniyrmx=iy*setup0%lrzmax
       lniyrsp=iy*(lrors+1)
-      lnlzmx=lza*lrzmax
+      lnlzmx=lza*setup0%lrzmax
       lnoncrs=nonch*lrors
       lnoncsx=nonch*lrors
-      lnoncmx=nonch*lrzmax
-      lnlfield=lfielda*lrzmax
-      lnincz=incza*lrzmax
-      lninczp=inczpa*lrzmax
-      lnjx=jx*lrzmax
-      lnlzmxp=lz*(mx+1)*lrzmax
-      lniylzlra=iy*lz*lrzmax
-      lniylzlr=iy*lz*lrz
+      lnoncmx=nonch*setup0%lrzmax
+      lnlfield=lfielda*setup0%lrzmax
+      lnincz=incza*setup0%lrzmax
+      lninczp=inczpa*setup0%lrzmax
+      lnjx=jx*setup0%lrzmax
+      lnlzmxp=lz*(mx+1)*setup0%lrzmax
+      lniylzlra=iy*lz*setup0%lrzmax
+      lniylzlr=iy*lz*setup0%lrz
       lnxngrs=jx*ngen*lrors
       lnxngrs5=jx*ngen*lrors*5
-      lnyngmx=iy*ngen*lrzmax
-      lnlzgne=lz*(ngen+1)*negyrga*lrzmax
-      lnylzm2=iy*lz*(mx+1+1)*lrzmax
-      lnylzm=iy*lz*(mx+1)*lrz
-      lnylzm1=iy*lz*(mx+1)*lrzmax
+      lnyngmx=iy*ngen*setup0%lrzmax
+      lnlzgne=lz*(ngen+1)*negyrga*setup0%lrzmax
+      lnylzm2=iy*lz*(mx+1+1)*setup0%lrzmax
+      lnylzm=iy*lz*(mx+1)*setup0%lrz
+      lnylzm1=iy*lz*(mx+1)*setup0%lrzmax
       lnnonng=nonch*ngen*lrors
-      lnnonz=nonch*lrz
+      lnnonz=nonch*setup0%lrz
       lnj=jx
       lnj1=jxp1
       lni=iy
@@ -88,7 +89,7 @@ contains
       lnjfp=jfl+1
       lnjxjf=jx*jfl
       lniyjxlz=iy*jx*lz
-      lni0lzlr=(i0param+1)*lz*lrz
+      lni0lzlr=(i0param+1)*lz*setup0%lrz
 
 !     Temporary add (bobh 960724)
       lnipjpxy=ipxy*jpxy
@@ -104,7 +105,7 @@ contains
       if (implct.eq."enabled") lnrhs=iyjx
       if (soln_method.eq.'it3dv' .or. soln_method.eq.'it3drv') &
            lnrhs=iyjx*lrza
-      lnjnsl=jx*ngen*nsoa*lrzmax
+      lnjnsl=jx*ngen*nsoa*setup0%lrzmax
       lnjmpn=jx*(msxr+1)*nena*2
 
 !     New pointer use in this code: fully pointered variables, currv_*,
@@ -185,19 +186,19 @@ contains
       istat_tot=istat_tot+istat
       velsou2 = zero
 
-      allocate(source(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
+      allocate(source(0:iy+1,0:jx+1,ngen,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       source = zero
 
-      allocate(gone(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
+      allocate(gone(0:iy+1,0:jx+1,ngen,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       gone = zero
 
-      allocate(egylosa(0:iy+1,0:jx+1,ngen,lrz),STAT=istat)
+      allocate(egylosa(0:iy+1,0:jx+1,ngen,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(egylosa,zero,SIZE(egylosa))
 
-      allocate(i0tran(i0param+1,lz,lrz),STAT=istat)
+      allocate(i0tran(i0param+1,lz,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call ibcast(i0tran,0,SIZE(i0tran))
 
@@ -235,31 +236,31 @@ contains
       allocate(cex(iy,jx,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(cex,zero,SIZE(cex))
-      allocate(synca(iy,jx,lrz),STAT=istat)
+      allocate(synca(iy,jx,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(synca,zero,SIZE(synca))
-      allocate(syncd(iy,jx,lrz),STAT=istat)
+      allocate(syncd(iy,jx,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(syncd,zero,SIZE(syncd))
-      allocate(taulos(iy,jx,lrz),STAT=istat)
+      allocate(taulos(iy,jx,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(taulos,zero,SIZE(taulos))
-      allocate(psi0bar(lrz,0:nstop),STAT=istat)
+      allocate(psi0bar(setup0%lrz,0:nstop),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psi0bar,one,SIZE(psi0bar))
-      allocate(delecfld0(1:lrz,1:nstop),STAT=istat)
+      allocate(delecfld0(1:setup0%lrz,1:nstop),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(delecfld0,zero,SIZE(delecfld0))
-      allocate(elecfldn(0:lrz+1,0:nstop,0:nampfmax),STAT=istat)
+      allocate(elecfldn(0:setup0%lrz+1,0:nstop,0:nampfmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(elecfldn,zero,SIZE(elecfldn))
-      allocate(delecfld0n(1:lrz,1:nstop,1:nampfmax),STAT=istat)
+      allocate(delecfld0n(1:setup0%lrz,1:nstop,1:nampfmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(delecfld0n,zero,SIZE(delecfld0n))
 !     nefitera=10, presently.
-!BH171231      allocate(elecn(1:lrz,0:nstop,nefitera),STAT=istat)
+!BH171231      allocate(elecn(1:setup0%lrz,0:nstop,nefitera),STAT=istat)
 !BH171231      Fixing write of elecn in tdoutput elecn(,nch(1),)
-      allocate(elecn(1:lrz,0:nstop+1,nefitera),STAT=istat)
+      allocate(elecn(1:setup0%lrz,0:nstop+1,nefitera),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(elecn,zero,SIZE(elecn))
 
@@ -302,40 +303,40 @@ contains
       allocate(cynt2(iy,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(cynt2,zero,SIZE(cynt2))
-      allocate(batot(iy,lrzmax),STAT=istat)
+      allocate(batot(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(batot,zero,SIZE(batot))
-      allocate(lmax(iy,lrzmax),STAT=istat)
+      allocate(lmax(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call ibcast(lmax,0,SIZE(lmax))
-      allocate(vpint(iy,lrzmax),STAT=istat)
+      allocate(vpint(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(vpint,zero,SIZE(vpint))
-      allocate(psiiv(iy,lrzmax),STAT=istat)
+      allocate(psiiv(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psiiv,zero,SIZE(psiiv))
-      allocate(psiba(iy,lrzmax),STAT=istat)
+      allocate(psiba(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psiba,zero,SIZE(psiba))
-      allocate(psisq(iy,lrzmax),STAT=istat)
+      allocate(psisq(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psisq,zero,SIZE(psisq))
-      allocate(psicu(iy,lrzmax),STAT=istat)
+      allocate(psicu(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psicu,zero,SIZE(psicu))
-      allocate(psiqu(iy,lrzmax),STAT=istat)
+      allocate(psiqu(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psiqu,zero,SIZE(psiqu))
-      allocate(bavpd(iy,lrzmax),STAT=istat)
+      allocate(bavpd(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(bavpd,zero,SIZE(bavpd))
-      allocate(bavdn(iy,lrzmax),STAT=istat)
+      allocate(bavdn(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(bavdn,zero,SIZE(bavdn))
-      allocate(psiir(iy,lrzmax),STAT=istat)
+      allocate(psiir(iy,setup0%lrzmax),STAT=istat)
       call bcast(psiir,zero,SIZE(psiir))
       istat_tot=istat_tot+istat
-      allocate(vderb(iy,lrzmax),STAT=istat)
+      allocate(vderb(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(vderb,zero,SIZE(vderb))
       allocate(sinn(iy,lrors),STAT=istat)
@@ -347,50 +348,50 @@ contains
       allocate(ymid(iy,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ymid,zero,SIZE(ymid))
-      allocate(tau(iy,lrzmax),STAT=istat)
+      allocate(tau(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(tau,zero,SIZE(tau))
-      allocate(vptb(iy,lrzmax),STAT=istat)
+      allocate(vptb(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(vptb,zero,SIZE(vptb))
-      allocate(zboun(iy,lrzmax),STAT=istat)
+      allocate(zboun(iy,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(zboun,zero,SIZE(zboun))
       allocate(idx(iy,0:lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call ibcast(idx,0,SIZE(idx))
-      !---- (lza,lrzmax) arrays (at pol. angle grid) ---!
-      allocate(imax(lza,lrzmax),STAT=istat)
+      !---- (lza,setup0%lrzmax) arrays (at pol. angle grid) ---!
+      allocate(imax(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call ibcast(imax,0,SIZE(imax))
-      allocate(dz(lza,lrzmax),STAT=istat)
+      allocate(dz(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(dz,zero,SIZE(dz))
-      allocate(pol(lza,lrzmax),STAT=istat)
+      allocate(pol(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pol,zero,SIZE(pol))
-      allocate(solrz(lza,lrzmax),STAT=istat)
+      allocate(solrz(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(solrz,zero,SIZE(solrz))
-      allocate(solzz(lza,lrzmax),STAT=istat)
+      allocate(solzz(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(solzz,zero,SIZE(solzz))
-      allocate(thtab(lza,lrzmax),STAT=istat)
+      allocate(thtab(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(thtab,zero,SIZE(thtab))
-      allocate(z(lza,lrzmax),STAT=istat)
+      allocate(z(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(z,zero,SIZE(z))
-      allocate(zmid(lza,lrzmax),STAT=istat)
+      allocate(zmid(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(zmid,zero,SIZE(z))
-      allocate(bbpsi(lza,lrzmax),STAT=istat)
+      allocate(bbpsi(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(bbpsi,zero,SIZE(bbpsi))
-      allocate(bpolz(lza,lrzmax),STAT=istat)
+      allocate(bpolz(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(bpolz,zero,SIZE(bbpsi))
-      allocate(btorz(lza,lrzmax),STAT=istat)
+      allocate(btorz(lza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(btorz,zero,SIZE(bbpsi))
 
@@ -402,7 +403,7 @@ contains
       call bcast(ptime,zero,SIZE(ptime))
 !BH120315: Prevent out of bounds reference:
 !BH120315:      allocate(sptzrp(nonch,lrors),STAT=istat)
-      allocate(sptzrp(nonch,max(lrors,lrzmax)),STAT=istat)
+      allocate(sptzrp(nonch,max(lrors,setup0%lrzmax)),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(sptzrp,zero,SIZE(sptzrp))
       allocate(pefld(nonch,lrors),STAT=istat)
@@ -411,82 +412,82 @@ contains
       allocate(rovsp(nonch,lrors),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(rovsp,zero,SIZE(rovsp))
-      allocate(restp(nonch,lrzmax),STAT=istat)
+      allocate(restp(nonch,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(restp,zero,SIZE(restp))
-      allocate(restnp(nonch,lrzmax),STAT=istat)
+      allocate(restnp(nonch,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(restnp,zero,SIZE(restnp))
-      allocate(vpov(nonch,lrzmax),STAT=istat)
+      allocate(vpov(nonch,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(vpov,zero,SIZE(vpov))
-      allocate(es(lfielda,lrzmax),STAT=istat)
+      allocate(es(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(es,zero,SIZE(es))
-      allocate(bpsi(lfielda,lrzmax),STAT=istat)
+      allocate(bpsi(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(bpsi,zero,SIZE(bpsi))
-      allocate(d2bpsi(lfielda,lrzmax),STAT=istat)
+      allocate(d2bpsi(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(d2bpsi,zero,SIZE(d2bpsi))
-      allocate(d2solrz(lfielda,lrzmax),STAT=istat)
+      allocate(d2solrz(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(d2solrz,zero,SIZE(d2solrz))
-      allocate(d2solzz(lfielda,lrzmax),STAT=istat)
+      allocate(d2solzz(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(d2solzz,zero,SIZE(d2solzz))
-      allocate(d2bpolz(lfielda,lrzmax),STAT=istat)
+      allocate(d2bpolz(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(d2bpolz,zero,SIZE(d2bpolz))
-      allocate(d2btorz(lfielda,lrzmax),STAT=istat)
+      allocate(d2btorz(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(d2btorz,zero,SIZE(d2btorz))
-      allocate(d2thtpol(lfielda,lrzmax),STAT=istat)
+      allocate(d2thtpol(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(d2thtpol,zero,SIZE(d2thtpol))
-      allocate(d2es(lfielda,lrzmax),STAT=istat)
+      allocate(d2es(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(d2es,zero,SIZE(d2es))
-      allocate(thtpol(lfielda,lrzmax),STAT=istat)
+      allocate(thtpol(lfielda,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(thtpol,zero,SIZE(thtpol))
-      allocate(esfi(incza,lrzmax),STAT=istat)
+      allocate(esfi(incza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(esfi,zero,SIZE(esfi))
-      allocate(psiesfi(incza,lrzmax),STAT=istat)
+      allocate(psiesfi(incza,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psiesfi,zero,SIZE(psiesfi))
-      allocate(psifi(inczpa,lrzmax),STAT=istat)
+      allocate(psifi(inczpa,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psifi,zero,SIZE(psifi))
-      allocate(espsifi(inczpa,lrzmax),STAT=istat)
+      allocate(espsifi(inczpa,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(espsifi,zero,SIZE(espsifi))
-      allocate(soupp(jx,lrzmax),STAT=istat)
+      allocate(soupp(jx,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(soupp,zero,SIZE(soupp))
-      allocate(waa(lz,0:mx,lrzmax),STAT=istat)
+      allocate(waa(lz,0:mx,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(waa,zero,SIZE(waa))
-      allocate(wbb(lz,0:mx,lrzmax),STAT=istat)
+      allocate(wbb(lz,0:mx,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(wbb,zero,SIZE(wbb))
-      allocate(cosz(iy,lz,lrzmax),STAT=istat)
+      allocate(cosz(iy,lz,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(cosz,zero,SIZE(cosz))
-      allocate(dtau(iy,lz,lrzmax),STAT=istat)
+      allocate(dtau(iy,lz,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(dtau,zero,SIZE(dtau))
-      allocate(sinz(iy,lz,lrzmax),STAT=istat)
+      allocate(sinz(iy,lz,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(sinz,zero,SIZE(sinz))
-      allocate(tanz(iy,lz,lrzmax),STAT=istat)
+      allocate(tanz(iy,lz,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(tanz,zero,SIZE(tanz))
-      allocate(yz(iy,lz,lrzmax),STAT=istat)
+      allocate(yz(iy,lz,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(yz,zero,SIZE(yz))
-      allocate(tot(iy,lz,lrzmax),STAT=istat)
+      allocate(tot(iy,lz,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(tot,zero,SIZE(tot))
       allocate(vflux(jx,ngen,lrors),STAT=istat)
@@ -495,10 +496,10 @@ contains
       allocate(f_aveth(jx,ngen,lrors,5),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(f_aveth,zero,SIZE(f_aveth))
-      allocate(sincosba(iy,ngen,lrzmax),STAT=istat)
+      allocate(sincosba(iy,ngen,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(sincosba,zero,SIZE(sincosba))
-      allocate(densz(lz,ngen+1,negyrga,lrzmax),STAT=istat)
+      allocate(densz(lz,ngen+1,negyrga,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(densz,zero,SIZE(densz))
 
@@ -515,25 +516,25 @@ contains
 !BH      endif
       mmxp1=mmx+1
 
-      allocate(ss(iy,lz,0:mmxp1,lrzmax),STAT=istat)
+      allocate(ss(iy,lz,0:mmxp1,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ss,zero,SIZE(ss))
-      allocate(dcofleg(iy,lz,0:mmx,lrz),STAT=istat)
+      allocate(dcofleg(iy,lz,0:mmx,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(dcofleg,zero,SIZE(dcofleg))
-      allocate(dpcosz(iy,lz,0:mmx,lrzmax),STAT=istat)
+      allocate(dpcosz(iy,lz,0:mmx,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(dpcosz,zero,SIZE(dpcosz))
-      allocate(ssy(iy,lz,0:mx,lrzmax),STAT=istat)
+      allocate(ssy(iy,lz,0:mx,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ssy,zero,SIZE(ssy))
-      allocate(ssyy(iy,lz,0:mx,lrzmax),STAT=istat)
+      allocate(ssyy(iy,lz,0:mx,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ssyy,zero,SIZE(ssyy))
-      allocate(ssyi(iy,lz,0:mx,lrzmax),STAT=istat)
+      allocate(ssyi(iy,lz,0:mx,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ssyi,zero,SIZE(ssyi))
-      allocate(ssyyy(iy,lz,0:mx,lrzmax),STAT=istat)
+      allocate(ssyyy(iy,lz,0:mx,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(ssyyy,zero,SIZE(ssyyy))
 
@@ -558,28 +559,28 @@ contains
       istat_tot=istat_tot+istat
       call bcast(pengym,zero,SIZE(pengym))
 
-      allocate(pdenra(nonch,lrz),STAT=istat)
+      allocate(pdenra(nonch,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pdenra,zero,SIZE(pdenra))
-      allocate(pcurra(nonch,lrz),STAT=istat)
+      allocate(pcurra(nonch,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pcurra,zero,SIZE(pcurra))
-      allocate(pfdenra(nonch,lrz),STAT=istat)
+      allocate(pfdenra(nonch,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pfdenra,zero,SIZE(pfdenra))
-      allocate(pfcurra(nonch,lrz),STAT=istat)
+      allocate(pfcurra(nonch,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pfcurra,zero,SIZE(pfcurra))
-      allocate(pucrit(nonch,lrz),STAT=istat)
+      allocate(pucrit(nonch,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(pucrit,zero,SIZE(pucrit))
-      allocate(peoe0(nonch,lrz),STAT=istat)
+      allocate(peoe0(nonch,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(peoe0,zero,SIZE(peoe0))
-      allocate(psrc(nonch,lrz),STAT=istat)
+      allocate(psrc(nonch,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(psrc,zero,SIZE(psrc))
-      allocate(peoed(nonch,lrz),STAT=istat)
+      allocate(peoed(nonch,setup0%lrz),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(peoed,zero,SIZE(peoed))
 
@@ -919,7 +920,7 @@ contains
       allocate(rhs(lnrhs),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(rhs,zero,SIZE(rhs))
-      allocate(sovt(jx,ngen,nsoa,lrzmax),STAT=istat)
+      allocate(sovt(jx,ngen,nsoa,setup0%lrzmax),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(sovt,zero,SIZE(sovt))
       allocate(sigsxr(jx,0:msxr,nena,2),STAT=istat)
@@ -1032,7 +1033,7 @@ contains
       allocate(bqlm(iy,jx),STAT=istat)
       call bcast(bqlm,zero,iyjx)
 
-      iyjx2l=max(iy+2,lrz)*(jx+2)
+      iyjx2l=max(iy+2,setup0%lrz)*(jx+2)
       allocate(tem1(iyjx2l),STAT=istat)
       istat_tot=istat_tot+istat
       call bcast(tem1,zero,SIZE(tem1))
@@ -1117,9 +1118,9 @@ contains
            .or. lossmode(1).eq.'simplbn1' &
            .or. lossmode(1).eq.'simplbn2') then
          !YuP[2017-11-21] Need lossmode(k), checking all k?
-         allocate(deltarho(iy,lz,lrzmax),STAT=istat)
+         allocate(deltarho(iy,lz,setup0%lrzmax),STAT=istat)
          call bcast(deltarho,zero,SIZE(deltarho))
-         allocate(deltarhop(nt_delta,lz,lrzmax),STAT=istat)
+         allocate(deltarhop(nt_delta,lz,setup0%lrzmax),STAT=istat)
          call bcast(deltarhop,zero,SIZE(deltarhop))
          allocate(deltarz(nr_delta,nz_delta,nt_delta),STAT=istat)
          call bcast(deltarz,zero,SIZE(deltarz))
@@ -1159,29 +1160,29 @@ contains
 
       allocate(xlndnz(ngen+1,negyrga),STAT=istat)
       call bcast(xlndnz,zero,(ngen+1)*negyrga)
-      allocate(sounor(ngen,nsoa,lz,lrz),STAT=istat)
-      call bcast(sounor,zero,ngen*nsoa*lz*lrz)
+      allocate(sounor(ngen,nsoa,lz,setup0%lrz),STAT=istat)
+      call bcast(sounor,zero,ngen*nsoa*lz*setup0%lrz)
 
       call bcast(sgain,zero,8*ngena)
 
       allocate(truncd(jx),STAT=istat)
       call bcast(truncd,one,jx)
 
-!      allocate(eflux_r_npa(nen_npa,nv_npa,4*lrz),STAT=istat)
-!      allocate(rho_npa(nv_npa,4*lrz),STAT=istat)
-!      allocate(s_npa(nv_npa,4*lrz),STAT=istat)
-!      allocate(ds_npa(nv_npa,4*lrz),STAT=istat)
+!      allocate(eflux_r_npa(nen_npa,nv_npa,4*setup0%lrz),STAT=istat)
+!      allocate(rho_npa(nv_npa,4*setup0%lrz),STAT=istat)
+!      allocate(s_npa(nv_npa,4*setup0%lrz),STAT=istat)
+!      allocate(ds_npa(nv_npa,4*setup0%lrz),STAT=istat)
 
       !YuP[07-2016] added: for neutron flux diagnostics (along view lines)
 !      allocate(flux_fus_f(4,nv_fus),STAT=istat)
 !      allocate(flux_fus_m(4,nv_fus),STAT=istat)
 !      allocate(flux_neutron_f(nv_fus), STAT=istat)
 !      allocate(flux_neutron_m(nv_fus), STAT=istat)
-!      allocate(flux_rad_fus_f(4,nv_fus,4*lrz),STAT=istat)
-!      allocate(flux_rad_fus_m(4,nv_fus,4*lrz),STAT=istat)
-!      allocate(rho_fus(nv_fus,4*lrz),STAT=istat)
-!      allocate(s_fus(nv_fus,4*lrz),STAT=istat)
-!      allocate(ds_fus(nv_fus,4*lrz),STAT=istat)
+!      allocate(flux_rad_fus_f(4,nv_fus,4*setup0%lrz),STAT=istat)
+!      allocate(flux_rad_fus_m(4,nv_fus,4*setup0%lrz),STAT=istat)
+!      allocate(rho_fus(nv_fus,4*setup0%lrz),STAT=istat)
+!      allocate(s_fus(nv_fus,4*setup0%lrz),STAT=istat)
+!      allocate(ds_fus(nv_fus,4*setup0%lrz),STAT=istat)
 
 !     Check that allocations were OK
       if (istat_tot.ne.0) then

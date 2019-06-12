@@ -53,10 +53,10 @@ contains
       if (eqmod.ne."enabled") return
 
 !.......................................................................
-!     pick equilpsp values according to lrindx mesh
+!     pick equilpsp values according to setup0%lrindx mesh
 !.......................................................................
-      do 20 l=1,lrz
-        zeqpsir(l)=equilpsp(lrindx(l))
+      do 20 l=1,setup0%lrz
+        zeqpsir(l)=equilpsp(setup0%lrindx(l))
 20   enddo
 !..................................................................
 !     file (the file used to reinitialize the MHD equilibrium code).
@@ -78,7 +78,7 @@ contains
 !..................................................................
 
         ipestg=3
-        call firstdrv(equilpsp(1),prest,prestp,lrzmax)
+        call firstdrv(equilpsp(1),prest,prestp,setup0%lrzmax)
 
 !..................................................................
 !     Compute <JparB> (volume, or flux surface average).
@@ -91,8 +91,8 @@ contains
 !     Input currents are in Amps/cm**2
 !..................................................................
 
-        do 5 ll=1,lrz
-          ilr=lrindx(ll)
+        do 5 ll=1,setup0%lrz
+          ilr=setup0%lrindx(ll)
           jparb(ll)=0.0
           jparbp(ll)=0.0
           if (zmaxpsi(ilr).ne.zero) then
@@ -112,16 +112,16 @@ contains
 !..................................................................
 
         factr=-8.*pi/clight
-        do 101 ll=1,lrz
-          ilr=lrindx(ll)
+        do 101 ll=1,setup0%lrz
+          ilr=setup0%lrindx(ll)
           tr1(ll)=bmdplne(ilr)**2*psidz(ilr)/zmaxpsi(ilr)
  101    enddo
         if (mode.ne.0) then
 !BH070116          fpsiz2(0)=fpsiar(nnv)**2
           fpsiz2(0)=fpsiar(nfp)**2
           do 100 nit=1,niterate
-            do 120 ll=1,lrz
-              ilr=lrindx(ll)
+            do 120 ll=1,setup0%lrz
+              ilr=setup0%lrindx(ll)
               fpsiz2(ll)=fpsiz2(ll-1)+(equilpsp(ilr)-equilpsp(ilr-1))* &
                 factr*(1./tr1(ll))*(fpsiz(ll)*(jparbp(ll)+jparbt(ll))+ &
                 clight*fpsiz(ll)**2*prestp(ilr))
@@ -132,7 +132,7 @@ contains
 !..................................................................
 
 
-            do 130 ll=1,lrz
+            do 130 ll=1,setup0%lrz
               fpsiz(ll)=sqrt(fpsiz2(ll))
 130        end do
 100     end do
@@ -142,8 +142,8 @@ contains
 !     ff'
 !..................................................................
 
-        do 140 ll=1,lrz
-          ilr=lrindx(ll)
+        do 140 ll=1,setup0%lrz
+          ilr=setup0%lrindx(ll)
           ffpsiz(ll)=(1./tr1(ll))*factr*(fpsiz(ll)*(jparbp(ll)+ &
             jparbt(ll))+clight*fpsiz(ll)**2*prestp(ilr))*.5
 140    end do
@@ -153,8 +153,8 @@ contains
 !..................................................................
 
         toteqd=0.
-        do 150 ll=1,lrz
-          ilr=lrindx(ll)
+        do 150 ll=1,setup0%lrz
+          ilr=setup0%lrindx(ll)
           toteqd=toteqd-clight/(8.*pi**2)*ffpsiz(ll)*onovrpz(ilr,2) &
             *dvol(ilr)-clight/twopi*prestp(ilr)*dvol(ilr)
 150    end do
@@ -174,8 +174,8 @@ contains
 !     ff' and f
 !..................................................................
 
-        call coeff1(lrz,zeqpsir(1),fpsiz,d2fpsiz,i1p,1,workk)
-        call coeff1(lrz,zeqpsir(1),ffpsiz,d2ffpsiz,i1p,1,workk)
+        call coeff1(setup0%lrz,zeqpsir(1),fpsiz,d2fpsiz,i1p,1,workk)
+        call coeff1(setup0%lrz,zeqpsir(1),ffpsiz,d2ffpsiz,i1p,1,workk)
         itab(1)=1
         itab(2)=0
         itab(3)=0
@@ -199,14 +199,14 @@ contains
         call coeff1(nconteqn-1,eqpsi_(2),q_(2),d2q_(2),i1p,1,workk)
 !BH070116        do 50 ne=1,nnv
         do 50 ne=1,nfp
-          call terp1(lrzmax,equilpsp(1),prest,d2prest,psiar(ne),1,tab, &
+          call terp1(setup0%lrzmax,equilpsp(1),prest,d2prest,psiar(ne),1,tab, &
             itab)
           prar(ne)=tab(1)
           if (prar(ne).lt.0.) prar(ne)=0.
-          call terp1(lrz,zeqpsir(1),fpsiz,d2fpsiz,psiar(ne),1,tab, &
+          call terp1(setup0%lrz,zeqpsir(1),fpsiz,d2fpsiz,psiar(ne),1,tab, &
             itab)
           fpsiar(ne)=tab(1)
-          call terp1(lrz,zeqpsir(1),ffpsiz,d2ffpsiz,psiar(ne),1,tab, &
+          call terp1(setup0%lrz,zeqpsir(1),ffpsiz,d2ffpsiz,psiar(ne),1,tab, &
             itab)
           ffpar(ne)=tab(1)
           call terp1(nconteqn-1,eqpsi_(2),q_(2),d2q_(2),psiar(ne),1,tab, &
@@ -317,14 +317,14 @@ contains
         if (k.ne.kelecg .and. k.ne.kelecm) then
           ku=ku+1
           atw(ku)=fmass(k)/1.6724e-24
-          do 303 l=1,lrzmax
+          do 303 l=1,setup0%lrzmax
             z1(l,ku)=bnumb(k)
 303      end do
         endif
 302  end do
       k=kelecm
       if (k.eq.0) k=kelecg
-      do 304 l=1,lrzmax
+      do 304 l=1,setup0%lrzmax
         ene(l)=reden(k,l)*1.e6
         te(l)=temp(k,l)
 304  end do
@@ -332,7 +332,7 @@ contains
       do 305 k=1,ntotal
         if (k.ne.kelecg .and. k.ne.kelecm) then
           ku=ku+1
-          do 306 l=1,lrzmax
+          do 306 l=1,setup0%lrzmax
             enp(l,ku)=reden(k,l)*1.e6
             ti(l,ku)=temp(k,l)
 306      end do
@@ -375,10 +375,10 @@ contains
         open(unit=17,file="tdeqdsk",delim='apostrophe',status='unknown')
       endif
 !BH:000906  Maybe problem with format of the following write(17,210)
-!BH070116      !write(17,210) mnemonic,ipestg,nnr,nnz,nnv_
+!BH070116      !write(17,210) setup0%mnemonic,ipestg,nnr,nnz,nnv_
 !BH070116:  Swe ymideqd=0.  BE CAREFUL in future something else needed.
       ymideqd=0.
-      write(17,210) mnemonic,ipestg,nnr,nnz,nfp_
+      write(17,210) setup0%mnemonic,ipestg,nnr,nnz,nfp_
       write(17,220) rbox,zbox,radmaj,rboxdst,ymideqd
       write(17,220) raxis,zaxis,psimag,psilim,btor
       write(17,220) toteqd,(tem1(i),i=1,4)
@@ -421,7 +421,7 @@ contains
 !     we put out enough information so that the eqdsk could be used as
 !     a restart file.
 !
-!     lrzmax  = number of radial mesh points
+!     setup0%lrzmax  = number of radial mesh points
 !     nprim= number of primary ion species
 !     nimp = number of impurities
 !     nti  = number of species for which ion temperatures given
@@ -440,27 +440,27 @@ contains
 !..................................................................
 
         nti=1
-        write(17,221) lrzmax,nprim,nimp,nti,lrors,lrz
+        write(17,221) setup0%lrzmax,nprim,nimp,nti,lrors,setup0%lrz
         write (17,220) (atw(k),k=1,nion)
         do 700  k=1,nion
- 700    write(17,220) (z1(j,k),j=1,lrzmax)
-        write(17,220) (zeff(j),j=1,lrzmax)
-        do 705  j=1,lrzmax
+ 700    write(17,220) (z1(j,k),j=1,setup0%lrzmax)
+        write(17,220) (zeff(j),j=1,setup0%lrzmax)
+        do 705  j=1,setup0%lrzmax
  705    dumm(j)=1.e-2*radmin*rya(j)
-        write(17,220) (dumm(j),j=1,lrzmax)
-        do 706 j=1,lrzmax
+        write(17,220) (dumm(j),j=1,setup0%lrzmax)
+        do 706 j=1,setup0%lrzmax
           dumm(j)=-equilpsi(j)*1.e-8
 706    end do
-        write(17,220) (dumm(j),j=1,lrzmax)
-        write(17,220) (te(j),j=1,lrzmax)
+        write(17,220) (dumm(j),j=1,setup0%lrzmax)
+        write(17,220) (te(j),j=1,setup0%lrzmax)
         do 710  k=1,nti
- 710    write(17,220) (ti(j,k),j=1,lrzmax)
-        write(17,220)  (ene(j),j=1,lrzmax)
+ 710    write(17,220) (ti(j,k),j=1,setup0%lrzmax)
+        write(17,220)  (ene(j),j=1,setup0%lrzmax)
         do 730 k=1,nprim
- 730    write(17,220) (enp(j,k),j=1,lrzmax)
+ 730    write(17,220) (enp(j,k),j=1,setup0%lrzmax)
         if (nimp.ne.0)  then
           do 740 k=1,nimp
- 740      write(17,220) (enp(j,k),j=1,lrzmax)
+ 740      write(17,220) (enp(j,k),j=1,setup0%lrzmax)
         endif
       endif
       close(unit=17)

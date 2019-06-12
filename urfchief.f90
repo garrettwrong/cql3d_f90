@@ -23,7 +23,8 @@ module urfchief_mod
 
 contains
 
-      subroutine urfchief
+  subroutine urfchief
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -175,7 +176,7 @@ contains
 
 !.......................................................................
 !     compute damping and power but do not update delpwr according
-!     to what has been absorbed before => compatible with lrz<lrzmax
+!     to what has been absorbed before => compatible with setup0%lrz<setup0%lrzmax
 !.......................................................................
 
         call urfdamp0(irfpwr,iopt)
@@ -248,7 +249,7 @@ contains
 
 !..................................................................
 !     Call the coefficient generator.
-!     Radial surfaces: lrz (and not lrors)
+!     Radial surfaces: setup0%lrz (and not lrors)
 !     Generate B,C,E and F
 !..................................................................
       call cpu_time(t_urf1) !-.-.-.-.-.-.-.-.-.-.-.-.-.
@@ -262,7 +263,7 @@ contains
       imprf=1
 
 
-      do 50 ll=1,lrz
+      do 50 ll=1,setup0%lrz
 !..................................................................
 !     Read flux surface dependent data from disk.
 !     for midplane parameter values
@@ -277,7 +278,7 @@ contains
 !..................................................................
 !     Plot out diffusion coefficients
 !..................................................................
-        if (noplots.ne."enabled1") call urfbplt !only when plturfb="enabled"
+        if (setup0%noplots.ne."enabled1") call urfbplt !only when plturfb="enabled"
                                                 !or  plturfb='color'
  50   continue
 

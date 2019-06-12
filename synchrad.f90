@@ -39,8 +39,8 @@ contains
     dimension synca_geom(jx),syncd_geom(jx)
 
     if (syncrad .eq. "disabled" .or. kelecg .eq. 0) return
-    call bcast(synca,zero,iyjx*lrz)
-    call bcast(syncd,zero,iyjx*lrz)
+    call bcast(synca,zero,iyjx*setup0%lrz)
+    call bcast(syncd,zero,iyjx*setup0%lrz)
 
     if (syncrad.eq."gyro" .or. syncrad.eq."gyrogeom") then
 

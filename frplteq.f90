@@ -16,6 +16,7 @@ module frplteq_mod
 contains
 
   subroutine frplteq(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep,nfrplt,frplt)
+    use cqlconf_mod, only : setup0
     use param_mod
     use cqlcomm_mod
     use r8subs_mod, only : dcopy
@@ -49,7 +50,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
     ! make plots on mpirank.eq.0 only
 
-    if (noplots.eq."enabled1") return
+    if (setup0%noplots.eq."enabled1") return
 
     if (frplt.eq."disabled") return
 
@@ -93,9 +94,9 @@ contains
           CALL PGLAB('Major radius (cms)','Vert height (cms)', 'NBI Deposition')
           endif
     xyplotmax=0. ! to set limits in (X,Y) plots
-    do 10 l=1,lrz,nconskp
+    do 10 l=1,setup0%lrz,nconskp
        l1=l
-       if (l1.gt.lrz-nconskp) l1=lrz
+       if (l1.gt.setup0%lrz-nconskp) l1=setup0%lrz
        call tdnflxs(l1)
        call dcopy(lfield,solr(1:lfield,lr_),1,tlorb1,1)
        call dcopy(lfield,solz(1:lfield,lr_),1,tlorb2,1)
@@ -156,12 +157,12 @@ contains
           RTAB1(ilim)=rlimiter(ilim)
           RTAB2(ilim)=zlimiter(ilim)
        enddo
-               CALL PGSLW(lnwidth*2) ! bold
+               CALL PGSLW(setup0%lnwidth*2) ! bold
                CALL PGLINE(nline,RTAB1,RTAB2)
        if(machine.eq."mirror") then
                   CALL PGLINE(nline,-RTAB1,RTAB2) !mirror area to the left of Z-axis
        endif
-               CALL PGSLW(lnwidth) ! restore
+               CALL PGSLW(setup0%lnwidth) ! restore
     endif
 
     !..................................................................
@@ -202,14 +203,14 @@ contains
           CALL PGLAB('X (cms)','Y (cms)','NBI Deposition')
     ! Plot circles for the largest and smallest FP surfaces.
     nline=LFIELDA ! could be other number, but RTAB1 has LFIELDA size
-    r_surf=rpcon(lrz)  ! R radius of largest FP surf, outboard
+    r_surf=rpcon(setup0%lrz)  ! R radius of largest FP surf, outboard
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
           CALL PGLINE(nline,RTAB1,RTAB2)
-    r_surf=rmcon(lrz)  ! R radius of largest FP surf, inboard
+    r_surf=rmcon(setup0%lrz)  ! R radius of largest FP surf, inboard
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
@@ -253,9 +254,9 @@ contains
           RTAB1(iline)= r_surf*cos(tora)
           RTAB2(iline)= r_surf*sin(tora)
        enddo
-               CALL PGSLW(lnwidth*2) ! bold
+               CALL PGSLW(setup0%lnwidth*2) ! bold
                CALL PGLINE(nline,RTAB1,RTAB2)
-               CALL PGSLW(lnwidth) ! restore
+               CALL PGSLW(setup0%lnwidth) ! restore
     endif
 
     !..................................................................

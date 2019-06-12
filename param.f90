@@ -5,7 +5,7 @@
   !     PARAMETERS CHOSEN BY USER FOLLOW
 
   !..................................................................
-  !     version is simply a mnemonic printed out to indicate
+  !     version is simply a setup0%mnemonic printed out to indicate
   !     the version of the source being run.  Further below, the non-
   !     user set parameter precursr indicates from which author-released
   !     version this source is descended.
@@ -30,7 +30,7 @@
   !
   !     lza is the number of poloidal mesh points for purposes of
   !     computing bounce averages (number of "z" mesh points).
-  !     (if cqlpmod="enabled", lza=lsa=number of mesh points
+  !     (if setup0%cqlpmod="enabled", lza=lsa=number of mesh points
   !     along the magnetic field line)
   !
   !     jx is the number of speed (momentum) mesh points.
@@ -127,7 +127,7 @@ module param_mod
   !     lsa should be .ge.lrza [BH081106:  perhaps this the usual
   !       case before big memory and bigger lrza cases.   Its
   !       contravention is causing an out-of-bounds ref for
-  !       cqlpmod.ne.enabled.   Could check code out further
+  !       setup0%cqlpmod.ne.enabled.   Could check code out further
   !       to see how essential it is.]
   !
   !     Note: Limitations on relative sizes of lrza, lsa, and lza!
@@ -149,7 +149,7 @@ module param_mod
 
   parameter(lrza=128)
   parameter(lsa=max(128,lrza), lsa1=lsa+1)
-  !     lza should be .ge. lsa. if cqlpmod, lz is set equal to ls
+  !     lza should be .ge. lsa. if setup0%cqlpmod, lz is set equal to setup0%ls
   parameter(lza=lsa)
   !     lrorsa should be equal to max of lrza and lsa
   parameter(lrorsa=lsa)

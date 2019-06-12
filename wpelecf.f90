@@ -20,7 +20,8 @@ contains
 !---real(c_double) function ghelec() !YuP[2019-05-31] now a scalar, see below
 
 !
-      subroutine wpelecf(kopt)
+  subroutine wpelecf(kopt)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use advnce_mod !here: in wpelecf.  To get fpi(),fpj(),qz(),ry()
@@ -53,7 +54,7 @@ contains
 !l    1. Computes the charge density.
 !.......................................................................
 
-      do l=1,ls
+      do l=1,setup0%ls
         z4pirho(l) = 0.0
       end do
 
@@ -66,7 +67,7 @@ contains
           ztra1=charge*bnumb(k)*4.*pi
           do 111 j=1,jx
             ztra2=ztra1*cint2(j)
-            do 112 l=1,ls
+            do 112 l=1,setup0%ls
               do 113 i=1,iy_(l)
                 z4pirho(l)=z4pirho(l)+ztra2*f(i,j,k,l)*cynt2(i,l)
  113          continue
@@ -86,8 +87,8 @@ contains
         if (k .eq. 0) go to 121
         if (k.le.ngen .and. kopt.le.10) go to 120
         ztra1=bnumb(k)*charge*4.*pi
-        do 122 l=1,ls
-          z4pirho(l)=z4pirho(l)+ztra1*denpar(k,lsindx(l))
+        do 122 l=1,setup0%ls
+          z4pirho(l)=z4pirho(l)+ztra1*denpar(k,setup0%lsindx(l))
  122    continue
  120  continue
  121  continue
@@ -96,22 +97,22 @@ contains
 !l    2. Compute the new parallel component of the electric field
 !.......................................................................
 
-      call dcopy(ls+2,elparnw(0:ls+1),1,elparol(0:ls+1),1)
+      call dcopy(setup0%ls+2,elparnw(0:setup0%ls+1),1,elparol(0:setup0%ls+1),1)
       zsumrho=0.0
       elparnw(1)=elpar0
       zel0cof=elparnw(1)/psipols(1)**2
-      do 200 l=2,ls
+      do 200 l=2,setup0%ls
         zsumrho=zsumrho+0.5*dszm5(l)*(z4pirho(l-1)/psis(l-1)+ &
           z4pirho(l)  /psis(l))
         elparnw(l)=psipols(l)**2/psis(l)*(zel0cof+zsumrho)
  200  continue
 
       if (sbdry .eq. "periodic") then
-        elparnw(0)=elparnw(ls)
-        elparnw(ls+1)=elparnw(1)
+        elparnw(0)=elparnw(setup0%ls)
+        elparnw(setup0%ls+1)=elparnw(1)
       else
         elparnw(0)=0.0
-        elparnw(ls+1)=0.0
+        elparnw(setup0%ls+1)=0.0
       endif
 
 !%OS  if (kopt.eq.1 .or. kopt.eq.11) return
@@ -126,7 +127,7 @@ contains
 
       do 300 k=1,ngen
         ztra1=bnumb(k)*charge/fmass(k)/vnorm
-        do 310 l=1,ls
+        do 310 l=1,setup0%ls
           zdepar=ztra1*(elparnw(l)-elparol(l))*0.25
           do 320 j=1,jx
             zdacofp=-zdepar*(x(j)+x(j+1-1/(jx+1-j)))**2

@@ -16,7 +16,7 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
-!     Storing values on whole mesh lrzmax and equilibrium quantities
+!     Storing values on whole mesh setup0%lrzmax and equilibrium quantities
 !     recall:
 !     lr_     : radial index
 !     l_      : spatial variable index

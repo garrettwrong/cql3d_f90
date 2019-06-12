@@ -32,7 +32,7 @@ contains
 
       go to 999
 
-      if (lrzmax.le.1) then
+      if (setup0%lrzmax.le.1) then
         if(idskf.eq. "disabled".or. n.ne.nstop+1)  return
       else
         if(idskf.eq. "disabled".or. n.ne.nstop)  return
@@ -41,11 +41,11 @@ contains
       open(unit=41,file='graph',status='unknown')
 !cc      close(unit=2) ! YuP: Why here?
       ilen=0
-      write(41,1004)  iy,jx,lrors,lrzmax
+      write(41,1004)  iy,jx,lrors,setup0%lrzmax
       write(41,1005)  vnorm
       write(41,1005)  ((y(i,l),i=1,iy),l=1,lrors)
       write(41,1005)  (x(j),j=1,jx)
-      write(41,1005)  (rz(l),l=1,lrzmax)
+      write(41,1005)  (rz(l),l=1,setup0%lrzmax)
       do 1000 k=1,ngen
         write(41,1005)  (((f(i,j,k,l),i=1,iy),j=1,jx),l=1,lrors)
  1000 continue

@@ -21,7 +21,8 @@ module tdnpa0_mod
 
 contains
 
-      subroutine tdnpa0(rb,ene,icall,iplotnbi)
+  subroutine tdnpa0(rb,ene,icall,iplotnbi)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -69,8 +70,8 @@ contains
 !                 viewing cord.]
 !
 !     rb=array of minor radius bin boundaries from 0. to radmin, in cms.
-!     Dimension is 0:lrzmax.
-!     zeff=array of effective charge, dimension lrzmax.
+!     Dimension is 0:setup0%lrzmax.
+!     zeff=array of effective charge, dimension setup0%lrzmax.
 !     rd_npa= minor radius of detector (cms.),  .ge.radmin.
 !     thetd_npa= poloidal location of detector (radians).
 !     nv_npa= number of viewing chords.
@@ -104,14 +105,14 @@ contains
 
       character*8 icall,icalls,iplotnbi
 
-      real(c_double),dimension(lrzmax)::ene
-      real(c_double),dimension(0:lrzmax)::rb
-      real(c_double),dimension(lrzmax,4,nen_npa)::atten
-      real(c_double),dimension(lrzmax,nen_npa)::stoplamda
+      real(c_double),dimension(setup0%lrzmax)::ene
+      real(c_double),dimension(0:setup0%lrzmax)::rb
+      real(c_double),dimension(setup0%lrzmax,4,nen_npa)::atten
+      real(c_double),dimension(setup0%lrzmax,nen_npa)::stoplamda
       real(c_double),dimension(nen_npa)::vel
       real(c_double),dimension(nen_npa,npaproc)::sigmanpa,emitnpa
       real(c_double),dimension(nen_npa,nv_npa)::eflux_npa
-      dimension efluxwk(nen_npa,lrzmax) ! local working array
+      dimension efluxwk(nen_npa,setup0%lrzmax) ! local working array
 
       integer::jj
       real(c_double), allocatable, dimension(:):: tempp4,tempp5,tempp6
@@ -130,8 +131,8 @@ contains
 !.......................................................................
 !     Allocate temporary storage, to be deallocated at end of subroutine
 !.......................................................................
-!BH121115      itempp=int(15*lrzmax*nv_npa/fds)
-      itempp=int(100*lrzmax*nv_npa/fds)
+!BH121115      itempp=int(15*setup0%lrzmax*nv_npa/fds)
+      itempp=int(100*setup0%lrzmax*nv_npa/fds)
       allocate(tempp4(itempp),STAT=istat4)
       allocate(tempp5(itempp),STAT=istat5)
       allocate(tempp6(itempp),STAT=istat6)
@@ -210,13 +211,13 @@ contains
 !.......................................................................
 
         if(fds_npa.ge.1.)  stop 'tdfds_npa step size in npa too large'
-        ibin1=lrzmax
+        ibin1=setup0%lrzmax
         ibin2=1
 
 !.......................................................................
 !     ibin1= the radial bin of the source point along the viewing cord,
 !     numbered from 1 for the bin with inner edge at the magnetic
-!     axis, to lrzmax for the bin with outer limit equal to radmin/
+!     axis, to setup0%lrzmax for the bin with outer limit equal to radmin/
 !     (rhomax for eqmod.eq.'enabled').
 !     (Bin ibin occupies the region from .ge.rb(ibin-1) to
 !     .lt.rb(ibin)).
@@ -244,7 +245,7 @@ contains
 !VT...............................................
 
         do 99  j=1,4
-          do 991  i=1,lrzmax  ! Initialize:
+          do 991  i=1,setup0%lrzmax  ! Initialize:
             ibin(i,j)=0
             sxry(i,j)=0.0
             sang(i,j)=0.0
@@ -263,7 +264,7 @@ contains
 
  100    continue
 
-        ds=fds_npa*min(rb(ibin1)-rb(ibin1-1),radmin/lrzmax)
+        ds=fds_npa*min(rb(ibin1)-rb(ibin1-1),radmin/setup0%lrzmax)
         s=s+ds
         istep=istep+1  ! counts for each view chord
         do 102  j=1,3
@@ -382,7 +383,7 @@ contains
 !.......................................................................
 
           ibin1=ibin1+1
-          if(ibin1.gt.lrzmax)  stop 'stop 2 in tdnpa0'
+          if(ibin1.gt.setup0%lrzmax)  stop 'stop 2 in tdnpa0'
           go to 150
 
 !.......................................................................
@@ -440,7 +441,7 @@ contains
 
           if ((psimag-psilim).le.0.0) stop 'psimag.lt.psilim in tdnpa0'
           tr(0)=0.0
-          do 160  l=1,lrzmax
+          do 160  l=1,setup0%lrzmax
  160      tr(l)=psimag-psivalm(l)
           xx=xs_(1)
           yy=xs_(2)
@@ -546,7 +547,7 @@ contains
 !.......................................................................
           ichangebin24=1 !cVT
           ibin1=ibin1+1
-          if(ibin1.gt.lrzmax)  stop 'stop 5 in tdnpa0'
+          if(ibin1.gt.setup0%lrzmax)  stop 'stop 5 in tdnpa0'
           go to 190
 
 !.......................................................................
@@ -697,7 +698,7 @@ contains
  200    continue
 
 !        do ien=1,nen_npa
-!           do l=1,lrzmax
+!           do l=1,setup0%lrzmax
 !            write(*,*)'l,ien,atten(l,j=1:4,ien)=',l,ien,atten(l,1:4,ien)
 !           enddo
 !        enddo
@@ -705,11 +706,11 @@ contains
 
 !.......................................................................
 !     Obtain weighted angle between viewing and toroidal directions,
-!     and poloidal angle, in each of the lrzmax radial bins.
+!     and poloidal angle, in each of the setup0%lrzmax radial bins.
 !.......................................................................
 
         do 210  j=1,ibin2  ! Radial bin class, ibin2.le.4
-          do 211  i=1,lrzmax
+          do 211  i=1,setup0%lrzmax
             if(sxry(i,j).eq.zero)  go to 211
             sang(i,j)=sang(i,j)/sxry(i,j)
             spol(i,j)=spol(i,j)/sxry(i,j)
@@ -717,13 +718,13 @@ contains
  211      continue
  210    continue
 
-!        do l=1,lrzmax
+!        do l=1,setup0%lrzmax
 !           write(*,*)'l,sxry(l,j=1:4)=',l,sxry(l,1:4)
 !        enddo
-!        do l=1,lrzmax
+!        do l=1,setup0%lrzmax
 !           write(*,*)'l,sang(l,j=1:4)=',l,sang(l,1:4)
 !        enddo
-!        do l=1,lrzmax
+!        do l=1,setup0%lrzmax
 !           write(*,*)'l,spol(l,j=1:4)=',l,spol(l,1:4)
 !        enddo
 
@@ -740,10 +741,10 @@ contains
 !       very high attenuation
 
         atten(1,2,:)=100
-        atten(lrzmax,3,:)=100
+        atten(setup0%lrzmax,3,:)=100
         atten(1,4,:)=100
 
-        do i=1,lrzmax   !lrzmax
+        do i=1,setup0%lrzmax   !setup0%lrzmax
 !MPIINSERT_MPIWORKER_I
 !MPIINSERT_IF_RANK_EQ_MPIWORKER
         do j=1,ibin2  ! Radial bin class, ibin2.le.4
@@ -752,7 +753,7 @@ contains
 !     for each npa_process().
 !     enn density pertains to each npa_process(), generally
 !     a namelist input neutral density.  For npa_process(5)=
-!     'radrecom', enn(1:lrzmax,5) is set to the electron density.
+!     'radrecom', enn(1:setup0%lrzmax,5) is set to the electron density.
               call tdnpa(vel,sang(i,j),ibin(i,j),spol(i,j), &
                    sigmanpa,emitnpa)
               do kk=1,npaproc
@@ -790,14 +791,14 @@ contains
 !MPIINSERT_ENDIF_RANK
 !MPIINSERT_RECV_EFLUXWK
 !MPIINSERT_SEND_EFLUXWK
-        enddo ! i=1,lrzmax
+        enddo ! i=1,setup0%lrzmax
 
         call bcast(eflux_npa(1:nen_npa,nn),zero,nen_npa) ! YuP:range 1:nen_npa
 
         do ien=1,nen_npa  ! for each energy bin
-        do i=1,lrzmax ! sum-up contributions from all flux surfaces
+        do i=1,setup0%lrzmax ! sum-up contributions from all flux surfaces
            eflux_npa(ien,nn)=eflux_npa(ien,nn)+ efluxwk(ien,i)
-        enddo ! i=1,lrzmax
+        enddo ! i=1,setup0%lrzmax
         enddo ! ien=1,nen
 
 !MPIINSERT_BARRIER
@@ -880,16 +881,16 @@ contains
 !$$$      enddo
 !$$$          iiii=int(nen_npa)
 !$$$          print*, "tdnpa0::atten for Neutral energy:",en_(iiii)
-!$$$          print*,"atten_ibin21=[",atten(1:lrzmax,1,iiii)
-!$$$          print*,"atten_ibin22=[",atten(1:lrzmax,2,iiii)
-!$$$          print*,"atten_ibin23=[",atten(1:lrzmax,3,iiii)
-!$$$          print*,"atten_ibin24=[",atten(1:lrzmax,4,iiii)
+!$$$          print*,"atten_ibin21=[",atten(1:setup0%lrzmax,1,iiii)
+!$$$          print*,"atten_ibin22=[",atten(1:setup0%lrzmax,2,iiii)
+!$$$          print*,"atten_ibin23=[",atten(1:setup0%lrzmax,3,iiii)
+!$$$          print*,"atten_ibin24=[",atten(1:setup0%lrzmax,4,iiii)
 !$$$          iiii=int(nen_npa/2)
 !$$$          print*, "tdnpa0::atten for Neutral energy:",en_(iiii)
-!$$$          print*,"atten_ibin21=[",atten(1:lrzmax,1,iiii)
-!$$$          print*,"atten_ibin22=[",atten(1:lrzmax,2,iiii)
-!$$$          print*,"atten_ibin23=[",atten(1:lrzmax,3,iiii)
-!$$$          print*,"atten_ibin24=[",atten(1:lrzmax,4,iiii)
+!$$$          print*,"atten_ibin21=[",atten(1:setup0%lrzmax,1,iiii)
+!$$$          print*,"atten_ibin22=[",atten(1:setup0%lrzmax,2,iiii)
+!$$$          print*,"atten_ibin23=[",atten(1:setup0%lrzmax,3,iiii)
+!$$$          print*,"atten_ibin24=[",atten(1:setup0%lrzmax,4,iiii)
 
 
 
@@ -918,7 +919,7 @@ contains
       if (iplt3d.ne.0 .or. n.eq.0 .or. n.eq.nstop &
            .and. iplotnbi.eq.'yes') then
          call tdsxrplt(en_,eflux_npa,nen_npa,nenaa, &
-              efluxt,nv_npa,inegsxr,softxry,lnwidth)
+              efluxt,nv_npa,inegsxr,softxry,setup0%lnwidth)
 
 !.......................................................................
 !     Plot NPA view cords in poloidal cross-section, if eqmod="enabled"

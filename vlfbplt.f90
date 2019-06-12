@@ -13,7 +13,8 @@ module vlfbplt_mod
 
 contains
 
-      subroutine vlfbplt
+  subroutine vlfbplt
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : luf
@@ -37,12 +38,12 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
       if (pltvlfb.ne."enabled") return
 
       if (pltovlp.eq."enabled".and. mrfn.gt.1) then
 
-      if (cqlpmod.ne."enabled") then
+      if (setup0%cqlpmod.ne."enabled") then
          call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)
 
          do 560 k=1,mrfn
@@ -60,7 +61,7 @@ contains
             CALL PGMTXT('B',10.,0.,0.,t_)
  560     continue
 
-      elseif (cqlpmod.eq."enabled") then
+      elseif (setup0%cqlpmod.eq."enabled") then
 
 !       Save l_ (just in case), and pass l_=l to pltcont.
 !       Restore at end of loop.
@@ -89,13 +90,13 @@ contains
         enddo
         l_=l_save
 
-      endif ! cqlpmod selection
+      endif ! setup0%cqlpmod selection
 
       endif !  mrfn.gt.1
 
 
       ! Next part - for both mrfn=1 and mrfn>1
-      if (cqlpmod.ne."enabled") then
+      if (setup0%cqlpmod.ne."enabled") then
 
 
       do 680 k=1,mrfn
@@ -228,11 +229,11 @@ contains
 
 !..................................................................
 !
-!     cqlpmod.eq."enabled" case
+!     setup0%cqlpmod.eq."enabled" case
 !
 !..................................................................
 
-      elseif (cqlpmod.eq."enabled") then
+      elseif (setup0%cqlpmod.eq."enabled") then
 
 !     Save l_ (just in case), and pass l_=l to pltcont.
 !     Restore at end of loop.

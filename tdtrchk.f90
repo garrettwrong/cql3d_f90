@@ -17,6 +17,7 @@ contains
       subroutine tdtrchk
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use r8subs_mod, only : cvmgt
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
@@ -39,8 +40,8 @@ contains
           do 30 i=1,iytr(lrors)
             do 40 l=l_lower(i),lrors-1
 !%OS  do 40 l=l_lower(i),lrors
-              ilr=lrindx(l)
-              ilrm1=lrindx(l-1)
+              ilr=setup0%lrindx(l)
+              ilrm1=setup0%lrindx(l-1)
 
 !..............................................................
 !     rhs first

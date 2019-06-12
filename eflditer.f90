@@ -36,7 +36,7 @@ contains
 
 
 !     Return, for cases not implemented:
-      if (cqlpmod.eq."enabled" ) return
+      if (setup0%cqlpmod.eq."enabled" ) return
       if (ngen.gt.1 .or. kelecg.ne.1) stop 'check operation of eflditer'
 
 !-YuP: moved this control outside of this subroutine:

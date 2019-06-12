@@ -48,40 +48,40 @@ contains
       i1p(1)=4
       i1p(2)=4
       if (bootst.ne."enabled") then
-        do 5 ll=1,lrzmax
+        do 5 ll=1,setup0%lrzmax
           bscurm(ll,1,1)=0.
  5      continue
         return
       endif
-      do 10 l=1,lrzmax
+      do 10 l=1,setup0%lrzmax
         tedst(l)=energy(kelec,l)*2./3.*1.e+3
         dndst(l)=reden(kelec,l)*1.e+6
         tr1(l)=rz(l)*.01
  10   continue
-      call coeff1(lrzmax,tr1(1),dndst,d2ne,i1p,1,workk)
-      call coeff1(lrzmax,tr1(1),tedst,d2te,i1p,1,workk)
+      call coeff1(setup0%lrzmax,tr1(1),dndst,d2ne,i1p,1,workk)
+      call coeff1(setup0%lrzmax,tr1(1),tedst,d2te,i1p,1,workk)
       itab(1)=0
       itab(2)=1
       itab(3)=0
-      do 11 l=1,lrzmax
+      do 11 l=1,setup0%lrzmax
 
 !..................................................................
 !     derivative of density w.r.t. rho
 !..................................................................
 
-        call terp1(lrzmax,tr1(1),dndst,d2ne,tr1(l),1,tab,itab)
+        call terp1(setup0%lrzmax,tr1(1),dndst,d2ne,tr1(l),1,tab,itab)
         nedrv(l)=tab(2)
 
 !..................................................................
 !     derivative of te with respect to rho
 !..................................................................
 
-        call terp1(lrzmax,tr1(1),tedst,d2te,tr1(l),1,tab,itab)
+        call terp1(setup0%lrzmax,tr1(1),tedst,d2te,tr1(l),1,tab,itab)
         tedrv(l)=tab(2)
  11   continue
-      tr=zero !YuP[2019-06-08]was call bcast(tr(1),zero,lrzmax)
-      tr2=zero !YuP[2019-06-08]was call bcast(tr2(1),zero,lrzmax)
-      tr3=zero !YuP[2019-06-08]was call bcast(tr3(1),zero,lrzmax)
+      tr=zero !YuP[2019-06-08]was call bcast(tr(1),zero, setup0%lrzmax)
+      tr2=zero !YuP[2019-06-08]was call bcast(tr2(1),zero, setup0%lrzmax)
+      tr3=zero !YuP[2019-06-08]was call bcast(tr3(1),zero, setup0%lrzmax)
 
 !..................................................................
 !     Determine average ion temperature over all background species
@@ -91,19 +91,19 @@ contains
       do 21 k=ngen+1,ntotal
         if (k.eq.kelecm .or. k.eq.kelecg) go to 21
         kk=kk+1
-        do 20 l=1,lrzmax
+        do 20 l=1,setup0%lrzmax
           tr(l)=tr(l)+reden(k,l)*1.e+6
           tr2(l)=tr2(l)+reden(k,l)*energy(k,l)*2./3.*1.e+3*1.e+6
           tr3(l)=tr3(l)+reden(k,l)*1.e+6*fmass(k)/proton
  20     continue
  21   continue
-      do 22 l=1,lrzmax
+      do 22 l=1,setup0%lrzmax
         tidst(l)=tr2(l)/tr(l)
         avms(l)=tr3(l)/tr(l)
  22   continue
-      call coeff1(lrzmax,tr1(1),tidst,d2ti,i1p,1,workk)
-      do 23 l=1,lrzmax
-        call terp1(lrzmax,tr1(1),tidst,d2ti,tr1(l),1,tab,itab)
+      call coeff1(setup0%lrzmax,tr1(1),tidst,d2ti,i1p,1,workk)
+      do 23 l=1,setup0%lrzmax
+        call terp1(setup0%lrzmax,tr1(1),tidst,d2ti,tr1(l),1,tab,itab)
         tidrv(l)=tab(2)
         pe(l)=1.e-3*ergtkev*1.e-1*tedst(l)*dndst(l)*1.e-6
         bpo(l)=-1.e-4/rmag*dpsidrho(l)
@@ -115,7 +115,7 @@ contains
 !..................................................................
       twosqt=1.41421356
 !DIR$ NEXTSCALAR
-      do 200 l=1,lrzmax
+      do 200 l=1,setup0%lrzmax
         epsqrt=sqrt(aspin(l))
         dene=dndst(l)
         te=tedst(l)

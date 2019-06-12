@@ -99,13 +99,13 @@ contains
 
         call tdtry     !i.e., meshy fixed_y or fixed_mu
 
-      else if (cqlpmod .ne. "enabled") then  !meshy.eq."free"
+      else if (setup0%cqlpmod .ne. "enabled") then  !meshy.eq."free"
 
 !..................................................................
-!     meshy=free and cqlpmod="disabled".
+!     meshy=free and setup0%cqlpmod="disabled".
 !     Pack in theta mesh points if yreset="enabled".
 !**    [Not working at present, and if "enabled" will be reset to
-!**     "disabled" in ainsetva.f, for lrz>1.]
+!**     "disabled" in ainsetva.f, for setup0%lrz>1.]
 !..................................................................
 
         iyh1=iyh
@@ -330,7 +330,7 @@ contains
  310  continue
       dz(1,lr_)=(z(2,lr_)-z(1,lr_))*.5
       dz(lz,lr_)=(z(lz,lr_)-z(lz-1,lr_))*.5
-      if (sbdry.eq."periodic" .and. cqlpmod.eq."enabled" .and. &
+      if (sbdry.eq."periodic" .and. setup0%cqlpmod.eq."enabled" .and. &
         transp.eq."enabled") then
         dz(1,lr_)=2.*dz(1,lr_)
         dz(lz,lr_)=dz(lz,lr_)+0.5*(z(2,lr_)-z(1,lr_))

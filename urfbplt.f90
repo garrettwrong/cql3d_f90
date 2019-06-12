@@ -12,7 +12,8 @@ module urfbplt_mod
 
 contains
 
-      subroutine urfbplt
+  subroutine urfbplt
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -32,7 +33,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      if (noplots.eq."enabled1") return
+      if (setup0%noplots.eq."enabled1") return
 !BH081105      iiplt3d=0
       iiplt3d=-1
       do i=1,nplota

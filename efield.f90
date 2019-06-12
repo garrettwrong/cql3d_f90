@@ -35,7 +35,7 @@ contains
 
       elecset="eoved"
       if (eoved.eq.zero) elecset="elecfld"
-!      if (lrzmax.gt.1)   elecset="elecfld"
+!      if (setup0%lrzmax.gt.1)   elecset="elecfld"
       call cfpgamma
 
 !.......................................................................
@@ -44,7 +44,7 @@ contains
 !.......................................................................
 
       if (n .eq. 0) then
-        if (cqlpmod .ne. "enabled") then
+        if (setup0%cqlpmod .ne. "enabled") then
 !
 !     formula should be 0.5064*N(Z)*me/taueeh/ne/e**2, with N(Z=1)=1
 !     Thus one should use game(e,e) as in taueeh, but as it is not
@@ -113,7 +113,7 @@ contains
 !     Thus: taueeh=3 sqrt(pi/2) / Zeff * tauee
 !     Note: taueeh and nuestar same as ONETWO 4.2-20 and 4.2-30
 !     (Eq. 4.2-28 and 4.2-39, in GA-A16178, Pfeiffer, Davidson, Miller, Waltz)
-      if (cqlpmod .ne. "enabled") then
+      if (setup0%cqlpmod .ne. "enabled") then
         taueeh(lr_)=tauee(lr_)*3.*sqrt(pi/2.)/zeff(lr_)
         starnue(lr_)=rgeom(lr_)*bmod0(lr_)/bthr0(lr_)/ &
           vth(kelec,lr_)/taueeh(lr_)/eps(lr_)**1.5

@@ -16,7 +16,7 @@
 !     iyjx2=(iy+2)*(jx+2)
 !     MOREOVER: We assume temp[1-6] are in contiguous storage,
 !               so we can reference the whole six arrays through tem1.
-!BH180527: Dimension of tem[1-6] modified to iyjx2l=max(iy+2,lrz)*(jx+2),
+!BH180527: Dimension of tem[1-6] modified to iyjx2l=max(iy+2,setup0%lrz)*(jx+2),
 !BH180527: to handle possible situation in netcdfrw2.
 !
 !     tam1(jx) --> tam30(jx)
@@ -43,12 +43,14 @@ module cqlcomm_mod
 
   !---BEGIN USE
 
+  use cqlconf_mod, only : setup0
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
   use iso_c_binding, only : c_double_complex
+  use param_mod
 
   !---END USE
-  use param_mod
+
   implicit none
   public
 
@@ -56,8 +58,7 @@ module cqlcomm_mod
   !     nml variables that take on the values assigned to parameters.
   !.......................................................................
   integer :: iy,jx, &
-       lfield,lz,lrz, &
-       lrzmax,ls,lsmax, &
+       lfield,lz,&
        mx, &
        nbctime,negyrg,ngen,nmax
 
@@ -68,10 +69,9 @@ module cqlcomm_mod
   character(len=8) :: chang, &
        eqmod,eleccomp,f4d_out,tavg, &
        iactst,ineg,idrop,idskf,idskrf,ichkpnt,implct, &
-       lbdry0,locquas,lrzdiff,lsdiff,taunew, &
+       lbdry0,locquas,taunew, &
        machine,meshy,manymat, &
        netcdfvecal,netcdfvecc,netcdfvece,netcdfvecrf,netcdfvecs, &
-       noplots, &
        psimodel,pltpowe,pltend,pltinput,pltlim,pltrdc, &
        pltrst,plturfb,pltvflu,pltra,pltfvs,pltd,pltprpp,pltfofv,pltlos, &
        pltdn,pltvecal,pltvecc,pltvecrf,pltvece,pltstrm,pltflux, &
@@ -81,12 +81,10 @@ module cqlcomm_mod
        relativ,sigmamod,soln_method, &
        symtrap,syncrad,bremsrad, &
        tandem,gamafac, &
-       yreset, &
-       nmlstout
+       yreset
 
   character(len=256) :: netcdfnm
-  character(len=256) :: mnemonic
-  character(len=8) :: iuser,izeff,netcdfshort
+  character(len=8) :: izeff,netcdfshort
 
   integer :: colmodl
 
@@ -106,7 +104,7 @@ module cqlcomm_mod
   !common /readscal/ &
   integer :: nstop,ncoef,nchec,ncont,nrstrt,nstps,nfpld, &
        noncntrl,nonel,noffel,nonvphi,noffvphi,nonloss,noffloss, &
-       numby,lnwidth
+       numby
   real(c_double) :: pltmag, &
        xprpmax, &
        trapredc,scatfrac, &
@@ -130,8 +128,7 @@ module cqlcomm_mod
   !     VECTOR DIMENSIONED NAMELIST SETUP COMMON BLOCK.....
   !..................................................................
 
-  character(len=8) :: ibox(3), &
-       kpress(ntotala),kfield(ntotala), &
+  character(len=8) :: kpress(ntotala),kfield(ntotala), &
        lbdry(ngena),lossmode(ngena), &
        regy(ngena), &
        torloss(ngena), &
@@ -140,7 +137,7 @@ module cqlcomm_mod
   character(len=256) :: lossfile(ngena)
 
   !common /readvec/ &
-  integer :: ioutput(2),isigmas(6)
+  integer :: isigmas(6)
   integer :: nplot(nplota),nsave(nsavea)
   real(c_double) :: bnumb(ntotala), &
        fmass(ntotala), &
@@ -176,8 +173,8 @@ module cqlcomm_mod
   !     Variables in common block diskx have as their last dimension lrza.
   !     Thus they are dimensioned with respect to the radial coordinate.
   !     If lrza=1  ==> single flux surface CQL run.
-  !     Note that input variable lrz can be less than lrza. For some of
-  !     the larger arrays we allocate space using lrz rather than
+  !     Note that input variable setup0%lrz can be less than lrza. For some of
+  !     the larger arrays we allocate space using setup0%lrz rather than
   !     dimensioning with lrza to save some space.
   !
   !     VECTORS
@@ -189,7 +186,6 @@ module cqlcomm_mod
        tbnd(lrorsa), &
        rovera(lrza), &
        zmax(0:lrza)
-  integer :: lrindx(0:lrorsa),lsindx(0:lrorsa)
 
   !..................................................................
   !     2-D ARRAYS
@@ -412,13 +408,9 @@ module cqlcomm_mod
   !     BEGIN variables for WP... modules for CQLP case
   !-----------------------------------------------------------------------
 
-  character(len=8) :: special_calls,cqlpmod, &
-       oldiag, &
+  character(len=8) :: oldiag, &
        sbdry,scheck,ampfmod,eseswtch, &
        updown
-
-  !      logical (lolz)
-  character(len=8) :: nlrestrt,nlwritf
 
   logical :: nlotp1(noutpta),nlotp2(noutpta)
   logical :: nlotp3(noutpta),nlotp4(noutpta)
@@ -803,12 +795,12 @@ module cqlcomm_mod
   !common /dptr95/ solrz
   real(c_double), pointer :: solzz(:,:)
   !common /dptr95/ solzz
-  real(c_double), pointer :: bpolz(:,:), btorz(:,:)  ! (lza,lrzmax)
+  real(c_double), pointer :: bpolz(:,:), btorz(:,:)  ! (lza,setup0%lrzmax)
   !common /dptr95/ bpolz, btorz
 
   ! YuP: [added Apr/2014] area and volume of a cell associated with each
   !                     (R,Z) point on flux surface, (R,Z)==(solrz,solzz)
-  real(c_double), pointer :: ddarea(:,:), ddvol(:,:)  !  (lza,lrzmax)
+  real(c_double), pointer :: ddarea(:,:), ddvol(:,:)  !  (lza,setup0%lrzmax)
   !common /dptr95/ ddarea, ddvol
 
   real(c_double), pointer :: thtab(:,:)
@@ -1163,7 +1155,7 @@ module cqlcomm_mod
   real(c_double), pointer :: sgaint(:,:,:)  !!!(8,ngen,lrors)
   real(c_double), pointer :: entr(:,:,:)    !!!(ngen,-1:15,lrors)
   real(c_double), pointer :: xlndnz(:,:)    !!!(ngen+1,negyrga)
-  real(c_double), pointer :: sounor(:,:,:,:)   !!!(ngen,nsoa,lz,lrz)
+  real(c_double), pointer :: sounor(:,:,:,:)   !!!(ngen,nsoa,lz,setup0%lrz)
   !common /dptr95/ sgaint,entr,xlndnz,sounor
 
 

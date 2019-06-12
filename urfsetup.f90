@@ -88,7 +88,7 @@ contains
  100  format('urfsetup:   mrfn.gt.nmodsa',i5,'>',i3)
 
 
-      if (lr_.eq.lrindx(lrz) .and. l_.eq.lrors) then
+      if (lr_.eq.setup0%lrindx(setup0%lrz) .and. l_.eq.lrors) then
 
 !-YuP 101122: This part is added to read data on number of rays---------
 ! It repeats part of urfread.
@@ -334,7 +334,7 @@ contains
 !-YuP          call ibcast(lrayelt(1,k),0,nrayn)
 !-YuP 40     continue
 
-      endif !   if (lr_.eq.lrindx(lrz) .and. l_.eq.lrors) then
+      endif !   if (lr_.eq.setup0%lrindx(setup0%lrz) .and. l_.eq.lrors) then
 
 
 !..................................................................

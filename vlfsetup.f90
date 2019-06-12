@@ -153,8 +153,8 @@ contains
       if(vlfpol_inrange.eq.0.d0)then
         ! the above condition was not met for any vlfpol(k)
         WRITE(*,*)'vlfsetup: vlfpol is outside of pol.angle range.'
-        WRITE(*,*)'vlfsetup: pol(1,lrz)=',pol(1,lrz), &
-                          '  pol(lz,lrz)=',pol(lz,lrz)
+        WRITE(*,*)'vlfsetup: pol(1,setup0%lrz)=',pol(1,setup0%lrz), &
+                          '  pol(lz,setup0%lrz)=',pol(lz,setup0%lrz)
         WRITE(*,*)'vlfsetup: vlfpol(k)=',vlfpol ! print for all k
         stop
       endif
@@ -222,7 +222,7 @@ contains
 !     this will decrease guess.
 !..................................................................
 
-        bvalmin=fpsi(lrindx(lrors))/solr(lorbit(lr_),lr_)
+        bvalmin=fpsi(setup0%lrindx(lrors))/solr(lorbit(lr_),lr_)
         !YuP[03-2016] But in a mirror machine, Btor=0 (fpsi=0).
         !write(*,*)'vlfsetup: krf,bvalmin=',k,bvalmin
         bvalmin=bmidplne(lr_) !YuP[03-2016]

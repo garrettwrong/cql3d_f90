@@ -20,7 +20,8 @@ module tdtravct_mod
 
 contains
 
-      subroutine tdtravct(f1,kprofile,ktransp)
+  subroutine tdtravct(f1,kprofile,ktransp)
+    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : cvmgt
@@ -66,13 +67,13 @@ contains
 !     trans.h, except xtr3 uses d_rr in place of d_r (as in xtr()),
 !     for case3nn below.
 !     ztra(i,j,l) is ztrp(i,l)/zmaxpsi*d^3u [cynt2_=cynt2 for ipacktp=0].
-      ztra(i,j,l)=cosovb(idx(i,l),l)/dvol(lrindx(l))*4.*pi**2*radmaj* &
+      ztra(i,j,l)=cosovb(idx(i,l),l)/dvol(setup0%lrindx(l))*4.*pi**2*radmaj* &
         cynt2_(i,l)*cint2(j)
-      ytr(i,l)=h_r(lrindx(l))*drrt(k)*d_rr(idx(i,l),j,k,indxlr(l))/ &
-        drp5(lrindx(l))*bovcos(idx(i,l),l)
-      xtr3(i,l)=-h_r(lrindx(l))*drrt(k)*d_rr(idx(i,l),j,k,indxlr(l))* &
+      ytr(i,l)=h_r(setup0%lrindx(l))*drrt(k)*d_rr(idx(i,l),j,k,indxlr(l))/ &
+        drp5(setup0%lrindx(l))*bovcos(idx(i,l),l)
+      xtr3(i,l)=-h_r(setup0%lrindx(l))*drrt(k)*d_rr(idx(i,l),j,k,indxlr(l))* &
         bovcos(idx(i,l),l)
-      if (lrz.ne.lrzmax) stop 'tdtravct: Fixes reqd for lrz.ne.lrzmax'
+      if (setup0%lrz.ne.setup0%lrzmax) stop 'tdtravct: Fixes reqd for setup0%lrz.ne.setup0%lrzmax'
 
 !..............................................................
 !     Compute two integrals that are defined on mid-mesh points.
@@ -82,7 +83,7 @@ contains
       if (ngen.gt.1) stop 'STOP in tdtravct: ngen.gt.1'
 
       if (ifirst.eq."first") then
-         call bcast(d_r,zero,iyjx2*ngen*(lrz+1))
+         call bcast(d_r,zero,iyjx2*ngen*(setup0%lrz+1))
          ifirst="notfirst"
       endif
 
@@ -96,17 +97,17 @@ contains
       kp=kprofile
       if (n.eq.nontran .and. colmodl.eq.0) then
          kp=1
-         do l=1,lrz
+         do l=1,setup0%lrz
             dentarget(l)=reden(kp,l)
          enddo
       else
-         do l=1,lrz
+         do l=1,setup0%lrz
             dentarget(l)=reden(kp,l)
          enddo
       endif
 
 !$$$c     Reducing target density by error on previous step
-!$$$      do l=1,lrz
+!$$$      do l=1,setup0%lrz
 !$$$         dentarget(l)=dentarget(l)-
 !$$$     +        relaxden*(reden(ktransp,l)-dentarget(l))
 !$$$      enddo
@@ -127,26 +128,26 @@ contains
       if (pinch.eq.'case1' .or. pinch.eq.'case2' &
                            .or. pinch.eq.'case3') then
 
-      do i=1,iytr(lrz)
+      do i=1,iytr(setup0%lrz)
       do j=1,jx
-         do l=2,lrz-1 !-YuP: smoothening the f1 radial profile:
+         do l=2,setup0%lrz-1 !-YuP: smoothening the f1 radial profile:
             tr1(l)=(f1(i,j,k,l-1) + f1(i,j,k,l) + f1(i,j,k,l+1))/3.d0
          enddo !-YuP: tr1 here is used as a working array
          tr1(1)=f1(i,j,k,1)
-         tr1(lrz)=f1(i,j,k,lrz)
-         do l=1,lrz
+         tr1(setup0%lrz)=f1(i,j,k,setup0%lrz)
+         do l=1,setup0%lrz
 !-YuP            f1(i,j,k,l)=tr1(l) !-YuP: f1 now has a smooth radial profile
 !-YuP-100326: In some cases, smoothening is not good: MST tests.
          enddo
       enddo
       enddo
 
-      do l=2,lrz-1 !-YuP: smoothening the density profile:
+      do l=2,setup0%lrz-1 !-YuP: smoothening the density profile:
          tr1(l)=(reden(k,l-1) + reden(k,l) + reden(k,l+1))/3.d0
       enddo !-YuP: tr1 here is used as a working array
       tr1(1)=reden(k,1)
-      tr1(lrz)=reden(k,lrz)
-      do l=1,lrz
+      tr1(setup0%lrz)=reden(k,setup0%lrz)
+      do l=1,setup0%lrz
 !-YuP         reden(k,l)=tr1(l) !-YuP: reden now is the smooth density profile
 !-YuP-100326: In some cases, smoothening is not good: MST tests.
       enddo
@@ -162,7 +163,7 @@ contains
         do ii=1,4
            if (difus_vshape(ii).ne.0.) stop 'tdtravct:pinch=simple'
         enddo
-        do 160 l=1,lrz-1
+        do 160 l=1,setup0%lrz-1
           tr1(l)= reden(1,l)                !-YuP: definition changed
           tr2(l)= (reden(1,l+1)-reden(1,l-1)) / &
                       ( drp5(l)+drp5(l-1) ) !-YuP: definition of dn/dr changed
@@ -183,7 +184,7 @@ contains
            if (difus_vshape(ii).ne.0.) &
                 stop 'tdtravct:pinch=case1, chx difus_vshape'
         enddo
-        do l=1,lrz-1
+        do l=1,setup0%lrz-1
             tr3(l)=(dentarget(l)-reden(k,l))*relaxden*dvol(l)/ &
                  (4.*pi**2*radmaj)/dtreff*advectr  !-YuP: *advectr
             tr1(l)=h_r(l)*drrt(k)*d_rr(1,1,k,l)* &
@@ -202,13 +203,13 @@ contains
 !..............................................................
 
          adv(k,1)=(-tr3(1)+tr2(1))/tr1(1)   !-YuP: signs corrected
-         do l=2,lrz-1                       !-YuP: signs corrected:
+         do l=2,setup0%lrz-1                       !-YuP: signs corrected:
            adv(k,l)=(-tr3(l)+tr2(l)+adv(k,l-1)*tr1(l-1)-tr2(l-1))/tr1(l)
            !!! adv(k,l)=(-tr3(l)+tr2(l))/tr1(l) ! ~same result
          enddo
 !         write(*,'(a,8x,a,7x,a,5x,a,5x,a,7x,a,7x,a)')
 !     +   'tdtravct: tr1','tr2','tr3','dentarget','reden','h_r','d_r'
-         do l=1,lrz-1
+         do l=1,setup0%lrz-1
             do i=1,iy_(l)
                do j=1,jx
                   d_r(i,j,k,l)=adv(k,l)*drrt(k)*d_rr(i,j,k,l)
@@ -225,13 +226,13 @@ contains
 
 !***NEED TO FIX THIS CASE TO TAKE D_RR OUT OF ADV.***
 !        if (pinch.eq."case2n") stop 'tdtravct: Dont forget more work'
-         do l=1,lrz-1
+         do l=1,setup0%lrz-1
             lp=l+1
             tr1(l)=0.
             tr2(l)=0.
             call bcast(tam1,zero,jx)
             call bcast(tam2,zero,jx)
-            do  i=1,iytr(lrz)
+            do  i=1,iytr(setup0%lrz)
                id=idx(i,l)
                ie=idx(i,l+1)
                if (id.eq.0 .or. ie.eq.0) go to 21
@@ -261,7 +262,7 @@ contains
 !     Relaxation coefficient slows down the "correction" term.
 !..............................................................
 
-         do l=1,lrz-1
+         do l=1,setup0%lrz-1
             tr3(l)=(dentarget(l)-reden(k,l))*relaxden*dvol(l)/ &
                  (4.*pi**2*radmaj)/dtreff*advectr    !-YuP: *advectr
          enddo
@@ -271,13 +272,13 @@ contains
 !..............................................................
 
          adv(k,1)=(h_r(1)*tr2(1)-tr3(1))/(h_r(1)*tr1(1))
-         do l=2,lrz-1
+         do l=2,setup0%lrz-1
           adv(k,l)=(-tr3(l)+h_r(l)*tr2(l)-h_r(l-1)*(tr2(l-1) &
             -adv(k,l-1)*tr1(l-1)))/(h_r(l)*tr1(l))
          enddo
 !         write(*,'(a,8x,a,7x,a,5x,a,5x,a,7x,a,7x,a)')
 !     +   'tdtravct: tr1','tr2','tr3','dentarget','reden','h_r','d_r'
-         do l=1,lrz-1
+         do l=1,setup0%lrz-1
             do i=1,iy_(l)
                do j=1,jx
                   d_r(i,j,k,l)=adv(k,l)
@@ -292,13 +293,13 @@ contains
       elseif (pinch.eq."case3" .or. pinch.eq."case3n") then
 !=======================================================================
 
-        do 10 l=1,lrz-1
+        do 10 l=1,setup0%lrz-1
           lp=l+1
           tr1(l)=0.
           tr2(l)=0.
           call bcast(tam1,zero,jx)
           call bcast(tam2,zero,jx)
-          do 20 i=1,iytr(lrz)
+          do 20 i=1,iytr(setup0%lrz)
             id=idx(i,l)
             ie=idx(i,l+1)
             if (id.eq.0 .or. ie.eq.0) go to 20
@@ -324,7 +325,7 @@ contains
 !     Relaxation coefficient slows down the "correction" term.
 !..............................................................
 
-        do 50 l=1,lrz-1
+        do 50 l=1,setup0%lrz-1
 !BH010423  Didn't like relaxden coeff being a divisor.
 !BH010423  (Not a big problem as most runs now using relaxden=1.)
 !BH010423          tr3(l)=(reden(kp,l)-reden(k,l))/relaxden*dvol(l)/
@@ -339,11 +340,11 @@ contains
 !..............................................................
 
        adv(k,1)=(h_r(1)*tr2(1)-tr3(1))/(h_r(1)*tr1(1))
-       do l=2,lrz-1
+       do l=2,setup0%lrz-1
           adv(k,l)=(-tr3(l)+h_r(l)*tr2(l)-h_r(l-1)*(tr2(l-1) &
                -adv(k,l-1)*tr1(l-1)))/(h_r(l)*tr1(l))
        enddo
-        do 60 l=1,lrz-1
+        do 60 l=1,setup0%lrz-1
           do 70 i=1,iy_(l)
             do 80 j=1,jx
               d_r(i,j,k,l)=adv(k,l)*drrt(k)*d_rr(i,j,k,l)
@@ -358,13 +359,13 @@ contains
 
 !BH080503:  For soln_method=it3drv,  idx(i,l_)=i.   Using idx
 !BH080503:  below for legacy purposes, although maybe not needed.
-       do l=1,lrz-1
+       do l=1,setup0%lrz-1
           lp=l+1
           tr1(l)=0.
           tr2(l)=0.
           call bcast(tam1,zero,jx)
           call bcast(tam2,zero,jx)
-          do i=1,iytr(lrz)
+          do i=1,iytr(setup0%lrz)
              id=idx(i,l)
              ie=idx(i,l+1)
              if (id.eq.0 .or. ie.eq.0) go to 223
@@ -388,7 +389,7 @@ contains
 !     Relaxation coefficient slows down the "correction" term.
 !..............................................................
 
-       do l=1,lrz-1
+       do l=1,setup0%lrz-1
           tr3(l)=(dentarget(l)-reden(k,l))*relaxden/dtreff
 !          write(*,*)'tdtravct: l,dentarget(l),reden(k,l),tr3(l)',
 !     +         l,dentarget(l),reden(k,l),tr3(l)
@@ -399,13 +400,13 @@ contains
 !..............................................................
 
        adv(k,1)=(tr3(1)-tr2(1))/tr1(1)
-       do l=2,lrz-1
+       do l=2,setup0%lrz-1
           adv(k,l)=(tr3(l)-tr2(l) +(tr2(l-1)+adv(k,l-1)*tr1(l-1))) &
                /(h_r(l)*tr1(l))
        enddo
 !         write(*,'(a,8x,a,7x,a,5x,a,5x,a,7x,a,7x,a)')
 !     +   'tdtravct: tr1','tr2','tr3','dentarget','reden','h_r','d_r'
-       do l=1,lrz-1
+       do l=1,setup0%lrz-1
           do i=1,iy_(l)
              do j=1,jx
                 d_r(i,j,k,l)=adv(k,l)*drrt(k)*d_rr(i,j,k,l)
@@ -421,13 +422,13 @@ contains
 !=======================================================================
 
 
-      do l=1,lrz-1
+      do l=1,setup0%lrz-1
 !        write(*,*)'tdtravct: l,dentarget(l),reden(k,l),tr1(l),tr2(l)'//
 !     +    ',tr3(l),adv(k,l)',
 !     +    l,dentarget(l),reden(k,l),tr1(l),tr2(l),tr3(l),adv(k,l)
       enddo
 
-      do l=1,lrz
+      do l=1,setup0%lrz
          do j=1,jx
             do i=1,iy
                fxsp(i,j,1,l)=f2(i,j,1,l)
@@ -452,7 +453,7 @@ contains
 !     adv(k,l) such that (dentarget(l)-reden(k,l)=0.).
 !     The calculation of adv at the beginning of this subroutine
 !     provides a first guess for the
-!     lrz values of adv(k,l).
+!     setup0%lrz values of adv(k,l).
 !     Normalization is applied to the input vector, and
 !     the density solution vector.
 !     See Numerical Recipes in Fortran, Sec.9.7.
@@ -460,15 +461,15 @@ contains
 
       write(*,*) 'tdtravct: [l,adv,d_r,drp5] BEFORE NEWTON ITERATIONS:'
 
-      do l=1,lrz-1
+      do l=1,setup0%lrz-1
       write(*,'(i4,3e15.5)') l,adv(k,l),d_r(iy/4,jx/2,k,l),drp5(l)
          reden_norm(l)=dentarget(l)
          adv_norm(l)=adv(k,l)
          xx(l)=1.0
       enddo
 
-      reden_norm(lrz)=dentarget(l)
-      nn=lrz-1
+      reden_norm(setup0%lrz)=dentarget(l)
+      nn=setup0%lrz-1
       call newt(xx,nn,iters,check)
 
       write(*,*)'tdtravct:[l,adv,d_r,xx] AFTER NEWTON ITERATIONS:',iters
@@ -477,7 +478,7 @@ contains
          stop 'tdtravct: Newton Iteration failed'
       elseif (pinch.eq."simplen" .or. pinch.eq."case1n" .or. &
               pinch.eq."case3n") then
-         do l=1,lrz-1
+         do l=1,setup0%lrz-1
             adv(k,l)=xx(l)*adv_norm(l)
             do i=1,iy_(l)
                do j=1,jx
@@ -487,7 +488,7 @@ contains
             write(*,'(i4,3e15.5)') l,adv(k,l),d_r(iy/4,jx/2,k,l),xx(l)
          enddo ! l
       elseif (pinch.eq."case2n") then
-         do l=1,lrz-1
+         do l=1,setup0%lrz-1
             adv(k,l)=xx(l)*adv_norm(l)
             do i=1,iy_(l)
                do j=1,jx
@@ -507,10 +508,11 @@ contains
 !=======================================================================
 !=======================================================================
       subroutine funcv(nn,xx,ffvec)
+        use cqlconf_mod, only : setup0
       use param_mod
-      use cqlcomm_mod, only: lrz, ngen, pinch
+      use cqlcomm_mod, only: ngen, pinch
       use cqlcomm_mod, only: adv, adv_norm, d_r, drrt, d_rr
-      use cqlcomm_mod, only: lrindx,tam2, frn, cynt2, coss, tau
+      use cqlcomm_mod, only: tam2, frn, cynt2, coss, tau
       use cqlcomm_mod, only: cint2, zmaxpsi, iy_
       use cqlcomm_mod, only: dentarget, reden, reden_norm
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -519,21 +521,21 @@ contains
 !.......................................................................
 !     This user input subroutine is used by newt, giving the function
 !     values fvec(1:nn) resulting for input vector xx(1:nn).
-!     In our case:   nn=lrz-1
-!                    xx(1:nn)=adv(k,1:lrz-1)
-!                    fvec=(dentarget(l)-reden(ktransp,l)),l=1,lrz-1
+!     In our case:   nn=setup0%lrz-1
+!                    xx(1:nn)=adv(k,1:setup0%lrz-1)
+!                    fvec=(dentarget(l)-reden(ktransp,l)),l=1,setup0%lrz-1
 !.......................................................................
 
       dimension xx(nn)
 
-      if (nn.ne.(lrz-1)) stop 'funcv: nn.ne.(lrz-1)'
+      if (nn.ne.(setup0%lrz-1)) stop 'funcv: nn.ne.(setup0%lrz-1)'
 
 !     If want to transport multiple species, will need to
 !     pass species index to here.
       if (ngen.ne.1) stop 'funcv: Have to fix for ngen.ne.1, BH010426'
       k=1
 
-      do l=1,lrz-1
+      do l=1,setup0%lrz-1
 
          if (pinch.eq."simplen" .or. pinch.eq."case1n" .or. &
               pinch.eq."case3n") then
@@ -565,7 +567,7 @@ contains
 
       do l=1,nn
          call bcast(tam2,zero,jx)
-         lr=lrindx(l)
+         lr=setup0%lrindx(l)
          do j=1,jx
             do i=1,iy_(l)
             tam2(j)=tam2(j)+frn(i,j,k,l)*cynt2(i,l)* &
@@ -597,6 +599,7 @@ contains
       subroutine tdtransp1
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use r8subs_mod, only : cvmgt, dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
@@ -630,11 +633,11 @@ contains
 !%OS
 !      write(*,*) 'f(i,3,1,1),i=1,iy',(f(i,3,1,1),i=1,iy)
       if (nonadi .eq. 6) then
-         !XXX YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+         !XXX YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or setup0%lrz)
         call tdtrvtor2(fvn(0:iyp1,0:jxp1,1:ngen,1), &
                        frn(0:iyp1,0:jxp1,1:ngen,1), vpint,vpint_,1)
       else
-        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or lrz)
+        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,0:lrors(or setup0%lrz)
         call tdtrvtor(fvn,frn)
       endif
 !%OS
@@ -691,7 +694,7 @@ contains
               fg_(j,ii,lu)=delr(i,lu)*dtfactor/betr(i,lu)
               eg_(j,ii,lu)=alpr(i,lu)/betr(i,lu)
               frn(idx(i,lrors),j,k,lrors)=vptb_(idx(i,lrors), &
-                lrindx(lrors))/zmaxpsi(lrindx(lrors)) &
+                setup0%lrindx(lrors))/zmaxpsi(setup0%lrindx(lrors)) &
                 *frn(idx(i,lrors),j,k,lrors)
               eg_(j,ii,lrors)=0.
               fg_(j,ii,lrors)=frn(idx(i,lrors),j,k,lrors)
@@ -783,8 +786,8 @@ contains
             do 310 l=l_lower(i),lrors
               ii=idx(i,l)
               do 312 j=1,jx
-                frn(ii,j,k,l)=frn(ii,j,k,l)/vptb_(ii,lrindx(l))* &
-                  zmaxpsi(lrindx(l))
+                frn(ii,j,k,l)=frn(ii,j,k,l)/vptb_(ii,setup0%lrindx(l))* &
+                  zmaxpsi(setup0%lrindx(l))
  312          continue
  310        continue
  285      continue
@@ -809,8 +812,8 @@ contains
             zs=0.
             zt=0.
             do 420 i=1,iytr(l)
-              zs=zs+vpint_(idx(i,l),lrindx(l))
-              zt=zt+vpint_(idx(i,l),lrindx(l))*frn(idx(i,l),1,k,l)
+              zs=zs+vpint_(idx(i,l),setup0%lrindx(l))
+              zt=zt+vpint_(idx(i,l),setup0%lrindx(l))*frn(idx(i,l),1,k,l)
  420        continue
             do 430 i=1,iytr(l)
               frn(idx(i,l),1,k,l)=zt/zs
@@ -826,7 +829,7 @@ contains
 !......................................................................
 
       if (nonadi .eq. 6) then
-        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or lrz)
+        !     YuP:This subr. uses internal loops in 0:iyp1,0:jxp1,1:ngen,1:lrors(or setup0%lrz)
         call tdtrrtov2(frn(0:ipy1,0:jxp1,1:ngen,1), &
                        frn(0:ipy1,0:jxp1,1:ngen,1), vpint,vpint_,1)
       else
