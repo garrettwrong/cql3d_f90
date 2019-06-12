@@ -33,8 +33,9 @@ LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
 DELETE    = rm -f
 
-
-all: $(NAME) $(NAME)_shared lib$(NAME).a
+standalone: $(NAME)
+libs: $(NAME)_shared lib$(NAME).a
+all: standalone libs
 
 $(NAME):           $(F90OBJECTS) $(OBJECTS)
 	$(LOAD)    $^  $(LOCATION) $(LIBRARIES)
@@ -95,4 +96,6 @@ clean:
 
 .PHONY: all
 .PHONY: clean
+.PHONY: libs
 .PHONY: rebuild
+.PHONY: standalone
