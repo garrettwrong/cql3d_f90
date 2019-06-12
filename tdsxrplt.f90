@@ -165,7 +165,8 @@ contains
       subroutine tdsxrvw(tempp4,tempp5,tempp6)
         use cqlconf_mod, only : setup0
         use param_mod
-      use cqlcomm_mod, only : eqsym, softxry, ez, er, iyjx, lorbit, solr, solz
+        use cqlcomm_mod, only : eqsym, softxry, ez, er, iyjx
+        use cqlcomm_mod, only : lorbit, solr, solz, rcontr, zcontr, lensxr
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
 
