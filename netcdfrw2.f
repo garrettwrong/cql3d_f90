@@ -1,5 +1,16 @@
-c
-c
+
+      integer function length_char(string)
+c     Returns length of string, ignoring trailing blanks,
+c     using the fortran intrinsic len().
+      character*(*) string
+      do i=len(string),1,-1
+         if(string(i:i) .ne. ' ') goto 20
+      enddo
+ 20   length_char=i
+      return
+      end function length_char
+
+
       subroutine netcdfrw2(kopt)
       use cqlconf_mod, only : setup0
       use advnce_mod !here: in netcdfrw2().
@@ -10,8 +21,17 @@ c
       use prppr_mod, only : prppr
       use r8subs_mod, only : dcopy
       use zcunix_mod, only : terp1
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
       save
+
+      integer :: kopt
+      integer :: i, ii, ielem, istat, iyy
+      integer :: jj
+      integer :: k, kk, kk, kbdim, kedim, kzdim
+      integer :: l, ll, lrzadim, lsig
+      integer :: nampfmax_dim, ngenadim, nonch_dim, nrho_dim, nrho_dim1
+      integer :: numrec1, numrecsave, nwkpack
+
 !MPIINSERT_INCLUDE
 
 c     This subroutine is only called from MPI rank=0.
@@ -893,7 +913,7 @@ c     Output current calculated from eqdsk:
 
       vid=ncvdef2(ncid,'enerkev',NCDOUBLE,1,xdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,31,
-     +           'energy=restmkev*(gamma(x(:))-1)',status)
+     +           'energy=restmkev*(gamma(x(:))-1)',istatus)
 
       vid=ncvdef2(ncid,'uoc',NCDOUBLE,1,xdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,34,
@@ -1416,7 +1436,7 @@ c--------------------------
 
       !YuP[2018-09-28], BH181112 added for 'lngshrtf' option,
       !for saving f() distr.func. at selected (nsave()) t steps only.
-      vid=ncvdef2(ncid,'nsave',NCINT,1,tsavedim,istatus)
+      vid=ncvdef2(ncid,'nsave',NCLONG,1,tsavedim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,41,
      +           'Selected time steps, n.eq.nsave(1:nsavet)',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,4,'none',istatus)
@@ -5135,21 +5155,6 @@ c-YuP:            call ncclos(ncid,istatus)
 
       return
       end subroutine netcdfvec
-c
-c
-      integer function length_char(string)
-c     Returns length of string, ignoring trailing blanks,
-c     using the fortran intrinsic len().
-      character*(*) string
-      do i=len(string),1,-1
-         if(string(i:i) .ne. ' ') goto 20
-      enddo
- 20   length_char=i
-      return
-      end function length_char
-
-
-
 
 
 
