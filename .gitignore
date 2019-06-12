@@ -5,3 +5,5 @@ xcql3d_gfortran64*
 *~
 *#*
 oldmakefiles*
+*.a
+*.so
