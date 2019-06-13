@@ -18,7 +18,13 @@ c
       use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      implicit none
+      integer kopt,krf ! input
+      integer i,j,ii,is,ll,iray,neltmax,nr, len_ii ! local
+      integer nrays ! nrays will be obtained from reading genray.nc or similar
+      integer length_char, ncvdef2 ! external functions
+      real*8 sbsign ! local scalar
+      
       save
 
 
@@ -215,15 +221,6 @@ cl    1.1.2 define dimensions
 c     p. 67 of netcdf-2 manual
 c     integer function ncddef(ncid,dim_name,dim_siz,error_code)
 c       returns dimension id.
-
-c-YuP:      xdim=ncddef(ncid,'x',jx,istatus)
-c-YuP:      ydim=ncddef(ncid,'y',iymax,istatus)
-c-YuP:      rdim=ncddef(ncid,'r',setup0%lrz,istatus)
-c-YuP:      r0dim=ncddef(ncid,'r0',setup0%lrzmax,istatus)
-c-YuP:      twodim=ncddef(ncid,'two',2,istatus)
-c-YuP:      neltdim=ncddef(ncid,'neltmax',neltmax,istatus)
-c-YuP:      nraydim=ncddef(ncid,'nrays',nray(1),istatus)
-c-YuP:      cdim=ncddef(ncid,'cdim',8,istatus)
 
       istatus= NF_DEF_DIM(ncid, 'x',      jx ,      xdim)  !-YuP: NetCDF-f77
       istatus= NF_DEF_DIM(ncid, 'y',      iymax,    ydim)
@@ -1140,20 +1137,17 @@ c-YuP      endif
       endif                                   !-YuP: NetCDF-f77
 
 c     Get dimension ID from dimension name
-c-YuP:      neltdim=ncdid(ncid,'neltmax',istatus)
-c-YuP:      nraydim=ncdid(ncid,'nrays',istatus)
-c-YuP:      twodim=ncdid(ncid,'two',istatus)
       istatus= NF_INQ_DIMID(ncid,'neltmax',neltdim) ! dep. on krf
       istatus= NF_INQ_DIMID(ncid,'nrays',  nraydim) ! dep. on krf
       istatus= NF_INQ_DIMID(ncid,'two',    twodim)  !-YuP: NetCDF-f77 get twodim
 
 c     Query netcdf file for dimensions:
-c-YuP:      call ncdinq(ncid,neltdim,name,neltmax,istatus)
-c-YuP:      call ncdinq(ncid,nraydim,name,nrays,istatus)
-c-YuP:      call ncdinq(ncid,twodim,name,ntwo,istatus)
       istatus= NF_INQ_DIM(ncid,neltdim,name,neltmax)  ! dep. on krf
-      istatus= NF_INQ_DIM(ncid,nraydim,name,nrays)    ! dep. on krf
-      istatus= NF_INQ_DIM(ncid,twodim,name,ntwo)     !-YuP: NetCDF-f77 get ntwo
+      istatus= NF_INQ_DIM(ncid,nraydim,name,nrays) !get nrays value (dep. on krf)
+      
+      !YuP[2019-06-13] the value of ntwo is not used anywhere? Why reading?
+      !Commenting out (but leave the line, just in case):
+      !istatus= NF_INQ_DIM(ncid,twodim,name,ntwo)     ! get ntwo
 
       !-YuP: Why needed ???      COMMENTING it out:
 cBH110329  Now using urftmp temporary storage rather than temp1, etc.
@@ -1170,27 +1164,20 @@ c     is known for the input data. That is, the data conforms
 c     to the above output data format.
 c     (Checks could be placed in the code.)
 
-c-YuP:      vid=ncvid(ncid,'nray',istatus)
       istatus= NF_INQ_VARID(ncid,'nray',vid)  !-YuP: NetCDF-f77 get vid
-c-YuP:      call ncvgt(ncid,vid,1,1,nray(krf),istatus)
       istatus= NF_GET_VAR1_INT(ncid,vid,(1),nray(krf)) !-YuP: NetCDF-f77
 
 c     Variable nharm in toray.nc and 3d.nc, is called nharm1 in
 c     the cql3d mnemonic_rf.nc file.  Allow for this.
       !!!-YuP       call NCPOPT(NCVERBOSL)
-c-YuP:      vid=ncvid(ncid,'nharm',istatus)
       istatus= NF_INQ_VARID(ncid,'nharm',vid)  !-YuP: NetCDF-f77 get vid
       !!!-YuP       call NCPOPT(NCVERBOS+NCFATAL)
       if (istatus.ne.0) then
-c-YuP:          vid=ncvid(ncid,'nharm1',istatus)
       istatus= NF_INQ_VARID(ncid,'nharm1',vid)  !-YuP: NetCDF-f77 get vid
       endif
-c-YuP:      call ncvgt(ncid,vid,1,1,nharm(krf),istatus)
       istatus= NF_GET_VAR1_INT(ncid,vid,(1),nharm(krf)) !-YuP: NetCDF-f77
 
-c-YuP:      vid=ncvid(ncid,'freqcy',istatus)
       istatus= NF_INQ_VARID(ncid,'freqcy',vid)  !-YuP: NetCDF-f77 get vid
-c-YuP:      call ncvgt(ncid,vid,1,1,freqcy(krf),istatus)
       istatus= NF_GET_VAR1_DOUBLE(ncid,vid,(1),freqcy(krf)) !-YuP: NetCDF-f77
 
       omega(krf)=2.*pi*freqcy(krf)
@@ -1216,12 +1203,10 @@ c     modes, may be read.
 c..................................................................
 
       ray_count(1)=neltmax ! depends on krf
-      ray_count(2)=nrays   ! depends on krf
+      ray_count(2)=nrays ! nrays was obtained from genray.nc or similar (value depends on krf)
       ray_count(3)=2
 
-c-YuP:      vid=ncvid(ncid,'nrayelt',istatus)
       istatus= NF_INQ_VARID(ncid,'nrayelt',vid)  !-YuP: NetCDF-f77 get vid
-c-YuP:      call ncvgt(ncid,vid,1,ray_count(2),nrayelt(1,krf),istatus)
       istatus= NF_GET_VARA_INT(ncid,vid,(1),ray_count(2),nrayelt(:,krf))
 
 
@@ -1473,7 +1458,7 @@ c --- endif --- (kopt = 2  or  3  or  4)
 
 
       return
-      end subroutine
+      end subroutine netcdfrf
 
 
 
@@ -1487,7 +1472,11 @@ C==========================================================================
       use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      implicit none !integer (i-n), real(c_double) (a-h,o-z)
+      integer krf ! input
+      integer ll,numrec_rdcb ! local
+      integer length_char, ncvdef2 ! external functions
+
       save
 
 #ifdef __MPI
@@ -1878,6 +1867,6 @@ c-YuP:      call ncclos(ncid,istatus)
       call check_err(istatus)
 
       return
-      end subroutine
+      end subroutine netcdf_rdcb
 
       end module netcdfrf_mod
