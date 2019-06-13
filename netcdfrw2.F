@@ -2,7 +2,9 @@
       integer function length_char(string)
 c     Returns length of string, ignoring trailing blanks,
 c     using the fortran intrinsic len().
-      character*(*) string
+      implicit none
+      character*(*) string ! input
+      integer i ! local
       do i=len(string),1,-1
          if(string(i:i) .ne. ' ') goto 20
       enddo
@@ -21,7 +23,7 @@ c     using the fortran intrinsic len().
       use prppr_mod, only : prppr
       use r8subs_mod, only : dcopy
       use zcunix_mod, only : terp1
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
       save
 
       integer :: kopt
@@ -161,6 +163,9 @@ c      character(len=8), dimension(npaproc) :: npa_proc  !automatic var
       data start2/1,1/
       data start3/1,1,1/
       data start4/1,1,1,1/
+      
+      integer length_char, ncvdef2 ! external functions
+      integer j ! local
 
       ! another way to do this, when the code is a mess.
       character(len=8) :: cqlpmod
@@ -4253,6 +4258,7 @@ c
 c
 
       subroutine check_err(iret)
+      implicit none
       integer iret
       include 'netcdf.inc'
       if (iret .ne. NF_NOERR) then
@@ -4267,7 +4273,8 @@ c
       subroutine netcdfmain
       use param_mod
       use cqlcomm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
+      integer igrid ! local
 
 c.......................................................................
 c     Controls some netcdf output (could make it all).
@@ -4330,7 +4337,7 @@ c
       use prppr_mod, only : prppr
       use r8subs_mod, only : dcopy
 
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
 
 c...................................................................
 c
@@ -4350,9 +4357,6 @@ c...................................................................
 
       include 'netcdf.inc'
 
-      dimension ll_netcdf(lrza),rya_netcdf(lrza),
-     +          itl_netcdf(lrza),itu_netcdf(lrza)
-
       integer ncid,vid,istatus
       integer ipxydim,jpxydim
       integer dims(4),count(4),start(4)
@@ -4369,6 +4373,16 @@ c...................................................................
      +              "rf diffusion flux ","sum of fluxes     "/
 
       real*8, allocatable :: wkpack(:) ! local working array for pack21
+      
+      integer :: lefct, igrid ! input
+      integer :: length_char, ncvdef2 ! external functions
+      integer :: nwkpack, istat, ll, llcount, i, j, k ! local
+      integer :: n_netcdf ! local
+      real*8 xll,xlu,xlp,xpl,xpu,xmaxq,pltlimm,pltlimmm ! local scalars, input for other functions
+      real*8 xrf ! local scalar, input for call coefrfad()
+      real*8 rya_netcdf(lrza) ! local, and input for ncvpt_doubl2
+      integer :: ll_netcdf(lrza),itl_netcdf(lrza),itu_netcdf(lrza) ! local, and input for ncvpt_int2
+
 
 !     another way to do this, when the code is a mess.
       character(len=8) :: cqlpmod
@@ -5002,27 +5016,22 @@ c-YuP:                vid=ncvid(ncid,'lrz',istatus)
             istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,lrz,istatus)
 
-c-YuP:                vid=ncvid(ncid,'n_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'n_netcdf',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,n_netcdf,istatus)
 
-c-YuP:                vid=ncvid(ncid,'ll_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'ll_netcdf',vid)  !-YuP: NetCDF-f77 get vid
-            call ncvpt_int2(ncid,vid,1,n_netcdf,ll_netcdf,istatus)
+            call ncvpt_int2(ncid,vid,1,n_netcdf,
+     &           ll_netcdf(1:n_netcdf),istatus)
 
-c-YuP:                vid=ncvid(ncid,'jpxy',istatus)
             istatus= NF_INQ_VARID(ncid,'jpxy',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,jpxy,istatus)
 
-c-YuP:                vid=ncvid(ncid,'ipxy',istatus)
             istatus= NF_INQ_VARID(ncid,'ipxy',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_int2(ncid,vid,1,1,ipxy,istatus)
 
-c-YuP:                vid=ncvid(ncid,'xll',istatus)
             istatus= NF_INQ_VARID(ncid,'xll',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,(1),1,xll,istatus)
 
-c-YuP:                vid=ncvid(ncid,'xlu',istatus)
             istatus= NF_INQ_VARID(ncid,'xlu',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,(1),1,xlu,istatus)
 
@@ -5042,14 +5051,12 @@ c-YuP:                vid=ncvid(ncid,'xperp',istatus)
             istatus= NF_INQ_VARID(ncid,'xperp',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,(1),ipxy,xperp,istatus)
 
-c-YuP:                vid=ncvid(ncid,'rhomax',istatus)
             istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
             call ncvpt_doubl2(ncid,vid,(1),1,rhomax,istatus)
 
-c-YuP:                vid=ncvid(ncid,'rya_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'rya_netcdf',vid)  !-YuP: NetCDF-f77 get vid
-            call ncvpt_doubl2(ncid,vid,(1),n_netcdf,rya_netcdf(1),
-     &      istatus)
+            call ncvpt_doubl2(ncid,vid,(1),n_netcdf,
+     &           rya_netcdf(1:n_netcdf), istatus)
 
 
 
@@ -5094,7 +5101,8 @@ c-YuP:                vid=ncvid(ncid,'n_netcdf',istatus)
 
 c-YuP:                vid=ncvid(ncid,'ll_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'ll_netcdf',vid)  !-YuP: NetCDF-f77 get vid
-            call ncvpt_int2(ncid,vid,1,n_netcdf,ll_netcdf,istatus)
+            call ncvpt_int2(ncid,vid,1,n_netcdf,
+     &           ll_netcdf(1:n_netcdf),istatus)
 
 c-YuP:                vid=ncvid(ncid,'jx',istatus)
             istatus= NF_INQ_VARID(ncid,'jx',vid)  !-YuP: NetCDF-f77 get vid
@@ -5118,11 +5126,13 @@ c-YuP:                vid=ncvid(ncid,'iy',istatus)
 
 c-YuP:                vid=ncvid(ncid,'itl_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'itl_netcdf',vid)  !-YuP: NetCDF-f77 get vid
-            call ncvpt_int2(ncid,vid,1,n_netcdf,itl_netcdf(1),istatus)
+            call ncvpt_int2(ncid,vid,1,n_netcdf,
+     &           itl_netcdf(1:n_netcdf),istatus)
 
 c-YuP:                vid=ncvid(ncid,'itu_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'itu_netcdf',vid)  !-YuP: NetCDF-f77 get vid
-            call ncvpt_int2(ncid,vid,1,n_netcdf,itu_netcdf(1),istatus)
+            call ncvpt_int2(ncid,vid,1,n_netcdf,
+     &           itu_netcdf(1:n_netcdf),istatus)
 
 c-YuP:                vid=ncvid(ncid,'rhomax',istatus)
             istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
@@ -5130,8 +5140,8 @@ c-YuP:                vid=ncvid(ncid,'rhomax',istatus)
 
 c-YuP:                vid=ncvid(ncid,'rya_netcdf',istatus)
             istatus= NF_INQ_VARID(ncid,'rya_netcdf',vid)  !-YuP: NetCDF-f77 get vid
-            call ncvpt_doubl2(ncid,vid,(1),n_netcdf,rya_netcdf(1),
-     &       istatus)
+            call ncvpt_doubl2(ncid,vid,(1),n_netcdf,
+     &           rya_netcdf(1:n_netcdf), istatus)
 
 
 c     Write the fluxes (and the pitch angle mesh y):
@@ -5175,8 +5185,9 @@ c-YuP:            call ncclos(ncid,istatus)
 C=YuP=> ADDED: conversion from Netcdf-2 to Netcdf-3 or higher ==========
 C These routines/function convert old routines:
 
-      function ncvdef2(NCID,VARNAM,VARTYP,NDIMS,VDIMS,istatus)
+      integer function ncvdef2(NCID,VARNAM,VARTYP,NDIMS,VDIMS,istatus)
       ! vid=NCVDEF() is renamed to vid=ncvdef2() in *.f files
+      implicit none
       INCLUDE 'netcdf.inc'
       CHARACTER*(*) VARNAM
       INTEGER istatus,vid,NCID, VARTYP,XTYPE, NDIMS,VDIMS(*)
@@ -5191,6 +5202,7 @@ C These routines/function convert old routines:
       end function ncvdef2
 
       subroutine ncaptc2(NCID, vid, NAME, ATTYPE, LEN, TEXT, istatus)
+      implicit none
       INCLUDE 'netcdf.inc'
       CHARACTER*(*) NAME
       CHARACTER*(*) TEXT
@@ -5200,6 +5212,7 @@ C These routines/function convert old routines:
       end subroutine ncaptc2
 
       subroutine ncvptc2(NCID, vid, START, COUNTS, TEXT, LEN, istatus)
+      implicit none
       INCLUDE 'netcdf.inc'
       CHARACTER*(*) TEXT
       INTEGER istatus,vid,NCID, LEN, START(*), COUNTS(*)
@@ -5208,6 +5221,7 @@ C These routines/function convert old routines:
       end subroutine ncvptc2
 
       subroutine ncvpt_doubl2(NCID, vid, START, COUNTS,  DVALS, istatus)
+      implicit none
       INCLUDE 'netcdf.inc'
       INTEGER istatus,vid,NCID, START(*), COUNTS(*)
       REAL*8 DVALS(*)
@@ -5216,6 +5230,7 @@ C These routines/function convert old routines:
       end subroutine ncvpt_doubl2
 
       subroutine ncvpt_int2(NCID, vid, START, COUNTS,  IVALS, istatus)
+      implicit none
       INCLUDE 'netcdf.inc'
       INTEGER istatus,vid,NCID, START(*), COUNTS(*)
       INTEGER IVALS(*)
@@ -5257,7 +5272,13 @@ c======================================================================
       use tdfinterp_mod, only : tdfinterp
       use zcunix_mod, only : terp1
       use zcunix_mod, only : terp2
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
+      integer :: j,k,istat1,istat2,istat3,istat4,istat5,istat6,istat7 !local
+      integer :: ir,iz,iv,it ! local
+      real*8 dr,dz_,dv,dt,avg ! local scalars
+      real*8 rr,zz,ppsi ! local scalars, input for terp2(),terp1()
+      real*8 arg1,arg2 ! local scalars, input for atan2()
+      real*8 vn,pitch,rhoin,polang ! local scalars, input for tdfinterp()
       save
 
 #ifdef __MPI
@@ -5524,7 +5545,7 @@ c======================================================================
       subroutine ncwritef4d(f4dr,f4dz,f4dv,f4dt,f4ddv,f4ddt,f4d)
       use param_mod
       use cqlcomm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
 
 c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
@@ -5548,6 +5569,9 @@ c     nv_f4d,nt_f4d are dims of normalized vel and of pitch angle grids.
       integer dims(4),start(4),count(4)
 
       character*128 ltitle
+      
+      integer length_char, ncvdef2 ! external functions
+      integer ll ! local
 
       data start/1,1,1,1/
 
