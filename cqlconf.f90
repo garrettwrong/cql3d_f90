@@ -40,7 +40,7 @@ module cqlconf_mod
   end type setup0_t
 
   ! rest of cql3d will access this
-  type(setup0_t), public :: setup0
+  type(setup0_t), public, save :: setup0
 
   !..................................................................
   !     NAMELIST (SETUP0) DECLARATION FOR INPUT
