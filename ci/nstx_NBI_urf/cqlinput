@@ -94,7 +94,7 @@
  ncoef=1,
  ncont=20,
  nen=30,
- netcdfnm='disabled', !'enabled', !----------disabled writing into *krf.nc file
+ netcdfnm='enabled',
  nfpld=10000,
  ngen=1,
  njene=21,

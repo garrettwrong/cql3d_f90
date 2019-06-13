@@ -59,4 +59,22 @@ case1_shared:
   dependencies:
   - build:centos7
 
+nstx_NBI_urf:
+  stage: test
+  image: garrettwrong/cql3d_f90_centos-7
+  script:
+  - cd ci/nstx_NBI_urf
+  - ../../xcql3d_gfortran64
+  - nccmp -dmgfs nstx_130608.00352.0_short_rerun190612.nc reference.nc 
+  - nccmp -dmgfs nstx_130608.00352.0_short_rerun190612_krf001.nc reference_krf001.nc 
+  artifacts:
+    when: always
+    paths:
+    - ci/nstx_NBI_urf/nstx_130608.00352.0_short_rerun190612.nc
+    - ci/nstx_NBI_urf/nstx_130608.00352.0_short_rerun190612_krf001.nc
+    - ci/nstx_NBI_urf/nstx_130608.00352.0_short_rerun190612.ps
+    expire_in: 1 week
+  dependencies:
+  - build:centos7
+
 
