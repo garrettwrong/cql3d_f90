@@ -15,9 +15,9 @@ module tdpltmne_mod
 contains
 
   subroutine tdpltmne
-    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use r8subs_mod, only : rbound
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)

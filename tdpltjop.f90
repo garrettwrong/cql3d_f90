@@ -15,9 +15,9 @@ module tdpltjop_mod
 contains
 
   subroutine tdpltjop
-    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !MPIINSERT_INCLUDE
