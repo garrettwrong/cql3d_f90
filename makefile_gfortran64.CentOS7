@@ -34,8 +34,8 @@ PROTECT   = chmod 755
 DELETE    = rm -f
 
 standalone: $(NAME)
-libs: $(NAME)_shared lib$(NAME).a
-all: standalone libs
+libs: lib$(NAME).a lib$(NAME).so
+all: libs $(NAME)_shared standalone
 
 $(NAME):           $(F90OBJECTS) $(OBJECTS)
 	$(LOAD)    $^  $(LOCATION) $(LIBRARIES)
@@ -48,7 +48,7 @@ lib$(NAME).so: $(LIBOBJS)
 	$(PROTECT) $@
 
 lib$(NAME).a: $(LIBOBJS)
-	$(LIBTOOL) -o $@ $^
+	$(LIBTOOL) $@ $^
 	$(PROTECT) $@
 
 $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
@@ -92,7 +92,7 @@ rebuild:
 clean:
 	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
 	$(DELETE) *.mod
-	$(DELETE) *.so *.a
+	$(DELETE) *.so *.a $(NAME)_shared
 
 .PHONY: all
 .PHONY: clean
