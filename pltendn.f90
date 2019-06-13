@@ -14,9 +14,9 @@ module pltendn_mod
 contains
 
   subroutine pltendn
-    use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use r8subs_mod, only : rbound, luf
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -451,9 +451,9 @@ contains
 !======================================================================
 
     subroutine plt_fow_cons ! developed for FOW, but can also be used for ZOW
-      use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use r8subs_mod, only : rbound
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
@@ -579,8 +579,8 @@ contains
            !RNONCHA1(it)=RBOUND(ptime(it,1))
 !BH171231           RLRZAP11(1:setup0%lrzmax)= consnp(it,1:setup0%lrzmax)
             RLRZAP11(1:setup0%lrz)= consnp(it,1:setup0%lrz)
-!BH171231           CALL PGLINE(setup0%lrzmax,RLRZAP1(1),RLRZAP11(1))
-           CALL PGLINE(setup0%lrz,RLRZAP1(1),RLRZAP11(1))
+!BH171231           CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
+           CALL PGLINE(setup0%lrz,RLRZAP1(1:setup0%lrz),RLRZAP11(1:setup0%lrz))
         ENDDO
         CALL PGSAVE
         CALL PGSCH(1.)

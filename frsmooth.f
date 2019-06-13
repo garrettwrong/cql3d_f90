@@ -3,7 +3,15 @@ c
       subroutine frsmooth(k,curnorm)
       use param_mod
       use cqlcomm_mod
+      !lrzmax =  setup0%lrzmax
+      !mnemonic = setup0%mnemonic
+      use cqlconf_mod, only : setup0
       implicit integer (i-n), real(c_double) (a-h,o-z)
+      
+      ! YuP[2019-06-12] Getting lrz from setup0 type:
+      integer :: lrz
+      lrz = setup0%lrz
+
 
       if (smooth_ .lt. .005) return
 

@@ -5,6 +5,7 @@ c
       use bcast_mod, only : bcast
       use bcast_mod, only : ibcast
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use eqfpsi_mod, only : eqppsi
       use eqfpsi_mod, only : eqfpsi
       use param_mod
@@ -40,6 +41,12 @@ c
       pointer psipt
       dimension pr(:)
       pointer pr
+
+      ! YuP[2019-06-12] Getting lrz and lrzmax from setup0 type:
+      integer :: lrz
+      integer :: lrzmax
+      lrz = setup0%lrz
+      lrzmax =  setup0%lrzmax
 
 c
 c..................................................................

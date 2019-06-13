@@ -115,7 +115,7 @@ finit.o: bcast.o cqlcomm.o cqlconf.o lossorbm.o param.o tdreadf.o
 fle.o: bcast.o cqlcomm.o diagwrng.o micgetr.o param.o r8subs.o
 flxfn.o: cqlcomm.o diagwrng.o param.o
 freya.o: aminmx.o bcast.o param.o
-freyasou.o: bcast.o cqlcomm.o eqfpsi.o param.o r8subs.o sourcpwr.o  \
+freyasou.o: bcast.o cqlcomm.o cqlconf.o eqfpsi.o param.o r8subs.o sourcpwr.o  \
 	tdnflxs.o tdtoaray.o urfb0.o zcunix.o
 frinitl.o: cqlcomm.o param.o
 frinitz.o: cqlcomm.o param.o
@@ -123,10 +123,10 @@ frnbdep2.o: cqlcomm.o param.o
 frnfreya.o: cqlcomm.o frplteq.o param.o
 frplteq.o: cqlcomm.o cqlconf.o param.o r8subs.o tdnflxs.o
 frset.o: cqlcomm.o param.o
-frsmooth.o: cqlcomm.o param.o
+frsmooth.o: cqlcomm.o cqlconf.o param.o
 frsplft.o: cqlcomm.o param.o
 frsuppor.o: cqlcomm.o param.o
-frstup.o: bcast.o cqlcomm.o param.o
+frstup.o: bcast.o cqlcomm.o cqlconf.o param.o
 frwrong.o: cqlcomm.o param.o
 ilut.o: r8subs.o
 impavnc0.o: advnce.o bcast.o bsl.o bsu.o coefmidt.o coefmidv.o  \

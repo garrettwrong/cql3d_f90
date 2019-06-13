@@ -6,6 +6,7 @@ c
 
       use bcast_mod, only : bcast
       use cqlcomm_mod
+      use cqlconf_mod, only : setup0
       use param_mod
 
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -15,6 +16,12 @@ c
       dimension psivol(*),potsid(*),frpsi(nnra,*),
      1  zne(kz,*),zni(kz,*),zte(*),zzi(kz,*),xxx(*),yyy(*),
      1  zti(*),zeffctv(*)
+
+      ! YuP[2019-06-12] Getting lrz and lrzmax from setup0 type:
+      integer :: lrz
+      integer :: lrzmax
+      lrz = setup0%lrz
+      lrzmax =  setup0%lrzmax
 
 c..................................................................
 c     This routine should be called just before the call to FREYA.
