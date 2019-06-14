@@ -46,8 +46,8 @@
         tr1(l)=0.
         do 20 ll=1,lrz
           tr(l)=exp(-(rz(ll)-rz(l))**2/smth)*dvol(l)+tr(l)
-          tr1(l)=exp(-(rz(ll)-rz(l))**2/smth)*asorz(k,1,ll)*dvol(l)
-     &      +tr1(l)
+          tr1(l)=exp(-(rz(ll)-rz(l))**2/smth)*asorz(k,1,ll)*dvol(l) &
+            +tr1(l)
  20     continue
         tr4(l)=tr1(l)/tr(l)
         curnorm=curnorm+dvol(l)*tr4(l)

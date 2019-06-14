@@ -255,10 +255,10 @@
 !     angmpz contains only the toroidal component of ang momentum.
 !---------------------------------------------------------------------
 !     ONETWO DIVERGENCE
-      include 'frcomm.h77'
+      include 'frcomm.h'
 
 !     Automatic arrays for local dynamic mem, for case where NUBEAM
-!     particle birth point list is used. nbirth_pts from frcomm.h77
+!     particle birth point list is used. nbirth_pts from frcomm.h
       integer, intent(out) :: ipts
       integer mi,mj ! in arg.list
       real(c_double) :: rin,rmax,zax,zmin,zmax ! in arg.list
@@ -281,14 +281,14 @@
       equivalence(r,xxx)
       equivalence(w,yyy)
       equivalence(psi,p)
-      real(c_double) :: cangv(kb), cangh(kb), sangv(kb), sangh(kb),
-     &  thetp(kb), thetpp(kb),
-     &  costp(kb), sintp(kb), costpp(kb), sintpp(kb),
-     &  vbeam(ke,kb)
+      real(c_double) :: cangv(kb), cangh(kb), sangv(kb), sangh(kb)
+      real(c_double) :: thetp(kb), thetpp(kb)
+      real(c_double) :: costp(kb), sintp(kb), costpp(kb), sintpp(kb)
+      real(c_double) :: vbeam(ke,kb)
       integer iatype(nap,kb)
 !      dimension sgvxne(kz),sgxn(kz,ke,kb),sgxnmi(ke,kb),hxfrac(ke,kb)
-      real(c_double) :: sgvxne(kz),sgxn(kcmp1,kz,kbe,ksge),
-     &       sgxnmi(ke,kb),hxfrac(ke,kb)
+      real(c_double) :: sgvxne(kz),sgxn(kcmp1,kz,kbe,ksge)
+      real(c_double) :: sgxnmi(ke,kb),hxfrac(ke,kb)
 !      real(c_double) :: sgxn1(kcmp1,kz,kbe,ksge)
       real(c_double) :: wt(kz), zeta_(kz),angmtp(kz)
       integer nmbrz(kz)
@@ -404,10 +404,10 @@
       drot   = (rotsid(mf)-rotsid(1))/mfm1
       drin   = (rinsid(1)-rinsid(mf))/mfm1
       drutp  = sqrt(potsid(mf)-potsid(1))/mfm1
-c990131      drot   = amax1(drot,1.e-6)
-c990131      drin   = amax1(drin,1.e-6)
-c990131      drutp  = amax1(drutp,1.e-6)
-c990131      elong  = amax1(elong,1.e-6)
+!990131      drot   = amax1(drot,1.e-6)
+!990131      drin   = amax1(drin,1.e-6)
+!990131      drutp  = amax1(drutp,1.e-6)
+!990131      elong  = amax1(elong,1.e-6)
       deps=1.d-6
       drot   = max(drot,deps)
       drin   = max(drin,deps)
@@ -487,12 +487,12 @@ c990131      elong  = amax1(elong,1.e-6)
             write(*,*)'Freya: read_birth_pts case, ncalls=',ncalls
          endif
          filenm=trim(birth_pts_files(ncalls))
-         call read_nubeam_data(filenm,nbirth_pts,atwb,
-     &                   nbirth_cmpts_nub,nshine_nub,
-     &                   pinj_nub,pabs_nub,x_nub,y_nub,z_nub,
-     &                   vx_nub,vy_nub,vz_nub,v_nub,en_nub,ie_nub,
-     &                   birth_rate_cmpts_nub,en_avg_cmpts_nub,
-     &                   pabs_cmpts_nub)
+         call read_nubeam_data(filenm,nbirth_pts,atwb, &
+                         nbirth_cmpts_nub,nshine_nub, &
+                         pinj_nub,pabs_nub,x_nub,y_nub,z_nub, &
+                         vx_nub,vy_nub,vz_nub,v_nub,en_nub,ie_nub, &
+                         birth_rate_cmpts_nub,en_avg_cmpts_nub, &
+                         pabs_cmpts_nub)
 
 !        pinj_nub=Injected power (Watts) = freya bptor
          bptor(1)=pinj_nub
@@ -582,10 +582,10 @@ c990131      elong  = amax1(elong,1.e-6)
 !       write(*,'(5(2x,1pe14.5))') (zzis(j,3),j=1,kz)
 !       stop
 !
-        call nbsgxn (iexcit,namep,namei,mb,mfm1,ne_tk,nprim,
-     &             nimp,nion,atwb,atw,ebkev,fe_tk,ibion,vbeam,
-     &             zne,znis,zte,zti,zzis,de_tk,dtemax,dnemax,dzemax,
-     &             hxfrac,sgxn,sgxnmi)
+        call nbsgxn (iexcit,namep,namei,mb,mfm1,ne_tk,nprim, &
+                   nimp,nion,atwb,atw,ebkev,fe_tk,ibion,vbeam, &
+                   zne,znis,zte,zti,zzis,de_tk,dtemax,dnemax,dzemax, &
+                   hxfrac,sgxn,sgxnmi)
 !      do ib=1,mb
 !       do j=1,3
 !         write(*,'(2i3,2x,1p1e12.4,a12)') j,ib,sgxnmi(j,ib),' sgxnmi'
@@ -736,20 +736,20 @@ c990131      elong  = amax1(elong,1.e-6)
 !
 !... generate neutral particle at beam source
 !
-             call sorspt1(bshape,bheigh,bwidth,bhfoc,bvfoc,bhdiv,
-     &            bvdiv,ib,ie,isourc,nsourc,sfrac1,vbeam,x0,y0,z0,
-     &            vx0,vy0,vz0)
+             call sorspt1(bshape,bheigh,bwidth,bhfoc,bvfoc,bhdiv, &
+                  bvdiv,ib,ie,isourc,nsourc,sfrac1,vbeam,x0,y0,z0, &
+                  vx0,vy0,vz0)
 !
 !... transform coordinates and advance particle to pivot point
 !
-            call rotate(naptr,iatype,aheigh,awidth,alen,bhofset,
-     &        bvofset,cangv,cangh,ib,isourc,costp,sintp,costpp,
-     &        sintpp,blenp,nsourc,sangv,sangh,rpivot,zpivot,mlost,
-     &        x0,y0,z0,vx0,vy0,vz0)
+            call rotate(naptr,iatype,aheigh,awidth,alen,bhofset, &
+              bvofset,cangv,cangh,ib,isourc,costp,sintp,costpp, &
+              sintpp,blenp,nsourc,sangv,sangh,rpivot,zpivot,mlost, &
+              x0,y0,z0,vx0,vy0,vz0)
 !      write(*,*)'freya,rotate:x0,y0,z0,vx0,vy0,vz0',x0,y0,z0,vx0,vy0,vz0
 !
 !     skip injection if particle is lost at aperture
-cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
+!Check inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 ! 120        if(mlost.ne.0) go to 160
   120       continue
             if (mlost .ne. 0)  go to 160
@@ -770,19 +770,19 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 !       stop
 !
             if (iexcit.le.0) then
-             call inject_old(atw,codeid,drutpi,droti,dri,dzi,
-     &             elongi,ib,ie,mfm1,mim1,mjm1,newpar,potsid(1),
-     &             psi,r,rmajor,rin,rmax,sgxn,sgxnmi,x0,y0,z0,
-     &             vx0,vy0,vz0,vbeam,w,zax,zmin,zmax,izone,
-     &             pzone,rzone,rpos,xpos,ypos,zpos)
+             call inject_old(atw,codeid,drutpi,droti,dri,dzi, &
+                   elongi,ib,ie,mfm1,mim1,mjm1,newpar,potsid(1), &
+                   psi,r,rmajor,rin,rmax,sgxn,sgxnmi,x0,y0,z0, &
+                   vx0,vy0,vz0,vbeam,w,zax,zmin,zmax,izone, &
+                   pzone,rzone,rpos,xpos,ypos,zpos)
             else
-             call inject1(atwb,codeid,de_tk,drutpi,droti,dri,ds_tk,dzi,
-     &             elongi,ib,ie,kb,kbe,ksge,ke,kz,ki,mfm1,mim1,
-     &             mjm1,ne_tk,newpar,nout,potsid(1),psi,r,rmajor,rin,
-     &             rmax,sgxn,sgxnloc,sgxnmi,x0,y0,z0,vx0,vy0,vz0,
-     &             vbeam,w,zangrot,zax,zmin,zmax,izone,
-     &             pzone,rzone,rpos,xpos,ypos,zpos,myid,tenter,
-     &             smax,texit)
+             call inject1(atwb,codeid,de_tk,drutpi,droti,dri,ds_tk,dzi, &
+                   elongi,ib,ie,kb,kbe,ksge,ke,kz,ki,mfm1,mim1, &
+                   mjm1,ne_tk,newpar,nout,potsid(1),psi,r,rmajor,rin, &
+                   rmax,sgxn,sgxnloc,sgxnmi,x0,y0,z0,vx0,vy0,vz0, &
+                   vbeam,w,zangrot,zax,zmin,zmax,izone, &
+                   pzone,rzone,rpos,xpos,ypos,zpos,myid,tenter, &
+                   smax,texit)
             endif
 
 !           Shift from particle birth point to guiding center point
@@ -810,8 +810,8 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
             vz0=vz_nub(ii)
             rpos=sqrt(xpos**2+zpos**2)
 !           get pzone (i.e., psi-value) and radial izone
-            call zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,potsid(1),psi,
-     &           r,w,xpos,ypos,zpos,pzone,izone)
+            call zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,potsid(1),psi, &
+                 r,w,xpos,ypos,zpos,pzone,izone)
 !
             vbeam(ie,ib)=v_nub(ii)
 !
@@ -886,11 +886,11 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 !
             if(iborb.ne.0)then
               nparx  = nparx + 1
-              call freyorb(atwb,codeid,drutpi,drini,droti,ic,iskip,
-     &          izone,mfm1,
-     &          norb,pinsid,potsid,pzone,rinsid,rotsid,rzone,rpos,
-     &          zetai,vbeam(ie,ib),zpos,ipass,iaxis,ier,izp,wid,wt,
-     &          zeta_,angmtp)
+              call freyorb(atwb,codeid,drutpi,drini,droti,ic,iskip, &
+                izone,mfm1, &
+                norb,pinsid,potsid,pzone,rinsid,rotsid,rzone,rpos, &
+                zetai,vbeam(ie,ib),zpos,ipass,iaxis,ier,izp,wid,wt, &
+                zeta_,angmtp)
 !
               if(ier.ne.0) then
                 fber(ie,ib) = fber(ie,ib) + one
@@ -975,8 +975,8 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 !    multiplying by weight of each m.c. particle
 !
           do 183 i=1,mfm1
-            angmpz(i,ie,ib)=angmpz(i,ie,ib)*bneut(ie,ib)/
-     &        (psivol(i)*npart)
+            angmpz(i,ie,ib)=angmpz(i,ie,ib)*bneut(ie,ib)/ &
+              (psivol(i)*npart)
  183      continue
 !
 !... normalize loss fractions and hot ion birth rate
@@ -993,13 +993,13 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 !     .        ' hibrz-pre'
 !         enddo
           do 190 i=1,mfm1
-            hibrz(i,ie,ib) = hibrz(i,ie,ib)*volume
-     &        /((one-xloss1)*npar*psivol(i))
+            hibrz(i,ie,ib) = hibrz(i,ie,ib)*volume &
+              /((one-xloss1)*npar*psivol(i))
             if(iborb.eq.0) then
               hdepz(i,ie,ib) = hibrz(i,ie,ib)
             elseif(xloss2.lt.1.) then
-              hdepz(i,ie,ib) = hdepz(i,ie,ib)*volume
-     &          /((one-xloss2)*npar*psivol(i))
+              hdepz(i,ie,ib) = hdepz(i,ie,ib)*volume &
+                /((one-xloss2)*npar*psivol(i))
             endif
  190      continue
 !      if(ie.eq.1 .and. ib.eq.2) stop
@@ -1033,10 +1033,10 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 !
        write(*,*) 'hibrz(i,1,1),hibrz(i,2,1),hibrz(i,3,1)'
        do i=1,mfm1
-         write(*,'(i4,2x,0p9f9.4)') i, hibrz(i,1,1),
-     &        hibrz(i,2,1),hibrz(i,3,1),
-     &        hibrz(i,1,2),hibrz(i,2,2),hibrz(i,3,2),
-     &        hibrz(i,1,3),hibrz(i,2,3),hibrz(i,3,3)
+         write(*,'(i4,2x,0p9f9.4)') i, hibrz(i,1,1), &
+              hibrz(i,2,1),hibrz(i,3,1), &
+              hibrz(i,1,2),hibrz(i,2,2),hibrz(i,3,2), &
+              hibrz(i,1,3),hibrz(i,2,3),hibrz(i,3,3) 
        enddo
 !       stop
 !
@@ -1095,20 +1095,20 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 !
 !     calculate neutral beam deposition density on (r,w) grid
       if (inubpat.eq.1 .and. codeid.ne.'onedee') then
-        call frnbdep2(psi,mi,mj,r,w,potsid,mf,rzpat,nrpat,nzpat,
-     &  ke,mb,sgxn,vbeam,hxfrac,inubpat)
+        call frnbdep2(psi,mi,mj,r,w,potsid,mf,rzpat,nrpat,nzpat, &
+        ke,mb,sgxn,vbeam,hxfrac,inubpat)
       endif
 !
       return
       end subroutine freya
 
 
-      subroutine read_nubeam_data(filenm,nbirth_pts,atwb,
-     &                   nbirth_cmpts_nub,nshine_nub,
-     &                   pinj_nub,pabs_nub,x_nub,y_nub,z_nub,
-     &                   vx_nub,vy_nub,vz_nub,v_nub,en_nub,ie_nub,
-     &                   birth_rate_cmpts_nub,en_avg_cmpts_nub,
-     &                   pabs_cmpts_nub)
+      subroutine read_nubeam_data(filenm,nbirth_pts,atwb, &
+                         nbirth_cmpts_nub,nshine_nub, &
+                         pinj_nub,pabs_nub,x_nub,y_nub,z_nub, &
+                         vx_nub,vy_nub,vz_nub,v_nub,en_nub,ie_nub, &
+                         birth_rate_cmpts_nub,en_avg_cmpts_nub, &
+                         pabs_cmpts_nub) 
 !
 !     Read NUBEAM data file
 !
@@ -1157,8 +1157,7 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
       iunit=14
       open(unit=iunit,file=filenm,status='old',iostat=kode)
       if (kode.ne.0) then
-         WRITE(*,*)
-     &        'NUBEAM file', filenm,' cannot be opened'
+         WRITE(*,*)'NUBEAM file', filenm,' cannot be opened'
          STOP
       endif
 
@@ -1186,8 +1185,8 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 !     Read the NUBEAM birth points
       ergtkev=1.6022d-09
       do i=1,nbirth_pts
-         read(iunit,105)x_nub(i),y_nub(i),z_nub(i),
-     &                  vx_nub(i),vy_nub(i),vz_nub(i)
+         read(iunit,105)x_nub(i),y_nub(i),z_nub(i), &
+                        vx_nub(i),vy_nub(i),vz_nub(i)
 !        Calc beam velocity and energy
          v_nub(i)=vx_nub(i)**2+vy_nub(i)**2+vz_nub(i)**2
          en_nub(i)=0.5*atwb*1.6726e-24*v_nub(i)/ergtkev
@@ -1237,22 +1236,22 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
 !     to obtain bcnst. Adjust keV energy to joules:*ergtkev*1.e-7(J/erg)
       p_avg_tot_nub=0d0
       do i=1,3
-         p_avg_tot_nub=p_avg_tot_nub + nbirth_cmpts_nub(i)*
-     &                 en_avg_cmpts_nub(i)*ergtkev*1.d-7  !Watts
+         p_avg_tot_nub=p_avg_tot_nub + nbirth_cmpts_nub(i)* &
+                       en_avg_cmpts_nub(i)*ergtkev*1.d-7  !Watts
       enddo
       bcnst=pabs_nub/p_avg_tot_nub
 
 !     Normalize for deposited power and deposition rate at each energy
       do i=1,3
          birth_rate_cmpts_nub(i)=bcnst*nbirth_cmpts_nub(i)
-         pabs_cmpts_nub(i)=birth_rate_cmpts_nub(i)*en_avg_cmpts_nub(i)*
-     &                     ergtkev*1.e-7   !Watts
+         pabs_cmpts_nub(i)=birth_rate_cmpts_nub(i)*en_avg_cmpts_nub(i)* &
+                           ergtkev*1.e-7   !Watts
       enddo
 
 !     Alternative calc of birth_rate_cmpts_nub(i)
       do i=1,3
-         birth_rate_cmpts_nub1(i)=(total_source_rate/nbirth_pts_nub)*
-     &                            nbirth_cmpts_nub(i)
+         birth_rate_cmpts_nub1(i)=(total_source_rate/nbirth_pts_nub)* &
+                                  nbirth_cmpts_nub(i)
       enddo
 
 !     printout birth_rates, as check for consistency
@@ -1268,8 +1267,8 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
       end subroutine read_nubeam_data
 
 
-      subroutine zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,psiax,psi,r,z,
-     &     xpos,ypos,zpos,pzone,izone)
+      subroutine zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,psiax,psi,r,z, &
+           xpos,ypos,zpos,pzone,izone)
       use iso_c_binding, only : c_double
       implicit none
       save
@@ -1294,11 +1293,11 @@ cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
       area2=(r(i+1)-rpos)*(zpos-z(j))
       area3=(r(i+1)-rpos)*(z(j+1)-zpos)
       area4=(rpos-r(i))*(z(j+1)-zpos)
-      pzone=(area3*psi(i,j)+area4*psi(i+1,j)+area1*psi(i+1,j+1)
-     &  +area2*psi(i,j+1))*dri*dzi
+      pzone=(area3*psi(i,j)+area4*psi(i+1,j)+area1*psi(i+1,j+1) &
+        +area2*psi(i,j+1))*dri*dzi
       go to 126
- 124  call pfit(psi(i-1,j-1), r(i-1), z(j-1), rpos, zpos, ki, pzone,
-     &  dum, dum)
+ 124  call pfit(psi(i-1,j-1), r(i-1), z(j-1), rpos, zpos, ki, pzone, &
+        dum, dum)
  126  pzone = max(pzone,psiax)
       izone = sqrt(pzone-psiax)*drutpi + 1.
 

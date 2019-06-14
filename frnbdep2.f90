@@ -1,8 +1,8 @@
 !
 !
 !     ONETWO DIVERGENCE
-      subroutine frnbdep2(psi,mi,mj,r,z,potsid,mf,rzpat,nrpat,nzpat,me,
-     &  mb,sgxn,vbeam,hxfrac,iopt)
+      subroutine frnbdep2(psi,mi,mj,r,z,potsid,mf,rzpat,nrpat,nzpat,me, &
+        mb,sgxn,vbeam,hxfrac,iopt)
       use param_mod
       implicit none
 !-----------------------------------------------------------------------
@@ -16,14 +16,14 @@
 
       integer nbdep ! local 
       parameter (nbdep=29)
-      real(c_double) :: psi(ki,kj),r(ki),z(kj),potsid(kf),
-     &  rzpat(kix2,kjx2,ke,kb),sgxn(kz,ke,kb),vbeam(ke,kb),
-     &  hxfrac(ke,kb)
-      real(c_double) :: psipat(kix2,kjx2),rr(kix2),zz(kjx2),
-     &  rznub(kix2,kjx2,ke,kb),rzhex(kix2,kjx2,ke,kb),pc(kz),
-     &  capsig(kz),rzsig(kikj),frac(kz),rzfrac(kikj),
-     &  splnwk(kwork),cspln1(kzm1,3),cspln2(kzm1,3),
-     &  bpar1(4),bpar2(4),psikp(kikj)
+      real(c_double) :: psi(ki,kj),r(ki),z(kj),potsid(kf), &
+        rzpat(kix2,kjx2,ke,kb),sgxn(kz,ke,kb),vbeam(ke,kb), &
+        hxfrac(ke,kb)
+      real(c_double) :: psipat(kix2,kjx2),rr(kix2),zz(kjx2), &
+        rznub(kix2,kjx2,ke,kb),rzhex(kix2,kjx2,ke,kb),pc(kz), &
+        capsig(kz),rzsig(kikj),frac(kz),rzfrac(kikj), &
+        splnwk(kwork),cspln1(kzm1,3),cspln2(kzm1,3), &
+        bpar1(4),bpar2(4),psikp(kikj)
       integer :: isupp(4,ke,kb),inc(kjx2)
 !
       integer i,j,ib,ie,n,nout ! local
@@ -65,8 +65,8 @@
         do 114 i=2,nzpat
           zz(i)=zz(1)+inc(i)*dz
  114    continue
-        call ibcieu1(psi,ki,r,mi,z,mj,rr,nrpat,zz,nzpat,psipat,kix2,
-     &    splnwk,ier)
+        call ibcieu1(psi,ki,r,mi,z,mj,rr,nrpat,zz,nzpat,psipat,kix2, &
+          splnwk,ier)
       endif
 !
 !     begin loop over beam and beam energy
@@ -102,8 +102,8 @@
             do 141 j=isupp(3,ie,ib),isupp(4,ie,ib)
               if(rzpat(i,j,ie,ib).ne.zero)then
                 n=n+1
-                rznub(i,j,ie,ib)=rzpat(i,j,ie,ib)/(vbeam(ie,ib)
-     &            *rzsig(n))
+                rznub(i,j,ie,ib)=rzpat(i,j,ie,ib)/(vbeam(ie,ib) &
+                  *rzsig(n))
               endif
  141        continue
  140      continue
@@ -131,9 +131,9 @@
         do 301 ie=1,me
           write(nout,1000) (isupp(i,ie,ib),i=1,4)
           write(nout,1010) hxfrac(ie,ib)
-          write(nout,1010) ((rzhex(i,j,ie,ib)
-     &      ,i=isupp(1,ie,ib),isupp(2,ie,ib))
-     &      ,j=isupp(3,ie,ib),isupp(4,ie,ib))
+          write(nout,1010) ((rzhex(i,j,ie,ib) &
+            ,i=isupp(1,ie,ib),isupp(2,ie,ib)) &
+            ,j=isupp(3,ie,ib),isupp(4,ie,ib))
  301    continue
  300  continue
  1000 format(4(5x,i4))

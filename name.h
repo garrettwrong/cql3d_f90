@@ -3,6 +3,8 @@
 !..................................................................
 !     NAMELIST (SETUP) DECLARATION FOR INPUT
 !..................................................................
+! YuP[2019-06-14] Why were epar,eper,ioutimepltview in the namelist? Removed.
+    real*8 pltlimm
 
       namelist/setup/ &
 	acoefne,acoefte, &
@@ -10,7 +12,7 @@
 	bnumb,btor,bth,bootst,bootcalc,bootupdt,bootsign,nonboot,jhirsh, &
 	contrmin,constr,chang,colmodl, &
 	deltabdb,denpar,droptol,dtr,dtr1, &
-	eegy,eparc,eperc,simpbfac,epar,eper, &
+	eegy,eparc,eperc,simpbfac, &
 	elecfld,elpar0,enorm,enorme,enormi,eleccomp, &
 	elecin,elecin_t,elecscal,enein,enein_t,ennin_t, &
 	enescal,enloss,epsthet, &
@@ -23,7 +25,7 @@
 	iprone,iprote,iproti,iprozeff,iprovphi,iproelec,ipronn,iprocur, &
 	tmdmeth,isigmas,isigtst,isigsgv1,isigsgv2, &
 	pltflux1, &
-	irzplt,izeff,ioutime, &
+	irzplt,izeff, &
 	iy, &
 	jx, &
 	kenorm,lfil,kfrsou,kpress,kfield,kspeci,fpld, &
@@ -50,7 +52,7 @@
 	pltstrm,pltflux,pltmag,pltsig,pltlim,pltlimm, &
 	pltrst,plturfb,pltvflu,pltra,pltfvs,pltd,pltprpp,pltfofv,pltlos, &
 	pltrdc,profpsi, &
-	psimodel,pltpowe,pltend,pltinput,pltview, &
+	psimodel,pltpowe,pltend,pltinput, &
 	qsineut,trapmod,trapredc,scatmod,scatfrac, &
 	ryain,radmaj,radmin,rmirror,relativ, &
 	reden,regy,rfacz,rzset,rd,roveram, &

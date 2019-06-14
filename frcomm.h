@@ -1,19 +1,19 @@
-c     frcomm.h77
-c***********************************************************************
-c     BEGIN NFREYA (fr..) common blocks
-c***********************************************************************
+!     frcomm.h
+!***********************************************************************
+!     BEGIN NFREYA (fr..) common blocks
+!***********************************************************************
 
-      include 'frname_decl.h77'
+      include 'frname_decl.h'
 
-c................................................................
+!................................................................
       integer nion,nneu,nk,nkt,nj,nbctim,njs,ialignf1
       real(c_double) :: zero,one,two,half,pi
       
-      common /numbrs/   nion,nneu,nk,nkt,nj,nbctim,njs
-     &  ,ialignf1,zero,one,two,half,pi
-c     ONETWO DIVERGENCE
+      common /numbrs/ nion,nneu,nk,nkt,nj,nbctim,njs,ialignf1
+      common /numbrs/ zero,one,two,half,pi
+!     ONETWO DIVERGENCE
 
-c................................................................
+!................................................................
 
       integer ibeam,ibion,inubplt,mfm1
       real(c_double) :: bion(ke,kb),bneut(ke,kb)
@@ -31,26 +31,20 @@ c................................................................
       real(c_double) :: zte(kz),psivol(kz),freyr(kf)
       real(c_double) :: zeffctv(kz)
       
-      common /nub/
-     &  bion,bneut
-     &  ,beamof,ebeam
-     &  ,ennub,fap,fwall
-     &  ,hibr,hibrz
-     &  ,hicmz
-     &  ,ftrapfi,ftrapfit
-     &  ,angmpf,angmpz
-     &  ,ibeam,ibion,inubplt,mfm1
-cBH170808     &  ,psif(kf),rowpsi(k_)  psif(kf) not used in fr routines
-cBH170808             routines, and conflicts with real(c_double) function psif.
-cBH170808             NBI test case showed NO CHANGE.
-     &  ,rowpsi
-     &  ,pbeam,tenub
-     &  ,sb,sbcx,sbion
-     &  ,spb,qb,qbf
-     &  ,zzi,zne,zni
-     &  ,zte,psivol,freyr,
-     &  zeffctv
-c................................................................
+      common /nub/ bion,bneut,beamof,ebeam
+      common /nub/ ennub,fap,fwall
+      common /nub/ hibr,hibrz
+      common /nub/ hicmz
+      common /nub/ ftrapfi,ftrapfit
+      common /nub/ angmpf,angmpz
+      common /nub/ ibeam,ibion,inubplt,mfm1
+      common /nub/ rowpsi
+      common /nub/ pbeam,tenub
+      common /nub/ sb,sbcx,sbion
+      common /nub/ spb,qb,qbf
+      common /nub/ zzi,zne,zni
+      common /nub/ zte,psivol,freyr,zeffctv
+!................................................................
 
       real(c_double) :: bencap(k_,ke,kb),fbe(k_,ke,kb),fbi(k_,ke,kb)
       real(c_double) :: bke(k_,ke,kb),bki(k_,ke,kb)
@@ -71,45 +65,43 @@ c................................................................
       real(c_double) :: wb01(ke,kb),wb00(ke,kb)
       real(c_double) :: zetaz(kz,ke,kb),zeta(k_,ke,kb)
 
-      common /nub2/     bencap,fbe,fbi
-     &  ,bke,bki
-     &  ,ecrit,emzrat,enbeam,enbs
-     &  ,enb,enbsav
-     &  ,enbav,enbav0,enbav1
-     &  ,forb,fb11,fb10
-     &  ,fb01,fb00,fber
-     &  ,hdep,hdepz
-     &  ,ppb,ppbsav,ppbav
-     &  ,pinsid,potsid,rinsid,rotsid
-     &  ,qbsav
-     &  ,sbsav,spbsav
-     &  ,taupb,tauppb
-     &  ,taueb,taus,wbeam
-     &  ,wb,wbsav,wbav
-     &  ,wb11,wb10
-     &  ,wb01,wb00
-     &  ,zetaz,zeta
+      common /nub2/ bencap,fbe,fbi
+      common /nub2/ bke,bki
+      common /nub2/ ecrit,emzrat,enbeam,enbs
+      common /nub2/ enb,enbsav
+      common /nub2/ enbav,enbav0,enbav1
+      common /nub2/ forb,fb11,fb10
+      common /nub2/ fb01,fb00,fber
+      common /nub2/ hdep,hdepz
+      common /nub2/ ppb,ppbsav,ppbav
+      common /nub2/ pinsid,potsid,rinsid,rotsid
+      common /nub2/ qbsav
+      common /nub2/ sbsav,spbsav
+      common /nub2/ taupb,tauppb
+      common /nub2/ taueb,taus,wbeam
+      common /nub2/ wb,wbsav,wbav
+      common /nub2/ wb11,wb10
+      common /nub2/ wb01,wb00
+      common /nub2/ zetaz,zeta
 
       pointer xpts,ypts,zpts,rpts  ! (1:npart)
-c     ONETWO DIVERGENCE
+!     ONETWO DIVERGENCE
       pointer vx,vy,vz  ! (1:npart)
       real(c_double) :: xpts(:),ypts(:),zpts(:),rpts(:)
       real(c_double) :: vx(:),vy(:),vz(:)
       common /xyzpts/ xpts,ypts,zpts,rpts,vx,vy,vz
-c................................................................
+!................................................................
 
       integer ncont,iz(kimp)
       common /nub3/ ncont,iz
       real(c_double) :: znipm(kprim),atwpm(kprim)
       real(c_double) :: atwim(kimp),zniim(kimp),zti(kz)
-      common /nub3/
-     &  znipm,atwpm
-     &  ,atwim,zniim,zti
-c     nub3 is is used for variables related to hexnb routine
-c     note that nouthx and ncorin,also required for hexnb,
-c     have been added to block io.
+      common /nub3/znipm,atwpm,atwim,zniim,zti
+!     nub3 is is used for variables related to hexnb routine
+!     note that nouthx and ncorin,also required for hexnb,
+!     have been added to block io.
 
-c................................................................
+!................................................................
 
       integer ncrt,nin,nout,nqik,neqplt,ntrplt,nitre,ngreen
       integer nbplt,neq,nsvsol,nscr,nrguess,nwguess
@@ -128,20 +120,20 @@ c................................................................
       real(c_double) :: timplt,pltlst(30)
       real(c_double) :: banktime,extime
       real(c_double) :: vid,ddebug(50)
-      common /io/       ncrt,nin,nout,nqik,neqplt,ntrplt,nitre,ngreen
-     &  ,nbplt,neq,nsvsol,nscr,nrguess,nwguess
-     &  ,nmix,ntweak,nyok,nupel,nitrex
-     &  ,ialign25,eqdskin_fr,guessin,guessout
-     &  ,iprt,ialign26,timprt,mprt,ialign27,prtlst
-     &  ,jprt,ialign28,timplt,pltlst,jflux,jcoef
-     &  ,jsourc,jbal,jtfus,ihead,ineu,inub,irfcalc
-     &  ,ialign30,ifred,ialign31,banktime,extime,nterow
-     &  ,jterow,ilastp,itimav,ialign32,vid,ddebug
-     &  ,ncorin,iotoray
-cBH070410  mplot removed since not used and possible conflict
-cBH070410  with other use of this variable name.
+      common /io/ ncrt,nin,nout,nqik,neqplt,ntrplt,nitre,ngreen
+      common /io/ nbplt,neq,nsvsol,nscr,nrguess,nwguess
+      common /io/ nmix,ntweak,nyok,nupel,nitrex
+      common /io/ ialign25,eqdskin_fr,guessin,guessout
+      common /io/ iprt,ialign26,timprt,mprt,ialign27,prtlst
+      common /io/ jprt,ialign28,timplt,pltlst,jflux,jcoef
+      common /io/ jsourc,jbal,jtfus,ihead,ineu,inub,irfcalc
+      common /io/ ialign30,ifred,ialign31,banktime,extime,nterow
+      common /io/ jterow,ilastp,itimav,ialign32,vid,ddebug
+      common /io/ ncorin,iotoray
+!BH070410  mplot removed since not used and possible conflict
+!BH070410  with other use of this variable name.
 
-c................................................................
+!................................................................
 
       character*8 namep,namei
       common /ions/ namep(kprim),namei(kimp)
@@ -151,15 +143,15 @@ c................................................................
       real(c_double) :: z(k_,kion),zsq(k_,kion),dzdte(k_,kion)
       real(c_double) :: zeff_(k_),rfatmwt
       common /ions/ atw,dzdtim
-     &  ,z,zsq,dzdte
-     &  ,zeff_,rfatmwt
+      common /ions/ z,zsq,dzdte
+      common /ions/ zeff_,rfatmwt
 
-c................................................................
-c     ONETWO DIVERGENCE
+!................................................................
+!     ONETWO DIVERGENCE
 
       real(c_double) :: p(ki,kj),xxx(ki),yyy(kj)
       common/mhd1/ p,xxx,yyy
-c................................................................
+!................................................................
 
 
 

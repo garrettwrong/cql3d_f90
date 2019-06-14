@@ -6,15 +6,15 @@
       implicit none
       integer lrz ! input
       
-      include 'frcomm.h77'
-      include 'frname.h77' ! contain nimp,nprim,.. 
+      include 'frcomm.h'
+      include 'frname.h' ! contains namelist variables (*,frsetup) 
 !MPIINSERT_INCLUDE
 
       character*1024 t_ ! local
       character*8 noplots,nmlstout ! input
       
       integer j,istat ! local
-      ! nion,ibion ! arg of frinitz(), to be found; declared in frcomm.h77
+      ! nion,ibion ! arg of frinitz(), to be found; declared in frcomm.h
       real(c_double) :: dummy,fd ! local
       real(c_double) :: random_my ! external function
 

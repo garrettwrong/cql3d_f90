@@ -1,7 +1,6 @@
 !
 !
-      subroutine frinitz(
-     &        nprim,nimp,nion,ibion,namep,namei,atw,fd,smth)
+      subroutine frinitz(nprim,nimp,nion,ibion,namep,namei,atw,fd,smth)
       use param_mod
       use cqlcomm_mod
       implicit none
@@ -11,12 +10,12 @@
 !     segregated CRAY32 (NFREYA ONETWO version) common blocks,
 !     by passing subroutine arguments.
 !
-!     smooth in comm.h and frcomm.h77 is passed from frcomm to comm,
+!     smooth in comm.h and frcomm.h is passed from frcomm to comm,
 !       through argument smth.
 !     fd specified in frinitl passed here to give dt mixture ratio.
-!     nprim,nimp,nion,ibion,namep,namei,atw are in frcomm.h77, not comm.h.
+!     nprim,nimp,nion,ibion,namep,namei,atw are in frcomm.h, not comm.h.
 !     These variables are determined from comm.h data, passed to
-!     frcomm.h77 through the arguments of frinitz.
+!     frcomm.h through the arguments of frinitz.
 !
 !..................................................................
       integer i,k,kk,ksave ! local
@@ -135,8 +134,8 @@
 
 
 
-      write(*,*) 'frinitz:namep(1),namep(2),namei(1),ibion   ',
-     &            namep(1),namep(2),namei(1),ibion
+      write(*,*) 'frinitz:namep(1),namep(2),namei(1),ibion   ', &
+                  namep(1),namep(2),namei(1),ibion
 
 
 !----------------------------------------------------------------
@@ -144,26 +143,26 @@
 !----------------------------------------------------------------
       do 3410 i=1,nprim
         atw(i) = 0.
-        if(trim(namep(i)).eq.'h'  .or.
-     &     trim(namep(i)).eq.'H') atw(i)=1.
+        if(trim(namep(i)).eq.'h'  .or. &
+           trim(namep(i)).eq.'H') atw(i)=1.
 
-        if(trim(namep(i)).eq.'d'  .or.
-     &     trim(namep(i)).eq.'D') atw(i)=2.
+        if(trim(namep(i)).eq.'d'  .or. &
+           trim(namep(i)).eq.'D') atw(i)=2.
 
-        if(trim(namep(i)).eq.'t'  .or.
-     &     trim(namep(i)).eq.'T') atw(i)=3.
+        if(trim(namep(i)).eq.'t'  .or. &
+           trim(namep(i)).eq.'T') atw(i)=3.
 
-        if(trim(namep(i)).eq.'dt' .or.
-     &     trim(namep(i)).eq.'DT' .or.
-     &     trim(namep(i)).eq.'Dt' .or.
-     &     trim(namep(i)).eq.'dT') atw(i) = fd*2. + (1.-fd)*3.
+        if(trim(namep(i)).eq.'dt' .or. &
+           trim(namep(i)).eq.'DT' .or. &
+           trim(namep(i)).eq.'Dt' .or. &
+           trim(namep(i)).eq.'dT') atw(i) = fd*2. + (1.-fd)*3.
 
-        if(trim(namep(i)).eq.'he' .or.
-     &     trim(namep(i)).eq.'HE' .or.
-     &     trim(namep(i)).eq.'He') atw(i)=4.
+        if(trim(namep(i)).eq.'he' .or. &
+           trim(namep(i)).eq.'HE' .or. &
+           trim(namep(i)).eq.'He') atw(i)=4.
 
-        write(*,*) 'frinitz: i, trim(namep(i)), atw(i)',
-     &                       i, trim(namep(i)), atw(i)
+        write(*,*) 'frinitz: i, trim(namep(i)), atw(i)', &
+                             i, trim(namep(i)), atw(i)
         if(atw(i).eq.zero) call frwrong(1)
  3410 continue
 
@@ -175,54 +174,54 @@
       do 3420 i=1,nimp
         k = nprim + i
         atw(k) = 0.
-        if(trim(namei(i)).eq.'he' .or.
-     &     trim(namei(i)).eq.'HE' .or.
-     &     trim(namei(i)).eq.'He') atw(k)= 4.
+        if(trim(namei(i)).eq.'he' .or. &
+           trim(namei(i)).eq.'HE' .or. &
+           trim(namei(i)).eq.'He') atw(k)= 4.
 
-        if(trim(namei(i)).eq.'b' .or.
-     &     trim(namei(i)).eq.'B' ) atw(k)= 11.  ! YuP added [2015]
+        if(trim(namei(i)).eq.'b' .or. &
+           trim(namei(i)).eq.'B' ) atw(k)= 11.  ! YuP added [2015]
 
-        if(trim(namei(i)).eq.'c' .or.
-     &     trim(namei(i)).eq.'C' ) atw(k)= 12.
+        if(trim(namei(i)).eq.'c' .or. &
+           trim(namei(i)).eq.'C' ) atw(k)= 12.
 
-        if(trim(namei(i)).eq.'o' .or.
-     &     trim(namei(i)).eq.'O' ) atw(k)= 16.
+        if(trim(namei(i)).eq.'o' .or. &
+           trim(namei(i)).eq.'O' ) atw(k)= 16.
 
-        if(trim(namei(i)).eq.'si' .or.
-     &     trim(namei(i)).eq.'SI' .or.
-     &     trim(namei(i)).eq.'Si') atw(k)= 28.
+        if(trim(namei(i)).eq.'si' .or. &
+           trim(namei(i)).eq.'SI' .or. &
+           trim(namei(i)).eq.'Si') atw(k)= 28.
 
-        if(trim(namei(i)).eq.'ar' .or.
-     &     trim(namei(i)).eq.'AR' .or.
-     &     trim(namei(i)).eq.'Ar') atw(k)= 40.
+        if(trim(namei(i)).eq.'ar' .or. &
+           trim(namei(i)).eq.'AR' .or. &
+           trim(namei(i)).eq.'Ar') atw(k)= 40.
 
-        if(trim(namei(i)).eq.'cr' .or.
-     &     trim(namei(i)).eq.'CR' .or.
-     &     trim(namei(i)).eq.'Cr') atw(k)= 52.
+        if(trim(namei(i)).eq.'cr' .or. &
+           trim(namei(i)).eq.'CR' .or. &
+           trim(namei(i)).eq.'Cr') atw(k)= 52.
 
-        if(trim(namei(i)).eq.'fe' .or.
-     &     trim(namei(i)).eq.'FE' .or.
-     &     trim(namei(i)).eq.'Fe') atw(k)= 56.
+        if(trim(namei(i)).eq.'fe' .or. &
+           trim(namei(i)).eq.'FE' .or. &
+           trim(namei(i)).eq.'Fe') atw(k)= 56.
 
-        if(trim(namei(i)).eq.'ni' .or.
-     &     trim(namei(i)).eq.'NI' .or.
-     &     trim(namei(i)).eq.'Ni') atw(k)= 59.
+        if(trim(namei(i)).eq.'ni' .or. &
+           trim(namei(i)).eq.'NI' .or. &
+           trim(namei(i)).eq.'Ni') atw(k)= 59.
 
-        if(trim(namei(i)).eq.'kr' .or.
-     &     trim(namei(i)).eq.'KR' .or.
-     &     trim(namei(i)).eq.'Kr') atw(k)= 84.
+        if(trim(namei(i)).eq.'kr' .or. &
+           trim(namei(i)).eq.'KR' .or. &
+           trim(namei(i)).eq.'Kr') atw(k)= 84.
 
-        if(trim(namei(i)).eq.'mo' .or.
-     &     trim(namei(i)).eq.'MO' .or.
-     &     trim(namei(i)).eq.'Mo') atw(k)= 96.
+        if(trim(namei(i)).eq.'mo' .or. &
+           trim(namei(i)).eq.'MO' .or. &
+           trim(namei(i)).eq.'Mo') atw(k)= 96.
 
-        if(trim(namei(i)).eq.'w' .or.
-     &     trim(namei(i)).eq.'W' ) atw(k)= 184.
+        if(trim(namei(i)).eq.'w' .or. &
+           trim(namei(i)).eq.'W' ) atw(k)= 184.
 
         if(trim(namei(i)).eq.'mixt') atw(k)= 20.
 
-        if(trim(namei(i)).eq.'a' .or.
-     &     trim(namei(i)).eq.'A' ) atw(k)=int(fmass(ksave)/proton +0.1)
+        if(trim(namei(i)).eq.'a' .or. &
+           trim(namei(i)).eq.'A' ) atw(k)=int(fmass(ksave)/proton +0.1)
                                             !Compatible with cql3d added
                                             !impurity, for given zeff.
         if(atw(k).eq.zero) call frwrong(2)
@@ -231,8 +230,8 @@
 
       if(nimp.gt.0) then
          do i=1,nimp
-            write(*,*)'frinitz: trim(namei(i)),atw(nprim+i)',
-     &                          trim(namei(i)),atw(nprim+i)
+            write(*,*)'frinitz: trim(namei(i)),atw(nprim+i)', &
+                                trim(namei(i)),atw(nprim+i)
          enddo
       endif
 

@@ -36,7 +36,7 @@ contains
 
   subroutine tdreadf(kopt)
     use cqlconf_mod, only : setup0
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      implicit none !integer (i-n), real(c_double) (a-h,o-z)
       save
 
 !.......................................................................
@@ -54,7 +54,7 @@ contains
       character*8 ilrestrt
       include 'name.h'
       include 'frname_decl.h'
-      include 'frname.h'
+      include 'frname.h' ! contains namelist variables; To print (*,frsetup) 
 !
 ! --- include file for netCDF declarations
 ! --- (obtained from NetCDF distribution)
@@ -62,6 +62,15 @@ contains
 
 !MPIINSERT_INCLUDE
 
+      integer kopt ! input
+      integer i,j,k,l,ll,il,istat,iunwrif,inbline,nwkpack !local
+      integer iy_rstrt,jx_rstrt,lrz_rstrt,ngen_rstrt, j1,j2,ist1 !local
+      integer length_char ! external
+      real(c_double) :: r00_rstrt,enorm_rstrt,vnorm_rstrt,vnorm_rstrt2 !local
+      real(c_double) :: renorm_f, foverf,fj0,fof_fj0,f1,f2,hnr,snr,redenr
+      real(c_double) :: hn,sn,reden_code,reden_eps,reden_rat
+      real(c_double) :: senergy_code,senergy_eps,senergy_rat,senergyr
+      
       integer ncid,istatus
       integer xdim,ydim,rdim,gen_species_dim,vid, dimid, dimlen
 !BH180517      integer count(3),start(3)

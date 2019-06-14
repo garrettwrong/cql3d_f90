@@ -3,7 +3,7 @@
       subroutine frinitl
       use param_mod
       implicit none
-      include 'frname_decl.h77'
+      include 'frname_decl.h'
       character*8 machinei
       
       integer i,j,k ! local

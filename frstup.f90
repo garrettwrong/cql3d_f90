@@ -1,8 +1,8 @@
 !
 !
-      subroutine frstup(mf,mfm1,mi,mj,nion,potsid,codeid,rin,
-     &  rmax,zax,zminn,zmaxx,zni,zne,zte,zti,zzi,frpsi,psivol,
-     &  xxx,yyy,nprim,nimp,zeffctv,zshift1)
+      subroutine frstup(mf,mfm1,mi,mj,nion,potsid,codeid,rin, &
+        rmax,zax,zminn,zmaxx,zni,zne,zte,zti,zzi,frpsi,psivol, &
+        xxx,yyy,nprim,nimp,zeffctv,zshift1)
 
       use bcast_mod, only : bcast
       use cqlcomm_mod
@@ -197,7 +197,7 @@
       !elong=0 ! YuP: not used here?
       codeid="twodee"
       rin=rmincon
-      write(*,*)'frsetup: rmincon,rmaxcon=',rmincon,rmaxcon
+      write(*,*)'frstup: rmincon,rmaxcon=',rmincon,rmaxcon
       rmax=rmaxcon
       zminn=zmincon
       zmaxx=zmaxcon

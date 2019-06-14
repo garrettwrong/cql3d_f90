@@ -1,13 +1,13 @@
 !
 !
-      subroutine frnfreya(frmod_,fr_gyro_,beamplse_,beampon_,beampoff_,
-     &     hibrz_,mfm1_,noplots)
+      subroutine frnfreya(frmod_,fr_gyro_,beamplse_,beampon_,beampoff_, &
+           hibrz_,mfm1_,noplots)
       use param_mod
       use frplteq_mod, only :frplteq
       implicit none
 
 !.................................................................
-      include 'frcomm.h77'
+      include 'frcomm.h'
 !     ONETWO DIVERGENCE: SEE COMMENTS AT BEGINNING OF FREYA
       character*8 frmod_,fr_gyro_,beamplse_,noplots,codeid
       real(c_double) :: beampon_,beampoff_
@@ -16,15 +16,15 @@
       
       integer ib,ie,i ! local
       integer ipts ! arg. in freya(), to be found
-      integer :: mi,mj ! arg. in frsetup()      
-      real(c_double) :: rin,rmax,zmin,zmax,zax,zshift !arg. in frsetup()
+      integer :: mi,mj ! arg. in frstup()      
+      real(c_double) :: rin,rmax,zmin,zmax,zax,zshift !arg. in frstup()
       real(c_double) :: curdep ! local
 
       character*8 ifirst
       save ifirst
       data ifirst/"first"/
 
-!     To pass these freya namelist in frcomm.h77 to comm.h
+!     To pass these freya namelist in frcomm.h to comm.h
       frmod_=frmod
       fr_gyro_=fr_gyro
       beamplse_=beamplse
@@ -50,9 +50,9 @@
 !      density, etc.   Check in frstup.]
 !..................................................................
 
-      call frstup(mf,mfm1,mi,mj,nion,potsid,codeid,rin,rmax,
-     &  zax,zmin,zmax,zni,zne,zte,zti,zzi,p,psivol,xxx,yyy,
-     &  nprim,nimp,zeffctv,zshift)
+      call frstup(mf,mfm1,mi,mj,nion,potsid,codeid,rin,rmax, &
+        zax,zmin,zmax,zni,zne,zte,zti,zzi,p,psivol,xxx,yyy, &
+        nprim,nimp,zeffctv,zshift)
 
 !.......................................................................
 !     zshift if frstup above is passed back from comm.h data to
@@ -70,16 +70,12 @@
 !     Call NFREYA (cray32 from ONETWO)
 !..................................................................
 
-      write(*,*)'frnfreya:mi,mj,codeid',
-     &                    mi,mj,codeid
-      write(*,*)'frnfreya:rin,rmax',
-     &                    rin,rmax
-      write(*,*)'frnfreya:zax,zmin,zmax',
-     &                    zax,zmin,zmax
+      write(*,*)'frnfreya:mi,mj,codeid',mi,mj,codeid
+      write(*,*)'frnfreya:rin,rmax',rin,rmax
+      write(*,*)'frnfreya:zax,zmin,zmax',zax,zmin,zmax
       call freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
       write(*,*) 'Done calling freya...'
-      if (ipts.eq.0)
-     &       write(*,*)'frnfreya: WARNING, ipts=0, NB missed plasma?'
+      if (ipts.eq.0)write(*,*)'frnfreya: WARNING, ipts=0, NB missed plasma?'
 
 !..................................................................
 !     Compute the total number of particles/sec actually deposited in
@@ -110,8 +106,8 @@
 !     Now determine the source arrays used in CQL3D
 !..................................................................
 
-      call freyasou(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep,
-     &  bmsprd,multiply,multiplyn)
+      call freyasou(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep, &
+        bmsprd,multiply,multiplyn)
 
 
 !..................................................................
@@ -131,8 +127,8 @@
 !     Plot the FREYA birth points.
 !..................................................................
 
-        call frplteq(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep,
-     &    nfrplt,frplt)
+        call frplteq(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep, &
+          nfrplt,frplt)
 
       return
       end subroutine frnfreya

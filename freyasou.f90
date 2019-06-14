@@ -1,7 +1,7 @@
 !
 !
-      subroutine freyasou(qx,qy,qz,qr,vx,vy,vz,iqts,curdep,
-     &  bmsprd,multiply,multiplyn)
+      subroutine freyasou(qx,qy,qz,qr,vx,vy,vz,iqts,curdep, &
+        bmsprd,multiply,multiplyn)
       use bcast_mod, only : bcast
       use bcast_mod, only : ibcast
       use cqlcomm_mod
@@ -183,8 +183,8 @@
         rbrth2= px(ipar)**2 +py(ipar)**2
         rbrth=sqrt(rbrth2)
         pr(ipar)=rbrth
-        psibrth=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     &    epsirz,nnra,0,0)
+        psibrth=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz, &
+          epsirz,nnra,0,0)
         psipt(ipar)=psibrth
         apsi=psimag-psibrth
         if (psibrth.lt.psilim) then  !i.e., outside LCFS
@@ -197,17 +197,17 @@
            ! Note: fr_gyrop=fr_gyro through frnfreya call.
            ! Adjust coordinate from local position to g.c. position
            ! First, Determine components of B:
-           dpsidr=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     &       epsirz,nnra,1,0)
-           dpsidz=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     &       epsirz,nnra,0,1)
+           dpsidr=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz, &
+             epsirz,nnra,1,0)
+           dpsidz=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz, &
+             epsirz,nnra,0,1)
            call eqfpsi(psibrth,fpsi_,fppsi_)
 !           Bpol_factor=0d0   !Test: zero Bpol effect, leaving only btor.
            Bpol_factor=1.d0
-           bxcomp=(-cursign*Bpol_factor*dpsidz*px(ipar)-bsign*fpsi_*
-     &          py(ipar))/rbrth2
-           bycomp=(-cursign*Bpol_factor*dpsidz*py(ipar)+bsign*fpsi_*
-     &          px(ipar))/rbrth2
+           bxcomp=(-cursign*Bpol_factor*dpsidz*px(ipar)-bsign*fpsi_* &
+                py(ipar))/rbrth2
+           bycomp=(-cursign*Bpol_factor*dpsidz*py(ipar)+bsign*fpsi_* &
+                px(ipar))/rbrth2
            bzcomp=+cursign*Bpol_factor*dpsidr/rbrth
            if (multiply.eq."disabled") then
               jpar=ipar
@@ -233,8 +233,8 @@
            rbrth2= px(ipar)**2 +py(ipar)**2
            rbrth=sqrt(rbrth2)
            pr(ipar)=rbrth
-           psibrth= terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,
-     &                    epsirr,epsizz,epsirz,nnra,0,0)
+           psibrth= terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi, &
+                          epsirr,epsizz,epsirz,nnra,0,0)
            psipt(ipar)=psibrth ! at g.c. now
            apsi=psimag-psibrth
            if (psibrth.lt.psilim) then  !i.e., g.c. outside LCFS
@@ -285,8 +285,8 @@
           psibrth=-psibrth
 
 
-          call terp1(lrzmax,equilpsp(1),vphipl,d2vphipl,psibrth,
-     &      1,tab,itab)
+          call terp1(lrzmax,equilpsp(1),vphipl,d2vphipl,psibrth, &
+            1,tab,itab)
           if(rmag.gt.1.d-8)then
             vphiplas=tab(1)*(pr(ipar)/rmag) ! rmag=0 in mirror machine
             cosp=px(ipar)/pr(ipar)
@@ -360,10 +360,10 @@
 !     B dot v / mag B/ mag v
 !..................................................................
 
-          dpsidr=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     &      epsirz,nnra,1,0)
-          dpsidz=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     &      epsirz,nnra,0,1)
+          dpsidr=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz, &
+            epsirz,nnra,1,0)
+          dpsidz=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz, &
+            epsirz,nnra,0,1)
 
 !..................................................................
 !     Determine f(psi)
@@ -441,8 +441,8 @@
             rcon=er(iless)
             epsitst=epsi(iless,nzc)
  115        continue
-            dpsidr=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     &        epsirz,nnra,1,0)
+            dpsidr=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz, &
+              epsirz,nnra,1,0)
             a=(psibrth-epsitst)/dpsidr
 
 !..................................................................
@@ -450,8 +450,8 @@
 !..................................................................
 
             rcon=rcon+a
-            epsitst=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     &        epsirz,nnra,0,0)
+            epsitst=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz, &
+              epsirz,nnra,0,0)
             err=abs((psibrth-epsitst)/(epsi(imore,nzc)+epsi(iless,nzc)))
             if (err .lt. 1.e-3) go to 120
             iter=iter+1
@@ -467,15 +467,15 @@
 
 !BH990429            dpsidr=terp2(rcon,rbrth,0.,nnr,er,
 !BH990429                         nnz,ez,epsi,epsirr,epsizz,
-            dpsidr=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     &        epsirz,nnra,1,0)
+            dpsidr=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz, &
+              epsirz,nnra,1,0)
             bzero=sqrt(fpsi_**2+dpsidr**2)/rcon
 
           elseif (method.eq."meth1") then   !TRUE
 
             psb=-psibrth
-            call terp1(lrzmax,equilpsp(1),bmdplne,d2bmdpl,psb,
-     &        1,tab,itab)
+            call terp1(lrzmax,equilpsp(1),bmdplne,d2bmdpl,psb, &
+              1,tab,itab)
             bzero=tab(1)
 
           endif
@@ -486,8 +486,8 @@
 !         Allowing for some tolerance, these cases are adjusted.
           if (bratio.lt.1.) then
             bratio=1.0
-            if (bratio.lt.0.99)
-     &      write(*,*)'freyasou: bratio=[should be=1, else stop]',bratio
+            if (bratio.lt.0.99) &
+            write(*,*)'freyasou: bratio=[should be=1, else stop]',bratio
 !BH041215            if (bratio.le.0.9) stop 'freyasou: bratio.le.0.9'
           endif
           tmdplne=asin(sqrt((1.-cospitch**2)/bratio))
@@ -507,8 +507,8 @@
           if (j.gt.jx) go to 100
           i=luf_bin(tmdplne,ymid(1:iy,l_)) !iy
           if (i.gt.iy) then
-             write(*,*)'freyasou: ll,i,j,iy,ipar,tmdplne=',
-     &            ll,i,j,iy,ipar,tmdplne
+             write(*,*)'freyasou: ll,i,j,iy,ipar,tmdplne=', &
+                  ll,i,j,iy,ipar,tmdplne
              call frwrong(5)
           endif
 
@@ -519,8 +519,8 @@
 !..................................................................
 
 !VickieLynch060824 found this should be before do 100:          k=kfrsou
-          aa=bmdplne(lr_)/(cynt2(i,l_)*cint2(j)
-     &      *dpsi(lr_)*twopi*vptb(i,lr_)*one_*symm)
+          aa=bmdplne(lr_)/(cynt2(i,l_)*cint2(j) &
+            *dpsi(lr_)*twopi*vptb(i,lr_)*one_*symm)
           !YuP[03/27/2015] Changed 2.0->symm,
           !which is symm=2 in case of up-dn symmetrical equilibrium.
           !In this case,
