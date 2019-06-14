@@ -26,10 +26,10 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	eqtopeol.f90  eqvolpsi.f90  eqwrng.f90  \
 	esefld.f90  exlin.f90  exsweep.f90  exsweept.f90   \
 	exsweepx.f90  finit.f90  firstdrv.f90  fle.f90 flxfn.f90  \
-	freya.f  freyasou.f  \
-	frinitl.f  frinitz.f  frnbdep2.f  frnfreya.f  \
-	frset.f frsmooth.f  frsplft.f   \
-	frstup.f  frsubs.f  frsuppor.f  frwrong.f  \
+	freya.f90  freyasou.f90  \
+	frinitl.f90  frinitz.f90  frnbdep2.f90  frnfreya.f90  \
+	frset.f90 frsmooth.f90  frsplft.f90   \
+	frstup.f90  frsubs.f  frsuppor.f90  frwrong.f90  \
 	ilut.f90  impchk.f90  impnorm.f90  \
 	lookup.f90  losscone.f90  lossegy.f90  lossorbm.f90  \
 	losstor.f90  micgetr.f90   \
