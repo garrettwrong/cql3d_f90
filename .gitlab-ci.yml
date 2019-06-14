@@ -99,12 +99,12 @@ amp_far_rune_knockon:
   script:
   - cd ci/amp_far_rune_knockon
   - ../../xcql3d_gfortran64
-  - nccmp -dmgfs reference.nc tdep_ko_amp-far.4.3_sh.nc
+  - nccmp -dmgfs reference.nc tdep_ko_amp-far.4.3_short_test.nc
   artifacts:
     when: always
     paths:
-    - ci/amp_far_rune_knockon/tdep_ko_amp-far.4.3_sh.nc
-    - ci/amp_far_rune_knockon/tdep_ko_amp-far.4.3_sh.ps
+    - ci/amp_far_rune_knockon/tdep_ko_amp-far.4.3_short_test.nc
+    - ci/amp_far_rune_knockon/tdep_ko_amp-far.4.3_short_test.ps
     expire_in: 1 week
   dependencies:
   - build:centos7
