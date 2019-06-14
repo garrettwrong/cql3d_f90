@@ -1,0 +1,12 @@
+/home/bobh/cql3d/TEST_CASES_CQL3D/ko_multi_flux_surface/tdep_ko_amp-far.4.3/
+
+190613
+======
+KPRAD all-radii prompt runaway runaway electron test case,
+with Ampere-Faraday eqn, radial diffusion and knockon source.
+
+First 40 steps of
+/home/bobh/cql3d/TEST_CASES_CQL3D/ko_multi_flux_surface/tdep_ko_amp-far.4.3/\
+cqlinput_tdep_ko_amp-far.4.3
+shortened with nstop=161 ==> 40, jx=350 ==> 150
+==> cpu time=2 min.

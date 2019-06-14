@@ -92,3 +92,19 @@ ampere_faraday:
     expire_in: 1 week
   dependencies:
   - build:centos7
+
+amp_far_rune_knockon:
+  stage: test
+  image: garrettwrong/cql3d_f90_centos-7
+  script:
+  - cd ci/amp_far_rune_knockon
+  - ../../xcql3d_gfortran64
+  - nccmp -dmgfs reference.nc tdep_ko_amp-far.4.3_sh.nc
+  artifacts:
+    when: always
+    paths:
+    - ci/amp_far_rune_knockon/tdep_ko_amp-far.4.3_sh.nc
+    - ci/amp_far_rune_knockon/tdep_ko_amp-far.4.3_sh.ps
+    expire_in: 1 week
+  dependencies:
+  - build:centos7
