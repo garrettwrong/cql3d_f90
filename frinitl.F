@@ -1,19 +1,22 @@
-c
-c
+!
+!
       subroutine frinitl
       use param_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      implicit none
       include 'frname_decl.h77'
       character*8 machinei
+      
+      integer i,j,k ! local
+      real(c_double) :: ep100 ! local
 
       REAL RILIN
 
 
-c..................................................................
-c     Jump past the "fr" namelist if "fr" is disabled.
-c..................................................................
+!..................................................................
+!     Jump past the "fr" namelist if "fr" is disabled.
+!..................................................................
 
-c     some preset to have clean namelist output
+!     some preset to have clean namelist output
         do i=1,nap
           do j=1,kb
             ashape(i,j) = 'disabled'
@@ -23,191 +26,191 @@ c     some preset to have clean namelist output
            bshape(j)='disabled'
         enddo
 
-c..................................................................
-c     This routine sets defaults and reads in data for the
-c     neutral beam (NFREYA) code as it exists in ONETWO.
-c..................................................................
+!..................................................................
+!     This routine sets defaults and reads in data for the
+!     neutral beam (NFREYA) code as it exists in ONETWO.
+!..................................................................
 
-c
-c     NEUTRAL BEAM HEATING PARAMETERS
-c--------------------------------------------------------------------
+!
+!     NEUTRAL BEAM HEATING PARAMETERS
+!--------------------------------------------------------------------
 
-c******************************************************************
-c     BELOW TO **** NOT USED IN CQL3D  **** ONETWO DIVERGENCE
+!******************************************************************
+!     BELOW TO **** NOT USED IN CQL3D  **** ONETWO DIVERGENCE
 
-c     timbplt    Times (up to 5) to produce data for Freya -like plots
-c     of beam deposition. o/p is processed by nubplt.
-c     Defaulted to off.
-c     timbplt(1).le.time0.and.beamon.lt.time0 gives o/p
-c     for initial time.
-c     beamon      Time (sec) at which beam heating is turned on
-c     btime       Time interval (sec) during which beam heating is on
-c     ibcur       Flag for neutral beam driven current
-c     1, include beam driven current
-c     0, neglect beam driven current
-c     ibcx        Flag for secondary charge exchange between fast ions
-c     and thermal neutrals
-c     1, include secondary charge exchange
-c     0, neglect secondary charge exchange
-c     ibslow      Flag for neutral beam slowing down
-c     1, include neutral beam slowing down
-c     0, neglect neutral beam slowing down
-c     fionx       Allows testing for non-classical slowing down
-c     (see subroutine slow1).
-c     nameb       Name of neutral species in beam
-c     'h', 'd', 't', 'dt'
-c     Must be primary species #1 or #2.
-c     relnub      Minimum relative change in ion density or electron
-c     temperature between neutral beam calculations (suggest 0.10)
-c      tfusbb      'thermal fusion balance for beams', fraction by which
-c      the net energy gain from thermal fusion must exceed
-c      the net energy loss for automatic beam turnoff.
-c      If tfusbb = 0., automatic beam turnoff is not done.
-c      iddcal     Flag controlling treatment of beam effects on fuscal,
-c      the calculated fusion neutron rate:
-c      0 = do not include knock-on or beam-d neutrons in fuscal
-c      1 = include only knock-on neutrons in fuscal
-c      2 = include only beam-d neutrons in fuscal
-c      3 = include both knock-on and beam-d neutrons in fuscal
-c     fdbeam     Fraction of deuterium atoms in neutral beam.
+!     timbplt    Times (up to 5) to produce data for Freya -like plots
+!     of beam deposition. o/p is processed by nubplt.
+!     Defaulted to off.
+!     timbplt(1).le.time0.and.beamon.lt.time0 gives o/p
+!     for initial time.
+!     beamon      Time (sec) at which beam heating is turned on
+!     btime       Time interval (sec) during which beam heating is on
+!     ibcur       Flag for neutral beam driven current
+!     1, include beam driven current
+!     0, neglect beam driven current
+!     ibcx        Flag for secondary charge exchange between fast ions
+!     and thermal neutrals
+!     1, include secondary charge exchange
+!     0, neglect secondary charge exchange
+!     ibslow      Flag for neutral beam slowing down
+!     1, include neutral beam slowing down
+!     0, neglect neutral beam slowing down
+!     fionx       Allows testing for non-classical slowing down
+!     (see subroutine slow1).
+!     nameb       Name of neutral species in beam
+!     'h', 'd', 't', 'dt'
+!     Must be primary species #1 or #2.
+!     relnub      Minimum relative change in ion density or electron
+!     temperature between neutral beam calculations (suggest 0.10)
+!      tfusbb      'thermal fusion balance for beams', fraction by which
+!      the net energy gain from thermal fusion must exceed
+!      the net energy loss for automatic beam turnoff.
+!      If tfusbb = 0., automatic beam turnoff is not done.
+!      iddcal     Flag controlling treatment of beam effects on fuscal,
+!      the calculated fusion neutron rate:
+!      0 = do not include knock-on or beam-d neutrons in fuscal
+!      1 = include only knock-on neutrons in fuscal
+!      2 = include only beam-d neutrons in fuscal
+!      3 = include both knock-on and beam-d neutrons in fuscal
+!     fdbeam     Fraction of deuterium atoms in neutral beam.
 
-c     ABOVE NOT USED IN CQL3D** ONETWO DIVERGENCE**
-c******************************************************************
-c     ranseed    Starting seed for random number generator used in the
-c     Freya determination of the beam deposition.
-c     npart       Number of particles followed into plasma
-c     (suggest 10000)
-c     npskip     Ratio of number of particles followed into plasma
-c     to number of source particles (suggest 1)
-c     iborb      Flag for modeling orbit effects on beam-
-c     generated fast ions
-c     1, model orbit effects
-c     0, do not model orbit effects
-c     itrapfi    Flag for trapped fast ions.  If iborb=1 then
-c     setting itrapfi=1 will modify the beam driven
-c     current by the initial trapped ion fraction.
-c     (Subsequent pitch angle diffusion is not!!! taken into
-c     account).  itrapfi=0 neglects this effect.  If iborb=0,
-c     itrapfi has no affect.  itrapfi=0 is default
-c     iexcit    excited beam state option
-c     0,  do not use excited state cross sections (default)
-c     1,  use hexnb package but do not include excitations in
-c     its calculation of cross sections
-c     2,  use hexnb package, include excitations in calculation
-c     of cross sections
-c     inubpat   two-dimensional beam deposition option
-c     0,  do not calculate beam deposition in (r,z) coordinates
-c     1,  calculate beam deposition on eqdisk (r,z) coordinates,
-c     write third excited state population to file 'beamdep'
-c     2,  same as inubpat=1 except rescale (r,z) grid according
-c     to npat (see below)
-c     if inubpat.gt.0, iexcit is automatically set, iexcit=2
-c     npat      modified (r,z) grid dimensions, used only for inubpat=2
-c     npat(1)=number of elements in 'r' (<=2*nnra)
-c     npat(2)=number of elements in 'z' (<=2*nnza)
-c     defaults, npat(1)=nnra, npat(2)=nnza
-c     mf not read in - ONETWO DIVERGENCE
-c     mf         Number of flux zones plus 1 (max = 81)
-c
-c     In the following list the index ib designates the beam injector,
-c     while ie refers to one of the three energy components.
-c     iap refers to one of the aperatures.
-c
-c     nbeams          Number of neutral beam injectors (.le.kb)
-c     nsourc          Number of sources per beamline.
-c     If 1, source is centered on beamline axis.
-c     If nsourc=2, distinguish between the beamline
-c     axis and the source centerline (optical axis).
-c     The two sources are assumed to be mirror images
-c     through the beamline axis.
-c     In either case, the exit grid plane is perpendicula
-c     to the beamline axis, and contains the source
-c     exit grid center(s).
-c     If nsourc=2, the alignment of the sources w.r.t.
-c     the beamline axis is specified through bhofset,
-c     bvofset, and bleni (described further below).
-c     naptr           Total number of aperatures encountered by a particle
-c     as is moves from the source into the plasma chamber
-c     Maximum is specified by parameter nap (=10).
-c     First set of aperatures encountered by the particle
-c     are assumed centered on the source axis, and subseq
-c     aperatures are centered on the beamline axis; the
-c     distinction is made through ashape.
-c     anglev(ib)      Vertical angle (degrees) between optical axis
-c     and horizontal plane; a positive value indicates
-c     particles move upward
-c     angleh(ib)      Horizontal angle (degrees) between optical axis and
-c     vertical plane passing through pivot point and
-c     toroidal axis; a zero value denotes perpendicular
-c     injection, while a positive value indicates par-
-c     ticles move in the co-current direction
-c     bvofset(ib)     Vertical offset from beamline axis to center
-c     of each source (cm; used only for nsourc=2)
-c     bhofset(ib)     Horizontal offset from beamline axis to center
-c     of each source (cm; used only for nsourc=2)
-c     bleni(ib)       Length along source centerline (source optical axis)
-c     source to intersection point with the beamline axis
-c     sfrac1(ib)      Fraction of source current per beamline coming
-c     from upper source (used only for nsourc=2)
-c     bcur(ib)        Total current (a) in ion beam (used only if bptor
-c     is zero)
-c     bptor(ib)       Total power (w) through aperture into torus; when
-c     nonzero, bptor takes precedence over bcur
-c     bshape(ib)      Beam shape
-c     'circ' : circular
-c     'rect' : rectangular
-c     'rect-lps':  rect. long pulse source (DIII-D only)
-c     a choice of short or long pulse sources is
-c     available by injector (not by source).  on
-c     or both injectors may be long pulse by
-c     setting one or both to 'rect-lps'
-c     CAUTION:  DIII-D sources are defaulted to lps specs.
-c     It is the user's responsibility to overide these for
-c     sps configuration(s).
-c     bheigh(ib)      Height of source (cm)
-c     Default is bshape(1)=bshape(2)='rect-lps'
-c     bwidth(ib)      Width of source (cm); diameter for
-c     circular source.
-c     bhfoc(ib)       Horizontal focal length of source (cm)
-c     bvfoc(ib)       Vertical focal length of source (cm)
-c     bhdiv(ib)       Horizontal divergence of source (degrees)
-c     bvdiv(ib)       Vertical divergence of source (degrees)
-c     ebkev(ib)       Maximum particle energy in source (keV)
-c     fbcur(ie,ib)    Fraction of current at energy ebkeV/ie
-c     ashape(iap,ib)  Aperture shape.
-c     Prefix 's-' indicates source axis centered.
-c     Prefix 'b-' indicates beamline axis centered.
-c     's-circ'          'b-circ'
-c     's-rect'          'b-rect'
-c     's-vert'          'b-vert'
-c     's-horiz'         'b-horiz'
-c     'b-d3d'
-c     (circ=circular aperature, rect=rectagular,
-c     vert=limits vertical height of source particles,
-c     horiz=limits horizontal height of source particles,
-c     d3d= special DIII-D polygonal aperature)
-c     aheigh(iap,ib)  Height of aperture (cm)
-c     awidth(iap,ib)  Width of aperture (cm); diameter for circular
-c     aperture
-c     alen(iap,ib)    Length from source to aperature for 's-type' aperatur
-c     and from exit grid plane along beamline axis for
-c     'b-type' aperatures.
-c     blenp(ib)       Distance along beamline axis from source exit
-c     plane to the fiducial "pivot" point.
-c     rpivot(ib)      Radial position of pivot (cm)
-c     zpivot(ib)      Axial position of pivot (cm)
-c
-c     hdepsmth        set this parm to a positive value (gt.0.0) to turn of
-c     the smoothing of hibrz and hdepz in sub postnub.
-c     If this option is used then enough zones must be spec
-c     for adequate resolution (zones=number of radial grid
-c     and enough injected neutrals must be followed to minimize
-c     the statistical noise enough so that no greatly uneven
-c     profiles result! this option was added because the smoothing
-c     of the profiles by subroutine smooth can lead to unphysical
-c     forms of the birth and deposition profiles.
-c--------------------------------------------------------------------
-c     ONETWO DIVERGENCE BELOW
+!     ABOVE NOT USED IN CQL3D** ONETWO DIVERGENCE**
+!******************************************************************
+!     ranseed    Starting seed for random number generator used in the
+!     Freya determination of the beam deposition.
+!     npart       Number of particles followed into plasma
+!     (suggest 10000)
+!     npskip     Ratio of number of particles followed into plasma
+!     to number of source particles (suggest 1)
+!     iborb      Flag for modeling orbit effects on beam-
+!     generated fast ions
+!     1, model orbit effects
+!     0, do not model orbit effects
+!     itrapfi    Flag for trapped fast ions.  If iborb=1 then
+!     setting itrapfi=1 will modify the beam driven
+!     current by the initial trapped ion fraction.
+!     (Subsequent pitch angle diffusion is not!!! taken into
+!     account).  itrapfi=0 neglects this effect.  If iborb=0,
+!     itrapfi has no affect.  itrapfi=0 is default
+!     iexcit    excited beam state option
+!     0,  do not use excited state cross sections (default)
+!     1,  use hexnb package but do not include excitations in
+!     its calculation of cross sections
+!     2,  use hexnb package, include excitations in calculation
+!     of cross sections
+!     inubpat   two-dimensional beam deposition option
+!     0,  do not calculate beam deposition in (r,z) coordinates
+!     1,  calculate beam deposition on eqdisk (r,z) coordinates,
+!     write third excited state population to file 'beamdep'
+!     2,  same as inubpat=1 except rescale (r,z) grid according
+!     to npat (see below)
+!     if inubpat.gt.0, iexcit is automatically set, iexcit=2
+!     npat      modified (r,z) grid dimensions, used only for inubpat=2
+!     npat(1)=number of elements in 'r' (<=2*nnra)
+!     npat(2)=number of elements in 'z' (<=2*nnza)
+!     defaults, npat(1)=nnra, npat(2)=nnza
+!     mf not read in - ONETWO DIVERGENCE
+!     mf         Number of flux zones plus 1 (max = 81)
+!
+!     In the following list the index ib designates the beam injector,
+!     while ie refers to one of the three energy components.
+!     iap refers to one of the aperatures.
+!
+!     nbeams          Number of neutral beam injectors (.le.kb)
+!     nsourc          Number of sources per beamline.
+!     If 1, source is centered on beamline axis.
+!     If nsourc=2, distinguish between the beamline
+!     axis and the source centerline (optical axis).
+!     The two sources are assumed to be mirror images
+!     through the beamline axis.
+!     In either case, the exit grid plane is perpendicula
+!     to the beamline axis, and contains the source
+!     exit grid center(s).
+!     If nsourc=2, the alignment of the sources w.r.t.
+!     the beamline axis is specified through bhofset,
+!     bvofset, and bleni (described further below).
+!     naptr           Total number of aperatures encountered by a particle
+!     as is moves from the source into the plasma chamber
+!     Maximum is specified by parameter nap (=10).
+!     First set of aperatures encountered by the particle
+!     are assumed centered on the source axis, and subseq
+!     aperatures are centered on the beamline axis; the
+!     distinction is made through ashape.
+!     anglev(ib)      Vertical angle (degrees) between optical axis
+!     and horizontal plane; a positive value indicates
+!     particles move upward
+!     angleh(ib)      Horizontal angle (degrees) between optical axis and
+!     vertical plane passing through pivot point and
+!     toroidal axis; a zero value denotes perpendicular
+!     injection, while a positive value indicates par-
+!     ticles move in the co-current direction
+!     bvofset(ib)     Vertical offset from beamline axis to center
+!     of each source (cm; used only for nsourc=2)
+!     bhofset(ib)     Horizontal offset from beamline axis to center
+!     of each source (cm; used only for nsourc=2)
+!     bleni(ib)       Length along source centerline (source optical axis)
+!     source to intersection point with the beamline axis
+!     sfrac1(ib)      Fraction of source current per beamline coming
+!     from upper source (used only for nsourc=2)
+!     bcur(ib)        Total current (a) in ion beam (used only if bptor
+!     is zero)
+!     bptor(ib)       Total power (w) through aperture into torus; when
+!     nonzero, bptor takes precedence over bcur
+!     bshape(ib)      Beam shape
+!     'circ' : circular
+!     'rect' : rectangular
+!     'rect-lps':  rect. long pulse source (DIII-D only)
+!     a choice of short or long pulse sources is
+!     available by injector (not by source).  on
+!     or both injectors may be long pulse by
+!     setting one or both to 'rect-lps'
+!     CAUTION:  DIII-D sources are defaulted to lps specs.
+!     It is the user's responsibility to overide these for
+!     sps configuration(s).
+!     bheigh(ib)      Height of source (cm)
+!     Default is bshape(1)=bshape(2)='rect-lps'
+!     bwidth(ib)      Width of source (cm); diameter for
+!     circular source.
+!     bhfoc(ib)       Horizontal focal length of source (cm)
+!     bvfoc(ib)       Vertical focal length of source (cm)
+!     bhdiv(ib)       Horizontal divergence of source (degrees)
+!     bvdiv(ib)       Vertical divergence of source (degrees)
+!     ebkev(ib)       Maximum particle energy in source (keV)
+!     fbcur(ie,ib)    Fraction of current at energy ebkeV/ie
+!     ashape(iap,ib)  Aperture shape.
+!     Prefix 's-' indicates source axis centered.
+!     Prefix 'b-' indicates beamline axis centered.
+!     's-circ'          'b-circ'
+!     's-rect'          'b-rect'
+!     's-vert'          'b-vert'
+!     's-horiz'         'b-horiz'
+!     'b-d3d'
+!     (circ=circular aperature, rect=rectagular,
+!     vert=limits vertical height of source particles,
+!     horiz=limits horizontal height of source particles,
+!     d3d= special DIII-D polygonal aperature)
+!     aheigh(iap,ib)  Height of aperture (cm)
+!     awidth(iap,ib)  Width of aperture (cm); diameter for circular
+!     aperture
+!     alen(iap,ib)    Length from source to aperature for 's-type' aperatur
+!     and from exit grid plane along beamline axis for
+!     'b-type' aperatures.
+!     blenp(ib)       Distance along beamline axis from source exit
+!     plane to the fiducial "pivot" point.
+!     rpivot(ib)      Radial position of pivot (cm)
+!     zpivot(ib)      Axial position of pivot (cm)
+!
+!     hdepsmth        set this parm to a positive value (gt.0.0) to turn of
+!     the smoothing of hibrz and hdepz in sub postnub.
+!     If this option is used then enough zones must be spec
+!     for adequate resolution (zones=number of radial grid
+!     and enough injected neutrals must be followed to minimize
+!     the statistical noise enough so that no greatly uneven
+!     profiles result! this option was added because the smoothing
+!     of the profiles by subroutine smooth can lead to unphysical
+!     forms of the birth and deposition profiles.
+!--------------------------------------------------------------------
+!     ONETWO DIVERGENCE BELOW
       nprim=1  !number of primary species. Needs to be equal to ngen.
       nimp=0   !If impurities are present, should include at least =1.
       machinei="iter"
@@ -224,14 +227,14 @@ c     ONETWO DIVERGENCE BELOW
       fionx = 0.0
       nameb = 'h'
       relnub=.10
-cNLremoved      tfusbb = 0.
-cNLremoved      iddcal = 3
-cNLremoved      fdbeam = 0.150e-3
+!NLremoved      tfusbb = 0.
+!NLremoved      iddcal = 3
+!NLremoved      fdbeam = 0.150e-3
 
  1660 continue
-cBH091020:  Adding above defaults which were skipped for some unknown
-cBH091020:  reason, for machinei='iter'
-cBH091020:  Simply zeroing.
+!BH091020:  Adding above defaults which were skipped for some unknown
+!BH091020:  reason, for machinei='iter'
+!BH091020:  Simply zeroing.
       beamon = 0.  ! Not used for anything
       btime  = 0.  ! Not used for anything
       ibcur = 0
@@ -239,33 +242,33 @@ cBH091020:  Simply zeroing.
       ibcx = 0
       ibslow = 0
       fionx = 0.0
-c      nameb = 'h'
+!      nameb = 'h'
       relnub=0.
 
       nameb = 'd'
       ranseed=7**7
-c     ONETWO DIVERGENCE
+!     ONETWO DIVERGENCE
       npart= 150000 ! YuP-101211: default value. Was: npart=nap
       hdepsmth=-1.0
-c---smoothing is normally on by above line
+!---smoothing is normally on by above line
       npskip = 1
-c     ONETWO DIVERGENCE BELOW
+!     ONETWO DIVERGENCE BELOW
       iborb = 0
       inubpat=0
       npat(1)=nnra
       npat(2)=nnza
       mf = 41
       nbeams = 1
-c
-c     ONETWO DIVERGENCE BELOW
+!
+!     ONETWO DIVERGENCE BELOW
       nsourc=1
-c
+!
       if (ke.lt.3) then
          WRITE(*,*)'frinitl:  parameter ke needs to be .ge.3'
          stop
       endif
-c
-c     DIII beam input
+!
+!     DIII beam input
       if(machinei.ne.'doub-iii')go to 9020
       naptr=2
       do 1700 i=1,kb
@@ -324,8 +327,8 @@ c     DIII beam input
         endif
  1700 continue
       go to 9030
-c
-c     ITER BEAM INPUT.
+!
+!     ITER BEAM INPUT.
  9020 naptr=4
       do 1705  i=1,kb
         anglev(i)=0.0
@@ -392,9 +395,9 @@ c     ITER BEAM INPUT.
 
  1705 continue
  9030 continue
-c---
-c---following parms are used in subroutine hexnb
-c---
+!---
+!---following parms are used in subroutine hexnb
+!---
       kdene=1
       kdeni=1
       kdenz=1
@@ -408,7 +411,7 @@ c---
       ilorent=0
       mstate=4
 
-c     note izstrp=0 implies coronal equilibrium for impurity j in hexnb
+!     note izstrp=0 implies coronal equilibrium for impurity j in hexnb
       do 1720 j=1,kimp
         izstrp(j)=0
  1720 continue
@@ -427,7 +430,7 @@ c     note izstrp=0 implies coronal equilibrium for impurity j in hexnb
       beampon=0.d0
       beampoff=0.d0
 
-c     defaults for reading NUBEAM particle birth pt list
+!     defaults for reading NUBEAM particle birth pt list
       read_birth_pts="disabled"
       nbirth_pts_files=1
       nbirth_pts=250000
@@ -435,7 +438,7 @@ c     defaults for reading NUBEAM particle birth pt list
          birth_pts_files(i)="notset"
       enddo
 
-c     For removing NBI source at all psi outside of psicutoff:
+!     For removing NBI source at all psi outside of psicutoff:
       psicutoff=0.d0 ! if 0.0, no removal is done
       ! The value of psicutoff can be determined from
       ! screen output of rho and psi values.
@@ -443,4 +446,4 @@ c     For removing NBI source at all psi outside of psicutoff:
 
 
       return
-      end
+      end subroutine frinitl

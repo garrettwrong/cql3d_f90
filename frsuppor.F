@@ -1,19 +1,23 @@
-c     ONETWO DIVERGENCE
-c
-c
-c     ONETWO DIVERGENCE
+!     ONETWO DIVERGENCE
+!
+!
+!     ONETWO DIVERGENCE
       subroutine frsuppor(a,ni,nj,nk,nl,isupp,ifail)
       use param_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
-c-----------------------------------------------------------------------
-c     determines crude 2d support of four-dimensional array
-c     a(i,j,k,l)   array searched for support approximation
-c     isupp(4,k,l) output.  with k,l fixed, contains (in order),
-c     i1,i2,j1,j2, the indices of a corresponding to the
-c     vertices of the smallest rectangle supporting a.
-c-----------------------------------------------------------------------
-c     ONETWO DIVERGENCE
-      dimension a(kix2,kjx2,ke,kb),isupp(4,ke,kb)
+      implicit none
+!-----------------------------------------------------------------------
+!     determines crude 2d support of four-dimensional array
+!     a(i,j,k,l)   array searched for support approximation
+!     isupp(4,k,l) output.  with k,l fixed, contains (in order),
+!     i1,i2,j1,j2, the indices of a corresponding to the
+!     vertices of the smallest rectangle supporting a.
+!-----------------------------------------------------------------------
+!     ONETWO DIVERGENCE
+      real(c_double) :: a(kix2,kjx2,ke,kb) ! input
+      integer :: isupp(4,ke,kb) ! input
+      integer :: ni,nj,nk,nl,ifail ! input
+      integer i,j ! local
+      real(c_double) zero ! local
 
 c      zero=0.d0
 
@@ -54,4 +58,4 @@ c      zero=0.d0
  999  continue
       ifail=1
       return
-      end
+      end subroutine frsuppor

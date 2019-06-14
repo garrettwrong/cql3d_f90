@@ -1,54 +1,62 @@
-c
-c
-c     ONETWO DIVERGENCE
+!
+!
+!     ONETWO DIVERGENCE
       subroutine frnbdep2(psi,mi,mj,r,z,potsid,mf,rzpat,nrpat,nzpat,me,
      &  mb,sgxn,vbeam,hxfrac,iopt)
       use param_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
-c-----------------------------------------------------------------------
-c     calculates neutral beam deposition on (r,z) grid.  grid size
-c     determined by nrpat and nzpat, the number of equally spaced
-c     elements in the r and z axes.  outputs the 3rd excited state
-c     component, rzhex, to file 'beamdep' for postprocessing.
-c-----------------------------------------------------------------------
-c     ONETWO DIVERGENCE
+
+      implicit none
+!-----------------------------------------------------------------------
+!     calculates neutral beam deposition on (r,z) grid.  grid size
+!     determined by nrpat and nzpat, the number of equally spaced
+!     elements in the r and z axes.  outputs the 3rd excited state
+!     component, rzhex, to file 'beamdep' for postprocessing.
+!-----------------------------------------------------------------------
+!     ONETWO DIVERGENCE
 #ifdef __MPI
       include 'mpilib.h'
 #endif
 
+      integer nbdep ! local 
       parameter (nbdep=29)
-      dimension psi(ki,kj),r(ki),z(kj),potsid(kf),
+      real(c_double) :: psi(ki,kj),r(ki),z(kj),potsid(kf),
      &  rzpat(kix2,kjx2,ke,kb),sgxn(kz,ke,kb),vbeam(ke,kb),
      &  hxfrac(ke,kb)
-      dimension psipat(kix2,kjx2),rr(kix2),zz(kjx2),
+      real(c_double) :: psipat(kix2,kjx2),rr(kix2),zz(kjx2),
      &  rznub(kix2,kjx2,ke,kb),rzhex(kix2,kjx2,ke,kb),pc(kz),
      &  capsig(kz),rzsig(kikj),frac(kz),rzfrac(kikj),
      &  splnwk(kwork),cspln1(kzm1,3),cspln2(kzm1,3),
-     &  bpar1(4),bpar2(4),psikp(kikj),isupp(4,ke,kb),inc(kjx2)
-c
-c      zero=0.d0
+     &  bpar1(4),bpar2(4),psikp(kikj)
+      integer :: isupp(4,ke,kb),inc(kjx2)
+!
+      integer i,j,ib,ie,n,nout ! local
+      integer :: mi,mj,mf, nrpat,nzpat,me,mb,iopt ! arg. in subr.  
+      integer igrid,mfm1,ier,ifail ! local (and arg. in called subroutines)
+      real(c_double) :: zero,dr,dz ! local
 
-c     set (r,z) grid modification option
+      zero=0.d0
+
+!     set (r,z) grid modification option
       igrid=iopt-1
-c
-c     zero out arrays
+!
+!     zero out arrays
       do 100 i=1,4
         bpar1(i)=0.
         bpar2(i)=0.
  100  continue
-c
-c     set up integer array to allow vectorization further on
+!
+!     set up integer array to allow vectorization further on
       do 90 i=1,nzpat
         inc(i)=i-1
  90   continue
-c
-c     get psi on zone centers
+!
+!     get psi on zone centers
       mfm1=mf-1
       do 110 i=1,mfm1
         pc(i)=0.5*(potsid(i)+potsid(i+1))
  110  continue
-c
-c     if user defined new (r,z) grid, interpolate psi(i,j) onto it
+!
+!     if user defined new (r,z) grid, interpolate psi(i,j) onto it
       if(igrid.eq.1)then
         dr=(r(mi)-r(1))/(nrpat-1)
         rr(1)=r(1)
@@ -63,22 +71,22 @@ c     if user defined new (r,z) grid, interpolate psi(i,j) onto it
         call ibcieu1(psi,ki,r,mi,z,mj,rr,nrpat,zz,nzpat,psipat,kix2,
      &    splnwk,ier)
       endif
-c
-c     begin loop over beam and beam energy
+!
+!     begin loop over beam and beam energy
       do 200 ib=1,mb
         do 201 ie=1,me
-c
-c     get an estimate of the support of rzpat
+!
+!     get an estimate of the support of rzpat
           call frsuppor(rzpat,nrpat,nzpat,ie,ib,isupp,ifail)
-c
-c     get spline fits to macroscopic neutral beam attenuation cross
-c     sections as a function of psi
+!
+!     get spline fits to macroscopic neutral beam attenuation cross
+!     sections as a function of psi
           do 120 i=1,mfm1
             capsig(i)=sgxn(i,ie,ib)
  120      continue
           call icsicu1(pc,capsig,mfm1,bpar1,cspln1,kzm1,ier)
-c
-c     loop over (r,z) points
+!
+!     loop over (r,z) points
           do 130 i=isupp(1,ie,ib),isupp(2,ie,ib)
             do 131 j=isupp(3,ie,ib),isupp(4,ie,ib)
               if(rzpat(i,j,ie,ib).ne.zero)then
@@ -98,7 +106,7 @@ c     loop over (r,z) points
               if(rzpat(i,j,ie,ib).ne.zero)then
                 n=n+1
                 rznub(i,j,ie,ib)=rzpat(i,j,ie,ib)/(vbeam(ie,ib)
-     +            *rzsig(n))
+     &            *rzsig(n))
               endif
  141        continue
  140      continue
@@ -109,8 +117,8 @@ c     loop over (r,z) points
  150      continue
  201    continue
  200  continue
-c
-c     output subset of rzhex to 'beamdep'
+!
+!     output subset of rzhex to 'beamdep'
       nout=nbdep
 
 #ifdef __MPI
@@ -136,6 +144,6 @@ c     output subset of rzhex to 'beamdep'
  1000 format(4(5x,i4))
  1010 format(7(2x,e16.7))
       close(unit=nout)
-c
+!
       return
-      end
+      end subroutine frnbdep2

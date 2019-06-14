@@ -1,21 +1,24 @@
-c
-c
+!
+!
       subroutine frstup(mf,mfm1,mi,mj,nion,potsid,codeid,rin,
-     1  rmax,zax,zminn,zmaxx,zni,zne,zte,zti,zzi,frpsi,psivol,
-     1  xxx,yyy,nprim,nimp,zeffctv,zshift1)
+     &  rmax,zax,zminn,zmaxx,zni,zne,zte,zti,zzi,frpsi,psivol,
+     &  xxx,yyy,nprim,nimp,zeffctv,zshift1)
 
       use bcast_mod, only : bcast
       use cqlcomm_mod
       use cqlconf_mod, only : setup0
       use param_mod
 
-      implicit integer (i-n), real(c_double) (a-h,o-z)
-
-
-      character*8 codeid
-      dimension psivol(*),potsid(*),frpsi(nnra,*),
-     1  zne(kz,*),zni(kz,*),zte(*),zzi(kz,*),xxx(*),yyy(*),
-     1  zti(*),zeffctv(*)
+      implicit none
+      integer :: mf,mfm1,mi,mj,nion,nprim,nimp ! input and output
+      character*8 codeid ! output
+      real(c_double) :: psivol(*),potsid(*),frpsi(nnra,*) ! output
+      real(c_double) :: zne(kz,*),zni(kz,*),zte(*),zzi(kz,*) ! input
+      real(c_double) :: xxx(*),yyy(*) ! output
+      real(c_double) :: zti(*),zeffctv(*) ! input
+      real(c_double) :: rin,rmax,zminn,zmaxx,zax,zshift1 ! output
+      integer :: i,j,l,ll,k,kk,kimp_ ! local
+      real(c_double) :: tp,dn ! local
 
       ! YuP[2019-06-12] Getting lrz and lrzmax from setup0 type:
       integer :: lrz
@@ -23,17 +26,17 @@ c
       lrz = setup0%lrz
       lrzmax =  setup0%lrzmax
 
-c..................................................................
-c     This routine should be called just before the call to FREYA.
-c     It defines a number of time (or iteration) dependent input
-c     variables required in the call to FREYA.
-c..................................................................
+!..................................................................
+!     This routine should be called just before the call to FREYA.
+!     It defines a number of time (or iteration) dependent input
+!     variables required in the call to FREYA.
+!..................................................................
 
 
-c..................................................................
-c     Set the frpsi (epsi) array as required by FREYA
-c     Maximum will be at limiter not the axis.
-c..................................................................
+!..................................................................
+!     Set the frpsi (epsi) array as required by FREYA
+!     Maximum will be at limiter not the axis.
+!..................................................................
 
       do 10 i=1,nnr
         xxx(i)=er(i)
@@ -44,21 +47,21 @@ c..................................................................
       do 15 j=1,nnz
         yyy(j)=ez(j)
  15   continue
-c.....................................................................
-c     eqpsi(1:nconteqn) is set up in cql3d routine eqrhopsi.f.
-c     It is used to give the flux zones for freya returned in the
-c     izone argument of subroutine inject (now inject_old and inject1),
-c     called in subroutine freya.
-c     Change the sign of (positive) eqpsi array to get it in ascending
-c     order for splines.  (Changed back at end of subroutine).
-c.....................................................................
+!.....................................................................
+!     eqpsi(1:nconteqn) is set up in cql3d routine eqrhopsi.f.
+!     It is used to give the flux zones for freya returned in the
+!     izone argument of subroutine inject (now inject_old and inject1),
+!     called in subroutine freya.
+!     Change the sign of (positive) eqpsi array to get it in ascending
+!     order for splines.  (Changed back at end of subroutine).
+!.....................................................................
 
       do 2 l=1,nconteqn
         eqpsi(l)=-eqpsi(l)
  2    continue
-c..................................................................
-c     The number of flux zones (mfm1) used in FREYA
-c..................................................................
+!..................................................................
+!     The number of flux zones (mfm1) used in FREYA
+!..................................................................
 
       mfm1=nconteqn-1
       mf=mfm1+1
@@ -68,11 +71,11 @@ c..................................................................
       write(*,*)'Adjust mfm1=nconteqn-1 throught NL input of nconteqn'
       write(*,*)
 
-c..................................................................
-c     Interpolate densities, temperatures etc over to the
-c     (high resolution?) mesh utilized by FREYA.
-c
-c..................................................................
+!..................................................................
+!     Interpolate densities, temperatures etc over to the
+!     (high resolution?) mesh utilized by FREYA.
+!
+!..................................................................
 
       psivol(1)=.5*(eqvol(2)+eqvol(1))
       psivol(mfm1)=eqvol(mf)-.5*(eqvol(mfm1)+eqvol(mfm1-1))
@@ -80,27 +83,27 @@ c..................................................................
         psivol(ll)=.5*(eqvol(ll+1)-eqvol(ll-1))
  20   continue
 
-c..................................................................
-c     Electron density, energy
-c..................................................................
+!..................................................................
+!     Electron density, energy
+!..................................................................
 
       do 30 ll=1,lrzmax
         tr1(ll)=reden(kelec,ll)
         tr2(ll)=energy(kelec,ll)*2./3.
  30   continue
 
-c..................................................................
-c     Call spline interpolation routine to get values on FREYA
-c     eqspi mesh
-c     (which is same as intemediary radial mesh used in CQL3D proper).
-c..................................................................
+!..................................................................
+!     Call spline interpolation routine to get values on FREYA
+!     eqspi mesh
+!     (which is same as intemediary radial mesh used in CQL3D proper).
+!..................................................................
 
       call frsplft(lrzmax,equilpsp(1),tr1(1),mfm1,eqpsi,zne)
       call frsplft(lrzmax,equilpsp(1),tr2(1),mfm1,eqpsi,zte)
 
-c..................................................................
-c     Average ion temperature..
-c..................................................................
+!..................................................................
+!     Average ion temperature..
+!..................................................................
 
       kimp_=ntotal-nimp+1
       tr1=zero !YuP[2019-06-08]was call bcast(tr1(1),zero,lrzmax)
@@ -122,76 +125,76 @@ c..................................................................
  50   continue
       call frsplft(lrzmax,equilpsp(1),tr1(1),mfm1,eqpsi,zti(1))
 
-c..................................................................
-c     Ion densities..
-c..................................................................
-c
+!..................................................................
+!     Ion densities..
+!..................................................................
+!
       kk=0
       do 70 k=1,ntotal
         tr1=zero !YuP[2019-06-08]was call bcast(tr1(1),zero,lrzmax)
         if (k.eq.kelecm .or. k.eq.kelecg) go to 70
         kk=kk+1
-c        if (kk.gt.nprim .and. k.lt.kimp_) then
+!        if (kk.gt.nprim .and. k.lt.kimp_) then
         if (kk.gt.nprim+nimp+1 .and. k.lt.kimp_) then
           kk=kk-1
           go to 70
         endif
         do 60 ll=1,lrzmax
           tr1(ll)=reden(k,ll)
-c         write(*,*) k, ll, tr1(ll), ' ion density'
+!         write(*,*) k, ll, tr1(ll), ' ion density'
  60     continue
         call frsplft(lrzmax,equilpsp(1),tr1(1),mfm1,eqpsi,zni(1,kk))
  70   continue
-c      stop
-c..................................................................
-c     Average charge state..
-c..................................................................
+!      stop
+!..................................................................
+!     Average charge state..
+!..................................................................
       kk=0
       do 90 k=1,ntotal
         if (k.eq.kelecm .or. k.eq.kelecg) go to 90
         kk=kk+1
-c        if (kk.gt.nprim .and. k.lt.kimp_) then
+!        if (kk.gt.nprim .and. k.lt.kimp_) then
         if (kk.gt.nprim+nimp+1 .and. k.lt.kimp_) then
           kk=kk-1
           go to 90
         endif
         do 80 ll=1,lrzmax
           tr1(ll)=bnumb(k)
-c         write(*,*) k, ll, tr1(ll), ' ion charge'
+!         write(*,*) k, ll, tr1(ll), ' ion charge'
  80     continue
         call frsplft(lrzmax,equilpsp(1),tr1(1),mfm1,eqpsi,zzi(1,kk))
  90   continue
-c      stop
-c..................................................................
-c     Compute zeff(lr_) on Freya mesh.
-c..................................................................
+!      stop
+!..................................................................
+!     Compute zeff(lr_) on Freya mesh.
+!..................................................................
 
       call frsplft(lrzmax,equilpsp(1),zeff(1),mfm1,eqpsi,zeffctv(1))
-c
+!
        if(nprim.eq.1 .and. nimp.eq.1) then
          write(*,*) 'copying Zeff into zzi...'
          do k=1,mfm1
            zzi(k,nion+2)=zeff(k)
-c           write(*,*) 'zzi(k,nion+2) = ',zzi(k,nion+2)
+!           write(*,*) 'zzi(k,nion+2) = ',zzi(k,nion+2)
          enddo
        endif
-c
-c..................................................................
-c     Change eqpsi back to convention at call to this subroutine.
-c..................................................................
+!
+!..................................................................
+!     Change eqpsi back to convention at call to this subroutine.
+!..................................................................
 
       do 101 l=1,nconteqn
         eqpsi(l)=-eqpsi(l)
  101  continue
 
-c..................................................................
-c     For running NFREYA with CQL3D, we assume iborb=0; so
-c     it is necessary to set only the endpoints of potsid
-c..................................................................
+!..................................................................
+!     For running NFREYA with CQL3D, we assume iborb=0; so
+!     it is necessary to set only the endpoints of potsid
+!..................................................................
 
       potsid(1)=-psimag
       potsid(mf)=-psilim
-      elong=0
+      !elong=0 ! YuP: not used here?
       codeid="twodee"
       rin=rmincon
       write(*,*)'frsetup: rmincon,rmaxcon=',rmincon,rmaxcon
@@ -204,4 +207,4 @@ c..................................................................
       zshift1=zshift
 
       return
-      end
+      end subroutine frstup

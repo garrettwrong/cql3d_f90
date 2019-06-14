@@ -1,303 +1,329 @@
-c
-c
+!
+!
 
-c
-c..................................................................
-c     ONETWO DIVERGENCE
-c     THE CALLING SEQUENCE TO FREYA IS ALTERED. CIVIC WILL ONLY ALLOW
-c     61 ELEMENTS IN CALLING SEQUENCE. THEREFORE THE COMMUNICATION WILL
-c     BE THROUGH FRCOMM
-c..................................................................
+!
+!..................................................................
+!     ONETWO DIVERGENCE
+!     THE CALLING SEQUENCE TO FREYA IS ALTERED. CIVIC WILL ONLY ALLOW
+!     61 ELEMENTS IN CALLING SEQUENCE. THEREFORE THE COMMUNICATION WILL
+!     BE THROUGH FRCOMM
+!..................................................................
 
       subroutine freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
       use aminmx_mod, only : aminmx
       use bcast_mod, only : bcast
       use param_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
       save
-      integer, intent(out) :: ipts
-c---------------------------------------------------------------------
-c
-c     this subroutine calculates the particle and energy sources
-c     due to neutral beam injection.
-c
-c---------------------------------------------------------------------
-c     BH130329:  Adding capability to read a set of birth point files
-c                from NUBEAM, to compare with results from freya
-c                calculation.
-c                New input variables in frsetup namelist are:
-c                read_birth_pts="enabled", for use of this capability
-c                birth_pts_files=input nbirth_pts_files filenames into
-c                               the namelist, in the order which they
-c                               will be used in cql3d. character*256.
-c                               Max list length=24.  default='notset'
-c                nbirth_pts_files=number of birth point files.
-c                nbirth_pts= should be same as in all the NUBEAM files
-c
-c                A single beam is assumed, with up to three beam energy
-c                components.
-c
-c                The shine through, and total power is read from the
-c                files. nbirth_points is checked.  Power and shine
-c                through numbers may vary from file to file.
-c
-c
-c---------------------------------------------------------------------
-c     the input quantities to freya are:
-c
-c     mb              Number of neutral beam injectors (.le.kb)
-c     anglev(ib)      Vertical angle (degrees) between optical axis
-c     and horizontal plane; a positive value indicates
-c     particles move upward
-c     angleh(ib)      Horizontal angle (degrees) between optical axis and
-c     vertical plane passing through pivot point and
-c     toroidal axis; a zero value denotes perpendicular
-c     injection, while a positive value indicates par-
-c     ticles move in the co-current direction
-c     nsourc          Number of sources per beamline.
-c     If 1, source is centered on beamline axis.
-c     If nsourc=2, distinguish between the beamline
-c     axis and the source centerline (optical axis).
-c     The two sources are assumed to be mirror images
-c     through the beamline axis.
-c     In either case, the exit grid plane is perpendicula
-c     to the beamline axis, and contains the source
-c     exit grid center(s).
-c     If nsourc=2, the alignment of the sources w.r.t.
-c     the beamline axis is specified through bhofset,
-c     bvofset, and bleni (described further below).
-c     bvofset(ib)     Vertical offset from beamline axis to center
-c     of each source (cm; used only for nsourc=2)
-c     bhofset(ib)     Horizontal offset from beamline axis to center
-c     of each source (cm; used only for nsourc=2)
-c     bleni(ib)       Length along source centerline (source optical axis)
-c     source to intersection point with the beamline axis
-c     sfrac1(ib)      Fraction of source current per beamline coming
-c     from upper source (used only for nsourc=2)
-c     bcur(ib)        Total current (a) in ion beam (used only if bptor
-c     is zero)
-c     bptor(ib)       Total power (w) through aperture into torus; when
-c     nonzero, bptor takes precedence over bcur
-c     bshape(ib)      Beam shape
-c     'circ' : circular
-c     'rect' : rectangular
-c     bheigh(ib)      Height of source (cm)
-c     bwidth(ib)      Width of source (cm); diameter for
-c     circular source.
-c     bhfoc(ib)       Horizontal focal length of source (cm)
-c     bvfoc(ib)       Vertical focal length of source (cm)
-c     bhdiv(ib)       Horizontal divergence of source (degrees)
-c     bvdiv(ib)       Vertical divergence of source (degrees)
-c     ebkev(ib)       Maximum particle energy in source (keV)
-c     fbcur(ie,ib)    Fraction of current at energy ebkeV/ie
-c     iborb           Flag for modeling orbit effects on beam-
-c     generated fast ions
-c     1, model orbit effects
-c     0, do not model orbit effects
-c     npart           Number of particles followed into plasma
-c     (suggest 10000)
-c     npskip          Ratio of number of particles followed into plasma
-c     to number of source particles (suggest 1)
-c     naptr           Total number of aperatures encountered by a particle
-c     as is moves from the source into the plasma chamber
-c     Maximum is specified by parameter nap (=10).
-c     First set of aperatures encountered by the particle
-c     are assumed centered on the source axis, and subseq
-c     aperatures are centered on the beamline axis; the
-c     distinction is made through ashape.
-c     ashape(iap,ib)  Aperture shape.
-c     Prefix 's-' indicates source axis centered.
-c     Prefix 'b-' indicates beamline axis centered.
-c     's-circ'          'b-circ'
-c     's-rect'          'b-rect'
-c     's-vert'          'b-vert'
-c     's-horiz'         'b-horiz'
-c     'b-d3d'
-c     (circ=circular aperature, rect=rectagular,
-c     vert=limits vertical height of source particles,
-c     horiz=limits horizontal height of source particles,
-c     d3d= special DIII-D polygonal aperature)
-c     'circ' : circular
-c     'rect' : rectangular
-c     aheigh(iap,ib)  Height of aperture (cm)
-c     awidth(iap,ib)  Width of aperture (cm); diameter for circular
-c     aperture
-c     alen(iap,ib)    Length from source to aperature for 's-type' aperatur
-c     and from exit grid plane along beamline axis for
-c     'b-type' aperatures.
-c     blenp(ib)       Distance along beamline axis from source exit
-c     plane to the fiducial "pivot" point.
-c     rpivot(ib)      Radial position of pivot (cm)
-c     zpivot(ib)      Axial position of pivot (cm)
-c     atw(k)          atomic mass of ion species k
-c     codeid          flux surface geometry
-c     "onedee"      : elliptical
-c     anything else : nonelliptical
-c     elong           elongation (height/width) of elliptical
-c     cross-section plasma
-c     ibion           ion index of beam species
-c     mf              number of flux zones
-c     mi              number of radial mesh points for nonelliptical
-c     plasma
-c     mj              number of axial mesh points for nonelliptical
-c     plasma
-c     nion            number of ion species
-c     norb            flag controlling output of orbit information
-c     >0, write out extensive orbit information
-c     to unit norb
-c     0, omit output of orbit information
-c     <0, write out abbreviated orbit information
-c     to unit iabs(norb)
-c     pinsid(i)       poloidal magnetic flux (G-cm2) along horizontal
-c     chord inside and through the magnetic axis vs.
-c     a uniform mesh in major radius; pinsid is needed
-c     only if iborb=1
-c     potsid(i)       poloidal magnetic flux (G-cm2) along horizontal
-c     chord outside and through the magnetic axis vs.
-c     a uniform mesh in major radius; potsid(1) and
-c     potsid(mf) are needed if codeid.ne.'onedee';
-c     the entire potsid array is needed if iborb=1
-c     psi(i,j)        poloidal magnetic flux (G-cm2) at mesh point i,j
-c     (needed only if codid.ne.'onedee')
-c     psivol(i)       volume (cm3) of flux zone i; depending upon
-c     whether codeid.eq.'onedee' or not, psivol is
-c     chosen such that either r or sqrt(psi-psiax)
-c     varies a constant amount from one flux surface
-c     to the next
-c     rinsid(i)       major radius (cm) along horizontal chord inside
-c     and through the magnetic axis vs. a uniform mesh
-c     in sqrt(psi-psiax); rinsid is needed only if
-c     iborb=1
-c     rotsid(i)       major radius (cm) along horizontal chord outside
-c     and through the magnetic axis vs. a uniform mesh
-c     in sqrt(psi-psiax); rotsid(1) and rotsid(mf) are
-c     needed if codeid.eq.'onedee'; the entire rotsid
-c     array is needed if iborb=1
-c     r(i)            maj radius mesh point i for nonelliptical plasma (cm)
-c     rin             major radius of inside of vacuum vessel (cm)
-c     rmax            maximum radial position of plasma (cm)
-c     rpivot(ib)      radial position of pivot point (cm)
-c     sfrac1(ib)      fraction of source current per beamline coming
-c     from upper source (used only for nsourc=2)
-c     sofset(ib)      vertical offset from optical axis to center
-c     of each source (cm; used only for nsourc=2)
-c     ONETWO DIVERGENCE: use w instead of z
-c     w(j)            axial mesh point j for nonelliptical plasma (cm)
-c     zax             axial position of magnetic axis (cm) for
-c     elliptical plasma
-c     zmin            minimum axial position of plasma (cm)
-c     zmax            maximum axial position of plasma (cm)
-c     zpivot(ib)      axial position of pivot point (cm)
-c     zne(i)          electron density in zone i (cm-3)
-c     zni(i,k)        density of ion species k in zone i (cm-3)
-c     zte(i)          electron temperature in zone i (kev)
-c     zzi(i,k)        charge number of ion species k in zone i
-c     ONETWO DIVERGENCE
-c     zeffctv(i)      z-effective (used with iexcit=-1)
-c     iexcit       switch that controls the following
-c     ONETWO DIVERGENCE
-c     iexcit=-1 uses Stearn's average cross sections:otw. like =0
-c     iexcit = 0   (default mode) normal freya run
-c     iexcit = 1   use hexnb instead of crsecs to get cross sections
-c     but neglect presence of excited sates in beam
-c     iexcit = 2   use hexnb with excited beam states allowed.
-c     inubpat     switch controlling 2-d beam deposition calculation
-c     0, (default) bypass 2-d deposition
-c     1, determine beam deposition on standard (r,w) grid
-c     and output deposition of 3rd excited state
-c     components to file 'beamdep'
-c     2, same as inubpat=1, except bin deposition on
-c     modified (r,w) grid whose dimensions are given by
-c     'npat' (see below).
-c     note:  if inubpat.gt.0, iexcit must be set equal to 2.
-c     this will automatically be checked, iexcit rese
-c     (if needed), and a message output to the crt.
-c     npat        modified (r,w) dimension array for optional use if
-c     inubpat.gt.0, containing:
-c     npat(1)=number of new 'r' elements
-c     npat(2)=number of new 'w' elements
-c     default:  npat(1)=mi, npat(2)=mj
-c
-c     the output quantities are:
-c
-c     bion(ie,ib)     intensity of ion beam (particles/s)
-c                     [BH: evidently out of the ion source, before
-c                      neutralization]
-c     bneut(ie,ib)    intensity of neutral beam (particles/s)
-c                     [BH: Coming out of the neutralizer,
-c                      a fraction of bion]
-c     bpow(ie,ib)     beam power to aperture (w)
-c     ebeam(ie,ib)    particle energy (kev)
-c     fap(ie,ib)      fraction of beam stopped by aperture
-c     fwall(ie,ib)    fraction of beam incident on wall (shinethrough)
-c     forb(ie,ib)     fraction of beam lost on orbits
-c     ftrapfi(i,ie,ib)fraction of trapped fast ions in each zone
-c     fb11(ie,ib)     fraction of ions passing and axis-encircling
-c     fb10(ie,ib)     fraction of ions passing and not encircling
-c     fb01(ie,ib)     fraction of ions trapped and axis-encircling
-c     fb00(ie,ib)     fraction of ions trapped and not encircling
-c     fber(ie,ib)     fraction of ions trapped for which error was detec
-c     hibrz(i,ie,ib)  normalized hot ion birth rate
-c     hdepz(i,ie,ib)  normalized hot ion deposition rate
-c     ipts            number of birth points to be plotted
-c     xpts(ii)          x coordinate of birth point
-c     ypts(ii)          y coordinate of birth point
-c     zpts(ii)          w coordinate of birth point
-c     vx(ii)          x component of birth velocity
-c     vy(ii)          y component of birth velocity
-c     vz(ii)          w component of birth velocity
-c     wb11(ie,ib)     orbit width of fb11 ions (cm)
-c     wb10(ie,ib)     orbit width of fb10 ions (cm)
-c     wb01(ie,ib)     orbit width of fb01 ions (cm)
-c     wb00(ie,ib)     orbit width of fb00 ions (cm)
-c     zetaz(i,ie,ib)  average pitch angle cosine of deposited hot ions
-c     angmpz(i,ie,ib) toroidal angular momentum density deposition rate.
-c     (i.e. ang. momtm. deposited in shell per second /volume of she
-c     angmpz contains only the toroidal component of ang momentum.
-c---------------------------------------------------------------------
-c     ONETWO DIVERGENCE
+!---------------------------------------------------------------------
+!
+!     this subroutine calculates the particle and energy sources
+!     due to neutral beam injection.
+!
+!---------------------------------------------------------------------
+!     BH130329:  Adding capability to read a set of birth point files
+!                from NUBEAM, to compare with results from freya
+!                calculation.
+!                New input variables in frsetup namelist are:
+!                read_birth_pts="enabled", for use of this capability
+!                birth_pts_files=input nbirth_pts_files filenames into
+!                               the namelist, in the order which they
+!                               will be used in cql3d. character*256.
+!                               Max list length=24.  default='notset'
+!                nbirth_pts_files=number of birth point files.
+!                nbirth_pts= should be same as in all the NUBEAM files
+!
+!                A single beam is assumed, with up to three beam energy
+!                components.
+!
+!                The shine through, and total power is read from the
+!                files. nbirth_points is checked.  Power and shine
+!                through numbers may vary from file to file.
+!
+!
+!---------------------------------------------------------------------
+!     the input quantities to freya are:
+!
+!     mb              Number of neutral beam injectors (.le.kb)
+!     anglev(ib)      Vertical angle (degrees) between optical axis
+!     and horizontal plane; a positive value indicates
+!     particles move upward
+!     angleh(ib)      Horizontal angle (degrees) between optical axis and
+!     vertical plane passing through pivot point and
+!     toroidal axis; a zero value denotes perpendicular
+!     injection, while a positive value indicates par-
+!     ticles move in the co-current direction
+!     nsourc          Number of sources per beamline.
+!     If 1, source is centered on beamline axis.
+!     If nsourc=2, distinguish between the beamline
+!     axis and the source centerline (optical axis).
+!     The two sources are assumed to be mirror images
+!     through the beamline axis.
+!     In either case, the exit grid plane is perpendicula
+!     to the beamline axis, and contains the source
+!     exit grid center(s).
+!     If nsourc=2, the alignment of the sources w.r.t.
+!     the beamline axis is specified through bhofset,
+!     bvofset, and bleni (described further below).
+!     bvofset(ib)     Vertical offset from beamline axis to center
+!     of each source (cm; used only for nsourc=2)
+!     bhofset(ib)     Horizontal offset from beamline axis to center
+!     of each source (cm; used only for nsourc=2)
+!     bleni(ib)       Length along source centerline (source optical axis)
+!     source to intersection point with the beamline axis
+!     sfrac1(ib)      Fraction of source current per beamline coming
+!     from upper source (used only for nsourc=2)
+!     bcur(ib)        Total current (a) in ion beam (used only if bptor
+!     is zero)
+!     bptor(ib)       Total power (w) through aperture into torus; when
+!     nonzero, bptor takes precedence over bcur
+!     bshape(ib)      Beam shape
+!     'circ' : circular
+!     'rect' : rectangular
+!     bheigh(ib)      Height of source (cm)
+!     bwidth(ib)      Width of source (cm); diameter for
+!     circular source.
+!     bhfoc(ib)       Horizontal focal length of source (cm)
+!     bvfoc(ib)       Vertical focal length of source (cm)
+!     bhdiv(ib)       Horizontal divergence of source (degrees)
+!     bvdiv(ib)       Vertical divergence of source (degrees)
+!     ebkev(ib)       Maximum particle energy in source (keV)
+!     fbcur(ie,ib)    Fraction of current at energy ebkeV/ie
+!     iborb           Flag for modeling orbit effects on beam-
+!     generated fast ions
+!     1, model orbit effects
+!     0, do not model orbit effects
+!     npart           Number of particles followed into plasma
+!     (suggest 10000)
+!     npskip          Ratio of number of particles followed into plasma
+!     to number of source particles (suggest 1)
+!     naptr           Total number of aperatures encountered by a particle
+!     as is moves from the source into the plasma chamber
+!     Maximum is specified by parameter nap (=10).
+!     First set of aperatures encountered by the particle
+!     are assumed centered on the source axis, and subseq
+!     aperatures are centered on the beamline axis; the
+!     distinction is made through ashape.
+!     ashape(iap,ib)  Aperture shape.
+!     Prefix 's-' indicates source axis centered.
+!     Prefix 'b-' indicates beamline axis centered.
+!     's-circ'          'b-circ'
+!     's-rect'          'b-rect'
+!     's-vert'          'b-vert'
+!     's-horiz'         'b-horiz'
+!     'b-d3d'
+!     (circ=circular aperature, rect=rectagular,
+!     vert=limits vertical height of source particles,
+!     horiz=limits horizontal height of source particles,
+!     d3d= special DIII-D polygonal aperature)
+!     'circ' : circular
+!     'rect' : rectangular
+!     aheigh(iap,ib)  Height of aperture (cm)
+!     awidth(iap,ib)  Width of aperture (cm); diameter for circular
+!     aperture
+!     alen(iap,ib)    Length from source to aperature for 's-type' aperatur
+!     and from exit grid plane along beamline axis for
+!     'b-type' aperatures.
+!     blenp(ib)       Distance along beamline axis from source exit
+!     plane to the fiducial "pivot" point.
+!     rpivot(ib)      Radial position of pivot (cm)
+!     zpivot(ib)      Axial position of pivot (cm)
+!     atw(k)          atomic mass of ion species k
+!     codeid          flux surface geometry
+!     "onedee"      : elliptical
+!     anything else : nonelliptical
+!     elong           elongation (height/width) of elliptical
+!     cross-section plasma
+!     ibion           ion index of beam species
+!     mf              number of flux zones
+!     mi              number of radial mesh points for nonelliptical
+!     plasma
+!     mj              number of axial mesh points for nonelliptical
+!     plasma
+!     nion            number of ion species
+!     norb            flag controlling output of orbit information
+!     >0, write out extensive orbit information
+!     to unit norb
+!     0, omit output of orbit information
+!     <0, write out abbreviated orbit information
+!     to unit iabs(norb)
+!     pinsid(i)       poloidal magnetic flux (G-cm2) along horizontal
+!     chord inside and through the magnetic axis vs.
+!     a uniform mesh in major radius; pinsid is needed
+!     only if iborb=1
+!     potsid(i)       poloidal magnetic flux (G-cm2) along horizontal
+!     chord outside and through the magnetic axis vs.
+!     a uniform mesh in major radius; potsid(1) and
+!     potsid(mf) are needed if codeid.ne.'onedee';
+!     the entire potsid array is needed if iborb=1
+!     psi(i,j)        poloidal magnetic flux (G-cm2) at mesh point i,j
+!     (needed only if codid.ne.'onedee')
+!     psivol(i)       volume (cm3) of flux zone i; depending upon
+!     whether codeid.eq.'onedee' or not, psivol is
+!     chosen such that either r or sqrt(psi-psiax)
+!     varies a constant amount from one flux surface
+!     to the next
+!     rinsid(i)       major radius (cm) along horizontal chord inside
+!     and through the magnetic axis vs. a uniform mesh
+!     in sqrt(psi-psiax); rinsid is needed only if
+!     iborb=1
+!     rotsid(i)       major radius (cm) along horizontal chord outside
+!     and through the magnetic axis vs. a uniform mesh
+!     in sqrt(psi-psiax); rotsid(1) and rotsid(mf) are
+!     needed if codeid.eq.'onedee'; the entire rotsid
+!     array is needed if iborb=1
+!     r(i)            maj radius mesh point i for nonelliptical plasma (cm)
+!     rin             major radius of inside of vacuum vessel (cm)
+!     rmax            maximum radial position of plasma (cm)
+!     rpivot(ib)      radial position of pivot point (cm)
+!     sfrac1(ib)      fraction of source current per beamline coming
+!     from upper source (used only for nsourc=2)
+!     sofset(ib)      vertical offset from optical axis to center
+!     of each source (cm; used only for nsourc=2)
+!     ONETWO DIVERGENCE: use w instead of z
+!     w(j)            axial mesh point j for nonelliptical plasma (cm)
+!     zax             axial position of magnetic axis (cm) for
+!     elliptical plasma
+!     zmin            minimum axial position of plasma (cm)
+!     zmax            maximum axial position of plasma (cm)
+!     zpivot(ib)      axial position of pivot point (cm)
+!     zne(i)          electron density in zone i (cm-3)
+!     zni(i,k)        density of ion species k in zone i (cm-3)
+!     zte(i)          electron temperature in zone i (kev)
+!     zzi(i,k)        charge number of ion species k in zone i
+!     ONETWO DIVERGENCE
+!     zeffctv(i)      z-effective (used with iexcit=-1)
+!     iexcit       switch that controls the following
+!     ONETWO DIVERGENCE
+!     iexcit=-1 uses Stearn's average cross sections:otw. like =0
+!     iexcit = 0   (default mode) normal freya run
+!     iexcit = 1   use hexnb instead of crsecs to get cross sections
+!     but neglect presence of excited sates in beam
+!     iexcit = 2   use hexnb with excited beam states allowed.
+!     inubpat     switch controlling 2-d beam deposition calculation
+!     0, (default) bypass 2-d deposition
+!     1, determine beam deposition on standard (r,w) grid
+!     and output deposition of 3rd excited state
+!     components to file 'beamdep'
+!     2, same as inubpat=1, except bin deposition on
+!     modified (r,w) grid whose dimensions are given by
+!     'npat' (see below).
+!     note:  if inubpat.gt.0, iexcit must be set equal to 2.
+!     this will automatically be checked, iexcit rese
+!     (if needed), and a message output to the crt.
+!     npat        modified (r,w) dimension array for optional use if
+!     inubpat.gt.0, containing:
+!     npat(1)=number of new 'r' elements
+!     npat(2)=number of new 'w' elements
+!     default:  npat(1)=mi, npat(2)=mj
+!
+!     the output quantities are:
+!
+!     bion(ie,ib)     intensity of ion beam (particles/s)
+!                     [BH: evidently out of the ion source, before
+!                      neutralization]
+!     bneut(ie,ib)    intensity of neutral beam (particles/s)
+!                     [BH: Coming out of the neutralizer,
+!                      a fraction of bion]
+!     bpow(ie,ib)     beam power to aperture (w)
+!     ebeam(ie,ib)    particle energy (kev)
+!     fap(ie,ib)      fraction of beam stopped by aperture
+!     fwall(ie,ib)    fraction of beam incident on wall (shinethrough)
+!     forb(ie,ib)     fraction of beam lost on orbits
+!     ftrapfi(i,ie,ib)fraction of trapped fast ions in each zone
+!     fb11(ie,ib)     fraction of ions passing and axis-encircling
+!     fb10(ie,ib)     fraction of ions passing and not encircling
+!     fb01(ie,ib)     fraction of ions trapped and axis-encircling
+!     fb00(ie,ib)     fraction of ions trapped and not encircling
+!     fber(ie,ib)     fraction of ions trapped for which error was detec
+!     hibrz(i,ie,ib)  normalized hot ion birth rate
+!     hdepz(i,ie,ib)  normalized hot ion deposition rate
+!     ipts            number of birth points to be plotted
+!     xpts(ii)          x coordinate of birth point
+!     ypts(ii)          y coordinate of birth point
+!     zpts(ii)          w coordinate of birth point
+!     vx(ii)          x component of birth velocity
+!     vy(ii)          y component of birth velocity
+!     vz(ii)          w component of birth velocity
+!     wb11(ie,ib)     orbit width of fb11 ions (cm)
+!     wb10(ie,ib)     orbit width of fb10 ions (cm)
+!     wb01(ie,ib)     orbit width of fb01 ions (cm)
+!     wb00(ie,ib)     orbit width of fb00 ions (cm)
+!     zetaz(i,ie,ib)  average pitch angle cosine of deposited hot ions
+!     angmpz(i,ie,ib) toroidal angular momentum density deposition rate.
+!     (i.e. ang. momtm. deposited in shell per second /volume of she
+!     angmpz contains only the toroidal component of ang momentum.
+!---------------------------------------------------------------------
+!     ONETWO DIVERGENCE
       include 'frcomm.h77'
 
-c     Automatic arrays for local dynamic mem, for case where NUBEAM
-c     particle birth point list is used. nbirth_pts from frcomm.h77
-      real*8, allocatable :: x_nub(:),y_nub(:),z_nub(:)
-      real*8, allocatable :: vx_nub(:),vy_nub(:),vz_nub(:)
-      real*8, allocatable :: v_nub(:),en_nub(:)
+!     Automatic arrays for local dynamic mem, for case where NUBEAM
+!     particle birth point list is used. nbirth_pts from frcomm.h77
+      integer, intent(out) :: ipts
+      integer mi,mj ! in arg.list
+      real(c_double) :: rin,rmax,zax,zmin,zmax ! in arg.list
+      integer i,j,k,ib ! local
+
+      real(c_double), allocatable :: x_nub(:),y_nub(:),z_nub(:)
+      real(c_double), allocatable :: vx_nub(:),vy_nub(:),vz_nub(:)
+      real(c_double), allocatable :: v_nub(:),en_nub(:)
       integer, allocatable :: ie_nub(:)  !energy cmpt,=1, 2, or 3
       character*128 filenm
-      real*8, dimension(3) :: en_avg_cmpts_nub,pabs_cmpts_nub
+      real(c_double), dimension(3) :: en_avg_cmpts_nub,pabs_cmpts_nub
       integer, dimension(3) :: nbirth_cmpts_nub
-      real*8, dimension(3) :: birth_rate_cmpts_nub
+      real(c_double), dimension(3) :: birth_rate_cmpts_nub
 
       character*8 codeid
-      dimension psi(ki,kj),r(ki),w(kj)
-      dimension bpow(ke,kb),eb(ke,kb)
+      real(c_double) :: psi(ki,kj),r(ki),w(kj)
+      real(c_double) :: bpow(ke,kb),eb(ke,kb)
       equivalence(bpow,pbeam)
       equivalence(eb,ebeam)
       equivalence(r,xxx)
       equivalence(w,yyy)
       equivalence(psi,p)
-      dimension cangv(kb), cangh(kb), sangv(kb), sangh(kb),
-     *  thetp(kb), thetpp(kb),
-     *  costp(kb), sintp(kb), costpp(kb), sintpp(kb),
-     *  vbeam(ke,kb), iatype(nap,kb)
-c      dimension sgvxne(kz),sgxn(kz,ke,kb),sgxnmi(ke,kb),hxfrac(ke,kb)
-      real*8 sgvxne(kz),sgxn(kcmp1,kz,kbe,ksge),
-     *       sgxnmi(ke,kb),hxfrac(ke,kb)
-c      real*8 sgxn1(kcmp1,kz,kbe,ksge)
-      dimension wt(kz), zeta_(kz),angmtp(kz),nmbrz(kz)
-      dimension rzpat(kix2,kjx2,ke,kb)
+      real(c_double) :: cangv(kb), cangh(kb), sangv(kb), sangh(kb),
+     &  thetp(kb), thetpp(kb),
+     &  costp(kb), sintp(kb), costpp(kb), sintpp(kb),
+     &  vbeam(ke,kb)
+      integer iatype(nap,kb)
+!      dimension sgvxne(kz),sgxn(kz,ke,kb),sgxnmi(ke,kb),hxfrac(ke,kb)
+      real(c_double) :: sgvxne(kz),sgxn(kcmp1,kz,kbe,ksge),
+     &       sgxnmi(ke,kb),hxfrac(ke,kb)
+!      real(c_double) :: sgxn1(kcmp1,kz,kbe,ksge)
+      real(c_double) :: wt(kz), zeta_(kz),angmtp(kz)
+      integer nmbrz(kz)
+      real(c_double) :: rzpat(kix2,kjx2,ke,kb)
+      real(c_double) pio180,dr,dz,dri,dzi,elong,pzone,rzone !local
+      real(c_double) rmajor,drot,drin,drutp,deps,droti,drini !local
+      real(c_double) drutpi,elongi,bntot,beff,ebev
+      integer ncalls,ie,mb,norb,mim1,mjm1,kmin,kmax !local
+      real(c_double) :: drpat,dzpat ! arg.in setrz()
+      integer nrpat,nzpat  ! arg.in setrz()
+      real(c_double) dnemin,dnemax,dtemin,dtemax
+      real(c_double) dzemin,dzemax
+      real(c_double) pinj_nub,pabs_nub ! arg. in read_nubeam_data()
+      integer nshine_nub
+      integer ipar,npar,nparx,newpar,ic,ii,iskip,isourc
+      real(c_double) x0,y0,z0,vx0,vy0,vz0,xpos,ypos,zpos,rpos
+      real(c_double) atwb  ! in arg. of inject1()
+      integer myid ! in arg. of inject1()
+      integer maxp,mlost,izone
+      real(c_double) ebx,csgn,volume,tenter,smax,texit,zetai,vplane
+      real(c_double) vtroid,vrad,angmtm
+      real(c_double) wid,xnorm,xloss1,xloss2,bptorx
+      integer ipass,iaxis,ier,izp
+      
       data pio180 /0.017453293d0/
       data ncalls /0/
-c
-c.. new (JK)
-c   kimp-> 2 for namei
-c
-      integer ne_tk
-      real*8 fe_tk, de_tk
-      real*8 sgxnloc(kbe)
-      real*8 zangrot(kz), znis(kz,kion), zzis(kz,kion)
-c
+!
+!.. new (JK)
+!   kimp-> 2 for namei
+!
+      
+      real(c_double) :: de_tk
+      real(c_double) :: sgxnloc(kbe)
+      real(c_double) :: zangrot(kz), znis(kz,kion), zzis(kz,kion)
+!
       if (read_birth_pts.eq."enabled") then
       if (.NOT. ALLOCATED(x_nub)) then
       allocate(x_nub(nbirth_pts),y_nub(nbirth_pts),z_nub(nbirth_pts))
@@ -307,13 +333,13 @@ c
       endif
       endif
 
-c----------------------------------------------------------------------
-c     general freya initialization
+!----------------------------------------------------------------------
+!     general freya initialization
       call bcast(rzpat,zero,kix2*kjx2*ke*kb)   !rzpat not used w cql3d
       mb=nbeams
       elong=0.d0
       norb=0
-c
+!
       do ib=1,ke
        do i=1,kb
          bneut(ib,i)=0.d0
@@ -343,17 +369,17 @@ c
       enddo
       pzone=0.D0
       rzone=0.D0
-c
-c----------------------------------------------------------------------
-c     set up some data for optional (r,w) deposition calculation
+!
+!----------------------------------------------------------------------
+!     set up some data for optional (r,w) deposition calculation
       inubpat=0  !Not used with cql3d
       if(inubpat.gt.0) then
         call setrz(npat,r(1),r(mi),w(1),w(mj),drpat,dzpat,nrpat,nzpat)
         iexcit=2
       endif
 
-c----------------------------------------------------------------------
-c     if nubeam list case, make sure only 1 beam
+!----------------------------------------------------------------------
+!     if nubeam list case, make sure only 1 beam
       if (read_birth_pts.eq."enabled") then
          nbeams=1
          mb=1
@@ -364,15 +390,15 @@ c     if nubeam list case, make sure only 1 beam
          endif
       endif
 
-c
-c     turn off orbit calculation in case of counter-injection; present
-c     orbit model applies only for co-injection
+!
+!     turn off orbit calculation in case of counter-injection; present
+!     orbit model applies only for co-injection
       do 5 ib=1,mb
  5    if(angleh(ib).lt.5.) iborb = 0
-c
-c     initialize flux surface quantities
-c     BH130327:
-c          rotsid, rinsid equal 0, potsid(mf),potsid(1)set but other 0.
+!
+!     initialize flux surface quantities
+!     BH130327:
+!          rotsid, rinsid equal 0, potsid(mf),potsid(1)set but other 0.
       mfm1 = mf-1
       rmajor = rotsid(1)
       drot   = (rotsid(mf)-rotsid(1))/mfm1
@@ -399,27 +425,27 @@ c990131      elong  = amax1(elong,1.e-6)
         dri   = one/dr
         dzi   = one/dz
       endif
-c
-c     calculate sines and cosines of various angles
+!
+!     calculate sines and cosines of various angles
       do 15 ib=1,mb
         cangv(ib)=cos(anglev(ib)*pio180)
         cangh(ib)=cos(angleh(ib)*pio180)
         sangv(ib)=sin(anglev(ib)*pio180)
         sangh(ib)=sin(angleh(ib)*pio180)
  15   continue
-c
-c     calculate beam power; account for neutralizer efficiency
-c
+!
+!     calculate beam power; account for neutralizer efficiency
+!
       atwb = atw(ibion)
       bntot = zero
       do 20 ib=1,mb
         do 21 ie=1,3
           ebeam(ie,ib) = ebkev(ib)/ie
           ebx = ebeam(ie,ib)/atwb
-c     ONETWO DIVERGENCE   - delete reference to ionization efficiency
-c     routines.
+!     ONETWO DIVERGENCE   - delete reference to ionization efficiency
+!     routines.
       call logint(ebx,beff)  ! JK  BH140501: Check if any diff.
-c          beff=1.
+!          beff=1.
           ebev = 1.e3*ebx
           vbeam(ie,ib) = 1.384e6*sqrt(ebev)  !adjstd for mass, cm/sec
           bion(ie,ib)  = 0.625e19*fbcur(ie,ib)*bcur(ib) ! molecular src
@@ -431,27 +457,27 @@ c          beff=1.
                                        !and renormalize for bptor below.
           bneut(ie,ib) = ie*beff*bion(ie,ib)  !ion rates at energy/ie.
           bpow(ie,ib)  = ebeam(ie,ib)*bneut(ie,ib)/0.625e16
-c          write(*,*)'freya: ibion,atw(ibion),ie,ib,vbeam(ie,ib)',
-c     &                      ibion,atw(ibion),ie,ib,vbeam(ie,ib)
+!          write(*,*)'freya: ibion,atw(ibion),ie,ib,vbeam(ie,ib)',
+!     &                      ibion,atw(ibion),ie,ib,vbeam(ie,ib)
  21     bntot = bntot + bneut(ie,ib)
  20   continue
-c
-c.......................................................................
-cBH130329:  If read_birth_pts="enabled", then read in beam birth points
-c           from a NUBEAM generated file, as described above.
-c           There may be some unnecessary freya related calculation
-c           since the NUBEAM data-read is shoe-horned in on top of freya
-c
-c           Else:  freya calculation.
-c.......................................................................
+!
+!.......................................................................
+!BH130329:  If read_birth_pts="enabled", then read in beam birth points
+!           from a NUBEAM generated file, as described above.
+!           There may be some unnecessary freya related calculation
+!           since the NUBEAM data-read is shoe-horned in on top of freya
+!
+!           Else:  freya calculation.
+!.......................................................................
 
       if (read_birth_pts.eq."enabled") then
-c        read_nubeam_data reads data file and returns it
-c        through the argument list.
-c        NOTE:  The NUBEAM birth points are actually shifted from
-c        the ion birth point, accounting for the distance to the
-c        GC starting position of the particle.  That is, these
-c        are birth points for particle guiding centers.
+!        read_nubeam_data reads data file and returns it
+!        through the argument list.
+!        NOTE:  The NUBEAM birth points are actually shifted from
+!        the ion birth point, accounting for the distance to the
+!        GC starting position of the particle.  That is, these
+!        are birth points for particle guiding centers.
          ncalls=ncalls+1
          if (ncalls.gt.nbirth_pts_files) then
             write(*,*)'FREYA WARNING: Insufficient birth_pts_files'
@@ -462,19 +488,19 @@ c        are birth points for particle guiding centers.
          endif
          filenm=trim(birth_pts_files(ncalls))
          call read_nubeam_data(filenm,nbirth_pts,atwb,
-     +                   nbirth_cmpts_nub,nshine_nub,
-     +                   pinj_nub,pabs_nub,x_nub,y_nub,z_nub,
-     +                   vx_nub,vy_nub,vz_nub,v_nub,en_nub,ie_nub,
-     +                   birth_rate_cmpts_nub,en_avg_cmpts_nub,
-     +                   pabs_cmpts_nub)
+     &                   nbirth_cmpts_nub,nshine_nub,
+     &                   pinj_nub,pabs_nub,x_nub,y_nub,z_nub,
+     &                   vx_nub,vy_nub,vz_nub,v_nub,en_nub,ie_nub,
+     &                   birth_rate_cmpts_nub,en_avg_cmpts_nub,
+     &                   pabs_cmpts_nub)
 
-c        pinj_nub=Injected power (Watts) = freya bptor
+!        pinj_nub=Injected power (Watts) = freya bptor
          bptor(1)=pinj_nub
-c        Set bcur,bion,bneut,bpow from Nubeam list
-c        This is setup according to freya bptor, as above.
-c        Here, bcur, here, refers to absorbed power, since
-c        present Nubeam list doesn't contain a breakdown of the shine
-c        through components.  [Fix later].
+!        Set bcur,bion,bneut,bpow from Nubeam list
+!        This is setup according to freya bptor, as above.
+!        Here, bcur, here, refers to absorbed power, since
+!        present Nubeam list doesn't contain a breakdown of the shine
+!        through components.  [Fix later].
          bntot=0d0
          ib=1                   !Nubeam list only set up for 1 beam
          do ie=1,3
@@ -491,36 +517,36 @@ c        through components.  [Fix later].
 
       if (read_birth_pts.ne."enabled") then  !Skip, if nubeam case
 
-c     ONETWO DIVERGENCE
-c..................................................................
-c     Determine peak electron density, temp and zeff(lr_) for use with
-c     iexcit=-1 (Stearn's formula)
-c..................................................................
+!     ONETWO DIVERGENCE
+!..................................................................
+!     Determine peak electron density, temp and zeff(lr_) for use with
+!     iexcit=-1 (Stearn's formula)
+!..................................................................
 
       call aminmx(zne,1,mfm1,1,dnemin,dnemax,kmin,kmax)
       call aminmx(zte,1,mfm1,1,dtemin,dtemax,kmin,kmax)
       call aminmx(zeffctv,1,mfm1,1,dzemin,dzemax,kmin,kmax)
       dtemax=dtemax/10.
-c
-c...calculate macroscopic cross sections
-c     iexcit .le. 0 : Freeman and Jones
-c                 5 : ADAS
-c                 6 : Boley parameterization
-c
-c... new coding (JK)
-c
+!
+!...calculate macroscopic cross sections
+!     iexcit .le. 0 : Freeman and Jones
+!                 5 : ADAS
+!                 6 : Boley parameterization
+!
+!... new coding (JK)
+!
       csgn=1.d0
       do i=1,kz
        zangrot(i)=0.d0
       enddo
-c
-c... In CQL3D, for nprim=1, nimp=1, main ions in zni(j,1), (j,2)
-c    and zzi(j,1) and zzi(j,2) with general and maxwellian
-c    distributions, respectively. The impurity ion is in
-c    zni(j,3) and zzi(j,3). Also, Zeff has been copied into
-c    zzi(j,nion+2=4). So, for this case we slip
-c    the arrays such that (j,3) - > (j,2) for the impurity
-c
+!
+!... In CQL3D, for nprim=1, nimp=1, main ions in zni(j,1), (j,2)
+!    and zzi(j,1) and zzi(j,2) with general and maxwellian
+!    distributions, respectively. The impurity ion is in
+!    zni(j,3) and zzi(j,3). Also, Zeff has been copied into
+!    zzi(j,nion+2=4). So, for this case we slip
+!    the arrays such that (j,3) - > (j,2) for the impurity
+!
       if(nprim.eq.1 .and. nimp.eq.1) then
        do j=1,kz
          znis(j,1)=zni(j,2)
@@ -537,61 +563,61 @@ c
          enddo
        enddo
       endif
-c
+!
       write(*,*) 'calling nbsgxn ...'
       write(*,*) 'iexcit = ',iexcit
-c       write(*,*) 'zte:'
-c       write(*,'(5(2x,1pe14.5))') (zte(j),j=1,kz)
-c       write(*,*) 'zti:'
-c       write(*,'(5(2x,1pe14.5))') (zti(j),j=1,kz)
-c       write(*,*) 'zne:'
-c       write(*,'(5(2x,1pe14.5))') (zne(j),j=1,kz)
-c       write(*,*) 'zni(j,1-3):'
-c       write(*,'(5(2x,1pe14.5))') (znis(j,1),j=1,kz)
-c       write(*,'(5(2x,1pe14.5))') (znis(j,2),j=1,kz)
-c       write(*,'(5(2x,1pe14.5))') (znis(j,3),j=1,kz)
-c       write(*,*) 'zzi(j,1-3):'
-c       write(*,'(5(2x,1pe14.5))') (zzis(j,1),j=1,kz)
-c       write(*,'(5(2x,1pe14.5))') (zzis(j,2),j=1,kz)
-c       write(*,'(5(2x,1pe14.5))') (zzis(j,3),j=1,kz)
-c       stop
-c
+!       write(*,*) 'zte:'
+!       write(*,'(5(2x,1pe14.5))') (zte(j),j=1,kz)
+!       write(*,*) 'zti:'
+!       write(*,'(5(2x,1pe14.5))') (zti(j),j=1,kz)
+!       write(*,*) 'zne:'
+!       write(*,'(5(2x,1pe14.5))') (zne(j),j=1,kz)
+!       write(*,*) 'zni(j,1-3):'
+!       write(*,'(5(2x,1pe14.5))') (znis(j,1),j=1,kz)
+!       write(*,'(5(2x,1pe14.5))') (znis(j,2),j=1,kz)
+!       write(*,'(5(2x,1pe14.5))') (znis(j,3),j=1,kz)
+!       write(*,*) 'zzi(j,1-3):'
+!       write(*,'(5(2x,1pe14.5))') (zzis(j,1),j=1,kz)
+!       write(*,'(5(2x,1pe14.5))') (zzis(j,2),j=1,kz)
+!       write(*,'(5(2x,1pe14.5))') (zzis(j,3),j=1,kz)
+!       stop
+!
         call nbsgxn (iexcit,namep,namei,mb,mfm1,ne_tk,nprim,
-     .             nimp,nion,atwb,atw,ebkev,fe_tk,ibion,vbeam,
-     .             zne,znis,zte,zti,zzis,de_tk,dtemax,dnemax,dzemax,
-     .             hxfrac,sgxn,sgxnmi)
-c      do ib=1,mb
-c       do j=1,3
-c         write(*,'(2i3,2x,1p1e12.4,a12)') j,ib,sgxnmi(j,ib),' sgxnmi'
-c       enddo
-c      enddo
-c      stop
-c
-c... old coding (JK)
-c
-c      if(iexcit.le.0)then
-c     ONETWO DIVERGENCE
-c        call crsecs(atw,ebkev,ibion,ke,kz,mb,mfm1,nion,vbeam,
-c     &    zne,zni,zte,zzi,sgvxne,sgxn,sgxnmi,iexcit,
-c     &    dtemax,dnemax,dzemax)
-c         do ib = 1, mb
-c           do j = 1, 3
-c             do i=1,mfm1
-c        write(*,'(3i3,2x,1p1e10.4,a12)') i,j,ib,sgxn(i,j,ib), ' sgxn'
-c             enddo
-c           enddo
-c         enddo
-c         stop
-c      else
-c     ONETWO DIVERGENCE
-c         write(*,*) 'freya: before frhexdrv'
-c        call frhexdrv(mb,sgxn,sgxnmi,hxfrac)
-c      endif
-c... end old coding
-c
+     &             nimp,nion,atwb,atw,ebkev,fe_tk,ibion,vbeam,
+     &             zne,znis,zte,zti,zzis,de_tk,dtemax,dnemax,dzemax,
+     &             hxfrac,sgxn,sgxnmi)
+!      do ib=1,mb
+!       do j=1,3
+!         write(*,'(2i3,2x,1p1e12.4,a12)') j,ib,sgxnmi(j,ib),' sgxnmi'
+!       enddo
+!      enddo
+!      stop
+!
+!... old coding (JK)
+!
+!      if(iexcit.le.0)then
+!     ONETWO DIVERGENCE
+!        call crsecs(atw,ebkev,ibion,ke,kz,mb,mfm1,nion,vbeam,
+!     &    zne,zni,zte,zzi,sgvxne,sgxn,sgxnmi,iexcit,
+!     &    dtemax,dnemax,dzemax)
+!         do ib = 1, mb
+!           do j = 1, 3
+!             do i=1,mfm1
+!        write(*,'(3i3,2x,1p1e10.4,a12)') i,j,ib,sgxn(i,j,ib), ' sgxn'
+!             enddo
+!           enddo
+!         enddo
+!         stop
+!      else
+!     ONETWO DIVERGENCE
+!         write(*,*) 'freya: before frhexdrv'
+!        call frhexdrv(mb,sgxn,sgxnmi,hxfrac)
+!      endif
+!... end old coding
+!
       endif  !on read_birth_pts.ne."enabled"
-c
-c     calculate total plasma volume
+!
+!     calculate total plasma volume
       volume = 0.
       do i=1,mfm1
         write(*,*)'freya: i,psivol(i)=',i,psivol(i)
@@ -601,14 +627,14 @@ c     calculate total plasma volume
       !Note: psivol is based on eqvol() which is calc-ed by subr.eqvolpsi.
       !Can be a little different from alternative definition
       ! of flux surface volume as setup in subr.tdrmshst.
-c----------------------------------------------------------------------
-c     begin loop over beams, ib
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
+!     begin loop over beams, ib
+!----------------------------------------------------------------------
 
-c     Following statment executed in subroutine frset.
-c      if (read_birth_pts.eq."enabled") npart=nbirth_pts  !nubeam case
+!     Following statment executed in subroutine frset.
+!      if (read_birth_pts.eq."enabled") npart=nbirth_pts  !nubeam case
 
-cBH110309      iskip =       1 + (npart-1)/1500
+!BH110309      iskip =       1 + (npart-1)/1500
       maxp=1500000 !Formerly parameter giving max # of ions launched,
                   !according to code comment
       iskip =       1 + (npart-1)/maxp
@@ -618,11 +644,11 @@ cBH110309      iskip =       1 + (npart-1)/1500
       do 200 ib=1,mb  ! 386 lines down to line 989
 
       if (read_birth_pts.ne."enabled") then  !Skip, if nubeam case
-c
-c     Determine aperature designators.
-c     If nsourc=1, treat source axis centered aperatures equivalent
-c     to beam axis centered.
-cBH130915: Not sure of effect of this change. Reverting:do 40  i=1,naptr
+!
+!     Determine aperature designators.
+!     If nsourc=1, treat source axis centered aperatures equivalent
+!     to beam axis centered.
+!BH130915: Not sure of effect of this change. Reverting:do 40  i=1,naptr
          do 40  i=1,nap
             if (nsourc.eq.1) then
                if(ashape(i,ib).eq.'s-circ')  iatype(i,ib)=5
@@ -640,25 +666,25 @@ cBH130915: Not sure of effect of this change. Reverting:do 40  i=1,naptr
             if(ashape(i,ib).eq.'b-vert')  iatype(i,ib)=7
             if(ashape(i,ib).eq.'b-horiz') iatype(i,ib)=8
             if(ashape(i,ib).eq.'b-d3d')   iatype(i,ib)=9
-c        write(*,*) 'ashape(i,ib) = ',i,ib,ashape(i,ib)
-c        write(*,*) 'iatype(i,ib) before rotate = ',iatype(i,ib)
+!        write(*,*) 'ashape(i,ib) = ',i,ib,ashape(i,ib)
+!        write(*,*) 'iatype(i,ib) before rotate = ',iatype(i,ib)
  40      continue
-c
-c     Some angles for subroutine rotate
+!
+!     Some angles for subroutine rotate
         thetp(ib)=atan2(bvofset(ib),sqrt(bleni(ib)**2-bvofset(ib)**2))
         costp(ib)=cos(thetp(ib))
         sintp(ib)=sin(thetp(ib))
         thetpp(ib)=atan2(bhofset(ib),sqrt(bleni(ib)**2-bvofset(ib)**2))
         costpp(ib)=cos(thetpp(ib))
         sintpp(ib)=sin(thetpp(ib))
-c
+!
         endif  !on read_birth_pts.ne."enabled"
-c
-c----------------------------------------------------------------------
-c     begin loop over beam energy components, ie
-c----------------------------------------------------------------------
+!
+!----------------------------------------------------------------------
+!     begin loop over beam energy components, ie
+!----------------------------------------------------------------------
         do 201 ie=1,3  !340 lines down
-c         beam fractions
+!         beam fractions
           fap(ie,ib)   = 0.
           fwall(ie,ib) = 0.
           forb(ie,ib)  = 0.
@@ -680,69 +706,69 @@ c         beam fractions
           do 310 i=1,mfm1
              nmbrz(i)=0
  310      continue
-c     --- nmbrz(i) counts ions born in zone i
-c----------------------------------------------------------------------
-c     begin loop over particles, for each beam(ib),energy(ie)
-c----------------------------------------------------------------------
-c
+!     --- nmbrz(i) counts ions born in zone i
+!----------------------------------------------------------------------
+!     begin loop over particles, for each beam(ib),energy(ie)
+!----------------------------------------------------------------------
+!
           if (read_birth_pts.ne."enabled") then
              npar = (bneut(ie,ib)/bntot)*npart   !Not nubeam list
           else
              npar=nbirth_cmpts_nub(ie)           !nubeam list
              ii=0
           endif
-c
-cBH130925          npar = (bneut(ie,ib)/bntot) * npart
+!
+!BH130925          npar = (bneut(ie,ib)/bntot) * npart
           if(npar.eq.0) go to 201
           nparx = 0
           newpar = 0  ! JK
-c
-c.......................................................................
-c     Loop over the particles, for each ie,ib
-c.......................................................................
+!
+!.......................................................................
+!     Loop over the particles, for each ie,ib
+!.......................................................................
          do 180 ipar=1,npar  ! down 218 lines, to line 919
             if(mod(ipar-1,npskip).eq.0) newpar=1
-c YuP[171103] Moved this line inside if()            if(newpar.eq.0) go to 120
-c
+! YuP[171103] Moved this line inside if()            if(newpar.eq.0) go to 120
+!
           if (read_birth_pts.ne."enabled") then  !Skip if nubeam list
              ! FREYA normal calculations
              if(newpar.eq.0) go to 120 ! YuP[171103] moved from above
-c
-c... generate neutral particle at beam source
-c
+!
+!... generate neutral particle at beam source
+!
              call sorspt1(bshape,bheigh,bwidth,bhfoc,bvfoc,bhdiv,
-     .            bvdiv,ib,ie,isourc,nsourc,sfrac1,vbeam,x0,y0,z0,
-     .            vx0,vy0,vz0)
-c
-c... transform coordinates and advance particle to pivot point
-c
+     &            bvdiv,ib,ie,isourc,nsourc,sfrac1,vbeam,x0,y0,z0,
+     &            vx0,vy0,vz0)
+!
+!... transform coordinates and advance particle to pivot point
+!
             call rotate(naptr,iatype,aheigh,awidth,alen,bhofset,
      &        bvofset,cangv,cangh,ib,isourc,costp,sintp,costpp,
      &        sintpp,blenp,nsourc,sangv,sangh,rpivot,zpivot,mlost,
      &        x0,y0,z0,vx0,vy0,vz0)
-c      write(*,*)'freya,rotate:x0,y0,z0,vx0,vy0,vz0',x0,y0,z0,vx0,vy0,vz0
-c
-c     skip injection if particle is lost at aperture
+!      write(*,*)'freya,rotate:x0,y0,z0,vx0,vy0,vz0',x0,y0,z0,vx0,vy0,vz0
+!
+!     skip injection if particle is lost at aperture
 cCheck inj  write(*,*)'freya: ie,ipar,npar,mlost',ie,ipar,npar,mlost
-c 120        if(mlost.ne.0) go to 160
+! 120        if(mlost.ne.0) go to 160
   120       continue
             if (mlost .ne. 0)  go to 160
-c
-c... inject particle into plasma, i.e., follow particle from pivot
-c     point into, through, or around plasma. Use old subroutine
-c     inject for crsecs.
-c
-c       open(42,file='psi.dat',status='unknown')
-c       write(42,*) 'psi data for DIII-D #122080 from cql3d'
-c       write(42,*) '(nw,nh) = ',65,65
-c       do i=1,65
-c        do j=1,65
-c          write(42,'(2i4,2x,1p1e15.7,a16)') i,j,psi(i,j),' psi'
-c        enddo
-c       enddo
-c       close(42)
-c       stop
-c
+!
+!... inject particle into plasma, i.e., follow particle from pivot
+!     point into, through, or around plasma. Use old subroutine
+!     inject for crsecs.
+!
+!       open(42,file='psi.dat',status='unknown')
+!       write(42,*) 'psi data for DIII-D #122080 from cql3d'
+!       write(42,*) '(nw,nh) = ',65,65
+!       do i=1,65
+!        do j=1,65
+!          write(42,'(2i4,2x,1p1e15.7,a16)') i,j,psi(i,j),' psi'
+!        enddo
+!       enddo
+!       close(42)
+!       stop
+!
             if (iexcit.le.0) then
              call inject_old(atw,codeid,drutpi,droti,dri,dzi,
      &             elongi,ib,ie,mfm1,mim1,mjm1,newpar,potsid(1),
@@ -759,14 +785,14 @@ c
      &             smax,texit)
             endif
 
-c           Shift from particle birth point to guiding center point
+!           Shift from particle birth point to guiding center point
 
 
           else    !On read_birth_pts.ne."enabled"  ! NUBEAM list
 
-c           Nubeam list case.
-c           Remember, for given ie (energy cmpt),
-c           need to skip to next particle for the given ie.
+!           Nubeam list case.
+!           Remember, for given ie (energy cmpt),
+!           need to skip to next particle for the given ie.
             do
               ii=ii+1
               if (ie_nub(ii).eq.ie) exit
@@ -775,7 +801,7 @@ c           need to skip to next particle for the given ie.
                 STOP
               endif
             enddo
-c
+!
             xpos=x_nub(ii)
             ypos=y_nub(ii)
             zpos=z_nub(ii)
@@ -783,56 +809,56 @@ c
             vy0=vy_nub(ii)
             vz0=vz_nub(ii)
             rpos=sqrt(xpos**2+zpos**2)
-c           get pzone (i.e., psi-value) and radial izone
+!           get pzone (i.e., psi-value) and radial izone
             call zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,potsid(1),psi,
-     +           r,w,xpos,ypos,zpos,pzone,izone)
-c
+     &           r,w,xpos,ypos,zpos,pzone,izone)
+!
             vbeam(ie,ib)=v_nub(ii)
-c
+!
           endif                  !On read_birth_pts.ne."enabled"
-c
-c... skip birth data if:  particle missed plasma
-c
+!
+!... skip birth data if:  particle missed plasma
+!
             if(izone.ge.mf) go to 170
-c     For removing NBI source at all psi outside of psicutoff:
+!     For removing NBI source at all psi outside of psicutoff:
           !print*,'Rpos,Zpos, pzone,psicutoff=',rpos,zpos,pzone,psicutoff
           !pause
             if(psicutoff.ne.0.d0  .and. (-pzone).lt.psicutoff) go to 170
             ! pzone is increasing from center to edge.
             ! equilpsi is decreasing, and psicutoff is based on equilpsi
-c
-c... accumulate hot ion birth rate
-c
+!
+!... accumulate hot ion birth rate
+!
             hibrz(izone,ie,ib) = hibrz(izone,ie,ib) + one
             hicmz(izone,ie,ib,1) = hicmz(izone,ie,ib,1) + sgxnloc(1)
             hicmz(izone,ie,ib,2) = hicmz(izone,ie,ib,2) + sgxnloc(2)
             hicmz(izone,ie,ib,3) = hicmz(izone,ie,ib,3) + sgxnloc(3)
-c           write(*,*) 'hibrz(1,1,2) = ',hibrz(1,1,2)
-c          write(*,*) 'hibrz = ',hibrz(izone,ie,ib)
-c          write(*,*) 'hicmz-1 = ',hicmz(izone,ie,ib,1)
-c
-c... Calculate pitch angle cosine at birth point; accumulate average
-c    pitch angle cosine. Calculate toroidal angular momentum deposited
-c    in shell by each monte carlo ion.
-c990131            zetai = amin1(zetai,1.)
-c990131            zetai = amax1(zetai,-1.)
+!           write(*,*) 'hibrz(1,1,2) = ',hibrz(1,1,2)
+!          write(*,*) 'hibrz = ',hibrz(izone,ie,ib)
+!          write(*,*) 'hicmz-1 = ',hicmz(izone,ie,ib,1)
+!
+!... Calculate pitch angle cosine at birth point; accumulate average
+!    pitch angle cosine. Calculate toroidal angular momentum deposited
+!    in shell by each monte carlo ion.
+!990131            zetai = amin1(zetai,1.)
+!990131            zetai = amax1(zetai,-1.)
             zetai = (-ypos*vx0+xpos*vy0)/(rpos*vbeam(ie,ib))    ! Original
             vplane = SQRT (vx0**2+vy0**2)                       ! Onetwo
-cBH130914            zetai  = csgn*(xpos*vy0-ypos*vx0)/(rpos*vplane)     ! Onetwo
+!BH130914            zetai  = csgn*(xpos*vy0-ypos*vx0)/(rpos*vplane)     ! Onetwo
             zetai = min(zetai,one)
             zetai = max(zetai,-one)
             vtroid=zetai*vbeam(ie,ib)                           ! Original
-cBH130914            vtroid = csgn*zetai*vplane                          ! Onetwo
+!BH130914            vtroid = csgn*zetai*vplane                          ! Onetwo
             vrad   = -SQRT (1.0 - zetai**2) * vplane            ! Onetwo
             angmtm=rpos*vtroid*atwb*1.673e-24
             angmpz(izone,ie,ib) = angmpz(izone,ie,ib) + angmtm  ! Onetwo
             if(iborb.ne.1) then
               zetaz(izone,ie,ib) = zetaz(izone,ie,ib) + zetai
-c              angmpz(izone,ie,ib)=angmpz(izone,ie,ib) + angmtm
+!              angmpz(izone,ie,ib)=angmpz(izone,ie,ib) + angmtm
             endif
-c
-c... save occasional birth point for subsequent plotting
-c
+!
+!... save occasional birth point for subsequent plotting
+!
             ic = ic + 1
             if(mod(ic-1,iskip).eq.0) then
               ipts = ipts+1
@@ -844,28 +870,28 @@ c
               vy(ipts) = vy0
               vz(ipts) = vz0
             endif
-c
-c... calculate (r,w) grid location
-c
+!
+!... calculate (r,w) grid location
+!
             if(inubpat.gt.0)then
               i=(rpos-r(1))/drpat + one
               j=(zpos-w(1))/dzpat + one
               rzpat(i,j,ie,ib) = rzpat(i,j,ie,ib) + one
             endif
-c
-c ----------------------------------------------------------------------
-c... calculate orbit widths and orbit loss
-c    [BH140501:  Might be good to replace this with the G.C. orbit-based
-c                calcs.
-c
+!
+! ----------------------------------------------------------------------
+!... calculate orbit widths and orbit loss
+!    [BH140501:  Might be good to replace this with the G.C. orbit-based
+!                calcs.
+!
             if(iborb.ne.0)then
               nparx  = nparx + 1
               call freyorb(atwb,codeid,drutpi,drini,droti,ic,iskip,
-     +          izone,mfm1,
+     &          izone,mfm1,
      &          norb,pinsid,potsid,pzone,rinsid,rotsid,rzone,rpos,
      &          zetai,vbeam(ie,ib),zpos,ipass,iaxis,ier,izp,wid,wt,
      &          zeta_,angmtp)
-c
+!
               if(ier.ne.0) then
                 fber(ie,ib) = fber(ie,ib) + one
               elseif(izp.gt.mfm1) then
@@ -888,43 +914,43 @@ c
                   ftrapfi(izp,ie,ib)=ftrapfi(izp,ie,ib)+1.
                 endif
               endif
-c
-c... accumulate hot ion deposition rate and average pitch angle cosine
-c
+!
+!... accumulate hot ion deposition rate and average pitch angle cosine
+!
               do 155 i=1,mfm1
                 hdepz(i,ie,ib) = hdepz(i,ie,ib) + wt(i)
                 angmpz(i,ie,ib)=angmpz(i,ie,ib) + wt(i)*angmtp(i)
  155          zetaz(i,ie,ib) = zetaz(i,ie,ib) + wt(i)*zeta_(i)
-c
+!
             endif    ! iborb=1
-c ----------------------------------------------------------------------
-c
+! ----------------------------------------------------------------------
+!
             go to 180
-c
-c... accumulate particles that are not deposited in plasma
-c
+!
+!... accumulate particles that are not deposited in plasma
+!
  160        fap(ie,ib) = fap(ie,ib) + one
             go to 180
  170        fwall(ie,ib) = fwall(ie,ib) + one
             go to 180
  175        forb(ie,ib) = forb(ie,ib) + one
-c----------------------------------------------------------------------
-c     end loop over particles
-c----------------------------------------------------------------------
-c
+!----------------------------------------------------------------------
+!     end loop over particles
+!----------------------------------------------------------------------
+!
             newpar = 0
  180     continue
 
-c
-c... normalize average pitch angle cosine. normalize momentum and birth
-c    mode in each shell to a single particle.
-c
+!
+!... normalize average pitch angle cosine. normalize momentum and birth
+!    mode in each shell to a single particle.
+!
             write(*,*) '** end loop over particles **'
-c          do i=1,mfm1
-c        write(*,'(3i4,2x,1p1e10.4,a16)')i,ie,ib,hibrz(i,ie,ib),' hibrz'
-c          enddo
-c          stop
-c
+!          do i=1,mfm1
+!        write(*,'(3i4,2x,1p1e10.4,a16)')i,ie,ib,hibrz(i,ie,ib),' hibrz'
+!          enddo
+!          stop
+!
           do 182 i=1,mfm1
             xnorm = hibrz(i,ie,ib)
             if (xnorm.ne.0) then
@@ -936,50 +962,50 @@ c
             if(iborb.ne.0) xnorm = hdepz(i,ie,ib)
             if(xnorm.ne.zero) xnorm = 1./xnorm
  182      zetaz(i,ie,ib) = xnorm*zetaz(i,ie,ib)
-c
-c... get the fraction of trapped ions in each zone. if orbit effects are
-c    not turned on or itrapfi=0 then this effect is not included.
-c
+!
+!... get the fraction of trapped ions in each zone. if orbit effects are
+!    not turned on or itrapfi=0 then this effect is not included.
+!
           do 300 i=1,mfm1
             nmbrz(i) = MAX0(nmbrz(i),1)
             ftrapfi(i,ie,ib) = ftrapfi(i,ie,ib)/nmbrz(i)
  300      continue
-c
-c... get true toroidal ang. mtm. density deposition rate by
-c    multiplying by weight of each m.c. particle
-c
+!
+!... get true toroidal ang. mtm. density deposition rate by
+!    multiplying by weight of each m.c. particle
+!
           do 183 i=1,mfm1
             angmpz(i,ie,ib)=angmpz(i,ie,ib)*bneut(ie,ib)/
-     +        (psivol(i)*npart)
+     &        (psivol(i)*npart)
  183      continue
-c
-c... normalize loss fractions and hot ion birth rate
-c
+!
+!... normalize loss fractions and hot ion birth rate
+!
           fap(ie,ib)   = fap(ie,ib) / npar
           fwall(ie,ib) = fwall(ie,ib) / npar
           forb(ie,ib)  = forb(ie,ib) / npar
           xloss1 = fap(ie,ib) + fwall(ie,ib)
           xloss2 = fap(ie,ib) + fwall(ie,ib) + forb(ie,ib)
           if(xloss1.ge.1.) go to 201
-c
-c         do i = 1, mfm1
-c         write(*,'(i4,2x,1p2e12.4,a12)') i, psivol(i), hibrz(i,ie,ib),
-c     .        ' hibrz-pre'
-c         enddo
+!
+!         do i = 1, mfm1
+!         write(*,'(i4,2x,1p2e12.4,a12)') i, psivol(i), hibrz(i,ie,ib),
+!     .        ' hibrz-pre'
+!         enddo
           do 190 i=1,mfm1
             hibrz(i,ie,ib) = hibrz(i,ie,ib)*volume
-     +        /((one-xloss1)*npar*psivol(i))
+     &        /((one-xloss1)*npar*psivol(i))
             if(iborb.eq.0) then
               hdepz(i,ie,ib) = hibrz(i,ie,ib)
             elseif(xloss2.lt.1.) then
               hdepz(i,ie,ib) = hdepz(i,ie,ib)*volume
-     +          /((one-xloss2)*npar*psivol(i))
+     &          /((one-xloss2)*npar*psivol(i))
             endif
  190      continue
-c      if(ie.eq.1 .and. ib.eq.2) stop
-c
-c... normalize orbit widths and fractions
-c
+!      if(ie.eq.1 .and. ib.eq.2) stop
+!
+!... normalize orbit widths and fractions
+!
           if(iborb.eq.0) go to 201
           if(fb11(ie,ib).ne.zero) wb11(ie,ib) = wb11(ie,ib)/fb11(ie,ib)
           if(fb10(ie,ib).ne.zero) wb10(ie,ib) = wb10(ie,ib)/fb10(ie,ib)
@@ -990,32 +1016,32 @@ c
           fb01(ie,ib) = fb01(ie,ib)/nparx
           fb00(ie,ib) = fb00(ie,ib)/nparx
           fber(ie,ib) = fber(ie,ib)/nparx
-c
+!
  201    continue  ! end loop over energy components
         write(*,*) '** end loop over energy components **'
  200  continue  ! end loop over beams
-c
-c----------------------------------------------------------------------
-c
-c     end loop over beams and components
-c
-c----------------------------------------------------------------------
+!
+!----------------------------------------------------------------------
+!
+!     end loop over beams and components
+!
+!----------------------------------------------------------------------
       write(*,*) 'end loop over beams...'
       write(*,*) 'ie,ib,ipar = ',ie,ib,ipar
-c
+!
       if (read_birth_pts.ne."enabled") then
-c
+!
        write(*,*) 'hibrz(i,1,1),hibrz(i,2,1),hibrz(i,3,1)'
        do i=1,mfm1
          write(*,'(i4,2x,0p9f9.4)') i, hibrz(i,1,1),
-     >        hibrz(i,2,1),hibrz(i,3,1),
-     >        hibrz(i,1,2),hibrz(i,2,2),hibrz(i,3,2),
-     >        hibrz(i,1,3),hibrz(i,2,3),hibrz(i,3,3)
+     &        hibrz(i,2,1),hibrz(i,3,1),
+     &        hibrz(i,1,2),hibrz(i,2,2),hibrz(i,3,2),
+     &        hibrz(i,1,3),hibrz(i,2,3),hibrz(i,3,3)
        enddo
-c       stop
-c
-c... renormalize currents and powers to bptor
-c
+!       stop
+!
+!... renormalize currents and powers to bptor
+!
       do 240 ib=1,mb
         if(bptor(ib).gt.0.) then
           bptorx = 0.
@@ -1035,94 +1061,104 @@ c
           endif
         endif
  240  continue
-c
+!
       else
-c
-c     Set bcur,bion,bneut,bpow from Nubeam list [above]
-c
+!
+!     Set bcur,bion,bneut,bpow from Nubeam list [above]
+!
       endif  !On read_birth_pts.ne."enabled"
-c
-c     write hot ion birth rate, and lost franction:
-c     BH130407:  hibrz is not used in cql3d, except for
-c       following printout.  For that purpose, it will be useful
-c       (in the future) to adjust the calculation of izone, perhaps
-c       to base it on the rho coordinate and rotsid,  and to
-c       fill in the rotsid() array.
+!
+!     write hot ion birth rate, and lost franction:
+!     BH130407:  hibrz is not used in cql3d, except for
+!       following printout.  For that purpose, it will be useful
+!       (in the future) to adjust the calculation of izone, perhaps
+!       to base it on the rho coordinate and rotsid,  and to
+!       fill in the rotsid() array.
       write(*,*)
       write(*,*)'freya, hot ion birth rate vs rotsid, for ib=1, ie=1:3'
       write(*,*) (rotsid(i),i=1,mfm1)
       write(*,*) (hibrz(i,1,1),i=1,mfm1)
       write(*,*) (hibrz(i,2,1),i=1,mfm1)
       write(*,*) (hibrz(i,3,1),i=1,mfm1)
-c
+!
       write(*,*)
       write(*,*) 'fap(ie=1:3)',(fap(i,1),i=1,3)
       write(*,*) 'fwall(ie=1:3)',(fwall(i,1),i=1,3)
       write(*,*) 'forb(ie=1:3)',(forb(i,1),i=1,3)
       write(*,*)
-c      write(*,*)
-c      write(*,*)'freya:i,xpts(i),ypts(i),zpts(i),rpts(i),vx(i),vy(i),vz(i)'
-c      do i=1,5
-c         write(*,*) i,xpts(i),ypts(i),zpts(i),rpts(i),vx(i),vy(i),vz(i)
-c         write(*,*) i,xpts(i),ypts(i),zpts(i),rpts(i),vx(i),vy(i),vz(i)
-c      enddo
-c
-c     calculate neutral beam deposition density on (r,w) grid
+!      write(*,*)
+!      write(*,*)'freya:i,xpts(i),ypts(i),zpts(i),rpts(i),vx(i),vy(i),vz(i)'
+!      do i=1,5
+!         write(*,*) i,xpts(i),ypts(i),zpts(i),rpts(i),vx(i),vy(i),vz(i)
+!         write(*,*) i,xpts(i),ypts(i),zpts(i),rpts(i),vx(i),vy(i),vz(i)
+!      enddo
+!
+!     calculate neutral beam deposition density on (r,w) grid
       if (inubpat.eq.1 .and. codeid.ne.'onedee') then
         call frnbdep2(psi,mi,mj,r,w,potsid,mf,rzpat,nrpat,nzpat,
      &  ke,mb,sgxn,vbeam,hxfrac,inubpat)
       endif
-c
+!
       return
       end subroutine freya
 
 
       subroutine read_nubeam_data(filenm,nbirth_pts,atwb,
-     +                   nbirth_cmpts_nub,nshine_nub,
-     +                   pinj_nub,pabs_nub,x_nub,y_nub,z_nub,
-     +                   vx_nub,vy_nub,vz_nub,v_nub,en_nub,ie_nub,
-     +                   birth_rate_cmpts_nub,en_avg_cmpts_nub,
-     +                   pabs_cmpts_nub)
-c
-c     Read NUBEAM data file
-c
-      implicit integer (i-n), real*8 (a-h,o-z)
+     &                   nbirth_cmpts_nub,nshine_nub,
+     &                   pinj_nub,pabs_nub,x_nub,y_nub,z_nub,
+     &                   vx_nub,vy_nub,vz_nub,v_nub,en_nub,ie_nub,
+     &                   birth_rate_cmpts_nub,en_avg_cmpts_nub,
+     &                   pabs_cmpts_nub)
+!
+!     Read NUBEAM data file
+!
+      use iso_c_binding, only : c_double
+      implicit none
 
-c
-c     input: filenm, nbirth_pts, atwb
-c     output: nbirth_cmpts_nub,nshine_nub,pinj_nub,pabs_nub,
-c             x_nub,y_nub,z_nub,vx_nub,vy_nub,vz_nub,
-c             en_nub,ie_nub,birth_rate_cmpts_nub,en_avg_cmpts_nub,
-c             pabs_cmpts_nub
-c
-c     Of the nbirth_pts (frset namelist, checked against nubeam list
-c     value): nbirth_cmpts_nub(1:3) is breakdown versus energy cmpt
-c     In addition, nshine_nub particles shine through (from nubeam list).
-c     [Breakdown into energy components, presumably most full energy,
-c      is not provided.]
-c     pinj_nub is injected power into the torus(Watts)
-c     pabs_nub is absorbed (Watts)
-c     en_nub/ie_nub(1:nbirth_pts) is energy/energy-component for each
-c        particle in the list
-c     birth_rate_cmpts_nub,en_avg_cmpts_nub,pabs_cmpts_nub(1:3) are the
-c        neutral particle birth rates, average energy (keV) and power
-c        absorbed for each of the three energy components.
-c
+!
+!     input: filenm, nbirth_pts, atwb
+!     output: nbirth_cmpts_nub,nshine_nub,pinj_nub,pabs_nub,
+!             x_nub,y_nub,z_nub,vx_nub,vy_nub,vz_nub,
+!             en_nub,ie_nub,birth_rate_cmpts_nub,en_avg_cmpts_nub,
+!             pabs_cmpts_nub
+!
+!     Of the nbirth_pts (frset namelist, checked against nubeam list
+!     value): nbirth_cmpts_nub(1:3) is breakdown versus energy cmpt
+!     In addition, nshine_nub particles shine through (from nubeam list).
+!     [Breakdown into energy components, presumably most full energy,
+!      is not provided.]
+!     pinj_nub is injected power into the torus(Watts)
+!     pabs_nub is absorbed (Watts)
+!     en_nub/ie_nub(1:nbirth_pts) is energy/energy-component for each
+!        particle in the list
+!     birth_rate_cmpts_nub,en_avg_cmpts_nub,pabs_cmpts_nub(1:3) are the
+!        neutral particle birth rates, average energy (keV) and power
+!        absorbed for each of the three energy components.
+!
 
       character*128 filenm
-      real*8 atwb
-      real*8, dimension(nbirth_pts) :: x_nub,y_nub,z_nub
-      real*8, dimension(nbirth_pts) :: vx_nub,vy_nub,vz_nub,v_nub,en_nub
+      integer nbirth_pts ! input
+      real(c_double) :: atwb
+      real(c_double),dimension(nbirth_pts) :: x_nub,y_nub,z_nub
+      real(c_double),dimension(nbirth_pts) :: vx_nub,vy_nub,vz_nub
+      real(c_double),dimension(nbirth_pts) :: v_nub,en_nub
       integer, dimension(nbirth_pts) :: ie_nub
-      real*8, dimension(3) :: en_avg_cmpts_nub,pabs_cmpts_nub
+      real(c_double),dimension(3) :: en_avg_cmpts_nub,pabs_cmpts_nub
       integer, dimension(3) :: nbirth_cmpts_nub
-      real*8, dimension(3) :: birth_rate_cmpts_nub,birth_rate_cmpts_nub1
+      real(c_double),dimension(3) :: birth_rate_cmpts_nub
+      real(c_double),dimension(3) :: birth_rate_cmpts_nub1
+      
+      integer iunit,i,kode ! local
+      integer nbirth_pts_nub, nshine_nub ! to read in
+      real(c_double) :: pinj_nub,pabs_nub,total_source_rate ! to read in
+      real(c_double) :: ergtkev,enmin,enmax,end2,en_avg,p_avg_tot_nub ! local
+      real(c_double) :: bcnst
 
       iunit=14
       open(unit=iunit,file=filenm,status='old',iostat=kode)
       if (kode.ne.0) then
          WRITE(*,*)
-     +        'NUBEAM file', filenm,' cannot be opened'
+     &        'NUBEAM file', filenm,' cannot be opened'
          STOP
       endif
 
@@ -1139,7 +1175,7 @@ c
  104  format(///)
  105  format(6e14.7)
 
-c     Check n_birth_pts_nub against namelist value
+!     Check n_birth_pts_nub against namelist value
       if (nbirth_pts_nub .ne. nbirth_pts) then
          WRITE(*,*)'STOP: inconsistency with NUBEAM file n_birth_pts'
          WRITE(*,*)'Namelist n_birth_pts =',nbirth_pts
@@ -1147,26 +1183,26 @@ c     Check n_birth_pts_nub against namelist value
          STOP
       endif
 
-c     Read the NUBEAM birth points
+!     Read the NUBEAM birth points
       ergtkev=1.6022d-09
       do i=1,nbirth_pts
          read(iunit,105)x_nub(i),y_nub(i),z_nub(i),
-     +                  vx_nub(i),vy_nub(i),vz_nub(i)
-c        Calc beam velocity and energy
+     &                  vx_nub(i),vy_nub(i),vz_nub(i)
+!        Calc beam velocity and energy
          v_nub(i)=vx_nub(i)**2+vy_nub(i)**2+vz_nub(i)**2
          en_nub(i)=0.5*atwb*1.6726e-24*v_nub(i)/ergtkev
          v_nub(i)=sqrt(v_nub(i))
       enddo
 
-c     Close the file.
+!     Close the file.
       close(iunit)
 
-c     Find maximum and minimum particle energies, and use them to
-c     calculate if full,half, or 1/3 energy cmpt (ie_nub=1,2,3, resp.)
-c     Relative beam deposition rate at each component propto total
-c     birth points at each energy.
-c     [It is assumed that the list contains only particles born
-c      within the plasma.  Add coding to check this.]
+!     Find maximum and minimum particle energies, and use them to
+!     calculate if full,half, or 1/3 energy cmpt (ie_nub=1,2,3, resp.)
+!     Relative beam deposition rate at each component propto total
+!     birth points at each energy.
+!     [It is assumed that the list contains only particles born
+!      within the plasma.  Add coding to check this.]
       enmin=minval(en_nub,nbirth_pts)
       enmax=maxval(en_nub,nbirth_pts)
       end2=0.5*enmax
@@ -1189,37 +1225,37 @@ c      within the plasma.  Add coding to check this.]
          endif
       enddo
 
-c     Avg energy of each of deposited beam components.
+!     Avg energy of each of deposited beam components.
       do i=1,3
          en_avg=en_avg_cmpts_nub(i)
          en_avg_cmpts_nub(i)=en_avg/nbirth_cmpts_nub(i)
       enddo
 
-c     To obtain the normalization for birth_rate_cmpts_nub(), invert
-c     pabs(Watt)=sum(i=1,3)[birth_rate_cmpts_nub(i)*en_avg_cmpts_nub(i)]
-c                *bcnst
-c     to obtain bcnst. Adjust keV energy to joules:*ergtkev*1.e-7(J/erg)
+!     To obtain the normalization for birth_rate_cmpts_nub(), invert
+!     pabs(Watt)=sum(i=1,3)[birth_rate_cmpts_nub(i)*en_avg_cmpts_nub(i)]
+!                *bcnst
+!     to obtain bcnst. Adjust keV energy to joules:*ergtkev*1.e-7(J/erg)
       p_avg_tot_nub=0d0
       do i=1,3
          p_avg_tot_nub=p_avg_tot_nub + nbirth_cmpts_nub(i)*
-     +                 en_avg_cmpts_nub(i)*ergtkev*1.d-7  !Watts
+     &                 en_avg_cmpts_nub(i)*ergtkev*1.d-7  !Watts
       enddo
       bcnst=pabs_nub/p_avg_tot_nub
 
-c     Normalize for deposited power and deposition rate at each energy
+!     Normalize for deposited power and deposition rate at each energy
       do i=1,3
          birth_rate_cmpts_nub(i)=bcnst*nbirth_cmpts_nub(i)
          pabs_cmpts_nub(i)=birth_rate_cmpts_nub(i)*en_avg_cmpts_nub(i)*
-     +                     ergtkev*1.e-7   !Watts
+     &                     ergtkev*1.e-7   !Watts
       enddo
 
-c     Alternative calc of birth_rate_cmpts_nub(i)
+!     Alternative calc of birth_rate_cmpts_nub(i)
       do i=1,3
          birth_rate_cmpts_nub1(i)=(total_source_rate/nbirth_pts_nub)*
-     +                            nbirth_cmpts_nub(i)
+     &                            nbirth_cmpts_nub(i)
       enddo
 
-c     printout birth_rates, as check for consistency
+!     printout birth_rates, as check for consistency
       write(*,*)
       write(*,*)'birth rate(particles/sec) for each cmpt based on'
       write(*,*)' cmpt   total power    total birth rate'
@@ -1233,12 +1269,16 @@ c     printout birth_rates, as check for consistency
 
 
       subroutine zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,psiax,psi,r,z,
-     +     xpos,ypos,zpos,pzone,izone)
-      implicit integer (i-n), real*8 (a-h,o-z)
+     &     xpos,ypos,zpos,pzone,izone)
+      use iso_c_binding, only : c_double
+      implicit none
       save
 
-c      dimension psi(ki,*),r(*),z(*)
-      dimension psi(ki,*),r(*),z(*)
+      real(c_double) :: psi(ki,*),r(*),z(*) ! in arg. list
+      real(c_double) :: drutpi,xpos,ypos,zpos,pzone,dri,dzi,psiax !in arg. list
+      integer ki,mfm1,mim1,mjm1,izone ! in arg. list
+      integer i,j !local
+      real(c_double) :: rpos,psix,ptest,area1,area2,area3,area4,dum !local
 
 
       rpos=sqrt(xpos**2+ypos**2)
@@ -1255,10 +1295,10 @@ c      dimension psi(ki,*),r(*),z(*)
       area3=(r(i+1)-rpos)*(z(j+1)-zpos)
       area4=(rpos-r(i))*(z(j+1)-zpos)
       pzone=(area3*psi(i,j)+area4*psi(i+1,j)+area1*psi(i+1,j+1)
-     1  +area2*psi(i,j+1))*dri*dzi
+     &  +area2*psi(i,j+1))*dri*dzi
       go to 126
  124  call pfit(psi(i-1,j-1), r(i-1), z(j-1), rpos, zpos, ki, pzone,
-     *  dum, dum)
+     &  dum, dum)
  126  pzone = max(pzone,psiax)
       izone = sqrt(pzone-psiax)*drutpi + 1.
 

@@ -80,21 +80,24 @@ module r8subs_mod
 contains
 
   real(c_double) function cvmgm(x,y,z)
-    implicit integer (i-n), real(c_double) (a-h,o-z)
+    implicit none
+    real(c_double) :: x,y,z
     cvmgm=y
     if (z .lt. 0.d0) cvmgm=x
     return
   end function cvmgm
 
   real(c_double) function cvmgp(x,y,z)
-    implicit integer (i-n), real(c_double) (a-h,o-z)
+    implicit none
+    real(c_double) :: x,y,z
     cvmgp=y
     if (z .gt. 0.d0) cvmgp=x
     return
   end function cvmgp
 
   real(c_double) function cvmgt(x,y,z)
-    implicit integer (i-n), real(c_double) (a-h,o-z)
+    implicit none
+    real(c_double) :: x,y
     logical z
     cvmgt=y
     if (z) cvmgt=x
@@ -102,7 +105,7 @@ contains
   end function cvmgt
 
   integer function luf(px,parray,kn)
-    implicit integer (i-n), real(c_double) (a-h,o-z)
+    implicit none
     !
     !     THIS ROUTINE SHOULD BE A BINARY SEARCH.  IT NEEDS WORK!!!
     !     luf(x,table,n) (MATHLIB) which is a function returning the index
@@ -110,7 +113,10 @@ contains
     !
     !     Elements must be strictly increasing. x.gt.table(n)==>n+1. !!!
     !
-    dimension parray(kn)
+    real(c_double) :: px ! scalar input
+    real(c_double) :: parray(kn) ! vector input
+    integer :: kn ! input
+    integer i ! local
     !
     !     YuP added: check that parray(i) is increasing with i
     do i=2,kn
@@ -139,7 +145,7 @@ contains
 
 
   integer function lug(px,parray,kn,iguess)
-    implicit integer (i-n), real(c_double) (a-h,o-z)
+    implicit none
     !
     !     IGUESS is dummy.  THIS NEEDS WORK.
     !     lug(x,table,n,iguess) (MATHLIB) same as luf,
@@ -149,7 +155,11 @@ contains
     !
     !     Elements must be strictly increasing. x.gt.table(n)==>n+1. !!!
     !
-    dimension parray(kn)
+    real(c_double) :: px ! scalar input
+    real(c_double) :: parray(kn) ! vector input
+    integer :: kn ! input
+    integer i ! local
+    integer iguess ! local, not actually used now
     !
     !     YuP added: check that parray(i) is increasing with i
     do i= 2,kn !max(2,iguess), kn
@@ -323,6 +333,7 @@ contains
     !     jack dongarra, linpack, 3/11/78.
     !     modified 12/3/93, array(1) declarations changed to array(*)
     !
+    implicit none
     real(c_double) dx(*),dy(*),da
     integer i,incx,incy,ix,iy,m,mp1,n
     !
@@ -366,6 +377,7 @@ contains
   end subroutine daxpy
 
   subroutine dcopy(n,dx,incx,dy,incy)
+    implicit none
 !
 !     copies a vector, x, to a vector, y.
 !     uses unrolled loops for increments equal to one.
@@ -417,6 +429,7 @@ contains
   end subroutine dcopy
 !
   real(c_double) function ddot(n,dx,incx,dy,incy)
+      implicit none
 !
 !     forms the dot product of two vectors.
 !     uses unrolled loops for increments equal to one.
@@ -468,6 +481,7 @@ contains
 !
 !
       subroutine dscal(n,da,dx,incx)
+      implicit none
 !     !XXX, just multiply it..    YuP: it uses unrolled loops, for speed.
 !     scales a vector by a constant.
 !     uses unrolled loops for increment equal to one.
@@ -513,6 +527,7 @@ contains
 !
 !
       integer function idamax(n,dx,incx)
+      implicit none
 !
 !     finds the index of element having max. absolute value.
 !     jack dongarra, linpack, 3/11/78.
@@ -555,6 +570,7 @@ contains
 
 
       real(c_float) function rbound(r8)
+      implicit none
       save !XXXX why?  YuP: probably not needed
 !
 !     Converts a real(c_double) argument to a real number,
@@ -588,6 +604,7 @@ contains
 
 
       SUBROUTINE DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+      implicit none
 !*
 !*  -- LAPACK routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -788,6 +805,7 @@ contains
       END subroutine DGBTF2
 
       SUBROUTINE DGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+      implicit none
 !*
 !*  -- LAPACK routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -1227,7 +1245,7 @@ contains
 
       SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, &
                          INFO )
-        implicit none
+      implicit none
 !*
 !*  -- LAPACK routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -1411,6 +1429,7 @@ contains
       END subroutine DGBTRS
 
       SUBROUTINE DGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+      implicit none
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA,BETA
       INTEGER K,LDA,LDB,LDC,M,N
@@ -1722,6 +1741,7 @@ contains
       END subroutine DGEMM
 
       SUBROUTINE DGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      implicit none
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA,BETA
       INTEGER INCX,INCY,LDA,M,N
@@ -1981,6 +2001,7 @@ contains
       END subroutine DGEMV
 
       SUBROUTINE DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+      implicit none
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA
       INTEGER INCX,INCY,LDA,M,N
@@ -2140,6 +2161,7 @@ contains
       END subroutine DGER
 
       SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
+      implicit none
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -2260,6 +2282,7 @@ contains
       END subroutine DLASWP
 
       SUBROUTINE DSWAP(N,DX,INCX,DY,INCY)
+      implicit none
 !*     .. Scalar Arguments ..
       INTEGER INCX,INCY,N
 !*     ..
@@ -2331,6 +2354,7 @@ contains
       END subroutine DSWAP
 
       SUBROUTINE DTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+      implicit none
 !*     .. Scalar Arguments ..
       INTEGER INCX,K,LDA,N
       CHARACTER DIAG,TRANS,UPLO
@@ -2665,6 +2689,7 @@ contains
       END subroutine DTBSV
 
       SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+      implicit none
 !*     .. Scalar Arguments ..
       REAL(C_DOUBLE) ALPHA
       INTEGER LDA,LDB,M,N
@@ -3036,6 +3061,7 @@ contains
       END subroutine DTRSM
 
       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
+      implicit none
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -3188,6 +3214,7 @@ contains
 
       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, &
                        N4 )
+      implicit none
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -3343,6 +3370,7 @@ contains
       END FUNCTION ILAENV
 
       LOGICAL FUNCTION LSAME(CA,CB)
+      implicit none
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -3429,6 +3457,7 @@ contains
       END FUNCTION LSAME
 
       SUBROUTINE XERBLA( SRNAME, INFO )
+      implicit none
 !*
 !*  -- LAPACK auxiliary routine (version 3.1) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -3549,6 +3578,7 @@ contains
 
 
       SUBROUTINE DGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      implicit none
 !*
 !*  -- LAPACK driver routine (version 3.2) --
 !*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -3657,6 +3687,7 @@ contains
       END subroutine DGESV
 
       SUBROUTINE DGETF2( M, N, A, LDA, IPIV, INFO )
+      implicit none
 !*
 !*  -- LAPACK routine (version 3.2) --
 !*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -3802,6 +3833,7 @@ contains
       END subroutine DGETF2
 
       SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
+      implicit none
 !*
 !*  -- LAPACK routine (version 3.2) --
 !*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -3958,6 +3990,7 @@ contains
       END subroutine DGETRF
 
       SUBROUTINE DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      implicit none
 !*
 !*  -- LAPACK routine (version 3.3.1) --
 !*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -4168,6 +4201,7 @@ contains
 !*
 !*  =====================================================================
       REAL(C_DOUBLE) FUNCTION DLAMCH( CMACH )
+      implicit none
 !*
 !*  -- LAPACK auxiliary routine (version 3.4.0) --
 !*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -4275,6 +4309,7 @@ contains
 !*> \endverbatim
 !*>
       REAL(C_DOUBLE) FUNCTION DLAMC3( A, B )
+      implicit none
 !*
 !*  -- LAPACK auxiliary routine (version 3.4.0) --
 !*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

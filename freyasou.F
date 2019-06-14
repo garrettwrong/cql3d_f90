@@ -1,7 +1,7 @@
-c
-c
+!
+!
       subroutine freyasou(qx,qy,qz,qr,vx,vy,vz,iqts,curdep,
-     1  bmsprd,multiply,multiplyn)
+     &  bmsprd,multiply,multiplyn)
       use bcast_mod, only : bcast
       use bcast_mod, only : ibcast
       use cqlcomm_mod
@@ -17,7 +17,7 @@ c
       use zcunix_mod, only : coeff1
       use zcunix_mod, only : terp1
       use zcunix_mod, only : terp2
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
 
 #ifdef __MPI
       include 'mpilib.h'
@@ -25,24 +25,38 @@ c
 
       character*8 multiply,method
 
-      dimension qx(*),qy(*),qz(*),qr(*),vx(*),vy(*),vz(*)
-      dimension llbrth(0:lrza), curbrth(lrza)
-      dimension d2vphipl(lrza),workk(3*lrza+1)
+      real(c_double) :: qx(*),qy(*),qz(*),qr(*),vx(*),vy(*),vz(*)
+      integer llbrth(0:lrza)
+      real(c_double) :: curbrth(lrza)
+      real(c_double) :: d2vphipl(lrza),workk(3*lrza+1)
 
-      dimension ranvc(:)
+      real(c_double) :: ranvc(:)
       pointer ranvc
-      dimension px(:)
+      real(c_double) :: px(:)
       pointer px
-      dimension py(:)
+      real(c_double) :: py(:)
       pointer py
-      dimension pz(:)
+      real(c_double) :: pz(:)
       pointer pz
-      dimension lbrth(:)
+      integer lbrth(:)
       pointer lbrth
-      dimension psipt(:)
+      real(c_double) :: psipt(:)
       pointer psipt
-      dimension pr(:)
+      real(c_double) :: pr(:)
       pointer pr
+      
+      integer i,j,l,ll,k,ipts,istat,mrans,ipar,mpar,jpar !local
+      integer mran,ma,multiplyn !local
+      integer iless,imore,iter !local
+      integer iqts ! in arg. list
+      real(c_double) :: twopi2,qmc,qmca,rbrth,rbrth2 ! local
+      real(c_double) :: dpsidr,dpsidz,bxcomp,bycomp,bzcomp,bmag2,one_wcb !local
+      real(c_double) :: vmag,bmag, bmra,bmsprd,apsi,psibrth,Bpol_factor !local
+      real(c_double) :: rhox_gyro,rhoy_gyro,rhoz_gyro ! local
+      real(c_double) :: vphi,vphip,vrp,vphiplas,dotprd,a,aa,s,scalfact !local
+      real(c_double) :: cosp,sinp,curnorm,curdep,cospitch,rcon
+      real(c_double) :: epsitst,err
+      real(c_double) :: bzero,psb,bratio,tmdplne
 
       ! YuP[2019-06-12] Getting lrz and lrzmax from setup0 type:
       integer :: lrz
@@ -50,25 +64,25 @@ c
       lrz = setup0%lrz
       lrzmax =  setup0%lrzmax
 
-c
-c..................................................................
-c
-c     This routine computes the bounce averaged source suitable for
-c     time advancement from the ion birth points as determined by the
-c     NFREYA code as it exists in the transport code ONETWO. For the
-c     moment the value of psi at which the particles are born is
-c     assumed to be the same as the bounce average of psi. qx qy and
-c     qz are the locations of birth in a cartesian system, and vx,vy and
-c     and vz are the velocity coordinates. kfrsou is the species index.
-c
-c..................................................................
-c     psivalm(l) is the value of psi that delimits the EXACT OUTER EDGE
-c     of flux volume l. The volume, area and incremental volume and
-c     area arrays, vol, area, dvol and darea (functions of l) are
-c     computed with this boundary in mind. Thus there is a PRECISE
-c     correspondence between the volume between psival(l-1) and
-c     psival(l) and dvol(l).
-c..................................................................
+!
+!..................................................................
+!
+!     This routine computes the bounce averaged source suitable for
+!     time advancement from the ion birth points as determined by the
+!     NFREYA code as it exists in the transport code ONETWO. For the
+!     moment the value of psi at which the particles are born is
+!     assumed to be the same as the bounce average of psi. qx qy and
+!     qz are the locations of birth in a cartesian system, and vx,vy and
+!     and vz are the velocity coordinates. kfrsou is the species index.
+!
+!..................................................................
+!     psivalm(l) is the value of psi that delimits the EXACT OUTER EDGE
+!     of flux volume l. The volume, area and incremental volume and
+!     area arrays, vol, area, dvol and darea (functions of l) are
+!     computed with this boundary in mind. Thus there is a PRECISE
+!     correspondence between the volume between psival(l-1) and
+!     psival(l) and dvol(l).
+!..................................................................
 
       itab(1)=1
       itab(2)=0
@@ -87,17 +101,17 @@ c..................................................................
  10   continue
       tr(lrz)=psimag-psilim
 
-c..................................................................
-c     If variable multiply.ne."disabled" and multiplyn.ge.1,
-c     we assume that each particle birth
-c     point represents the mean value of a normally distributed
-c     beamlet with standard deviation equal to beamsprd. If multiply
-c     is "disabled" then the code goes with the actual NFREYA deposition
-c     with no alterations.
-c     In the case that multiply is activated, multiply particles are
-c     born distributed as described above. Generate space for these new
-c     particles and for the random number vector.
-c..................................................................
+!..................................................................
+!     If variable multiply.ne."disabled" and multiplyn.ge.1,
+!     we assume that each particle birth
+!     point represents the mean value of a normally distributed
+!     beamlet with standard deviation equal to beamsprd. If multiply
+!     is "disabled" then the code goes with the actual NFREYA deposition
+!     with no alterations.
+!     In the case that multiply is activated, multiply particles are
+!     born distributed as described above. Generate space for these new
+!     particles and for the random number vector.
+!..................................................................
 
       ma=multiplyn
       if (multiply.eq."disabled") ma=1
@@ -122,21 +136,21 @@ c..................................................................
          call bcast(ranvc,zero,SIZE(ranvc))
 
 
-c..................................................................
-c     Call random number generator - scale to obtain desired
-c     standard deviation
-c..................................................................
+!..................................................................
+!     Call random number generator - scale to obtain desired
+!     standard deviation
+!..................................................................
 
-c     iseed=123457        ***old**bh
-c     call rnset(iseed)   ***old**bh
-c     call rnnoa(mrans,ranvc)   ***old**bh
+!     iseed=123457        ***old**bh
+!     call rnset(iseed)   ***old**bh
+!     call rnnoa(mrans,ranvc)   ***old**bh
         call frnnoa(mrans,ranvc)
         bmra=bmsprd*radmin
         call dscal(mrans,bmra,ranvc,1)
 
-c..................................................................
-c     Determine the birth points....
-c..................................................................
+!..................................................................
+!     Determine the birth points....
+!..................................................................
 
         mpar=0
         mran=0
@@ -155,16 +169,16 @@ c..................................................................
       endif  !on multiply
       write(*,*)'freyasou: After allocate'
 
-c      write(*,*)
-c      write(*,*)'freyasou:i,qx(i),qy(i),qz(i),qr(i),vx(i),vy(i),vz(i):'
-c      do i=1,5
-c         write(*,*) i,qx(i),qy(i),qz(i),qr(i),vx(i),vy(i),vz(i)
-c      enddo
+!      write(*,*)
+!      write(*,*)'freyasou:i,qx(i),qy(i),qz(i),qr(i),vx(i),vy(i),vz(i):'
+!      do i=1,5
+!         write(*,*) i,qx(i),qy(i),qz(i),qr(i),vx(i),vy(i),vz(i)
+!      enddo
 
-c..................................................................
-c     Mark birth particles according to their birth flux surface bin.
-c     lbrth(ipar) is the label of the relevant flux surface.
-c..................................................................
+!..................................................................
+!     Mark birth particles according to their birth flux surface bin.
+!     lbrth(ipar) is the label of the relevant flux surface.
+!..................................................................
 
       do 60 ipar=1,ipts
 
@@ -172,7 +186,7 @@ c..................................................................
         rbrth=sqrt(rbrth2)
         pr(ipar)=rbrth
         psibrth=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     1    epsirz,nnra,0,0)
+     &    epsirz,nnra,0,0)
         psipt(ipar)=psibrth
         apsi=psimag-psibrth
         if (psibrth.lt.psilim) then  !i.e., outside LCFS
@@ -186,16 +200,16 @@ c..................................................................
            ! Adjust coordinate from local position to g.c. position
            ! First, Determine components of B:
            dpsidr=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     1       epsirz,nnra,1,0)
+     &       epsirz,nnra,1,0)
            dpsidz=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     1       epsirz,nnra,0,1)
+     &       epsirz,nnra,0,1)
            call eqfpsi(psibrth,fpsi_,fppsi_)
 !           Bpol_factor=0d0   !Test: zero Bpol effect, leaving only btor.
            Bpol_factor=1.d0
            bxcomp=(-cursign*Bpol_factor*dpsidz*px(ipar)-bsign*fpsi_*
-     1          py(ipar))/rbrth2
+     &          py(ipar))/rbrth2
            bycomp=(-cursign*Bpol_factor*dpsidz*py(ipar)+bsign*fpsi_*
-     1          px(ipar))/rbrth2
+     &          px(ipar))/rbrth2
            bzcomp=+cursign*Bpol_factor*dpsidr/rbrth
            if (multiply.eq."disabled") then
               jpar=ipar
@@ -222,7 +236,7 @@ c..................................................................
            rbrth=sqrt(rbrth2)
            pr(ipar)=rbrth
            psibrth= terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,
-     1                    epsirr,epsizz,epsirz,nnra,0,0)
+     &                    epsirr,epsizz,epsirz,nnra,0,0)
            psipt(ipar)=psibrth ! at g.c. now
            apsi=psimag-psibrth
            if (psibrth.lt.psilim) then  !i.e., g.c. outside LCFS
@@ -240,19 +254,19 @@ c..................................................................
  60   continue
 
 
-c      do ipar=1,10
-c         write(*,*)'freyasou: ipar,psipt(ipar),lbrth(ipar)'//
-c     +        'vx(ipar),vy(ipar),vz(ipar)=,',
-c     +        ipar,psipt(ipar),lbrth(ipar),vx(ipar),vy(ipar),vz(ipar)
-c      enddo
+!      do ipar=1,10
+!         write(*,*)'freyasou: ipar,psipt(ipar),lbrth(ipar)'//
+!     +        'vx(ipar),vy(ipar),vz(ipar)=,',
+!     +        ipar,psipt(ipar),lbrth(ipar),vx(ipar),vy(ipar),vz(ipar)
+!      enddo
 
 
 
 
-c..................................................................
-c     Subtract rotation velocity vphipl from the toroidal
-c     velocity of the particles, if n.ge.nonvphi .and. n.lt.noffvphi.
-c..................................................................
+!..................................................................
+!     Subtract rotation velocity vphipl from the toroidal
+!     velocity of the particles, if n.ge.nonvphi .and. n.lt.noffvphi.
+!..................................................................
 
       if ((n+1).ge.nonvphi .and. (n+1).lt.noffvphi) then
         if (multiply.ne."disabled") stop 'rerun with multiply=disabled'
@@ -266,7 +280,7 @@ c..................................................................
         do 70 ipar=1,ipts
           psibrth=psipt(ipar)
 
-c         prevent possibility of unhealthy extrapolation
+!         prevent possibility of unhealthy extrapolation
           if (psibrth.lt.psilim) psibrth=psilim
           if(psibrth.gt.(-equilpsp(1))) psibrth=-equilpsp(1)
 
@@ -274,7 +288,7 @@ c         prevent possibility of unhealthy extrapolation
 
 
           call terp1(lrzmax,equilpsp(1),vphipl,d2vphipl,psibrth,
-     +      1,tab,itab)
+     &      1,tab,itab)
           if(rmag.gt.1.d-8)then
             vphiplas=tab(1)*(pr(ipar)/rmag) ! rmag=0 in mirror machine
             cosp=px(ipar)/pr(ipar)
@@ -284,53 +298,53 @@ c         prevent possibility of unhealthy extrapolation
             vrp=cosp*vx(ipar)+sinp*vy(ipar)
             vx(ipar)=vrp*cosp-vphip*sinp
             vy(ipar)=vrp*sinp+vphip*cosp
-c           vz(ipar)=vz(ipar)
+!           vz(ipar)=vz(ipar)
           else
             goto 70 ! skip, for now
           endif
 
-c          if (ipar.lt.10) then
-c             write(*,*)'freyasou: ipar,psibrth,vphiplas,'//
-c     +            'vx(ipar),vy(ipar),vz(ipar)=,',
-c     +            ipar,psibrth,vphiplas,vx(ipar),vy(ipar),vz(ipar)
-c          endif
+!          if (ipar.lt.10) then
+!             write(*,*)'freyasou: ipar,psibrth,vphiplas,'//
+!     &            'vx(ipar),vy(ipar),vz(ipar)=,',
+!     &            ipar,psibrth,vphiplas,vx(ipar),vy(ipar),vz(ipar)
+!          endif
 
  70     continue ! ipar=1,ipts
       endif ! ((n+1).ge.nonvphi .and. (n+1).lt.noffvphi)
 
-c.......................................................................
-cBH110614:  Loop structure is changed.  Main loop is now over
-cBH110614:  particles, and data is accumulated for each flux
-cBH110614:  surface as advance through the particle (ipar) loop.
-c
-cxx     Begin loop over the flux surfaces: Recall that information
-cxx     pertaining to individual flux surfaces (including S) is
-cxx     stored on disk. This introduces some awkwardness in this
-cxx     routine (such as the existence of do loop 60).
-c.......................................................................
+!.......................................................................
+!BH110614:  Loop structure is changed.  Main loop is now over
+!BH110614:  particles, and data is accumulated for each flux
+!BH110614:  surface as advance through the particle (ipar) loop.
+!
+!xx     Begin loop over the flux surfaces: Recall that information
+!xx     pertaining to individual flux surfaces (including S) is
+!xx     stored on disk. This introduces some awkwardness in this
+!xx     routine (such as the existence of do loop 60).
+!.......................................................................
 
-c.......................................................................
-c     curnorm will be the integral over the source over velocity and
-c     configuration space volume. To get the actual current, the
-c     source arrays which are being computed below will have to
-c     be divided by curnorm (giving total current=1.) and then
-c     multiplied by curdep, curdep being the total number of
-c     particles deposited per second in the plasma.
-c     asor will (after rescaling at the end of the routine) have in it
-c     the local current (part/sec) for the flux surface in question.
-c.......................................................................
+!.......................................................................
+!     curnorm will be the integral over the source over velocity and
+!     configuration space volume. To get the actual current, the
+!     source arrays which are being computed below will have to
+!     be divided by curnorm (giving total current=1.) and then
+!     multiplied by curdep, curdep being the total number of
+!     particles deposited per second in the plasma.
+!     asor will (after rescaling at the end of the routine) have in it
+!     the local current (part/sec) for the flux surface in question.
+!.......................................................................
 
       curnorm=0.
       do 200 ll=1,lrz
         call tdnflxs(ll)
         llbrth(ll)=0
-cBH171014        call bcast(source(0,0,kfrsou,ll),zero,iyjx2)
+!BH171014        call bcast(source(0,0,kfrsou,ll),zero,iyjx2)
         call bcast(source(0:iy+1,0:jx+1,k,ll),zero,iyjx2)
 
-c..................................................................
-c     Begin loop over the birth particles.
-c     Determine the value of psi and R at birth
-c..................................................................
+!..................................................................
+!     Begin loop over the birth particles.
+!     Determine the value of psi and R at birth
+!..................................................................
 
         k=kfrsou
         do 100 ipar=1,ipts
@@ -343,27 +357,27 @@ c..................................................................
 !          write(*,*)'freyasou, do 100, ll,ipar,ipts=',ll,ipar,ipts
 !          write(*,*)'freyasou, do 100, rbrth,psibrth=',rbrth,psibrth
 
-c..................................................................
-c     Determine the pitch angle (cos(theta)) at birth. Compute
-c     B dot v / mag B/ mag v
-c..................................................................
+!..................................................................
+!     Determine the pitch angle (cos(theta)) at birth. Compute
+!     B dot v / mag B/ mag v
+!..................................................................
 
           dpsidr=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     1      epsirz,nnra,1,0)
+     &      epsirz,nnra,1,0)
           dpsidz=terp2(rbrth,pz(ipar),nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     1      epsirz,nnra,0,1)
+     &      epsirz,nnra,0,1)
 
-c..................................................................
-c     Determine f(psi)
-c..................................................................
+!..................................................................
+!     Determine f(psi)
+!..................................................................
 
           call eqfpsi(psibrth,fpsi_,fppsi_)
 
-c..................................................................
-c     Determine components of B.
-c..................................................................
+!..................................................................
+!     Determine components of B.
+!..................................................................
           if(rbrth.gt.1.d-8)then
-cBHandYuP110715: Account for bsign/cursign
+!BHandYuP110715: Account for bsign/cursign
 
           bxcomp=(-cursign*dpsidz*px(ipar)-bsign*fpsi_*py(ipar))/rbrth2
           bycomp=(-cursign*dpsidz*py(ipar)+bsign*fpsi_*px(ipar))/rbrth2
@@ -372,14 +386,14 @@ cBHandYuP110715: Account for bsign/cursign
              go to 100 ! skip, for now
           endif
 
-c.......................................................................
-c     Compute the dot product and the cosine
-c     BH110614:  But, pitch angle is measure from B-field,
-c     BH110614:  however, it is pos. in pos. tor. dirn, by convention.
-c     BH110614:  In present NSTX study, bsign=-1., but get pos cospitch
-c     BH110614:  for part with pos vphi.  Maybe ok, by logic needs
-c     BH110614:  verifying.  Also, effect of cursign?
-c.......................................................................
+!.......................................................................
+!     Compute the dot product and the cosine
+!     BH110614:  But, pitch angle is measure from B-field,
+!     BH110614:  however, it is pos. in pos. tor. dirn, by convention.
+!     BH110614:  In present NSTX study, bsign=-1., but get pos cospitch
+!     BH110614:  for part with pos vphi.  Maybe ok, by logic needs
+!     BH110614:  verifying.  Also, effect of cursign?
+!.......................................................................
 
           if (multiply.eq."disabled") then
             jpar=ipar
@@ -390,23 +404,23 @@ c.......................................................................
           vmag=sqrt(vx(jpar)**2+vy(jpar)**2+vz(jpar)**2)
           bmag2= bxcomp**2+bycomp**2+bzcomp**2 ! B^2
           bmag=sqrt(bmag2)
-cBHandYuP110715: cospitch measured with vpar pos in pos vphi
-cBHandYuP110715: (CCW dirn viewed from top).
+!BHandYuP110715: cospitch measured with vpar pos in pos vphi
+!BHandYuP110715: (CCW dirn viewed from top).
           cospitch=bsign*dotprd/bmag/vmag ! local cos(pitch)
-c          write(*,*)'freyasou: ll,ipar,vmag,bmag,cospitch=',
-c     +                         ll,ipar,vmag,bmag,cospitch
+!          write(*,*)'freyasou: ll,ipar,vmag,bmag,cospitch=',
+!     +                         ll,ipar,vmag,bmag,cospitch
 
-c..................................................................
-c     Translate to midplane coordinates. This requires knowledge
-c     of B-ratio = B(at birth)/B(at midplane). We require rcon,
-c     the value of R at which the flux surface of birth pierces
-c     the midplane.
-c     Determine the first mesh point iless such the epsi(iless,nzc)
-c     is less than psibrth (the epsi associated with the contour of
-c     interest).
-c     Two methods can be used; default 1-d splines (meth1)
-c     Other method is probably much slower (meth2).
-c..................................................................
+!..................................................................
+!     Translate to midplane coordinates. This requires knowledge
+!     of B-ratio = B(at birth)/B(at midplane). We require rcon,
+!     the value of R at which the flux surface of birth pierces
+!     the midplane.
+!     Determine the first mesh point iless such the epsi(iless,nzc)
+!     is less than psibrth (the epsi associated with the contour of
+!     interest).
+!     Two methods can be used; default 1-d splines (meth1)
+!     Other method is probably much slower (meth2).
+!..................................................................
 
           if (method.eq."meth2") then   !NOT TRUE, method hardwired.
             do 110 i=imag+1,nnr
@@ -419,10 +433,10 @@ c..................................................................
  110        continue
  111        continue
 
-c..................................................................
-c     Do a Newton's iteration to find the R=rcon where the contour
-c     intersects the Z=0. axis.
-c..................................................................
+!..................................................................
+!     Do a Newton's iteration to find the R=rcon where the contour
+!     intersects the Z=0. axis.
+!..................................................................
 
             iter=0
             imore=iless-1
@@ -430,16 +444,16 @@ c..................................................................
             epsitst=epsi(iless,nzc)
  115        continue
             dpsidr=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     1        epsirz,nnra,1,0)
+     &        epsirz,nnra,1,0)
             a=(psibrth-epsitst)/dpsidr
 
-c..................................................................
-c     New value for rcon..
-c..................................................................
+!..................................................................
+!     New value for rcon..
+!..................................................................
 
             rcon=rcon+a
             epsitst=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     1        epsirz,nnra,0,0)
+     &        epsirz,nnra,0,0)
             err=abs((psibrth-epsitst)/(epsi(imore,nzc)+epsi(iless,nzc)))
             if (err .lt. 1.e-3) go to 120
             iter=iter+1
@@ -449,75 +463,75 @@ c..................................................................
  120        continue
 
 
-c..................................................................
-c     Determine B0, i.e., B at midplane
-c..................................................................
+!..................................................................
+!     Determine B0, i.e., B at midplane
+!..................................................................
 
-cBH990429            dpsidr=terp2(rcon,rbrth,0.,nnr,er,
-cBH990429                         nnz,ez,epsi,epsirr,epsizz,
+!BH990429            dpsidr=terp2(rcon,rbrth,0.,nnr,er,
+!BH990429                         nnz,ez,epsi,epsirr,epsizz,
             dpsidr=terp2(rcon,zero,nnr,er,nnz,ez,epsi,epsirr,epsizz,
-     1        epsirz,nnra,1,0)
+     &        epsirz,nnra,1,0)
             bzero=sqrt(fpsi_**2+dpsidr**2)/rcon
 
           elseif (method.eq."meth1") then   !TRUE
 
             psb=-psibrth
             call terp1(lrzmax,equilpsp(1),bmdplne,d2bmdpl,psb,
-     +        1,tab,itab)
+     &        1,tab,itab)
             bzero=tab(1)
 
           endif
 
           bratio=bmag/bzero
-c         bratio, physically, is .ge.1.  Due to inaccuracies, it can
-c         numerically get .lt.1.
-c         Allowing for some tolerance, these cases are adjusted.
+!         bratio, physically, is .ge.1.  Due to inaccuracies, it can
+!         numerically get .lt.1.
+!         Allowing for some tolerance, these cases are adjusted.
           if (bratio.lt.1.) then
             bratio=1.0
             if (bratio.lt.0.99)
      &      write(*,*)'freyasou: bratio=[should be=1, else stop]',bratio
-cBH041215            if (bratio.le.0.9) stop 'freyasou: bratio.le.0.9'
+!BH041215            if (bratio.le.0.9) stop 'freyasou: bratio.le.0.9'
           endif
           tmdplne=asin(sqrt((1.-cospitch**2)/bratio))
           if (cospitch.lt.0.) then
             tmdplne=pi-tmdplne
           endif
 
-c..................................................................
-c     Determine the indices of the midplane meshes to which the
-c     velocity coordinates at the birth point transform.
-c     i for theta, j for velocity.
-c     Locate the flux surface to which this particle will be
-c     assigned.
-c..................................................................
+!..................................................................
+!     Determine the indices of the midplane meshes to which the
+!     velocity coordinates at the birth point transform.
+!     i for theta, j for velocity.
+!     Locate the flux surface to which this particle will be
+!     assigned.
+!..................................................................
 
           j=luf_bin(vmag/vnorm,xmidpt(1:jx)) !jx
           if (j.gt.jx) go to 100
           i=luf_bin(tmdplne,ymid(1:iy,l_)) !iy
           if (i.gt.iy) then
              write(*,*)'freyasou: ll,i,j,iy,ipar,tmdplne=',
-     +            ll,i,j,iy,ipar,tmdplne
+     &            ll,i,j,iy,ipar,tmdplne
              call frwrong(5)
           endif
 
-c..................................................................
-c     Increment the source by the birth particle weight.
-c     2. in denominator added because zmaxpsi(lr_), vptb are half orbit
-c     quantities in CQL
-c..................................................................
+!..................................................................
+!     Increment the source by the birth particle weight.
+!     2. in denominator added because zmaxpsi(lr_), vptb are half orbit
+!     quantities in CQL
+!..................................................................
 
-cVickieLynch060824 found this should be before do 100:          k=kfrsou
+!VickieLynch060824 found this should be before do 100:          k=kfrsou
           aa=bmdplne(lr_)/(cynt2(i,l_)*cint2(j)
-     1      *dpsi(lr_)*twopi*vptb(i,lr_)*one_*symm)
+     &      *dpsi(lr_)*twopi*vptb(i,lr_)*one_*symm)
           !YuP[03/27/2015] Changed 2.0->symm,
           !which is symm=2 in case of up-dn symmetrical equilibrium.
           !In this case,
           !for passing particles vptb*symm corresponds to the whole orbit;
           !for trapped: vptb*symm corresponds to half orbit (from tip to tip)
 
-c..................................................................
-c     Symmetrize in trapped region...
-c..................................................................
+!..................................................................
+!     Symmetrize in trapped region...
+!..................................................................
 
           if (i.ge.itl_(l_) .and. i.le.itu_(l_)) then   !trapped
             source(i,j,k,ll)=source(i,j,k,ll)+aa/2. ! ZOW
@@ -528,7 +542,7 @@ c..................................................................
             source(i,j,k,ll)=source(i,j,k,ll)+aa    ! ZOW
           endif
  100   continue ! ipar=1,ipts
-c=========================================== Done LOOP IN PARTICLES
+!=========================================== Done LOOP IN PARTICLES
 
 
         s=0.
@@ -538,9 +552,9 @@ c=========================================== Done LOOP IN PARTICLES
  160      continue
  150    continue
 
-c..................................................................
-c     asor(k,1,lr_) will temporarily hold the non-normalized current
-c..................................................................
+!..................................................................
+!     asor(k,1,lr_) will temporarily hold the non-normalized current
+!..................................................................
 
         asor(k,1,lr_)=s/zmaxpsi(lr_)*one_
         asorz(k,1,lr_)=asor(k,1,lr_)
@@ -548,19 +562,6 @@ c..................................................................
         call tdtoaray
  200   continue ! ll
 
-c_cray    call hpdeallc(pxptr,ier,0)
-c_cray    call hpdeallc(pyptr,ier,0)
-c_cray    call hpdeallc(pzptr,ier,0)
-c_cray    call hpdeallc(prptr,ier,0)
-c_cray    call hpdeallc(lbrthptr,ier,0)
-c_cray    call hpdeallc(psiptptr,ier,0)
-c_pc      Using unix library libU77.a.
-c_pc      call free(pxptr)
-c_pc      call free(pyptr)
-c_pc      call free(pzptr)
-c_pc      call free(prptr)
-c_pc      call free(lbrthptr)
-c_pc      call free(psiptptr)
       deallocate(px,STAT=istat)
       deallocate(py,STAT=istat)
       deallocate(pz,STAT=istat)
@@ -572,25 +573,25 @@ c_pc      call free(psiptptr)
       endif
       tr3=one !YuP[2019-06-08]was call bcast(tr3(1),one,lrz)
 
-c..................................................................
-c     Smooth the source if input variable smooth .ge. .001
-c..................................................................
+!..................................................................
+!     Smooth the source if input variable smooth .ge. .001
+!..................................................................
 
       call frsmooth(k,curnorm)
 
-c..................................................................
-c     Compute the factor necessary to scale asor so that the source
-c     current is equal to curdep (a quantity determined by NFREYA).
-c     If frsmooth has been utilized, tr3 has been altered as has
-c     curnorm.
-c..................................................................
+!..................................................................
+!     Compute the factor necessary to scale asor so that the source
+!     current is equal to curdep (a quantity determined by NFREYA).
+!     If frsmooth has been utilized, tr3 has been altered as has
+!     curnorm.
+!..................................................................
 
       scalfact=curdep/curnorm
 
-c..................................................................
-c     Scale all the sources (at each flux surface) by scalfact*tr3.
-c     This forces the source current equal to curdep.
-c..................................................................
+!..................................................................
+!     Scale all the sources (at each flux surface) by scalfact*tr3.
+!     This forces the source current equal to curdep.
+!..................................................................
 
       do 300 ll=1,lrz
         call tdnflxs(ll)
@@ -604,66 +605,71 @@ c..................................................................
  300  continue
 
       return
-      end
+      end subroutine freyasou
 
 
-c======================================================================
-c======================================================================
+!======================================================================
+!======================================================================
 
 
       subroutine frnnoa(mrans,ranvc)
-      implicit integer (i-n), real*8 (a-h,o-z)
-c     Generate a vector of mrans normal (0,1) pseudo-random numbers
-c     using a method based on the central limit theorem
-c     and power residue method.  Output becomes truly normal
-c     as k (below) goes to infinity.
-c     General formula for the deviate is
-c     y=((sum of x(i),i=1,k)-k/2.)/sqrt(k/12.),
-c     where x(i) are uniformally distributed on 0,1.
-c     Method is borrowed through ibm.  They use k=12.
-c
-c     parameter (k=12,rtkd12=1.00)
-c
-      dimension ranvc(mrans)
+      use iso_c_binding, only : c_double
+      implicit none
+!     Generate a vector of mrans normal (0,1) pseudo-random numbers
+!     using a method based on the central limit theorem
+!     and power residue method.  Output becomes truly normal
+!     as k (below) goes to infinity.
+!     General formula for the deviate is
+!     y=((sum of x(i),i=1,k)-k/2.)/sqrt(k/12.),
+!     where x(i) are uniformally distributed on 0,1.
+!     Method is borrowed through ibm.  They use k=12.
+!
+!     parameter (k=12,rtkd12=1.00)
+!
+      integer mrans ! arg. in subr.
+      real(c_double) :: ranvc(mrans) ! arg. in subr.
+      real(c_double) :: RANDOM_my ! external function
+      integer i,j,k ! local
+      real(c_double) :: seed,rtkd12,a ! local
 
-cYuP110316      integer iflag
+!YuP110316      integer iflag
 
-cYuP110316      iflag=0
+!YuP110316      iflag=0
       seed=0.d0  ! I.E., continue RN sequence in RANDOM_my
 
-c990131      iseed=123457
-c990131      call  ranset(iseed)
-c     drand() is a unix library function (see Absoft f77 manual).
-c     drand(0) returns next real*8 random number of the
-c     sequence.  The input parameter must be integer.
-c     Presumably each realization of the
-c     sequence is the same.  Rand(iflag.ne.0) could be
-c     used to start a different sequence.
+!990131      iseed=123457
+!990131      call  ranset(iseed)
+!     drand() is a unix library function (see Absoft f77 manual).
+!     drand(0) returns next real*8 random number of the
+!     sequence.  The input parameter must be integer.
+!     Presumably each realization of the
+!     sequence is the same.  Rand(iflag.ne.0) could be
+!     used to start a different sequence.
 
-cBH060821:
-c     random_number(harvest) is [0.,1.] r.n., an f90 intrinsic sub
-c     call random_seed(size,put,get) see f90 intrinsics
-c     call random_seed() initializes the rn generator.
+!BH060821:
+!     random_number(harvest) is [0.,1.] r.n., an f90 intrinsic sub
+!     call random_seed(size,put,get) see f90 intrinsics
+!     call random_seed() initializes the rn generator.
 
-c      call random_seed()
+!      call random_seed()
 
-cBH060821:  BUT, instead of random_number will use RANDOM_my,
-c           which is from the GA portlib.f (see function in zfreya.f)
+!BH060821:  BUT, instead of random_number will use RANDOM_my,
+!           which is from the GA portlib.f (see function in zfreya.f)
       k=12
       rtkd12=1.0
       do 100 i=1,mrans
         a=0.0
         do 10 j=1,12
-c990131          a=a+ranf()
-cBH060821          a=a+drand(iflag)
-cBH060821           call random_number(harvest)
-cBH060821           a=a+harvest
+!990131          a=a+ranf()
+!BH060821          a=a+drand(iflag)
+!BH060821           call random_number(harvest)
+!BH060821           a=a+harvest
 
-cYuP110316           a=a+RANDOM_my(iflag)
+!YuP110316           a=a+RANDOM_my(iflag)
            a=a+RANDOM_my(seed)  !input should be real*8
-c-YuP           a=a+drand(iflag) ! YuP: unresolved drand
+!-YuP           a=a+drand(iflag) ! YuP: unresolved drand
  10     continue
         ranvc(i)=(a-0.5*k)/rtkd12
  100  continue
       return
-      end
+      end subroutine frnnoa

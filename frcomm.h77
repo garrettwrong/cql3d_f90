@@ -6,80 +6,137 @@ c***********************************************************************
       include 'frname_decl.h77'
 
 c................................................................
-
+      integer nion,nneu,nk,nkt,nj,nbctim,njs,ialignf1
+      real(c_double) :: zero,one,two,half,pi
+      
       common /numbrs/   nion,nneu,nk,nkt,nj,nbctim,njs
      &  ,ialignf1two,half
 c     ONETWO DIVERGENCE
 
 c................................................................
 
+      integer ibeam,ibion,inubplt,mfm1
+      real(c_double) :: bion(ke,kb),bneut(ke,kb)
+      real(c_double) :: beamof,ebeam(ke,kb)
+      real(c_double) :: ennub(k_),fap(ke,kb),fwall(ke,kb)
+      real(c_double) :: hibr(k_,ke,kb),hibrz(kz,ke,kb)
+      real(c_double) :: hicmz(kz,ke,kb,3)
+      real(c_double) :: ftrapfi(kz,ke,kb),ftrapfit(k_,ke,kb)
+      real(c_double) :: angmpf(k_,ke,kb),angmpz(kz,ke,kb)
+      real(c_double) :: rowpsi(k_)
+      real(c_double) :: pbeam(ke,kb),tenub(k_)
+      real(c_double) :: sb(k_,ke,kb),sbcx(k_,2),sbion(k_)
+      real(c_double) :: spb(k_,ke,kb),qb(k_,ke,kb),qbf(k_,ke,kb)
+      real(c_double) :: zzi(kz,kion),zne(kz),zni(kz,kion)
+      real(c_double) :: zte(kz),psivol(kz),freyr(kf)
+      real(c_double) :: zeffctv(kz)
+      
       common /nub/
-     &  bion(ke,kb),bneut(ke,kb)
-     &  ,beamof,ebeam(ke,kb)
-     &  ,ennub(k_),fap(ke,kb),fwall(ke,kb)
-     &  ,hibr(k_,ke,kb),hibrz(kz,ke,kb)
-     &  ,hicmz(kz,ke,kb,3)
-     &  ,ftrapfi(kz,ke,kb),ftrapfit(k_,ke,kb)
-     &  ,angmpf(k_,ke,kb),angmpz(kz,ke,kb)
+     &  bion,bneut
+     &  ,beamof,ebeam
+     &  ,ennub,fap,fwall
+     &  ,hibr,hibrz
+     &  ,hicmz
+     &  ,ftrapfi,ftrapfit
+     &  ,angmpf,angmpz
      &  ,ibeam,ibion,inubplt,mfm1
 cBH170808     &  ,psif(kf),rowpsi(k_)  psif(kf) not used in fr routines
 cBH170808             routines, and conflicts with real(c_double) function psif.
 cBH170808             NBI test case showed NO CHANGE.
-     &  ,rowpsi(k_)
-     &  ,pbeam(ke,kb),tenub(k_)
-     &  ,sb(k_,ke,kb),sbcx(k_,2),sbion(k_)
-     &  ,spb(k_,ke,kb),qb(k_,ke,kb),qbf(k_,ke,kb)
-     &  ,zzi(kz,kion),zne(kz),zni(kz,kion)
-     &  ,zte(kz),psivol(kz),freyr(kf),
-c     ONETWO DIVERGENCE
-     1  zeffctv(kz)
+     &  ,rowpsi
+     &  ,pbeam,tenub
+     &  ,sb,sbcx,sbion
+     &  ,spb,qb,qbf
+     &  ,zzi,zne,zni
+     &  ,zte,psivol,freyr,
+     &  zeffctv
 c................................................................
 
-      common /nub2/     bencap(k_,ke,kb),fbe(k_,ke,kb),fbi(k_,ke,kb)
-     &  ,bke(k_,ke,kb),bki(k_,ke,kb)
-     &  ,ecrit(k_),emzrat(k_),enbeam(k_),enbs(k_)
-     &  ,enb(k_,ke,kb),enbsav(k_,ke,kb)
-     &  ,enbav(k_,ke,kb),enbav0(k_),enbav1(k_)
-     &  ,forb(ke,kb),fb11(ke,kb),fb10(ke,kb)
-     &  ,fb01(ke,kb),fb00(ke,kb),fber(ke,kb)
-     &  ,hdep(k_,ke,kb),hdepz(kz,ke,kb)
-     &  ,ppb(k_,ke,kb),ppbsav(k_,ke,kb),ppbav(k_,ke,kb)
-     &  ,pinsid(kf),potsid(kf),rinsid(kf),rotsid(kf)
-     &  ,qbsav(k_,ke,kb)
-     &  ,sbsav(k_,ke,kb),spbsav(k_,ke,kb)
-     &  ,taupb(k_,ke,kb),tauppb(k_,ke,kb)
-     &  ,taueb(k_,ke,kb),taus(k_),wbeam(k_)
-     &  ,wb(k_,ke,kb),wbsav(k_,ke,kb),wbav(k_,ke,kb)
-     &  ,wb11(ke,kb),wb10(ke,kb)
-cYuP110316     &  ,wb01(ke,kb),wb00(ke,kb),npts,int_space1
-     &  ,wb01(ke,kb),wb00(ke,kb)
-     &  ,zetaz(kz,ke,kb),zeta(k_,ke,kb)
+      real(c_double) :: bencap(k_,ke,kb),fbe(k_,ke,kb),fbi(k_,ke,kb)
+      real(c_double) :: bke(k_,ke,kb),bki(k_,ke,kb)
+      real(c_double) :: ecrit(k_),emzrat(k_),enbeam(k_),enbs(k_)
+      real(c_double) :: enb(k_,ke,kb),enbsav(k_,ke,kb)
+      real(c_double) :: enbav(k_,ke,kb),enbav0(k_),enbav1(k_)
+      real(c_double) :: forb(ke,kb),fb11(ke,kb),fb10(ke,kb)
+      real(c_double) :: fb01(ke,kb),fb00(ke,kb),fber(ke,kb)
+      real(c_double) :: hdep(k_,ke,kb),hdepz(kz,ke,kb)
+      real(c_double) :: ppb(k_,ke,kb),ppbsav(k_,ke,kb),ppbav(k_,ke,kb)
+      real(c_double) :: pinsid(kf),potsid(kf),rinsid(kf),rotsid(kf)
+      real(c_double) :: qbsav(k_,ke,kb)
+      real(c_double) :: sbsav(k_,ke,kb),spbsav(k_,ke,kb)
+      real(c_double) :: taupb(k_,ke,kb),tauppb(k_,ke,kb)
+      real(c_double) :: taueb(k_,ke,kb),taus(k_),wbeam(k_)
+      real(c_double) :: wb(k_,ke,kb),wbsav(k_,ke,kb),wbav(k_,ke,kb)
+      real(c_double) :: wb11(ke,kb),wb10(ke,kb)
+      real(c_double) :: wb01(ke,kb),wb00(ke,kb)
+      real(c_double) :: zetaz(kz,ke,kb),zeta(k_,ke,kb)
+
+      common /nub2/     bencap,fbe,fbi
+     &  ,bke,bki
+     &  ,ecrit,emzrat,enbeam,enbs
+     &  ,enb,enbsav
+     &  ,enbav,enbav0,enbav1
+     &  ,forb,fb11,fb10
+     &  ,fb01,fb00,fber
+     &  ,hdep,hdepz
+     &  ,ppb,ppbsav,ppbav
+     &  ,pinsid,potsid,rinsid,rotsid
+     &  ,qbsav
+     &  ,sbsav,spbsav
+     &  ,taupb,tauppb
+     &  ,taueb,taus,wbeam
+     &  ,wb,wbsav,wbav
+     &  ,wb11,wb10
+     &  ,wb01,wb00
+     &  ,zetaz,zeta
 
       pointer xpts,ypts,zpts,rpts  ! (1:npart)
 c     ONETWO DIVERGENCE
       pointer vx,vy,vz  ! (1:npart)
-      dimension xpts(:),ypts(:),zpts(:),rpts(:),vx(:),vy(:),vz(:)
+      real(c_double) :: xpts(:),ypts(:),zpts(:),rpts(:)
+      real(c_double) :: vx(:),vy(:),vz(:)
       common /xyzpts/ xpts,ypts,zpts,rpts,vx,vy,vz
 c................................................................
 
+      integer ncont,iz(kimp)
+      common /nub3/ ncont,iz
+      real(c_double) :: znipm(kprim),atwpm(kprim)
+      real(c_double) :: atwim(kimp),zniim(kimp),zti(kz)
       common /nub3/
-     &  znipm(kprim),atwpm(kprim),iz(kimp)
-     &  ,atwim(kimp),zniim(kimp),zti(kz),ncont
+     &  znipm,atwpm
+     &  ,atwim,zniim,zti
 c     nub3 is is used for variables related to hexnb routine
 c     note that nouthx and ncorin,also required for hexnb,
 c     have been added to block io.
 
 c................................................................
 
+      integer ncrt,nin,nout,nqik,neqplt,ntrplt,nitre,ngreen
+      integer nbplt,neq,nsvsol,nscr,nrguess,nwguess
+      integer nmix,ntweak,nyok,nupel,nitrex
+      integer ialign25
+      integer iprt,ialign26
+      integer mprt,ialign27
+      integer jprt,ialign28
+      integer jflux,jcoef
+      integer jsourc,jbal,jtfus,ihead,ineu,inub,irfcalc
+      integer ialign30,ifred,ialign31,nterow
+      integer jterow(10),ilastp,itimav,ialign32
+      integer ncorin,iotoray
+      real(c_double) :: eqdskin_fr,guessin,guessout
+      real(c_double) :: timprt,prtlst(10)
+      real(c_double) :: timplt,pltlst(30)
+      real(c_double) :: banktime,extime
+      real(c_double) :: vid,ddebug(50)
       common /io/       ncrt,nin,nout,nqik,neqplt,ntrplt,nitre,ngreen
      &  ,nbplt,neq,nsvsol,nscr,nrguess,nwguess
      &  ,nmix,ntweak,nyok,nupel,nitrex
      &  ,ialign25,eqdskin_fr,guessin,guessout
-     &  ,iprt,ialign26,timprt,mprt,ialign27,prtlst(10)
-     &  ,jprt,ialign28,timplt,pltlst(30),jflux,jcoef
+     &  ,iprt,ialign26,timprt,mprt,ialign27,prtlst
+     &  ,jprt,ialign28,timplt,pltlst,jflux,jcoef
      &  ,jsourc,jbal,jtfus,ihead,ineu,inub,irfcalc
      &  ,ialign30,ifred,ialign31,banktime,extime,nterow
-     &  ,jterow(10),ilastp,itimav,ialign32,vid,ddebug(50)
+     &  ,jterow,ilastp,itimav,ialign32,vid,ddebug
      &  ,ncorin,iotoray
 cBH070410  mplot removed since not used and possible conflict
 cBH070410  with other use of this variable name.
@@ -87,16 +144,21 @@ cBH070410  with other use of this variable name.
 c................................................................
 
       character*8 namep,namei
-
-      common /ions/     namep(kprim),namei(kimp),namen(2),atw(kion)
-     &  ,dzdtim(k_,kimp)
-     &  ,z(k_,kion),zsq(k_,kion),dzdte(k_,kion)
-     &  ,zeff_(k_),rfatmwt,nameu(kkq)
+      common /ions/ namep(kprim),namei(kimp)
+      integer namen(2),nameu(kkq)
+      common /ions/ namen,nameu
+      real(c_double) :: atw(kion),dzdtim(k_,kimp)
+      real(c_double) :: z(k_,kion),zsq(k_,kion),dzdte(k_,kion)
+      real(c_double) :: zeff_(k_),rfatmwt
+      common /ions/ atw,dzdtim
+     &  ,z,zsq,dzdte
+     &  ,zeff_,rfatmwt
 
 c................................................................
 c     ONETWO DIVERGENCE
 
-      common/mhd1/ p(ki,kj),xxx(ki),yyy(kj)
+      real(c_double) :: p(ki,kj),xxx(ki),yyy(kj)
+      common/mhd1/ p,xxx,yyy
 c................................................................
 
 

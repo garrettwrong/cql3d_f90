@@ -1,30 +1,37 @@
-c
-c
+!
+!
       subroutine frset(lrz,noplots,nmlstout)
       use bcast_mod, only : bcast
       use param_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      implicit none
+      integer lrz ! input
+
       include 'frcomm.h77'
       include 'frname.h77'
 #ifdef __MPI
       include 'mpilib.h'
 #endif
 
-      character*1024 t_
-      character*8 noplots,nmlstout
+      character*1024 t_ ! local
+      character*8 noplots,nmlstout ! input
+
+      integer j,istat ! local
+      ! nion,ibion ! arg of frinitz(), to be found; declared in frcomm.h77
+      real(c_double) :: dummy,fd ! local
+      real(c_double) :: random_my ! external function
 
       REAL RILIN
 
-c..................................................................
-c     frset initializes non-namelist variables.
-cBH081020c     Also, resets namelist variable nprim=1, if not =1.
-c..................................................................
+!..................................................................
+!     frset initializes non-namelist variables.
+! BH081020c     Also, resets namelist variable nprim=1, if not =1.
+!..................................................................
 
 
 
-c..................................................................
-c     Jump out if lrz=1
-c..................................................................
+!..................................................................
+!     Jump out if lrz=1
+!..................................................................
 
       if (lrz.eq.1) then
          ranseed=7**7
@@ -45,18 +52,18 @@ c..................................................................
 
       ncont=30
 
-c..................................................................
-c     Set defaults for beam smoothing (none)...
-c..................................................................
+!..................................................................
+!     Set defaults for beam smoothing (none)...
+!..................................................................
 
       smooth=.05
 
-c..................................................................
+!..................................................................
 
 
-c..................................................................
-c     Read in data for NFREYA
-c..................................................................
+!..................................................................
+!     Read in data for NFREYA
+!..................................................................
 
       read(2,frsetup)
       if (nmlstout.eq."enabled") write(6,frsetup)
@@ -64,14 +71,14 @@ c..................................................................
       if (frmod.eq."disabled") return
 
 
-cBH081020      if (nprim.ne.1) then
-cBH081020         nprim=1
-cBH081020         write(*,210)
-cBH081020      endif
-cBH081020 210  format('WARNING: Resetting nprim=1. Check FREYA if want nprim>1')
+!BH081020      if (nprim.ne.1) then
+!BH081020         nprim=1
+!BH081020         write(*,210)
+!BH081020      endif
+!BH081020 210  format('WARNING: Resetting nprim=1. Check FREYA if want nprim>1')
 
 
-c     Check nbeams not too large.
+!     Check nbeams not too large.
       if (nbeams .gt. kb) then
          WRITE(*,*)
          WRITE(*,*)'Namelist nbeams.gt.kb:  increase parameter kb'
@@ -84,52 +91,52 @@ c     Check nbeams not too large.
  214     format(//,'Must set multiplyn, if multiply.ne.disabled',//)
          stop 'Must set multiplyn'
       endif
-c
-c     ION PARAMETERS
-c--------------------------------------------------------------------
-c     nprim       Number of primary ion species
-c     nimp        Number of impurity ion species
-c     namep(i)    Name of ith primary ion species
-c     'h' , protons
-c     'd' , deuterons
-c     't' , tritons
-c     'dt', mixture of d and t
-c     'he', thermal alphas
-c     namei(i)    Name of ith impurity ion species
-c     'he', helium
-c     'c' , carbon
-c     'o' , oxygen
-c     'si', silicon
-c     'ar', argon
-c     'ti', titanium
-c     'cr', chromium
-c     'fe', iron
-c     'ni', nickel
-c     'kr', krypton
-c     'mo', molybdenum
-c     'w' , tungsten
-c     fd          Number fraction of deuterons in d-t mixture
-c--------------------------------------------------------------------
+!
+!     ION PARAMETERS
+!--------------------------------------------------------------------
+!     nprim       Number of primary ion species
+!     nimp        Number of impurity ion species
+!     namep(i)    Name of ith primary ion species
+!     'h' , protons
+!     'd' , deuterons
+!     't' , tritons
+!     'dt', mixture of d and t
+!     'he', thermal alphas
+!     namei(i)    Name of ith impurity ion species
+!     'he', helium
+!     'c' , carbon
+!     'o' , oxygen
+!     'si', silicon
+!     'ar', argon
+!     'ti', titanium
+!     'cr', chromium
+!     'fe', iron
+!     'ni', nickel
+!     'kr', krypton
+!     'mo', molybdenum
+!     'w' , tungsten
+!     fd          Number fraction of deuterons in d-t mixture
+!--------------------------------------------------------------------
       fd=.5d0   !No longer namelist input
 
-c..................................................................
-c     Call subroutine linked to CQL3D common blocks for more initializat
-c..................................................................
+!..................................................................
+!     Call subroutine linked to CQL3D common blocks for more initializat
+!..................................................................
 
       call frinitz(nprim,nimp,nion,ibion,namep,namei,atw,fd,smooth)
 
 
-c..................................................................
-c     Initiate random number generator for NFREYA
-c..................................................................
-c     See comments in freyasou.f/subroutine frnnoa.
-c990131      call ranset(ranseed)
+!..................................................................
+!     Initiate random number generator for NFREYA
+!..................................................................
+!     See comments in freyasou.f/subroutine frnnoa.
+!990131      call ranset(ranseed)
 
-cBH131015: ranseed is initialized in frinitl to 7**7
-cBH131015: This call to RANDOM_my initialized a RN sequence.
+!BH131015: ranseed is initialized in frinitl to 7**7
+!BH131015: This call to RANDOM_my initialized a RN sequence.
       dummy=RANDOM_my(ranseed)
 
-c     Reset npart, for nubeam list case
+!     Reset npart, for nubeam list case
       if (read_birth_pts.eq."enabled") npart=nbirth_pts
 
 
@@ -164,13 +171,18 @@ c     Reset npart, for nubeam list case
 #endif
 
 
-c..................................................................
-c     Set constants (for real(c_double))
-c..................................................................
+!..................................................................
+!     Set constants (for real(c_double))
+!..................................................................
  300  continue
 
       two=2.d0
       half=0.5d0
+<<<<<<< HEAD:frset.F
+=======
+!      pi=4.d0*atan2(one,one)
+      pi=atan2(zero,-one)
+>>>>>>> updates related to implicit none:frset.f
 
       allocate(rpts(npart),STAT=istat)
       write(*,*)'frset  rpts: istat=',istat
@@ -201,4 +213,4 @@ c..................................................................
       if(istat.eq.0) call bcast(vz,zero,npart)
 
       return
-      end
+      end subroutine frset

@@ -1,20 +1,25 @@
-c
-c
+!
+!
       subroutine frsplft(lrz,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
       use zcunix_mod, only : coeff1
       use zcunix_mod, only : terp1
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      implicit none
 
-c..................................................................
-c     Interpolates with splines between cql3d radial mesh and the
-c     (finer) NFREYA radial mesh.
-c..................................................................
+!..................................................................
+!     Interpolates with splines between cql3d radial mesh and the
+!     (finer) NFREYA radial mesh.
+!..................................................................
 
-
+      integer nwka ! local
       parameter (nwka=3*lrza+1)
-      dimension work(nwka),oldx(*),oldf(*),ynewx(*),ynewf(*),i1p(2),
-     1  secondd(lrza),itab(3),tab(3)
+      real(c_double) :: work(nwka) ! local
+      integer l ! local
+      integer lrz,npts ! arguments
+      real(c_double) :: oldx(*),oldf(*),ynewx(*),ynewf(*) ! arguments
+      integer i1p(2) ! local, and input for coeff1()
+      real(c_double) :: secondd(lrza),tab(3) ! local, and arg for terp1()
+      integer itab(3) ! local, and input for terp1()
 
       i1p(1)=4
       i1p(2)=4
@@ -27,4 +32,4 @@ c..................................................................
         ynewf(l)=tab(1)
  10   continue
       return
-      end
+      end subroutine frsplft
