@@ -27,7 +27,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EBALAF (A,N,IA,D,K,L)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -172,7 +172,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EBBCKF (D,Z,K,L,MM,N,IZ)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER            K,L,MM,N,IZ
@@ -246,7 +246,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EHBCKF (Z,H,D,N,MM,IZH,K,L)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -316,7 +316,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EHESSF (A,K,L,N,IA,D)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -411,11 +411,11 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EQRH3F (H,N,IH,K,L,WR,WI,Z,IZ,IER)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
-      INTEGER            N,IH,K,L,IZ,IER
+      INTEGER            N,IH,K,L,IZ,IER, NN,II
       REAL*8             H(IH,N),WR(N),WI(N),Z(IZ,N)
 C                                  SPECIFICATIONS FOR LOCAL VARIABLES
       INTEGER            I,IEN,ITS,IENM2,NPL,LL,LB,NAML,MM,M,MP2,KA,NA,
@@ -853,7 +853,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE EIGRF  (A,N,IA,IJOB,W,Z,IZ,WK,IER)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 C
 C                                  SPECIFICATIONS FOR ARGUMENTS
@@ -1043,7 +1043,7 @@ C                                  COMPUTE PERFORMANCE INDEX
       END
 
       subroutine leqt1fl(a, m, n, ia, b, idgt, wkarea, ier)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 c
 c-leqt1f--------s/d-----library 2--------------------------------------
@@ -1094,8 +1094,10 @@ c ----------------------------------------------------------------------
 c   latest revision     - march 22,1974
 c                                  dec
 c
-      dimension          a(ia,*),b(ia,*),wkarea(*)
-      dimension ipvt(n) ! YuP: added  ipvt - permutation indices.
+      integer ier,j,idgt,ia,m,n
+      real*8          a(ia,*),b(ia,*),wkarea(*)
+      real*8 d1,d2,wa
+      integer ipvt(n) ! YuP: added  ipvt - permutation indices.
 ****  double precision   a,b,wkarea,d1,d2,wa
 c
       ier = 0
@@ -1119,7 +1121,7 @@ c
 
       subroutine ludatf1 (a, lu, n, ia, idgt, d1, d2, ipvt,
      .                    equil, wa, ier)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
 c
 c-ludatf1--------s/d-----library 2--------------------------------------
 c
@@ -1186,8 +1188,13 @@ c ----------------------------------------------------------------------
 c
 c   latest revision     - march 22,1974 (dec)
 c
-      dimension a(ia,*), lu(ia,*), ipvt(*), equil(*)
-      real*8    lu
+      real*8 a(ia,*), equil(*)
+      real*8   lu(ia,*)
+      integer  ipvt(*)
+      integer  ia
+      real*8 zero, one, four, sixtn, sixth, rn,wrel,d1,d2,biga,bigg,p,q
+      real*8 ai,wi,test,t,sum,wa
+      integer ier,i,j,n,jm1,im1,idgt,k,imax, jp1
       data      zero, one, four, sixtn, sixth
      .         /0.0 , 1.0, 4.0 , 16.0 , 0.0625/
 c
@@ -1346,7 +1353,7 @@ c
       end
 
       subroutine luelmf1 (a, b, ipvt, n, ia, x)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
 c
 c
 c-luelmf1--------s/d-----library 2--------------------------------------
@@ -1375,7 +1382,11 @@ c ----------------------------------------------------------------------
 c   latest revision     - april 11,1975
 c                                  dec
 c
-      dimension          a(ia,*),b(*),ipvt(*),x(*)
+      real*8   a(ia,*),b(*),x(*)
+      integer ipvt(*)
+      integer ia
+      integer i,j,n,iw,ip,ib,ip1,im1
+      real*8 sum
 ****  double precision   a,b,x,sum
 c                                  solve ly = b for y
       do 5 i=1,n
@@ -1409,7 +1420,7 @@ c
 
 
       subroutine uertst1 (ier, obsolete)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 c
 c --- changed name from UERTST to UERTST1 so that only IMSL routines
@@ -1441,7 +1452,8 @@ c990131      include 'imsl.i'
 c990131      include 'io.i'
 c
       integer        warn, warf, term
-      dimension      ibit(4)
+      integer      ibit(4)
+      integer ier,ier2,ier1
       character*(*)  obsolete
       equivalence   (ibit(1), warn), (ibit(2), warf), (ibit(3), term)
       data           ibit / 32, 64, 128, 0 /
@@ -1493,7 +1505,7 @@ c
 c
 c
       subroutine icsevu1 (x, y, nx, c, ic, u, s, m, ier)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 c
 c --- modified version of IMSL subroutine named ICSEVU
@@ -1645,7 +1657,7 @@ c
 c
 c
       subroutine icsicu1 (x, y, nx, bpar, c, ic, ier)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 c
 c --- modified version of IMSL subroutine named ICSICU
@@ -1890,7 +1902,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE IBCIEU1 (F,IFD,X,NX,Y,NY,XL,NXL,YL,NYL,FL,IFLD,WK,IER)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
 C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER            IFD,NX,NY,NXL,NYL,IFLD,IER
       REAL*8               F(IFD,NY),X(NX),Y(NY),XL(NXL),YL(NYL),
@@ -2020,7 +2032,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE UGETIO1(IOPT,NIN,NOUT)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
       save
 C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER            IOPT,NIN,NOUT
@@ -2086,7 +2098,7 @@ C
 C-----------------------------------------------------------------------
 C
       SUBROUTINE UERSET1 (LEVEL,LEVOLD)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
 C                                  SPECIFICATIONS FOR ARGUMENTS
       INTEGER            LEVEL,LEVOLD
 C                                  FIRST EXECUTABLE STATEMENT
@@ -2097,16 +2109,19 @@ C                                  FIRST EXECUTABLE STATEMENT
 c
 c
       real*8 function asimp (a1, b, ep, m, n, FUN)
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none !integer (i-n), real*8 (a-h,o-z)
 c
 c --- author:  k. hillstrom (argonne national laboratory, chicago, illinois)
 c
       external FUN
 c
       real*8    a1, b, ep, FUN, a, eps, absar, est, fa, fm, fb, dx, sx,
-     .          f1, f2, fbp, est2, nrtr, est1, sum, daft, esum, tsum, da
-      real*8    aest2, ftst, fmax, aest1, delta, aest
-      dimension f2(30), fbp(30), est2(30), nrtr(30), aest2(30), ftst(3)
+     .          f1, est1, sum, daft, esum, tsum, da
+      real*8    fmax, aest1, delta, aest
+      real*8 f2(30), fbp(30), est2(30), aest2(30), ftst(3)
+      integer nrtr(30) 
+      integer i,l,n,m,lvl
+      real*8 diff
 c
 c     the parameter setup for the initial call
 c

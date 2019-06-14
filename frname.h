@@ -11,31 +11,32 @@
 !     Might have to change a couple of variable names.
 !     frname.h is used included into frcomm.h, which is used by
 !     freya.f,frinitl.f,frnfreya.f
-! # YuP[2019-05-31] frhexdrv.f is removed - not used   
+! # YuP[2019-05-31] frhexdrv.f is removed - not used
 !................................................................
+      integer nbinject,nrfzon,ichmod,iyoka,ishot,itime
+      real(c_double) :: a1rf,a2rf,wrfe,wrfi,rfzone,betalm
+      
       namelist/frsetup/ timbplt,beamon,btime,nameb,relnub &
-	,anglev,angleh,ashape,aheigh,awidth,bcur,bptor,blenp,bshape &
-	,bleni,bheigh,bwidth,bhfoc,bvfoc,bhdiv,bvdiv,ebkev,fbcur,nbeams &
-	,naptr,alen,bvofset,bhofset,nsourc,sfrac1,mf,npart,npskip &
-	,rpivot,zpivot,ranseed,fionx,nbinject &
-	,xdebug &
-	,a1rf,a2rf,wrfe,wrfi,nrfzon,rfzone,ichmod,betalm &
-	,beamplse,beampon,beampoff &
-!     ONETWO DIVERGENCE
-	,nimp,nprim,frmod,fr_gyro,smooth,multiply,multiplyn,bmsprd &
-	,frplt,nfrplt,inubpat,npat &
-	,ibcur,ibcx,ibslow,iborb,iyoka,ishot,itime &
-	,itrapfi &
-	,iexcit,ilorent,mstate,izstrp,kdene &
-	,kdeni,kdenz,ksvi,ksvz,ksve,krad,ngh,ngl,nouthx &
-	,hdepsmth &
-	,birth_pts_files,nbirth_pts_files,nbirth_pts,read_birth_pts &
-	,ne_tk,ds_tk,fe_tk &
-!     Remove NBI source at psi outside of psicutoff:
-	,psicutoff
+       ,anglev,angleh,ashape,aheigh,awidth,bcur,bptor,blenp,bshape &
+       ,bleni,bheigh,bwidth,bhfoc,bvfoc,bhdiv,bvdiv,ebkev,fbcur,nbeams &
+       ,naptr,alen,bvofset,bhofset,nsourc,sfrac1,mf,npart,npskip &
+       ,rpivot,zpivot,ranseed,fionx,nbinject &
+       ,xdebug &
+       ,a1rf,a2rf,wrfe,wrfi,nrfzon,rfzone,ichmod,betalm &
+       ,beamplse,beampon,beampoff &
+       ,nimp,nprim,frmod,fr_gyro,smooth,multiply,multiplyn,bmsprd &
+       ,frplt,nfrplt,inubpat,npat &
+       ,ibcur,ibcx,ibslow,iborb,iyoka,ishot,itime &
+       ,itrapfi &
+       ,iexcit,ilorent,mstate,izstrp,kdene &
+       ,kdeni,kdenz,ksvi,ksvz,ksve,krad,ngh,ngl,nouthx &
+       ,hdepsmth &
+       ,birth_pts_files,nbirth_pts_files,nbirth_pts,read_birth_pts &
+       ,ne_tk,ds_tk,fe_tk &
+       ,psicutoff 
 
 
-!Removed namelist, not used, BH070308:
+! Removed namelist, not used, BH070308:
 ! tfusbb,iddcal,fdbeam,nbinject,rfmode,rfon,rftime,rfpow,
 ! idamp,isrc,zsrc,fpsrc,phisrc,
 ! freq,rfrad1,rfrad2,wrfo,wrfx,rnormin,njqin,qine,qini,
