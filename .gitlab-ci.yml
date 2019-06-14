@@ -65,7 +65,7 @@ nstx_NBI_urf:
   script:
   - cd ci/nstx_NBI_urf
   - ../../xcql3d_gfortran64
-  - nccmp -dmgfs nstx_130608.00352.0_short_rerun190612.nc reference.nc 
+  - nccmp -dmgfs nstx_130608.00352.0_short_rerun190612.nc reference.nc
   - nccmp -dmgfs nstx_130608.00352.0_short_rerun190612_krf001.nc reference_krf001.nc 
   artifacts:
     when: always
@@ -77,4 +77,34 @@ nstx_NBI_urf:
   dependencies:
   - build:centos7
 
+ampere_faraday:
+  stage: test
+  image: garrettwrong/cql3d_f90_centos-7
+  script:
+  - cd ci/ampere_faraday
+  - ../../xcql3d_gfortran64
+  - nccmp -dmgfs reference.nc freidberg_full_eps_AF_3rd_root_J0.3.3_nstop10_lrz20.nc
+  artifacts:
+    when: always
+    paths:
+    - ci/ampere_faraday/freidberg_full_eps_AF_3rd_root_J0.3.3_nstop10_lrz20.nc
+    - ci/ampere_faraday/freidberg_full_eps_AF_3rd_root_J0.3.3_nstop10_lrz20.ps
+    expire_in: 1 week
+  dependencies:
+  - build:centos7
 
+amp_far_rune_knockon:
+  stage: test
+  image: garrettwrong/cql3d_f90_centos-7
+  script:
+  - cd ci/amp_far_rune_knockon
+  - ../../xcql3d_gfortran64
+  - nccmp -dmgfs reference.nc tdep_ko_amp-far.4.3_short_test.nc
+  artifacts:
+    when: always
+    paths:
+    - ci/amp_far_rune_knockon/tdep_ko_amp-far.4.3_short_test.nc
+    - ci/amp_far_rune_knockon/tdep_ko_amp-far.4.3_short_test.ps
+    expire_in: 1 week
+  dependencies:
+  - build:centos7
