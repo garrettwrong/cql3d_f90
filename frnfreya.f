@@ -1,23 +1,30 @@
-c
-c
+!
+!
       subroutine frnfreya(frmod_,fr_gyro_,beamplse_,beampon_,beampoff_,
-     1     hibrz_,mfm1_,noplots)
+     &     hibrz_,mfm1_,noplots)
       use param_mod
       use frplteq_mod, only :frplteq
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      implicit none
 
-c.................................................................
+!.................................................................
       include 'frcomm.h77'
-c     ONETWO DIVERGENCE: SEE COMMENTS AT BEGINNING OF FREYA
+!     ONETWO DIVERGENCE: SEE COMMENTS AT BEGINNING OF FREYA
       character*8 frmod_,fr_gyro_,beamplse_,noplots,codeid
+      real(c_double) :: beampon_,beampoff_
       real(c_double), intent(out) :: hibrz_(kz,ke,kb)
       integer, intent(out) :: mfm1_
+      
+      integer ib,ie,i ! local
+      integer ipts ! arg. in freya(), to be found
+      integer :: mi,mj ! arg. in frsetup()      
+      real(c_double) :: rin,rmax,zmin,zmax,zax,zshift !arg. in frsetup()
+      real(c_double) :: curdep ! local
 
       character*8 ifirst
       save ifirst
       data ifirst/"first"/
 
-c     To pass these freya namelist in frcomm.h77 to comm.h
+!     To pass these freya namelist in frcomm.h77 to comm.h
       frmod_=frmod
       fr_gyro_=fr_gyro
       beamplse_=beamplse
@@ -25,32 +32,32 @@ c     To pass these freya namelist in frcomm.h77 to comm.h
       beampoff_=beampoff
 
 
-c..................................................................
-c     This routine controls all of the NFREYA routines.
-c     Called from subroutine tdintl and tdchief
-c..................................................................
+!..................................................................
+!     This routine controls all of the NFREYA routines.
+!     Called from subroutine tdintl and tdchief
+!..................................................................
 
-c..................................................................
-c     Return if input variable frmod is "disabled"
-c..................................................................
+!..................................................................
+!     Return if input variable frmod is "disabled"
+!..................................................................
 
       if (frmod.ne."enabled") return
-      elong=0
+      !elong=0 ! YuP: not used here?
 
-c..................................................................
-c     First initialize some (iteration or time dependent) data.
-c     [Possible dependence is on equilibrium, average temp,
-c      density, etc.   Check in frstup.]
-c..................................................................
+!..................................................................
+!     First initialize some (iteration or time dependent) data.
+!     [Possible dependence is on equilibrium, average temp,
+!      density, etc.   Check in frstup.]
+!..................................................................
 
       call frstup(mf,mfm1,mi,mj,nion,potsid,codeid,rin,rmax,
-     1  zax,zmin,zmax,zni,zne,zte,zti,zzi,p,psivol,xxx,yyy,
-     1  nprim,nimp,zeffctv,zshift)
+     &  zax,zmin,zmax,zni,zne,zte,zti,zzi,p,psivol,xxx,yyy,
+     &  nprim,nimp,zeffctv,zshift)
 
-c.......................................................................
-c     zshift if frstup above is passed back from comm.h data to
-c     adjust beam pivot height according to any shift in the equilibrim.
-c.......................................................................
+!.......................................................................
+!     zshift if frstup above is passed back from comm.h data to
+!     adjust beam pivot height according to any shift in the equilibrim.
+!.......................................................................
 
       if (ifirst.eq."first") then
          do ib=1,nbeams
@@ -59,38 +66,38 @@ c.......................................................................
          ifirst="notfirst"
       endif
 
-c..................................................................
-c     Call NFREYA (cray32 from ONETWO)
-c..................................................................
+!..................................................................
+!     Call NFREYA (cray32 from ONETWO)
+!..................................................................
 
       write(*,*)'frnfreya:mi,mj,codeid',
-     +                    mi,mj,codeid
+     &                    mi,mj,codeid
       write(*,*)'frnfreya:rin,rmax',
-     +                    rin,rmax
+     &                    rin,rmax
       write(*,*)'frnfreya:zax,zmin,zmax',
-     +                    zax,zmin,zmax
+     &                    zax,zmin,zmax
       call freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
       write(*,*) 'Done calling freya...'
       if (ipts.eq.0)
-     1       write(*,*)'frnfreya: WARNING, ipts=0, NB missed plasma?'
+     &       write(*,*)'frnfreya: WARNING, ipts=0, NB missed plasma?'
 
-c..................................................................
-c     Compute the total number of particles/sec actually deposited in
-c     the plasma. This requires subtracting off from the neutral current
-c     the fraction that are lost at the aperture and the fraction
-c     lost at the walls. ORBIT EFFECTS ARE NOT CURRENTLY CONSIDERED.
-c     [2014-5: cql3d-fow now accounts for gc orbits and gyro-radius
-c      offsets.]
-c     Note that in the event that Freya input variable bptor is
-c     used, we are specifying the total power injected into the tokamak
-c     disregarding any losses at the apertures. The expression for
-c     the deposited current below takes this into account. While fap may
-c     not be zero, in routine FREYA the total number of neutralized
-c     particles has been normalized up to account for losses at
-c     the apertures. In the event that bptor is not used, bneut is
-c     not renormalized, and the expression below makes sense as it
-c     stands.
-c..................................................................
+!..................................................................
+!     Compute the total number of particles/sec actually deposited in
+!     the plasma. This requires subtracting off from the neutral current
+!     the fraction that are lost at the aperture and the fraction
+!     lost at the walls. ORBIT EFFECTS ARE NOT CURRENTLY CONSIDERED.
+!     [2014-5: cql3d-fow now accounts for gc orbits and gyro-radius
+!      offsets.]
+!     Note that in the event that Freya input variable bptor is
+!     used, we are specifying the total power injected into the tokamak
+!     disregarding any losses at the apertures. The expression for
+!     the deposited current below takes this into account. While fap may
+!     not be zero, in routine FREYA the total number of neutralized
+!     particles has been normalized up to account for losses at
+!     the apertures. In the event that bptor is not used, bneut is
+!     not renormalized, and the expression below makes sense as it
+!     stands.
+!..................................................................
 
       curdep=0.
       do 10 ib=1,nbeams
@@ -99,17 +106,17 @@ c..................................................................
  20     continue
  10   continue
 
-c..................................................................
-c     Now determine the source arrays used in CQL3D
-c..................................................................
+!..................................................................
+!     Now determine the source arrays used in CQL3D
+!..................................................................
 
       call freyasou(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep,
-     1  bmsprd,multiply,multiplyn)
+     &  bmsprd,multiply,multiplyn)
 
 
-c..................................................................
-c     Pass additional data to cql3d through subroutine arguments
-c..................................................................
+!..................................................................
+!     Pass additional data to cql3d through subroutine arguments
+!..................................................................
 
       mfm1_=mfm1
       do i=1,kz
@@ -120,12 +127,12 @@ c..................................................................
          enddo
       enddo
 
-c..................................................................
-c     Plot the FREYA birth points.
-c..................................................................
+!..................................................................
+!     Plot the FREYA birth points.
+!..................................................................
 
         call frplteq(xpts,ypts,zpts,rpts,vx,vy,vz,ipts,curdep,
-     1    nfrplt,frplt)
+     &    nfrplt,frplt)
 
       return
-      end
+      end subroutine frnfreya

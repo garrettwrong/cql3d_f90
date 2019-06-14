@@ -13,6 +13,9 @@ c     frname.h is used included into frcomm.h, which is used by
 c     freya.f,frinitl.f,frnfreya.f
 ! # YuP[2019-05-31] frhexdrv.f is removed - not used
 c................................................................
+      integer nbinject,nrfzon,ichmod,iyoka,ishot,itime
+      real(c_double) :: a1rf,a2rf,wrfe,wrfi,rfzone,betalm
+      
       namelist/frsetup/ timbplt,beamon,btime,nameb,relnub
      &  ,anglev,angleh,ashape,aheigh,awidth,bcur,bptor,blenp,bshape
      &  ,bleni,bheigh,bwidth,bhfoc,bvfoc,bhdiv,bvdiv,ebkev,fbcur,nbeams

@@ -1,9 +1,11 @@
-c
-c
+!
+!
       subroutine frwrong(kerr)
       use param_mod
       use cqlcomm_mod
-      implicit integer (i-n), real*8 (a-h,o-z)
+      implicit none
+      integer kerr ! input
+      
 !MPIINSERT_INCLUDE
 
 ! print error messages - on mpirank.eq.0 only
@@ -27,4 +29,4 @@ c
 10050 format("subroutine freyasou - luf failure i.gt.iy")
 10990 format( "fr module-unspecified")
       stop 'frwrong:' ! stop at all MPI cores
-      end
+      end subroutine frwrong
