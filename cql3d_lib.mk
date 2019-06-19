@@ -24,7 +24,7 @@ clean:
 	$(MAKE) -f makefile.CentOS7 clean
 realclean: clean
 
-.PHONE: realclean
+.PHONY: realclean
 .PHONY: clean
 .PHONY: pkg
 .PHONY: libcql3d_lib
