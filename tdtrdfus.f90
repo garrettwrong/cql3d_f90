@@ -3,7 +3,8 @@ module tdtrdfus_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
-  use netcdfrw2_mod, only : ncvdef0,ncvdef2,length_char
+  use netcdfrw2_mod, only : ncvdef0,ncvdef2,ncaptc2,ncvptc0,ncvpt_int0, &
+                            ncvpt_doubl0,ncvpt_doubl2,length_char,check_err
 
   use bcast_mod, only : bcast
   use cqlcomm_mod
@@ -764,7 +765,7 @@ contains
       call ncvpt_doubl0(ncid,vid,(1),setup0%lrzmax,rpconz(1),istatus)
 
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)
-      call ncvpt_doubl0(ncid,vid,(1),1,rhomax,istatus)
+      call ncvpt_doubl0(ncid,vid,(1),1,(rhomax),istatus)
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrz',vid)
       call ncvpt_int0(ncid,vid,1,1,setup0%lrz,istatus)
@@ -773,19 +774,19 @@ contains
       call ncvpt_int0(ncid,vid,1,setup0%lrz,setup0%lrindx(1),istatus)
 
       istatus= NF_INQ_VARID(ncid,'jx',vid)
-      call ncvpt_int0(ncid,vid,1,1,jx,istatus)
+      call ncvpt_int0(ncid,vid,1,1,(jx),istatus)
 
       istatus= NF_INQ_VARID(ncid,'x',vid)
       call ncvpt_doubl0(ncid,vid,(1),jx,x,istatus)
 
       istatus= NF_INQ_VARID(ncid,'vnorm',vid)
-      call ncvpt_doubl0(ncid,vid,(1),1,vnorm,istatus)
+      call ncvpt_doubl0(ncid,vid,(1),1,(vnorm),istatus)
 
       istatus= NF_INQ_VARID(ncid,'enorm',vid)
-      call ncvpt_doubl0(ncid,vid,(1),1,enorm,istatus)
+      call ncvpt_doubl0(ncid,vid,(1),1,(enorm),istatus)
 
       istatus= NF_INQ_VARID(ncid,'iy',vid)
-      call ncvpt_int0(ncid,vid,1,1,iymax,istatus)
+      call ncvpt_int0(ncid,vid,1,1,(iymax),istatus)
 
       if (iy*lrors.gt.iyjx2) stop 'netcdfrf:  Need to set jx>lrza'
       call pack21(y,1,iy,1,lrors,tem1,iymax,lrors)
