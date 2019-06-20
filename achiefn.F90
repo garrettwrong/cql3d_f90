@@ -20,6 +20,7 @@ module achiefn_mod
   use restvty_mod, only : restvty
   use sourcee_mod, only : sourcee
   use tdoutput_mod, only : tdoutput
+  use netcdfrw2_mod, only : netcdfmain !,netcdfrw2
 
   !---END USE
 

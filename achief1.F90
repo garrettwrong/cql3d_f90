@@ -31,6 +31,7 @@ module achief1_mod
   use r8subs_mod, only : dcopy
   use tdnflxs_mod, only : tdnflxs
   use wploweq_mod, only : wploweq
+  use netcdfrw2_mod, only : netcdfrw2
 
   !---END USE
 
