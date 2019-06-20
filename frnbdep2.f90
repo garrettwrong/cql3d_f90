@@ -4,6 +4,7 @@
       subroutine frnbdep2(psi,mi,mj,r,z,potsid,mf,rzpat,nrpat,nzpat,me, &
         mb,sgxn,vbeam,hxfrac,iopt)
       use param_mod
+      use frsubs_mod, only : icsicu1,icsevu1,ibcieu1
       implicit none
 !-----------------------------------------------------------------------
 !     calculates neutral beam deposition on (r,z) grid.  grid size

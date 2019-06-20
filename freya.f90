@@ -12,6 +12,7 @@
       subroutine freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
       use aminmx_mod, only : aminmx
       use bcast_mod, only : bcast
+      use zfreya_mod, only : logint,freyorb,sorspt1,rotate,inject1,inject_old,nbsgxn
       use param_mod
       implicit none
       save
@@ -1102,7 +1103,8 @@
       return
       end subroutine freya
 
-
+!====================================================================
+!====================================================================
       subroutine read_nubeam_data(filenm,nbirth_pts,atwb, &
                          nbirth_cmpts_nub,nshine_nub, &
                          pinj_nub,pabs_nub,x_nub,y_nub,z_nub, &
@@ -1266,10 +1268,12 @@
       return
       end subroutine read_nubeam_data
 
-
+!====================================================================
+!====================================================================
       subroutine zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,psiax,psi,r,z, &
            xpos,ypos,zpos,pzone,izone)
       use iso_c_binding, only : c_double
+      use zfreya_mod, only : pfit
       implicit none
       save
 

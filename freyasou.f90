@@ -612,6 +612,7 @@
 
       subroutine frnnoa(mrans,ranvc)
       use iso_c_binding, only : c_double
+      use zfreya_mod, only : random_my
       implicit none
 !     Generate a vector of mrans normal (0,1) pseudo-random numbers
 !     using a method based on the central limit theorem
@@ -626,7 +627,6 @@
 !
       integer mrans ! arg. in subr.
       real(c_double) :: ranvc(mrans) ! arg. in subr.
-      real(c_double) :: RANDOM_my ! external function
       integer i,j,k ! local
       real(c_double) :: seed,rtkd12,a ! local
 

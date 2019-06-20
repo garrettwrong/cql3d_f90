@@ -3,6 +3,7 @@ module tdoutput_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
+  use netcdfrw2_mod, only : ncvdef0,ncvdef2,length_char
 
   use bcast_mod, only : bcast
   use cfpgamma_mod, only : cfpgamma

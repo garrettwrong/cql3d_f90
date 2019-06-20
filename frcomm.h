@@ -9,8 +9,8 @@
       integer nion,nneu,nk,nkt,nj,nbctim,njs,ialignf1
       real(c_double) :: zero,one,two,half,pi
       
-      common /numbrs/ nion,nneu,nk,nkt,nj,nbctim,njs,ialignf1
       common /numbrs/ zero,one,two,half,pi
+      common /numbrs/ nion,nneu,nk,nkt,nj,nbctim,njs,ialignf1
 !     ONETWO DIVERGENCE
 
 !................................................................
@@ -37,13 +37,13 @@
       common /nub/ hicmz
       common /nub/ ftrapfi,ftrapfit
       common /nub/ angmpf,angmpz
-      common /nub/ ibeam,ibion,inubplt,mfm1
       common /nub/ rowpsi
       common /nub/ pbeam,tenub
       common /nub/ sb,sbcx,sbion
       common /nub/ spb,qb,qbf
       common /nub/ zzi,zne,zni
       common /nub/ zte,psivol,freyr,zeffctv
+      common /nub/ ibeam,ibion,inubplt,mfm1
 !................................................................
 
       real(c_double) :: bencap(k_,ke,kb),fbe(k_,ke,kb),fbi(k_,ke,kb)
@@ -92,16 +92,24 @@
       common /xyzpts/ xpts,ypts,zpts,rpts,vx,vy,vz
 !................................................................
 
-      integer ncont,iz(kimp)
-      common /nub3/ ncont,iz
       real(c_double) :: znipm(kprim),atwpm(kprim)
       real(c_double) :: atwim(kimp),zniim(kimp),zti(kz)
       common /nub3/znipm,atwpm,atwim,zniim,zti
+      integer ncont,iz(kimp)
+      common /nub3/ ncont,iz
 !     nub3 is is used for variables related to hexnb routine
 !     note that nouthx and ncorin,also required for hexnb,
 !     have been added to block io.
 
 !................................................................
+      real(c_double) :: eqdskin_fr,guessin,guessout
+      real(c_double) :: timprt,prtlst(10)
+      real(c_double) :: timplt,pltlst(30)
+      real(c_double) :: banktime,extime
+      real(c_double) :: vid,ddebug(50)
+      common /io/ eqdskin_fr,guessin,guessout
+      common /io/ timprt,prtlst,timplt,pltlst
+      common /io/ banktime,extime,vid,ddebug
 
       integer ncrt,nin,nout,nqik,neqplt,ntrplt,nitre,ngreen
       integer nbplt,neq,nsvsol,nscr,nrguess,nwguess
@@ -114,37 +122,33 @@
       integer jsourc,jbal,jtfus,ihead,ineu,inub,irfcalc
       integer ialign30,ifred,ialign31,nterow
       integer jterow(10),ilastp,itimav,ialign32
-      integer ncorin,iotoray
-      real(c_double) :: eqdskin_fr,guessin,guessout
-      real(c_double) :: timprt,prtlst(10)
-      real(c_double) :: timplt,pltlst(30)
-      real(c_double) :: banktime,extime
-      real(c_double) :: vid,ddebug(50)
+      integer ncorin,iotoray    
+      
       common /io/ ncrt,nin,nout,nqik,neqplt,ntrplt,nitre,ngreen
       common /io/ nbplt,neq,nsvsol,nscr,nrguess,nwguess
       common /io/ nmix,ntweak,nyok,nupel,nitrex
-      common /io/ ialign25,eqdskin_fr,guessin,guessout
-      common /io/ iprt,ialign26,timprt,mprt,ialign27,prtlst
-      common /io/ jprt,ialign28,timplt,pltlst,jflux,jcoef
+      common /io/ ialign25
+      common /io/ iprt,ialign26,mprt,ialign27
+      common /io/ jprt,ialign28,jflux,jcoef
       common /io/ jsourc,jbal,jtfus,ihead,ineu,inub,irfcalc
-      common /io/ ialign30,ifred,ialign31,banktime,extime,nterow
-      common /io/ jterow,ilastp,itimav,ialign32,vid,ddebug
+      common /io/ ialign30,ifred,ialign31,nterow
+      common /io/ jterow,ilastp,itimav,ialign32
       common /io/ ncorin,iotoray
 !BH070410  mplot removed since not used and possible conflict
 !BH070410  with other use of this variable name.
 
 !................................................................
 
-      character*8 namep,namei
-      common /ions/ namep(kprim),namei(kimp)
-      integer namen(2),nameu(kkq)
-      common /ions/ namen,nameu
       real(c_double) :: atw(kion),dzdtim(k_,kimp)
       real(c_double) :: z(k_,kion),zsq(k_,kion),dzdte(k_,kion)
       real(c_double) :: zeff_(k_),rfatmwt
       common /ions/ atw,dzdtim
       common /ions/ z,zsq,dzdte
       common /ions/ zeff_,rfatmwt
+      integer namen(2),nameu(kkq)
+      common /ions/ namen,nameu
+      character*8 namep,namei
+      common /ions/ namep(kprim),namei(kimp)
 
 !................................................................
 !     ONETWO DIVERGENCE

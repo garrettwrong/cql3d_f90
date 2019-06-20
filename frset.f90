@@ -3,6 +3,8 @@
       subroutine frset(lrz,noplots,nmlstout)
       use bcast_mod, only : bcast
       use param_mod
+      use zfreya_mod, only : random_my
+
       implicit none
       integer lrz ! input
       
@@ -16,7 +18,6 @@
       integer j,istat ! local
       ! nion,ibion ! arg of frinitz(), to be found; declared in frcomm.h
       real(c_double) :: dummy,fd ! local
-      real(c_double) :: random_my ! external function
 
       REAL RILIN
 
