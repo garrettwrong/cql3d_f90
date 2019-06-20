@@ -50,9 +50,8 @@
 
 
 !................................................................
-
-      character*8    frplt,frmod,fr_gyro,beamplse,multiply
-      common /nub2_/ frplt,frmod,fr_gyro,beamplse,multiply
+      real(c_double) :: smooth,bmsprd,beampon,beampoff
+      common /nub2_/    smooth,bmsprd,beampon,beampoff
 
       integer ibcur,ibcx,iborb,ibslow,inubpat,npat(2)
       integer itrapfi,itrapech
@@ -62,8 +61,9 @@
 !     ONETWO DIVERGENCE
       integer        nfrplt,multiplyn
       common /nub2_/ nfrplt,multiplyn
-      real(c_double) :: smooth,bmsprd,beampon,beampoff
-      common /nub2_/    smooth,bmsprd,beampon,beampoff
+
+      character*8    frplt,frmod,fr_gyro,beamplse,multiply
+      common /nub2_/ frplt,frmod,fr_gyro,beamplse,multiply
 
 !................................................................
 

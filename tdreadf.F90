@@ -3,6 +3,7 @@ module tdreadf_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
+  use netcdfrw2_mod, only : ncvdef0,ncvdef2,length_char
 
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
@@ -37,7 +38,7 @@ contains
 
   subroutine tdreadf(kopt)
     use cqlconf_mod, only : setup0
-      implicit none !integer (i-n), real(c_double) (a-h,o-z)
+      implicit none 
       save
 
 !.......................................................................
@@ -67,7 +68,6 @@ contains
       integer kopt ! input
       integer i,j,k,l,ll,il,istat,iunwrif,inbline,nwkpack !local
       integer iy_rstrt,jx_rstrt,lrz_rstrt,ngen_rstrt, j1,j2,ist1 !local
-      integer length_char ! external
       real(c_double) :: r00_rstrt,enorm_rstrt,vnorm_rstrt,vnorm_rstrt2 !local
       real(c_double) :: renorm_f, foverf,fj0,fof_fj0,f1,f2,hnr,snr,redenr
       real(c_double) :: hn,sn,reden_code,reden_eps,reden_rat
@@ -301,10 +301,9 @@ contains
          endif
 
 !-----pitch angle variable y
-!-YuP:         vid = ncvid(ncid,'iy_',istatus)
          istatus= NF_INQ_VARID(ncid,'iy_',vid)  !-YuP: NetCDF-f77 get vid
-!-YuP:         call ncvgt(ncid,vid,1,setup0%lrz,iy_,istatus)
-         istatus= NF_GET_VARA_INT(ncid,vid,(1),(setup0%lrz),iy_) !-YuP: NetCDF-f77
+         !istatus= NF_GET_VAR1_INT(ncid,vid,setup0%lrz,iy_) 
+         istatus= NF_GET_VAR_INT(ncid,vid,iy_(1:setup0%lrz)) 
          do ll=1,setup0%lrz
             if (iy_(ll).ne.iy) then
 #ifdef __MPI
@@ -329,12 +328,11 @@ contains
             start(2)=tdim_rstrt
             r00_count(1)=r00_rstrt
             r00_count(2)=1
-            istatus= NF_GET_VARA_DOUBLE( &
-                     ncid,vid,start,r00_count,elecfld)
+            istatus=NF_GET_VARA_DOUBLE(ncid,vid,start,r00_count,elecfld)
             elecfldc=elecfld(0)
             istatus=NF_INQ_VARID(ncid,'elecfldb',vid)
-            istatus= NF_GET_VAR1_DOUBLE( &
-                     ncid,vid,(1),elecfldb)
+            istatus=NF_GET_VAR1_DOUBLE(ncid,vid,(1),elecfldb)
+            !istatus=NF_GET_VAR_DOUBLE(ncid,vid,elecfldb)
          endif
 
 !-----distribution function f: restore after checking that
@@ -563,7 +561,8 @@ contains
 
 !-----pitch angle variable y
          istatus= NF_INQ_VARID(ncid,'iy_',vid)
-         istatus= NF_GET_VARA_INT(ncid,vid,(1),(setup0%lrz),iy_)
+         !istatus= NF_GET_VARA_INT(ncid,vid,1,setup0%lrz,iy_)
+         istatus= NF_GET_VAR_INT(ncid,vid,iy_(1:setup0%lrz))
          do ll=1,setup0%lrz
             if (iy_(ll).ne.iy) then
 #ifdef __MPI
@@ -666,13 +665,14 @@ contains
          endif
 
          istatus= NF_INQ_VARID(ncid,'enorm',vid)
-         istatus= NF_GET_VAR1_DOUBLE(ncid,vid,(1),enorm_rstrt)
+         istatus= NF_GET_VAR1_DOUBLE(ncid,vid,(1),enorm_rstrt) ! scalar
 
          istatus= NF_INQ_VARID(ncid,'vnorm',vid)
-         istatus= NF_GET_VAR1_DOUBLE(ncid,vid,(1),vnorm_rstrt)
+         istatus= NF_GET_VAR1_DOUBLE(ncid,vid,(1),vnorm_rstrt) ! scalar
 
          istatus= NF_INQ_VARID(ncid,'x',vid)
-         istatus= NF_GET_VARA_DOUBLE(ncid,vid,(1),(jx_rstrt),x_rstrt)
+         !istatus= NF_GET_VARA_DOUBLE(ncid,vid,1,jx_rstrt,x_rstrt) ! vector
+         istatus= NF_GET_VAR_DOUBLE(ncid,vid,x_rstrt(1:jx_rstrt)) ! vector
 
 #ifdef __MPI
       if(mpirank.eq.0) then
@@ -706,7 +706,8 @@ contains
               call allocate_error("cint2r, sub tdreadf",0,istat)
          call bcast(cint2r,zero,jx_rstrt)
          istatus= NF_INQ_VARID(ncid,'cint2',vid)
-         istatus= NF_GET_VARA_DOUBLE(ncid,vid,(1),(jx_rstrt),cint2r)
+         !istatus= NF_GET_VARA_DOUBLE(ncid,vid,1,jx_rstrt,cint2r) !vector
+         istatus= NF_GET_VAR_DOUBLE(ncid,vid,cint2r(1:jx_rstrt)) !vector
 
          endif  !  On l_.eq.lrors
 
