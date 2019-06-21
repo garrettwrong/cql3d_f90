@@ -14,12 +14,11 @@ $(SOURCES):        $(INCLUDES)
 # SOURCE line
 include source_dependency.mk
 
-F90OBJECTS = $(filter %.o,$(SOURCES:.f90=.o))
-OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
+OBJECTS = $(SOURCES:.f90=.o)
 
 LOCATION  =   -L /usr/lib -L/usr/local/lib
 LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
-INCLUDE   =/usr/local/include
+INCLUDE   =   -I/usr/local/include
 
 DEBUG     = -g -fbacktrace
 #common gfortran dbg flags
@@ -28,7 +27,7 @@ OPTIMIZE  = -O1
 CSPECIAL  =
 #force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL =
-COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
+COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
 LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
 DELETE    = rm -f
@@ -37,12 +36,12 @@ standalone: $(NAME)
 libs: $(NAME)_shared lib$(NAME).a
 all: standalone libs
 
-$(NAME):           $(F90OBJECTS) $(OBJECTS)
+$(NAME):           $(OBJECTS)
 	$(LOAD)    $^  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
 
 # For the libraries, we do not want a main
-LIBOBJS = $(filter-out a_cqlp.o, $(F90OBJECTS) $(OBJECTS))
+LIBOBJS = $(filter-out a_cqlp.o, $(OBJECTS))
 lib$(NAME).so: $(LIBOBJS)
 	$(BUILDER) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $@
@@ -72,25 +71,16 @@ $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
 
 include module_dependency.mk
 
-
-#GBW, until all files have the same extension (90 I hope!)
-# filter out objects with correct extension
-# this will simplify greatly once all f90...
-
 # see Sect. 4.10.1, Static Pattern Rules.
-$(filter %.o,$(F90OBJECTS)): %.o: %.f90 $(INCLUDES)
+%.o: %.f90 $(INCLUDES)
 	$(COMPILE) $< -o $@
-
-$(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
-	$(COMPILE) $< -o $@
-
 
 rebuild:
-	$(COMPILE) $(SOURCES) $(F90SOURCES)
-	$(LOAD) $(OBJECTS) $(F90OBJECTS) $(LOCATION) $(LIBRARIES)
+	$(COMPILE) $(SOURCES)
+	$(LOAD) $(OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
+	$(DELETE)  $(NAME) $(OBJECTS)
 	$(DELETE) *.mod
 	$(DELETE) *.so *.a
 
