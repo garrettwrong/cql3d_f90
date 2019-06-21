@@ -5,8 +5,8 @@ module netcdfrf_mod
   use param_mod, only : nmodsa
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
-  use netcdfrw2_mod, only : ncvdef0,ncvdef2,ncaptc2,ncvptc0,ncvpt_int0, &
-       ncvpt_doubl0,ncvpt_doubl2,length_char,check_err
+  use netcdfrw2_mod, only : ncvdef0,ncvdef2,ncaptc2,ncvptc0
+  use netcdfrw2_mod, only : length_char,check_err
   !use pack21_mod, only : pack21
   !use pack21_mod, only : unpack21
   external pack21    ! XXXX ugh, you should fix these.  YuP: don't know what exactly to fix
@@ -588,60 +588,60 @@ contains
           !--------------------------
 
           istatus= NF_INQ_VARID(ncid,'lrzmax',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,1,setup0%lrzmax,istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,setup0%lrzmax)
 
           istatus= NF_INQ_VARID(ncid,'rya',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl0(ncid,vid,(1),setup0%lrzmax,rya(1),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),setup0%lrzmax,rya(1))
 
           istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl0(ncid,vid,(1),1,(rhomax),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(rhomax))
 
           istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,1,setup0%lrz,istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,setup0%lrz)
 
           istatus= NF_INQ_VARID(ncid,'lrindx',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,setup0%lrz,setup0%lrindx(1),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,setup0%lrindx(1))
 
           istatus= NF_INQ_VARID(ncid,'jx',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,1,(jx),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(jx))
 
           istatus= NF_INQ_VARID(ncid,'mrf',vid)  !-YuP: added
-          call ncvpt_int0(ncid,vid,1,1,(mrf),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(mrf))
 
           istatus= NF_INQ_VARID(ncid,'mrfn',vid)  !-YuP[2017]added
-          call ncvpt_int0(ncid,vid,1,1,(mrfn),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(mrfn))
           !number of rf modes (sum over all wave types and all nharms)
           istatus= NF_INQ_VARID(ncid,'krf',vid)  !-YuP: added
-          call ncvpt_int0(ncid,vid,1,1,(krf),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(krf))
 
           istatus= NF_INQ_VARID(ncid,'x',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl0(ncid,vid,(1),jx,x,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),jx,x)
 
           istatus= NF_INQ_VARID(ncid,'vnorm',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl0(ncid,vid,(1),1,(vnorm),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(vnorm))
 
           istatus= NF_INQ_VARID(ncid,'enorm',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl0(ncid,vid,(1),1,(enorm),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(enorm))
 
           istatus= NF_INQ_VARID(ncid,'iy',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,1,(iymax),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(iymax))
 
           call pack21(y,1,iy,1,lrors,tem1,iymax,lrors)
           istatus= NF_INQ_VARID(ncid,'y',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,y_count,tem1,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,y_count,tem1)
 
           istatus= NF_INQ_VARID(ncid,'iy_',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,count(3),iy_,istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,count(3),iy_)
 
           istatus= NF_INQ_VARID(ncid,'itl',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,count(3),itl_,istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,count(3),itl_)
 
           istatus= NF_INQ_VARID(ncid,'itu',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,count(3),itu_,istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,count(3),itu_)
 
           call pack21(tau,1,iy,1,setup0%lrzmax,tem1,iy,setup0%lrzmax)
           istatus= NF_INQ_VARID(ncid,'tau',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,tau_count,tem1,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,tau_count,tem1)
 
        endif  !kopt.eq.0 .and. n.eq.0
 
@@ -650,14 +650,14 @@ contains
        !-----------------------------------------------------------
 
        istatus= NF_INQ_VARID(ncid,'time',vid)  !-YuP: NetCDF-f77 get vid
-       call ncvpt_doubl0(ncid,vid,start(4),1,(timet),istatus)
+       istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start(4),1,(timet))
 
        if ( netcdfshort.eq.'longer_b' ) then
           istatus= NF_INQ_VARID(ncid,'urfb',vid)  !-YuP: NetCDF-f77 get vid
           do ll=1,setup0%lrz
              start1(3)=ll
-             call ncvpt_doubl2(ncid,vid,start1,count1, &
-                  urfb(1:iymax,1:jx,setup0%lrindx(ll),krf), istatus) !-YuP: (1)->(krf)
+             istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,urfb(1:iymax,1:jx,setup0%lrindx(ll),krf))
+             !-YuP: (1)->(krf)
              !Note: count1={iymax,jx,1,1}
           enddo
        endif
@@ -751,14 +751,14 @@ contains
           !cl    3.2 Variables saved at each time-step
 
           istatus= NF_INQ_VARID(ncid,'time',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl0(ncid,vid,start(4),1,(timet),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start(4),1,(timet))
 
           if ( netcdfshort.eq.'longer_b' ) then
              istatus= NF_INQ_VARID(ncid,'urfb',vid)  !-YuP: NetCDF-f77 get vid
              do ll=1,setup0%lrz
                 start1(3)=ll
-                call ncvpt_doubl2(ncid,vid,start1,count1, &
-                     urfb(1:iymax,1:jx,setup0%lrindx(ll),krf), istatus) !-YuP: (1)->(krf)
+                istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,urfb(1:iymax,1:jx,setup0%lrindx(ll),krf))
+                !-YuP: (1)->(krf)
                 !Note: count1={iymax,jx,1,1}
              enddo
           endif
@@ -817,10 +817,10 @@ contains
           !     Put data
           !--------------------------
           istatus= NF_INQ_VARID(ncid,'nray',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,1,nray(krf),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,nray(krf))
 
           istatus= NF_INQ_VARID(ncid,'freqcy',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl0(ncid,vid,(1),1,freqcy(krf),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,freqcy(krf))
 
           istatus= NF_INQ_VARID(ncid,'lh',vid)  !-YuP: NetCDF-f77 get vid
           call ncvptc0(ncid,vid,1,8,lh,8,istatus)
@@ -832,65 +832,65 @@ contains
           call ncvptc0(ncid,vid,1,8,ech,8,istatus)
 
           istatus= NF_INQ_VARID(ncid,'nharm1',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,1,nharm1(krf),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,nharm1(krf))
 
           istatus= NF_INQ_VARID(ncid,'nharms',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,1,nharms(krf),istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,1,nharms(krf))
 
           istatus= NF_INQ_VARID(ncid,'nrayelt',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_int0(ncid,vid,1,nray(krf),nrayelt,istatus)
+          istatus = NF_PUT_VARA_INT(ncid,vid,1,nray(krf),nrayelt)
 
           !BH170920: Added (1,1,krf) in below section of coding down to l 982, to get
           !BH170920: krf dependent data going in to the respective krf data file.
           call pack21 &
                (ws(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'ws',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (spsi(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! dep. on krf
           istatus= NF_INQ_VARID(ncid,'spsi',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (wr(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'wr',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (wphi(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'wphi',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (wz(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'wz',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (wnpar(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'wnpar',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (wnper(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'wnper',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (delpwr(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'delpwr',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (sdpwr(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'sdpwr',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (wdnpar(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'wdnpar',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           ii=0
           do j=1,nray(krf)
@@ -906,7 +906,7 @@ contains
              enddo
           enddo
           istatus= NF_INQ_VARID(ncid,'cwexde',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           ii=0
           do j=1,nray(krf)
@@ -922,7 +922,7 @@ contains
              enddo
           enddo
           istatus= NF_INQ_VARID(ncid,'cweyde',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           ii=0
           do j=1,nray(krf)
@@ -938,33 +938,33 @@ contains
              enddo
           enddo
           istatus= NF_INQ_VARID(ncid,'cwezde',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
 
           call pack21 &
                (fluxn(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'fluxn',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (sbtot(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'sbtot',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (sene(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'sene',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (salphac(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'salphac',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
           call pack21 &
                (salphal(1,1,krf),1,nrayelts,1,nrayn,urftmp,neltmax,nray(krf)) ! depends on krf
           istatus= NF_INQ_VARID(ncid,'salphal',vid)  !-YuP: NetCDF-f77 get vid
-          call ncvpt_doubl2(ncid,vid,start,ray_count,urftmp,istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp)
 
 
           ! --- full update of data file (last time-step only) ---
@@ -973,8 +973,8 @@ contains
              istatus= NF_INQ_VARID(ncid,'urfb',vid)  !-YuP: NetCDF-f77 get vid
              do ll=1,setup0%lrz
                 start1(3)=ll
-                call ncvpt_doubl2(ncid,vid,start1,count1, &
-                     urfb(1:iymax,1:jx,setup0%lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
+                istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,urfb(1:iymax,1:jx,setup0%lrindx(ll),krf))
+                !-YuP: (1)->(krf)
                 !Note: count1={iymax,jx,1,1}
              enddo
 
@@ -982,8 +982,8 @@ contains
                 istatus= NF_INQ_VARID(ncid,'urfc',vid) !-YuP: NetCDF-f77 get vid
                 do ll=1,setup0%lrz
                    start1(3)=ll
-                   call ncvpt_doubl2(ncid,vid,start1,count1, &
-                        urfc(1:iymax,1:jx,setup0%lrindx(ll),krf),istatus) !-YuP: (1)->(krf)
+                   istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,urfc(1:iymax,1:jx,setup0%lrindx(ll),krf))
+                   !-YuP: (1)->(krf)
                    !Note: count1={iymax,jx,1,1}
                 enddo
                 !            istatus= NF_INQ_VARID(ncid,'urfe',vid) !-YuP: NetCDF-f77 get vid
@@ -1645,65 +1645,64 @@ contains
     !--------------------------
 
     istatus= NF_INQ_VARID(ncid,'lrzmax',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_int0(ncid,vid,1,1,setup0%lrzmax,istatus)
+    istatus = NF_PUT_VARA_INT(ncid,vid,1,1,setup0%lrzmax)
 
     istatus= NF_INQ_VARID(ncid,'rya',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_doubl0(ncid,vid,(1),tau_count(2),rya(1),istatus)
+    istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),tau_count(2),rya(1))
 
     istatus= NF_INQ_VARID(ncid,'rpconz',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_doubl0(ncid,vid,(1),tau_count(2),rpconz(1),istatus)
+    istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),tau_count(2),rpconz(1))
 
     istatus= NF_INQ_VARID(ncid,'rhomax',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_doubl0(ncid,vid,(1),1,(rhomax),istatus)
+    istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(rhomax))
 
     istatus= NF_INQ_VARID(ncid,'lrz',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_int0(ncid,vid,1,1,setup0%lrz,istatus)
+    istatus = NF_PUT_VARA_INT(ncid,vid,1,1,setup0%lrz)
 
     istatus= NF_INQ_VARID(ncid,'lrindx',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_int0(ncid,vid,1,setup0%lrz,setup0%lrindx(1),istatus)
+    istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,setup0%lrindx(1))
 
     istatus= NF_INQ_VARID(ncid,'jx',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_int0(ncid,vid,1,1,(jx),istatus)
+    istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(jx))
 
     istatus= NF_INQ_VARID(ncid,'x',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_doubl0(ncid,vid,(1),jx,x,istatus)
+    istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),jx,x)
 
     istatus= NF_INQ_VARID(ncid,'vnorm',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_doubl0(ncid,vid,(1),1,(vnorm),istatus)
+    istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(vnorm))
 
     istatus= NF_INQ_VARID(ncid,'enorm',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_doubl0(ncid,vid,(1),1,(enorm),istatus)
+    istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(enorm))
 
     istatus= NF_INQ_VARID(ncid,'iy',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_int0(ncid,vid,1,1,(iymax),istatus)
+    istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(iymax))
 
     if (iy*lrors.gt.iyjx2) then
        stop 'netcdfrf:  Need to set jx>setup0%lrza'
     endif
     call pack21(y,1,iy,1,lrors,tem1,iymax,lrors)
     istatus= NF_INQ_VARID(ncid,'y',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_doubl2(ncid,vid,start,y_count,tem1,istatus)
+    istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,y_count,tem1)
 
     istatus= NF_INQ_VARID(ncid,'iy_',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_int0(ncid,vid,1,setup0%lrz,iy_,istatus)
+    istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,iy_)
 
     istatus= NF_INQ_VARID(ncid,'itl',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_int0(ncid,vid,1,setup0%lrz,itl_,istatus)
+    istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,itl_)
 
     istatus= NF_INQ_VARID(ncid,'itu',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_int0(ncid,vid,1,setup0%lrz,itu_,istatus)
+    istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,itu_)
 
     call pack21(tau,1,iy,1,setup0%lrzmax,tem1,iy,setup0%lrzmax)
     istatus= NF_INQ_VARID(ncid,'tau',vid)  !-YuP: NetCDF-f77 get vid
-    call ncvpt_doubl2(ncid,vid,start,tau_count,tem1,istatus)
+    istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start,tau_count,tem1)
 
     !     rdcb coefficient write
 
     istatus= NF_INQ_VARID(ncid,'rdcb',vid)  !-YuP: NetCDF-f77 get vid
     do ll=1,setup0%lrz
        start1(3)=ll
-       call ncvpt_doubl2(ncid,vid,start1,count1, &
-            rdcb(1:iymax,1:jx,setup0%lrindx(ll), krf),istatus)
+       istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,rdcb(1:iymax,1:jx,setup0%lrindx(ll), krf))
        !Note: count1={iymax,jx,1}
        if (istatus.ne.NF_NOERR) WRITE(*,*) 'netcdf_rdc, ll= :',ll
        call check_err(istatus)
@@ -1715,8 +1714,7 @@ contains
        istatus= NF_INQ_VARID(ncid,'rdcc',vid)  !-YuP: NetCDF-f77 get vid
        do ll=1,setup0%lrz
           start1(3)=ll
-          call ncvpt_doubl2(ncid,vid,start1,count1, &
-               rdcc(1:iymax,1:jx,setup0%lrindx(ll), krf),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,rdcc(1:iymax,1:jx,setup0%lrindx(ll), krf))
           !Note: count1={iymax,jx,1,1}
           if (istatus.ne.NF_NOERR) WRITE(*,*) 'netcdf_rdc, ll= :',ll
           call check_err(istatus)
@@ -1725,8 +1723,7 @@ contains
        istatus= NF_INQ_VARID(ncid,'rdce',vid)  !-YuP: NetCDF-f77 get vid
        do ll=1,setup0%lrz
           start1(3)=ll
-          call ncvpt_doubl2(ncid,vid,start1,count1, &
-               rdce(1:iymax,1:jx,setup0%lrindx(ll), krf),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,rdce(1:iymax,1:jx,setup0%lrindx(ll), krf))
           !Note: count1={iymax,jx,1,1}
           if (istatus.ne.NF_NOERR) WRITE(*,*) 'netcdf_rdc, ll= :',ll
           call check_err(istatus)
@@ -1735,8 +1732,7 @@ contains
        istatus= NF_INQ_VARID(ncid,'rdcf',vid)  !-YuP: NetCDF-f77 get vid
        do ll=1,setup0%lrz
           start1(3)=ll
-          call ncvpt_doubl2(ncid,vid,start1,count1, &
-               rdcf(1:iymax,1:jx,setup0%lrindx(ll), krf),istatus)
+          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,rdcf(1:iymax,1:jx,setup0%lrindx(ll), krf))
           !Note: count1={iymax,jx,1,1}
           if (istatus.ne.NF_NOERR) WRITE(*,*) 'netcdf_rdc, ll= :',ll
           call check_err(istatus)
