@@ -743,15 +743,15 @@ contains
 
       istatus= NF_INQ_VARID(ncid,'version',vid)
       ll=length_char(version)
-      call ncvptc0(ncid,vid,1,ll,version,ll,istatus)
+      call ncvptc0(ncid,vid,(1),(ll),version,ll,istatus)
 
       istatus= NF_INQ_VARID(ncid,'setup0%mnemonic',vid)
       ll=length_char(setup0%mnemonic)
-      call ncvptc0(ncid,vid,1,ll,setup0%mnemonic,ll,istatus)
+      call ncvptc0(ncid,vid,(1),(ll),setup0%mnemonic,ll,istatus)
 
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrzmax',vid)
-      istatus = NF_PUT_VARA_INT(ncid,vid,1,1,setup0%lrzmax)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),setup0%lrzmax)
 
       istatus= NF_INQ_VARID(ncid,'rya',vid)
       istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),setup0%lrzmax,rya(1))
@@ -760,28 +760,28 @@ contains
       istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),setup0%lrzmax,rpconz(1))
 
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)
-      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(rhomax))
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(1),(rhomax))
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrz',vid)
-      istatus = NF_PUT_VARA_INT(ncid,vid,1,1,setup0%lrz)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),setup0%lrz)
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrindx',vid)
-      istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,setup0%lrindx(1))
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),setup0%lrz,setup0%lrindx(1))
 
       istatus= NF_INQ_VARID(ncid,'jx',vid)
-      istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(jx))
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),(jx))
 
       istatus= NF_INQ_VARID(ncid,'x',vid)
-      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),jx,x)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(jx),x)
 
       istatus= NF_INQ_VARID(ncid,'vnorm',vid)
-      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(vnorm))
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(1),(vnorm))
 
       istatus= NF_INQ_VARID(ncid,'enorm',vid)
-      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(enorm))
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(1),(enorm))
 
       istatus= NF_INQ_VARID(ncid,'iy',vid)
-      istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(iymax))
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),(iymax))
 
       if (iy*lrors.gt.iyjx2) stop 'netcdfrf:  Need to set jx>lrza'
       call pack21(y,1,iy,1,lrors,tem1,iymax,lrors)
@@ -789,13 +789,13 @@ contains
       istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,y_count,tem1)
 
       istatus= NF_INQ_VARID(ncid,'iy_',vid)
-      istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,iy_)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),setup0%lrz,iy_)
 
       istatus= NF_INQ_VARID(ncid,'itl',vid)
-      istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,itl_)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),setup0%lrz,itl_)
 
       istatus= NF_INQ_VARID(ncid,'itu',vid)
-      istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,itu_)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),setup0%lrz,itu_)
 
 !  n_d_rr is the number of diffused general species
       if (n_d_rr.eq.1) then

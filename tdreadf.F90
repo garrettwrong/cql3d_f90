@@ -561,7 +561,7 @@ contains
 
 !-----pitch angle variable y
          istatus= NF_INQ_VARID(ncid,'iy_',vid)
-         !istatus= NF_GET_VARA_INT(ncid,vid,1,setup0%lrz,iy_)
+         !istatus= NF_GET_VARA_INT(ncid,vid,(1),setup0%lrz,iy_)
          istatus= NF_GET_VAR_INT(ncid,vid,iy_(1:setup0%lrz))
          do ll=1,setup0%lrz
             if (iy_(ll).ne.iy) then
@@ -671,7 +671,7 @@ contains
          istatus= NF_GET_VAR1_DOUBLE(ncid,vid,(1),vnorm_rstrt) ! scalar
 
          istatus= NF_INQ_VARID(ncid,'x',vid)
-         !istatus= NF_GET_VARA_DOUBLE(ncid,vid,1,jx_rstrt,x_rstrt) ! vector
+         !istatus= NF_GET_VARA_DOUBLE(ncid,vid,(1),jx_rstrt,x_rstrt) ! vector
          istatus= NF_GET_VAR_DOUBLE(ncid,vid,x_rstrt(1:jx_rstrt)) ! vector
 
 #ifdef __MPI
@@ -706,7 +706,7 @@ contains
               call allocate_error("cint2r, sub tdreadf",0,istat)
          call bcast(cint2r,zero,jx_rstrt)
          istatus= NF_INQ_VARID(ncid,'cint2',vid)
-         !istatus= NF_GET_VARA_DOUBLE(ncid,vid,1,jx_rstrt,cint2r) !vector
+         !istatus= NF_GET_VARA_DOUBLE(ncid,vid,(1),jx_rstrt,cint2r) !vector
          istatus= NF_GET_VAR_DOUBLE(ncid,vid,cint2r(1:jx_rstrt)) !vector
 
          endif  !  On l_.eq.lrors
