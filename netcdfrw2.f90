@@ -1,6 +1,7 @@
 !
 !
 module netcdfrw2_mod
+  use iso_c_binding, only : c_double
       use param_mod, only : nmodsa
       use bcast_mod, only : bcast
       use bcast_mod, only : ibcast
@@ -154,7 +155,7 @@ contains
 
       character*8 ndelta_op
 
-      real*8,  allocatable ::  wkpack(:) ! local working array for  pack21
+      real(c_double),  allocatable ::  wkpack(:) ! local working array for  pack21
       integer, allocatable :: iwkpack(:) ! local working array for ipack21
 
 !      character(len=8), dimension(npaproc) :: npa_proc  !automatic var
@@ -635,7 +636,7 @@ contains
 !     Note: Unlimited dimension must be last
 !     Refer to p. 50, netcdf-3 manual
 
-!     NF_DOUBLE for REAL*8:
+!     NF_DOUBLE for REAL(C_DOUBLE):
 
 
 !--------------------------
@@ -2381,8 +2382,7 @@ contains
 !BH         call pack21(dtau(1,1,ll),1,iy,1,lz,wkpack,iy,lz)
          start1(3)=ll
 !BH         call ncvpt_doubl2(ncid,vid,start1,z_count1,wkpack,istatus)
-         call ncvpt_doubl2(ncid,vid,start1(1:3),z_count1(1:3),dtau(1:iy,1:lz,ll), &
-              istatus)
+         call ncvpt_doubl2(ncid,vid,start1(1:3),z_count1(1:3),dtau(1:iy,1:lz,ll), istatus)
       enddo
 
       istatus= NF_INQ_VARID(ncid,'beampon',vid)
@@ -2444,8 +2444,7 @@ contains
 !BH         vid=ncvid(ncid,'deltarz',istatus)
 !BH         call ncvpt_doubl2(ncid,vid,delta_start,delta_count,deltarz,istatus)
          istatus= NF_INQ_VARID(ncid,'deltarz',vid)
-         call ncvpt_doubl2(ncid,vid,delta_start,delta_count,deltarz, &
-              istatus)
+         call ncvpt_doubl2(ncid,vid,delta_start,delta_count,deltarz, istatus)
         WRITE(*,*)'netcdfrw2:start,z_count1=', &
              start(1:3),z_count1(1:3)
         WRITE(*,*)'netcdfrw2:delta_start,delta_count=', &
@@ -2455,8 +2454,7 @@ contains
 !BH         call ncvpt(ncid,vid,delta_start,delta_count,delta_bdb0,
 !BH     +        istatus)
          istatus= NF_INQ_VARID(ncid,'delta_bdb0',vid)
-         call ncvpt_doubl2(ncid,vid,delta_start,delta_count,delta_bdb0, &
-              istatus)
+         call ncvpt_doubl2(ncid,vid,delta_start,delta_count,delta_bdb0,istatus)
 
       endif  ! On ndeltarho
 
@@ -2518,8 +2516,7 @@ contains
          call ncvpt_doubl2(ncid,vid,start_xr,count_xr,wkpack,istatus)
 
          istatus= NF_INQ_VARID(ncid,'efluxt',vid)  !-YuP: NetCDF-f77 get vid
-         call ncvpt_doubl2(ncid,vid,start_xr(2),count_xr(2),efluxt(1), &
-              istatus)
+         call ncvpt_doubl2(ncid,vid,start_xr(2),count_xr(2),efluxt(1),istatus)
 
       endif  ! On softxry .ne. "disabled"
 
@@ -2586,16 +2583,14 @@ contains
 
          istatus= NF_INQ_VARID(ncid,'enn',vid)
          call pack21(enn,1,lrza,1,npaproca,wkpack,lrzmax,npaproc)
-         call ncvpt_doubl2(ncid,vid,start_npaenn,count_npaenn,wkpack, &
-              istatus)
+         call ncvpt_doubl2(ncid,vid,start_npaenn,count_npaenn,wkpack,istatus)
 
          istatus= NF_INQ_VARID(ncid,'eflux_npa',vid)
          call pack21(eflux,1,nena,1,nva,wkpack,nen_npa,nv_npa)
          call ncvpt_doubl2(ncid,vid,start_npa,count_npa,wkpack,istatus)
 
          istatus= NF_INQ_VARID(ncid,'efluxt',vid)
-         call ncvpt_doubl2(ncid,vid,start_npa(2),count_npa(2),efluxt(1), &
-              istatus)
+         call ncvpt_doubl2(ncid,vid,start_npa(2),count_npa(2),efluxt(1),istatus)
 
       endif  ! On npa_diag .ne. "disabled"
 
@@ -2751,16 +2746,13 @@ contains
 !
       if (frmodp.eq."enabled") then
            istatus= NF_INQ_VARID(ncid,'hibrz',vid)
-           call ncvpt_doubl2(ncid,vid,start_hibr,count_hibr, &
-                       hibrzp,istatus)
+           call ncvpt_doubl2(ncid,vid,start_hibr,count_hibr,hibrzp,istatus)
 
            istatus= NF_INQ_VARID(ncid,'sorpw_nbi',vid)
-           call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw, &
-                       sorpw_nbi,istatus)
+           call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw,sorpw_nbi,istatus)
 
            istatus= NF_INQ_VARID(ncid,'sorpw_nbii',vid)
-           call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw, &
-                       sorpw_nbii,istatus)
+           call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw,sorpw_nbii,istatus)
 
       endif
 !
@@ -2826,8 +2818,7 @@ contains
       call ncvpt_doubl2(ncid,vid,start_powrf,count_powrf,tem1,istatus)
 
       istatus= NF_INQ_VARID(ncid,'powurfl',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2), &
-                 powurfl(1),istatus)
+      call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2),powurfl(1),istatus)
 
 
 !BH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
@@ -2851,8 +2842,7 @@ contains
       call ncvpt_doubl2(ncid,vid,start_powrf,count_powrf,tem1,istatus)
 
       istatus= NF_INQ_VARID(ncid,'powurfc',vid)
-      call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2), &
-                 powurfc(1),istatus)
+      call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2),powurfc(1),istatus)
 
       call bcast(tem1,zero,lrz)
       do ll=1,lrz
@@ -3037,8 +3027,7 @@ contains
             tem1(kk+kkk)=entrintr(k,4)
       enddo
       istatus= NF_INQ_VARID(ncid,'powers_int',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,start_powers(2),count_powers(2), &
-                        tem1,istatus)
+      call ncvpt_doubl2(ncid,vid,start_powers(2),count_powers(2),tem1,istatus)
 
 
       if (sigmamod .eq. "enabled") then ! n>0: save sigftt
@@ -3046,8 +3035,7 @@ contains
          do lsig=1,4
             tem2(lsig)=sigftt(nch(1),lsig)
          enddo
-         call ncvpt_doubl2(ncid,vid,start_fus(2),count_fus(2), &
-                           tem2,istatus)
+         call ncvpt_doubl2(ncid,vid,start_fus(2),count_fus(2),tem2,istatus)
       endif
 
       if ( netcdfshort.eq.'long_jp' ) then
@@ -3241,8 +3229,7 @@ contains
 !                 temp1 dimensnd 0:iyp1,0,jxp1. Pack in to (1:iy,1:jx)
                   call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                   start1(3)=ll
-                  call ncvpt_doubl2(ncid,vid,start1(1:3),count1(1:3), &
-                                    wkpack,istatus)
+                  call ncvpt_doubl2(ncid,vid,start1(1:3),count1(1:3),wkpack,istatus)
                !So, here start1={1,   1,   ll}
                !         count1={iy,  jx,  1}
                !         dimsf= {ydim,xdim,rdim}
@@ -3262,8 +3249,7 @@ contains
                   call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                   startg(3)=ll
                   startg(4)=k
-                 call ncvpt_doubl2(ncid,vid,startg(1:4),countg(1:4), &
-                                   wkpack,istatus)
+                 call ncvpt_doubl2(ncid,vid,startg(1:4),countg(1:4),wkpack,istatus)
                !So, here startg={1,   1,   ll,  k}
                !         countg={iy,  jx,  1,   1}
                !         dimsg= {ydim,xdim,rdim,gdim}
@@ -3278,8 +3264,7 @@ contains
                   call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                   startg(3)=ll
                   startg(4)=k
-                  call ncvpt_doubl2(ncid,vid,startg(1:4),countg(1:4), &
-                                    wkpack,istatus)
+                  call ncvpt_doubl2(ncid,vid,startg(1:4),countg(1:4),wkpack,istatus)
                !So, here startg={1,   1,   ll,  k}
                !         countg={iy,  jx,  1,   1}
                !         dimsg= {ydim,xdim,rdim,gdim}
@@ -3540,16 +3525,13 @@ contains
 !
       if (frmodp.eq."enabled") then
          istatus= NF_INQ_VARID(ncid,'hibrz',vid)
-         call ncvpt_doubl2(ncid,vid,start_hibr,count_hibr, &
-                       hibrzp,istatus)
+         call ncvpt_doubl2(ncid,vid,start_hibr,count_hibr,hibrzp,istatus)
 
          istatus= NF_INQ_VARID(ncid,'sorpw_nbi',vid)
-         call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw, &
-                       sorpw_nbi,istatus)
+         call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw,sorpw_nbi,istatus)
 
          istatus= NF_INQ_VARID(ncid,'sorpw_nbii',vid)
-         call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw, &
-                           sorpw_nbii,istatus)
+         call ncvpt_doubl2(ncid,vid,start_sorpw,count_sorpw,sorpw_nbii,istatus)
       endif
 !
 
@@ -3612,8 +3594,7 @@ contains
       call ncvpt_doubl2(ncid,vid,start_powrf,count_powrf,tem1,istatus)
 
       istatus= NF_INQ_VARID(ncid,'powurfl',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2), &
-                 powurfl(1),istatus)
+      call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2),powurfl(1),istatus)
 
 !BH120202:  Should only store mrfn*lrz, at most: NEEDS ADJUSTMENT
       call bcast(tem1,zero,nmodsa*lrz)
@@ -3638,8 +3619,7 @@ contains
       call ncvpt_doubl2(ncid,vid,start_powrf,count_powrf,tem1,istatus)
 
       istatus= NF_INQ_VARID(ncid,'powurfc',vid)
-      call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2), &
-                 powurfc(1),istatus)
+      call ncvpt_doubl2(ncid,vid,start_powrf(2),count_powrf(2),powurfc(1),istatus)
 
       call bcast(tem1,zero,lrz)
       do ll=1,lrz
@@ -3822,16 +3802,14 @@ contains
             tem1(kk+kkk)=entrintr(k,4)
       enddo  !  on k=1,ngen
       istatus= NF_INQ_VARID(ncid,'powers_int',vid)  !-YuP: NetCDF-f77 get vid
-      call ncvpt_doubl0(ncid,vid,start_powers(2),count_powers(2), &
-                        tem1,istatus)
+      call ncvpt_doubl0(ncid,vid,start_powers(2),count_powers(2),tem1,istatus)
 
       if (sigmamod .eq. "enabled") then ! n>0: save sigftt
          istatus= NF_INQ_VARID(ncid,'sigftt',vid)  !-YuP: NetCDF-f77 get vid
          do lsig=1,4
             tem2(lsig)=sigftt(nch(1),lsig)
          enddo
-         call ncvpt_doubl0(ncid,vid,start_fus(2),count_fus(2), &
-                           tem2,istatus)
+         call ncvpt_doubl0(ncid,vid,start_fus(2),count_fus(2),tem2,istatus)
          call check_err(istatus)
       endif ! sigmamod
 
@@ -3844,8 +3822,7 @@ contains
          call ncvpt_doubl2(ncid,vid,start_npa,count_npa,wkpack,istatus)
 
          istatus= NF_INQ_VARID(ncid,'efluxt',vid)  !-YuP: NetCDF-f77 get vid
-         call ncvpt_doubl2(ncid,vid,start_npa(2),count_npa(2),efluxt(1), &
-              istatus)
+         call ncvpt_doubl2(ncid,vid,start_npa(2),count_npa(2),efluxt(1),istatus)
 
       endif
 
@@ -3856,8 +3833,7 @@ contains
          call ncvpt_doubl2(ncid,vid,start_xr,count_xr,wkpack,istatus)
 
          istatus= NF_INQ_VARID(ncid,'efluxt',vid)  !-YuP: NetCDF-f77 get vid
-         call ncvpt_doubl0(ncid,vid,start_xr(2),count_xr(2),efluxt(1), &
-              istatus)
+         call ncvpt_doubl0(ncid,vid,start_xr(2),count_xr(2),efluxt(1),istatus)
 
       endif
 
@@ -3869,8 +3845,7 @@ contains
          call ncvpt_doubl2(ncid,vid,start_npa,count_npa,wkpack,istatus)
 
          istatus= NF_INQ_VARID(ncid,'efluxt',vid)
-         call ncvpt_doubl0(ncid,vid,start_npa(2),count_npa(2),efluxt(1), &
-              istatus)
+         call ncvpt_doubl0(ncid,vid,start_npa(2),count_npa(2),efluxt(1),istatus)
 
       endif  ! On npa_diag .eq. "ncdf_all"
 
@@ -3900,8 +3875,7 @@ contains
               enddo
               call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
               start1(3)=ll
-              call ncvpt_doubl2(ncid,vid,start1(1:4),count1(1:4), &
-                                wkpack,istatus)
+              call ncvpt_doubl2(ncid,vid,start1(1:4),count1(1:4),wkpack,istatus)
                !So, here start1={1,   1,   ll,  numrec1(or numrecsave)}
                !         count1={iy,  jx,  1,   1}
                !         dimsf= {ydim,xdim,rdim,tdim(or tsavedim)}
@@ -4042,8 +4016,7 @@ contains
                                     elecfldn(0:lrz+1,1,0)*300
          write(*,*)'netcdfrw2: n=1,it=1,elecfldn(:,n,1)*300=', &
                                     elecfldn(0:lrz+1,1,1)*300
-         call ncvpt_doubl2(ncid,vid,start_elecfldn,count_elecfldn, &
-              elecfldn(0:,0:,0:),istatus)
+         call ncvpt_doubl2(ncid,vid,start_elecfldn,count_elecfldn,elecfldn(0:,0:,0:),istatus)
       endif
 
       if ( (netcdfshort.ne.'enabled')  .and. &
@@ -4100,8 +4073,7 @@ contains
                endif  !On tavg
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                start1(3)=ll
-               call ncvpt_doubl2(ncid,vid,start1(1:3),count1(1:3), &
-                                 wkpack,istatus)
+               call ncvpt_doubl2(ncid,vid,start1(1:3),count1(1:3),wkpack,istatus)
                !So, here start1={1,   1,   ll}
                !         count1={iy,  jx,  1}
                !         dimsf= {ydim,xdim,rdim}
@@ -4128,8 +4100,7 @@ contains
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                startg(3)=ll
                startg(4)=k
-               call ncvpt_doubl2(ncid,vid,startg(1:4),countg(1:4), &
-                                 wkpack,istatus)
+               call ncvpt_doubl2(ncid,vid,startg(1:4),countg(1:4),wkpack,istatus)
                !So, here startg={1,   1,   ll,  k}
                !         countg={iy,  jx,  1,   1}
                !         dimsg= {ydim,xdim,rdim,gdim}
@@ -4151,8 +4122,7 @@ contains
          call ncvpt_doubl2(ncid,vid,start_xr,count_xr,wkpack,istatus)
 
          istatus= NF_INQ_VARID(ncid,'efluxt',vid)  !-YuP: NetCDF-f77 get vid
-         call ncvpt_doubl0(ncid,vid,start_xr(2),count_xr(2),efluxt(1), &
-              istatus)
+         call ncvpt_doubl0(ncid,vid,start_xr(2),count_xr(2),efluxt(1),istatus)
 
       endif
 
@@ -4284,14 +4254,14 @@ contains
       data fluxcmpt/"collisional flux  ","electric fld flux ", &
                     "rf diffusion flux ","sum of fluxes     "/
 
-      real*8, allocatable :: wkpack(:) ! local working array for pack21
+      real(c_double), allocatable :: wkpack(:) ! local working array for pack21
       
       integer :: lefct, igrid ! input
       integer :: nwkpack, istat, ll, llcount, i, j, k ! local
       integer :: n_netcdf ! local
-      real*8 xll,xlu,xlp,xpl,xpu,xmaxq,pltlimm,pltlimmm ! local scalars, input for other functions
-      real*8 xrf ! local scalar, input for call coefrfad()
-      real*8 rya_netcdf(lrza) ! local, and input for ncvpt_doubl2
+      real(c_double) xll,xlu,xlp,xpl,xpu,xmaxq,pltlimm,pltlimmm ! local scalars, input for other functions
+      real(c_double) xrf ! local scalar, input for call coefrfad()
+      real(c_double) rya_netcdf(lrza) ! local, and input for ncvpt_doubl2
       integer :: ll_netcdf(lrza),itl_netcdf(lrza),itu_netcdf(lrza) ! local, and input for ncvpt_int2
 
 
@@ -4943,8 +4913,7 @@ contains
             call ncvpt_doubl0(ncid,vid,(1),1,(rhomax),istatus)
 
             istatus= NF_INQ_VARID(ncid,'rya_netcdf',vid)  !-YuP: NetCDF-f77 get vid
-            call ncvpt_doubl0(ncid,vid,(1),n_netcdf, &
-                 rya_netcdf(1:n_netcdf), istatus)
+            call ncvpt_doubl0(ncid,vid,(1),n_netcdf,rya_netcdf(1:n_netcdf), istatus)
 
 
 
@@ -5012,8 +4981,7 @@ contains
             call ncvpt_doubl0(ncid,vid,(1),1,(rhomax),istatus)
 
             istatus= NF_INQ_VARID(ncid,'rya_netcdf',vid)  !-YuP: NetCDF-f77 get vid
-            call ncvpt_doubl0(ncid,vid,(1),n_netcdf, &
-                 rya_netcdf(1:n_netcdf), istatus)
+            call ncvpt_doubl0(ncid,vid,(1),n_netcdf,rya_netcdf(1:n_netcdf), istatus)
 
 
 !     Write the fluxes (and the pitch angle mesh y):
@@ -5122,70 +5090,6 @@ contains
       return
       end subroutine ncvptc2
 
-      subroutine ncvpt_doubl0(NCID, vid, START, COUNTS,  DVALS, istatus)
-      !YuP: START, COUNTS are scalars
-      implicit none
-      INCLUDE 'netcdf.inc'
-      INTEGER istatus,vid,NCID, START, COUNTS
-      REAL*8 DVALS(*)
-      istatus=NF_PUT_VARA_DOUBLE(NCID, vid, START, COUNTS, DVALS)
-      return
-      end subroutine ncvpt_doubl0
-
-      subroutine ncvpt_doubl2(NCID, vid, START, COUNTS,  DVALS, istatus)
-      !YuP: START, COUNTS are vectors
-      implicit none
-      INCLUDE 'netcdf.inc'
-      INTEGER istatus,vid,NCID, START(*), COUNTS(*)
-      REAL*8 DVALS(*)
-      istatus=NF_PUT_VARA_DOUBLE(NCID, vid, START, COUNTS, DVALS)
-      return
-      end subroutine ncvpt_doubl2
-
-      subroutine ncvpt_int0(NCID, vid, START, COUNTS,  IVALS, istatus)
-      !YuP: START and COUNT as scalars 
-      implicit none
-      INCLUDE 'netcdf.inc'
-      INTEGER istatus,vid,NCID, START, COUNTS
-      INTEGER, dimension(COUNTS-START+1) :: IVALS
-      !istatus=NF_PUT_VARA_INT(NCID, vid, START, COUNTS, IVALS)
-      istatus=NF_PUT_VAR_INT(NCID, vid, IVALS)
-      return
-      end subroutine ncvpt_int0
-
-      subroutine ncvpt_int2(NCID, vid, START, COUNTS,  IVALS, istatus)
-      !YuP: START and COUNT as vectors 
-      implicit none
-      INCLUDE 'netcdf.inc'
-      INTEGER istatus,vid,NCID, START(*), COUNTS(*)
-      INTEGER IVALS(*)
-      istatus=NF_PUT_VARA_INT(NCID, vid, START, COUNTS, IVALS)
-      return
-      end subroutine ncvpt_int2
-
-
-!      subroutine NCPOPT
-       !!!-YuP: call NCPOPT() commented in files
-       ! No similar routine in NetCDF-3
-
-
-!     OTHER NF_PUT_*** routines available in NetCDF-3 or higher:
-
-!     VAR entire variable access:
-!     INTEGER FUNCTION  NF_PUT_VAR_DOUBLE(NCID, VARID, DVAL)
-
-!     VAR1 single value access:
-!     INTEGER FUNCTION  NF_PUT_VAR1_INT(NCID, VARID, INDEX, IVAL)
-
-!     VARA array or array section access:
-!     INTEGER FUNCTION  NF_PUT_VARA_INT(NCID, VARID, START, COUNT, IVALS)
-
-!     VARS strided access to a subsample of values:
-!     INTEGER FUNCTION  NF_PUT_VARS_INT(NCID, VARID, START, COUNT, STRIDE, IVALS)
-
-!     VARM mapped access to values not contiguous in memory:
-!     INTEGER FUNCTION  NF_PUT_VARM_INT(NCID, VARID, START, COUNT, STRIDE, IMAP, IVALS)
-
 
 !======================================================================
 !======================================================================
@@ -5200,10 +5104,10 @@ contains
       implicit none
       integer :: j,k,istat1,istat2,istat3,istat4,istat5,istat6,istat7 !local
       integer :: ir,iz,iv,it ! local
-      real*8 dr,dz_,dv,dt,avg ! local scalars
-      real*8 rr,zz,ppsi ! local scalars, input for terp2(),terp1()
-      real*8 arg1,arg2 ! local scalars, input for atan2()
-      real*8 vn,pitch,rhoin,polang ! local scalars, input for tdfinterp()
+      real(c_double) dr,dz_,dv,dt,avg ! local scalars
+      real(c_double) rr,zz,ppsi ! local scalars, input for terp2(),terp1()
+      real(c_double) arg1,arg2 ! local scalars, input for atan2()
+      real(c_double) vn,pitch,rhoin,polang ! local scalars, input for tdfinterp()
       save
 
 !MPIINSERT_INCLUDE
@@ -5221,8 +5125,8 @@ contains
 !     according to the namelist input, and will be deallocated at
 !     the end of the subroutine.
 
-      real*8,dimension(:),allocatable:: f4dr,f4dz,f4dv,f4dt,f4ddv,f4ddt
-      real*8,dimension(:,:,:,:),allocatable:: f4d
+      real(c_double),dimension(:),allocatable:: f4dr,f4dz,f4dv,f4dt,f4ddv,f4ddt
+      real(c_double),dimension(:,:,:,:),allocatable:: f4d
 
 !MPIINSERT_IF_RANK_NE_0_RETURN
 
@@ -5475,10 +5379,10 @@ contains
 
 !     nr_f4d,nz_f4d are R,Z grid dimensions set in namelist
 !     nv_f4d,nt_f4d are dims of normalized vel and of pitch angle grids.
-      real*8, dimension(:) :: f4dr(nr_f4d),f4dz(nz_f4d), &
+      real(c_double), dimension(:) :: f4dr(nr_f4d),f4dz(nz_f4d), &
                               f4dv(nv_f4d),f4dt(nt_f4d), &
                               f4ddv(nv_f4d),f4ddt(nt_f4d)
-      real*8, dimension(nr_f4d,nz_f4d,nv_f4d,nt_f4d) :: f4d  !dims in comm.h
+      real(c_double), dimension(nr_f4d,nz_f4d,nv_f4d,nt_f4d) :: f4d  !dims in comm.h
 
 
 
