@@ -20,8 +20,7 @@ $(SOURCES):        $(INCLUDES)
 # SOURCE line
 include source_dependency.mk
 
-F90OBJECTS = $(filter %.o,$(SOURCES:.F90=.o))
-OBJECTS = $(filter %.o,$(SOURCES:.F=.o))
+OBJECTS = $(SOURCES:.F90=.o)
 
 LOCATION  =   -L/usr/lib64
 LIBRARIES =   -lX11 -lnetcdff -lnetcdf
@@ -56,12 +55,12 @@ standalone: $(NAME)
 libs: lib$(NAME).a lib$(NAME).so
 all: libs $(NAME)_shared standalone
 
-$(NAME):           $(F90OBJECTS) $(OBJECTS)
+$(NAME):           $(OBJECTS)
 	$(LOAD)    $^  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME)
 
 # For the libraries, we do not want a main
-LIBOBJS = $(filter-out a_cqlp.o, $(F90OBJECTS) $(OBJECTS))
+LIBOBJS = $(filter-out a_cqlp.o, $(OBJECTS))
 lib$(NAME).so: $(LIBOBJS)
 	$(COMPILER) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $@
@@ -91,18 +90,10 @@ $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
 oext = o
 include module_dependency.mk
 
-
-#GBW, until all files have the same extension (90 I hope!)
-# filter out objects with correct extension
-# this will simplify greatly once all f90...
-
 # see Sect. 4.10.1, Static Pattern Rules.
-$(filter %.o,$(F90OBJECTS)): %.o: %.F90 $(INCLUDES)
-	$(COMPILE) $< -o $@
 
-$(filter %.o,$(OBJECTS)): %.o: %.F $(INCLUDES)
+%.o: %.F90 $(INCLUDES)
 	$(COMPILE) $< -o $@
-
 
 # ------------------------  Similarly for MPI
 
@@ -110,11 +101,10 @@ standalone_mpi: $(NAME_MPI)
 libs_mpi: lib$(NAME_MPI).a lib$(NAME_MPI).so
 mpi: libs_mpi $(NAME_MPI)_shared standalone_mpi
 
-F90OBJECTS_MPI = $(F90OBJECTS:.o=.o_mpi) cql3d_mpilib.o_mpi
-OBJECTS_MPI = $(OBJECTS:.o=.o_mpi)
+OBJECTS_MPI = $(OBJECTS:.o=.o_mpi) cql3d_mpilib.o_mpi
 #INCLUDE_MPI = $(INCLUDE)
 
-$(NAME_MPI):           $(F90OBJECTS_MPI) $(OBJECTS_MPI)
+$(NAME_MPI):           $(OBJECTS_MPI)
 	$(LOAD_MPI)    $^  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $(NAME_MPI)
 
@@ -122,7 +112,7 @@ $(NAME_MPI)_shared: $(NAME_MPI) lib$(NAME_MPI).so a_cqlp.o_mpi
 	$(COMPILER_MPI) -o $@ $(LDSPECIAL) $(DEBUG) a_cqlp.o_mpi -L. -l$< $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $@
 
-LIBOBJS_MPI = $(filter-out a_cqlp.o_mpi, $(F90OBJECTS_MPI) $(OBJECTS_MPI))
+LIBOBJS_MPI = $(filter-out a_cqlp.o_mpi, $(OBJECTS_MPI))
 lib$(NAME_MPI).a: $(LIBOBJS_MPI)
 	$(LIBTOOL) $@ $^
 	$(PROTECT) $@
@@ -131,10 +121,7 @@ lib$(NAME_MPI).so: $(LIBOBJS_MPI)
 	$(COMPILER_MPI) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $@
 
-$(filter %.o_mpi,$(F90OBJECTS_MPI)): %.o_mpi: %.F90 $(INCLUDES)
-	$(COMPILE_MPI) $< -o $@
-
-$(filter %.o_mpi,$(OBJECTS_MPI)): %.o_mpi: %.F $(INCLUDES)
+%.o_mpi: %.F90 $(INCLUDES)
 	$(COMPILE_MPI) $< -o $@
 
 oext = o_mpi
@@ -142,13 +129,12 @@ include module_dependency.mk
 
 # ------------------------ /MPI
 
-
 rebuild:
-	$(COMPILE) $(SOURCES) $(F90SOURCES)
-	$(LOAD) $(OBJECTS) $(F90OBJECTS) $(LOCATION) $(LIBRARIES)
+	$(COMPILE) $(SOURCES)
+	$(LOAD) $(OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE) *.o
+	$(DELETE)  $(NAME) $(OBJECTS)
 	$(DELETE) *.mod
 	$(DELETE) *.so *.a  $(NAME)_shared
 	$(DELETE) *.o_mpi
