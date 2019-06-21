@@ -29,13 +29,13 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	freya.f90  freyasou.f90  \
 	frinitl.f90  frinitz.f90  frnbdep2.f90  frnfreya.f90  \
 	frset.f90 frsmooth.f90  frsplft.f90   \
-	frstup.f90  frsubs.f  frsuppor.f90  frwrong.f90  \
+	frstup.f90  frsubs.f90 frsuppor.f90  frwrong.f90  \
 	ilut.f90  impchk.f90  impnorm.f90  \
 	lookup.f90  losscone.f90  lossegy.f90  lossorbm.f90  \
 	losstor.f90  micgetr.f90   \
 	micgmbnd.f90  micgnbnd.f90  micxinil.f90  micxinim.f90  micxinit.f90  \
 	micxiniz.f90  \
-	netcdfrf.f  netcdfrw2.f \
+	netcdfrf.f90 netcdfrw2.f90\
 	ntdstore.f90   \
 	ntloop.f90  pack21.f90 pltcycl.f90 \
 	pltdnz.f90  pltelec.f90  pltendn.f90   \
@@ -43,7 +43,7 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	pltpower.f90  \
 	pltrun.f90  pltvec.f90  pltvectr.f90  \
 	pltvflux.f90  profaxis.f90  profiles.f90 prppr.f90   \
-	prpprctr.f90  psif.f90 r8lsode.f  \
+	prpprctr.f90  psif.f90 r8lsode.f90 \
 	rdc_multi.f90 rdc_bplt.f90 restcon.f90 resthks.f90  \
 	restvty.f90  rf.f90  sigalloc.f90  siggy.f90  sigmax.f90  sigsetup.f90  \
 	sigv5d.f90 sigfn.f90 sigie.f90  sigmaxwl.f90   sigv.f90  \
@@ -78,4 +78,4 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	wpcheck.f90  wpchgdy.f90 wpcthta.f90  wpelecf.f90   \
 	wpinitl.f90  wploweq.f90  wpsavf.f90  wptrafx.f90  wptramu.f90  \
 	wptrmuy.f90  wpvptb.f90  wpwrng.f90  wpmshchk.f90 \
-	zblock.f90  zcunix.f90  zfreya.f   znonsym.f90
+	zblock.f90  zcunix.f90  zfreya.f90  znonsym.f90

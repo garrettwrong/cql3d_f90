@@ -114,7 +114,7 @@ exsweepx.o: advnce.o cqlcomm.o diagentr.o diagwrng.o param.o
 finit.o: bcast.o cqlcomm.o cqlconf.o lossorbm.o param.o tdreadf.o
 fle.o: bcast.o cqlcomm.o diagwrng.o micgetr.o param.o r8subs.o
 flxfn.o: cqlcomm.o diagwrng.o param.o
-freya.o: aminmx.o bcast.o param.o
+freya.o: aminmx.o bcast.o param.o zfreya.o
 freyasou.o: bcast.o cqlcomm.o cqlconf.o eqfpsi.o param.o r8subs.o sourcpwr.o  \
 	tdnflxs.o tdtoaray.o urfb0.o zcunix.o
 frinitl.o: cqlcomm.o param.o
@@ -122,7 +122,7 @@ frinitz.o: cqlcomm.o param.o
 frnbdep2.o: cqlcomm.o param.o
 frnfreya.o: cqlcomm.o frplteq.o param.o
 frplteq.o: cqlcomm.o cqlconf.o param.o r8subs.o tdnflxs.o
-frset.o: cqlcomm.o param.o
+frset.o: cqlcomm.o param.o zfreya.o
 frsmooth.o: cqlcomm.o cqlconf.o param.o
 frsplft.o: cqlcomm.o param.o
 frsuppor.o: cqlcomm.o param.o
@@ -148,7 +148,7 @@ micxinit.o: cqlcomm.o diagwrng.o micgetr.o param.o tdtry.o zcunix.o
 micxiniz.o: cqlcomm.o diagwrng.o micgetr.o param.o psif.o tdxin13d.o  \
 	zcunix.o
 mpilib.o: cqlcomm.o param.o r8subs.o
-netcdfrf.o: bcast.o cqlcomm.o pack21.o param.o
+netcdfrf.o: bcast.o cqlcomm.o pack21.o netcdfrw2.o param.o
 netcdfrw2.o: advnce.o bcast.o coeffpad.o coefmidt.o coefstup.o  \
 	cqlcomm.o diagentr.o param.o prppr.o r8subs.o tdfinterp.o zcunix.o
 ntdstore.o: cqlcomm.o param.o restvty.o
@@ -160,7 +160,7 @@ pltelec.o: aminmx.o cqlcomm.o cqlconf.o param.o
 pltendn.o: aminmx.o cqlcomm.o cqlconf.o param.o r8subs.o
 pltfvsv.o: aminmx.o bcast.o cqlcomm.o cqlconf.o param.o pltdf.o  \
 	r8subs.o
-pltinit.o: cqlcomm.o cqlconf.o param.o
+pltinit.o: cqlcomm.o cqlconf.o param.o netcdfrw2.o
 pltlosc.o: cqlcomm.o cqlconf.o param.o pltdf.o
 pltmain.o: advnce.o aminmx.o bcast.o coefefad.o coefegad.o coeffpad.o  \
 	coefload.o coefmidt.o coefmidv.o coefrfad.o coefstup.o coefsyad.o  \
@@ -241,12 +241,13 @@ tdnpa0.o: bcast.o cqlcomm.o cqlconf.o eqfpsi.o param.o tdnpa.o  \
 	tdnpalam.o tdsetnpa.o tdsxrplt.o zcunix.o
 tdnpadiag.o: cqlcomm.o cqlconf.o param.o tdnpa0.o
 tdnpalam.o: cqlcomm.o param.o tdnpabscs.o
-tdoutput.o: bcast.o cfpgamma.o cqlcomm.o cqlconf.o param.o restcon.o  \
-	resthks.o tdnflxs.o tdtrflx.o
+tdoutput.o: bcast.o cfpgamma.o cqlcomm.o cqlconf.o netcdfrw2.o param.o  \
+	restcon.o resthks.o tdnflxs.o tdtrflx.o
 tdplteq.o: cqlcomm.o cqlconf.o frplteq.o param.o
 tdpltjop.o: aminmx.o cqlcomm.o cqlconf.o param.o
 tdpltmne.o: aminmx.o cqlcomm.o cqlconf.o param.o r8subs.o tdpltjop.o
-tdreadf.o: bcast.o cqlcomm.o cqlconf.o param.o tdnflxs.o zcunix.o
+tdreadf.o: bcast.o cqlcomm.o cqlconf.o netcdfrw2.o param.o tdnflxs.o  \
+	zcunix.o
 tdrmshst.o: cqlcomm.o eqorbit.o eqvolpsi.o param.o zcunix.o
 tdsetnpa.o: bcast.o cqlcomm.o param.o zcunix.o
 tdsetsxr.o: bcast.o cqlcomm.o param.o tddsig.o
@@ -271,7 +272,7 @@ tdtravct.o: bcast.o cqlcomm.o cqlconf.o param.o r8subs.o tdtrrtov.o  \
 tdtrchk.o: bcast.o cqlcomm.o cqlconf.o diagwrng.o param.o r8subs.o
 tdtrchkd.o: bcast.o cqlcomm.o param.o
 tdtrcon.o: cqlcomm.o param.o tdtrflx.o
-tdtrdfus.o: bcast.o cqlcomm.o cqlconf.o param.o tdnflxs.o
+tdtrdfus.o: bcast.o cqlcomm.o cqlconf.o param.o netcdfrw2.o tdnflxs.o
 tdtrfcop.o: cqlcomm.o param.o r8subs.o
 tdtrflg.o: bcast.o cqlcomm.o param.o
 tdtrflx.o: bcast.o cqlcomm.o param.o r8subs.o
@@ -316,7 +317,7 @@ urfdout.o: cqlcomm.o param.o
 urfedge.o: cqlcomm.o param.o
 urffflx.o: bcast.o cqlcomm.o param.o r8subs.o zcunix.o
 urfindfl.o: cqlcomm.o param.o
-urfinitl.o: cqlcomm.o cqlconf.o param.o
+urfinitl.o: cqlcomm.o cqlconf.o param.o netcdfrw2.o
 urfmidv.o: bcast.o cqlcomm.o param.o r8subs.o
 urfpack.o: cqlcomm.o param.o r8subs.o tdnflxs.o urfedge.o urfwrong.o
 urfrays.o: cqlcomm.o param.o
@@ -354,4 +355,5 @@ wptramu.o: bcast.o cqlcomm.o param.o r8subs.o wpbdry.o wpcheck.o  \
 	znonsym.o
 wptrmuy.o: cqlcomm.o param.o
 wpvptb.o: cqlcomm.o param.o
-wpwrng.o:  cqlcomm.o param.o
+wpwrng.o: cqlcomm.o param.o
+zfreya.o: param.o frsubs.o
