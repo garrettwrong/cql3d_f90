@@ -6574,7 +6574,135 @@ contains
       return
       end subroutine adassgxn
 !
+      !
+
+            real(c_double) function seval (n, u, x, y, b, c, d)
 !
+      implicit none 
+!.......................................................................
+!      include 'fileiou.inc'
+!      BH: explicitly including:
+!-----Include file, FILEIOU.INC, 03/01/92
+!-----This file includes the unit numbers of the different I/O files
+!-----for the NFREYA project, as well as the title:
+
+      integer ntty, nin, nout, nmhd, ngrf
+      common/iou/ntty, nin, nout, nmhd, ngrf ! only here 
+      character*80 title
+      common/titl/title ! only here
+!.......................................................................
+!
+      integer n
+      real(c_double) :: u, x(n), y(n), b(n), c(n), d(n)
+!
+! this subroutine evaluates the cubic spline function
+!
+!    seval = y(i) + b(i)*(u-x(i)) + c(i)*(u-x(i))**2 + d(i)*(u-x(i))**3
+!
+!    where  x(i) < u < x(i+1), using Horner's rule
+!
+!  if  u .lt. x(1)  then  i = 1  is used.
+!  if  u .ge. x(n)  then  i = n  is used.
+
+!  ---------------------------HSJ Modification 1/30/98------------------
+!  The above two rules are not acceptible in the context in which
+!  this routine is used in the ONETWO code. (actually they are not
+!  acceptable in any context in my opinion.
+!  Interpolating outside the cubic spline fit is totally bogus.)
+!  I have changed the rules to read
+!   if u .gt. x(n) then use Y(n) as the most reasonable
+!   approximation if you dont actually want to stop the code.
+!   similarly if u .lt. x(1) then use y(1) as the returned value.
+!  using the first or last point may not be much better in some circumstances
+!  but at least we will get physically relevant values !!!!!!!!!!!HSJ
+!  Note that the switch extend_seval must be set to 1 to get this
+!  behavior. Otherwise an error stop is taken when trying to interpoalte
+!  outside the tables.
+! -----------------------------------------------------------------------
+!
+!  input..
+!
+!    n     = the number of data points
+!    u     = the abscissa at which the spline is to be evaluated
+!    x,y   = the arrays of data abscissas and ordinates
+!    b,c,d = arrays of spline coefficients computed by spline
+!
+!  if  u  is not in the same interval as the previous call, then a
+!  binary search is performed to determine the proper interval.
+!
+      integer i, j, k
+      real(c_double) ::  dx
+      integer extend_seval
+      data    i/1/, extend_seval/1/ ! YuP[07-2016] changed extend_seval from 0 to 1
+      !YuP: Had problem with extend_seval=0 in mirror machine runs:
+      ! Code quits with a message:
+      !Subroutine Seval,a spline fit evaluater,
+      !has detected that out of bounds interpolation
+      !is occuring. The value at which the cubic spline
+      !is to be evaluated is     4.16666667E+03
+      !the interpolating table extends from     5.00000000E+03 to     1.00000000E+06
+      !You can set extend_seval=1 in the first namelist
+      !in inone if you want to ignore this problem
+      !subroutine SEVAL: Bad Interpolation
+!
+!
+!  added  1/29/98  HSJ
+!
+      if (u .lt. x(1)) then
+         if(extend_seval .eq. 1)then
+           seval=y(1)
+           return
+         else
+           write(*,100)u,x(1),x(n)
+            write(nout,100)u,x(1),x(n)
+!           call STOP('subroutine SEVAL: Bad Interpolation', 1226)
+           write(nout,*)'subroutine SEVAL: Bad Interpolation'
+           STOP
+         endif
+      else if(u .gt. x(n)) then
+         if(extend_seval .eq. 1)then
+           seval=y(n)
+           return
+         else
+           write(*,100)u,x(1),x(n)
+            write(nout,100)u,x(1),x(n)
+!           call STOP('subroutine SEVAL: Bad Interpolation', 1226)
+           write(nout,*)'subroutine SEVAL: Bad Interpolation'
+           STOP
+         endif
+      endif
+!
+      if (i .ge. n)  i = 1
+      if (u .lt. x(i))  go to 10
+      if (u .le. x(i+1))  go to 30
+!
+!  binary search
+!
+
+  10  i = 1
+      j = n+1
+  20  k = (i+j)/2
+      if (u .lt. x(k))  j = k
+      if (u .ge. x(k))  i = k
+      if (j .gt. i+1 )  go to 20
+!
+!  evaluate spline
+!
+   30 dx = u - x(i)
+      seval = y(i) + dx*(b(i) + dx*(c(i) + dx*d(i)))
+      return
+!
+ 100  format('Subroutine Seval,a spline fit evaluater,',/, &
+             ' has detected that out of bounds interpolation',/, &
+             ' is occuring. The value at which the cubic spline',/, &
+             ' is to be evaluated is ',1pe18.8,/, &
+             ' the interpolating table extends from ',1pe18.8, &
+             ' to ',1pe18.8,/, &
+             ' You can set extend_seval=1 in the first namelist',/, &
+             ' in inone if you want to ignore this problem')
+!
+    end function seval
+    
       subroutine adasqh6 (ti,ecol,bmz,iflag,ne,zeff,conche, &
                           concbe,concb,concc,concn,conco,concne, &
                           qrat,ierr)
@@ -6697,7 +6825,7 @@ contains
       integer    isp, z(nsp), neb(nsp), ndens(nsp), ntemp(nsp), i, j, k
       real(c_double) ::     eb(maxe,nsp), dens(maxn,nsp), temp(maxt,nsp)
       real(c_double) ::     tref(nsp), ebref(nsp), denref(nsp), svref(nsp)
-      real(c_double) ::     sven(maxe,maxn,nsp), svt(maxt,nsp), seval
+      real(c_double) ::     sven(maxe,maxn,nsp), svt(maxt,nsp)
       character  line*80
       data       z /1, 2, 4, 5, 6, 7, 8, 10/
 !
@@ -7349,132 +7477,7 @@ contains
       end subroutine spline
       
 !
-      real(c_double) function seval (n, u, x, y, b, c, d)
-!
-      implicit none 
-!.......................................................................
-!      include 'fileiou.inc'
-!      BH: explicitly including:
-!-----Include file, FILEIOU.INC, 03/01/92
-!-----This file includes the unit numbers of the different I/O files
-!-----for the NFREYA project, as well as the title:
 
-      integer ntty, nin, nout, nmhd, ngrf
-      common/iou/ntty, nin, nout, nmhd, ngrf ! only here 
-      character*80 title
-      common/titl/title ! only here
-!.......................................................................
-!
-      integer n
-      real(c_double) :: u, x(n), y(n), b(n), c(n), d(n)
-!
-! this subroutine evaluates the cubic spline function
-!
-!    seval = y(i) + b(i)*(u-x(i)) + c(i)*(u-x(i))**2 + d(i)*(u-x(i))**3
-!
-!    where  x(i) < u < x(i+1), using Horner's rule
-!
-!  if  u .lt. x(1)  then  i = 1  is used.
-!  if  u .ge. x(n)  then  i = n  is used.
-
-!  ---------------------------HSJ Modification 1/30/98------------------
-!  The above two rules are not acceptible in the context in which
-!  this routine is used in the ONETWO code. (actually they are not
-!  acceptable in any context in my opinion.
-!  Interpolating outside the cubic spline fit is totally bogus.)
-!  I have changed the rules to read
-!   if u .gt. x(n) then use Y(n) as the most reasonable
-!   approximation if you dont actually want to stop the code.
-!   similarly if u .lt. x(1) then use y(1) as the returned value.
-!  using the first or last point may not be much better in some circumstances
-!  but at least we will get physically relevant values !!!!!!!!!!!HSJ
-!  Note that the switch extend_seval must be set to 1 to get this
-!  behavior. Otherwise an error stop is taken when trying to interpoalte
-!  outside the tables.
-! -----------------------------------------------------------------------
-!
-!  input..
-!
-!    n     = the number of data points
-!    u     = the abscissa at which the spline is to be evaluated
-!    x,y   = the arrays of data abscissas and ordinates
-!    b,c,d = arrays of spline coefficients computed by spline
-!
-!  if  u  is not in the same interval as the previous call, then a
-!  binary search is performed to determine the proper interval.
-!
-      integer i, j, k
-      real(c_double) ::  dx
-      integer extend_seval
-      data    i/1/, extend_seval/1/ ! YuP[07-2016] changed extend_seval from 0 to 1
-      !YuP: Had problem with extend_seval=0 in mirror machine runs:
-      ! Code quits with a message:
-      !Subroutine Seval,a spline fit evaluater,
-      !has detected that out of bounds interpolation
-      !is occuring. The value at which the cubic spline
-      !is to be evaluated is     4.16666667E+03
-      !the interpolating table extends from     5.00000000E+03 to     1.00000000E+06
-      !You can set extend_seval=1 in the first namelist
-      !in inone if you want to ignore this problem
-      !subroutine SEVAL: Bad Interpolation
-!
-!
-!  added  1/29/98  HSJ
-!
-      if (u .lt. x(1)) then
-         if(extend_seval .eq. 1)then
-           seval=y(1)
-           return
-         else
-           write(*,100)u,x(1),x(n)
-            write(nout,100)u,x(1),x(n)
-!           call STOP('subroutine SEVAL: Bad Interpolation', 1226)
-           write(nout,*)'subroutine SEVAL: Bad Interpolation'
-           STOP
-         endif
-      else if(u .gt. x(n)) then
-         if(extend_seval .eq. 1)then
-           seval=y(n)
-           return
-         else
-           write(*,100)u,x(1),x(n)
-            write(nout,100)u,x(1),x(n)
-!           call STOP('subroutine SEVAL: Bad Interpolation', 1226)
-           write(nout,*)'subroutine SEVAL: Bad Interpolation'
-           STOP
-         endif
-      endif
-!
-      if (i .ge. n)  i = 1
-      if (u .lt. x(i))  go to 10
-      if (u .le. x(i+1))  go to 30
-!
-!  binary search
-!
-
-  10  i = 1
-      j = n+1
-  20  k = (i+j)/2
-      if (u .lt. x(k))  j = k
-      if (u .ge. x(k))  i = k
-      if (j .gt. i+1 )  go to 20
-!
-!  evaluate spline
-!
-   30 dx = u - x(i)
-      seval = y(i) + dx*(b(i) + dx*(c(i) + dx*d(i)))
-      return
-!
- 100  format('Subroutine Seval,a spline fit evaluater,',/, &
-             ' has detected that out of bounds interpolation',/, &
-             ' is occuring. The value at which the cubic spline',/, &
-             ' is to be evaluated is ',1pe18.8,/, &
-             ' the interpolating table extends from ',1pe18.8, &
-             ' to ',1pe18.8,/, &
-             ' You can set extend_seval=1 in the first namelist',/, &
-             ' in inone if you want to ignore this problem')
-!
-      end function seval
 !
 !
       subroutine spline_12 (n, x, y, b, c, d)

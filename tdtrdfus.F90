@@ -3,8 +3,8 @@ module tdtrdfus_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
-  use netcdfrw2_mod, only : ncvdef0,ncvdef2,ncaptc2,ncvptc0,ncvpt_int0, &
-                            ncvpt_doubl0,ncvpt_doubl2,length_char,check_err
+  use netcdfrw2_mod, only : ncvdef0,ncvdef2,ncaptc2,ncvptc0, &
+                            length_char,check_err
 
   use bcast_mod, only : bcast
   use cqlcomm_mod
@@ -751,51 +751,51 @@ contains
 
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrzmax',vid)
-      call ncvpt_int0(ncid,vid,1,1,setup0%lrzmax,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,1,1,setup0%lrzmax)
 
       istatus= NF_INQ_VARID(ncid,'rya',vid)
-      call ncvpt_doubl0(ncid,vid,(1),setup0%lrzmax,rya(1),istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),setup0%lrzmax,rya(1))
 
       istatus= NF_INQ_VARID(ncid,'rpconz',vid)
-      call ncvpt_doubl0(ncid,vid,(1),setup0%lrzmax,rpconz(1),istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),setup0%lrzmax,rpconz(1))
 
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)
-      call ncvpt_doubl0(ncid,vid,(1),1,(rhomax),istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(rhomax))
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrz',vid)
-      call ncvpt_int0(ncid,vid,1,1,setup0%lrz,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,1,1,setup0%lrz)
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrindx',vid)
-      call ncvpt_int0(ncid,vid,1,setup0%lrz,setup0%lrindx(1),istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,setup0%lrindx(1))
 
       istatus= NF_INQ_VARID(ncid,'jx',vid)
-      call ncvpt_int0(ncid,vid,1,1,(jx),istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(jx))
 
       istatus= NF_INQ_VARID(ncid,'x',vid)
-      call ncvpt_doubl0(ncid,vid,(1),jx,x,istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),jx,x)
 
       istatus= NF_INQ_VARID(ncid,'vnorm',vid)
-      call ncvpt_doubl0(ncid,vid,(1),1,(vnorm),istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(vnorm))
 
       istatus= NF_INQ_VARID(ncid,'enorm',vid)
-      call ncvpt_doubl0(ncid,vid,(1),1,(enorm),istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),1,(enorm))
 
       istatus= NF_INQ_VARID(ncid,'iy',vid)
-      call ncvpt_int0(ncid,vid,1,1,(iymax),istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,1,1,(iymax))
 
       if (iy*lrors.gt.iyjx2) stop 'netcdfrf:  Need to set jx>lrza'
       call pack21(y,1,iy,1,lrors,tem1,iymax,lrors)
       istatus= NF_INQ_VARID(ncid,'y',vid)
-      call ncvpt_doubl2(ncid,vid,start1,y_count,tem1,istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,y_count,tem1)
 
       istatus= NF_INQ_VARID(ncid,'iy_',vid)
-      call ncvpt_int0(ncid,vid,1,setup0%lrz,iy_,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,iy_)
 
       istatus= NF_INQ_VARID(ncid,'itl',vid)
-      call ncvpt_int0(ncid,vid,1,setup0%lrz,itl_,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,itl_)
 
       istatus= NF_INQ_VARID(ncid,'itu',vid)
-      call ncvpt_int0(ncid,vid,1,setup0%lrz,itu_,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,1,setup0%lrz,itu_)
 
 !  n_d_rr is the number of diffused general species
       if (n_d_rr.eq.1) then
@@ -809,7 +809,7 @@ contains
             enddo
             call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
             start1(3)=ll
-            call ncvpt_doubl2(ncid,vid,start1,count1,wkpack,istatus)
+            istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,wkpack)
          enddo
          if (kopt.eq.2) then
          istatus= NF_INQ_VARID(ncid,'d_r',vid)
@@ -821,7 +821,7 @@ contains
             enddo
             call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
             start1(3)=ll
-            call ncvpt_doubl2(ncid,vid,start1,count1,wkpack,istatus)
+            istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,wkpack)
          enddo
          endif  !On kopt.eq.2
 
@@ -838,7 +838,7 @@ contains
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                startg(3)=ll
                startg(4)=k
-               call ncvpt_doubl2(ncid,vid,startg,countg,wkpack,istatus)
+               istatus = NF_PUT_VARA_DOUBLE(ncid,vid,startg,countg,wkpack)
             enddo               !  On ll
          enddo                  !  On k
          if (kopt.eq.2) then
@@ -853,7 +853,7 @@ contains
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                startg(3)=ll
                startg(4)=k
-               call ncvpt_doubl2(ncid,vid,startg,countg,wkpack,istatus)
+               istatus = NF_PUT_VARA_DOUBLE(ncid,vid,startg,countg,wkpack)
             enddo               !  On ll
          enddo                  !  On k
          endif  !On kopt.eq.2
