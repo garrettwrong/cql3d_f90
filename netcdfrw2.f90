@@ -4,16 +4,7 @@ module netcdfrw2_mod
       use param_mod, only : nmodsa
       use bcast_mod, only : bcast
       use bcast_mod, only : ibcast
-      !-------------------
-      !YuP[2019-06-20] Having problem, after converting to netcdfrw2_mod --
-      ! Many NF_*** functions from the standard 'netcdf.inc' file became "unresolved".
-      ! Added this line:
-      use netcdf90
-      ! Also found netcdf90.mod file in my Windows-netcdf distribution,
-      ! copied it to ...\Intel\Compiler\Fortran\10.1.011\IA32\Include\
-      ! Also copied netcdff90.lib into ...\Intel\Compiler\Fortran\10.1.011\IA32\lib\
-      ! NO UNRESOLVED ANYMORE !  But not sure how it will work at NERSC
-      !-------------------
+      use netcdf
       !use pack21_mod, only : pack21
       !use pack21_mod, only : unpack21
       external pack21    ! XXXX ugh, you should fix these.  YuP: don't know what exactly to fix
