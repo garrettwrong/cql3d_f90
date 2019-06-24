@@ -21,7 +21,7 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	diagxswx.f90  dsk_gr.f90 dskout.f90  efield.f90  eflditer.f90 eqalloc.f90   \
 	eqcoord.f90  eqelpse.f90  eqflxavg.f90  eqfn.f90  \
 	eqfndpsi.f90  eqfninv.f90  eqfpsi.f90   \
-	eqindflt.f90  eqinitl.f90  eqjac.f90  eqonovrp.f90  \
+	eqinitl.f90  eqjac.f90  eqonovrp.f90  \
 	eqorbit.f90  eqrhs.f90   \
 	eqtopeol.f90  eqvolpsi.f90  eqwrng.f90  \
 	esefld.f90  exlin.f90  exsweep.f90  exsweept.f90   \

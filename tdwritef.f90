@@ -76,11 +76,11 @@ contains
 !.......................................................................
 
       write(iunwrif,'(" ")')
-      ! nml name now private, can be called from module write(iunwrif,setup0)
+      ! nml name now private, can make a function in the module for this (iunwrif,setup0)
       write(iunwrif,setup)
       write(iunwrif,trsetup)
       write(iunwrif,sousetup)
-      write(iunwrif,eqsetup)
+      !nml name now private, can make a function in the module for this i(iunwrif,eqsetup)
       write(iunwrif,rfsetup)
       write(iunwrif,frsetup)
 !.......................................................................

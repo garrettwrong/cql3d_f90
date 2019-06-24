@@ -144,7 +144,7 @@ contains
 
       ! this shoudl get (re)moved with each nml convers as need,
       ! eventually totally handled by the config module
-      open(unit=2,file='cqlinput',status='old')
+      open(unit=2,file=nml_file,status='old')
       read(2,setup)  ! Gets pltinput variable, for ainplt routine.
       rewind(2)
       sumdtr=zero
@@ -187,7 +187,7 @@ contains
          nefiter=1              ! counts iterations; elecfld iterations for
                                 ! one flux surface are not functional;
                             ! set nefiter to 1 for logic control in impavnc0
-         call achief1           ! YuP: only called during n=0; Why needed?
+         call achief1(nml_file)           ! YuP: only called during n=0; Why needed?
                                 ! BH:  In the past, at least, this call with
                                 !      setup0%lrzmax=1, time-stepped the soln
                                 !      to n=nstop in achiefn.
@@ -198,7 +198,7 @@ contains
 !     (and sets n=0, n_(1:lrorsa)=0 though call aindflt1).
 !..................................................................
 
-      call tdinitl !-> call ainitial
+      call tdinitl(nml_file) !-> call ainitial
          ! tdinitl-> eqcoord-> eqfndpsi-> eqorbit-> trace flux surf.
          ! solr(l,lr_), solz(l,lr_) are R,Z coords. of flux surface
       dtr0=dtr

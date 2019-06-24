@@ -109,22 +109,6 @@
 	szm2z,sthm1,szm1,szm2
 
 !..................................................................
-!     Namelist (eqsetup) for "eq"(equilibrium geometry) routines.
-!..................................................................
-
-      namelist/eqsetup/ &
-	atol, &
-	ellptcty,eqmodel,eqpower,eqsource,eqdskin,bsign,eqmod, &
-	eqsym,eqdskalt, &
-	fpsimodl, &
-	lfield, &
-	methflag, &
-	nconteq,nconteqn, &
-	povdelp, &
-	rtol,rmag,rbox,rboxdst, &
-	zbox
-
-!..................................................................
 !      Namelist (rfsetup) for "urf", "vlh", "vlf", rdcmod  modules.
 !..................................................................
 

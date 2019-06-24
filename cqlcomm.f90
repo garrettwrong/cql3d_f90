@@ -43,7 +43,7 @@ module cqlcomm_mod
 
   !---BEGIN USE
 
-  use cqlconf_mod, only : setup0
+  use cqlconf_mod, only : setup0, eqsetup
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
   use iso_c_binding, only : c_double_complex
@@ -58,7 +58,7 @@ module cqlcomm_mod
   !     nml variables that take on the values assigned to parameters.
   !.......................................................................
   integer :: iy,jx, &
-       lfield,lz,&
+       lz,&
        mx, &
        nbctime,negyrg,ngen,nmax
 
@@ -67,7 +67,7 @@ module cqlcomm_mod
   !.......................................................................
 
   character(len=8) :: chang, &
-       eqmod,eleccomp,f4d_out,tavg, &
+       eleccomp,f4d_out,tavg, &
        iactst,ineg,idrop,idskf,idskrf,ichkpnt,implct, &
        lbdry0,locquas,taunew, &
        machine,meshy,manymat, &
@@ -348,24 +348,34 @@ module cqlcomm_mod
   !     SECTIONS).
   !******************************************************************
 
-  character(len=8) :: nconteq
+  character(len=8), pointer :: nconteq => eqsetup%nconteq
+  character(len=8), pointer :: eqmod => eqsetup%eqmod
 
+  integer, pointer :: lfield => eqsetup%lfield
   !common/params/
-  integer :: nconteqn
+  integer, pointer :: nconteqn => eqsetup%nconteqn
 
-  character(len=8) :: eqsym,eqdskalt,eqsource,eqmodel, fpsimodl
+  character(len=8), pointer :: eqsym =>eqsetup%eqsym
+  character(len=8), pointer :: eqdskalt => eqsetup%eqdskalt
+  character(len=8), pointer :: eqsource => eqsetup%eqsource
+  character(len=8), pointer :: eqmodel=> eqsetup%eqmodel
+  character(len=8), pointer :: fpsimodl => eqsetup%fpsimodl
 
   !     ONETWO uses character*60 for eqdskin.
-  character(len=256) :: eqdskin
+  character(len=256), pointer :: eqdskin => eqsetup%eqdskin
 
   !common/readscal/ &
-  real(c_double) :: atol, &
-       ellptcty,eqpower,bsign, &
-       povdelp, &
-       rtol,rmag,rbox,rboxdst, &
-       zbox
-  integer :: methflag
-
+  real(c_double), pointer :: atol => eqsetup%atol
+  real(c_double), pointer :: ellptcty => eqsetup%ellptcty
+  real(c_double), pointer :: eqpower => eqsetup%eqpower
+  real(c_double), pointer :: bsign => eqsetup%bsign
+  real(c_double), pointer :: povdelp => eqsetup%povdelp
+  real(c_double), pointer :: rtol => eqsetup%rtol
+  real(c_double), pointer :: rmag => eqsetup%rmag
+  real(c_double), pointer :: rbox => eqsetup%rbox
+  real(c_double), pointer :: rboxdst => eqsetup%rboxdst
+  real(c_double), pointer :: zbox => eqsetup%zbox
+  integer, pointer :: methflag => eqsetup%methflag
 
 
   !*********************************************************************

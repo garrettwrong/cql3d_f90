@@ -23,7 +23,6 @@ module achief1_mod
   use coefwtj_mod, only : coefwtj
   use diagimpd_mod, only : diagimpd
   use diagscal_mod, only : diagscal
-  use eqindflt_mod, only : eqindflt
   use eqinitl_mod, only : eqinitl
   use micxinit_mod, only : micxinit
   use micxiniz_mod, only : micxiniz
@@ -41,10 +40,12 @@ module achief1_mod
 
 contains
 
-  subroutine achief1
+  subroutine achief1(nml_file)
     use param_mod
     use cqlconf_mod, only : print_setup0
     use cqlconf_mod, only : setup0
+    use cqlconf_mod, only : get_eqsetup_from_nml
+    use cqlconf_mod, only : print_eqsetup
     use cqlcomm_mod
     use pltmain_mod, only : pltmain
     use r8subs_mod, only : dcopy
@@ -61,6 +62,7 @@ contains
     use achiefn_mod, only : achiefn
 
     implicit integer (i-n), real(c_double) (a-h,o-z)
+    character(len=*), intent(in), optional :: nml_file
     save
 
     !..................................................................
@@ -75,17 +77,25 @@ contains
     !     Set defaults - for main code + "eq" module.
     !..................................................................
     call aindflt
-    call eqindflt
+    !call eqindflt
     call aindflt1
 
     !.....................................................................
     !     Read in driver input namelist setup
     !.....................................................................
-    open(unit=2,file="cqlinput",status="old")
+    open(unit=2,file=nml_file,status="old")
     read(2,setup)
     read(2,trsetup)
     read(2,sousetup)
-    read(2,eqsetup)
+
+    rewind(2) !tmp
+    close(2) !tmp
+    call get_eqsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+    !read(2,eqsetup)
+
+    open(unit=2,file=nml_file,status="old") ! tmp
+    rewind(2) !tmp
+    
     read(2,rfsetup)
     close(2)
 
@@ -117,11 +127,11 @@ contains
        write(6,setup)
        write(6,trsetup)
        write(6,sousetup)
-       write(6,eqsetup)
+       !now private write(6,eqsetup)
        write(6,rfsetup)
     elseif (setup0%nmlstout.eq."trnscrib") then
        write(6,*)'  In achief1: '
-       call ain_transcribe("cqlinput")
+       call ain_transcribe(nml_file)
     else
        write(6,*)
        write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
@@ -141,7 +151,7 @@ contains
     call eqinitl
     call frinitl
 
-    open(unit=2,file="cqlinput",delim='apostrophe',status="old")
+    open(unit=2,file=nml_file,delim='apostrophe',status="old")
     call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
     close(2)
 

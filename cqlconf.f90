@@ -1,15 +1,21 @@
 module cqlconf_mod
-  use param_mod, only : lrorsa
+  use param_mod, only : lrorsa, lfielda
+  use iso_c_binding, only : c_double
   implicit none
 
   private
   integer :: ll
-  logical :: nml_file_open = .FALSE.
+  logical, save :: nml_file_open = .FALSE.
   integer, save:: nml_fd = -1
+  public nml_close
+
   public get_setup0_from_nml
   public print_setup0
   public set_setup0
-  public nml_close
+
+  public get_eqsetup_from_nml
+  public print_eqsetup
+  public set_eqsetup
 
   type, public ::  setup0_t
      character(len=256) :: mnemonic = "default_output"
@@ -39,8 +45,33 @@ module cqlconf_mod
      character(len=8) :: nlwritf = "disabled"
   end type setup0_t
 
+  type, public :: eqsetup_t
+     real(c_double) :: atol = 1.e-8
+     real(c_double) :: ellptcty = 0.
+     character(len=8) :: eqdskalt = "disabled"
+     character(len=256) :: eqdskin = "eqdsk"
+     character(len=8) :: eqmodel = "power"
+     real(c_double) :: eqpower = 1.
+     character(len=8) :: eqsym = "average"
+     character(len=8) :: eqsource = "eqdsk"
+     real(c_double) :: bsign = +1.0
+     character(len=8) :: eqmod = "disabled"
+     character(len=8) :: fpsimodl = "constant"
+     integer :: lfield = lfielda
+     integer :: methflag = 10
+     character(len=8) :: nconteq = "disabled"
+     integer :: nconteqn = 50
+     real(c_double) :: povdelp = .2
+     real(c_double) :: rtol = 1.e-8
+     real(c_double) :: rmag = 100.
+     real(c_double) :: rbox = 100.
+     real(c_double) :: rboxdst = 50.
+     real(c_double) :: zbox = 100.
+  end type eqsetup_t
+
   ! rest of cql3d will access this
   type(setup0_t), public, save :: setup0
+  type(eqsetup_t), public, target, save :: eqsetup
 
   !..................................................................
   !     NAMELIST (SETUP0) DECLARATION FOR INPUT
@@ -50,7 +81,8 @@ contains
 
   subroutine maybe_nml_open(nml_file)
     character(len=*), intent(in) :: nml_file
-    if (nml_file_open .eqv. .FALSE.) then
+    if (.not. nml_file_open) then
+       print *, "Opening nml_file: ", nml_file
        nml_fd = newunit()
        open(unit=nml_fd, file=nml_file, status='old')
        nml_file_open = .TRUE.
@@ -58,7 +90,7 @@ contains
   end subroutine maybe_nml_open
 
   subroutine nml_close()
-    if (nml_file_open .eqv. .TRUE.) then
+    if (nml_file_open) then
        close(nml_fd)
        nml_file_open = .FALSE.
     end if
@@ -135,7 +167,7 @@ contains
 
     ! we optionally close the nml file.
     if (present(close_nml_file)) then
-       if(close_nml_file .eqv. .TRUE.) then
+       if(close_nml_file) then
           call nml_close()
        end if
     endif
@@ -143,9 +175,9 @@ contains
   end subroutine get_setup0_from_nml
 
   subroutine set_setup0(mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
-         nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
-         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf, &
-         debug_print)
+       nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
+       ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf, &
+       debug_print)
     character(len=256), intent(in), optional :: mnemonic
     integer, intent(in), optional :: ioutput(2)
     character(len=8), intent(in), optional :: iuser
@@ -242,6 +274,152 @@ contains
     WRITE(*, nml = setup0_nml)
     WRITE(*, *)  "!----  END SETUP0 DUMP"
   end subroutine print_setup0
+
+
+  subroutine get_eqsetup_from_nml(nml_file, close_nml_file, debug_print)
+    implicit none
+    character(len=*), intent(in) :: nml_file
+    logical, intent(in), optional :: close_nml_file
+    logical, intent(in), optional :: debug_print
+    ! local
+    type(eqsetup_t) :: eqsetup_
+
+    ! make local vars and assign defaults from type
+    real(c_double) :: atol
+    real(c_double) :: ellptcty
+    character(len=8) :: eqdskalt
+    character(len=256) :: eqdskin
+    character(len=8) :: eqmodel
+    real(c_double) :: eqpower
+    character(len=8) :: eqsym
+    character(len=8) :: eqsource
+    real(c_double) :: bsign
+    character(len=8) :: eqmod
+    character(len=8) :: fpsimodl
+    integer :: lfield
+    integer :: methflag
+    character(len=8) :: nconteq
+    integer :: nconteqn
+    real(c_double) :: povdelp
+    real(c_double) :: rtol
+    real(c_double) :: rmag
+    real(c_double) :: rbox
+    real(c_double) :: rboxdst
+    real(c_double) :: zbox
+
+    ! state the namelist, with associated vars
+    namelist/eqsetup/ &
+         atol, &
+         ellptcty,eqmodel,eqpower,eqsource,eqdskin,bsign,eqmod, &
+         eqsym,eqdskalt, &
+         fpsimodl, &
+         lfield, &
+         methflag, &
+         nconteq,nconteqn, &
+         povdelp, &
+         rtol,rmag,rbox,rboxdst, &
+         zbox
+
+    atol = eqsetup_%atol
+    ellptcty = eqsetup_%ellptcty
+    eqdskalt = eqsetup_%eqdskalt
+    eqdskin = eqsetup_%eqdskin
+    eqmodel = eqsetup_%eqmodel
+    eqpower = eqsetup_%eqpower
+    eqsym = eqsetup_%eqsym
+    eqsource = eqsetup_%eqsource
+    bsign = eqsetup_%bsign
+    eqmod = eqsetup_%eqmod
+    fpsimodl = eqsetup_%fpsimodl
+    lfield = eqsetup_%lfield
+    methflag = eqsetup_%methflag
+    nconteq = eqsetup_%nconteq
+    nconteqn = eqsetup_%nconteqn
+    povdelp = eqsetup_%povdelp
+    rtol = eqsetup_%rtol
+    rmag = eqsetup_%rmag
+    rbox = eqsetup_%rbox
+    rboxdst = eqsetup_%rboxdst
+    zbox = eqsetup_%zbox
+
+   call maybe_nml_open(nml_file)
+   read(nml_fd, eqsetup)
+
+    call set_eqsetup(atol, ellptcty, eqdskalt, eqdskin, eqmodel, eqpower, &
+         eqsym, eqsource, bsign, eqmod, fpsimodl, lfield, methflag, nconteq, &
+         nconteqn, povdelp, rtol, rmag, rbox, rboxdst, zbox, debug_print)
+
+    if (present(close_nml_file)) then
+       if(close_nml_file) then
+          call nml_close()
+       end if
+    endif
+
+  end subroutine get_eqsetup_from_nml
+
+  subroutine set_eqsetup(atol, ellptcty, eqdskalt, eqdskin, eqmodel, eqpower, &
+       eqsym, eqsource, bsign, eqmod, fpsimodl, lfield, methflag, nconteq, &
+       nconteqn, povdelp, rtol, rmag, rbox, rboxdst, zbox, debug_print)
+    implicit none
+    logical, intent(in), optional :: debug_print
+    !
+    real(c_double), optional, intent(in) :: atol
+    real(c_double), optional, intent(in) :: ellptcty
+    character(len=8), optional, intent(in) :: eqdskalt
+    character(len=256), optional, intent(in) :: eqdskin
+    character(len=8), optional, intent(in) :: eqmodel
+    real(c_double), optional, intent(in) :: eqpower
+    character(len=8), optional, intent(in) :: eqsym
+    character(len=8), optional, intent(in) :: eqsource
+    real(c_double), optional, intent(in) :: bsign
+    character(len=8), optional, intent(in) :: eqmod
+    character(len=8), optional, intent(in) :: fpsimodl
+    integer, optional, intent(in) :: lfield
+    integer, optional, intent(in) :: methflag
+    character(len=8), optional, intent(in) :: nconteq
+    integer, optional, intent(in) :: nconteqn
+    real(c_double), optional, intent(in) :: povdelp
+    real(c_double), optional, intent(in) :: rtol
+    real(c_double), optional, intent(in) :: rmag
+    real(c_double), optional, intent(in) :: rbox
+    real(c_double), optional, intent(in) :: rboxdst
+    real(c_double), optional, intent(in) :: zbox
+
+    if(present(atol)) eqsetup%atol = atol
+    if(present(ellptcty)) eqsetup%ellptcty = ellptcty
+    if(present(eqdskalt)) eqsetup%eqdskalt = eqdskalt
+    if(present(eqdskin)) eqsetup%eqdskin = eqdskin
+    if(present(eqmodel)) eqsetup%eqmodel = eqmodel
+    if(present(eqpower)) eqsetup%eqpower = eqpower
+    if(present(eqsym)) eqsetup%eqsym = eqsym
+    if(present(eqsource)) eqsetup%eqsource = eqsource
+    if(present(bsign)) eqsetup%bsign = bsign
+    if(present(eqmod)) eqsetup%eqmod = eqmod
+    if(present(fpsimodl)) eqsetup%fpsimodl = fpsimodl
+    if(present(lfield)) eqsetup%lfield = lfield
+    if(present(methflag)) eqsetup%methflag = methflag
+    if(present(nconteq)) eqsetup%nconteq = nconteq
+    if(present(nconteqn)) eqsetup%nconteqn = nconteqn
+    if(present(povdelp)) eqsetup%povdelp = povdelp
+    if(present(rtol)) eqsetup%rtol = rtol
+    if(present(rmag)) eqsetup%rmag = rmag
+    if(present(rbox)) eqsetup%rbox = rbox
+    if(present(rboxdst)) eqsetup%rboxdst = rboxdst
+    if(present(zbox)) eqsetup%zbox = zbox
+
+    if ( present(debug_print)) then
+       if (debug_print) call print_eqsetup
+    end if
+
+  end subroutine set_eqsetup
+
+
+  subroutine print_eqsetup()
+    namelist /eqsetup_nml/ eqsetup
+    WRITE(*, *) "!----  BEGIN EQSETUP DUMP"
+    WRITE(*, nml = eqsetup_nml)
+    WRITE(*, *)  "!----  END EQSETUP DUMP"
+  end subroutine print_eqsetup
 
 
   integer function newunit(unit)

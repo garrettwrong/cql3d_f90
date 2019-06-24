@@ -4,7 +4,7 @@ abchief.o: cqlcomm.o param.o tdchief.o
 achief1.o: achiefn.o ainalloc.o aindflt.o aindflt1.o aindfpa.o  \
 	aingeom.o ainitial.o ainpla.o ainsetva.o ainspec.o ainvnorm.o  \
 	cfpgamma.o coefmidt.o coefmidv.o coefstup.o coefwti.o coefwtj.o  \
-	cqlcomm.o cqlconf.o diagimpd.o diagscal.o eqindflt.o eqinitl.o  \
+	cqlcomm.o cqlconf.o diagimpd.o diagscal.o eqinitl.o  \
 	micxinit.o micxiniz.o ntloop.o param.o pltmain.o profiles.o r8subs.o  \
 	tdnflxs.o wploweq.o
 achiefn.o: cfpcoefc.o cfpgamma.o cqlcomm.o cqlconf.o diag.o  \
@@ -92,7 +92,6 @@ eqfndpsi.o: cqlcomm.o eqflxavg.o eqfpsi.o eqonovrp.o eqorbit.o  \
 	eqvolpsi.o eqwrng.o param.o
 eqfninv.o: cqlcomm.o eqwrng.o param.o
 eqfpsi.o: cqlcomm.o eqwrng.o param.o zcunix.o
-eqindflt.o: cqlcomm.o param.o
 eqinitl.o: cqlcomm.o cqlconf.o param.o
 eqjac.o: cqlcomm.o param.o zcunix.o
 eqonovrp.o: cqlcomm.o eqflxavg.o eqorbit.o param.o
@@ -226,7 +225,7 @@ tdeqdsk.o: cqlcomm.o equilib.o firstdrv.o param.o r8subs.o zcunix.o
 tdfinterp.o: cqlcomm.o lookup.o param.o
 tdinitl.o: ainalloc.o aindflt.o aindflt1.o aindfpa.o aingeom.o  \
 	ainitial.o ainpla.o ainsetva.o ainspec.o ainvnorm.o ampfar.o  \
-	baviorbt.o cqlcomm.o cqlconf.o diagwrng.o eqindflt.o eqinitl.o  \
+	baviorbt.o cqlcomm.o cqlconf.o diagwrng.o eqinitl.o  \
 	micxinil.o micxinit.o micxiniz.o param.o profiles.o rdc_multi.o  \
 	sigv.o tddiag.o tdeqdsk.o tdnflxs.o tdnpadiag.o tdoutput.o tdplteq.o  \
 	tdpltmne.o tdreadf.o tdrmshst.o tdstin.o tdsxray.o tdtoarad.o  \

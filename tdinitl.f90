@@ -19,7 +19,6 @@ module tdinitl_mod
   use baviorbt_mod, only : baviorbto
   use baviorbt_mod, only : deltar
   use diagwrng_mod, only : diagwrng
-  use eqindflt_mod, only : eqindflt
   use eqinitl_mod, only : eqinitl
   use micxinil_mod, only : micxinil
   use micxinit_mod, only : micxinit
@@ -67,9 +66,10 @@ module tdinitl_mod
 
 contains
 
-      subroutine tdinitl ! called only at n=0
+      subroutine tdinitl(nml_file) ! called only at n=0
         use param_mod
         use cqlconf_mod, only : setup0
+        use cqlconf_mod, only : get_eqsetup_from_nml
       use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use ampfar_mod, only : ampfalloc
@@ -84,6 +84,7 @@ contains
       use ainalloc_mod, only : ainalloc
       use aindfpa_mod , only : ain_transcribe
       implicit integer (i-n), real(c_double) (a-h,o-z)
+      character(len=*), intent(in), optional :: nml_file
       save
 
 !..................................................................
@@ -107,7 +108,7 @@ contains
 !..................................................................
 
       call aindflt
-      call eqindflt
+      !call eqindflt
       call urfindfl
       call aindflt1
 
@@ -123,13 +124,19 @@ contains
 !..................................................................
 !     read in namelist input for CQL3D
 !..................................................................
-      open(unit=2,file='cqlinput',status='old')
+      open(unit=2,file=nml_file,status='old')
         read(2,setup)
         read(2,trsetup)
         read(2,sousetup)
-        read(2,eqsetup)
+
+        rewind(2) !tmp
+        close(2) !tmp
+        call get_eqsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+
+        open(unit=2,file=nml_file,status='old') !tmp
+        rewind(2) !tmp
+        
         read(2,rfsetup)
-      close(2)
 
       if (partner.eq."selene") then
         open(unit=18,file='kcqlsel',status='old')
@@ -169,13 +176,13 @@ contains
 !.......................................................................
 
       if (setup0%nmlstout.eq."enabled") then
-         open(unit=2,file='cqlinput',delim='apostrophe',status='old')
+         open(unit=2,file=nml_file,delim='apostrophe',status='old')
          write(6,*)'  In tdinitl: '
-         ! nml name now private, can be written from module write(6,setup0)
+         ! nml name now private, write function can be added to module write(6,setup0)
          write(6,setup)
          write(6,trsetup)
          write(6,sousetup)
-         write(6,eqsetup)
+         ! private, writer function can be added to module write(6,eqsetup)
          write(6,rfsetup)
          close(2)
       elseif (setup0%nmlstout.eq."trnscrib") then
@@ -193,7 +200,7 @@ contains
       call eqinitl
       call urfinitl ! mrfn= is set here also
       call frinitl
-      open(unit=2,file='cqlinput',delim='apostrophe',status='old')
+      open(unit=2,file=nml_file,delim='apostrophe',status='old')
       call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
       close(2)
 
