@@ -80,8 +80,8 @@ contains
       write(iunwrif,setup)
       write(iunwrif,trsetup)
       write(iunwrif,sousetup)
-      !nml name now private, can make a function in the module for this i(iunwrif,eqsetup)
-      write(iunwrif,rfsetup)
+      !nml name now private, can make a function in the module for this write(iunwrif,eqsetup)
+      !nml name now private, can make a function in the module for this write(iunwrif,rfsetup)
       write(iunwrif,frsetup)
 !.......................................................................
 !BH070408:  Have added write of frsetup here.  Probably should

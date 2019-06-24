@@ -70,6 +70,7 @@ contains
         use param_mod
         use cqlconf_mod, only : setup0
         use cqlconf_mod, only : get_eqsetup_from_nml
+        use cqlconf_mod, only : get_rfsetup_from_nml
       use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use ampfar_mod, only : ampfalloc
@@ -131,12 +132,13 @@ contains
 
         rewind(2) !tmp
         close(2) !tmp
-        call get_eqsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+        call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
+        call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
 
         open(unit=2,file=nml_file,status='old') !tmp
         rewind(2) !tmp
         
-        read(2,rfsetup)
+
 
       if (partner.eq."selene") then
         open(unit=18,file='kcqlsel',status='old')
@@ -183,7 +185,7 @@ contains
          write(6,trsetup)
          write(6,sousetup)
          ! private, writer function can be added to module write(6,eqsetup)
-         write(6,rfsetup)
+         ! private, writer function can be added to module write(6,rfsetup)
          close(2)
       elseif (setup0%nmlstout.eq."trnscrib") then
          write(6,*)'  In tdinitl: '

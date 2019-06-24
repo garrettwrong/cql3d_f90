@@ -1,12 +1,13 @@
 module cqlconf_mod
   use param_mod, only : lrorsa, lfielda
-  use iso_c_binding, only : c_double
+  use param_mod, only : ep100, nmodsa, ngena, nrdca, nbctimea
+  use iso_c_binding, only : c_double, c_double_complex
   implicit none
 
   private
   integer :: ll
   logical, save :: nml_file_open = .FALSE.
-  integer, save:: nml_fd = -1
+  integer, save :: nml_fd = -1
   public nml_close
 
   public get_setup0_from_nml
@@ -16,6 +17,11 @@ module cqlconf_mod
   public get_eqsetup_from_nml
   public print_eqsetup
   public set_eqsetup
+
+  public get_rfsetup_from_nml
+  public print_rfsetup
+  public set_rfsetup
+
 
   type, public ::  setup0_t
      character(len=256) :: mnemonic = "default_output"
@@ -69,9 +75,164 @@ module cqlconf_mod
      real(c_double) :: zbox = 100.
   end type eqsetup_t
 
+  type, public :: rfsetup_t
+     !..................................................................
+     !     Variables determine which, if any,  ray tracing code is called.
+     !..................................................................
+     character(len=8) :: call_lh = "disabled"
+     character(len=8) :: call_ech = "disabled"
+     character(len=8) :: call_fw = "disabled"
+     !..................................................................
+     !     ieqbrurf designates the source of equilibrium data to be used by
+     !     xbram.  Appropriate values are: ieqbrurf=0 to use Brambilla
+     !     ieqbrurf=0, to use Brambilla analytic "equilibria",
+     !     =3, to use standard eqdsk input.
+     !     =4, to use extended eqdsk, including density, and
+     !     temperature profiles,...[output by GA ONETWO transport code].
+     !     If eqsource="tsc", ieqbrurf is reset to = 4.
+     !..................................................................
+     integer :: ieqbrurf = 1
+     !..................................................................
+     !     Step interval at which to recalc diffusion coefficients,
+     !     as a fraction of ncoef.
+     !..................................................................
+     integer :: urfncoef = 1.d0
+     real(c_double)  :: dlndau(1:nmodsa) = 1.
+     !..................................................................
+     !     lh,ech and fw determine which wave modes are utilized
+     !     Alternatively(060314), this data can be input through rftype()
+     !..................................................................
+     character(len=8) :: lh = "disabled"
+     character(len=8) :: ech = "disabled"
+     character(len=8) :: fw = "disabled"
+     character(len=8) :: rftype(1:nmodsa) = "notset"
+     character(len=256) :: rffile(1:nmodsa) = "notset"
+     character(len=256) :: rdcfile(1:nrdca) = "notset"
+     character(len=8) :: rfread = "text"
+     !..................................................................
+     !     nharms.gt.0, then calculate damping for harmonics
+     !     nharm1 to nharm1+(nharms-1), rather than according to nharm
+     !     in the rayop file.
+     !     This option is only viable for one rf mode, i.e., only one
+     !     of lh, ech, or fw may be enabled.
+     !     060214: Extended to multi-rf-wave types.
+     !..................................................................
+     integer :: nharms(1:nmodsa) = 0
+     integer :: nharm1(1:nmodsa) = 0
+     integer :: nrfspecies(1:nmodsa) = 1
+     !..................................................................
+     !     iurfcoll (iurfl) indicate use of collisional (additional linear)
+     !     absorption coeff. Passed in ray data files.
+     !..................................................................
+     character(len=8) :: iurfcoll(1:nmodsa) = "disabled"
+     character(len=8) :: iurfl(1:nmodsa) = "disabled"
+     !     number of elements in Bessel table at setup time
+     integer :: nbssltbl = 10000
+     !     damping on at step nondamp
+     integer :: nondamp = 0
+     !..................................................................
+     !     maximum number of ray elements per ray for first call to R.T code
+     !     [Not presently implemented, BH060314]
+     !..................................................................
+     integer :: nrfstep1(1:nmodsa) = 100
+     !..................................................................
+     !     number of ray elements added at each step in addition of new data.
+     !     [Not presently implemented, BH060314]
+     !.................................................................
+     integer :: nrfstep2 = 50
+     !     number of steps in power ramp-up
+     integer :: nrfpwr = 3
+     !     number of iterations at full power, for first ray elements
+     integer :: nrfitr1 = 1
+     !     number of iterations after additional ray data
+     integer :: nrfitr2 = 1
+     !     number of steps adding new ray data
+     integer :: nrfitr3 = 2
+     integer :: nonrf(1:ngena) = 0
+     integer :: noffrf(1:ngena) = 10000
+     integer :: nrf = 0
+     !..................................................................
+     !     scaleurf="enabled" rescale contribution to B so that a particular
+     !     ray does not "overdamp" on a given flux surface volume.
+     !..................................................................
+     character(len=8) :: scaleurf = "enabled"
+     !..................................................................
+     !     scaling of power and nparallel- width in rays
+     !..................................................................
+     real(c_double) :: pwrscale(1:nmodsa) = 1.d0
+     real(c_double) :: wdscale(1:nmodsa) = 1.d0
+     character(len=8) :: urfrstrt = "disabled"
+     character(len=8) :: urfwrray = "disabled"
+     !..................................................................
+     !     Additional time-dependent scaling of power
+     !..................................................................
+     integer :: nurftime = 0
+     real(c_double) :: urftime(nbctimea) = 0.0
+     real(c_double) :: pwrscale1(1:nbctimea) = 1.d0
+     !..................................................................
+     !     urfdmp="secondd" means utilize the "second derivative" damping
+     !     diagnostic in computing the damping due to each ray as
+     !     it moves through the plasma. If urfdmp .ne. "secondd" the
+     !     diagnostic uses an integration by parts technique to compute
+     !     the damping. We highly recommend "secondd" because convergence
+     !     is the agreement between the sum of the damping of all rays
+     !     and the absorbed power as computed from dF/dt. This latter
+     !     diagnostic utilizes the "second derivative" approach so
+     !     consistency demands "secondd" for the rays.
+     !..................................................................
+     character(len=8) :: urfdmp = "secondd"
+     real(c_double) :: urfmult = 1.0
+     character(len=8) :: urfmod = "disabled"
+     character(len=8) :: vlhmod = "disabled"
+     real(c_double) :: vlhmodes = 1.
+     real(c_double) :: vparmin(1:nmodsa) = 1.
+     real(c_double) :: vparmax(1:nmodsa) = 1.
+     character(len=8) :: vprprop = "disabled"
+     real(c_double) :: vdalp = .03
+     real(c_double) :: vlh_karney = 0.
+     character(len=8) :: vlhprprp(1:nmodsa) = "parallel"
+     character(len=8) :: vlhplse = "disabled"
+     real(c_double) :: vlhpon = .1
+     real(c_double) :: vlhpoff = .11
+     real(c_double) :: vprpmin(1:nmodsa) = 0.
+     real(c_double) :: vprpmax(1:nmodsa) = ep100
+     real(c_double) :: vlhpolmn(1:nmodsa) = 0.
+     real(c_double) :: vlhpolmx(1:nmodsa) = 100.
+     character(len=8) :: vlfmod = "disabled"
+     real(c_double) :: vlfmodes = 1.
+     real(c_double) :: vlffreq(1:nmodsa) = .8e9
+     real(c_double) :: vlfnp(1:nmodsa) = 5.
+     real(c_double) :: vlfdnp(1:nmodsa) = .2
+     real(c_double) :: vlfddnp(1:nmodsa) = .1
+     complex(c_double_complex) :: vlfeplus(1:nmodsa) = (0.,0.)
+     complex(c_double_complex) :: vlfemin(1:nmodsa) = (0.,0.)
+     real(c_double) :: vlfpol(1:nmodsa) = 0.
+     real(c_double) :: vlfdpol(1:nmodsa) = 360.
+     real(c_double) :: vlfddpol(1:nmodsa) = 20.
+     character(len=8) :: vlfbes = "enabled"
+     character(len=8) :: vlfnpvar = "1/r"
+     real(c_double) :: vlfharms(1:nmodsa) = 1.
+     real(c_double) :: vlfharm1(1:nmodsa) = 0.
+     real(c_double) :: vlfnperp(1:nmodsa) = 5.
+     real(c_double) :: vlfdnorm(1:nmodsa) = 10.
+     real(c_double) :: vlfparmn(1:nmodsa) = -ep100
+     real(c_double) :: vlfparmx(1:nmodsa) = +ep100
+     real(c_double) :: vlfprpmn(1:nmodsa) = 0.
+     real(c_double) :: vlfprpmx(1:nmodsa) = ep100
+     real(c_double) :: rdc_upar_sign = +1
+     integer :: nrdc = 1
+     character(len=8) :: rdcmod = "disabled"
+     character(len=8) :: rdc_clipping = "disabled"
+     integer :: nrdcspecies(1:nrdca) = 0
+     real(c_double) :: rdcscale(1:nrdca) = 1.d0
+     ! this may have been undefined in original code
+     character(len=8) :: rdc_netcdf = "disabled"
+  end type rfsetup_t
+
   ! rest of cql3d will access this
   type(setup0_t), public, save :: setup0
   type(eqsetup_t), public, target, save :: eqsetup
+  type(rfsetup_t), public, target, save :: rfsetup
 
   !..................................................................
   !     NAMELIST (SETUP0) DECLARATION FOR INPUT
@@ -342,8 +503,8 @@ contains
     rboxdst = eqsetup_%rboxdst
     zbox = eqsetup_%zbox
 
-   call maybe_nml_open(nml_file)
-   read(nml_fd, eqsetup)
+    call maybe_nml_open(nml_file)
+    read(nml_fd, eqsetup)
 
     call set_eqsetup(atol, ellptcty, eqdskalt, eqdskin, eqmodel, eqpower, &
          eqsym, eqsource, bsign, eqmod, fpsimodl, lfield, methflag, nconteq, &
@@ -420,6 +581,439 @@ contains
     WRITE(*, nml = eqsetup_nml)
     WRITE(*, *)  "!----  END EQSETUP DUMP"
   end subroutine print_eqsetup
+
+
+  subroutine get_rfsetup_from_nml(nml_file, close_nml_file, debug_print)
+    implicit none
+    character(len=*), intent(in) :: nml_file
+    logical, intent(in), optional :: close_nml_file
+    logical, intent(in), optional :: debug_print
+    ! local
+    type(rfsetup_t) :: rfsetup_
+    character(len=8) :: call_lh
+    character(len=8) :: call_ech
+    character(len=8) :: call_fw
+    integer :: ieqbrurf
+    integer :: urfncoef
+    real(c_double)  :: dlndau(nmodsa)
+    character(len=8) :: lh
+    character(len=8) :: ech
+    character(len=8) :: fw
+    character(len=8) :: rftype(nmodsa)
+    character(len=256) :: rffile(nmodsa)
+    character(len=256) :: rdcfile(nrdca)
+    character(len=8) :: rfread
+    integer :: nharms(nmodsa)
+    integer :: nharm1(nmodsa)
+    integer :: nrfspecies(nmodsa)
+    character(len=8) :: iurfcoll(nmodsa)
+    character(len=8) :: iurfl(nmodsa)
+    integer :: nbssltbl
+    integer :: nondamp
+    integer :: nrfstep1(nmodsa)
+    integer :: nrfstep2
+    integer :: nrfpwr
+    integer :: nrfitr1
+    integer :: nrfitr2
+    integer :: nrfitr3
+    integer :: nonrf(ngena)
+    integer :: noffrf(ngena)
+    integer :: nrf
+    character(len=8) :: scaleurf
+    real(c_double) :: pwrscale(nmodsa)
+    real(c_double) :: wdscale(nmodsa)
+    character(len=8) :: urfrstrt
+    character(len=8) :: urfwrray
+    integer :: nurftime
+    real(c_double) :: urftime(nbctimea)
+    real(c_double) :: pwrscale1(nbctimea)
+    character(len=8) :: urfdmp
+    real(c_double) :: urfmult
+    character(len=8) :: urfmod
+    character(len=8) :: vlhmod
+    real(c_double) :: vlhmodes
+    real(c_double) :: vparmin(nmodsa)
+    real(c_double) :: vparmax(nmodsa)
+    character(len=8) :: vprprop
+    real(c_double) :: vdalp
+    real(c_double) :: vlh_karney
+    character(len=8) :: vlhprprp(nmodsa)
+    character(len=8) :: vlhplse
+    real(c_double) :: vlhpon
+    real(c_double) :: vlhpoff
+    real(c_double) :: vprpmin(nmodsa)
+    real(c_double) :: vprpmax(nmodsa)
+    real(c_double) :: vlhpolmn(nmodsa)
+    real(c_double) :: vlhpolmx(nmodsa)
+    character(len=8) :: vlfmod
+    real(c_double) :: vlfmodes
+    real(c_double) :: vlffreq(nmodsa)
+    real(c_double) :: vlfnp(nmodsa)
+    real(c_double) :: vlfdnp(nmodsa)
+    real(c_double) :: vlfddnp(nmodsa)
+    complex(c_double_complex) :: vlfeplus(nmodsa)
+    complex(c_double_complex) :: vlfemin(nmodsa)
+    real(c_double) :: vlfpol(nmodsa)
+    real(c_double) :: vlfdpol(nmodsa)
+    real(c_double) :: vlfddpol(nmodsa)
+    character(len=8) :: vlfbes
+    character(len=8) :: vlfnpvar
+    real(c_double) :: vlfharms(nmodsa)
+    real(c_double) :: vlfharm1(nmodsa)
+    real(c_double) :: vlfnperp(nmodsa)
+    real(c_double) :: vlfdnorm(nmodsa)
+    real(c_double) :: vlfparmn(nmodsa)
+    real(c_double) :: vlfparmx(nmodsa)
+    real(c_double) :: vlfprpmn(nmodsa)
+    real(c_double) :: vlfprpmx(nmodsa)
+    real(c_double) :: rdc_upar_sign
+    integer :: nrdc
+    character(len=8) :: rdcmod
+    character(len=8) :: rdc_clipping
+    integer :: nrdcspecies(nrdca)
+    real(c_double) :: rdcscale(nrdca)
+    character(len=8) :: rdc_netcdf
+
+
+    namelist/rfsetup/ &
+         call_lh,call_ech,call_fw,ieqbrurf,urfncoef, &
+         dlndau, &
+         lh, &
+         ech, &
+         fw, &
+         rftype, &
+         rffile,rdcfile,rfread, &
+         nharms,nharm1,nrfspecies,iurfcoll,iurfl, &
+         nbssltbl,nondamp,nrfstep1,nrfstep2, &
+         nrfpwr,nrfitr1,nrfitr2,nrfitr3, &
+         nonrf,noffrf,nrf, &
+         scaleurf,pwrscale,wdscale,urfrstrt,urfwrray, &
+         nurftime,urftime,pwrscale1, &
+         urfdmp,urfmult,urfmod, &
+         vlhmod,vlhmodes,vparmin,vparmax,vprprop,vdalp,vlh_karney, &
+         vlhprprp,vlhplse,vlhpon,vlhpoff,vprpmin,vprpmax,vlhpolmn, &
+         vlhpolmx,vlfmod,vlfmodes,vlffreq,vlfnp,vlfdnp,vlfddnp, &
+         vlfeplus,vlfemin,vlfpol,vlfdpol,vlfddpol,vlfbes,vlfnpvar, &
+         vlfharms,vlfharm1,vlfnperp,vlfdnorm, &
+         vlfparmn,vlfparmx,vlfprpmn,vlfprpmx,rdc_upar_sign,nrdc, &
+         rdcmod,rdc_clipping,nrdcspecies,rdcscale,rdc_netcdf
+
+
+    call_lh = rfsetup_%call_lh
+    call_ech = rfsetup_%call_ech
+    call_fw = rfsetup_%call_fw
+    ieqbrurf = rfsetup_%ieqbrurf
+    urfncoef = rfsetup_%urfncoef
+    dlndau = rfsetup_%dlndau
+    lh = rfsetup_%lh
+    ech = rfsetup_%ech
+    fw = rfsetup_%fw
+    rftype = rfsetup_%rftype
+    rffile = rfsetup_%rffile
+    rdcfile = rfsetup_%rdcfile
+    rfread = rfsetup_%rfread
+    nharms = rfsetup_%nharms
+    nharm1 = rfsetup_%nharm1
+    nrfspecies = rfsetup_%nrfspecies
+    iurfcoll = rfsetup_%iurfcoll
+    iurfl = rfsetup_%iurfl
+    nbssltbl = rfsetup_%nbssltbl
+    nondamp = rfsetup_%nondamp
+    nrfstep1 = rfsetup_%nrfstep1
+    nrfstep2 = rfsetup_%nrfstep2
+    nrfpwr = rfsetup_%nrfpwr
+    nrfitr1 = rfsetup_%nrfitr1
+    nrfitr2 = rfsetup_%nrfitr2
+    nrfitr3 = rfsetup_%nrfitr3
+    nonrf = rfsetup_%nonrf
+    noffrf = rfsetup_%noffrf
+    nrf = rfsetup_%nrf
+    scaleurf = rfsetup_%scaleurf
+    pwrscale = rfsetup_%pwrscale
+    wdscale = rfsetup_%wdscale
+    urfrstrt = rfsetup_%urfrstrt
+    urfwrray = rfsetup_%urfwrray
+    nurftime = rfsetup_%nurftime
+    urftime = rfsetup_%urftime
+    pwrscale1 = rfsetup_%pwrscale1
+    urfdmp = rfsetup_%urfdmp
+    urfmult = rfsetup_%urfmult
+    urfmod = rfsetup_%urfmod
+    vlhmod = rfsetup_%vlhmod
+    vlhmodes = rfsetup_%vlhmodes
+    vparmin = rfsetup_%vparmin
+    vparmax = rfsetup_%vparmax
+    vprprop = rfsetup_%vprprop
+    vdalp = rfsetup_%vdalp
+    vlh_karney = rfsetup_%vlh_karney
+    vlhprprp = rfsetup_%vlhprprp
+    vlhplse = rfsetup_%vlhplse
+    vlhpon = rfsetup_%vlhpon
+    vlhpoff = rfsetup_%vlhpoff
+    vprpmin = rfsetup_%vprpmin
+    vprpmax = rfsetup_%vprpmax
+    vlhpolmn = rfsetup_%vlhpolmn
+    vlhpolmx = rfsetup_%vlhpolmx
+    vlfmod = rfsetup_%vlfmod
+    vlfmodes = rfsetup_%vlfmodes
+    vlffreq = rfsetup_%vlffreq
+    vlfnp = rfsetup_%vlfnp
+    vlfdnp = rfsetup_%vlfdnp
+    vlfddnp = rfsetup_%vlfddnp
+    vlfeplus = rfsetup_%vlfeplus
+    vlfemin = rfsetup_%vlfemin
+    vlfpol = rfsetup_%vlfpol
+    vlfdpol = rfsetup_%vlfdpol
+    vlfddpol = rfsetup_%vlfddpol
+    vlfbes = rfsetup_%vlfbes
+    vlfnpvar = rfsetup_%vlfnpvar
+    vlfharms = rfsetup_%vlfharms
+    vlfharm1 = rfsetup_%vlfharm1
+    vlfnperp = rfsetup_%vlfnperp
+    vlfdnorm = rfsetup_%vlfdnorm
+    vlfparmn = rfsetup_%vlfparmn
+    vlfparmx = rfsetup_%vlfparmx
+    vlfprpmn = rfsetup_%vlfprpmn
+    vlfprpmx = rfsetup_%vlfprpmx
+    rdc_upar_sign = rfsetup_%rdc_upar_sign
+    nrdc = rfsetup_%nrdc
+    rdcmod = rfsetup_%rdcmod
+    rdc_clipping = rfsetup_%rdc_clipping
+    nrdcspecies = rfsetup_%nrdcspecies
+    rdcscale = rfsetup_%rdcscale
+    rdc_netcdf = rfsetup_%rdc_netcdf
+
+    ! read the nml, which will write into the local vars
+
+    call maybe_nml_open(nml_file)
+    read(nml_fd, rfsetup)
+
+    ! external codes can call this, which packs the setup0 derived type.
+    call set_rfsetup(call_lh, call_ech, call_fw, ieqbrurf, urfncoef, &
+         dlndau, lh, ech, fw, rftype, rffile, rdcfile, rfread, nharms, nharm1, &
+         nrfspecies, iurfcoll, iurfl, nbssltbl, nondamp, nrfstep1, nrfstep2, &
+         nrfpwr, nrfitr1, nrfitr2, nrfitr3, nonrf, noffrf, nrf, scaleurf, &
+         pwrscale, wdscale, urfrstrt, urfwrray, nurftime, urftime, pwrscale1, &
+         urfdmp, urfmult, urfmod, vlhmod, vlhmodes, vparmin, vparmax, vprprop, &
+         vdalp, vlh_karney, vlhprprp, vlhplse, vlhpon, vlhpoff, vprpmin, &
+         vprpmax, vlhpolmn, vlhpolmx, vlfmod, vlfmodes, vlffreq, vlfnp, &
+         vlfdnp, vlfddnp, vlfeplus, vlfemin, vlfpol, vlfdpol, vlfddpol, vlfbes, &
+         vlfnpvar, vlfharms, vlfharm1, vlfnperp, vlfdnorm, vlfparmn, vlfparmx, &
+         vlfprpmn, vlfprpmx, rdc_upar_sign, nrdc, rdcmod, rdc_clipping, &
+         nrdcspecies, rdcscale, rdc_netcdf, debug_print)
+
+    ! we optionally close the nml file.
+    if (present(close_nml_file)) then
+       if(close_nml_file) then
+          call nml_close()
+       end if
+    endif
+
+  end subroutine get_rfsetup_from_nml
+
+
+  subroutine set_rfsetup(call_lh, call_ech, call_fw, ieqbrurf, urfncoef, &
+       dlndau, lh, ech, fw, rftype, rffile, rdcfile, rfread, nharms, nharm1, &
+       nrfspecies, iurfcoll, iurfl, nbssltbl, nondamp, nrfstep1, nrfstep2, &
+       nrfpwr, nrfitr1, nrfitr2, nrfitr3, nonrf, noffrf, nrf, scaleurf, &
+       pwrscale, wdscale, urfrstrt, urfwrray, nurftime, urftime, pwrscale1, &
+       urfdmp, urfmult, urfmod, vlhmod, vlhmodes, vparmin, vparmax, vprprop, &
+       vdalp, vlh_karney, vlhprprp, vlhplse, vlhpon, vlhpoff, vprpmin, &
+       vprpmax, vlhpolmn, vlhpolmx, vlfmod, vlfmodes, vlffreq, vlfnp, &
+       vlfdnp, vlfddnp, vlfeplus, vlfemin, vlfpol, vlfdpol, vlfddpol, vlfbes, &
+       vlfnpvar, vlfharms, vlfharm1, vlfnperp, vlfdnorm, vlfparmn, vlfparmx, &
+       vlfprpmn, vlfprpmx, rdc_upar_sign, nrdc, rdcmod, rdc_clipping, &
+       nrdcspecies, rdcscale, rdc_netcdf, debug_print)
+    implicit none
+    logical, intent(in), optional :: debug_print
+    !
+    character(len=8), intent(in), optional :: call_lh
+    character(len=8), intent(in), optional :: call_ech
+    character(len=8), intent(in), optional :: call_fw
+    integer, intent(in), optional :: ieqbrurf
+    integer, intent(in), optional :: urfncoef
+    real(c_double) , intent(in), optional :: dlndau(nmodsa)
+    character(len=8), intent(in), optional :: lh
+    character(len=8), intent(in), optional :: ech
+    character(len=8), intent(in), optional :: fw
+    character(len=8), intent(in), optional :: rftype(nmodsa)
+    character(len=256), intent(in), optional :: rffile(nmodsa)
+    character(len=256), intent(in), optional :: rdcfile(nrdca)
+    character(len=8), intent(in), optional :: rfread
+    integer, intent(in), optional :: nharms(nmodsa)
+    integer, intent(in), optional :: nharm1(nmodsa)
+    integer, intent(in), optional :: nrfspecies(nmodsa)
+    character(len=8), intent(in), optional :: iurfcoll(nmodsa)
+    character(len=8), intent(in), optional :: iurfl(nmodsa)
+    integer, intent(in), optional :: nbssltbl
+    integer, intent(in), optional :: nondamp
+    integer, intent(in), optional ::nrfstep1(nmodsa)
+    integer, intent(in), optional :: nrfstep2
+    integer, intent(in), optional :: nrfpwr
+    integer, intent(in), optional :: nrfitr1
+    integer, intent(in), optional :: nrfitr2
+    integer, intent(in), optional :: nrfitr3
+    integer, intent(in), optional :: nonrf(ngena)
+    integer, intent(in), optional :: noffrf(ngena)
+    integer, intent(in), optional :: nrf
+    character(len=8), intent(in), optional :: scaleurf
+    real(c_double), intent(in), optional :: pwrscale(nmodsa)
+    real(c_double), intent(in), optional :: wdscale(nmodsa)
+    character(len=8), intent(in), optional :: urfrstrt
+    character(len=8), intent(in), optional :: urfwrray
+    integer, intent(in), optional :: nurftime
+    real(c_double), intent(in), optional :: urftime(nbctimea)
+    real(c_double), intent(in), optional :: pwrscale1(nbctimea)
+    character(len=8), intent(in), optional :: urfdmp
+    real(c_double), intent(in), optional :: urfmult
+    character(len=8), intent(in), optional :: urfmod
+    character(len=8), intent(in), optional :: vlhmod
+    real(c_double), intent(in), optional :: vlhmodes
+    real(c_double), intent(in), optional :: vparmin(nmodsa)
+    real(c_double), intent(in), optional :: vparmax(nmodsa)
+    character(len=8), intent(in), optional :: vprprop
+    real(c_double), intent(in), optional :: vdalp
+    real(c_double), intent(in), optional :: vlh_karney
+    character(len=8), intent(in), optional :: vlhprprp(nmodsa)
+    character(len=8), intent(in), optional :: vlhplse
+    real(c_double), intent(in), optional :: vlhpon
+    real(c_double), intent(in), optional :: vlhpoff
+    real(c_double), intent(in), optional :: vprpmin(nmodsa)
+    real(c_double), intent(in), optional :: vprpmax(nmodsa)
+    real(c_double), intent(in), optional :: vlhpolmn(nmodsa)
+    real(c_double), intent(in), optional :: vlhpolmx(nmodsa)
+    character(len=8), intent(in), optional :: vlfmod
+    real(c_double), intent(in), optional :: vlfmodes
+    real(c_double), intent(in), optional :: vlffreq(nmodsa)
+    real(c_double), intent(in), optional :: vlfnp(nmodsa)
+    real(c_double), intent(in), optional :: vlfdnp(nmodsa)
+    real(c_double), intent(in), optional :: vlfddnp(nmodsa)
+    complex(c_double_complex), intent(in), optional :: vlfeplus(nmodsa)
+    complex(c_double_complex), intent(in), optional :: vlfemin(nmodsa)
+    real(c_double), intent(in), optional :: vlfpol(nmodsa)
+    real(c_double), intent(in), optional :: vlfdpol(nmodsa)
+    real(c_double), intent(in), optional :: vlfddpol(nmodsa)
+    character(len=8), intent(in), optional :: vlfbes
+    character(len=8), intent(in), optional :: vlfnpvar
+    real(c_double), intent(in), optional :: vlfharms(nmodsa)
+    real(c_double), intent(in), optional :: vlfharm1(nmodsa)
+    real(c_double), intent(in), optional :: vlfnperp(nmodsa)
+    real(c_double), intent(in), optional :: vlfdnorm(nmodsa)
+    real(c_double), intent(in), optional :: vlfparmn(nmodsa)
+    real(c_double), intent(in), optional :: vlfparmx(nmodsa)
+    real(c_double), intent(in), optional :: vlfprpmn(nmodsa)
+    real(c_double), intent(in), optional :: vlfprpmx(nmodsa)
+    real(c_double), intent(in), optional :: rdc_upar_sign
+    integer, intent(in), optional :: nrdc
+    character(len=8), intent(in), optional :: rdcmod
+    character(len=8), intent(in), optional :: rdc_clipping
+    integer, intent(in), optional :: nrdcspecies(nrdca)
+    real(c_double), intent(in), optional :: rdcscale(nrdca)
+    character(len=8), intent(in), optional :: rdc_netcdf
+
+
+    if(present(call_lh)) rfsetup%call_lh = call_lh
+    if(present(call_ech)) rfsetup%call_ech = call_ech
+    if(present(call_fw)) rfsetup%call_fw = call_fw
+    if(present(ieqbrurf)) rfsetup%ieqbrurf = ieqbrurf
+    if(present(urfncoef)) rfsetup%urfncoef = urfncoef
+    if(present(dlndau)) rfsetup%dlndau = dlndau
+    if(present(lh)) rfsetup%lh = lh
+    if(present(ech)) rfsetup%ech = ech
+    if(present(fw)) rfsetup%fw = fw
+    if(present(rftype)) rfsetup%rftype = rftype
+    if(present(rffile)) rfsetup%rffile = rffile
+    if(present(rdcfile)) then
+       rfsetup%rdcfile = rdcfile
+    else
+       ! set non trivial default first value:
+       rfsetup%rdcfile(1) = "du0u0_input"
+    end if
+    if(present(rfread)) rfsetup%rfread = rfread
+    if(present(nharms)) rfsetup%nharms = nharms
+    if(present(nharm1)) rfsetup%nharm1 = nharm1
+    if(present(nrfspecies)) rfsetup%nrfspecies = nrfspecies
+    if(present(iurfcoll)) rfsetup%iurfcoll = iurfcoll
+    if(present(iurfl)) rfsetup%iurfl = iurfl
+    if(present(nbssltbl)) rfsetup%nbssltbl = nbssltbl
+    if(present(nondamp)) rfsetup%nondamp = nondamp
+    if(present(nrfstep1)) rfsetup%nrfstep1 = nrfstep1
+    if(present(nrfstep2)) rfsetup%nrfstep2 = nrfstep2
+    if(present(nrfpwr)) rfsetup%nrfpwr = nrfpwr
+    if(present(nrfitr1)) rfsetup%nrfitr1 = nrfitr1
+    if(present(nrfitr2)) rfsetup%nrfitr2 = nrfitr2
+    if(present(nrfitr3)) rfsetup%nrfitr3 = nrfitr3
+    if(present(nonrf)) rfsetup%nonrf = nonrf
+    if(present(noffrf)) rfsetup%noffrf = noffrf
+    if(present(nrf)) rfsetup%nrf = nrf
+    if(present(scaleurf)) rfsetup%scaleurf = scaleurf
+    if(present(pwrscale)) rfsetup%pwrscale = pwrscale
+    if(present(wdscale)) rfsetup%wdscale = wdscale
+    if(present(urfrstrt)) rfsetup%urfrstrt = urfrstrt
+    if(present(urfwrray)) rfsetup%urfwrray = urfwrray
+    if(present(nurftime)) rfsetup%nurftime = nurftime
+    if(present(urftime)) rfsetup%urftime = urftime
+    if(present(pwrscale1)) rfsetup%pwrscale1 = pwrscale1
+    if(present(urfdmp)) rfsetup%urfdmp = urfdmp
+    if(present(urfmult)) rfsetup%urfmult = urfmult
+    if(present(urfmod)) rfsetup%urfmod = urfmod
+    if(present(vlhmod)) rfsetup%vlhmod = vlhmod
+    if(present(vlhmodes)) rfsetup%vlhmodes = vlhmodes
+    if(present(vparmin)) rfsetup%vparmin = vparmin
+    if(present(vparmax)) rfsetup%vparmax = vparmax
+    if(present(vprprop)) rfsetup%vprprop = vprprop
+    if(present(vdalp)) rfsetup%vdalp = vdalp
+    if(present(vlh_karney)) rfsetup%vlh_karney = vlh_karney
+    if(present(vlhprprp)) rfsetup%vlhprprp = vlhprprp
+    if(present(vlhplse)) rfsetup%vlhplse = vlhplse
+    if(present(vlhpon)) rfsetup%vlhpon = vlhpon
+    if(present(vlhpoff)) rfsetup%vlhpoff = vlhpoff
+    if(present(vprpmin)) rfsetup%vprpmin = vprpmin
+    if(present(vprpmax)) rfsetup%vprpmax = vprpmax
+    if(present(vlhpolmn)) rfsetup%vlhpolmn = vlhpolmn
+    if(present(vlhpolmx)) rfsetup%vlhpolmx = vlhpolmx
+    if(present(vlfmod)) rfsetup%vlfmod = vlfmod
+    if(present(vlfmodes)) rfsetup%vlfmodes = vlfmodes
+    if(present(vlffreq)) rfsetup%vlffreq = vlffreq
+    if(present(vlfnp)) rfsetup%vlfnp = vlfnp
+    if(present(vlfdnp)) rfsetup%vlfdnp = vlfdnp
+    if(present(vlfddnp)) rfsetup%vlfddnp = vlfddnp
+    if(present(vlfeplus)) rfsetup%vlfeplus = vlfeplus
+    if(present(vlfemin)) rfsetup%vlfemin = vlfemin
+    if(present(vlfpol)) rfsetup%vlfpol = vlfpol
+    if(present(vlfdpol)) rfsetup%vlfdpol = vlfdpol
+    if(present(vlfddpol)) rfsetup%vlfddpol = vlfddpol
+    if(present(vlfbes)) rfsetup%vlfbes = vlfbes
+    if(present(vlfnpvar)) rfsetup%vlfnpvar = vlfnpvar
+    if(present(vlfharms)) rfsetup%vlfharms = vlfharms
+    if(present(vlfharm1)) rfsetup%vlfharm1 = vlfharm1
+    if(present(vlfnperp)) rfsetup%vlfnperp = vlfnperp
+    if(present(vlfdnorm)) rfsetup%vlfdnorm = vlfdnorm
+    if(present(vlfparmn)) rfsetup%vlfparmn = vlfparmn
+    if(present(vlfparmx)) rfsetup%vlfparmx = vlfparmx
+    if(present(vlfprpmn)) rfsetup%vlfprpmn = vlfprpmn
+    if(present(vlfprpmx)) rfsetup%vlfprpmx = vlfprpmx
+    if(present(rdc_upar_sign)) rfsetup%rdc_upar_sign = rdc_upar_sign
+    if(present(nrdc)) rfsetup%nrdc = nrdc
+    if(present(rdcmod)) rfsetup%rdcmod = rdcmod
+    if(present(rdc_clipping)) rfsetup%rdc_clipping = rdc_clipping
+    if(present(nrdcspecies)) then
+       rfsetup%nrdcspecies = nrdcspecies
+    else
+       ! set non trivial default first value:
+       rfsetup%nrdcspecies(1) = 1
+    end if
+    if(present(rdcscale)) rfsetup%rdcscale = rdcscale
+    if(present(rdc_netcdf)) rfsetup%rdc_netcdf = rdc_netcdf
+
+  end subroutine set_rfsetup
+
+  subroutine print_rfsetup()
+    namelist /rfsetup_nml/ eqsetup
+    WRITE(*, *) "!----  BEGIN EQSETUP DUMP"
+    WRITE(*, nml = rfsetup_nml)
+    WRITE(*, *)  "!----  END EQSETUP DUMP"
+  end subroutine print_rfsetup
 
 
   integer function newunit(unit)

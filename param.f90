@@ -380,4 +380,7 @@ module param_mod
 
   parameter(noutpta=10)
 
+  ! constants from random places
+  real(c_double), parameter ::  ep100 = 1.d+100
+
 end module param_mod

@@ -162,7 +162,6 @@ contains
       em300=1.d-300
       ep37=1.e+37
       ep90=1.d+90
-      ep100=1.d+100
       half=one/two
       third=one/three
 

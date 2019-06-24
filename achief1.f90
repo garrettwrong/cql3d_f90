@@ -45,6 +45,7 @@ contains
     use cqlconf_mod, only : print_setup0
     use cqlconf_mod, only : setup0
     use cqlconf_mod, only : get_eqsetup_from_nml
+    use cqlconf_mod, only : get_rfsetup_from_nml
     use cqlconf_mod, only : print_eqsetup
     use cqlcomm_mod
     use pltmain_mod, only : pltmain
@@ -90,13 +91,14 @@ contains
 
     rewind(2) !tmp
     close(2) !tmp
-    call get_eqsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+    call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
+    call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
     !read(2,eqsetup)
-
+    !read(2,rfsetup)
     open(unit=2,file=nml_file,status="old") ! tmp
     rewind(2) !tmp
     
-    read(2,rfsetup)
+
     close(2)
 
     !..................................................................
@@ -128,7 +130,7 @@ contains
        write(6,trsetup)
        write(6,sousetup)
        !now private write(6,eqsetup)
-       write(6,rfsetup)
+       !now private write(6,rfsetup)
     elseif (setup0%nmlstout.eq."trnscrib") then
        write(6,*)'  In achief1: '
        call ain_transcribe(nml_file)

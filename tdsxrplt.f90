@@ -50,7 +50,6 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
  ! make plots on mpirank.eq.0 only
 
-      ep100=1.d100
       em100=1.d-100
 
       fmin=ep100

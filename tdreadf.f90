@@ -8,6 +8,7 @@ module tdreadf_mod
   use bcast_mod, only : ibcast
   use cqlcomm_mod
   use cqlconf_mod, only : get_eqsetup_from_nml
+  use cqlconf_mod, only : get_rfsetup_from_nml
   !XXXXuse pack21_mod, only : unpack21
   use param_mod
   use tdnflxs_mod, only : tdnflxs
@@ -124,11 +125,11 @@ contains
       ! for now, we'll close their file, open again, close, and open again.
       !read(iunwrif,eqsetup)
       close(iunwrif) !tmp for conversion
-      call get_eqsetup_from_nml('distrfunc', close_nml_file=.TRUE., debug_print=.TRUE.)
+      call get_eqsetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
+      call get_rfsetup_from_nml('distrfunc', close_nml_file=.TRUE., debug_print=.TRUE.)
       open(unit=iunwrif,file='distrfunc') ! tmp for conversion
       rewind(iunwrif) ! tmp for conversion
 
-      read(iunwrif,rfsetup)
       read(iunwrif,frsetup)
       setup0%nlrestrt=ilrestrt
 

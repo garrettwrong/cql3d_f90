@@ -43,7 +43,7 @@ module cqlcomm_mod
 
   !---BEGIN USE
 
-  use cqlconf_mod, only : setup0, eqsetup
+  use cqlconf_mod, only : setup0, eqsetup, rfsetup
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
   use iso_c_binding, only : c_double_complex
@@ -99,7 +99,8 @@ module cqlcomm_mod
        kenorm,lfil, &
        nnspec
 
-  complex(c_double_complex) :: vlfemin(nmodsa),vlfeplus(nmodsa)
+  complex(c_double_complex), pointer :: vlfemin(:) => rfsetup%vlfemin
+  complex(c_double_complex), pointer :: vlfeplus(:) => rfsetup%vlfeplus
 
   !common /readscal/ &
   integer :: nstop,ncoef,nchec,ncont,nrstrt,nstps,nfpld, &
@@ -243,31 +244,57 @@ module cqlcomm_mod
   !*****************************************************************
   !     BEGIN arrays for rf package..(rf...,vlh[B,...,vlf...) routines
   !*****************************************************************
-  character(len=8) :: urfmod, &
-       vlfmod,vlfbes,vlfnpvar,vlhmod,vprprop,vlhplse,vlhprprp(nmodsa), &
-       rfread,rdcmod,rdc_clipping,rdc_netcdf
-  character(len=256) :: rffile(nmodsa)
-  character(len=256) :: rdcfile(nmodsa)
+  character(len=8), pointer :: urfmod => rfsetup%urfmod
+  character(len=8), pointer :: vlfmod => rfsetup%vlfmod
+  character(len=8), pointer :: vlfbes => rfsetup%vlfbes
+  character(len=8), pointer :: vlfnpvar => rfsetup%vlfnpvar
+  character(len=8), pointer :: vlhmod => rfsetup%vlhmod
+  character(len=8), pointer :: vprprop => rfsetup%vprprop
+  character(len=8), pointer :: vlhplse => rfsetup%vlhplse
+  character(len=8), pointer :: vlhprprp(:) => rfsetup%vlhprprp
+  character(len=8), pointer :: rfread => rfsetup%rfread
+  character(len=8), pointer :: rdcmod => rfsetup%rdcmod
+  character(len=8), pointer :: rdc_clipping => rfsetup%rdc_clipping
+  character(len=8), pointer :: rdc_netcdf => rfsetup%rdc_netcdf
+  character(len=256), pointer :: rffile(:) => rfsetup%rffile
+  character(len=256), pointer :: rdcfile(:) => rfsetup%rdcfile
 
   !common /params/ &
-  integer :: nrf
+  integer, pointer :: nrf => rfsetup%nrf
   !common/readscal/
-  real(c_double) :: vlhmodes,vdalp,vlh_karney, &
-       vlhpon,vlhpoff, &
-       vlfmodes, &
-       rdc_upar_sign
+  real(c_double), pointer :: vlhmodes => rfsetup%vlhmodes
+  real(c_double), pointer :: vdalp => rfsetup%vdalp
+  real(c_double), pointer :: vlh_karney => rfsetup%vlh_karney
+  real(c_double), pointer :: vlhpon => rfsetup%vlhpon
+  real(c_double), pointer :: vlhpoff => rfsetup%vlhpoff
+  real(c_double), pointer :: vlfmodes => rfsetup%vlfmodes
+  real(c_double), pointer :: rdc_upar_sign => rfsetup%rdc_upar_sign
 
   !common /readvec/ &
-  integer :: nonrf(ngena),noffrf(ngena)
-  real(c_double) :: dlndau(nmodsa),vparmin(nmodsa),vparmax(nmodsa), &
-       vprpmin(nmodsa),vprpmax(nmodsa), &
-       vlhpolmn(nmodsa),vlhpolmx(nmodsa), &
-       vlffreq(nmodsa),vlfharms(nmodsa),vlfharm1(nmodsa), &
-       vlfnp(nmodsa),vlfdnp(nmodsa),vlfddnp(nmodsa), &
-       vlfpol(nmodsa),vlfdpol(nmodsa),vlfddpol(nmodsa), &
-       vlfnperp(nmodsa),vlfdnorm(nmodsa), &
-       vlfparmn(nmodsa),vlfparmx(nmodsa), &
-       vlfprpmn(nmodsa),vlfprpmx(nmodsa)
+  integer, pointer :: nonrf(:) => rfsetup%nonrf
+  integer, pointer :: noffrf(:) => rfsetup%noffrf
+  real(c_double), pointer :: dlndau(:) => rfsetup%dlndau
+  real(c_double), pointer :: vparmin(:) => rfsetup%vparmin
+  real(c_double), pointer :: vparmax(:) => rfsetup%vparmax
+  real(c_double), pointer :: vprpmin(:) => rfsetup%vprpmin
+  real(c_double), pointer :: vprpmax(:) => rfsetup%vprpmax
+  real(c_double), pointer :: vlhpolmn(:) => rfsetup%vlhpolmn
+  real(c_double), pointer :: vlhpolmx(:) => rfsetup%vlhpolmx
+  real(c_double), pointer :: vlffreq(:) => rfsetup%vlffreq
+  real(c_double), pointer :: vlfharms(:) => rfsetup%vlfharms
+  real(c_double), pointer :: vlfharm1(:) => rfsetup%vlfharm1
+  real(c_double), pointer :: vlfnp(:) => rfsetup%vlfnp
+  real(c_double), pointer :: vlfdnp(:) => rfsetup%vlfdnp
+  real(c_double), pointer :: vlfddnp(:) => rfsetup%vlfddnp
+  real(c_double), pointer :: vlfpol(:) => rfsetup%vlfpol
+  real(c_double), pointer :: vlfdpol(:) => rfsetup%vlfdpol
+  real(c_double), pointer :: vlfddpol(:) => rfsetup%vlfddpol
+  real(c_double), pointer :: vlfnperp(:) => rfsetup%vlfnperp
+  real(c_double), pointer :: vlfdnorm(:) => rfsetup%vlfdnorm
+  real(c_double), pointer :: vlfparmn(:) => rfsetup%vlfparmn
+  real(c_double), pointer :: vlfparmx(:) => rfsetup%vlfparmx
+  real(c_double), pointer :: vlfprpmn(:) => rfsetup%vlfprpmn
+  real(c_double), pointer :: vlfprpmx(:) => rfsetup%vlfprpmx
 
 
   !..................................................................
@@ -384,34 +411,50 @@ module cqlcomm_mod
 
 
   !common/params/ &
-  integer :: nurftime
-
-  character(len=8) :: urfdmp,iurfcoll(nmodsa),iurfl(nmodsa), &
-       call_lh, &
-       call_ech, &
-       call_fw, &
-       ech,fw,lh, &
-       scaleurf,urfrstrt,urfwrray, &
-       rftype(nmodsa)
+  integer, pointer :: nurftime => rfsetup%nurftime
+  character(len=8), pointer :: urfdmp => rfsetup%urfdmp
+  character(len=8), pointer :: iurfcoll(:) => rfsetup%iurfcoll
+  character(len=8), pointer :: iurfl(:) => rfsetup%iurfl
+  character(len=8), pointer :: call_lh => rfsetup%call_lh
+  character(len=8), pointer :: call_ech => rfsetup%call_ech
+  character(len=8), pointer :: call_fw => rfsetup%call_fw
+  character(len=8), pointer :: ech => rfsetup%ech
+  character(len=8), pointer :: fw => rfsetup%fw
+  character(len=8), pointer :: lh => rfsetup%lh
+  character(len=8), pointer :: scaleurf => rfsetup%scaleurf
+  character(len=8), pointer :: urfrstrt => rfsetup%urfrstrt
+  character(len=8), pointer :: urfwrray => rfsetup%urfwrray
+  character(len=8), pointer :: rftype(:) => rfsetup%rftype
 
   !common/readscal/ &
-  integer :: ieqbrurf,urfncoef
-  integer :: nmods,nbssltbl,nondamp,nrfstep2, &
-       nrfpwr,nrfitr1,nrfitr2,nrfitr3
-  real(c_double) :: urfmult
-  integer :: nrdc
+  integer, pointer :: ieqbrurf => rfsetup%ieqbrurf
+  integer, pointer :: urfncoef => rfsetup%urfncoef
+  integer :: nmods ! xxx used in aindflt?
+  integer, pointer :: nbssltbl => rfsetup%nbssltbl
+  integer, pointer :: nondamp => rfsetup%nondamp
+  integer, pointer :: nrfstep2 => rfsetup%nrfstep2
+  integer, pointer :: nrfpwr => rfsetup%nrfpwr
+  integer, pointer :: nrfitr1 => rfsetup%nrfitr1
+  integer, pointer :: nrfitr2 => rfsetup%nrfitr2
+  integer, pointer :: nrfitr3 => rfsetup%nrfitr3
+  real(c_double), pointer :: urfmult => rfsetup%urfmult
+  integer, pointer :: nrdc => rfsetup%nrdc
 
   !common/readvec/ &
-  real(c_double) :: pwrscale(nmodsa),wdscale(nmodsa)
-  integer :: nrfstep1(nmodsa), &
-       nharms(nmodsa),nharm1(nmodsa),nrfspecies(nmodsa)
+  real(c_double), pointer :: pwrscale(:) => rfsetup%pwrscale
+  real(c_double), pointer :: wdscale(:) => rfsetup%wdscale
+  integer, pointer :: nrfstep1(:) => rfsetup%nrfstep1
+  integer, pointer :: nharms(:) => rfsetup%nharms
+  integer, pointer :: nharm1(:) => rfsetup%nharm1
+  integer, pointer :: nrfspecies(:) => rfsetup%nrfspecies
 
   !common/readvec/ &
-  real(c_double) :: pwrscale1(nbctimea),urftime(nbctimea)
+  real(c_double), pointer :: pwrscale1(:) => rfsetup%pwrscale1
+  real(c_double), pointer :: urftime(:) => rfsetup%urftime
 
   !common/readvec/ &
-  real(c_double) :: rdcscale(nrdca)
-  integer :: nrdcspecies(nrdca)
+  real(c_double), pointer :: rdcscale(:) => rfsetup%rdcscale
+  integer, pointer :: nrdcspecies(:) => rfsetup%nrdcspecies
 
 
   !-----------------------------------------------------------------------
@@ -584,7 +627,7 @@ module cqlcomm_mod
        cnorm,cnorm2,cnorm3,clite2,cnorm2i,cnormi, &
        ergtkev,eps0,elect,eratio,eovsz,eovedd, &
        em6,em8,em10,em12,em14,em37,em40,ep37,em90,ep90, &
-       ep100,em100,em120,em300,four,fourpi,fc, &
+       em100,em120,em300,four,fourpi,fc, &
        gszb,gsb,gsem,gsep,gszm,gszp,gseb,gszm2,gszp2,gszb2,gsla2, &
        gslb2,gsnm,half
   integer :: iyh,istate,itl,itu, &

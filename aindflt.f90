@@ -27,7 +27,6 @@ contains
 
 
 !     Set a few local constants, same as in subroutine ainsetpa.
-      ep100=1.d+100
       zero=0.d0
       one=1.d0
 !      pi=3.141592653589793d0
@@ -177,7 +176,6 @@ contains
       nfpld=0
       ngauss=0
       nlagran=4
-      nrf=0
       ngen=ngena
       nmax=nmaxa
       nonavgf=5
@@ -194,10 +192,6 @@ contains
       nonelpr=10000
       noffelpr=0
 !BH080305      do k=1,nmodsa
-      do k=1,ngena
-         nonrf(k)=0
-         noffrf(k)=10000
-      enddo
       nrskip=10
       numby=20
       do i=1,nplota
@@ -294,62 +288,10 @@ contains
       nonadi= 5
       updown="symmetry"
 
-      rdcmod="disabled"
-      rdc_clipping="disabled"
-      rdc_upar_sign=+1.
-      nrdc=1
-      rdcfile(1)="du0u0_input"
-      nrdcspecies(1)=1
-      rdcscale(1)=1.d0
-      do i=2,nrdca
-         rdcfile(i)="notset"
-         nrdcspecies(i)=0
-         rdcscale(i)=1.d0
-      enddo
 
-      urfmod="disabled"
-      urfmult=1.0
       veclnth=1.0
-      vdalp=.03
-      vlfmod="disabled"
-      vlfmodes=1.
-      vlfnpvar="1/r"
-      vlfbes="enabled"
-      do k=1,nmodsa
-         vlfharms(k)=1.
-         dlndau(k)=1.
-         vlfdnorm(k)=10.
-         vlffreq(k)=.8e9
-         vlfnp(k)=5.
-         vlfdnp(k)=.2
-         vlfddnp(k)=.1
-         vlfnperp(k)=5.
-         vlfharm1(k)=0.
-         vlfeplus(k)=(0.,0.)
-         vlfemin(k)=(0.,0.)
-         vlfpol(k)=0.
-         vlfdpol(k)=360.
-         vlfddpol(k)=20.
-         vlfparmn(k)=-ep100
-         vlfparmx(k)=+ep100
-         vlfprpmn(k)=0.0
-         vlfprpmx(k)=+ep100
-         vparmin(k)=-1.
-         vparmax(k)=1.
-         vprpmin(k)=0.
-         vprpmax(k)=ep100
-         vlh_karney=0.
-         vlhpolmn(k)=0.
-         vlhpolmx(k)=180.
-         vlhprprp(k)="parallel"
-      enddo
-      vlhplse="disabled"
-      vlhmod="disabled"
-      vlhmodes=1.
-      vlhpon=.1
-      vlhpoff=.11
+
       vnorm=4.e10   !  Usually set through enorm
-      vprprop="disabled"
       xfac=1.
       xlfac=1.
       xlpctlwr=.1
@@ -373,8 +315,6 @@ contains
       mpwrelec=1.
       npwrxj=1.
       mpwrxj=1.
-      urfrstrt="disabled"
-      urfwrray="disabled"
       xsink=0.
 
 !.......................................................................
