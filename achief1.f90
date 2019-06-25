@@ -46,6 +46,7 @@ contains
     use cqlconf_mod, only : setup0
     use cqlconf_mod, only : get_eqsetup_from_nml
     use cqlconf_mod, only : get_rfsetup_from_nml
+    use cqlconf_mod, only : get_trsetup_from_nml
     use cqlconf_mod, only : print_eqsetup
     use cqlcomm_mod
     use pltmain_mod, only : pltmain
@@ -86,11 +87,12 @@ contains
     !.....................................................................
     open(unit=2,file=nml_file,status="old")
     read(2,setup)
-    read(2,trsetup)
+    !read(2,trsetup)
     read(2,sousetup)
 
     rewind(2) !tmp
     close(2) !tmp
+    call get_trsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
     call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
     call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
     !read(2,eqsetup)
@@ -127,7 +129,7 @@ contains
        write(6,*)'  In achief1: '
        call print_setup0
        write(6,setup)
-       write(6,trsetup)
+       !now private write(6,trsetup)
        write(6,sousetup)
        !now private write(6,eqsetup)
        !now private write(6,rfsetup)

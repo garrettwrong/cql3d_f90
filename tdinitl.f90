@@ -71,6 +71,7 @@ contains
         use cqlconf_mod, only : setup0
         use cqlconf_mod, only : get_eqsetup_from_nml
         use cqlconf_mod, only : get_rfsetup_from_nml
+        use cqlconf_mod, only : get_trsetup_from_nml
       use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use ampfar_mod, only : ampfalloc
@@ -127,11 +128,12 @@ contains
 !..................................................................
       open(unit=2,file=nml_file,status='old')
         read(2,setup)
-        read(2,trsetup)
+        !read(2,trsetup)
         read(2,sousetup)
 
         rewind(2) !tmp
         close(2) !tmp
+        call get_trsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
         call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
         call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
 
@@ -182,7 +184,7 @@ contains
          write(6,*)'  In tdinitl: '
          ! nml name now private, write function can be added to module write(6,setup0)
          write(6,setup)
-         write(6,trsetup)
+         ! nml name now private, write function can be added to module write(6,trsetup)
          write(6,sousetup)
          ! private, writer function can be added to module write(6,eqsetup)
          ! private, writer function can be added to module write(6,rfsetup)

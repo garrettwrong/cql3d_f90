@@ -78,7 +78,7 @@ contains
       write(iunwrif,'(" ")')
       ! nml name now private, can make a function in the module for this (iunwrif,setup0)
       write(iunwrif,setup)
-      write(iunwrif,trsetup)
+      ! nml name now private, can make a function in the module for this write(iunwrif,trsetup)
       write(iunwrif,sousetup)
       !nml name now private, can make a function in the module for this write(iunwrif,eqsetup)
       !nml name now private, can make a function in the module for this write(iunwrif,rfsetup)

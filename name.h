@@ -79,21 +79,6 @@
 	j2_ini,j2_end,inc_j2, i2_ini,i2_end,inc_i2
 
 !..................................................................
-!     Namelist (trsetup) for "tr" transport routines
-!..................................................................
-
-      namelist/trsetup/ &
-	advectr, &
-	difus_type,difusr,difus_rshape,difus_vshape,difin, &
-	difus_io,difus_io_file, &
-	difus_io_drrscale,difus_io_drscale,difus_io_t, &
-	pinch, &
-	relaxden,relaxtsp, &
-	transp,adimeth,nonadi, &
-	nontran,nofftran,nonelpr,noffelpr,ndifus_io_t
-
-
-!..................................................................
 !     Namelist (sousetup) for "sou" simple source routines.
 !..................................................................
 

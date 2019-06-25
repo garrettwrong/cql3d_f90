@@ -70,32 +70,6 @@ contains
       curr_edge=0.
       currerr=0.1 !0.1
       deltabdb=0.
-      do k=1,ngena
-         difus_type(k)="specify"
-         difus_io(k)="disabled"
-      enddo
-      difus_io_file="drrin.nc"
-      ndifus_io_t=0
-      do ii=1,nbctimea
-         difus_io_t(ii)=zero
-         do k=1,ngena
-            difus_io_drrscale(ii,k)=one
-            difus_io_drscale(ii,k)=one
-         enddo
-      enddo
-      difusr=1.d4
-      difus_rshape(1)=1.0
-      difus_rshape(2)=3.0
-      difus_rshape(3)=3.0
-      difus_rshape(4)=1.0
-      difus_rshape(5)=-1.0
-      difus_rshape(6)=0.0
-      difus_rshape(7)=0.0
-      difus_rshape(8)=0.0
-      difus_vshape(1)=0.
-      difus_vshape(2)=0.
-      difus_vshape(3)=0.
-      difus_vshape(4)=0.
       droptol=0.001d0
       dtr=5.d0
       dtr0=dtr
@@ -187,10 +161,6 @@ contains
       noffloss=10000
       nonvphi=10000
       noffvphi=10000
-      nontran=0
-      nofftran=10000
-      nonelpr=10000
-      noffelpr=0
 !BH080305      do k=1,nmodsa
       nrskip=10
       numby=20
@@ -252,8 +222,6 @@ contains
       eleccomp="enabled"
       radmin=50.
       relativ="enabled"
-      relaxden=1.
-      relaxtsp="disabled"
       rfacz=.7
       roveram=1.e-6
       rmirror=2.
@@ -281,16 +249,8 @@ contains
       tfac=1.
       tfacz=1.
       thetd=0.0
-      transp="disabled"
-      pinch="disabled"
-      advectr=1.0
-      adimeth="disabled"
-      nonadi= 5
       updown="symmetry"
-
-
       veclnth=1.0
-
       vnorm=4.e10   !  Usually set through enorm
       xfac=1.
       xlfac=1.
@@ -499,7 +459,6 @@ contains
         tiin(i)=0.0d0
         zeffin(i)=1.0d0
         vphiplin(i)=0.0d0
-        difin(i)=0.0d0
  12   continue
 
       do k=1,npaproca

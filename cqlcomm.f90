@@ -43,7 +43,7 @@ module cqlcomm_mod
 
   !---BEGIN USE
 
-  use cqlconf_mod, only : setup0, eqsetup, rfsetup
+  use cqlconf_mod, only : setup0, eqsetup, rfsetup, trsetup
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
   use iso_c_binding, only : c_double_complex
@@ -59,8 +59,10 @@ module cqlcomm_mod
   logical, private :: initialized_cqlcomm = .FALSE.
   logical, private :: initialized_eq_pointers = .FALSE.
   logical, private :: initialized_rf_pointers = .FALSE.
+  logical, private :: initialized_tr_pointers = .FALSE.
   private :: initialize_eq_pointers
   private :: initialize_rf_pointers
+  private :: initialize_tr_pointers
 
   public
 
@@ -142,8 +144,9 @@ module cqlcomm_mod
   character(len=8) :: kpress(ntotala),kfield(ntotala), &
        lbdry(ngena),lossmode(ngena), &
        regy(ngena), &
-       torloss(ngena), &
-       difus_type(ngena), difus_io(ngena)
+       torloss(ngena)
+  character(len=8), pointer :: difus_type(:) => null()
+  character(len=8), pointer :: difus_io(:) => null()
 
   character(len=256) :: lossfile(ngena)
 
@@ -341,7 +344,7 @@ module cqlcomm_mod
   !****************************************************************
 
   !common/params/ ndifus_io_t  !Max to be nbctimea
-  integer :: ndifus_io_t
+  integer, pointer :: ndifus_io_t => null()
 
   !..................................................................
   !     scalars in input
@@ -349,36 +352,43 @@ module cqlcomm_mod
 
   character(len=8) :: bootst,bootcalc,bootupdt, &
        iprone,iprote,iproti,iprozeff,iprovphi,iproelec,ipronn,iprocur, &
-       tmdmeth,partner,pinch,plt3d,pltvs,radcoord, &
-       relaxtsp,rzset, &
+       tmdmeth,partner,plt3d,pltvs,radcoord, &
+       rzset, &
        ndeltarho,softxry,npa_diag,atten_npa, &
-       transp,adimeth, &
        efswtch,efswtchn,efiter,efflag
-  ! bug
+  character(len=8), pointer :: pinch => null()
+  character(len=8), pointer :: relaxtsp => null()
+  character(len=8), pointer :: transp => null()
+  character(len=8), pointer :: adimeth => null()
+
   character(len=8) :: npa_process(npaproca)
 
-  character(len=256) :: difus_io_file
+  character(len=256), pointer :: difus_io_file => null()
 
   !common /s3d/ &
-  real(c_double) :: difusr,advectr,&
-       enmin,enmax,bootsign,fds
+  real(c_double), pointer :: difusr => null()
+  real(c_double), pointer :: advectr => null()
+  real(c_double) :: enmin,enmax,bootsign,fds
   integer :: kfrsou, &
        mmsv,msxr,njene,njte,njti,nonboot,jhirsh, &
        nrskip,nen,nv,nen_npa,nv_npa,npaproc, &
        nr_delta,nz_delta,nt_delta, &
        nr_f4d,nz_f4d,nv_f4d,nt_f4d
-  real(c_double) :: rfacz,roveram,relaxden
+  real(c_double) :: rfacz,roveram
+  real(c_double), pointer :: relaxden => null()
   real(c_double) :: enmin_npa,enmax_npa,fds_npa, &
        curr_edge,efrelax,efrelax1,currerr
-  integer :: nonadi !YuP[2019-04-24]
+  integer, pointer :: nonadi
 
   !common/ar3d/ &
-  real(c_double) :: difus_rshape(8),difus_vshape(4),difin(njenea), &
-       rd(nva),thetd(nva),x_sxr(nva),z_sxr(nva), &
+  real(c_double), pointer :: difus_rshape(:) => null()
+  real(c_double), pointer :: difus_vshape(:) => null()
+  real(c_double), pointer :: difin(:) => null()
+  real(c_double) :: rd(nva),thetd(nva),x_sxr(nva),z_sxr(nva), &
        rd_npa(nva),thetd_npa(nva),x_npa(nva),z_npa(nva)
-  real(c_double) :: difus_io_drrscale(nbctimea,ngena),  &
-       difus_io_drscale(nbctimea,ngena), &
-       difus_io_t(nbctimea)
+  real(c_double), pointer :: difus_io_drrscale(:,:) => null()
+  real(c_double), pointer :: difus_io_drscale(:,:) => null()
+  real(c_double), pointer :: difus_io_t(:) => null()
 
   !******************************************************************
   !     BEGIN arrays for EQUILIBRIUM MODEL (eq..) (NON-CIRCULAR CROSS
@@ -483,8 +493,11 @@ module cqlcomm_mod
   integer :: lmidpln,lmidvel,laddbnd, &
        nchgdy,ngauss,nlagran, &
        nonavgf,nofavgf, &
-       nontran, nofftran, nonelpr, noffelpr, &
        nummods,numixts
+  integer, pointer :: nontran => null()
+  integer, pointer :: nofftran => null()
+  integer, pointer :: nonelpr => null()
+  integer, pointer :: noffelpr => null()
   real(c_double) :: ampferr
   integer :: nampfmax,nonampf
 
@@ -2168,7 +2181,7 @@ contains
     eqmod => eqsetup%eqmod
     lfield => eqsetup%lfield
     nconteqn => eqsetup%nconteqn
-    eqsym =>eqsetup%eqsym
+    eqsym => eqsetup%eqsym
     eqdskalt => eqsetup%eqdskalt
     eqsource => eqsetup%eqsource
     eqmodel=> eqsetup%eqmodel
@@ -2187,14 +2200,41 @@ contains
     methflag => eqsetup%methflag
 
     initialized_eq_pointers = .TRUE.
-end subroutine initialize_eq_pointers
+  end subroutine initialize_eq_pointers
 
+  subroutine initialize_tr_pointers
+    if(initialized_tr_pointers) call abort
+    advectr => trsetup%advectr
+    difus_type => trsetup%difus_type
+    difusr => trsetup%difusr
+    difus_rshape => trsetup%difus_rshape
+    difus_vshape => trsetup%difus_vshape
+    difin => trsetup%difin
+    difus_io => trsetup%difus_io
+    difus_io_file => trsetup%difus_io_file
+    difus_io_drrscale => trsetup%difus_io_drrscale
+    difus_io_drscale => trsetup%difus_io_drscale
+    difus_io_t => trsetup%difus_io_t
+    pinch => trsetup%pinch
+    relaxden => trsetup%relaxden
+    relaxtsp => trsetup%relaxtsp
+    transp => trsetup%transp
+    adimeth => trsetup%adimeth
+    nonadi => trsetup%nonadi
+    nontran => trsetup%nontran
+    nofftran => trsetup%nofftran
+    nonelpr => trsetup%nonelpr
+    noffelpr => trsetup%noffelpr
+    ndifus_io_t => trsetup%ndifus_io_t
+    initialized_tr_pointers = .TRUE.
+  end subroutine initialize_tr_pointers
 
-subroutine initialize_cqlcomm
-  if(initialized_cqlcomm) call abort
-  call initialize_eq_pointers
-  call initialize_rf_pointers
-  initialized_cqlcomm = .TRUE.
-end subroutine initialize_cqlcomm
+  subroutine initialize_cqlcomm
+    if(initialized_cqlcomm) call abort
+    call initialize_eq_pointers
+    call initialize_rf_pointers
+    call initialize_tr_pointers
+    initialized_cqlcomm = .TRUE.
+  end subroutine initialize_cqlcomm
 
 end module cqlcomm_mod

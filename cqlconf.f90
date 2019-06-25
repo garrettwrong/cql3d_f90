@@ -1,6 +1,7 @@
 module cqlconf_mod
   use param_mod, only : lrorsa, lfielda
   use param_mod, only : ep100, nmodsa, ngena, nrdca, nbctimea
+  use param_mod, only : njenea
   use iso_c_binding, only : c_double, c_double_complex
   implicit none
 
@@ -21,6 +22,10 @@ module cqlconf_mod
   public get_rfsetup_from_nml
   public print_rfsetup
   public set_rfsetup
+
+  public get_trsetup_from_nml
+  public print_trsetup
+  public set_trsetup
 
 
   type, public ::  setup0_t
@@ -229,14 +234,37 @@ module cqlconf_mod
      character(len=8) :: rdc_netcdf = "disabled"
   end type rfsetup_t
 
+  type, public :: trsetup_t
+     real(c_double) :: advectr = 1.0
+     character(len=8) :: difus_type(1:ngena) = "specify"
+     real(c_double) :: difusr = 1.d4
+     real(c_double) :: difus_rshape(8) = (/ 1.0, 3.0, 3.0, 1.0, -1.0, 0.0, 0.0, 0.0 /)
+     real(c_double) :: difus_vshape(4) = 0.
+     real(c_double) :: difin(1:njenea) = 0.
+     character(len=8) :: difus_io(1:ngena) = "disabled"
+     character(len=256) :: difus_io_file = "drrin.nc"
+     real(c_double) :: difus_io_drrscale(1:nbctimea, 1:ngena) = 1.
+     real(c_double) :: difus_io_drscale(1:nbctimea, 1:ngena) = 1.
+     real(c_double) :: difus_io_t(1:nbctimea) = 0.
+     character(len=8) :: pinch = "disabled"
+     real(c_double) :: relaxden = 1.
+     character(len=8) :: relaxtsp = "disabled"
+     character(len=8) :: transp= " disabled"
+     character(len=8) :: adimeth = "disabled"
+     integer :: nonadi = 5
+     integer :: nontran = 0
+     integer :: nofftran = 10000
+     integer :: nonelpr = 10000
+     integer :: noffelpr = 0
+     integer :: ndifus_io_t = 0
+  end type trsetup_t
+
+
   ! rest of cql3d will access this
   type(setup0_t), public, save :: setup0
   type(eqsetup_t), public, target, save :: eqsetup
   type(rfsetup_t), public, target, save :: rfsetup
-
-  !..................................................................
-  !     NAMELIST (SETUP0) DECLARATION FOR INPUT
-  !..................................................................
+  type(trsetup_t), public, target, save :: trsetup
 
 contains
 
@@ -293,7 +321,6 @@ contains
          nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
          ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf
 
-
     ! copy defaults to local vars
 
     mnemonic = setup0_%mnemonic
@@ -339,6 +366,8 @@ contains
        nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
        ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf, &
        debug_print)
+    logical, intent(in), optional :: debug_print
+    !
     character(len=256), intent(in), optional :: mnemonic
     integer, intent(in), optional :: ioutput(2)
     character(len=8), intent(in), optional :: iuser
@@ -358,7 +387,6 @@ contains
     integer, intent(in), optional :: lsindx(0:lrorsa)
     character(len=8), intent(in), optional :: nlrestrt
     character(len=8), intent(in), optional :: nlwritf
-    logical, intent(in), optional :: debug_print
 
     ! All this code should do is override the defaults
     ! in setup0 with optional args.
@@ -469,6 +497,7 @@ contains
     real(c_double) :: zbox
 
     ! state the namelist, with associated vars
+
     namelist/eqsetup/ &
          atol, &
          ellptcty,eqmodel,eqpower,eqsource,eqdskin,bsign,eqmod, &
@@ -480,6 +509,8 @@ contains
          povdelp, &
          rtol,rmag,rbox,rboxdst, &
          zbox
+
+    ! copy defaults to local vars
 
     atol = eqsetup_%atol
     ellptcty = eqsetup_%ellptcty
@@ -674,7 +705,6 @@ contains
     real(c_double) :: rdcscale(nrdca)
     character(len=8) :: rdc_netcdf
 
-
     namelist/rfsetup/ &
          call_lh,call_ech,call_fw,ieqbrurf,urfncoef, &
          dlndau, &
@@ -698,6 +728,7 @@ contains
          vlfparmn,vlfparmx,vlfprpmn,vlfprpmx,rdc_upar_sign,nrdc, &
          rdcmod,rdc_clipping,nrdcspecies,rdcscale,rdc_netcdf
 
+    ! copy defaults to local vars
 
     call_lh = rfsetup_%call_lh
     call_ech = rfsetup_%call_ech
@@ -1009,10 +1040,10 @@ contains
   end subroutine set_rfsetup
 
   subroutine print_rfsetup()
-    namelist /rfsetup_nml/ eqsetup
-    WRITE(*, *) "!----  BEGIN EQSETUP DUMP"
+    namelist /rfsetup_nml/ rfsetup
+    WRITE(*, *) "!----  BEGIN RFSETUP DUMP"
     WRITE(*, nml = rfsetup_nml)
-    WRITE(*, *)  "!----  END EQSETUP DUMP"
+    WRITE(*, *)  "!----  END RFSETUP DUMP"
   end subroutine print_rfsetup
 
 
@@ -1041,4 +1072,161 @@ contains
     if (present(unit)) unit=newunit
   end function newunit
 
-end module cqlconf_mod
+  subroutine get_trsetup_from_nml(nml_file, close_nml_file, debug_print)
+    implicit none
+    character(len=*), intent(in) :: nml_file
+    logical, intent(in), optional :: close_nml_file
+    logical, intent(in), optional :: debug_print
+    ! local
+    type(trsetup_t) :: trsetup_
+    !
+    real(c_double) :: advectr
+    character(len=8) :: difus_type(1:ngena)
+    real(c_double) :: difusr
+    real(c_double) :: difus_rshape(8)
+    real(c_double) :: difus_vshape(4)
+    real(c_double) :: difin(1:njenea)
+    character(len=8) :: difus_io(1:ngena)
+    character(len=256) :: difus_io_file
+    real(c_double) :: difus_io_drrscale(1:nbctimea, 1:ngena)
+    real(c_double) :: difus_io_drscale(1:nbctimea, 1:ngena)
+    real(c_double) :: difus_io_t(1:nbctimea)
+    character(len=8) :: pinch
+    real(c_double) :: relaxden
+    character(len=8) :: relaxtsp
+    character(len=8) :: transp= " disabled"
+    character(len=8) :: adimeth
+    integer :: nonadi
+    integer :: nontran
+    integer :: nofftran
+    integer :: nonelpr
+    integer :: noffelpr
+    integer :: ndifus_io_t
+
+    namelist/trsetup/ &
+         advectr, &
+         difus_type,difusr,difus_rshape,difus_vshape,difin, &
+         difus_io,difus_io_file, &
+         difus_io_drrscale,difus_io_drscale,difus_io_t, &
+         pinch, &
+         relaxden,relaxtsp, &
+         transp,adimeth,nonadi, &
+         nontran,nofftran,nonelpr,noffelpr,ndifus_io_t
+
+    ! copy defaults to local vars
+
+    advectr = trsetup_%advectr
+    difus_type = trsetup_%difus_type
+    difusr = trsetup_%difusr
+    difus_rshape = trsetup_%difus_rshape
+    difus_vshape = trsetup_%difus_vshape
+    difin = trsetup_%difin
+    difus_io = trsetup_%difus_io
+    difus_io_file = trsetup_%difus_io_file
+    difus_io_drrscale = trsetup_%difus_io_drrscale
+    difus_io_drscale = trsetup_%difus_io_drscale
+    difus_io_t = trsetup_%difus_io_t
+    pinch = trsetup_%pinch
+    relaxden = trsetup_%relaxden
+    relaxtsp = trsetup_%relaxtsp
+    transp = trsetup_%transp
+    adimeth = trsetup_%adimeth
+    nonadi = trsetup_%nonadi
+    nontran = trsetup_%nontran
+    nofftran = trsetup_%nofftran
+    nonelpr = trsetup_%nonelpr
+    noffelpr = trsetup_%noffelpr
+    ndifus_io_t = trsetup_%ndifus_io_t
+
+    
+    ! read the nml, which will write into the local vars
+
+    call maybe_nml_open(nml_file)
+    read(nml_fd, trsetup)
+
+    ! external codes can call this, which packs the setup0 derived type.
+    call set_trsetup(advectr, &
+         difus_type,difusr,difus_rshape,difus_vshape,difin, &
+         difus_io,difus_io_file, &
+         difus_io_drrscale,difus_io_drscale,difus_io_t, &
+         pinch, &
+         relaxden,relaxtsp, &
+         transp,adimeth,nonadi, &
+         nontran,nofftran,nonelpr,noffelpr,ndifus_io_t, &
+         debug_print)
+
+    ! we optionally close the nml file.
+    if (present(close_nml_file)) then
+       if(close_nml_file) then
+          call nml_close()
+       end if
+    endif
+  end subroutine get_trsetup_from_nml
+
+  subroutine set_trsetup(advectr, &
+       difus_type,difusr,difus_rshape,difus_vshape,difin, &
+       difus_io,difus_io_file, &
+       difus_io_drrscale,difus_io_drscale,difus_io_t, &
+       pinch, &
+       relaxden,relaxtsp, &
+       transp,adimeth,nonadi, &
+       nontran,nofftran,nonelpr,noffelpr,ndifus_io_t, &
+       debug_print)
+    logical, intent(in), optional :: debug_print
+    !
+    real(c_double), intent(in), optional :: advectr
+    character(len=8), intent(in), optional :: difus_type(1:ngena)
+    real(c_double), intent(in), optional :: difusr
+    real(c_double), intent(in), optional :: difus_rshape(8)
+    real(c_double), intent(in), optional :: difus_vshape(4)
+    real(c_double), intent(in), optional :: difin(1:njenea)
+    character(len=8), intent(in), optional :: difus_io(1:ngena)
+    character(len=256), intent(in), optional :: difus_io_file
+    real(c_double), intent(in), optional :: difus_io_drrscale(1:nbctimea, 1:ngena)
+    real(c_double), intent(in), optional :: difus_io_drscale(1:nbctimea, 1:ngena)
+    real(c_double), intent(in), optional :: difus_io_t(1:nbctimea)
+    character(len=8), intent(in), optional :: pinch
+    real(c_double), intent(in), optional :: relaxden
+    character(len=8), intent(in), optional :: relaxtsp
+    character(len=8), intent(in), optional :: transp
+    character(len=8), intent(in), optional :: adimeth
+    integer, intent(in), optional :: nonadi
+    integer, intent(in), optional :: nontran
+    integer, intent(in), optional :: nofftran
+    integer, intent(in), optional :: nonelpr
+    integer, intent(in), optional :: noffelpr
+    integer, intent(in), optional :: ndifus_io_t
+
+    if(present(advectr)) trsetup%advectr = advectr
+    if(present(difus_type)) trsetup%difus_type = difus_type
+    if(present(difusr)) trsetup%difusr = difusr
+    if(present(difus_rshape)) trsetup%difus_rshape = difus_rshape
+    if(present(difus_vshape)) trsetup%difus_vshape = difus_vshape
+    if(present(difin)) trsetup%difin = difin
+    if(present(difus_io)) trsetup%difus_io = difus_io
+    if(present(difus_io_file)) trsetup%difus_io_file = difus_io_file
+    if(present(difus_io_drrscale)) trsetup%difus_io_drrscale = difus_io_drrscale
+    if(present(difus_io_drscale)) trsetup%difus_io_drscale = difus_io_drscale
+    if(present(difus_io_t)) trsetup%difus_io_t = difus_io_t
+    if(present(pinch)) trsetup%pinch = pinch
+    if(present(relaxden)) trsetup%relaxden = relaxden
+    if(present(relaxtsp)) trsetup%relaxtsp = relaxtsp
+    if(present(transp)) trsetup%transp = transp
+    if(present(adimeth)) trsetup%adimeth = adimeth
+    if(present(nonadi)) trsetup%nonadi = nonadi
+    if(present(nontran)) trsetup%nontran = nontran
+    if(present(nofftran)) trsetup%nofftran = nofftran
+    if(present(nonelpr)) trsetup%nonelpr = nonelpr
+    if(present(noffelpr)) trsetup%noffelpr = noffelpr
+    if(present(ndifus_io_t)) trsetup%ndifus_io_t = ndifus_io_t
+
+  end subroutine set_trsetup
+
+  subroutine print_trsetup()
+    namelist /trsetup_nml/ trsetup
+    WRITE(*, *) "!----  BEGIN TRSETUP DUMP"
+    WRITE(*, nml = trsetup_nml)
+    WRITE(*, *)  "!----  END TRSETUP DUMP"
+  end subroutine print_trsetup
+
+  end module cqlconf_mod
