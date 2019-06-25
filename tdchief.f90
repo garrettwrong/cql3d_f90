@@ -109,6 +109,22 @@ contains
       character*8 icall,iplotsxr
       data iflag1/0/
 
+!..................................................................
+!     Before we do anything, init cqlcomm  module, exactly once.
+!
+!     This has the effect of associating pointers from comm vars previously
+!       in a huge common block to the derived type targets in cqlconf.
+!
+!     This was done to accomodate a request not to use  module or der types
+!       (on a project that was to impliment derived types and modules)
+!       in the code bc Compx authors found these "did not look good"...
+!
+!     The approach used for setup0, though verbose, actually deleted
+!       the common variables.... reducing code.
+!..................................................................
+      call initialize_cqlcomm
+
+
 !.......................................................................
 !     Open cqlinput NL file and adjust to new setup0/setup structure,
 !     if old two setup namelist sections are present [maintaining
