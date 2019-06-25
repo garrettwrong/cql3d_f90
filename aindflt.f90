@@ -36,13 +36,8 @@ contains
       jx=300 ! default value; will be over-written by cqlinput value
       mx=3   ! default value; will be over-written by cqlinput value
 
-      jfl=151  !!!min(201,jx)
-      if (mod(jfl,2).eq.0) jfl=jfl-1
-      ! jfl needed to be odd because of jpxyh=(jfl+1)/2 in pltprppr.f
-
       nmods=nmodsa ! YuP-101220: should be mrfn, but not known yet
 
-      nso=0
       lz=lza
 
       ampfmod="disabled"
@@ -60,8 +55,6 @@ contains
       brfac=0.
       brfac1=0.
       brfacgm3=1.0
-      isoucof=0
-      faccof=1.e0
       bth=1000.
       btor=10000.
       chang="enabled"
@@ -193,9 +186,11 @@ contains
       pltlim="disabled"
       pltlimm=1.
       pltlos="disabled"
-      pltso="disabled"
+      !pltso="disabled"
        !YuP[2018-02-07] New: pltso='color' and 'first_cl'
-       !for color contour plots
+      !for color contour plots
+      ! (gbw) the above variable pltsowas assigned multiple times in this file
+      ! took latest value of 'enabled' as default
       pltmag=1.
       pltsig="enabled"
       pltpowe="disabled"
@@ -253,11 +248,6 @@ contains
       veclnth=1.0
       vnorm=4.e10   !  Usually set through enorm
       xfac=1.
-      xlfac=1.
-      xlpctlwr=.1
-      xlpctmdl=.4
-      xllwr=1./43.
-      xlmdl=.25
       xpctlwr=.1
       xpctmdl=.4
       xlwr=1./43.
@@ -321,8 +311,6 @@ contains
 
 
 !DIR$ NEXTSCALAR
-      mpwrsou(0)=1.
-      npwrsou(0)=2.
       do 11 k=1,ngena
          torloss(k)="disabled"
          lbdry(k)="conserv"
@@ -336,8 +324,6 @@ contains
          gamegy(k)=0.0
          eparc(k,0)=-1.
          eperc(k,0)=-1.
-         mpwrsou(k)=3.
-         npwrsou(k)=2.
          ntorloss(k)=0.0
          mtorloss(k)=0.0
          paregy(k)=0.0
@@ -539,90 +525,6 @@ contains
       enmin_npa=5.
       enmax_npa=50.
       fds_npa=0.2
-      soucoord="disabled"
-      nsou=1
-      pltso="enabled"
-      flemodel="fsa"
-      knockon="disabled"
-      komodel="mr"
-      nkorfn=1
-      nonko=10000
-      noffko=10000
-      soffvte=3.
-      soffpr=0.5
-      do 19 k=1,ngena
-        do 20 m=1,nsoa
-          nonso(k,m)=100000
-          noffso(k,m)=100000
-          do ll=1,lrza
-             asor(k,m,ll)=0.
-          enddo
-          sellm1(k,m)=1.
-          sellm2(k,m)=1.
-          seppm1(k,m)=0.
-          seppm2(k,m)=1.
-          sem1(k,m)=0.
-          sem2(k,m)=0.
-          sthm1(k,m)=0.
-          scm2(k,m)=0.
-          szm1(k,m)=0.
-          szm2(k,m)=1.
- 20     continue
- 19   continue
-
-!     Some specific settings from cqlinput_help
-
-
-!BH080125  DON'T reset this, as it conflicts with past
-!BH080125  usage of asor.
-!BH080125      do ll=1,lrza
-!BH080125         asor(1,1,ll)=.25e+13
-!BH080125         asor(1,2,ll)=3.25e+13
-!BH080125      enddo
-
-      scm2(1,1)=.001
-      scm2(1,2)=10000.
-      sellm1(1,1)=1.
-      sellm1(1,2)=1.
-      sellm2(1,1)=1.
-      sellm2(1,2)=1.
-      sem1(1,1)=1600.
-      sem1(1,2)=0.
-      sem2(1,1)=.5
-      sem2(1,2)=25.
-      seppm1(1,1)=1.
-      seppm1(1,2)=1.
-      seppm2(1,1)=1.
-      seppm2(1,2)=1.
-      sthm1(1,1)=5.
-      sthm1(1,2)=0.
-      szm1(1,1)=0.
-      szm1(1,2)=0.
-      szm2(1,1)=1.e+5
-      szm2(1,2)=1.e+5
-
-      do k=1,ngena
-         do m=1,nsoa
-            do ll=0,lrza
-               sellm1z(k,m,ll)=sellm1(k,m)
-               sellm2z(k,m,ll)=sellm2(k,m)
-               seppm1z(k,m,ll)=seppm1(k,m)
-               sem1z(k,m,ll)=sem1(k,m)
-               sem2z(k,m,ll)=sem2(k,m)
-               sthm1z(k,m,ll)=sthm1(k,m)
-               scm2z(k,m,ll)=scm2(k,m)
-               szm1z(k,m,ll)=szm1(k,m)
-               seppm2z(k,m,ll)=seppm2(k,m)
-               szm2z(k,m,ll)=szm2(k,m)
-            enddo
-            asorz(k,m,0)=0.
-            do ll=1,lrza
-               asorz(k,m,ll)=asor(k,m,ll)
-            enddo
-         enddo
-      enddo
-
-
 
 !.......................................................................
 !l    4. Output option arrays

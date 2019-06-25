@@ -78,17 +78,3 @@
 	j0_ini,j0_end,inc_j0, i0_ini,i0_end,inc_i0, &
 	j2_ini,j2_end,inc_j2, i2_ini,i2_end,inc_i2
 
-!..................................................................
-!     Namelist (sousetup) for "sou" simple source routines.
-!..................................................................
-
-      namelist/sousetup/ &
-	asorz,asor,flemodel, &
-	nonso,noffso,nso,nsou, &
-	pltso,mpwrsou,npwrsou, &
-	scm2z,szm1z,scm2,sellm1,sellm2,seppm1, &
-	sellm1z,sellm2z,seppm2,sem1,sem2, &
-	seppm1z,sem1z,sem2z,sthm1z, &
-	seppm2z,soucoord,knockon,komodel,nkorfn,nonko,noffko,soffvte, &
-	soffpr,isoucof,faccof,jfl,xlfac,xlpctlwr,xlpctmdl,xllwr,xlmdl, &
-	szm2z,sthm1,szm1,szm2

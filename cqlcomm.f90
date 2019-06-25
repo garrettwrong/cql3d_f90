@@ -43,7 +43,7 @@ module cqlcomm_mod
 
   !---BEGIN USE
 
-  use cqlconf_mod, only : setup0, eqsetup, rfsetup, trsetup
+  use cqlconf_mod, only : setup0, eqsetup, rfsetup, trsetup, sousetup
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
   use iso_c_binding, only : c_double_complex
@@ -60,9 +60,11 @@ module cqlcomm_mod
   logical, private :: initialized_eq_pointers = .FALSE.
   logical, private :: initialized_rf_pointers = .FALSE.
   logical, private :: initialized_tr_pointers = .FALSE.
+  logical, private :: initialized_sou_pointers = .FALSE.
   private :: initialize_eq_pointers
   private :: initialize_rf_pointers
   private :: initialize_tr_pointers
+  private :: initialize_sou_pointers
 
   public
 
@@ -211,8 +213,10 @@ module cqlcomm_mod
 
   !common /diskx/ &
   real(c_double) :: tauegy(ngena,0:lrza),eparc(ngena,0:lrza), &
-       eperc(ngena,0:lrza),simpbfac, &
-       isoucof,faccof
+       eperc(ngena,0:lrza),simpbfac
+
+  real(c_double), pointer :: isoucof => null()
+  real(c_double), pointer :: faccof => null()
 
   !..................................................................
   !     3-D ARRAYS
@@ -231,27 +235,46 @@ module cqlcomm_mod
   !*****************************************************************
 
   !common /diskx/ &
-  real(c_double) :: mpwrsou(0:ngena),npwrsou(0:ngena) !YuP[2019-04-24] corrected to real
-  real(c_double) ::asor(ngena,nsoa,lrza)
+  real(c_double), pointer :: mpwrsou(:) => null()
+  real(c_double), pointer :: npwrsou(:) => null()
+  real(c_double), pointer :: asor(:,:,:) => null()
 
   !common /params/ &
-  integer :: nso
+  integer, pointer :: nso => null()
 
-  character(len=8) :: pltso, soucoord, knockon, komodel, flemodel
+  character(len=8), pointer :: pltso => null()
+  character(len=8), pointer :: soucoord => null()
+  character(len=8), pointer :: knockon => null()
+  character(len=8), pointer :: komodel => null()
+  character(len=8), pointer :: flemodel => null()
 
   !common /readscal/ &
-  integer ::  nsou
-  integer :: nkorfn,nonko,noffko
-  real(c_double) :: soffvte, soffpr, &
-       xlfac,xlpctlwr,xlpctmdl,xllwr,xlmdl
-  integer :: jfl
+  integer, pointer ::  nsou => null()
+  integer, pointer :: nkorfn => null()
+  integer, pointer :: nonko => null()
+  integer, pointer :: noffko => null()
+  real(c_double), pointer :: soffvte => null()
+  real(c_double), pointer :: soffpr => null()
+  real(c_double), pointer :: xlfac => null()
+  real(c_double), pointer :: xlpctlwr => null()
+  real(c_double), pointer :: xlpctmdl => null()
+  real(c_double), pointer :: xllwr => null()
+  real(c_double), pointer :: xlmdl => null()
+  integer, pointer :: jfl => null()
 
   !common /readarr/ &
-  integer :: nonso(ngena,nsoa),noffso(ngena,nsoa)
-  real(c_double) :: sellm1(ngena,nsoa),sellm2(ngena,nsoa),seppm1(ngena,nsoa), &
-       seppm2(ngena,nsoa),sem1(ngena,nsoa),sem2(ngena,nsoa), &
-       sthm1(ngena,nsoa),scm2(ngena,nsoa),szm1(ngena,nsoa), &
-       szm2(ngena,nsoa)
+  integer, pointer :: nonso(:,:) => null()
+  integer, pointer :: noffso(:,:) => null()
+  real(c_double), pointer :: sellm1(:,:) => null()
+  real(c_double), pointer :: sellm2(:,:) => null()
+  real(c_double), pointer :: seppm1(:,:) => null()
+  real(c_double), pointer :: seppm2(:,:) => null()
+  real(c_double), pointer :: sem1(:,:) => null()
+  real(c_double), pointer :: sem2(:,:) => null()
+  real(c_double), pointer :: sthm1(:,:) => null()
+  real(c_double), pointer :: scm2(:,:) => null()
+  real(c_double), pointer :: szm1(:,:) => null()
+  real(c_double), pointer :: szm2(:,:) => null()
 
 
   !*****************************************************************
@@ -331,12 +354,17 @@ module cqlcomm_mod
        ennin_t(njenea,nbctimea,npaproca) !neutrals,impurities,etc.
 
   !common/arr3d/ &
-  real(c_double) :: sellm1z(ngena,nsoa,0:lrza),sellm2z(ngena,nsoa,0:lrza), &
-       seppm1z(ngena,nsoa,0:lrza),sem1z(ngena,nsoa,0:lrza), &
-       sem2z(ngena,nsoa,0:lrza),sthm1z(ngena,nsoa,0:lrza), &
-       scm2z(ngena,nsoa,0:lrza),szm1z(ngena,nsoa,0:lrza), &
-       seppm2z(ngena,nsoa,0:lrza), &
-       szm2z(ngena,nsoa,0:lrza),asorz(ngena,nsoa,0:lrza)
+  real(c_double), pointer :: sellm1z(:,:,:) => null()
+  real(c_double), pointer :: sellm2z(:,:,:) => null()
+  real(c_double), pointer :: seppm1z(:,:,:) => null()
+  real(c_double), pointer :: sem1z(:,:,:) => null()
+  real(c_double), pointer :: sem2z(:,:,:) => null()
+  real(c_double), pointer :: sthm1z(:,:,:) => null()
+  real(c_double), pointer :: scm2z(:,:,:) => null()
+  real(c_double), pointer :: szm1z(:,:,:) => null()
+  real(c_double), pointer :: seppm2z(:,:,:) => null()
+  real(c_double), pointer :: szm2z(:,:,:) => null()
+  real(c_double), pointer :: asorz(:,:,:) => null()
 
 
   !****************************************************************
@@ -2229,11 +2257,63 @@ contains
     initialized_tr_pointers = .TRUE.
   end subroutine initialize_tr_pointers
 
+  subroutine initialize_sou_pointers
+    if(initialized_sou_pointers) call abort
+    asorz => sousetup%asorz
+    asor => sousetup%asor
+    flemodel => sousetup%flemodel
+    nonso => sousetup%nonso
+    noffso => sousetup%noffso
+    nso => sousetup%nso
+    nsou => sousetup%nsou
+    pltso => sousetup%pltso
+    mpwrsou => sousetup%mpwrsou
+    npwrsou => sousetup%npwrsou
+    scm2z => sousetup%scm2z
+    szm1z => sousetup%szm1z
+    scm2 => sousetup%scm2
+    sellm1 => sousetup%sellm1
+    sellm2 => sousetup%sellm2
+    seppm1 => sousetup%seppm1
+    sellm1z => sousetup%sellm1z
+    sellm2z => sousetup%sellm2z
+    seppm2 => sousetup%seppm2
+    sem1 => sousetup%sem1
+    sem2 => sousetup%sem2
+    seppm1z => sousetup%seppm1z
+    sem1z => sousetup%sem1z
+    sem2z => sousetup%sem2z
+    sthm1z => sousetup%sthm1z
+    seppm2z => sousetup%seppm2z
+    soucoord => sousetup%soucoord
+    knockon => sousetup%knockon
+    komodel => sousetup%komodel
+    nkorfn => sousetup%nkorfn
+    nonko => sousetup%nonko
+    noffko => sousetup%noffko
+    soffvte => sousetup%soffvte
+    soffpr => sousetup%soffpr
+    isoucof => sousetup%isoucof
+    faccof => sousetup%faccof
+    jfl => sousetup%jfl
+    xlfac => sousetup%xlfac
+    xlpctlwr => sousetup%xlpctlwr
+    xlpctmdl => sousetup%xlpctmdl
+    xllwr => sousetup%xllwr
+    xlmdl => sousetup%xlmdl
+    szm2z => sousetup%szm2z
+    sthm1 => sousetup%sthm1
+    Szm1 => sousetup%Szm1
+    szm2 => sousetup%szm2
+    initialized_sou_pointers = .FALSE.
+  end subroutine initialize_sou_pointers
+
   subroutine initialize_cqlcomm
     if(initialized_cqlcomm) call abort
     call initialize_eq_pointers
     call initialize_rf_pointers
     call initialize_tr_pointers
+    call initialize_sou_pointers
     initialized_cqlcomm = .TRUE.
   end subroutine initialize_cqlcomm
 

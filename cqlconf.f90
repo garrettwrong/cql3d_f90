@@ -2,6 +2,7 @@ module cqlconf_mod
   use param_mod, only : lrorsa, lfielda
   use param_mod, only : ep100, nmodsa, ngena, nrdca, nbctimea
   use param_mod, only : njenea
+  use param_mod, only : nsoa, lrza
   use iso_c_binding, only : c_double, c_double_complex
   implicit none
 
@@ -26,6 +27,10 @@ module cqlconf_mod
   public get_trsetup_from_nml
   public print_trsetup
   public set_trsetup
+
+  public get_sousetup_from_nml
+  public print_sousetup
+  public set_sousetup
 
 
   type, public ::  setup0_t
@@ -259,12 +264,63 @@ module cqlconf_mod
      integer :: ndifus_io_t = 0
   end type trsetup_t
 
+  type, public :: sousetup_t
+     real(c_double) :: asorz(1:ngena,1:nsoa,0:lrza) = 0
+     real(c_double) :: asor(1:ngena,1:nsoa,1:lrza) = 0
+     character(len=8) :: flemodel = "fsa"
+     integer :: nonso(1:ngena,1:nsoa) = 100000
+     integer :: noffso(1:ngena,1:nsoa) = 100000
+     integer :: nso = 0
+     integer :: nsou = 1
+     character(len=8) :: pltso = "enabled"
+     real(c_double) :: mpwrsou(0:ngena) = 3.
+     real(c_double) :: npwrsou(0:ngena) = 2.
+     character(len=8) :: soucoord = "disabled"
+     character(len=8) :: knockon = "disabled"
+     character(len=8) :: komodel = "mr"
+     integer :: nkorfn = 1
+     integer :: nonko = 10000
+     integer :: noffko = 10000
+     real(c_double) :: soffvte = 3.
+     real(c_double) :: soffpr = 0.5
+     real(c_double) :: isoucof = 0 ! hrmmm, maybe should be int?
+     real(c_double) :: faccof = 1.e0
+     integer :: jfl = 151  !!!min(201,jx)
+     real(c_double) :: xlfac = 1.
+     real(c_double) :: xlpctlwr = .1
+     real(c_double) :: xlpctmdl = .4
+     real(c_double) :: xllwr = 1./43.
+     real(c_double) :: xlmdl = .25
+     ! the following will be initilized to non trivial values in the setter
+     ! we should probably init these to nans, but fortran makes that a chore
+     real(c_double) :: scm2z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: scm2(1:ngena,1:nsoa) = 0.
+     real(c_double) :: sellm1(1:ngena,1:nsoa) = 1.
+     real(c_double) :: sellm2(1:ngena,1:nsoa) = 1.
+     real(c_double) :: seppm1(1:ngena,1:nsoa) = 0.
+     real(c_double) :: sellm1z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: sellm2z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: seppm2(1:ngena,1:nsoa) = 1.
+     real(c_double) :: sem1(ngena,nsoa) = 0.
+     real(c_double) :: sem2(ngena,nsoa) = 0.
+     real(c_double) :: seppm1z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: sem1z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: sem2z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: sthm1z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: seppm2z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: szm1z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: szm2z(ngena,nsoa,0:lrza) = 0.
+     real(c_double) :: sthm1(ngena,nsoa) = 0.
+     real(c_double) :: szm1(ngena,nsoa) = 0.
+     real(c_double) :: szm2(ngena,nsoa) = 1.
+  end type sousetup_t
 
   ! rest of cql3d will access this
   type(setup0_t), public, save :: setup0
   type(eqsetup_t), public, target, save :: eqsetup
   type(rfsetup_t), public, target, save :: rfsetup
   type(trsetup_t), public, target, save :: trsetup
+  type(sousetup_t), public, target, save :: sousetup
 
 contains
 
@@ -1138,7 +1194,7 @@ contains
     noffelpr = trsetup_%noffelpr
     ndifus_io_t = trsetup_%ndifus_io_t
 
-    
+
     ! read the nml, which will write into the local vars
 
     call maybe_nml_open(nml_file)
@@ -1229,4 +1285,412 @@ contains
     WRITE(*, *)  "!----  END TRSETUP DUMP"
   end subroutine print_trsetup
 
-  end module cqlconf_mod
+  subroutine get_sousetup_from_nml(nml_file, close_nml_file, debug_print)
+    implicit none
+    character(len=*), intent(in) :: nml_file
+    logical, intent(in), optional :: close_nml_file
+    logical, intent(in), optional :: debug_print
+    ! local
+    type(sousetup_t) :: sousetup_
+    !
+    real(c_double) :: asorz(1:ngena,1:nsoa,0:lrza)
+    real(c_double) :: asor(1:ngena,1:nsoa,1:lrza)
+    character(len=8) :: flemodel
+    integer :: nonso(1:ngena,1:nsoa)
+    integer :: noffso(1:ngena,1:nsoa)
+    integer :: nso
+    integer :: nsou
+    character(len=8) :: pltso
+    real(c_double) :: mpwrsou(0:ngena)
+    real(c_double) :: npwrsou(0:ngena)
+    character(len=8) :: soucoord
+    character(len=8) :: knockon
+    character(len=8) :: komodel
+    integer :: nkorfn
+    integer :: nonko
+    integer :: noffko
+    real(c_double) :: soffvte
+    real(c_double) :: soffpr
+    real(c_double) :: isoucof
+    real(c_double) :: faccof
+    integer :: jfl
+    real(c_double) :: xlfac
+    real(c_double) :: xlpctlwr
+    real(c_double) :: xlpctmdl
+    real(c_double) :: xllwr
+    real(c_double) :: xlmdl
+    ! the following will be initilized to non trivial values in the setter
+    ! we should probably init these to nans, but fortran makes that a chore
+    real(c_double) :: scm2z(ngena,nsoa,0:lrza)
+    real(c_double) :: scm2(1:ngena,1:nsoa)
+    real(c_double) :: sellm1(1:ngena,1:nsoa)
+    real(c_double) :: sellm2(1:ngena,1:nsoa)
+    real(c_double) :: seppm1(1:ngena,1:nsoa)
+    real(c_double) :: sellm1z(ngena,nsoa,0:lrza)
+    real(c_double) :: sellm2z(ngena,nsoa,0:lrza)
+    real(c_double) :: seppm2(1:ngena,1:nsoa)
+    real(c_double) :: sem1(ngena,nsoa)
+    real(c_double) :: sem2(ngena,nsoa)
+    real(c_double) :: seppm1z(ngena,nsoa,0:lrza)
+    real(c_double) :: sem1z(ngena,nsoa,0:lrza)
+    real(c_double) :: sem2z(ngena,nsoa,0:lrza)
+    real(c_double) :: sthm1z(ngena,nsoa,0:lrza)
+    real(c_double) :: seppm2z(ngena,nsoa,0:lrza)
+    real(c_double) :: szm1z(ngena,nsoa,0:lrza)
+    real(c_double) :: szm2z(ngena,nsoa,0:lrza)
+    real(c_double) :: sthm1(ngena,nsoa)
+    real(c_double) :: szm1(ngena,nsoa)
+    real(c_double) :: szm2(ngena,nsoa)
+
+    !..................................................................
+    !     Namelist (sousetup) for "sou" simple source routines.
+    !..................................................................
+
+    namelist/sousetup/ &
+         asorz,asor,flemodel, &
+         nonso,noffso,nso,nsou, &
+         pltso,mpwrsou,npwrsou, &
+         scm2z,szm1z,scm2,sellm1,sellm2,seppm1, &
+         sellm1z,sellm2z,seppm2,sem1,sem2, &
+         seppm1z,sem1z,sem2z,sthm1z, &
+         seppm2z,soucoord,knockon,komodel,nkorfn,nonko,noffko,soffvte, &
+         soffpr,isoucof,faccof,jfl,xlfac,xlpctlwr,xlpctmdl,xllwr,xlmdl, &
+         szm2z,sthm1,szm1,szm2
+
+    ! copy defaults to local vars
+    asorz = sousetup_%asorz
+    asor = sousetup_%asor
+    flemodel = sousetup_%flemodel
+    nonso = sousetup_%nonso
+    noffso = sousetup_%noffso
+    nso = sousetup_%nso
+    nsou = sousetup_%nsou
+    pltso = sousetup_%pltso
+    mpwrsou = sousetup_%mpwrsou
+    npwrsou = sousetup_%npwrsou
+    scm2z = sousetup_%scm2z
+    szm1z = sousetup_%szm1z
+    scm2 = sousetup_%scm2
+    sellm1 = sousetup_%sellm1
+    sellm2 = sousetup_%sellm2
+    seppm1 = sousetup_%seppm1
+    sellm1z = sousetup_%sellm1z
+    sellm2z = sousetup_%sellm2z
+    seppm2 = sousetup_%seppm2
+    sem1 = sousetup_%sem1
+    sem2 = sousetup_%sem2
+    seppm1z = sousetup_%seppm1z
+    sem1z = sousetup_%sem1z
+    sem2z = sousetup_%sem2z
+    sthm1z = sousetup_%sthm1z
+    seppm2z = sousetup_%seppm2z
+    soucoord = sousetup_%soucoord
+    knockon = sousetup_%knockon
+    komodel = sousetup_%komodel
+    nkorfn = sousetup_%nkorfn
+    nonko = sousetup_%nonko
+    noffko = sousetup_%noffko
+    soffvte = sousetup_%soffvte
+    soffpr = sousetup_%soffpr
+    isoucof = sousetup_%isoucof
+    faccof = sousetup_%faccof
+    jfl = sousetup_%jfl
+    xlfac = sousetup_%xlfac
+    xlpctlwr = sousetup_%xlpctlwr
+    xlpctmdl = sousetup_%xlpctmdl
+    xllwr = sousetup_%xllwr
+    xlmdl = sousetup_%xlmdl
+    szm1z = sousetup_%szm2z
+    szm2z = sousetup_%szm2z
+    sthm1 = sousetup_%sthm1
+    szm1 = sousetup_%szm1
+    szm2 = sousetup_%szm2
+
+    ! read the nml, which will write into the local vars
+
+    call maybe_nml_open(nml_file)
+    read(nml_fd, sousetup)
+
+    ! external codes can call this, which packs the setup0 derived type.
+    call set_sousetup(asorz,asor,flemodel, &
+         nonso,noffso,nso,nsou, &
+         pltso,mpwrsou,npwrsou, &
+         scm2z,szm1z,scm2,sellm1,sellm2,seppm1, &
+         sellm1z,sellm2z,seppm2,sem1,sem2, &
+         seppm1z,sem1z,sem2z,sthm1z, &
+         seppm2z,soucoord,knockon,komodel,nkorfn,nonko,noffko,soffvte, &
+         soffpr,isoucof,faccof,jfl,xlfac,xlpctlwr,xlpctmdl,xllwr,xlmdl, &
+         szm2z,sthm1,szm1,szm2, &
+         debug_print)
+
+    ! we optionally close the nml file.
+    if (present(close_nml_file)) then
+       if(close_nml_file) then
+          call nml_close()
+       end if
+    endif
+  end subroutine get_sousetup_from_nml
+
+  subroutine sou_init_loop(lhs, rhs)
+    real(c_double), intent(inout) :: lhs(:,:,:)
+    real(c_double), intent(inout) :: rhs(:,:)
+    integer :: k, m, ll
+    ! many of the variables were assigned with this loop in aindflt
+    do k=1,ngena
+       do m=1,nsoa
+          do ll=0,lrza
+             lhs(k,m,ll)=rhs(k,m)
+          enddo
+       enddo
+    enddo
+  end subroutine sou_init_loop
+
+  subroutine set_sousetup(asorz,asor,flemodel, &
+       nonso,noffso,nso,nsou, &
+       pltso,mpwrsou,npwrsou, &
+       scm2z,szm1z,scm2,sellm1,sellm2,seppm1, &
+       sellm1z,sellm2z,seppm2,sem1,sem2, &
+       seppm1z,sem1z,sem2z,sthm1z, &
+       seppm2z,soucoord,knockon,komodel,nkorfn,nonko,noffko,soffvte, &
+       soffpr,isoucof,faccof,jfl,xlfac,xlpctlwr,xlpctmdl,xllwr,xlmdl, &
+       szm2z,sthm1,szm1,szm2, &
+       debug_print)
+
+    logical, intent(in), optional :: debug_print
+    integer :: k, m, ll
+    !
+    real(c_double), intent(in), optional :: asorz(1:ngena,1:nsoa,0:lrza)
+    real(c_double), intent(in), optional :: asor(1:ngena,1:nsoa,1:lrza)
+    character(len=8), intent(in), optional :: flemodel
+    integer, intent(in), optional :: nonso(1:ngena,1:nsoa)
+    integer, intent(in), optional :: noffso(1:ngena,1:nsoa)
+    integer, intent(in), optional :: nso
+    integer, intent(in), optional :: nsou
+    character(len=8), intent(in), optional :: pltso
+    real(c_double), intent(in), optional :: mpwrsou(0:ngena)
+    real(c_double), intent(in), optional :: npwrsou(0:ngena)
+    character(len=8), intent(in), optional :: soucoord
+    character(len=8), intent(in), optional :: knockon
+    character(len=8), intent(in), optional :: komodel
+    integer, intent(in), optional :: nkorfn
+    integer, intent(in), optional :: nonko
+    integer, intent(in), optional :: noffko
+    real(c_double), intent(in), optional :: soffvte
+    real(c_double), intent(in), optional :: soffpr
+    real(c_double), intent(in), optional :: isoucof
+    real(c_double), intent(in), optional :: faccof
+    integer, intent(in), optional :: jfl
+    real(c_double), intent(in), optional :: xlfac
+    real(c_double), intent(in), optional :: xlpctlwr
+    real(c_double), intent(in), optional :: xlpctmdl
+    real(c_double), intent(in), optional :: xllwr
+    real(c_double), intent(in), optional :: xlmdl
+    real(c_double), intent(in), optional :: scm2z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: scm2(1:ngena,1:nsoa)
+    real(c_double), intent(in), optional :: sellm1(1:ngena,1:nsoa)
+    real(c_double), intent(in), optional :: sellm2(1:ngena,1:nsoa)
+    real(c_double), intent(in), optional :: seppm1(1:ngena,1:nsoa)
+    real(c_double), intent(in), optional :: sellm1z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: sellm2z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: seppm2(1:ngena,1:nsoa)
+    real(c_double), intent(in), optional :: sem1(ngena,nsoa)
+    real(c_double), intent(in), optional :: sem2(ngena,nsoa)
+    real(c_double), intent(in), optional :: seppm1z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: sem1z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: sem2z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: sthm1z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: seppm2z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: szm1z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: szm2z(ngena,nsoa,0:lrza)
+    real(c_double), intent(in), optional :: sthm1(ngena,nsoa)
+    real(c_double), intent(in), optional :: szm1(ngena,nsoa)
+    real(c_double), intent(in), optional :: szm2(ngena,nsoa)
+
+
+    if(present(asor)) then
+       sousetup%asor = asor
+    else
+       !BH080125  usage of asor.
+       !BH080125         asor(1,1,ll)=.25e+13
+       !BH080125         asor(1,2,ll)=3.25e+1
+    end if
+    if(present(asorz)) then
+       sousetup%asorz = asorz
+    else
+       do ll=1,lrza
+          sousetup%asorz(k,m,ll)=asor(k,m,ll)
+       enddo
+    end if
+    if(present(flemodel)) sousetup%flemodel = flemodel
+    if(present(nonso)) sousetup%nonso = nonso
+    if(present(noffso)) sousetup%noffso = noffso
+    if(present(nso)) sousetup%nso = nso
+    if(present(nsou)) sousetup%nsou = nsou
+    if(present(pltso)) sousetup%pltso = pltso
+    if(present(mpwrsou)) then
+       sousetup%mpwrsou = mpwrsou
+    else
+       sousetup%mpwrsou(0)=1.
+    end if
+    if(present(npwrsou)) then
+       sousetup%npwrsou = npwrsou
+    else
+       sousetup%npwrsou(0)=2.
+    end if
+
+    if(present(scm2)) then
+       sousetup%scm2 = scm2
+    else
+      sousetup%scm2(1,1)=.001
+      sousetup%scm2(1,2)=10000.
+    end if
+    if(present(scm2z)) then
+       sousetup%scm2z = scm2z
+    else
+       call sou_init_loop(sousetup%scm2z, sousetup%scm2)
+    end if
+
+    if(present(szm1)) then
+       sousetup%szm1 = szm1
+    else
+       sousetup%szm1(1,1)=0.
+       sousetup%szm1(1,2)=0.
+    end if
+
+    if(present(szm1z)) then
+       sousetup%szm1z = szm1z
+    else
+       call sou_init_loop(sousetup%szm1z, sousetup%szm1)
+    end if
+
+    if(present(szm2)) then
+       sousetup%szm2 = szm2
+    else
+       sousetup%szm2(1,1)=1.e+5
+       sousetup%szm2(1,2)=1.e+5
+    end if
+    if(present(szm2z)) then
+       sousetup%szm2z = szm2z
+    else
+       call sou_init_loop(sousetup%szm2z, sousetup%szm2)
+    end if
+
+    if(present(sellm1)) then
+       sousetup%sellm1 = sellm1
+    else
+       sousetup%sellm1(1,1)=1.
+       sousetup%sellm1(1,2)=1.
+    end if
+    if(present(sellm1z)) then
+       sousetup%sellm1z = sellm1z
+    else
+       call sou_init_loop(sousetup%sellm1z, sousetup%sellm1)
+    end if
+
+    if(present(sellm2)) then
+       sousetup%sellm2 = sellm2
+    else
+       sousetup%sellm2(1,1)=1.
+       sousetup%sellm2(1,2)=1.
+    end if
+
+    if(present(sellm2z)) then
+       sousetup%sellm2z = sellm2z
+    else
+       call sou_init_loop(sousetup%sellm2z, sousetup%sellm2)
+    end if
+
+    if(present(seppm1)) then
+       sousetup%seppm1 = seppm1
+    else
+       sousetup%seppm1(1,1)=1.
+       sousetup%seppm1(1,2)=1.
+    end if
+    if(present(seppm1z)) then
+       sousetup%seppm1z = seppm1z
+    else
+       call sou_init_loop(sousetup%seppm1z, sousetup%seppm1)
+    end if
+
+    if(present(seppm2)) then
+       sousetup%seppm2 = seppm2
+    else
+       sousetup%seppm2(1,1)=1.
+       sousetup%seppm2(1,2)=1.
+    end if
+    if(present(seppm2z)) then
+       sousetup%seppm2z = seppm2z
+    else
+       call sou_init_loop(sousetup%seppm2z, sousetup%seppm2)
+    end if
+
+    if(present(sem1)) then
+       sousetup%sem1 = sem1
+    else
+       sousetup%sem1(1,1)=1600.
+       sousetup%sem1(1,2)=0.
+    end if
+    if(present(sem1z)) then
+       sousetup%sem1z = sem1z
+    else
+       call sou_init_loop(sousetup%sem1z, sousetup%sem1)
+    end if
+
+
+    if(present(sem2)) then
+       sousetup%sem2 = sem2
+    else
+       sousetup%sem2(1,1)=.5
+       sousetup%sem2(1,2)=25.
+    end if
+    if(present(sem2z)) then
+       sousetup%sem2z = sem2z
+    else
+       call sou_init_loop(sousetup%sem2z, sousetup%sem2)
+    end if
+
+    if(present(sthm1)) then
+       sousetup%sthm1 = sthm1
+    else
+       sousetup%sthm1(1,1)=5.
+       sousetup%sthm1(1,2)=0.
+    end if
+    if(present(sthm1z)) then
+       sousetup%sthm1z = sthm1z
+    else
+       call sou_init_loop(sousetup%sthm1z, sousetup%sthm1)
+    end if
+
+    if(present(soucoord)) sousetup%soucoord = soucoord
+    if(present(knockon)) sousetup%knockon = knockon
+    if(present(komodel)) sousetup%komodel = komodel
+    if(present(nkorfn)) sousetup%nkorfn = nkorfn
+    if(present(nonko)) sousetup%nonko = nonko
+    if(present(noffko)) sousetup%noffko = noffko
+    if(present(soffvte)) sousetup%soffvte = soffvte
+    if(present(soffpr)) sousetup%soffpr = soffpr
+    if(present(isoucof)) sousetup%isoucof = isoucof
+    if(present(faccof)) sousetup%faccof = faccof
+    if(present(xlfac)) sousetup%xlfac = xlfac
+    if(present(xlpctlwr)) sousetup%xlpctlwr = xlpctlwr
+    if(present(xlpctmdl)) sousetup%xlpctmdl = xlpctmdl
+    if(present(xllwr)) sousetup%xllwr = xllwr
+    if(present(xlmdl)) sousetup%xlmdl = xlmdl
+
+    if(present(jfl)) sousetup%jfl = jfl
+    if (mod(jfl,2).eq.0) then
+       print *, "WARNING, jfl needed to be odd because of jpxyh=(jfl+1)/2 in pltprppr"
+       print *, "   Adjusting with sousetup%jfl=sousetup%jfl-1"
+       sousetup%jfl=sousetup%jfl-1
+    end if
+
+  end subroutine set_sousetup
+
+  subroutine print_sousetup()
+    namelist /sousetup_nml/ sousetup
+    WRITE(*, *) "!----  BEGIN SOUSETUP DUMP"
+    WRITE(*, nml = sousetup_nml)
+    WRITE(*, *)  "!----  END SOUSETUP DUMP"
+  end subroutine print_sousetup
+
+end module cqlconf_mod

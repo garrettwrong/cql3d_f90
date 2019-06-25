@@ -10,6 +10,7 @@ module tdreadf_mod
   use cqlconf_mod, only : get_eqsetup_from_nml
   use cqlconf_mod, only : get_rfsetup_from_nml
   use cqlconf_mod, only : get_trsetup_from_nml
+  use cqlconf_mod, only : get_sousetup_from_nml
   !XXXXuse pack21_mod, only : unpack21
   use param_mod
   use tdnflxs_mod, only : tdnflxs
@@ -119,7 +120,7 @@ contains
 !      read(iunwrif,setup0)  !Commented out, so setup0%mnemonic set by cqlinput
       read(iunwrif,setup)
       !read(iunwrif,trsetup)
-      read(iunwrif,sousetup)
+      !read(iunwrif,sousetup)
       ! gbw, this whole block will be able to use the same logic as startup
       ! simply with difference fname
       ! just need all nml converted first...
@@ -127,6 +128,7 @@ contains
       !read(iunwrif,eqsetup)
       close(iunwrif) !tmp for conversion
       call get_trsetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
+      call get_sousetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
       call get_eqsetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
       call get_rfsetup_from_nml('distrfunc', close_nml_file=.TRUE., debug_print=.TRUE.)
       open(unit=iunwrif,file='distrfunc') ! tmp for conversion
