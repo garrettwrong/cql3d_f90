@@ -96,8 +96,6 @@ contains
 !     functions and quasilinear coefficients.
 !..................................................................
 
-
-      include 'name.h'
 !MPIINSERT_INCLUDE
 
       character*8 icall,iplotsxr

@@ -61,10 +61,12 @@ module cqlcomm_mod
   logical, private :: initialized_rf_pointers = .FALSE.
   logical, private :: initialized_tr_pointers = .FALSE.
   logical, private :: initialized_sou_pointers = .FALSE.
+  logical, private :: initialized_setup_pointers = .FALSE.
   private :: initialize_eq_pointers
   private :: initialize_rf_pointers
   private :: initialize_tr_pointers
   private :: initialize_sou_pointers
+  private :: initialize_setup_pointers
 
   public
 
@@ -2308,12 +2310,19 @@ contains
     initialized_sou_pointers = .FALSE.
   end subroutine initialize_sou_pointers
 
+  subroutine initialize_setup_pointers
+    if(initialized_setup_pointers) call abort
+
+    initialized_setup_pointers = .TRUE.
+  end subroutine initialize_setup_pointers
+
   subroutine initialize_cqlcomm
     if(initialized_cqlcomm) call abort
     call initialize_eq_pointers
     call initialize_rf_pointers
     call initialize_tr_pointers
     call initialize_sou_pointers
+    call initialize_setup_pointers
     initialized_cqlcomm = .TRUE.
   end subroutine initialize_cqlcomm
 

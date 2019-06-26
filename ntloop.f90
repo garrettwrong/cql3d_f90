@@ -19,8 +19,6 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 
-      include 'name.h'
-
       zdttot=1.0
       if (adimeth.eq."enabled" .and. transp.eq."enabled" &
         .and. n.ge.nonadi) zdttot=2.0

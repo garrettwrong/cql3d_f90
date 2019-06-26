@@ -103,7 +103,6 @@ contains
       ! we can actually make this an argument if we want...
       character(len=*), intent(in), optional :: nml_file
 
-      include 'name.h'
 !MPIINSERT_INCLUDE
 
       character*8 icall,iplotsxr

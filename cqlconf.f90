@@ -32,6 +32,10 @@ module cqlconf_mod
   public print_sousetup
   public set_sousetup
 
+  public get_setup_from_nml
+  public print_setup
+  public set_setup
+
 
   type, public ::  setup0_t
      character(len=256) :: mnemonic = "default_output"
@@ -315,12 +319,18 @@ module cqlconf_mod
      real(c_double) :: szm2(ngena,nsoa) = 1.
   end type sousetup_t
 
+  type, public ::  setup_t
+     
+  end type setup_t
+
+
   ! rest of cql3d will access this
   type(setup0_t), public, save :: setup0
   type(eqsetup_t), public, target, save :: eqsetup
   type(rfsetup_t), public, target, save :: rfsetup
   type(trsetup_t), public, target, save :: trsetup
   type(sousetup_t), public, target, save :: sousetup
+  type(setup_t), public, target save :: setup
 
 contains
 
@@ -1692,5 +1702,48 @@ contains
     WRITE(*, nml = sousetup_nml)
     WRITE(*, *)  "!----  END SOUSETUP DUMP"
   end subroutine print_sousetup
+
+  subroutine get_setup_from_nml(nml_file, close_nml_file, debug_print)
+    implicit none
+    character(len=*), intent(in) :: nml_file
+    logical, intent(in), optional :: close_nml_file
+    logical, intent(in), optional :: debug_print
+    ! local
+    type(setup_t) :: setup_
+
+    ! make private local variables to read in the namelist
+
+
+    ! state the namelist, with associated vars
+
+    ! copy defaults to local vars
+
+
+    ! read the nml, which will write into the local vars
+
+    call maybe_nml_open(nml_file)
+    read(nml_fd, setup)
+
+    ! external codes can call this, which packs the setup0 derived type.
+    call set_setup()
+
+    ! we optionally close the nml file.
+    if (present(close_nml_file)) then
+       if(close_nml_file) then
+          call nml_close()
+       end if
+    endif
+
+  end subroutine get_setup_from_nml
+
+  subroutine set_setup()
+    logical, intent(in), optional :: debug_print
+    !
+
+    ! All this code should do is override the defaults
+    ! in setup0 with optional args, or setup non trivial defaults
+
+  end subroutine set_setup
+
 
 end module cqlconf_mod
