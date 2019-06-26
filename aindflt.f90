@@ -427,15 +427,6 @@ contains
 !     (ti profiles given by te profile, for "asdex" option).
 !..................................................................
 
-      acoefne(1)=-1.87
-      acoefne(2)=-0.57
-      acoefne(3)=-24.78
-      acoefne(4)=-181.38
-      acoefte(1)=7.51
-      acoefte(2)=-13.45
-      acoefte(3)=6.21
-      acoefte(4)=-125.64
-
       zeffin(0)=1.0d0
       vphiplin(0)=0.0d0
       do 12  i=1,njenea
