@@ -6,7 +6,6 @@ module tdinitl_mod
 
   use ainalloc_mod, only : ainalloc
   use aindflt1_mod, only : aindflt1
-  use aindflt_mod, only : aindflt
   use aindfpa_mod, only : ain_transcribe
   use aingeom_mod, only : aingeom
   use ainitial_mod, only : ainitial
@@ -82,7 +81,6 @@ contains
       use ainpla_mod, only : ainpla
       use aingeom_mod, only : aingeom
       use ainitial_mod, only : ainitial
-      use aindflt_mod, only : aindflt
       use aindflt1_mod, only : aindflt1
       use ainalloc_mod, only : ainalloc
       use aindfpa_mod , only : ain_transcribe
@@ -108,8 +106,6 @@ contains
 !     set defaults for namelisted quantities and other variables
 !..................................................................
 
-      call aindflt
-      !call eqindflt
       call urfindfl
       call aindflt1
 

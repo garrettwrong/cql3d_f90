@@ -382,5 +382,10 @@ module param_mod
 
   ! constants from random places
   real(c_double), parameter ::  ep100 = 1.d+100
+  real(c_double), parameter :: zero=0.d0
+  real(c_double), parameter :: one=1.d0
+  !      pi=3.141592653589793d0
+  real(c_double), parameter :: pi=atan2(zero,-one)
+
 
 end module param_mod

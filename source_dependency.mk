@@ -6,7 +6,7 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \
 	bsl.f90  bsu.f90 \
 	a_cqlp.f90  abchief.f90  achief1.f90  achiefn.f90  aclear.f90 ainalloc.f90  \
-	aindflt.f90  aindflt1.f90 aindfpa.f90  aingeom.f90  ainitial.f90   \
+	aindflt1.f90 aindfpa.f90  aingeom.f90  ainitial.f90   \
 	ainpla.f90  ainplt.f90  ainpltpa.f90   \
 	ainsetpa.f90  ainsetva.f90  ainspec.f90  ainvnorm.f90 ampfar.f90 \
 	aminmx.f90 bavdens.f90  bavgmax.f90  baviorbt.f90   \

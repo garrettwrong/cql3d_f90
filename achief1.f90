@@ -7,7 +7,6 @@ module achief1_mod
   use achiefn_mod, only : achiefn
   use ainalloc_mod, only : ainalloc
   use aindflt1_mod, only : aindflt1
-  use aindflt_mod, only : aindflt
   use aindfpa_mod, only : ain_transcribe
   use aingeom_mod, only : aingeom
   use ainitial_mod, only : ainitial
@@ -58,7 +57,6 @@ contains
     use ainpla_mod, only : ainpla
     use aingeom_mod, only : aingeom
     use ainitial_mod, only : ainitial
-    use aindflt_mod, only : aindflt
     use aindflt1_mod, only : aindflt1
     use ainalloc_mod, only : ainalloc
     use aindfpa_mod , only : ain_transcribe
@@ -73,10 +71,9 @@ contains
     !..................................................................
 
     !..................................................................
-    !     Set defaults - for main code + "eq" module.
+    !     Set defaults not in the cql_conf types
     !..................................................................
-    call aindflt
-    !call eqindflt
+
     call aindflt1
 
     !.....................................................................

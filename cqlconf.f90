@@ -3,6 +3,7 @@ module cqlconf_mod
   use param_mod, only : ep100, nmodsa, ngena, nrdca, nbctimea
   use param_mod, only : njenea
   use param_mod, only : nsoa, lrza
+  use param_mod, only : ntotala, npaproca, lza, nmaxa, nplota, nsavea, nva
   use iso_c_binding, only : c_double, c_double_complex
   implicit none
 
@@ -320,7 +321,360 @@ module cqlconf_mod
   end type sousetup_t
 
   type, public ::  setup_t
-     
+     ! forgive me, i'm just a code custodian
+     !..................................................................
+     !     acoef's specify ASDEX exponentail profiles
+     !     (ti profiles given by te profile, for "asdex" option).
+     !..................................................................
+     real(c_double) :: acoefne(4) = (/ -1.87, -0.57, -24.78, -181.38 /)
+     real(c_double) :: acoefte(4) = (/ 7.51, -13.45, 6.21, -125.64 /)
+     character(len=8) :: ampfmod = "disabled"
+     integer :: nampfmax = 2
+     integer :: nonampf = 0
+     real(c_double) :: ampferr = 1.d-3
+     real(c_double) :: bctimescal = 1.d0
+     real(c_double) :: bnumb(ntotala) = 1.
+     real(c_double) :: bth(lrza) = 1000.
+     real(c_double) :: btor = 10000.
+     character(len=8) :: bootst = "disabled"   ! analytic (Hinton and Haseltine)
+     ! bootstrap current
+     character(len=8) :: bootcalc = "disabled" !computational bootstrap current off.
+     character(len=8) :: bootupdt = "disabled" !updating 0th order distn for bs radial derv.
+     real(c_double) :: bootsign = +1.0
+     integer :: nonboot = 2           !turn on computational bootstrap at n=nonboot.
+     integer :: jhirsh = 0
+     real(c_double) :: contrmin = 1.d-12
+     real(c_double) :: constr = 1.d-3
+     character(len=8) :: chang = "enabled"
+     integer :: colmodl = 1
+     real(c_double) :: deltabdb = 0.
+     real(c_double) :: denpar(ntotala,0:lza+1) =  1.
+     real(c_double) :: droptol = 0.001d0
+     real(c_double) :: dtr = 5.d0
+     real(c_double) :: dtr1(ndtr1a) = 0.
+     real(c_double) :: eegy(negyrga,2,ngena,lrza) = zero
+     real(c_double) :: eparc(ngena,0:lrza) = -1.
+     real(c_double) :: eperc(ngena,0:lrza) = -1.
+     real(c_double) :: simpbfac = 1.d0
+     !unused? epar
+     !unused? eper
+     real(c_double) :: elecfld(0:lrza) = 0.0
+     real(c_double) :: elpar0 = 0.
+     real(c_double) :: enorm = 200.
+     real(c_double) :: enorme = 200. ! (re)set to enom at runtime, sort of dangerous
+     real(c_double) :: enormi = 200. ! (re)set to enom at runtime, sort of dangerous
+     character(len=8) :: eleccomp = "enabled"
+     real(c_double) :: elecin(njenea) = 0.0d0
+     real(c_double) :: elecin_t(njenea,nbctimea) = 0.0d0
+     real(c_double) :: elecscal = 1.
+     real(c_double) :: enein(njenea,ntotala) = 0.0d0
+     real(c_double) :: enein_t(njenea,ntotala,nbctimea) = 0.0d0
+     ! xxx this var was undefined in original code, setting 0
+     real(c_double) :: ennin_t(njenea,nbctimea,npaproca) = 0.0d0 !neutrals,impurities,etc.
+     real(c_double) :: ennin(njenea,npaproca) = 0.0d0
+     real(c_double) :: enescal = 1.
+     real(c_double) :: enloss(ngena) = 200.
+     real(c_double) :: epsthet = 0.1
+     real(c_double) :: enmin = 5.
+     real(c_double) :: enmax = 50.
+     real(c_double) :: enn(lrza,npaproca) = 1.e10
+     real(c_double) :: ennl(npaproca) = 5.0
+     real(c_double) :: ennscal(npaproca) = 1.0
+     real(c_double) :: enmin_npa = 5.
+     real(c_double) :: enmax_npa = 50.
+     character(len=8) :: eseswtch = "disabled"
+     real(c_double) :: xsink = 0.
+     real(c_double) :: esink = 0.
+     real(c_double) :: ephicc = 0.
+     !unused real(c_double) :: esfac
+     real(c_double) :: eoved = -.01
+     real(c_double) :: fds = 0.2
+     real(c_double) :: fds_npa = 0.2
+     real(c_double) :: fmass(ntotala) = 1.e-29
+     character(len=8) :: f4d_out = "disabled"
+     character(len=8) :: tavg = "disabled"
+     real(c_double) :: tavg1(ntavga) = 0.
+     real(c_double) :: tavg2(ntavga) = 0.
+     real(c_double) :: gsla = 270.
+     real(c_double) :: gslb = 35.
+     real(c_double) :: gamaset = 0.
+     character(len=8) :: gamafac = "disabled"
+     real(c_double) :: gamegy(ngena) = 0.
+     character(len=8) :: iactst = "disabled"
+     character(len=8) :: ineg = "disabled"
+     character(len=8) :: idskf = "disabled"
+     character(len=8) :: idskrf = "disabled"
+     character(len=8) :: ichkpnt = "disabled"
+     character(len=8) :: implct = "enabled"
+     !..................................................................
+     !     Profile options are "parabola", "splines", and "asdex":
+     !..................................................................
+     character(len=8) :: iprone = "parabola"
+     character(len=8) :: iprote = "parabola"
+     character(len=8) :: iproti = "parabola"
+     character(len=8) :: iprozeff = "disabled"
+     character(len=8) :: iprovphi = "disabled"
+     character(len=8) :: iproelec = "parabola"
+     character(len=8) :: ipronn = "disabled"
+     character(len=8) :: iprocur = "parabola"
+     character(len=8) :: tmdmeth = "method1"
+     integer :: isigmas(6) = 0
+     integer :: isigtst = 1
+     integer :: isigsgv1 = 0
+     integer :: isigsgv2 = 0
+     real(c_double) :: pltflux1(7) = (/ 1., 1., 1., 1., 1., 1., 0. /)
+     integer :: irzplt(lrorsa) = 0
+     character(len=8) :: izeff = "backgrnd"
+     ! unused ioutime
+     integer :: iy = 200 ! default value; will be over-written by cqlinput value
+     integer :: jx = 300 ! default value; will be over-written by cqlinput value
+     integer :: kenorm = 1
+     integer :: lfil = 30
+     integer :: kfrsou = 0
+     character(len=8) :: kpress(ntotala) = "enabled"
+     character(len=8) :: kfield(ntotala) = "enabled"
+     character(len=8) :: kspeci(2,ntotala) = " "
+     integer :: lmidpln = 1
+     character(len=8) :: locquas = "disabled"
+     character(len=8) :: lbdry(ngena) = "conserv"
+     character(len=8) :: lbdry0 = "enabled"
+     character(len=256) :: lossfile(ngena) = "./prompt_loss.txt"
+     character(len=8) :: lossmode(ngena) = "disabled"
+     integer :: lmidvel = 0
+     integer :: laddbnd = 1
+     integer :: lz = lza
+     character(len=8) :: machine = "toroidal"
+     character(len=8) :: meshy = "free"
+     character(len=8) :: manymat = "disabled"
+     character(len=256) :: netcdfnm = "disabled"
+     character(len=8) :: netcdfshort = "disabled"
+     character(len=8) :: netcdfvecal = "disabled"
+     character(len=8) :: netcdfvecc = "disabled"
+     character(len=8) :: netcdfvece = "disabled"
+     character(len=8) :: netcdfvecrf = "disabled"
+     character(len=8) :: netcdfvecs = "all"
+     integer :: nnspec = 1
+     real(c_double) :: mpwr(0:ntotala) = 3. ! non trivial
+     real(c_double) :: megy(ngena) = 0.0
+     real(c_double) :: mtorloss(ngena) = 0.0
+     integer :: mmsv = 3 ! xxx reset by mx at run time, seems dangerous
+     integer :: msxr = 3 ! xxx reset by mx at run time, seems dangerous
+     integer :: mx = 3   ! default value; will be over-written by cqlinput value
+     !     if nchgdy = 1 adapt dy(ith)
+     integer :: nchgdy = 0
+     integer :: ngauss = 0
+     integer :: nlagran = 4
+     logical :: nlotp1(noutpta) = .false. ! non trivial
+     logical :: nlotp2(noutpta) = .false.
+     logical :: nlotp3(noutpta) = .false.
+     logical :: nlotp4(noutpta) = .false.
+     integer :: nmax = nmaxa
+     integer :: ngen = ngena
+     integer :: nkconro(ntotala) = 0 ! non trivial
+     integer :: nplt3d(nplota) = -10000
+     integer :: nrskip = 10
+     integer :: nen = nena
+     integer :: nv = 1
+     integer :: nv_npa = 1
+     integer :: nen_npa = nena
+     integer :: npaproc = 1
+     character(len=8) :: npa_process(npaproca) = "notset"
+     integer :: nr_delta = 65
+     integer :: nz_delta = 65
+     integer :: nt_delta = 80 !Needs to be even
+     ! For saving f4d== f(R,Z,u,theta) distribution:
+     integer :: nr_f4d = 20
+     integer :: nz_f4d = 21
+     integer :: nv_f4d = 20
+     integer :: nt_f4d = 20
+     real(c_double) :: npwr(0:ntotala) = 2.
+     real(c_double) :: negy(ngena) = 0.0
+     real(c_double) :: ntorloss(ngena) = 0.0
+     integer :: njene = 0
+     integer :: njte = 0 ! reset to njene at runtime, seems dangerous
+     integer :: njti = 0 ! reset to njene at runtime, seems dangerous
+     integer :: nstop = 5
+     integer :: nondtr1(ndtr1a) = -1
+     integer :: nplot(nplota) = -10000
+     integer :: nsave(nsavea) = -10000
+     integer :: ncoef = 1
+     integer :: nchec = 1
+     integer :: ncont = 25
+     integer :: nrstrt = 1
+     integer :: nstps = 100
+     !     if ngauss.ge.1 => analegco=disabled
+     !     good numbers are nlagran=4 and ngauss=4 or 6
+     !     max. nlagran allowed: 15
+     integer :: nfpld = 0
+     integer :: noncntrl = 0
+     integer :: nonel = 0
+     integer :: noffel = 10000
+     integer :: nonvphi = 10000
+     integer :: noffvphi = 10000
+     integer :: nonavgf = 5
+     integer :: nofavgf = 10
+     integer :: nonloss = 0
+     integer :: noffloss = 10000
+     integer :: nummods = 1
+     !     if numixts= 1=>forw/back; -1=>back/forw for numindx=2
+     integer :: numixts = 1
+     integer :: numby = 20
+     integer :: negyrg = 0
+     !     old way of integrating dens,cur in diaggnde
+     character(len=8) :: oldiag = "enabled"
+     character(len=8) :: plt3d = "enabled"
+     character(len=8) :: pltfvs = "disabled"
+     character(len=8) :: partner = "disabled"
+     real(c_double) :: paregy(ngena) = 0.0
+     real(c_double) :: peregy(ngena) = 0.0
+     real(c_double) :: pegy(ngena) = 0.0
+     real(c_double) :: zeffin(0:njenea) = 0.0d0
+     real(c_double) :: zeffin_t(njenea,nbctimea) = 0.0d0
+     real(c_double) :: zeffscal = 1.
+     real(c_double) :: vphiplin(0:njenea) = 0.0d0
+     real(c_double) :: vphiplin_t(njenea,nbctimea) = 0.0d0
+     real(c_double) :: vphiscal = 1.
+     character(len=8) :: pltdn = "disabled"
+     character(len=8) :: pltvecal = "disabled"
+     character(len=8) :: pltvecc = "disabled"
+     character(len=8) :: pltvecrf = "disabled"
+     character(len=8) :: pltvece = "disabled"
+     character(len=8) :: pltstrm = "disabled"
+     character(len=8) :: pltflux = "disabled"
+     real(c_double) :: pltmag = 1.
+     character(len=8) :: pltsig = "enabled"
+     character(len=8) :: pltlim = "disabled"
+     ! pltlimm use seems sparse, not in comm...
+     real(c_double) :: pltlimm = 1.
+     character(len=8) :: pltrst = "enabled"
+     character(len=8) :: plturfb = "enabled" !YuP[2018-02-07] New: 'color' for color contour plots
+     character(len=8) :: pltvflu = "disabled"
+     character(len=8) :: pltra = "disabled"
+     character(len=8) :: pltvs = "rho"
+     character(len=8) :: pltd = "enabled"
+     character(len=8) :: pltprpp = "disabled"
+     character(len=8) :: pltfofv = "disabled"
+     character(len=8) :: pltlos = "disabled"
+     character(len=8) :: profpsi = "disabled"
+     character(len=8) :: psimodel = "axitorus"
+     character(len=8) :: pltpowe = "disabled"
+     character(len=8) :: pltend = "enabled"
+     character(len=8) :: pltinput = "enabled"
+     !pltrdc was unused
+     !pltview was unused
+     character(len=8) :: qsineut = "disabled"
+     character(len=8) :: trapmod = "disabled"
+     real(c_double) :: trapredc = 0.
+     character(len=8) :: scatmod = "disabled"
+     real(c_double) :: scatfrac = 1.
+     real(c_double) :: ryain(njenea) = 0.0d0
+     real(c_double) :: radmaj = 100.
+     real(c_double) :: radmin = 50.
+     real(c_double) :: rmirror = 2.
+     character(len=8) :: relativ = "enabled"
+     real(c_double) :: reden(ntotala,0:lrza) = 1.
+     character(len=8) :: regy(ngena) = "disabled"
+     real(c_double) :: rfacz = .7
+     character(len=8) :: rzset = "disabled"
+     real(c_double) :: rd(nva) = zero ! non trivial
+     real(c_double) :: roveram = 1.e-6
+     real(c_double) :: rovera(lrza) = .1
+     real(c_double) :: rya(0:lrza+1) = 0.
+     character(len=8) :: radcoord = "sqtorflx"
+     character(len=8) :: sbdry = "bounded"
+     character(len=8) :: scheck = "enabled"
+     character(len=8) :: ndeltarho = "disabled"
+     character(len=8) :: softxry = "disabled"
+     character(len=8) :: npa_diag = "disabled"
+     character(len=8) :: symtrap = "enabled"
+     character(len=8) :: syncrad = "disabled"
+     character(len=8) :: bremsrad = "disabled"
+     real(c_double) :: brfac = 0.
+     real(c_double) :: brfac1 = 0.
+     real(c_double) :: brfacgm3 = 1.0
+     character(len=8) :: sigmamod = "disabled"
+     real(c_double) :: sigvcx = 0.
+     real(c_double) :: sigvi = 0.
+     character(len=8) :: soln_method = "direct"
+     real(c_double) :: tauegy(ngena,0:lrza) = -1.
+     character(len=8) :: taunew = "disabled"
+     real(c_double) :: tescal = 1.
+     real(c_double) :: tein(njenea) = 0.
+     real(c_double) :: tein_t(njenea,nbctimea) = 0.
+     real(c_double) :: tiscal = 1.
+     real(c_double) :: tiin_t(njenea,nbctimea) = 0.
+     real(c_double) :: tiin(njenea) = 0.
+     real(c_double) :: tauloss(3,ngena) = 0.
+     real(c_double) :: temp(ntotala,0:lrza) = 1.
+     real(c_double) :: temppar(ntotala,0:lza+1) = 1.
+     real(c_double) :: tfac = 1.
+     real(c_double) :: tfacz = 1.
+     real(c_double) :: tbnd(lrorsa) = 0. ! non trivial
+     character(len=8) :: tandem = "disabled"
+     real(c_double) :: thetd(nva) = 0.0
+     character(len=8) :: torloss(ngena) = "disabled"
+     real(c_double) :: thet1(nva) = 90.
+     real(c_double) :: thet2(nva) = 180.
+     real(c_double) :: thet1_npa(nva) = 90.
+     real(c_double) :: thet2_npa(nva) = 180.
+     real(c_double) :: x_sxr(nva) = 0.
+     real(c_double) :: z_sxr(nva) = 0.
+     real(c_double) :: rd_npa(nva) = 100.d0
+     real(c_double) :: thetd_npa(nva) = 0.
+     real(c_double) :: x_npa(nva) = 0.
+     real(c_double) :: z_npa(nva) = 0.
+     character(len=8) :: atten_npa = "enabled"
+     character(len=8) :: updown = "symmetry"
+     real(c_double) :: veclnth = 1.0
+     real(c_double) :: vnorm = 4.e10   !  Usually set through enorm
+     real(c_double) :: xfac = 1.
+     real(c_double) :: xpctlwr = .1
+     real(c_double) :: xpctmdl = .4
+     real(c_double) :: xlwr = 1./43.
+     real(c_double) :: xmdl = .25
+     real(c_double) :: xsinkm = 1.
+     real(c_double) :: xprpmax = 1.
+     ! original code, these were defined in aindflt1 at runtime, dangerous, why nml
+     integer :: ipxy,jpxy
+     character(len=8) :: yreset = "disabled"
+     real(c_double) :: ylower = 1.22
+     real(c_double) :: yupper = 1.275
+     real(c_double) :: mpwrzeff = 1.
+     real(c_double) :: npwrzeff = 1.
+     real(c_double) :: mpwrvphi = 0.
+     real(c_double) :: npwrvphi = 2.
+     real(c_double) :: mpwrxj = 1.
+     real(c_double) :: npwrxj = 1.
+     real(c_double) :: npwrelec = 1.
+     real(c_double) :: mpwrelec = 1.
+     real(c_double) :: redenc(nbctimea,ntotala) = 0.d0
+     real(c_double) :: redenb(nbctimea,ntotala) = 0.d0
+     real(c_double) :: temp_den = 0.0
+     real(c_double) :: tempc(nbctimea,ntotala) = 0.d0
+     real(c_double) :: tempb(nbctimea,ntotala) = 0.d0
+     real(c_double) :: zeffc(nbctimea) = 0.d0
+     real(c_double) :: zeffb(nbctimea) = 0.d0
+     real(c_double) :: elecc(nbctimea) = 0.d0
+     real(c_double) :: elecb(nbctimea) = 0.d0
+     real(c_double) :: vphic(nbctimea) = 0.d0
+     real(c_double) :: vphib(nbctimea) = 0.d0
+     real(c_double) :: xjc(nbctimea) = 0.d0
+     real(c_double) :: xjb(nbctimea) = 0.d0
+     real(c_double) :: xjin_t(njenea,nbctimea) = 0.0d0
+     real(c_double) :: totcrt(nbctimea) = 0.d0
+     character(len=8) :: efswtch = "method1"
+     character(len=8) :: efswtchn = "disabled"
+     character(len=8) :: efiter = "enabled"
+     character(len=8) :: efflag = 'toroidal'
+     real(c_double) :: curr_edge = 0.
+     real(c_double) :: efrelax = 0.5
+     real(c_double) :: efrelax1 = 0.5 !0.8
+     real(c_double) :: currerr = 0.1 !0.1
+     real(c_double) :: bctime(nbctimea) = (DBLE(i-1) i = 1, nbctimea)
+     integer :: nbctime = 0
+     real(c_double) :: zmax(0:lrza) = 1000.
+     character(len=8) :: fow = "disabled" ! "disabled" is to use ZOW model as the main model in CQL3D
+     ! from here, remaining vars in compx version of nml are unused in this code
   end type setup_t
 
 
@@ -1551,8 +1905,8 @@ contains
     if(present(scm2)) then
        sousetup%scm2 = scm2
     else
-      sousetup%scm2(1,1)=.001
-      sousetup%scm2(1,2)=10000.
+       sousetup%scm2(1,1)=.001
+       sousetup%scm2(1,2)=10000.
     end if
     if(present(scm2z)) then
        sousetup%scm2z = scm2z
@@ -1712,12 +2066,748 @@ contains
     type(setup_t) :: setup_
 
     ! make private local variables to read in the namelist
+    real(c_double) :: acoefne(4)
+    real(c_double) :: acoefte(4)
+    character(len=8) :: ampfmod
+    integer :: nampfmax
+    integer :: nonampf
+    real(c_double) :: ampferr
+    real(c_double) :: bctimescal
+    real(c_double) :: bnumb(ntotala)
+    real(c_double) :: bth(lrza)
+    real(c_double) :: btor
+    character(len=8) :: bootst
+    character(len=8) :: bootcalc
+    character(len=8) :: bootupdt
+    real(c_double) :: bootsign
+    integer :: nonboot
+    integer :: jhirsh
+    real(c_double) :: contrmin
+    real(c_double) :: constr
+    character(len=8) :: chang = "enabled"
+    integer :: colmodl
+    real(c_double) :: deltabdb
+    real(c_double) :: denpar(ntotala,0:lza+1)
+    real(c_double) :: droptol
+    real(c_double) :: dtr
+    real(c_double) :: dtr1(ndtr1a)
+    real(c_double) :: eegy(negyrga,2,ngena,lrza)
+    real(c_double) :: eparc(ngena,0:lrza)
+    real(c_double) :: eperc(ngena,0:lrza)
+    real(c_double) :: simpbfac
+    real(c_double) :: elecfld(0:lrza)
+    real(c_double) :: elpar0
+    real(c_double) :: enorm
+    real(c_double) :: enorme
+    real(c_double) :: enormi
+    character(len=8) :: eleccomp
+    real(c_double) :: elecin(njenea)
+    real(c_double) :: elecin_t(njenea,nbctimea)
+    real(c_double) :: elecscal
+    real(c_double) :: enein(njenea,ntotala)
+    real(c_double) :: enein_t(njenea,ntotala,nbctimea)
+    real(c_double) :: ennin_t(njenea,nbctimea,npaproca)
+    real(c_double) :: ennin(njenea,npaproca)
+    real(c_double) :: enescal
+    real(c_double) :: enloss(ngena)
+    real(c_double) :: epsthet
+    real(c_double) :: enmin
+    real(c_double) :: enmax
+    real(c_double) :: enn(lrza,npaproca)
+    real(c_double) :: ennl(npaproca)
+    real(c_double) :: ennscal(npaproca)
+    real(c_double) :: enmin_npa
+    real(c_double) :: enmax_npa
+    character(len=8) :: eseswtch
+    real(c_double) :: xsink
+    real(c_double) :: esink
+    real(c_double) :: ephicc
+    real(c_double) :: eoved
+    real(c_double) :: fds
+    real(c_double) :: fds_npa
+    real(c_double) :: fmass(ntotala)
+    character(len=8) :: f4d_out
+    character(len=8) :: tavg
+    real(c_double) :: tavg1(ntavga)
+    real(c_double) :: tavg2(ntavga)
+    real(c_double) :: gsla
+    real(c_double) :: gslb
+    real(c_double) :: gamaset
+    character(len=8) :: gamafac
+    real(c_double) :: gamegy(ngena)
+    character(len=8) :: iactst
+    character(len=8) :: ineg
+    character(len=8) :: idskf
+    character(len=8) :: idskrf
+    character(len=8) :: ichkpnt
+    character(len=8) :: implct
+    character(len=8) :: iprone
+    character(len=8) :: iprote
+    character(len=8) :: iproti
+    character(len=8) :: iprozeff
+    character(len=8) :: iprovphi
+    character(len=8) :: iproelec
+    character(len=8) :: ipronn
+    character(len=8) :: iprocur
+    character(len=8) :: tmdmeth
+    integer :: isigmas(6)
+    integer :: isigtst
+    integer :: isigsgv1
+    integer :: isigsgv2
+    real(c_double) :: pltflux1(7)
+    integer :: irzplt(lrorsa)
+    character(len=8) :: izeff
+    integer :: iy
+    integer :: jx
+    integer :: kenorm
+    integer :: lfil
+    integer :: kfrsou
+    character(len=8) :: kpress(ntotala)
+    character(len=8) :: kfield(ntotala)
+    character(len=8) :: kspeci(2,ntotala)
+    integer :: lmidpln
+    character(len=8) :: locquas
+    character(len=8) :: lbdry(ngena)
+    character(len=8) :: lbdry0
+    character(len=256) :: lossfile(ngena)
+    character(len=8) :: lossmode(ngena)
+    integer :: lmidvel
+    integer :: laddbnd
+    integer :: lz
+    character(len=8) :: machine
+    character(len=8) :: meshy
+    character(len=8) :: manymat
+    character(len=256) :: netcdfnm
+    character(len=8) :: netcdfshort
+    character(len=8) :: netcdfvecal
+    character(len=8) :: netcdfvecc
+    character(len=8) :: netcdfvece
+    character(len=8) :: netcdfvecrf
+    character(len=8) :: netcdfvecs
+    integer :: nnspec
+    real(c_double) :: mpwr(0:ntotala) ! non trivial
+    real(c_double) :: megy(ngena)
+    real(c_double) :: mtorloss(ngena)
+    integer :: mmsv
+    integer :: msxr
+    integer :: mx
+    integer :: nchgdy
+    integer :: ngauss
+    integer :: nlagran
+    logical :: nlotp1(noutpta)
+    logical :: nlotp2(noutpta)
+    logical :: nlotp3(noutpta)
+    logical :: nlotp4(noutpta)
+    integer :: nmax
+    integer :: ngen
+    integer :: nkconro(ntotala)
+    integer :: nplt3d(nplota)
+    integer :: nrskip
+    integer :: nen
+    integer :: nv
+    integer :: nv_npa
+    integer :: nen_npa
+    integer :: npaproc
+    character(len=8) :: npa_process(npaproca)
+    integer :: nr_delta
+    integer :: nz_delta
+    integer :: nt_delta
+    integer :: nr_f4d
+    integer :: nz_f4d
+    integer :: nv_f4d
+    integer :: nt_f4d
+    real(c_double) :: npwr(0:ntotala)
+    real(c_double) :: negy(ngena)
+    real(c_double) :: ntorloss(ngena)
+    integer :: njene
+    integer :: njte
+    integer :: njti
+    integer :: nstop
+    integer :: nondtr1(ndtr1a)
+    integer :: nplot(nplota)
+    integer :: nsave(nsavea)
+    integer :: ncoef
+    integer :: nchec
+    integer :: ncont
+    integer :: nrstrt
+    integer :: nstps
+    integer :: nfpld
+    integer :: noncntrl
+    integer :: nonel
+    integer :: noffel
+    integer :: nonvphi
+    integer :: noffvphi
+    integer :: nonavgf
+    integer :: nofavgf
+    integer :: nonloss
+    integer :: noffloss
+    integer :: nummods
+    integer :: numixts
+    integer :: numby
+    integer :: negyrg
+    character(len=8) :: oldiag
+    character(len=8) :: plt3d
+    character(len=8) :: pltfvs
+    character(len=8) :: partner
+    real(c_double) :: paregy(ngena)
+    real(c_double) :: peregy(ngena)
+    real(c_double) :: pegy(ngena)
+    real(c_double) :: zeffin(0:njenea)
+    real(c_double) :: zeffin_t(njenea,nbctimea)
+    real(c_double) :: zeffscal
+    real(c_double) :: vphiplin(0:njenea)
+    real(c_double) :: vphiplin_t(njenea,nbctimea)
+    real(c_double) :: vphiscal
+    character(len=8) :: pltdn
+    character(len=8) :: pltvecal
+    character(len=8) :: pltvecc
+    character(len=8) :: pltvecrf
+    character(len=8) :: pltvece
+    character(len=8) :: pltstrm
+    character(len=8) :: pltflux
+    real(c_double) :: pltmag
+    character(len=8) :: pltsig
+    character(len=8) :: pltlim
+    real(c_double) :: pltlimm
+    character(len=8) :: pltrst
+    character(len=8) :: plturfb
+    character(len=8) :: pltvflu
+    character(len=8) :: pltra
+    character(len=8) :: pltvs
+    character(len=8) :: pltd
+    character(len=8) :: pltprpp
+    character(len=8) :: pltfofv
+    character(len=8) :: pltlos
+    character(len=8) :: profpsi
+    character(len=8) :: psimodel
+    character(len=8) :: pltpowe
+    character(len=8) :: pltend
+    character(len=8) :: pltinput
+    character(len=8) :: qsineut
+    character(len=8) :: trapmod
+    real(c_double) :: trapredc
+    character(len=8) :: scatmod
+    real(c_double) :: scatfrac
+    real(c_double) :: ryain(njenea)
+    real(c_double) :: radmaj
+    real(c_double) :: radmin
+    real(c_double) :: rmirror
+    character(len=8) :: relativ
+    real(c_double) :: reden(ntotala,0:lrza)
+    character(len=8) :: regy(ngena)
+    real(c_double) :: rfacz
+    character(len=8) :: rzset
+    real(c_double) :: rd(nva)
+    real(c_double) :: roveram
+    real(c_double) :: rovera(lrza)
+    real(c_double) :: rya(0:lrza+1)
+    character(len=8) :: radcoord
+    character(len=8) :: sbdry
+    character(len=8) :: scheck
+    character(len=8) :: ndeltarho
+    character(len=8) :: softxry
+    character(len=8) :: npa_diag
+    character(len=8) :: symtrap
+    character(len=8) :: syncrad
+    character(len=8) :: bremsrad
+    real(c_double) :: brfac
+    real(c_double) :: brfac1
+    real(c_double) :: brfacgm3
+    character(len=8) :: sigmamod
+    real(c_double) :: sigvcx
+    real(c_double) :: sigvi
+    character(len=8) :: soln_method
+    real(c_double) :: tauegy(ngena,0:lrza)
+    character(len=8) :: taunew
+    real(c_double) :: tescal
+    real(c_double) :: tein(njenea)
+    real(c_double) :: tein_t(njenea,nbctimea)
+    real(c_double) :: tiscal
+    real(c_double) :: tiin_t(njenea,nbctimea)
+    real(c_double) :: tiin(njenea)
+    real(c_double) :: tauloss(3,ngena)
+    real(c_double) :: temp(ntotala,0:lrza)
+    real(c_double) :: temppar(ntotala,0:lza+1)
+    real(c_double) :: tfac
+    real(c_double) :: tfacz
+    real(c_double) :: tbnd(lrorsa)
+    character(len=8) :: tandem
+    real(c_double) :: thetd(nva)
+    character(len=8) :: torloss(ngena)
+    real(c_double) :: thet1(nva)
+    real(c_double) :: thet2(nva)
+    real(c_double) :: thet1_npa(nva)
+    real(c_double) :: thet2_npa(nva)
+    real(c_double) :: x_sxr(nva)
+    real(c_double) :: z_sxr(nva)
+    real(c_double) :: rd_npa(nva)
+    real(c_double) :: thetd_npa(nva)
+    real(c_double) :: x_npa(nva)
+    real(c_double) :: z_npa(nva)
+    character(len=8) :: atten_npa
+    character(len=8) :: updown
+    real(c_double) :: veclnth
+    real(c_double) :: vnorm
+    real(c_double) :: xfac
+    real(c_double) :: xpctlwr
+    real(c_double) :: xpctmdl
+    real(c_double) :: xlwr
+    real(c_double) :: xmdl
+    real(c_double) :: xsinkm
+    real(c_double) :: xprpmax
+    integer :: ipxy,jpxy
+    character(len=8) :: yreset
+    real(c_double) :: ylower
+    real(c_double) :: yupper
+    real(c_double) :: mpwrzeff
+    real(c_double) :: npwrzeff
+    real(c_double) :: mpwrvphi
+    real(c_double) :: npwrvphi
+    real(c_double) :: mpwrxj
+    real(c_double) :: npwrxj
+    real(c_double) :: npwrelec
+    real(c_double) :: mpwrelec
+    real(c_double) :: redenc(nbctimea,ntotala)
+    real(c_double) :: redenb(nbctimea,ntotala)
+    real(c_double) :: temp_den
+    real(c_double) :: tempc(nbctimea,ntotala)
+    real(c_double) :: tempb(nbctimea,ntotala)
+    real(c_double) :: zeffc(nbctimea)
+    real(c_double) :: zeffb(nbctimea)
+    real(c_double) :: elecc(nbctimea)
+    real(c_double) :: elecb(nbctimea)
+    real(c_double) :: vphic(nbctimea)
+    real(c_double) :: vphib(nbctimea)
+    real(c_double) :: xjc(nbctimea)
+    real(c_double) :: xjb(nbctimea)
+    real(c_double) :: xjin_t(njenea,nbctimea)
+    real(c_double) :: totcrt(nbctimea)
+    character(len=8) :: efswtch
+    character(len=8) :: efswtchn
+    character(len=8) :: efiter
+    character(len=8) :: efflag
+    real(c_double) :: curr_edge
+    real(c_double) :: efrelax
+    real(c_double) :: efrelax1
+    real(c_double) :: currerr
+    real(c_double) :: bctime(nbctimea)
+    integer :: nbctime
+    real(c_double) :: zmax(0:lrza)
+    character(len=8) :: fow
 
 
     ! state the namelist, with associated vars
+    namelist/setup/ &
+         acoefne,acoefte, &
+         ampfmod,nampfmax,nonampf,ampferr,bctimescal, &
+         bnumb,btor,bth,bootst,bootcalc,bootupdt,bootsign,nonboot,jhirsh, &
+         contrmin,constr,chang,colmodl, &
+         deltabdb,denpar,droptol,dtr,dtr1, &
+         eegy,eparc,eperc,simpbfac, &
+         elecfld,elpar0,enorm,enorme,enormi,eleccomp, &
+         elecin,elecin_t,elecscal,enein,enein_t,ennin_t, &
+         enescal,enloss,epsthet, &
+         enmin,enmax,ennb,ennin,ennl,ennscal,enmin_npa,enmax_npa, &
+         eseswtch,xsink,esink,ephicc,eoved, &
+         fds,fds_npa,fmass,f4d_out, &
+         tavg,tavg1,tavg2, &
+         gsla,gslb,gamaset,gamafac,gamegy, &
+         iactst,ineg,idskf,idskrf,ichkpnt,implct, &
+         iprone,iprote,iproti,iprozeff,iprovphi,iproelec,ipronn,iprocur, &
+         tmdmeth,isigmas,isigtst,isigsgv1,isigsgv2, &
+         pltflux1, &
+         irzplt,izeff,ioutime, &
+         iy, &
+         jx, &
+         kenorm,lfil,kfrsou,kpress,kfield,kspeci,fpld, &
+         lmidpln,locquas,lbdry,lbdry0,lossfile,lossmode,lmidvel,laddbnd, &
+         lz, &
+         machine,meshy,manymat,netcdfnm,netcdfshort, &
+         netcdfvecal,netcdfvecc,netcdfvece,netcdfvecrf,netcdfvecs, &
+         nnspec,mpwr,megy,mtorloss,mmsv,msxr,mx, &
+         nchgdy,ngauss,nlagran, &
+         nlotp1,nlotp2,nlotp3,nlotp4, &
+         nmax,ngen,nkconro,nplt3d,nrskip,nen,nv,nen_npa,nv_npa, &
+         npaproc,npa_process, &
+         nr_delta,nz_delta,nt_delta, &
+         nr_f4d,nz_f4d,nv_f4d,nt_f4d, &
+         npwr,negy,ntorloss,njene,njte,njti, &
+         nstop,nondtr1,nplot,nsave,ncoef,nchec,ncont,nrstrt,nstps,nfpld, &
+         noncntrl,nonel,noffel,nonvphi,noffvphi,nonavgf,nofavgf, &
+         nonloss,noffloss,nummods,numixts, &
+         numby,negyrg, &
+         oldiag, &
+         plt3d,pltvs,partner,paregy,peregy,pegy, &
+         zeffin,zeffin_t,zeffscal,vphiplin,vphiplin_t,vphiscal, &
+         pltdn,pltvecal,pltvecc,pltvecrf,pltvece, &
+         pltstrm,pltflux,pltmag,pltsig,pltlim,pltlimm, &
+         pltrst,plturfb,pltvflu,pltra,pltfvs,pltd,pltprpp,pltfofv,pltlos, &
+         pltrdc,profpsi, &
+         psimodel,pltpowe,pltend,pltinput,pltview, &
+         qsineut,trapmod,trapredc,scatmod,scatfrac, &
+         ryain,radmaj,radmin,rmirror,relativ, &
+         reden,regy,rfacz,rzset,rd,roveram, &
+         rovera,rya,radcoord, &
+         sbdry,scheck,ndeltarho,softxry,npa_diag,symtrap,syncrad, &
+         bremsrad,brfac,brfac1,brfacgm3,sigmamod,sigvcx,sigvi, &
+         soln_method,tauegy,taunew,tein,tein_t,tescal,tiin,tiin_t,tiscal, &
+         tauloss,temp,temppar, &
+         tfac,tfacz,tbnd,tandem, &
+         thetd,torloss,thet1,thet2,x_sxr,z_sxr, &
+         rd_npa,thetd_npa,x_npa,z_npa,thet1_npa,thet2_npa,atten_npa, &
+         updown, &
+         veclnth,vnorm, &
+         xfac,xpctlwr,xpctmdl,xlwr,xmdl,xsinkm, &
+         xprpmax,ipxy,jpxy, &
+         yreset,ylower,yupper, &
+         mpwrzeff,npwrzeff,mpwrvphi,npwrvphi,mpwrxj,npwrxj, &
+         mpwrelec,npwrelec, &
+         redenc,redenb,temp_den,tempc,tempb,zeffc,zeffb,elecc,elecb, &
+         vphic,vphib,xjc,xjb,xjin_t,totcrt,efswtch,efswtchn, &
+         efiter,efflag,curr_edge,efrelax,efrelax1,currerr, &
+         bctime,nbctime, &
+         zmax, &
+         fow,nmu,npfi,nsteps_orb,nptsorb,i_orb_width,iorb2, &
+         j0_ini,j0_end,inc_j0, i0_ini,i0_end,inc_i0, &
+         j2_ini,j2_end,inc_j2, i2_ini,i2_end,inc_i2
 
     ! copy defaults to local vars
-
+    acoefne = setup_%acoefne
+    acoefte = setup_%acoefte
+    ampfmod = setup_%ampfmod
+    nampfmax = setup_%nampfmax
+    nonampf = setup_%nonampf
+    ampferr = setup_%ampferr
+    bctimescal = setup_%bctimescal
+    bnumb = setup_%bnumb
+    btor = setup_%btor
+    bth = setup_%bth
+    bootst = setup_%bootst
+    bootcalc = setup_%bootcalc
+    bootupdt = setup_%bootupdt
+    bootsign = setup_%bootsign
+    nonboot = setup_%nonboot
+    jhirsh = setup_%jhirsh
+    contrmin = setup_%contrmin
+    constr = setup_%constr
+    chang = setup_%chang
+    colmodl = setup_%colmodl
+    deltabdb = setup_%deltabdb
+    denpar = setup_%denpar
+    droptol = setup_%droptol
+    dtr = setup_%dtr
+    dtr1 = setup_%dtr1
+    eegy = setup_%eegy
+    eparc = setup_%eparc
+    eperc = setup_%eperc
+    simpbfac = setup_%simpbfac
+    epar = setup_%epar
+    eper = setup_%eper
+    elecfld = setup_%elecfld
+    elpar0 = setup_%elpar0
+    enorm = setup_%enorm
+    enorme = setup_%enorme
+    enormi = setup_%enormi
+    eleccomp = setup_%eleccomp
+    elecin = setup_%elecin
+    elecin_t = setup_%elecin_t
+    elecscal = setup_%elecscal
+    enein = setup_%enein
+    enein_t = setup_%enein_t
+    ennin_t = setup_%ennin_t
+    enescal = setup_%enescal
+    enloss = setup_%enloss
+    epsthet = setup_%epsthet
+    enmin = setup_%enmin
+    enmax = setup_%enmax
+    ennb = setup_%ennb
+    ennin = setup_%ennin
+    ennl = setup_%ennl
+    ennscal = setup_%ennscal
+    enmin_npa = setup_%enmin_npa
+    enmax_npa = setup_%enmax_npa
+    eseswtch = setup_%eseswtch
+    xsink = setup_%xsink
+    esink = setup_%esink
+    ephicc = setup_%ephicc
+    esfac = setup_%esfac
+    eoved = setup_%eoved
+    fds = setup_%fds
+    fds_npa = setup_%fds_npa
+    fmass = setup_%fmass
+    f4d_out = setup_%f4d_out
+    tavg = setup_%tavg
+    tavg1 = setup_%tavg1
+    tavg2 = setup_%tavg2
+    gsla = setup_%gsla
+    gslb = setup_%gslb
+    gamaset = setup_%gamaset
+    gamafac = setup_%gamafac
+    gamegy = setup_%gamegy
+    iactst = setup_%iactst
+    ineg = setup_%ineg
+    idskf = setup_%idskf
+    idskrf = setup_%idskrf
+    ichkpnt = setup_%ichkpnt
+    implct = setup_%implct
+    iprone = setup_%iprone
+    iprote = setup_%iprote
+    iproti = setup_%iproti
+    iprozeff = setup_%iprozeff
+    iprovphi = setup_%iprovphi
+    iproelec = setup_%iproelec
+    ipronn = setup_%ipronn
+    iprocur = setup_%iprocur
+    tmdmeth = setup_%tmdmeth
+    isigmas = setup_%isigmas
+    isigtst = setup_%isigtst
+    isigsgv1 = setup_%isigsgv1
+    isigsgv2 = setup_%isigsgv2
+    pltflux1 = setup_%pltflux1
+    irzplt = setup_%irzplt
+    izeff = setup_%izeff
+    ioutime = setup_%ioutime
+    iy = setup_%iy
+    jx = setup_%jx
+    kenorm = setup_%kenorm
+    lfil = setup_%lfil
+    kfrsou = setup_%kfrsou
+    kpress = setup_%kpress
+    kfield = setup_%kfield
+    kspeci = setup_%kspeci
+    fpld = setup_%fpld
+    lmidpln = setup_%lmidpln
+    locquas = setup_%locquas
+    lbdry = setup_%lbdry
+    lbdry0 = setup_%lbdry0
+    lossfile = setup_%lossfile
+    lossmode = setup_%lossmode
+    lmidvel = setup_%lmidvel
+    laddbnd = setup_%laddbnd
+    lz = setup_%lz
+    machine = setup_%machine
+    meshy = setup_%meshy
+    manymat = setup_%manymat
+    netcdfnm = setup_%netcdfnm
+    netcdfshort = setup_%netcdfshort
+    netcdfvecal = setup_%netcdfvecal
+    netcdfvecc = setup_%netcdfvecc
+    netcdfvece = setup_%netcdfvece
+    netcdfvecrf = setup_%netcdfvecrf
+    netcdfvecs = setup_%netcdfvecs
+    nnspec = setup_%nnspec
+    mpwr = setup_%mpwr
+    megy = setup_%megy
+    mtorloss = setup_%mtorloss
+    mmsv = setup_%mmsv
+    msxr = setup_%msxr
+    mx = setup_%mx
+    nchgdy = setup_%nchgdy
+    ngauss = setup_%ngauss
+    nlagran = setup_%nlagran
+    nlotp1 = setup_%nlotp1
+    nlotp2 = setup_%nlotp2
+    nlotp3 = setup_%nlotp3
+    nlotp4 = setup_%nlotp4
+    nmax = setup_%nmax
+    ngen = setup_%ngen
+    nkconro = setup_%nkconro
+    nplt3d = setup_%nplt3d
+    nrskip = setup_%nrskip
+    nen = setup_%nen
+    nv = setup_%nv
+    nen_npa = setup_%nen_npa
+    nv_npa = setup_%nv_npa
+    npaproc = setup_%npaproc
+    npa_process = setup_%npa_process
+    nr_delta = setup_%nr_delta
+    nz_delta = setup_%nz_delta
+    nt_delta = setup_%nt_delta
+    nr_f4d = setup_%nr_f4d
+    nz_f4d = setup_%nz_f4d
+    nv_f4d = setup_%nv_f4d
+    nt_f4d = setup_%nt_f4d
+    npwr = setup_%npwr
+    negy = setup_%negy
+    ntorloss = setup_%ntorloss
+    njene = setup_%njene
+    njte = setup_%njte
+    njti = setup_%njti
+    nstop = setup_%nstop
+    nondtr1 = setup_%nondtr1
+    nplot = setup_%nplot
+    nsave = setup_%nsave
+    ncoef = setup_%ncoef
+    nchec = setup_%nchec
+    ncont = setup_%ncont
+    nrstrt = setup_%nrstrt
+    nstps = setup_%nstps
+    nfpld = setup_%nfpld
+    noncntrl = setup_%noncntrl
+    nonel = setup_%nonel
+    noffel = setup_%noffel
+    nonvphi = setup_%nonvphi
+    noffvphi = setup_%noffvphi
+    nonavgf = setup_%nonavgf
+    nofavgf = setup_%nofavgf
+    nonloss = setup_%nonloss
+    noffloss = setup_%noffloss
+    nummods = setup_%nummods
+    numixts = setup_%numixts
+    numby = setup_%numby
+    negyrg = setup_%negyrg
+    oldiag = setup_%oldiag
+    plt3d = setup_%plt3d
+    pltvs = setup_%pltvs
+    partner = setup_%partner
+    paregy = setup_%paregy
+    peregy = setup_%peregy
+    pegy = setup_%pegy
+    zeffin = setup_%zeffin
+    zeffin_t = setup_%zeffin_t
+    zeffscal = setup_%zeffscal
+    vphiplin = setup_%vphiplin
+    vphiplin_t = setup_%vphiplin_t
+    vphiscal = setup_%vphiscal
+    pltdn = setup_%pltdn
+    pltvecal = setup_%pltvecal
+    pltvecc = setup_%pltvecc
+    pltvecrf = setup_%pltvecrf
+    pltvece = setup_%pltvece
+    pltstrm = setup_%pltstrm
+    pltflux = setup_%pltflux
+    pltmag = setup_%pltmag
+    pltsig = setup_%pltsig
+    pltlim = setup_%pltlim
+    pltlimm = setup_%pltlimm
+    pltrst = setup_%pltrst
+    plturfb = setup_%plturfb
+    pltvflu = setup_%pltvflu
+    pltra = setup_%pltra
+    pltfvs = setup_%pltfvs
+    pltd = setup_%pltd
+    pltprpp = setup_%pltprpp
+    pltfofv = setup_%pltfofv
+    pltlos = setup_%pltlos
+    pltrdc = setup_%pltrdc
+    profpsi = setup_%profpsi
+    psimodel = setup_%psimodel
+    pltpowe = setup_%pltpowe
+    pltend = setup_%pltend
+    pltinput = setup_%pltinput
+    pltview = setup_%pltview
+    qsineut = setup_%qsineut
+    trapmod = setup_%trapmod
+    trapredc = setup_%trapredc
+    scatmod = setup_%scatmod
+    scatfrac = setup_%scatfrac
+    ryain = setup_%ryain
+    radmaj = setup_%radmaj
+    radmin = setup_%radmin
+    rmirror = setup_%rmirror
+    relativ = setup_%relativ
+    reden = setup_%reden
+    regy = setup_%regy
+    rfacz = setup_%rfacz
+    rzset = setup_%rzset
+    rd = setup_%rd
+    roveram = setup_%roveram
+    rovera = setup_%rovera
+    rya = setup_%rya
+    radcoord = setup_%radcoord
+    sbdry = setup_%sbdry
+    scheck = setup_%scheck
+    ndeltarho = setup_%ndeltarho
+    softxry = setup_%softxry
+    npa_diag = setup_%npa_diag
+    symtrap = setup_%symtrap
+    syncrad = setup_%syncrad
+    bremsrad = setup_%bremsrad
+    brfac = setup_%brfac
+    brfac1 = setup_%brfac1
+    brfacgm3 = setup_%brfacgm3
+    sigmamod = setup_%sigmamod
+    sigvcx = setup_%sigvcx
+    sigvi = setup_%sigvi
+    soln_method = setup_%soln_method
+    tauegy = setup_%tauegy
+    taunew = setup_%taunew
+    tein = setup_%tein
+    tein_t = setup_%tein_t
+    tescal = setup_%tescal
+    tiin = setup_%tiin
+    tiin_t = setup_%tiin_t
+    tiscal = setup_%tiscal
+    tauloss = setup_%tauloss
+    temp = setup_%temp
+    temppar = setup_%temppar
+    tfac = setup_%tfac
+    tfacz = setup_%tfacz
+    tbnd = setup_%tbnd
+    tandem = setup_%tandem
+    thetd = setup_%thetd
+    torloss = setup_%torloss
+    thet1 = setup_%thet1
+    thet2 = setup_%thet2
+    x_sxr = setup_%x_sxr
+    z_sxr = setup_%z_sxr
+    rd_npa = setup_%rd_npa
+    thetd_npa = setup_%thetd_npa
+    x_npa = setup_%x_npa
+    z_npa = setup_%z_npa
+    thet1_npa = setup_%thet1_npa
+    thet2_npa = setup_%thet2_npa
+    atten_npa = setup_%atten_npa
+    updown = setup_%updown
+    veclnth = setup_%veclnth
+    vnorm = setup_%vnorm
+    xfac = setup_%xfac
+    xpctlwr = setup_%xpctlwr
+    xpctmdl = setup_%xpctmdl
+    xlwr = setup_%xlwr
+    xmdl = setup_%xmdl
+    xsinkm = setup_%xsinkm
+    xprpmax = setup_%xprpmax
+    ipxy = setup_%ipxy
+    jpxy = setup_%jpxy
+    yreset = setup_%yreset
+    ylower = setup_%ylower
+    yupper = setup_%yupper
+    mpwrzeff = setup_%mpwrzeff
+    npwrzeff = setup_%npwrzeff
+    mpwrvphi = setup_%mpwrvphi
+    npwrvphi = setup_%npwrvphi
+    mpwrxj = setup_%mpwrxj
+    npwrxj = setup_%npwrxj
+    mpwrelec = setup_%mpwrelec
+    npwrelec = setup_%npwrelec
+    redenc = setup_%redenc
+    redenb = setup_%redenb
+    temp_den = setup_%temp_den
+    tempc = setup_%tempc
+    tempb = setup_%tempb
+    zeffc = setup_%zeffc
+    zeffb = setup_%zeffb
+    elecc = setup_%elecc
+    elecb = setup_%elecb
+    vphic = setup_%vphic
+    vphib = setup_%vphib
+    xjc = setup_%xjc
+    xjb = setup_%xjb
+    xjin_t = setup_%xjin_t
+    totcrt = setup_%totcrt
+    efswtch = setup_%efswtch
+    efswtchn = setup_%efswtchn
+    efiter = setup_%efiter
+    efflag = setup_%efflag
+    curr_edge = setup_%curr_edge
+    efrelax = setup_%efrelax
+    efrelax1 = setup_%efrelax1
+    currerr = setup_%currerr
+    bctime = setup_%bctime
+    nbctime = setup_%nbctime
+    zmax = setup_%zmax
+    fow = setup_%fow
 
     ! read the nml, which will write into the local vars
 
@@ -1725,7 +2815,79 @@ contains
     read(nml_fd, setup)
 
     ! external codes can call this, which packs the setup0 derived type.
-    call set_setup()
+    call set_setup(        acoefne,acoefte, &
+         ampfmod,nampfmax,nonampf,ampferr,bctimescal, &
+         bnumb,btor,bth,bootst,bootcalc,bootupdt,bootsign,nonboot,jhirsh, &
+         contrmin,constr,chang,colmodl, &
+         deltabdb,denpar,droptol,dtr,dtr1, &
+         eegy,eparc,eperc,simpbfac, &
+         elecfld,elpar0,enorm,enorme,enormi,eleccomp, &
+         elecin,elecin_t,elecscal,enein,enein_t,ennin_t, &
+         enescal,enloss,epsthet, &
+         enmin,enmax,ennb,ennin,ennl,ennscal,enmin_npa,enmax_npa, &
+         eseswtch,xsink,esink,ephicc,eoved, &
+         fds,fds_npa,fmass,f4d_out, &
+         tavg,tavg1,tavg2, &
+         gsla,gslb,gamaset,gamafac,gamegy, &
+         iactst,ineg,idskf,idskrf,ichkpnt,implct, &
+         iprone,iprote,iproti,iprozeff,iprovphi,iproelec,ipronn,iprocur, &
+         tmdmeth,isigmas,isigtst,isigsgv1,isigsgv2, &
+         pltflux1, &
+         irzplt,izeff,ioutime, &
+         iy, &
+         jx, &
+         kenorm,lfil,kfrsou,kpress,kfield,kspeci,fpld, &
+         lmidpln,locquas,lbdry,lbdry0,lossfile,lossmode,lmidvel,laddbnd, &
+         lz, &
+         machine,meshy,manymat,netcdfnm,netcdfshort, &
+         netcdfvecal,netcdfvecc,netcdfvece,netcdfvecrf,netcdfvecs, &
+         nnspec,mpwr,megy,mtorloss,mmsv,msxr,mx, &
+         nchgdy,ngauss,nlagran, &
+         nlotp1,nlotp2,nlotp3,nlotp4, &
+         nmax,ngen,nkconro,nplt3d,nrskip,nen,nv,nen_npa,nv_npa, &
+         npaproc,npa_process, &
+         nr_delta,nz_delta,nt_delta, &
+         nr_f4d,nz_f4d,nv_f4d,nt_f4d, &
+         npwr,negy,ntorloss,njene,njte,njti, &
+         nstop,nondtr1,nplot,nsave,ncoef,nchec,ncont,nrstrt,nstps,nfpld, &
+         noncntrl,nonel,noffel,nonvphi,noffvphi,nonavgf,nofavgf, &
+         nonloss,noffloss,nummods,numixts, &
+         numby,negyrg, &
+         oldiag, &
+         plt3d,pltvs,partner,paregy,peregy,pegy, &
+         zeffin,zeffin_t,zeffscal,vphiplin,vphiplin_t,vphiscal, &
+         pltdn,pltvecal,pltvecc,pltvecrf,pltvece, &
+         pltstrm,pltflux,pltmag,pltsig,pltlim,pltlimm, &
+         pltrst,plturfb,pltvflu,pltra,pltfvs,pltd,pltprpp,pltfofv,pltlos, &
+         pltrdc,profpsi, &
+         psimodel,pltpowe,pltend,pltinput,pltview, &
+         qsineut,trapmod,trapredc,scatmod,scatfrac, &
+         ryain,radmaj,radmin,rmirror,relativ, &
+         reden,regy,rfacz,rzset,rd,roveram, &
+         rovera,rya,radcoord, &
+         sbdry,scheck,ndeltarho,softxry,npa_diag,symtrap,syncrad, &
+         bremsrad,brfac,brfac1,brfacgm3,sigmamod,sigvcx,sigvi, &
+         soln_method,tauegy,taunew,tein,tein_t,tescal,tiin,tiin_t,tiscal, &
+         tauloss,temp,temppar, &
+         tfac,tfacz,tbnd,tandem, &
+         thetd,torloss,thet1,thet2,x_sxr,z_sxr, &
+         rd_npa,thetd_npa,x_npa,z_npa,thet1_npa,thet2_npa,atten_npa, &
+         updown, &
+         veclnth,vnorm, &
+         xfac,xpctlwr,xpctmdl,xlwr,xmdl,xsinkm, &
+         xprpmax,ipxy,jpxy, &
+         yreset,ylower,yupper, &
+         mpwrzeff,npwrzeff,mpwrvphi,npwrvphi,mpwrxj,npwrxj, &
+         mpwrelec,npwrelec, &
+         redenc,redenb,temp_den,tempc,tempb,zeffc,zeffb,elecc,elecb, &
+         vphic,vphib,xjc,xjb,xjin_t,totcrt,efswtch,efswtchn, &
+         efiter,efflag,curr_edge,efrelax,efrelax1,currerr, &
+         bctime,nbctime, &
+         zmax, &
+         fow,nmu,npfi,nsteps_orb,nptsorb,i_orb_width,iorb2, &
+         j0_ini,j0_end,inc_j0, i0_ini,i0_end,inc_i0, &
+         j2_ini,j2_end,inc_j2, i2_ini,i2_end,inc_i2, &
+         debug_print)
 
     ! we optionally close the nml file.
     if (present(close_nml_file)) then
@@ -1736,12 +2898,819 @@ contains
 
   end subroutine get_setup_from_nml
 
-  subroutine set_setup()
+  subroutine set_setup(        acoefne,acoefte, &
+       ampfmod,nampfmax,nonampf,ampferr,bctimescal, &
+       bnumb,btor,bth,bootst,bootcalc,bootupdt,bootsign,nonboot,jhirsh, &
+       contrmin,constr,chang,colmodl, &
+       deltabdb,denpar,droptol,dtr,dtr1, &
+       eegy,eparc,eperc,simpbfac,&
+       elecfld,elpar0,enorm,enorme,enormi,eleccomp, &
+       elecin,elecin_t,elecscal,enein,enein_t,ennin_t, &
+       enescal,enloss,epsthet, &
+       enmin,enmax,ennb,ennin,ennl,ennscal,enmin_npa,enmax_npa, &
+       eseswtch,xsink,esink,ephicc,eoved, &
+       fds,fds_npa,fmass,f4d_out, &
+       tavg,tavg1,tavg2, &
+       gsla,gslb,gamaset,gamafac,gamegy, &
+       iactst,ineg,idskf,idskrf,ichkpnt,implct, &
+       iprone,iprote,iproti,iprozeff,iprovphi,iproelec,ipronn,iprocur, &
+       tmdmeth,isigmas,isigtst,isigsgv1,isigsgv2, &
+       pltflux1, &
+       irzplt,izeff,ioutime, &
+       iy, &
+       jx, &
+       kenorm,lfil,kfrsou,kpress,kfield,kspeci,fpld, &
+       lmidpln,locquas,lbdry,lbdry0,lossfile,lossmode,lmidvel,laddbnd, &
+       lz, &
+       machine,meshy,manymat,netcdfnm,netcdfshort, &
+       netcdfvecal,netcdfvecc,netcdfvece,netcdfvecrf,netcdfvecs, &
+       nnspec,mpwr,megy,mtorloss,mmsv,msxr,mx, &
+       nchgdy,ngauss,nlagran, &
+       nlotp1,nlotp2,nlotp3,nlotp4, &
+       nmax,ngen,nkconro,nplt3d,nrskip,nen,nv,nen_npa,nv_npa, &
+       npaproc,npa_process, &
+       nr_delta,nz_delta,nt_delta, &
+       nr_f4d,nz_f4d,nv_f4d,nt_f4d, &
+       npwr,negy,ntorloss,njene,njte,njti, &
+       nstop,nondtr1,nplot,nsave,ncoef,nchec,ncont,nrstrt,nstps,nfpld, &
+       noncntrl,nonel,noffel,nonvphi,noffvphi,nonavgf,nofavgf, &
+       nonloss,noffloss,nummods,numixts, &
+       numby,negyrg, &
+       oldiag, &
+       plt3d,pltvs,partner,paregy,peregy,pegy, &
+       zeffin,zeffin_t,zeffscal,vphiplin,vphiplin_t,vphiscal, &
+       pltdn,pltvecal,pltvecc,pltvecrf,pltvece, &
+       pltstrm,pltflux,pltmag,pltsig,pltlim,pltlimm, &
+       pltrst,plturfb,pltvflu,pltra,pltfvs,pltd,pltprpp,pltfofv,pltlos, &
+       pltrdc,profpsi, &
+       psimodel,pltpowe,pltend,pltinput,pltview, &
+       qsineut,trapmod,trapredc,scatmod,scatfrac, &
+       ryain,radmaj,radmin,rmirror,relativ, &
+       reden,regy,rfacz,rzset,rd,roveram, &
+       rovera,rya,radcoord, &
+       sbdry,scheck,ndeltarho,softxry,npa_diag,symtrap,syncrad, &
+       bremsrad,brfac,brfac1,brfacgm3,sigmamod,sigvcx,sigvi, &
+       soln_method,tauegy,taunew,tein,tein_t,tescal,tiin,tiin_t,tiscal, &
+       tauloss,temp,temppar, &
+       tfac,tfacz,tbnd,tandem, &
+       thetd,torloss,thet1,thet2,x_sxr,z_sxr, &
+       rd_npa,thetd_npa,x_npa,z_npa,thet1_npa,thet2_npa,atten_npa, &
+       updown, &
+       veclnth,vnorm, &
+       xfac,xpctlwr,xpctmdl,xlwr,xmdl,xsinkm, &
+       xprpmax,ipxy,jpxy, &
+       yreset,ylower,yupper, &
+       mpwrzeff,npwrzeff,mpwrvphi,npwrvphi,mpwrxj,npwrxj, &
+       mpwrelec,npwrelec, &
+       redenc,redenb,temp_den,tempc,tempb,zeffc,zeffb,elecc,elecb, &
+       vphic,vphib,xjc,xjb,xjin_t,totcrt,efswtch,efswtchn, &
+       efiter,efflag,curr_edge,efrelax,efrelax1,currerr, &
+       bctime,nbctime, &
+       zmax, &
+       fow,nmu,npfi,nsteps_orb,nptsorb,i_orb_width,iorb2, &
+       j0_ini,j0_end,inc_j0, i0_ini,i0_end,inc_i0, &
+       j2_ini,j2_end,inc_j2, i2_ini,i2_end,inc_i2, &
+       debug_print)
     logical, intent(in), optional :: debug_print
     !
+    real(c_double), intent(in), optional :: acoefne(4)
+    real(c_double), intent(in), optional :: acoefte(4)
+    character(len=8), intent(in), optional :: ampfmod
+    integer, intent(in), optional :: nampfmax
+    integer, intent(in), optional :: nonampf
+    real(c_double), intent(in), optional :: ampferr
+    real(c_double), intent(in), optional :: bctimescal
+    real(c_double), intent(in), optional :: bnumb(ntotala)
+    real(c_double), intent(in), optional :: bth(lrza)
+    real(c_double), intent(in), optional :: btor
+    character(len=8), intent(in), optional :: bootst
+    character(len=8), intent(in), optional :: bootcalc
+    character(len=8), intent(in), optional :: bootupdt
+    real(c_double), intent(in), optional :: bootsign
+    integer, intent(in), optional :: nonboot
+    integer, intent(in), optional :: jhirsh
+    real(c_double), intent(in), optional :: contrmin
+    real(c_double), intent(in), optional :: constr
+    character(len=8), intent(in), optional :: chang = "enabled"
+    integer, intent(in), optional :: colmodl
+    real(c_double), intent(in), optional :: deltabdb
+    real(c_double), intent(in), optional :: denpar(ntotala,0:lza+1)
+    real(c_double), intent(in), optional :: droptol
+    real(c_double), intent(in), optional :: dtr
+    real(c_double), intent(in), optional :: dtr1(ndtr1a)
+    real(c_double), intent(in), optional :: eegy(negyrga,2,ngena,lrza)
+    real(c_double), intent(in), optional :: eparc(ngena,0:lrza)
+    real(c_double), intent(in), optional :: eperc(ngena,0:lrza)
+    real(c_double), intent(in), optional :: simpbfac
+    real(c_double), intent(in), optional :: elecfld(0:lrza)
+    real(c_double), intent(in), optional :: elpar0
+    real(c_double), intent(in), optional :: enorm
+    real(c_double), intent(in), optional :: enorme
+    real(c_double), intent(in), optional :: enormi
+    character(len=8), intent(in), optional :: eleccomp
+    real(c_double), intent(in), optional :: elecin(njenea)
+    real(c_double), intent(in), optional :: elecin_t(njenea,nbctimea)
+    real(c_double), intent(in), optional :: elecscal
+    real(c_double), intent(in), optional :: enein(njenea,ntotala)
+    real(c_double), intent(in), optional :: enein_t(njenea,ntotala,nbctimea)
+    real(c_double), intent(in), optional :: ennin_t(njenea,nbctimea,npaproca)
+    real(c_double), intent(in), optional :: ennin(njenea,npaproca)
+    real(c_double), intent(in), optional :: enescal
+    real(c_double), intent(in), optional :: enloss(ngena)
+    real(c_double), intent(in), optional :: epsthet
+    real(c_double), intent(in), optional :: enmin
+    real(c_double), intent(in), optional :: enmax
+    real(c_double), intent(in), optional :: enn(lrza,npaproca)
+    real(c_double), intent(in), optional :: ennl(npaproca)
+    real(c_double), intent(in), optional :: ennscal(npaproca)
+    real(c_double), intent(in), optional :: enmin_npa
+    real(c_double), intent(in), optional :: enmax_npa
+    character(len=8), intent(in), optional :: eseswtch
+    real(c_double), intent(in), optional :: xsink
+    real(c_double), intent(in), optional :: esink
+    real(c_double), intent(in), optional :: ephicc
+    real(c_double), intent(in), optional :: eoved
+    real(c_double), intent(in), optional :: fds
+    real(c_double), intent(in), optional :: fds_npa
+    real(c_double), intent(in), optional :: fmass(ntotala)
+    character(len=8), intent(in), optional :: f4d_out
+    character(len=8), intent(in), optional :: tavg
+    real(c_double), intent(in), optional :: tavg1(ntavga)
+    real(c_double), intent(in), optional :: tavg2(ntavga)
+    real(c_double), intent(in), optional :: gsla
+    real(c_double), intent(in), optional :: gslb
+    real(c_double), intent(in), optional :: gamaset
+    character(len=8), intent(in), optional :: gamafac
+    real(c_double), intent(in), optional :: gamegy(ngena)
+    character(len=8), intent(in), optional :: iactst
+    character(len=8), intent(in), optional :: ineg
+    character(len=8), intent(in), optional :: idskf
+    character(len=8), intent(in), optional :: idskrf
+    character(len=8), intent(in), optional :: ichkpnt
+    character(len=8), intent(in), optional :: implct
+    character(len=8), intent(in), optional :: iprone
+    character(len=8), intent(in), optional :: iprote
+    character(len=8), intent(in), optional :: iproti
+    character(len=8), intent(in), optional :: iprozeff
+    character(len=8), intent(in), optional :: iprovphi
+    character(len=8), intent(in), optional :: iproelec
+    character(len=8), intent(in), optional :: ipronn
+    character(len=8), intent(in), optional :: iprocur
+    character(len=8), intent(in), optional :: tmdmeth
+    integer, intent(in), optional :: isigmas(6)
+    integer, intent(in), optional :: isigtst
+    integer, intent(in), optional :: isigsgv1
+    integer, intent(in), optional :: isigsgv2
+    real(c_double), intent(in), optional :: pltflux1(7)
+    integer, intent(in), optional :: irzplt(lrorsa)
+    character(len=8), intent(in), optional :: izeff
+    integer, intent(in), optional :: iy
+    integer, intent(in), optional :: jx
+    integer, intent(in), optional :: kenorm
+    integer, intent(in), optional :: lfil
+    integer, intent(in), optional :: kfrsou
+    character(len=8), intent(in), optional :: kpress(ntotala)
+    character(len=8), intent(in), optional :: kfield(ntotala)
+    character(len=8), intent(in), optional :: kspeci(2,ntotala)
+    integer, intent(in), optional :: lmidpln
+    character(len=8), intent(in), optional :: locquas
+    character(len=8), intent(in), optional :: lbdry(ngena)
+    character(len=8), intent(in), optional :: lbdry0
+    character(len=256), intent(in), optional :: lossfile(ngena)
+    character(len=8), intent(in), optional :: lossmode(ngena)
+    integer, intent(in), optional :: lmidvel
+    integer, intent(in), optional :: laddbnd
+    integer, intent(in), optional :: lz
+    character(len=8), intent(in), optional :: machine
+    character(len=8), intent(in), optional :: meshy
+    character(len=8), intent(in), optional :: manymat
+    character(len=256), intent(in), optional :: netcdfnm
+    character(len=8), intent(in), optional :: netcdfshort
+    character(len=8), intent(in), optional :: netcdfvecal
+    character(len=8), intent(in), optional :: netcdfvecc
+    character(len=8), intent(in), optional :: netcdfvece
+    character(len=8), intent(in), optional :: netcdfvecrf
+    character(len=8), intent(in), optional :: netcdfvecs
+    integer, intent(in), optional :: nnspec
+    real(c_double), intent(in), optional :: mpwr(0:ntotala) ! non trivial
+    real(c_double), intent(in), optional :: megy(ngena)
+    real(c_double), intent(in), optional :: mtorloss(ngena)
+    integer, intent(in), optional :: mmsv
+    integer, intent(in), optional :: msxr
+    integer, intent(in), optional :: mx
+    integer, intent(in), optional :: nchgdy
+    integer, intent(in), optional :: ngauss
+    integer, intent(in), optional :: nlagran
+    logical, intent(in), optional :: nlotp1(noutpta)
+    logical, intent(in), optional :: nlotp2(noutpta)
+    logical, intent(in), optional :: nlotp3(noutpta)
+    logical, intent(in), optional :: nlotp4(noutpta)
+    integer, intent(in), optional :: nmax
+    integer, intent(in), optional :: ngen
+    integer, intent(in), optional :: nkconro(ntotala)
+    integer, intent(in), optional :: nplt3d(nplota)
+    integer, intent(in), optional :: nrskip
+    integer, intent(in), optional :: nen
+    integer, intent(in), optional :: nv
+    integer, intent(in), optional :: nv_npa
+    integer, intent(in), optional :: nen_npa
+    integer, intent(in), optional :: npaproc
+    character(len=8), intent(in), optional :: npa_process(npaproca)
+    integer, intent(in), optional :: nr_delta
+    integer, intent(in), optional :: nz_delta
+    integer, intent(in), optional :: nt_delta
+    integer, intent(in), optional :: nr_f4d
+    integer, intent(in), optional :: nz_f4d
+    integer, intent(in), optional :: nv_f4d
+    integer, intent(in), optional :: nt_f4d
+    real(c_double), intent(in), optional :: npwr(0:ntotala)
+    real(c_double), intent(in), optional :: negy(ngena)
+    real(c_double), intent(in), optional :: ntorloss(ngena)
+    integer, intent(in), optional :: njene
+    integer, intent(in), optional :: njte
+    integer, intent(in), optional :: njti
+    integer, intent(in), optional :: nstop
+    integer, intent(in), optional :: nondtr1(ndtr1a)
+    integer, intent(in), optional :: nplot(nplota)
+    integer, intent(in), optional :: nsave(nsavea)
+    integer, intent(in), optional :: ncoef
+    integer, intent(in), optional :: nchec
+    integer, intent(in), optional :: ncont
+    integer, intent(in), optional :: nrstrt
+    integer, intent(in), optional :: nstps
+    integer, intent(in), optional :: nfpld
+    integer, intent(in), optional :: noncntrl
+    integer, intent(in), optional :: nonel
+    integer, intent(in), optional :: noffel
+    integer, intent(in), optional :: nonvphi
+    integer, intent(in), optional :: noffvphi
+    integer, intent(in), optional :: nonavgf
+    integer, intent(in), optional :: nofavgf
+    integer, intent(in), optional :: nonloss
+    integer, intent(in), optional :: noffloss
+    integer, intent(in), optional :: nummods
+    integer, intent(in), optional :: numixts
+    integer, intent(in), optional :: numby
+    integer, intent(in), optional :: negyrg
+    character(len=8), intent(in), optional :: oldiag
+    character(len=8), intent(in), optional :: plt3d
+    character(len=8), intent(in), optional :: pltfvs
+    character(len=8), intent(in), optional :: partner
+    real(c_double), intent(in), optional :: paregy(ngena)
+    real(c_double), intent(in), optional :: peregy(ngena)
+    real(c_double), intent(in), optional :: pegy(ngena)
+    real(c_double), intent(in), optional :: zeffin(0:njenea)
+    real(c_double), intent(in), optional :: zeffin_t(njenea,nbctimea)
+    real(c_double), intent(in), optional :: zeffscal
+    real(c_double), intent(in), optional :: vphiplin(0:njenea)
+    real(c_double), intent(in), optional :: vphiplin_t(njenea,nbctimea)
+    real(c_double), intent(in), optional :: vphiscal
+    character(len=8), intent(in), optional :: pltdn
+    character(len=8), intent(in), optional :: pltvecal
+    character(len=8), intent(in), optional :: pltvecc
+    character(len=8), intent(in), optional :: pltvecrf
+    character(len=8), intent(in), optional :: pltvece
+    character(len=8), intent(in), optional :: pltstrm
+    character(len=8), intent(in), optional :: pltflux
+    real(c_double), intent(in), optional :: pltmag
+    character(len=8), intent(in), optional :: pltsig
+    character(len=8), intent(in), optional :: pltlim
+    real(c_double), intent(in), optional :: pltlimm
+    character(len=8), intent(in), optional :: pltrst
+    character(len=8), intent(in), optional :: plturfb
+    character(len=8), intent(in), optional :: pltvflu
+    character(len=8), intent(in), optional :: pltra
+    character(len=8), intent(in), optional :: pltvs
+    character(len=8), intent(in), optional :: pltd
+    character(len=8), intent(in), optional :: pltprpp
+    character(len=8), intent(in), optional :: pltfofv
+    character(len=8), intent(in), optional :: pltlos
+    character(len=8), intent(in), optional :: profpsi
+    character(len=8), intent(in), optional :: psimodel
+    character(len=8), intent(in), optional :: pltpowe
+    character(len=8), intent(in), optional :: pltend
+    character(len=8), intent(in), optional :: pltinput
+    character(len=8), intent(in), optional :: qsineut
+    character(len=8), intent(in), optional :: trapmod
+    real(c_double), intent(in), optional :: trapredc
+    character(len=8), intent(in), optional :: scatmod
+    real(c_double), intent(in), optional :: scatfrac
+    real(c_double), intent(in), optional :: ryain(njenea)
+    real(c_double), intent(in), optional :: radmaj
+    real(c_double), intent(in), optional :: radmin
+    real(c_double), intent(in), optional :: rmirror
+    character(len=8), intent(in), optional :: relativ
+    real(c_double), intent(in), optional :: reden(ntotala,0:lrza)
+    character(len=8), intent(in), optional :: regy(ngena)
+    real(c_double), intent(in), optional :: rfacz
+    character(len=8), intent(in), optional :: rzset
+    real(c_double), intent(in), optional :: rd(nva)
+    real(c_double), intent(in), optional :: roveram
+    real(c_double), intent(in), optional :: rovera(lrza)
+    real(c_double), intent(in), optional :: rya(0:lrza+1)
+    character(len=8), intent(in), optional :: radcoord
+    character(len=8), intent(in), optional :: sbdry
+    character(len=8), intent(in), optional :: scheck
+    character(len=8), intent(in), optional :: ndeltarho
+    character(len=8), intent(in), optional :: softxry
+    character(len=8), intent(in), optional :: npa_diag
+    character(len=8), intent(in), optional :: symtrap
+    character(len=8), intent(in), optional :: syncrad
+    character(len=8), intent(in), optional :: bremsrad
+    real(c_double), intent(in), optional :: brfac
+    real(c_double), intent(in), optional :: brfac1
+    real(c_double), intent(in), optional :: brfacgm3
+    character(len=8), intent(in), optional :: sigmamod
+    real(c_double), intent(in), optional :: sigvcx
+    real(c_double), intent(in), optional :: sigvi
+    character(len=8), intent(in), optional :: soln_method
+    real(c_double), intent(in), optional :: tauegy(ngena,0:lrza)
+    character(len=8), intent(in), optional :: taunew
+    real(c_double), intent(in), optional :: tescal
+    real(c_double), intent(in), optional :: tein(njenea)
+    real(c_double), intent(in), optional :: tein_t(njenea,nbctimea)
+    real(c_double), intent(in), optional :: tiscal
+    real(c_double), intent(in), optional :: tiin_t(njenea,nbctimea)
+    real(c_double), intent(in), optional :: tiin(njenea)
+    real(c_double), intent(in), optional :: tauloss(3,ngena)
+    real(c_double), intent(in), optional :: temp(ntotala,0:lrza)
+    real(c_double), intent(in), optional :: temppar(ntotala,0:lza+1)
+    real(c_double), intent(in), optional :: tfac
+    real(c_double), intent(in), optional :: tfacz
+    real(c_double), intent(in), optional :: tbnd(lrorsa)
+    character(len=8), intent(in), optional :: tandem
+    real(c_double), intent(in), optional :: thetd(nva)
+    character(len=8), intent(in), optional :: torloss(ngena)
+    real(c_double), intent(in), optional :: thet1(nva)
+    real(c_double), intent(in), optional :: thet2(nva)
+    real(c_double), intent(in), optional :: thet1_npa(nva)
+    real(c_double), intent(in), optional :: thet2_npa(nva)
+    real(c_double), intent(in), optional :: x_sxr(nva)
+    real(c_double), intent(in), optional :: z_sxr(nva)
+    real(c_double), intent(in), optional :: rd_npa(nva)
+    real(c_double), intent(in), optional :: thetd_npa(nva)
+    real(c_double), intent(in), optional :: x_npa(nva)
+    real(c_double), intent(in), optional :: z_npa(nva)
+    character(len=8), intent(in), optional :: atten_npa
+    character(len=8), intent(in), optional :: updown
+    real(c_double), intent(in), optional :: veclnth
+    real(c_double), intent(in), optional :: vnorm
+    real(c_double), intent(in), optional :: xfac
+    real(c_double), intent(in), optional :: xpctlwr
+    real(c_double), intent(in), optional :: xpctmdl
+    real(c_double), intent(in), optional :: xlwr
+    real(c_double), intent(in), optional :: xmdl
+    real(c_double), intent(in), optional :: xsinkm
+    real(c_double), intent(in), optional :: xprpmax
+    integer, intent(in), optional :: ipxy
+    integer, intent(in), optional :: jpxy
+    character(len=8), intent(in), optional :: yreset
+    real(c_double), intent(in), optional :: ylower
+    real(c_double), intent(in), optional :: yupper
+    real(c_double), intent(in), optional :: mpwrzeff
+    real(c_double), intent(in), optional :: npwrzeff
+    real(c_double), intent(in), optional :: mpwrvphi
+    real(c_double), intent(in), optional :: npwrvphi
+    real(c_double), intent(in), optional :: mpwrxj
+    real(c_double), intent(in), optional :: npwrxj
+    real(c_double), intent(in), optional :: npwrelec
+    real(c_double), intent(in), optional :: mpwrelec
+    real(c_double), intent(in), optional :: redenc(nbctimea,ntotala)
+    real(c_double), intent(in), optional :: redenb(nbctimea,ntotala)
+    real(c_double), intent(in), optional :: temp_den
+    real(c_double), intent(in), optional :: tempc(nbctimea,ntotala)
+    real(c_double), intent(in), optional :: tempb(nbctimea,ntotala)
+    real(c_double), intent(in), optional :: zeffc(nbctimea)
+    real(c_double), intent(in), optional :: zeffb(nbctimea)
+    real(c_double), intent(in), optional :: elecc(nbctimea)
+    real(c_double), intent(in), optional :: elecb(nbctimea)
+    real(c_double), intent(in), optional :: vphic(nbctimea)
+    real(c_double), intent(in), optional :: vphib(nbctimea)
+    real(c_double), intent(in), optional :: xjc(nbctimea)
+    real(c_double), intent(in), optional :: xjb(nbctimea)
+    real(c_double), intent(in), optional :: xjin_t(njenea,nbctimea)
+    real(c_double), intent(in), optional :: totcrt(nbctimea)
+    character(len=8), intent(in), optional :: efswtch
+    character(len=8), intent(in), optional :: efswtchn
+    character(len=8), intent(in), optional :: efiter
+    character(len=8), intent(in), optional :: efflag
+    real(c_double), intent(in), optional :: curr_edge
+    real(c_double), intent(in), optional :: efrelax
+    real(c_double), intent(in), optional :: efrelax1
+    real(c_double), intent(in), optional :: currerr
+    real(c_double), intent(in), optional :: bctime(nbctimea)
+    integer, intent(in), optional :: nbctime
+    real(c_double), intent(in), optional :: zmax(0:lrza)
+    character(len=8), intent(in), optional :: fow
+    ! local scratch
+    real(c_double) :: drya
+    integer :: i
 
     ! All this code should do is override the defaults
     ! in setup0 with optional args, or setup non trivial defaults
+
+    if(present(acoefne)) setup%acoefne = acoefne
+    if(present(acoefte)) setup%acoefte = acoefte
+    if(present(ampfmod)) setup%ampfmod = ampfmod
+    if(present(nampfmax)) setup%nampfmax = nampfmax
+    if(present(nonampf)) setup%nonampf = nonampf
+    if(present(ampferr)) setup%ampferr = ampferr
+    if(present(bctimescal)) setup%bctimescal = bctimescal
+    if(present(bnumb)) setup%bnumb = bnumb
+    if(present(btor)) setup%btor = btor
+    if(present(bth)) setup%bth = bth
+    if(present(bootst)) setup%bootst = bootst
+    if(present(bootcalc)) setup%bootcalc = bootcalc
+    if(present(bootupdt)) setup%bootupdt = bootupdt
+    if(present(bootsign)) setup%bootsign = bootsign
+    if(present(nonboot)) setup%nonboot = nonboot
+    if(present(jhirsh)) setup%jhirsh = jhirsh
+    if(present(contrmin)) setup%contrmin = contrmin
+    if(present(constr)) setup%constr = constr
+    if(present(chang)) setup%chang = chang
+    if(present(colmodl)) setup%colmodl = colmodl
+    if(present(deltabdb)) setup%deltabdb = deltabdb
+    if(present(denpar)) setup%denpar = denpar
+    if(present(droptol)) setup%droptol = droptol
+    if(present(dtr)) setup%dtr = dtr
+    if(present(dtr1)) setup%dtr1 = dtr1
+    if(present(eegy)) setup%eegy = eegy
+    if(present(eparc)) setup%eparc = eparc
+    if(present(eperc)) setup%eperc = eperc
+    if(present(simpbfac)) setup%simpbfac = simpbfac
+    if(present(epar)) setup%epar = epar
+    if(present(eper)) setup%eper = eper
+    if(present(elecfld)) setup%elecfld = elecfld
+    if(present(elpar0)) setup%elpar0 = elpar0
+    if(present(enorm)) setup%enorm = enorm
+    if(present(enorme)) then
+       setup%enorme = enorme
+    else
+       setup%enorme = setup%enorm   ! (re)set to enom at runtime, sort of dangerous
+    end if
+    if(present(enormi)) then
+       setup%enormi = enormi
+    else
+       setup%enormi = setup%enorm  ! (re)set to enom at runtime, sort of dangerous
+    end if
+    if(present(eleccomp)) setup%eleccomp = eleccomp
+    if(present(elecin)) setup%elecin = elecin
+    if(present(elecin_t)) setup%elecin_t = elecin_t
+    if(present(elecscal)) setup%elecscal = elecscal
+    if(present(enein)) setup%enein = enein
+    if(present(enein_t)) setup%enein_t = enein_t
+    if(present(ennin_t)) setup%ennin_t = ennin_t
+    if(present(enescal)) setup%enescal = enescal
+    if(present(enloss)) setup%enloss = enloss
+    if(present(epsthet)) setup%epsthet = epsthet
+    if(present(enmin)) setup%enmin = enmin
+    if(present(enmax)) setup%enmax = enmax
+    if(present(ennb)) setup%ennb = ennb
+    if(present(ennin)) setup%ennin = ennin
+    if(present(ennl)) setup%ennl = ennl
+    if(present(ennscal)) setup%ennscal = ennscal
+    if(present(enmin_npa)) setup%enmin_npa = enmin_npa
+    if(present(enmax_npa)) setup%enmax_npa = enmax_npa
+    if(present(eseswtch)) setup%eseswtch = eseswtch
+    if(present(xsink)) setup%xsink = xsink
+    if(present(esink)) setup%esink = esink
+    if(present(ephicc)) setup%ephicc = ephicc
+    if(present(esfac)) setup%esfac = esfac
+    if(present(eoved)) setup%eoved = eoved
+    if(present(fds)) setup%fds = fds
+    if(present(fds_npa)) setup%fds_npa = fds_npa
+    if(present(fmass)) setup%fmass = fmass
+    if(present(f4d_out)) setup%f4d_out = f4d_out
+    if(present(tavg)) setup%tavg = tavg
+    if(present(tavg1)) setup%tavg1 = tavg1
+    if(present(tavg2)) setup%tavg2 = tavg2
+    if(present(gsla)) setup%gsla = gsla
+    if(present(gslb)) setup%gslb = gslb
+    if(present(gamaset)) setup%gamaset = gamaset
+    if(present(gamafac)) setup%gamafac = gamafac
+    if(present(gamegy)) setup%gamegy = gamegy
+    if(present(iactst)) setup%iactst = iactst
+    if(present(ineg)) setup%ineg = ineg
+    if(present(idskf)) setup%idskf = idskf
+    if(present(idskrf)) setup%idskrf = idskrf
+    if(present(ichkpnt)) setup%ichkpnt = ichkpnt
+    if(present(implct)) setup%implct = implct
+    if(present(iprone)) setup%iprone = iprone
+    if(present(iprote)) setup%iprote = iprote
+    if(present(iproti)) setup%iproti = iproti
+    if(present(iprozeff)) setup%iprozeff = iprozeff
+    if(present(iprovphi)) setup%iprovphi = iprovphi
+    if(present(iproelec)) setup%iproelec = iproelec
+    if(present(ipronn)) setup%ipronn = ipronn
+    if(present(iprocur)) setup%iprocur = iprocur
+    if(present(tmdmeth)) setup%tmdmeth = tmdmeth
+    if(present(isigmas)) setup%isigmas = isigmas
+    if(present(isigtst)) setup%isigtst = isigtst
+    if(present(isigsgv1)) setup%isigsgv1 = isigsgv1
+    if(present(isigsgv2)) setup%isigsgv2 = isigsgv2
+    if(present(pltflux1)) setup%pltflux1 = pltflux1
+    if(present(irzplt)) setup%irzplt = irzplt
+    if(present(izeff)) setup%izeff = izeff
+    if(present(ioutime)) setup%ioutime = ioutime
+    if(present(iy)) setup%iy = iy
+    if(present(jx)) setup%jx = jx
+    if(present(kenorm)) setup%kenorm = kenorm
+    if(present(lfil)) setup%lfil = lfil
+    if(present(kfrsou)) setup%kfrsou = kfrsou
+    if(present(kpress)) setup%kpress = kpress
+    if(present(kfield)) setup%kfield = kfield
+    if(present(kspeci)) setup%kspeci = kspeci
+    if(present(fpld)) then
+       setup%fpld = fpld
+    else
+       setup%fpld(1:6,:)=0.
+       setup%fpld(7,:)=0.
+       setup%fpld(8,:)=1.e10
+       setup%fpld(9,:)=0.
+       setup%fpld(10,:)=pi
+    end if
+    if(present(lmidpln)) setup%lmidpln = lmidpln
+    if(present(locquas)) setup%locquas = locquas
+    if(present(lbdry)) setup%lbdry = lbdry
+    if(present(lbdry0)) setup%lbdry0 = lbdry0
+    if(present(lossfile)) setup%lossfile = lossfile
+    if(present(lossmode)) setup%lossmode = lossmode
+    if(present(lmidvel)) setup%lmidvel = lmidvel
+    if(present(laddbnd)) setup%laddbnd = laddbnd
+    if(present(lz)) setup%lz = lz
+    if(present(machine)) setup%machine = machine
+    if(present(meshy)) setup%meshy = meshy
+    if(present(manymat)) setup%manymat = manymat
+    if(present(netcdfnm)) setup%netcdfnm = netcdfnm
+    if(present(netcdfshort)) setup%netcdfshort = netcdfshort
+    if(present(netcdfvecal)) setup%netcdfvecal = netcdfvecal
+    if(present(netcdfvecc)) setup%netcdfvecc = netcdfvecc
+    if(present(netcdfvece)) setup%netcdfvece = netcdfvece
+    if(present(netcdfvecrf)) setup%netcdfvecrf = netcdfvecrf
+    if(present(netcdfvecs)) setup%netcdfvecs = netcdfvecs
+    if(present(nnspec)) setup%nnspec = nnspec
+    if(present(mpwr)) then
+       setup%mpwr = mpwr
+    else
+       setup%mpwr(0)=1.
+    end if
+    if(present(megy)) setup%megy = megy
+    if(present(mtorloss)) setup%mtorloss = mtorloss
+    if(present(mx)) setup%mx = mx
+    if(present(mmsv)) then
+       setup%mmsv = mmsv
+    else
+       setup%mmsv = setup%mx ! xxx reset by mx at run time, seems dangerous
+    end if
+    if(present(msxr)) then
+       setup%msxr = msxr
+    else
+       setup%msxr = setup%mx
+    end if
+    if(present(nchgdy)) setup%nchgdy = nchgdy
+    if(present(ngauss)) setup%ngauss = ngauss
+    if(present(nlagran)) setup%nlagran = nlagran
+    if(present(nlotp1)) then
+       setup%nlotp1 = nlotp1
+    else
+       setup%nlotp1(4)=.true.
+    end if
+    if(present(nlotp2)) setup%nlotp2 = nlotp2
+    if(present(nlotp3)) setup%nlotp3 = nlotp3
+    if(present(nlotp4)) setup%nlotp4 = nlotp4
+    if(present(nmax)) setup%nmax = nmax
+    if(present(ngen)) setup%ngen = ngen
+    if(present(nkconro)) then
+       setup%nkconro = nkconro
+    else
+       setup%nkconro(1)=1
+       setup%nkconro(2)=2
+    end if
+    if(present(nplt3d)) setup%nplt3d = nplt3d
+    if(present(nrskip)) setup%nrskip = nrskip
+    if(present(nen)) setup%nen = nen
+    if(present(nv)) setup%nv = nv
+    if(present(nen_npa)) setup%nen_npa = nen_npa
+    if(present(nv_npa)) setup%nv_npa = nv_npa
+    if(present(npaproc)) setup%npaproc = npaproc
+    if(present(npa_process)) then
+       setup%npa_process = npa_process
+    else
+       setup%npa_process(1)="cxh"
+    end if
+    if(present(nr_delta)) setup%nr_delta = nr_delta
+    if(present(nz_delta)) setup%nz_delta = nz_delta
+    if(present(nt_delta)) setup%nt_delta = nt_delta
+    if(present(nr_f4d)) setup%nr_f4d = nr_f4d
+    if(present(nz_f4d)) setup%nz_f4d = nz_f4d
+    if(present(nv_f4d)) setup%nv_f4d = nv_f4d
+    if(present(nt_f4d)) setup%nt_f4d = nt_f4d
+    if(present(npwr)) setup%npwr = npwr
+    if(present(negy)) setup%negy = negy
+    if(present(ntorloss)) setup%ntorloss = ntorloss
+    if(present(njene)) setup%njene = njene
+    if(present(njte)) then
+       setup%njte = njte
+    else
+       setup%njte = setup%njene
+    end if
+    if(present(njti)) then
+       setup%njti = njti
+    else
+       setup%njti = setup%njene
+    end if
+    if(present(nstop)) setup%nstop = nstop
+    if(present(nondtr1)) setup%nondtr1 = nondtr1
+    if(present(nplot)) setup%nplot = nplot
+    if(present(nsave)) setup%nsave = nsave
+    if(present(ncoef)) setup%ncoef = ncoef
+    if(present(nchec)) setup%nchec = nchec
+    if(present(ncont)) setup%ncont = ncont
+    if(present(nrstrt)) setup%nrstrt = nrstrt
+    if(present(nstps)) setup%nstps = nstps
+    if(present(nfpld)) setup%nfpld = nfpld
+    if(present(noncntrl)) setup%noncntrl = noncntrl
+    if(present(nonel)) setup%nonel = nonel
+    if(present(noffel)) setup%noffel = noffel
+    if(present(nonvphi)) setup%nonvphi = nonvphi
+    if(present(noffvphi)) setup%noffvphi = noffvphi
+    if(present(nonavgf)) setup%nonavgf = nonavgf
+    if(present(nofavgf)) setup%nofavgf = nofavgf
+    if(present(nonloss)) setup%nonloss = nonloss
+    if(present(noffloss)) setup%noffloss = noffloss
+    if(present(nummods)) setup%nummods = nummods
+    if(present(numixts)) setup%numixts = numixts
+    if(present(numby)) setup%numby = numby
+    if(present(negyrg)) setup%negyrg = negyrg
+    if(present(oldiag)) setup%oldiag = oldiag
+    if(present(plt3d)) setup%plt3d = plt3d
+    if(present(pltvs)) setup%pltvs = pltvs
+    if(present(partner)) setup%partner = partner
+    if(present(paregy)) setup%paregy = paregy
+    if(present(peregy)) setup%peregy = peregy
+    if(present(pegy)) setup%pegy = pegy
+    if(present(zeffin)) setup%zeffin = zeffin
+    if(present(zeffin_t)) setup%zeffin_t = zeffin_t
+    if(present(zeffscal)) setup%zeffscal = zeffscal
+    if(present(vphiplin)) setup%vphiplin = vphiplin
+    if(present(vphiplin_t)) setup%vphiplin_t = vphiplin_t
+    if(present(vphiscal)) setup%vphiscal = vphiscal
+    if(present(pltdn)) setup%pltdn = pltdn
+    if(present(pltvecal)) setup%pltvecal = pltvecal
+    if(present(pltvecc)) setup%pltvecc = pltvecc
+    if(present(pltvecrf)) setup%pltvecrf = pltvecrf
+    if(present(pltvece)) setup%pltvece = pltvece
+    if(present(pltstrm)) setup%pltstrm = pltstrm
+    if(present(pltflux)) setup%pltflux = pltflux
+    if(present(pltmag)) setup%pltmag = pltmag
+    if(present(pltsig)) setup%pltsig = pltsig
+    if(present(pltlim)) setup%pltlim = pltlim
+    if(present(pltlimm)) setup%pltlimm = pltlimm
+    if(present(pltrst)) setup%pltrst = pltrst
+    if(present(plturfb)) setup%plturfb = plturfb
+    if(present(pltvflu)) setup%pltvflu = pltvflu
+    if(present(pltra)) setup%pltra = pltra
+    if(present(pltfvs)) setup%pltfvs = pltfvs
+    if(present(pltd)) setup%pltd = pltd
+    if(present(pltprpp)) setup%pltprpp = pltprpp
+    if(present(pltfofv)) setup%pltfofv = pltfofv
+    if(present(pltlos)) setup%pltlos = pltlos
+    if(present(pltrdc)) setup%pltrdc = pltrdc
+    if(present(profpsi)) setup%profpsi = profpsi
+    if(present(psimodel)) setup%psimodel = psimodel
+    if(present(pltpowe)) setup%pltpowe = pltpowe
+    if(present(pltend)) setup%pltend = pltend
+    if(present(pltinput)) setup%pltinput = pltinput
+    if(present(pltview)) setup%pltview = pltview
+    if(present(qsineut)) setup%qsineut = qsineut
+    if(present(trapmod)) setup%trapmod = trapmod
+    if(present(trapredc)) setup%trapredc = trapredc
+    if(present(scatmod)) setup%scatmod = scatmod
+    if(present(scatfrac)) setup%scatfrac = scatfrac
+    if(present(ryain)) setup%ryain = ryain
+    if(present(radmaj)) setup%radmaj = radmaj
+    if(present(radmin)) setup%radmin = radmin
+    if(present(rmirror)) setup%rmirror = rmirror
+    if(present(relativ)) setup%relativ = relativ
+    if(present(reden)) setup%reden = reden
+    if(present(regy)) setup%regy = regy
+    if(present(rfacz)) setup%rfacz = rfacz
+    if(present(rzset)) setup%rzset = rzset
+    if(present(rd)) then
+       setup%rd = rd
+    else
+       setup%rd(1) = 100.d0
+    end if
+    if(present(roveram)) setup%roveram = roveram
+    if(present(rovera)) setup%rovera = rovera
+    if(present(rya)) then
+       setup%rya = rya
+    else
+       drya=1.d0/DBLE(lrza)
+       do i=1,lrza
+          setup%rya(i)=(i-0.5)*drya
+       end do
+       setup%rya(0)=0.
+       setup%rya(lrza+1)=1.
+    end if
+    if(present(radcoord)) setup%radcoord = radcoord
+    if(present(sbdry)) setup%sbdry = sbdry
+    if(present(scheck)) setup%scheck = scheck
+    if(present(ndeltarho)) setup%ndeltarho = ndeltarho
+    if(present(softxry)) setup%softxry = softxry
+    if(present(npa_diag)) setup%npa_diag = npa_diag
+    if(present(symtrap)) setup%symtrap = symtrap
+    if(present(syncrad)) setup%syncrad = syncrad
+    if(present(bremsrad)) setup%bremsrad = bremsrad
+    if(present(brfac)) setup%brfac = brfac
+    if(present(brfac1)) setup%brfac1 = brfac1
+    if(present(brfacgm3)) setup%brfacgm3 = brfacgm3
+    if(present(sigmamod)) setup%sigmamod = sigmamod
+    if(present(sigvcx)) setup%sigvcx = sigvcx
+    if(present(sigvi)) setup%sigvi = sigvi
+    if(present(soln_method)) setup%soln_method = soln_method
+    if(present(tauegy)) setup%tauegy = tauegy
+    if(present(taunew)) setup%taunew = taunew
+    if(present(tein)) setup%tein = tein
+    if(present(tein_t)) setup%tein_t = tein_t
+    if(present(tescal)) setup%tescal = tescal
+    if(present(tiin)) setup%tiin = tiin
+    if(present(tiin_t)) setup%tiin_t = tiin_t
+    if(present(tiscal)) setup%tiscal = tiscal
+    if(present(tauloss)) setup%tauloss = tauloss
+    if(present(temp)) setup%temp = temp
+    if(present(temppar)) setup%temppar = temppar
+    if(present(tfac)) setup%tfac = tfac
+    if(present(tfacz)) setup%tfacz = tfacz
+    if(present(tbnd)) then
+       setup%tbnd = tbnd
+    else
+       setup%tbnd(1)=.002
+    end if
+    if(present(tandem)) setup%tandem = tandem
+    if(present(thetd)) setup%thetd = thetd
+    if(present(torloss)) setup%torloss = torloss
+    if(present(thet1)) setup%thet1 = thet1
+    if(present(thet2)) setup%thet2 = thet2
+    if(present(x_sxr)) setup%x_sxr = x_sxr
+    if(present(z_sxr)) setup%z_sxr = z_sxr
+    if(present(rd_npa)) setup%rd_npa = rd_npa
+    if(present(thetd_npa)) setup%thetd_npa = thetd_npa
+    if(present(x_npa)) setup%x_npa = x_npa
+    if(present(z_npa)) setup%z_npa = z_npa
+    if(present(thet1_npa)) setup%thet1_npa = thet1_npa
+    if(present(thet2_npa)) setup%thet2_npa = thet2_npa
+    if(present(atten_npa)) setup%atten_npa = atten_npa
+    if(present(updown)) setup%updown = updown
+    if(present(veclnth)) setup%veclnth = veclnth
+    if(present(vnorm)) setup%vnorm = vnorm
+    if(present(xfac)) setup%xfac = xfac
+    if(present(xpctlwr)) setup%xpctlwr = xpctlwr
+    if(present(xpctmdl)) setup%xpctmdl = xpctmdl
+    if(present(xlwr)) setup%xlwr = xlwr
+    if(present(xmdl)) setup%xmdl = xmdl
+    if(present(xsinkm)) setup%xsinkm = xsinkm
+    if(present(xprpmax)) setup%xprpmax = xprpmax
+    if(present(ipxy)) setup%ipxy = ipxy
+    if(present(jpxy)) setup%jpxy = jpxy
+    if(present(yreset)) setup%yreset = yreset
+    if(present(ylower)) setup%ylower = ylower
+    if(present(yupper)) setup%yupper = yupper
+    if(present(mpwrzeff)) setup%mpwrzeff = mpwrzeff
+    if(present(npwrzeff)) setup%npwrzeff = npwrzeff
+    if(present(mpwrvphi)) setup%mpwrvphi = mpwrvphi
+    if(present(npwrvphi)) setup%npwrvphi = npwrvphi
+    if(present(mpwrxj)) setup%mpwrxj = mpwrxj
+    if(present(npwrxj)) setup%npwrxj = npwrxj
+    if(present(mpwrelec)) setup%mpwrelec = mpwrelec
+    if(present(npwrelec)) setup%npwrelec = npwrelec
+    if(present(redenc)) setup%redenc = redenc
+    if(present(redenb)) setup%redenb = redenb
+    if(present(temp_den)) setup%temp_den = temp_den
+    if(present(tempc)) setup%tempc = tempc
+    if(present(tempb)) setup%tempb = tempb
+    if(present(zeffc)) setup%zeffc = zeffc
+    if(present(zeffb)) setup%zeffb = zeffb
+    if(present(elecc)) setup%elecc = elecc
+    if(present(elecb)) setup%elecb = elecb
+    if(present(vphic)) setup%vphic = vphic
+    if(present(vphib)) setup%vphib = vphib
+    if(present(xjc)) setup%xjc = xjc
+    if(present(xjb)) setup%xjb = xjb
+    if(present(xjin_t)) setup%xjin_t = xjin_t
+    if(present(totcrt)) setup%totcrt = totcrt
+    if(present(efswtch)) setup%efswtch = efswtch
+    if(present(efswtchn)) setup%efswtchn = efswtchn
+    if(present(efiter)) setup%efiter = efiter
+    if(present(efflag)) setup%efflag = efflag
+    if(present(curr_edge)) setup%curr_edge = curr_edge
+    if(present(efrelax)) setup%efrelax = efrelax
+    if(present(efrelax1)) setup%efrelax1 = efrelax1
+    if(present(currerr)) setup%currerr = currerr
+    if(present(bctime)) setup%bctime = bctime
+    if(present(nbctime)) setup%nbctime = nbctime
+    if(present(zmax)) setup%zmax = zmax
+    if(present(fow)) setup%fow = fow
 
   end subroutine set_setup
 

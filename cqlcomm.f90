@@ -73,241 +73,236 @@ module cqlcomm_mod
   !.......................................................................
   !     nml variables that take on the values assigned to parameters.
   !.......................................................................
-  integer :: iy
-  integer :: jx
-  integer :: lz
-  integer :: mx
+  integer, pointer :: iy => null()
+  integer, pointer :: jx => null()
+  integer, pointer :: lz => null()
+  integer, pointer :: mx => null()
   integer :: nbctime
-  integer :: negyrg
-  integer :: ngen
-  integer :: nmax
+  integer, pointer :: negyrg => null()
+  integer, pointer :: ngen => null()
+  integer, pointer :: nmax => null()
 
   !.......................................................................
   !     SCALAR INPUT FOR NAMELIST SETUP...
   !.......................................................................
 
-  character(len=8) :: chang
-  character(len=8) :: eleccomp
-  character(len=8) :: f4d_out
-  character(len=8) :: tavg
-  character(len=8) :: iactst
-  character(len=8) :: ineg
-  character(len=8) :: idrop
-  character(len=8) :: idskf
-  character(len=8) :: idskrf
-  character(len=8) :: ichkpnt
-  character(len=8) :: implct
-  character(len=8) :: lbdry0
-  character(len=8) :: locquas
+  character(len=8), pointer :: chang => null()
+  character(len=8), pointer :: eleccomp => null()
+  character(len=8), pointer :: f4d_out => null()
+  character(len=8), pointer :: tavg => null()
+  character(len=8), pointer :: iactst => null()
+  character(len=8), pointer :: ineg => null()
+  character(len=8), pointer :: idskf => null()
+  character(len=8), pointer :: idskrf => null()
+  character(len=8), pointer :: ichkpnt => null()
+  character(len=8), pointer :: implct => null()
+  character(len=8), pointer :: lbdry0 => null()
+  character(len=8), pointer :: locquas => null()
   character(len=8) :: taunew
-  character(len=8) :: machine
-  character(len=8) :: meshy
-  character(len=8) :: manymat
-  character(len=8) :: netcdfvecal
-  character(len=8) :: netcdfvecc
-  character(len=8) :: netcdfvece
-  character(len=8) :: netcdfvecrf
-  character(len=8) :: netcdfvecs
-  character(len=8) :: psimodel
-  character(len=8) :: pltpowe
-  character(len=8) :: pltend
-  character(len=8) :: pltinput
-  character(len=8) :: pltlim
-  character(len=8) :: pltrdc
-  character(len=8) :: pltrst
-  character(len=8) :: plturfb
-  character(len=8) :: pltvflu
-  character(len=8) :: pltra
-  character(len=8) :: pltfvs
-  character(len=8) :: pltd
-  character(len=8) :: pltprpp
-  character(len=8) :: pltfofv
-  character(len=8) :: pltlos
-  character(len=8) :: pltdn
-  character(len=8) :: pltvecal
-  character(len=8) :: pltvecc
-  character(len=8) :: pltvecrf
-  character(len=8) :: pltvece
-  character(len=8) :: pltstrm
-  character(len=8) :: pltflux
-  character(len=8) :: pltsig
-  character(len=8) :: pltdnpos
-  character(len=8) :: profpsi
-  character(len=8) :: qsineut
-  character(len=8) :: trapmod
-  character(len=8) :: scatmod
-  character(len=8) :: relativ
-  character(len=8) :: sigmamod
-  character(len=8) :: soln_method
-  character(len=8) :: symtrap
-  character(len=8) :: syncrad
-  character(len=8) :: bremsrad
-  character(len=8) :: tandem
-  character(len=8) :: gamafac
-  character(len=8) :: yreset
+  character(len=8), pointer :: machine => null()
+  character(len=8), pointer :: meshy => null()
+  character(len=8), pointer :: manymat => null()
+  character(len=8), pointer :: netcdfvecal => null()
+  character(len=8), pointer :: netcdfvecc => null()
+  character(len=8), pointer :: netcdfvece => null()
+  character(len=8), pointer :: netcdfvecrf => null()
+  character(len=8), pointer :: netcdfvecs => null()
+  character(len=8), pointer :: psimodel => null()
+  character(len=8), pointer :: pltpowe => null()
+  character(len=8), pointer :: pltend => null()
+  character(len=8), pointer :: pltinput => null()
+  character(len=8), pointer :: pltlim => null()
+  character(len=8), pointer :: pltrst => null()
+  character(len=8), pointer :: plturfb => null()
+  character(len=8), pointer :: pltvflu => null()
+  character(len=8), pointer :: pltra => null()
+  character(len=8), pointer :: pltfvs => null()
+  character(len=8), pointer :: pltd => null()
+  character(len=8), pointer :: pltprpp => null()
+  character(len=8), pointer :: pltfofv => null()
+  character(len=8), pointer :: pltlos => null()
+  character(len=8), pointer :: pltdn => null()
+  character(len=8), pointer :: pltvecal => null()
+  character(len=8), pointer :: pltvecc => null()
+  character(len=8), pointer :: pltvecrf => null()
+  character(len=8), pointer :: pltvece => null()
+  character(len=8), pointer :: pltstrm => null()
+  character(len=8), pointer :: pltflux => null()
+  character(len=8), pointer :: pltsig => null()
+  character(len=8), pointer :: profpsi => null()
+  character(len=8), pointer :: qsineut => null()
+  character(len=8), pointer :: trapmod => null()
+  character(len=8), pointer :: scatmod => null()
+  character(len=8), pointer :: relativ => null()
+  character(len=8), pointer :: sigmamod => null()
+  character(len=8), pointer :: soln_method => null()
+  character(len=8), pointer :: symtrap => null()
+  character(len=8), pointer :: syncrad => null()
+  character(len=8), pointer :: bremsrad => null()
+  character(len=8), pointer :: tandem => null()
+  character(len=8), pointer :: gamafac => null()
+  character(len=8), pointer :: yreset => null()
 
-  character(len=256) :: netcdfnm
-  character(len=8) :: izeff
+  character(len=256), pointer :: netcdfnm => null()
+  character(len=8), pointer :: izeff => null()
   character(len=8) :: netcdfshort
 
-  integer :: colmodl
+  integer, pointer :: colmodl => null()
 
 
   !common /readscal/ &
-  real(c_double) :: btor
-  real(c_double) :: bth
-  real(c_double) :: contrmin
-  real(c_double) :: constr
-  real(c_double) :: deltabdb
-  real(c_double) :: droptol
-  real(c_double) :: dtr
-  real(c_double) :: dtr0
-  real(c_double) :: xsink
-  real(c_double) :: esink
-  real(c_double) :: ephicc
-  real(c_double) :: esfac
-  real(c_double) :: eoved
-  real(c_double) :: enorm
-  real(c_double) :: enorme
-  real(c_double) :: enormi
-  real(c_double) :: gsla
-  real(c_double) :: gslb
-  real(c_double) :: gamaset
-  integer :: isigtst
-  integer :: isigsgv1
-  integer :: isigsgv2
-  integer :: kenorm
-  integer :: lfil
-  integer :: nnspec
+  real(c_double), pointer :: btor => null()
+  real(c_double), pointer :: bth => null()
+  real(c_double), pointer :: contrmin => null()
+  real(c_double), pointer :: constr => null()
+  real(c_double), pointer :: deltabdb => null()
+  real(c_double), pointer :: droptol => null()
+  real(c_double), pointer :: dtr => null()
+  real(c_double), pointer :: xsink => null()
+  real(c_double), pointer :: esink => null()
+  real(c_double), pointer :: ephicc => null()
+  real(c_double), pointer :: eoved => null()
+  real(c_double), pointer :: enorm => null()
+  real(c_double), pointer :: enorme => null()
+  real(c_double), pointer :: enormi => null()
+  real(c_double), pointer :: gsla => null()
+  real(c_double), pointer :: gslb => null()
+  real(c_double), pointer :: gamaset => null()
+  integer, pointer :: isigtst => null()
+  integer, pointer :: isigsgv1 => null()
+  integer, pointer :: isigsgv2 => null()
+  integer, pointer :: kenorm => null()
+  integer, pointer :: lfil => null()
+  integer, pointer :: nnspec => null()
 
   complex(c_double_complex), pointer :: vlfemin(:) => null()
   complex(c_double_complex), pointer :: vlfeplus(:) => null()
 
   !common /readscal/ &
-  integer :: nstop
-  integer :: ncoef
-  integer :: nchec
-  integer :: ncont
-  integer :: nrstrt
-  integer :: nstps
-  integer :: nfpld
-  integer :: noncntrl
-  integer :: nonel
-  integer :: noffel
-  integer :: nonvphi
-  integer :: noffvphi
-  integer :: nonloss
-  integer :: noffloss
-  integer :: numby
-  real(c_double) :: pltmag
-  real(c_double) :: xprpmax
+  integer, pointer :: nstop => null()
+  integer, pointer :: ncoef => null()
+  integer, pointer :: nchec => null()
+  integer, pointer :: ncont => null()
+  integer, pointer :: nrstrt => null()
+  integer, pointer :: nstps => null()
+  integer, pointer :: nfpld => null()
+  integer, pointer :: noncntrl => null()
+  integer, pointer :: nonel => null()
+  integer, pointer :: noffel => null()
+  integer, pointer :: nonvphi => null()
+  integer, pointer :: noffvphi => null()
+  integer, pointer :: nonloss => null()
+  integer, pointer :: noffloss => null()
+  integer, pointer :: numby => null()
+  real(c_double), pointer :: pltmag => null()
+  real(c_double), pointer :: xprpmax => null()
   real(c_double) :: trapredc
-  real(c_double) :: scatfrac
-  real(c_double) :: radmaj
-  real(c_double) :: radmin
-  real(c_double) :: rmirror
-  real(c_double) :: sigvi
-  real(c_double) :: sigvcx
-  real(c_double) :: brfac
-  real(c_double) :: brfac1
-  real(c_double) :: brfacgm3
-  real(c_double) :: tfac
-  real(c_double) :: tfacz
-  real(c_double) :: temp_den
-  real(c_double) :: veclnth
-  real(c_double) :: vnorm
+  real(c_double), pointer :: scatfrac => null()
+  real(c_double), pointer :: radmaj => null()
+  real(c_double), pointer :: radmin => null()
+  real(c_double), pointer :: rmirror => null()
+  real(c_double), pointer :: sigvi => null()
+  real(c_double), pointer :: sigvcx => null()
+  real(c_double), pointer :: brfac => null()
+  real(c_double), pointer :: brfac1 => null()
+  real(c_double), pointer :: brfacgm3 => null()
+  real(c_double), pointer :: tfac => null()
+  real(c_double), pointer :: tfacz => null()
+  real(c_double), pointer :: temp_den => null()
+  real(c_double), pointer :: veclnth => null()
+  real(c_double), pointer :: vnorm => null()
 
-  real(c_double) :: npwr(0:ntotala)
-  real(c_double) :: negy(ngena)
-  real(c_double) :: ntorloss(ngena)
-  real(c_double) :: mpwr(0:ntotala)
-  real(c_double) :: megy(ngena)
-  real(c_double) :: mtorloss(ngena)
-  real(c_double) :: mpwrzeff
-  real(c_double) :: npwrzeff
-  real(c_double) :: mpwrvphi
-  real(c_double) :: npwrvphi
-  real(c_double) :: mpwrelec
-  real(c_double) :: npwrelec
-  real(c_double) :: mpwrxj
-  real(c_double) :: npwrxj
+  real(c_double), pointer :: npwr(:) => null()
+  real(c_double), pointer :: negy(:) => null()
+  real(c_double), pointer :: ntorloss(:) => null()
+  real(c_double), pointer :: mpwr(:) => null()
+  real(c_double), pointer :: megy(:) => null()
+  real(c_double), pointer :: mtorloss(:) => null()
+  real(c_double), pointer :: mpwrzeff => null()
+  real(c_double), pointer :: npwrzeff => null()
+  real(c_double), pointer :: mpwrvphi => null()
+  real(c_double), pointer :: npwrvphi => null()
+  real(c_double), pointer :: mpwrelec => null()
+  real(c_double), pointer :: npwrelec => null()
+  real(c_double), pointer :: mpwrxj => null()
+  real(c_double), pointer :: npwrxj => null()
 
   !common /readscal/ &
-  real(c_double) :: xfac
-  real(c_double) :: xpctlwr
-  real(c_double) :: xpctmdl
-  real(c_double) :: xlwr
-  real(c_double) :: xmdl
-  real(c_double) :: xsinkm
-  real(c_double) :: ylower
-  real(c_double) :: yupper
-  real(c_double) :: elecscal
-  real(c_double) :: enescal
-  real(c_double) :: zeffscal
-  real(c_double) :: vphiscal
-  real(c_double) :: tescal
-  real(c_double) :: tiscal
+  real(c_double), pointer :: xfac => null()
+  real(c_double), pointer :: xpctlwr => null()
+  real(c_double), pointer :: xpctmdl => null()
+  real(c_double), pointer :: xlwr => null()
+  real(c_double), pointer :: xmdl => null()
+  real(c_double), pointer :: xsinkm => null()
+  real(c_double), pointer :: ylower => null()
+  real(c_double), pointer :: yupper => null()
+  real(c_double), pointer :: elecscal => null()
+  real(c_double), pointer :: enescal => null()
+  real(c_double), pointer :: zeffscal => null()
+  real(c_double), pointer :: vphiscal => null()
+  real(c_double), pointer :: tescal => null()
+  real(c_double), pointer :: tiscal => null()
   real(c_double), pointer :: bctimescal => null()
 
   !..................................................................
   !     VECTOR DIMENSIONED NAMELIST SETUP COMMON BLOCK.....
   !..................................................................
 
-  character(len=8), :: kpress(ntotala)
-  character(len=8) :: kfield(ntotala)
-  character(len=8) :: lbdry(ngena)
-  character(len=8) :: lossmode(ngena)
-  character(len=8) :: regy(ngena)
-  character(len=8) :: torloss(ngena)
+  character(len=8), pointer :: kpress(:) => null()
+  character(len=8), pointer :: kfield(:) => null()
+  character(len=8), pointer :: lbdry(:) => null()
+  character(len=8), pointer :: lossmode(:) => null()
+  character(len=8), pointer :: regy(:) => null()
+  character(len=8), pointer :: torloss(:) => null()
   character(len=8), pointer :: difus_type(:) => null()
   character(len=8), pointer :: difus_io(:) => null()
 
-  character(len=256) :: lossfile(ngena)
+  character(len=256), pointer :: lossfile(:) => null()
 
   !common /readvec/ &
-  integer :: isigmas(6)
-  integer :: nplot(nplota)
-  integer :: nsave(nsavea)
-  real(c_double) :: bnumb(ntotala)
-  real(c_double) :: fmass(ntotala)
-  real(c_double) :: pltflux1(7)
-  real(c_double) :: enloss(ngena)
-  real(c_double) :: gamegy(ngena)
-  real(c_double) :: paregy(ngena)
-  real(c_double) :: peregy(ngena)
-  real(c_double) :: pegy(ngena)
-  real(c_double) :: zeffin(0:njenea)
-  real(c_double) :: vphiplin(0:njenea)
-  real(c_double) :: ennl(npaproca)
+  integer, pointer :: isigmas(:) => null()
+  integer, pointer :: nplot(:) => null()
+  integer, pointer :: nsave(:) => null()
+  real(c_double), pointer :: bnumb(:) => null()
+  real(c_double), pointer :: fmass(:) => null()
+  real(c_double), pointer :: pltflux1(:) => null()
+  real(c_double), pointer :: enloss(:) => null()
+  real(c_double), pointer :: gamegy(:) => null()
+  real(c_double), pointer :: paregy(:) => null()
+  real(c_double), pointer :: peregy(:) => null()
+  real(c_double), pointer :: pegy(:) => null()
+  real(c_double), pointer :: zeffin(:) => null()
+  real(c_double), pointer :: vphiplin(:) => null()
+  real(c_double), pointer :: ennl(:) => null()
   real(c_double) :: ennb(npaproca)
-  real(c_double) :: ennscal(npaproca)
+  real(c_double), pointer :: ennscal(:) => null()
   real(c_double) :: bctime(nbctimea)
-  real(c_double) :: dtr1(ndtr1a)
-  real(c_double) :: zeffc(nbctimea)
-  real(c_double) :: zeffb(nbctimea)
-  real(c_double) :: elecc(nbctimea)
-  real(c_double) :: elecb(nbctimea)
-  real(c_double) :: vphic(nbctimea)
-  real(c_double) :: vphib(nbctimea)
-  real(c_double) :: xjc(nbctimea)
-  real(c_double) :: xjb(nbctimea)
-  real(c_double) :: totcrt(nbctimea)
-  real(c_double) :: tavg1(ntavga)
-  real(c_double) :: tavg2(ntavga)
-  integer :: nondtr1(ndtr1a)
+  real(c_double), pointer :: dtr1(:) => null()
+  real(c_double), pointer :: zeffc(:) => null()
+  real(c_double), pointer :: zeffb(:) => null()
+  real(c_double), pointer :: elecc(:) => null()
+  real(c_double), pointer :: elecb(:) => null()
+  real(c_double), pointer :: vphic(:) => null()
+  real(c_double), pointer :: vphib(:) => null()
+  real(c_double), pointer :: xjc(:) => null()
+  real(c_double), pointer :: xjb(:) => null()
+  real(c_double), pointer :: totcrt(:) => null()
+  real(c_double), pointer :: tavg1(:) => null()
+  real(c_double), pointer :: tavg2(:) => null()
+  integer, pointer :: nondtr1(:) => null()
 
   !..................................................................
   !     TWO DIMENSIONAL NAMELIST SETUP COMMON BLOCK.....
   !..................................................................
 
   !common /readarr/ &
-  real(c_double) :: tauloss(3,ngena)
-  character(len=8) :: kspeci(2,ntotala)
-  real(c_double) :: fpld(10,ngena)
-  real(c_double) :: redenc(nbctimea,ntotala)
-  real(c_double) :: redenb(nbctimea,ntotala)
-  real(c_double) :: tempc(nbctimea,ntotala)
-  real(c_double) :: tempb(nbctimea,ntotala)
+  real(c_double), pointer :: tauloss(:,:) => null()
+  character(len=8), pointer :: kspeci(:,:) => null()
+  real(c_double), pointer :: fpld(10,ngena) => null()
+  real(c_double), pointer :: redenc(:,:) => null()
+  real(c_double), pointer :: redenb(:,:) => null()
+  real(c_double), pointer :: tempc(:,:) => null()
+  real(c_double), pointer :: tempb(:,:) => null()
 
 
 
@@ -324,24 +319,24 @@ module cqlcomm_mod
   !**********************************************************************
   !
   !common /diskx/ &
-  real(c_double) :: elecfld(0:lrza)
-  real(c_double) :: tbnd(lrorsa)
-  real(c_double) :: rovera(lrza)
-  real(c_double) :: zmax(0:lrza)
+  real(c_double), pointer :: elecfld(:) => null()
+  real(c_double), pointer :: tbnd(:) => null()
+  real(c_double), pointer :: rovera(:) => null()
+  real(c_double), pointer :: zmax(:) => null()
 
   !..................................................................
   !     2-D ARRAYS
   !..................................................................
 
   !common /diskx/ &
-  real(c_double) :: reden(ntotala,0:lrza)
-  real(c_double) :: temp(ntotala,0:lrza)
+  real(c_double), pointer :: reden(:,:) => null()
+  real(c_double), pointer :: temp(:,:) => null()
 
   !common /diskx/ &
-  real(c_double) :: tauegy(ngena,0:lrza)
-  real(c_double) :: eparc(ngena,0:lrza)
-  real(c_double) :: eperc(ngena,0:lrza)
-  real(c_double) :: simpbfac
+  real(c_double), pointer :: tauegy(:,:) => null()
+  real(c_double), pointer :: eparc(:,:) => null()
+  real(c_double), pointer :: eperc(:,:) => null()
+  real(c_double), pointer :: simpbfac => null()
 
   real(c_double), pointer :: isoucof => null()
   real(c_double), pointer :: faccof => null()
@@ -355,8 +350,9 @@ module cqlcomm_mod
   !..................................................................
 
   !common /diskx/ &
-  real(c_double) :: eegy(negyrga,2,ngena,lrza)
-  integer :: jegy(negyrga,2,ngena,lrza)
+  real(c_double), pointer :: eegy(:,:,:,:) => null()
+  ! previously in aindflt, only used in diagdenz
+  integer :: jegy(negyrga,2,ngena,lrza) = 0
 
   !*****************************************************************
   !     BEGIN arrays for analytic ion source (sou..) routines
@@ -469,27 +465,28 @@ module cqlcomm_mod
   real(c_double), pointer :: acoefne(:) => null()
   real(c_double), pointer :: acoefte(:) => null()
   real(c_double), pointer :: ryain(njenea) => null()
-  real(c_double) :: elecin(njenea)
-  real(c_double) :: enein(njenea,ntotala)
-  real(c_double) :: tein(njenea)
-  real(c_double) :: tiin(njenea)
-  real(c_double) :: ennin(njenea,npaproca)
-  integer :: irzplt(lrorsa)
-  real(c_double) :: rya(0:lrza+1)
-  real(c_double) :: thet1(nva),thet2(nva)
-  real(c_double) :: thet1_npa(nva)
-  real(c_double) :: thet2_npa(nva)
+  real(c_double), pointer :: elecin(:) => null()
+  real(c_double), pointer :: enein(:,:) => null()
+  real(c_double), pointer :: tein(:) => null()
+  real(c_double), pointer :: tiin(:) => null()
+  real(c_double), pointer :: ennin(:,:) => null()
+  integer, pointer :: irzplt(:) => null()
+  real(c_double), pointer :: rya(:) => null()
+  real(c_double), pointer :: thet1(:) => null()
+  real(c_double), pointer :: thet2(:) => null()
+  real(c_double), pointer :: thet1_npa(:) => null()
+  real(c_double), pointer :: thet2_npa(:) => null()
   integer :: nplt3d(nplota)
 
   !common/arr3d/ &
-  real(c_double) :: enein_t(njenea,ntotala,nbctimea)
-  real(c_double) :: tein_t(njenea,nbctimea)
-  real(c_double) :: tiin_t(njenea,nbctimea)
-  real(c_double) :: zeffin_t(njenea,nbctimea)
-  real(c_double) :: elecin_t(njenea,nbctimea)
-  real(c_double) :: xjin_t(njenea,nbctimea)
-  real(c_double) :: vphiplin_t(njenea,nbctimea)
-  real(c_double) :: ennin_t(njenea,nbctimea,npaproca) !neutrals,impurities,etc.
+  real(c_double), pointer :: enein_t(:,:,:) => null()
+  real(c_double), pointer :: tein_t(:,:) => null()
+  real(c_double), pointer :: tiin_t(:,:) => null()
+  real(c_double) :: zeffin_t(:,:) => null()
+  real(c_double), pointer :: elecin_t(:,:) => null()
+  real(c_double) :: xjin_t(:,:) => null()
+  real(c_double), pointer :: vphiplin_t(:,:) => null()
+  real(c_double), pointer :: ennin_t(:,:,:) => null() !neutrals,impurities,etc.
 
   !common/arr3d/ &
   real(c_double), pointer :: sellm1z(:,:,:) => null()
@@ -516,78 +513,78 @@ module cqlcomm_mod
   !     scalars in input
   !..................................................................
 
-  character(len=8) :: bootst
-  character(len=8) :: bootcalc
-  character(len=8) :: bootupdt
-  character(len=8) :: iprone
-  character(len=8) :: iprote
-  character(len=8) :: iproti
-  character(len=8) :: iprozeff
-  character(len=8) :: iprovphi
-  character(len=8) :: iproelec
-  character(len=8) :: ipronn
-  character(len=8) :: iprocur
-  character(len=8) :: tmdmeth
-  character(len=8) :: partner
-  character(len=8) :: plt3d
-  character(len=8) :: pltvs
-  character(len=8) :: radcoord
-  character(len=8) :: rzset
-  character(len=8) :: ndeltarho
-  character(len=8) :: softxry
-  character(len=8) :: npa_diag
-  character(len=8) :: atten_npa
-  character(len=8) :: efswtch
-  character(len=8) :: efswtchn
-  character(len=8) :: efiter
-  character(len=8) :: efflag
+  character(len=8), pointer :: bootst => null()
+  character(len=8), pointer :: bootcalc => null()
+  character(len=8), pointer :: bootupdt => null()
+  character(len=8), pointer :: iprone => null()
+  character(len=8), pointer :: iprote => null()
+  character(len=8), pointer :: iproti => null()
+  character(len=8), pointer :: iprozeff => null()
+  character(len=8), pointer :: iprovphi => null()
+  character(len=8), pointer :: iproelec => null()
+  character(len=8), pointer :: ipronn => null()
+  character(len=8), pointer :: iprocur => null()
+  character(len=8), pointer :: tmdmeth => null()
+  character(len=8), pointer :: partner => null()
+  character(len=8), pointer :: plt3d => null()
+  character(len=8), pointer :: pltvs => null()
+  character(len=8), pointer :: radcoord => null()
+  character(len=8), pointer :: rzset => null()
+  character(len=8), pointer :: ndeltarho => null()
+  character(len=8), pointer :: softxry => null()
+  character(len=8), pointer :: npa_diag => null()
+  character(len=8), pointer :: atten_npa => null()
+  character(len=8), pointer :: efswtch => null()
+  character(len=8), pointer :: efswtchn => null()
+  character(len=8), pointer :: efiter => null()
+  character(len=8), pointer :: efflag => null()
   character(len=8), pointer :: pinch => null()
   character(len=8), pointer :: relaxtsp => null()
   character(len=8), pointer :: transp => null()
   character(len=8), pointer :: adimeth => null()
 
-  character(len=8) :: npa_process(npaproca)
+  character(len=8), pointer :: npa_process(npaproca) => null()
 
   character(len=256), pointer :: difus_io_file => null()
 
   !common /s3d/ &
   real(c_double), pointer :: difusr => null()
   real(c_double), pointer :: advectr => null()
-  real(c_double) :: enmin
-  real(c_double) :: enmax
-  real(c_double) :: bootsign
-  real(c_double) :: fds
-  integer :: kfrsou
-  integer :: mmsv
-  integer :: msxr
-  integer :: njene
-  integer :: njte
-  integer :: njti
-  integer :: nonboot
-  integer :: jhirsh
-  integer :: nrskip
-  integer :: nen
-  integer :: nv
-  integer :: nen_npa
-  integer :: nv_npa
-  integer :: npaproc
-  integer :: nr_delta
-  integer :: nz_delta
-  integer :: nt_delta
-  integer :: nr_f4d
-  integer :: nz_f4d
-  integer :: nv_f4d
-  integer :: nt_f4d
-  real(c_double) :: rfacz
-  real(c_double) :: roveram
+  real(c_double), pointer :: enmin => null()
+  real(c_double), pointer :: enmax => null()
+  real(c_double), pointer :: bootsign => null()
+  real(c_double), pointer :: fds => null()
+  integer, pointer :: kfrsou => null()
+  integer, pointer :: mmsv => null()
+  integer, pointer :: msxr => null()
+  integer, pointer :: njene => null()
+  integer, pointer :: njte => null()
+  integer, pointer :: njti => null()
+  integer, pointer :: nonboot => null()
+  integer, pointer :: jhirsh => null()
+  integer, pointer :: nrskip => null()
+  integer, pointer :: nen => null()
+  integer, pointer :: nv => null()
+  integer, pointer :: nen_npa => null()
+  integer, pointer :: nv_npa => null()
+  integer, pointer :: npaproc => null()
+  integer, pointer :: nr_delta => null()
+  integer, pointer :: nz_delta => null()
+  integer, pointer :: nt_delta => null()
+  integer, pointer :: nr_f4d => null()
+  integer, pointer :: nz_f4d => null()
+  integer, pointer :: nv_f4d => null()
+  integer, pointer :: nt_f4d => null()
+  real(c_double), pointer :: rfacz => null()
+  real(c_double), pointer :: roveram => null()
   real(c_double), pointer :: relaxden => null()
-  real(c_double) :: enmin_npa
-  real(c_double) :: enmax_npa
-  real(c_double) :: fds_npa
-  real(c_double) :: curr_edge
-  real(c_double) :: efrelax
-  real(c_double) :: efrelax1
-  real(c_double) :: currerr
+  real(c_double), pointer :: enmin_npa => null()
+  real(c_double), pointer :: enmax_npa => null()
+  real(c_double), pointer :: fds_npa => null()
+  real(c_double), pointer :: curr_edge => null()
+  real(c_double), pointer :: efrelax => null()
+  real(c_double), pointer :: efrelax1 => null()
+  real(c_double), pointer :: currerr => null()
   integer, pointer :: nonadi
 
   !common/ar3d/ &
@@ -595,13 +592,13 @@ module cqlcomm_mod
   real(c_double), pointer :: difus_vshape(:) => null()
   real(c_double), pointer :: difin(:) => null()
   real(c_double) :: rd(nva)
-  real(c_double) :: thetd(nva)
-  real(c_double) :: x_sxr(nva)
-  real(c_double) :: z_sxr(nva)
-  real(c_double) :: rd_npa(nva)
-  real(c_double) :: thetd_npa(nva)
-  real(c_double) :: x_npa(nva)
-  real(c_double) :: z_npa(nva)
+  real(c_double), pointer :: thetd(:) => null()
+  real(c_double), pointer :: x_sxr(:) => null()
+  real(c_double), pointer :: z_sxr(:) => null()
+  real(c_double), pointer :: rd_npa(:) => null()
+  real(c_double), pointer :: thetd_npa(:) => null()
+  real(c_double), pointer :: x_npa(:) => null()
+  real(c_double), pointer :: z_npa(:) => null()
   real(c_double), pointer :: difus_io_drrscale(:,:) => null()
   real(c_double), pointer :: difus_io_drscale(:,:) => null()
   real(c_double), pointer :: difus_io_t(:) => null()
@@ -665,7 +662,7 @@ module cqlcomm_mod
   !common/readscal/ &
   integer, pointer :: ieqbrurf => null()
   integer, pointer :: urfncoef => null()
-  integer :: nmods ! xxx used in aindflt?
+  integer :: nmods ! xxx not sure we need this guy
   integer, pointer :: nbssltbl => null()
   integer, pointer :: nondamp => null()
   integer, pointer :: nrfstep2 => null()
@@ -704,22 +701,24 @@ module cqlcomm_mod
   character(len=8), pointer :: eseswtch => null()
   character(len=8), pointer :: updown => null()
 
-  logical :: nlotp1(noutpta),nlotp2(noutpta)
-  logical :: nlotp3(noutpta),nlotp4(noutpta)
+  logical, pointer :: nlotp1(:) => null()
+  logical, pointer :: nlotp2(:) => null()
+  logical, pointer :: nlotp3(:) => null()
+  logical, pointer :: nlotp4(:) => null()
 
   !common /readscal/ &
-  real(c_double) :: epsthet
-  real(c_double) :: elpar0
-  integer :: lmidpln
-  integer :: lmidvel
-  integer :: laddbnd
-  integer :: nchgdy
-  integer :: ngauss
-  integer :: nlagran
-  integer :: nonavgf
-  integer :: nofavgf
-  integer :: nummods
-  integer :: numixts
+  real(c_double), pointer :: epsthet => null()
+  real(c_double), pointer :: elpar0 => null()
+  integer, pointer :: lmidpln => null()
+  integer, pointer :: lmidvel => null()
+  integer, pointer :: laddbnd => null()
+  integer, pointer :: nchgdy => null()
+  integer, pointer :: ngauss => null()
+  integer, pointer :: nlagran => null()
+  integer, pointer :: nonavgf => null()
+  integer, pointer :: nofavgf => null()
+  integer, pointer :: nummods => null()
+  integer, pointer :: numixts => null()
   integer, pointer :: nontran => null()
   integer, pointer :: nofftran => null()
   integer, pointer :: nonelpr => null()
@@ -729,57 +728,16 @@ module cqlcomm_mod
   integer, pointer :: nonampf => null()
 
   !common /readvec/ &
-  real(c_double) :: denpar(ntotala,0:lza+1)
-  integer :: nkconro(ntotala)
-  real(c_double) :: temppar(ntotala,0:lza+1)
+  real(c_double), pointer :: denpar(:,:) => null()
+  integer, pointer :: nkconro(:) => null()
+  real(c_double), pointer :: temppar(:,:) => null()
 
 
   !.......................................................................
   !     Setup block for finite orbit width (FOW) calculations
   !.......................................................................
-  character(len=8) ::  fow
-  character(len=16) :: outorb
-  character(len=38) :: file_fow_plt ! for saving data on orbit to a file
-  !common/fow_control/
-  integer :: nmu,npfi
-  integer :: nsteps_orb
-  integer :: nptsorb
-  integer :: i_orb_width
-  integer :: iorb2
-  integer :: j0_ini
-  integer :: j0_end
-  integer :: inc_j0
-  integer :: i0_ini
-  integer :: i0_end
-  integer :: inc_i0
-  integer :: j2_ini
-  integer :: j2_end
-  integer :: inc_j2
-  integer :: i2_ini
-  integer :: i2_end
-  integer :: inc_i2
-  ! fow= 'enabled' or 'disabled'
-  ! outorb  ! 'detailed' or 'Not-detailed'
-  ! (saving/not-saving data to a file for plotting)
-  ! nmu     ! grid sizes for ad.ivariant mu
-  ! npfi    ! and canonical momentum Pfi;
-  ! to setup COM->R lookup table.
-  ! nsteps_orb ! Max.number of time steps for orbit integration.
-  ! Also used to trace Pfi=const levels for COM->R table
-  ! in order to find intersections with mu=const levels.
-  ! nptsorb ! Number of points on a complete orbit
-  ! (ityp=0 "main" orbit)
-  ! from which ityp=1 "secondary" orbits are launched.
-  ! ityp=1 orbit is stopped when it reaches the midplane.
-  ! (Note: secondary orbits are not traced usually,
-  ! see below, iorb2=0)
-  ! i_orb_width ! 1 -> Normal finite-orbit-width calculations.
-  ! 0 -> V_drift_perp is set to 0 (ZOW approximation)
-  ! iorb2  ! set to 1 to perform Runge-Kutta integration for tracing
-  ! SECONDARY orbits to midplane; 0 - no RK tracing.
-  ! This option (1) can be used for plotting orbits
-  ! (together with outorb="detailed"),
-  ! otherwise not needed.
+  character(len=8), pointer ::  fow => null()
+  ! fow= 'disabled' at this time.
 
 
   !.......................................................................
@@ -937,13 +895,13 @@ module cqlcomm_mod
   real(c_double) :: currv_(ngena,lrza)
   real(c_double) :: eoe0(ngena,lrza)
   real(c_double) :: ucrit(ngena,lrza)
-  integer :: jxcrit(ngena,lrza),      &
-       jchang(ngena,lrorsa)
+  integer :: jxcrit(ngena,lrza)
+  integer :: jchang(ngena,lrorsa)
   real(c_double) :: denra(ngena,lrza)
   real(c_double) :: curra(ngena,lrza)
   real(c_double) :: fdenra(ngena,lrza)
   real(c_double) :: fcurra(ngena,lrza)
-  real(c_double) :: enn(lrza,npaproca)
+  real(c_double), pointer :: enn(:,:) => null()
   !common /diskx/ &
   real(c_double) :: alm(0:mbeta,lrza)
   real(c_double) :: betta(0:mbeta,lrza)
@@ -1083,7 +1041,7 @@ module cqlcomm_mod
   real(c_double) :: vpovth
   real(c_double) :: xconn
   real(c_double) :: xmax
-  integer :: ipxy,jpxy
+  integer :: ipxy,jpxy ! its a trap, dont touch it
   real(c_double) :: zero
   real(c_double) :: zstar
   integer :: iplot
@@ -2937,6 +2895,342 @@ contains
 
   subroutine initialize_setup_pointers
     if(initialized_setup_pointers) call abort
+    acoefne => setup%acoefne
+    acoefte => setup%acoefte
+    ampfmod => setup%ampfmod
+    nampfmax => setup%nampfmax
+    nonampf => setup%nonampf
+    ampferr => setup%ampferr
+    bctimescal => setup%bctimescal
+    bnumb => setup%bnumb
+    btor => setup%btor
+    bth => setup%bth
+    bootst => setup%bootst
+    bootcalc => setup%bootcalc
+    bootupdt => setup%bootupdt
+    bootsign => setup%bootsign
+    nonboot => setup%nonboot
+    jhirsh => setup%jhirsh
+    contrmin => setup%contrmin
+    constr => setup%constr
+    chang => setup%chang
+    colmodl => setup%colmodl
+    deltabdb => setup%deltabdb
+    denpar => setup%denpar
+    droptol => setup%droptol
+    dtr => setup%dtr
+    dtr1 => setup%dtr1
+    eegy => setup%eegy
+    eparc => setup%eparc
+    eperc => setup%eperc
+    simpbfac => setup%simpbfac
+    epar => setup%epar
+    eper => setup%eper
+    elecfld => setup%elecfld
+    elpar0 => setup%elpar0
+    enorm => setup%enorm
+    enorme => setup%enorme
+    enormi => setup%enormi
+    eleccomp => setup%eleccomp
+    elecin => setup%elecin
+    elecin_t => setup%elecin_t
+    elecscal => setup%elecscal
+    enein => setup%enein
+    enein_t => setup%enein_t
+    ennin_t => setup%ennin_t
+    enescal => setup%enescal
+    enloss => setup%enloss
+    epsthet => setup%epsthet
+    enmin => setup%enmin
+    enmax => setup%enmax
+    ennb => setup%ennb
+    ennin => setup%ennin
+    ennl => setup%ennl
+    ennscal => setup%ennscal
+    enmin_npa => setup%enmin_npa
+    enmax_npa => setup%enmax_npa
+    eseswtch => setup%eseswtch
+    xsink => setup%xsink
+    esink => setup%esink
+    ephicc => setup%ephicc
+    esfac => setup%esfac
+    eoved => setup%eoved
+    fds => setup%fds
+    fds_npa => setup%fds_npa
+    fmass => setup%fmass
+    f4d_out => setup%f4d_out
+    tavg => setup%tavg
+    tavg1 => setup%tavg1
+    tavg2 => setup%tavg2
+    gsla => setup%gsla
+    gslb => setup%gslb
+    gamaset => setup%gamaset
+    gamafac => setup%gamafac
+    gamegy => setup%gamegy
+    iactst => setup%iactst
+    ineg => setup%ineg
+    idskf => setup%idskf
+    idskrf => setup%idskrf
+    ichkpnt => setup%ichkpnt
+    implct => setup%implct
+    iprone => setup%iprone
+    iprote => setup%iprote
+    iproti => setup%iproti
+    iprozeff => setup%iprozeff
+    iprovphi => setup%iprovphi
+    iproelec => setup%iproelec
+    ipronn => setup%ipronn
+    iprocur => setup%iprocur
+    tmdmeth => setup%tmdmeth
+    isigmas => setup%isigmas
+    isigtst => setup%isigtst
+    isigsgv1 => setup%isigsgv1
+    isigsgv2 => setup%isigsgv2
+    pltflux1 => setup%pltflux1
+    irzplt => setup%irzplt
+    izeff => setup%izeff
+    ioutime => setup%ioutime
+    iy => setup%iy
+    jx => setup%jx
+    kenorm => setup%kenorm
+    lfil => setup%lfil
+    kfrsou => setup%kfrsou
+    kpress => setup%kpress
+    kfield => setup%kfield
+    kspeci => setup%kspeci
+    fpld => setup%fpld
+    lmidpln => setup%lmidpln
+    locquas => setup%locquas
+    lbdry => setup%lbdry
+    lbdry0 => setup%lbdry0
+    lossfile => setup%lossfile
+    lossmode => setup%lossmode
+    lmidvel => setup%lmidvel
+    laddbnd => setup%laddbnd
+    lz => setup%lz
+    machine => setup%machine
+    meshy => setup%meshy
+    manymat => setup%manymat
+    netcdfnm => setup%netcdfnm
+    netcdfshort => setup%netcdfshort
+    netcdfvecal => setup%netcdfvecal
+    netcdfvecc => setup%netcdfvecc
+    netcdfvece => setup%netcdfvece
+    netcdfvecrf => setup%netcdfvecrf
+    netcdfvecs => setup%netcdfvecs
+    nnspec => setup%nnspec
+    mpwr => setup%mpwr
+    megy => setup%megy
+    mtorloss => setup%mtorloss
+    mmsv => setup%mmsv
+    msxr => setup%msxr
+    mx => setup%mx
+    nchgdy => setup%nchgdy
+    ngauss => setup%ngauss
+    nlagran => setup%nlagran
+    nlotp1 => setup%nlotp1
+    nlotp2 => setup%nlotp2
+    nlotp3 => setup%nlotp3
+    nlotp4 => setup%nlotp4
+    nmax => setup%nmax
+    ngen => setup%ngen
+    nkconro => setup%nkconro
+    nplt3d => setup%nplt3d
+    nrskip => setup%nrskip
+    nen => setup%nen
+    nv => setup%nv
+    nen_npa => setup%nen_npa
+    nv_npa => setup%nv_npa
+    npaproc => setup%npaproc
+    npa_process => setup%npa_process
+    nr_delta => setup%nr_delta
+    nz_delta => setup%nz_delta
+    nt_delta => setup%nt_delta
+    nr_f4d => setup%nr_f4d
+    nz_f4d => setup%nz_f4d
+    nv_f4d => setup%nv_f4d
+    nt_f4d => setup%nt_f4d
+    npwr => setup%npwr
+    negy => setup%negy
+    ntorloss => setup%ntorloss
+    njene => setup%njene
+    njte => setup%njte
+    njti => setup%njti
+    nstop => setup%nstop
+    nondtr1 => setup%nondtr1
+    nplot => setup%nplot
+    nsave => setup%nsave
+    ncoef => setup%ncoef
+    nchec => setup%nchec
+    ncont => setup%ncont
+    nrstrt => setup%nrstrt
+    nstps => setup%nstps
+    nfpld => setup%nfpld
+    noncntrl => setup%noncntrl
+    nonel => setup%nonel
+    noffel => setup%noffel
+    nonvphi => setup%nonvphi
+    noffvphi => setup%noffvphi
+    nonavgf => setup%nonavgf
+    nofavgf => setup%nofavgf
+    nonloss => setup%nonloss
+    noffloss => setup%noffloss
+    nummods => setup%nummods
+    numixts => setup%numixts
+    numby => setup%numby
+    negyrg => setup%negyrg
+    oldiag => setup%oldiag
+    plt3d => setup%plt3d
+    pltvs => setup%pltvs
+    partner => setup%partner
+    paregy => setup%paregy
+    peregy => setup%peregy
+    pegy => setup%pegy
+    zeffin => setup%zeffin
+    zeffin_t => setup%zeffin_t
+    zeffscal => setup%zeffscal
+    vphiplin => setup%vphiplin
+    vphiplin_t => setup%vphiplin_t
+    vphiscal => setup%vphiscal
+    pltdn => setup%pltdn
+    pltvecal => setup%pltvecal
+    pltvecc => setup%pltvecc
+    pltvecrf => setup%pltvecrf
+    pltvece => setup%pltvece
+    pltstrm => setup%pltstrm
+    pltflux => setup%pltflux
+    pltmag => setup%pltmag
+    pltsig => setup%pltsig
+    pltlim => setup%pltlim
+    pltlimm => setup%pltlimm
+    pltrst => setup%pltrst
+    plturfb => setup%plturfb
+    pltvflu => setup%pltvflu
+    pltra => setup%pltra
+    pltfvs => setup%pltfvs
+    pltd => setup%pltd
+    pltprpp => setup%pltprpp
+    pltfofv => setup%pltfofv
+    pltlos => setup%pltlos
+    pltrdc => setup%pltrdc
+    profpsi => setup%profpsi
+    psimodel => setup%psimodel
+    pltpowe => setup%pltpowe
+    pltend => setup%pltend
+    pltinput => setup%pltinput
+    pltview => setup%pltview
+    qsineut => setup%qsineut
+    trapmod => setup%trapmod
+    trapredc => setup%trapredc
+    scatmod => setup%scatmod
+    scatfrac => setup%scatfrac
+    ryain => setup%ryain
+    radmaj => setup%radmaj
+    radmin => setup%radmin
+    rmirror => setup%rmirror
+    relativ => setup%relativ
+    reden => setup%reden
+    regy => setup%regy
+    rfacz => setup%rfacz
+    rzset => setup%rzset
+    rd => setup%rd
+    roveram => setup%roveram
+    rovera => setup%rovera
+    rya => setup%rya
+    radcoord => setup%radcoord
+    sbdry => setup%sbdry
+    scheck => setup%scheck
+    ndeltarho => setup%ndeltarho
+    softxry => setup%softxry
+    npa_diag => setup%npa_diag
+    symtrap => setup%symtrap
+    syncrad => setup%syncrad
+    bremsrad => setup%bremsrad
+    brfac => setup%brfac
+    brfac1 => setup%brfac1
+    brfacgm3 => setup%brfacgm3
+    sigmamod => setup%sigmamod
+    sigvcx => setup%sigvcx
+    sigvi => setup%sigvi
+    soln_method => setup%soln_method
+    tauegy => setup%tauegy
+    taunew => setup%taunew
+    tein => setup%tein
+    tein_t => setup%tein_t
+    tescal => setup%tescal
+    tiin => setup%tiin
+    tiin_t => setup%tiin_t
+    tiscal => setup%tiscal
+    tauloss => setup%tauloss
+    temp => setup%temp
+    temppar => setup%temppar
+    tfac => setup%tfac
+    tfacz => setup%tfacz
+    tbnd => setup%tbnd
+    tandem => setup%tandem
+    thetd => setup%thetd
+    torloss => setup%torloss
+    thet1 => setup%thet1
+    thet2 => setup%thet2
+    x_sxr => setup%x_sxr
+    z_sxr => setup%z_sxr
+    rd_npa => setup%rd_npa
+    thetd_npa => setup%thetd_npa
+    x_npa => setup%x_npa
+    z_npa => setup%z_npa
+    thet1_npa => setup%thet1_npa
+    thet2_npa => setup%thet2_npa
+    atten_npa => setup%atten_npa
+    updown => setup%updown
+    veclnth => setup%veclnth
+    vnorm => setup%vnorm
+    xfac => setup%xfac
+    xpctlwr => setup%xpctlwr
+    xpctmdl => setup%xpctmdl
+    xlwr => setup%xlwr
+    xmdl => setup%xmdl
+    xsinkm => setup%xsinkm
+    xprpmax => setup%xprpmax
+    ipxy => setup%ipxy
+    jpxy => setup%jpxy
+    yreset => setup%yreset
+    ylower => setup%ylower
+    yupper => setup%yupper
+    mpwrzeff => setup%mpwrzeff
+    npwrzeff => setup%npwrzeff
+    mpwrvphi => setup%mpwrvphi
+    npwrvphi => setup%npwrvphi
+    mpwrxj => setup%mpwrxj
+    npwrxj => setup%npwrxj
+    mpwrelec => setup%mpwrelec
+    npwrelec => setup%npwrelec
+    redenc => setup%redenc
+    redenb => setup%redenb
+    temp_den => setup%temp_den
+    tempc => setup%tempc
+    tempb => setup%tempb
+    zeffc => setup%zeffc
+    zeffb => setup%zeffb
+    elecc => setup%elecc
+    elecb => setup%elecb
+    vphic => setup%vphic
+    vphib => setup%vphib
+    xjc => setup%xjc
+    xjb => setup%xjb
+    xjin_t => setup%xjin_t
+    totcrt => setup%totcrt
+    efswtch => setup%efswtch
+    efswtchn => setup%efswtchn
+    efiter => setup%efiter
+    efflag => setup%efflag
+    curr_edge => setup%curr_edge
+    efrelax => setup%efrelax
+    efrelax1 => setup%efrelax1
+    currerr => setup%currerr
+    bctime => setup%bctime
+    nbctime => setup%nbctime
+    zmax => setup%zmax
+    fow => setup%fow
 
     initialized_setup_pointers = .TRUE.
   end subroutine initialize_setup_pointers

@@ -1,7 +1,7 @@
 #------ Module generated dependencies, to be included in makefiles...
 a_cqlp.o: abchief.o impavnc0.o
 abchief.o: cqlcomm.o param.o tdchief.o
-achief1.o: achiefn.o ainalloc.o aindflt.o aindflt1.o aindfpa.o  \
+achief1.o: achiefn.o ainalloc.o aindflt1.o aindfpa.o  \
 	aingeom.o ainitial.o ainpla.o ainsetva.o ainspec.o ainvnorm.o  \
 	cfpgamma.o coefmidt.o coefmidv.o coefstup.o coefwti.o coefwtj.o  \
 	cqlcomm.o cqlconf.o diagimpd.o diagscal.o eqinitl.o  \
@@ -13,7 +13,6 @@ achiefn.o: cfpcoefc.o cfpgamma.o cqlcomm.o cqlconf.o diag.o  \
 aclear.o: bcast.o cqlcomm.o param.o
 advnce.o: bsl.o bsu.o cqlcomm.o r8subs.o
 ainalloc.o: bcast.o cqlcomm.o cqlconf.o param.o
-aindflt.o: cqlcomm.o param.o
 aindflt1.o: cqlcomm.o param.o
 aindfpa.o: cqlcomm.o cqlconf.o param.o
 aingeom.o: cqlcomm.o diagwrng.o eqalloc.o eqcoord.o eqelpse.o  \
@@ -223,7 +222,7 @@ tdchief.o: achief1.o achiefn.o aclear.o aindfpa.o ainplt.o ainpltpa.o  \
 tddiag.o: cqlcomm.o param.o tdboothi.o tdbootst.o
 tdeqdsk.o: cqlcomm.o equilib.o firstdrv.o param.o r8subs.o zcunix.o
 tdfinterp.o: cqlcomm.o lookup.o param.o
-tdinitl.o: ainalloc.o aindflt.o aindflt1.o aindfpa.o aingeom.o  \
+tdinitl.o: ainalloc.o aindflt1.o aindfpa.o aingeom.o  \
 	ainitial.o ainpla.o ainsetva.o ainspec.o ainvnorm.o ampfar.o  \
 	baviorbt.o cqlcomm.o cqlconf.o diagwrng.o eqinitl.o  \
 	micxinil.o micxinit.o micxiniz.o param.o profiles.o rdc_multi.o  \
