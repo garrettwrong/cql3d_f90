@@ -7,7 +7,6 @@ module achief1_mod
   use achiefn_mod, only : achiefn
   use ainalloc_mod, only : ainalloc
   use aindflt1_mod, only : aindflt1
-  use aindflt_mod, only : aindflt
   use aindfpa_mod, only : ain_transcribe
   use aingeom_mod, only : aingeom
   use ainitial_mod, only : ainitial
@@ -42,13 +41,13 @@ contains
 
   subroutine achief1(nml_file)
     use param_mod
-    use cqlconf_mod, only : print_setup0
     use cqlconf_mod, only : setup0
+    use cqlconf_mod, only : get_setup_from_nml
     use cqlconf_mod, only : get_eqsetup_from_nml
     use cqlconf_mod, only : get_rfsetup_from_nml
     use cqlconf_mod, only : get_trsetup_from_nml
     use cqlconf_mod, only : get_sousetup_from_nml
-    use cqlconf_mod, only : print_eqsetup
+    use cqlconf_mod, only : print_all_conf_nml
     use cqlcomm_mod
     use pltmain_mod, only : pltmain
     use r8subs_mod, only : dcopy
@@ -58,7 +57,6 @@ contains
     use ainpla_mod, only : ainpla
     use aingeom_mod, only : aingeom
     use ainitial_mod, only : ainitial
-    use aindflt_mod, only : aindflt
     use aindflt1_mod, only : aindflt1
     use ainalloc_mod, only : ainalloc
     use aindfpa_mod , only : ain_transcribe
@@ -73,33 +71,19 @@ contains
     !..................................................................
 
     !..................................................................
-    !     Set defaults - for main code + "eq" module.
+    !     Set defaults not in the cql_conf types
     !..................................................................
-    call aindflt
-    !call eqindflt
+
     call aindflt1
 
     !.....................................................................
     !     Read in driver input namelist setup
     !.....................................................................
-    open(unit=2,file=nml_file,status="old")
-    read(2,setup)
-    !read(2,trsetup)
-    !read(2,sousetup)
-
-    rewind(2) !tmp
-    close(2) !tmp
+    call get_setup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
     call get_trsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
     call get_sousetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
     call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
     call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
-    !read(2,eqsetup)
-    !read(2,rfsetup)
-    open(unit=2,file=nml_file,status="old") ! tmp
-    rewind(2) !tmp
-    
-
-    close(2)
 
     !..................................................................
     !     Call routine which finds electron and ion species indices.
@@ -125,12 +109,7 @@ contains
 
     if (setup0%nmlstout.eq."enabled") then
        write(6,*)'  In achief1: '
-       call print_setup0
-       write(6,setup)
-       !now private write(6,trsetup)
-       !now private write(6,sousetup)
-       !now private write(6,eqsetup)
-       !now private write(6,rfsetup)
+       call print_all_conf_nml
     elseif (setup0%nmlstout.eq."trnscrib") then
        write(6,*)'  In achief1: '
        call ain_transcribe(nml_file)
@@ -153,6 +132,7 @@ contains
     call eqinitl
     call frinitl
 
+    !NMLXXX, frsetup nml not converted yet
     open(unit=2,file=nml_file,delim='apostrophe',status="old")
     call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
     close(2)

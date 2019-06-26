@@ -1094,8 +1094,6 @@ contains
          urfmod="disabled"
       endif
       do krf=1,nmodsa
-         print *,ngen
-         print *,nrfspecies(krf) !XXX debug
          if (nrfspecies(krf).gt.ngen) then
 !MPIINSERT_IF_RANK_EQ_0
             WRITE(*,*) 'Check nrfspecies.lt.ngen'

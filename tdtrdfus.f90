@@ -143,7 +143,7 @@ contains
       rdefr = -1.
       if (rsum.gt.0.) then
         rdefr = 1.
-        call ryaintorz(njene,ryain(1),difin,setup0%lrz,rhotr(0),drshape(0))
+        call ryaintorz(njene,ryain,difin,setup0%lrz,rhotr(0),drshape(0))
       endif
 
       do l=0,setup0%lrz-1

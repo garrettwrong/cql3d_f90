@@ -162,13 +162,13 @@ contains
         !YuP160304 call coeff1(setup0%lrzmax,rz(1),equilpsi(1),d2equ,i1p,1,workk)
         tr(0:setup0%lrzmax)= psimag-equilpsi(0:setup0%lrzmax)
         !pol.flux, in ascending order needed for coeff1
-        call coeff1(setup0%lrzmax,rya(1),tr(1),d2equ,i1p,1,workk)
+        call coeff1(setup0%lrzmax,rya(1:ubound(rya,1)),tr(1),d2equ,i1p,1,workk)
         itab(1)=0
         itab(2)=1
         itab(3)=0
         do 50 l=1,setup0%lrzmax
           !YuP160304 call terp1(setup0%lrzmax,rz(1),equilpsi(1),d2equ,rz(l),1,tab,itab)
-          call terp1(setup0%lrzmax,rya(1),tr(1),d2equ,rya(l),1,tab,itab)
+          call terp1(setup0%lrzmax,rya(1:ubound(rya,1)),tr(1),d2equ,rya(l),1,tab,itab)
           dpsidrho(l)=-tab(2) ! '-' because we used ascending psi function
  50     continue
 

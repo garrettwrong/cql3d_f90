@@ -24,7 +24,7 @@ c     ONETWO DIVERGENCE
      &  splnwk(kwork),cspln1(kzm1,3),cspln2(kzm1,3),
      &  bpar1(4),bpar2(4),psikp(kikj),isupp(4,ke,kb),inc(kjx2)
 c
-      zero=0.d0
+c      zero=0.d0
 
 c     set (r,z) grid modification option
       igrid=iopt-1

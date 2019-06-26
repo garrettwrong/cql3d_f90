@@ -15,7 +15,7 @@ c-----------------------------------------------------------------------
 c     ONETWO DIVERGENCE
       dimension a(kix2,kjx2,ke,kb),isupp(4,ke,kb)
 
-      zero=0.d0
+c      zero=0.d0
 
       do 10 i=1,ni
         do 11 j=1,nj

@@ -1,7 +1,7 @@
 #------ Module generated dependencies, to be included in makefiles...
 a_cqlp.o: abchief.o impavnc0.o
 abchief.o: cqlcomm.o param.o tdchief.o
-achief1.o: achiefn.o ainalloc.o aindflt.o aindflt1.o aindfpa.o  \
+achief1.o: achiefn.o ainalloc.o aindflt1.o aindfpa.o  \
 	aingeom.o ainitial.o ainpla.o ainsetva.o ainspec.o ainvnorm.o  \
 	cfpgamma.o coefmidt.o coefmidv.o coefstup.o coefwti.o coefwtj.o  \
 	cqlcomm.o cqlconf.o diagimpd.o diagscal.o eqinitl.o  \
@@ -13,7 +13,6 @@ achiefn.o: cfpcoefc.o cfpgamma.o cqlcomm.o cqlconf.o diag.o  \
 aclear.o: bcast.o cqlcomm.o param.o
 advnce.o: bsl.o bsu.o cqlcomm.o r8subs.o
 ainalloc.o: bcast.o cqlcomm.o cqlconf.o param.o
-aindflt.o: cqlcomm.o param.o
 aindflt1.o: cqlcomm.o param.o
 aindfpa.o: cqlcomm.o cqlconf.o param.o
 aingeom.o: cqlcomm.o diagwrng.o eqalloc.o eqcoord.o eqelpse.o  \
@@ -223,14 +222,14 @@ tdchief.o: achief1.o achiefn.o aclear.o aindfpa.o ainplt.o ainpltpa.o  \
 tddiag.o: cqlcomm.o param.o tdboothi.o tdbootst.o
 tdeqdsk.o: cqlcomm.o equilib.o firstdrv.o param.o r8subs.o zcunix.o
 tdfinterp.o: cqlcomm.o lookup.o param.o
-tdinitl.o: ainalloc.o aindflt.o aindflt1.o aindfpa.o aingeom.o  \
+tdinitl.o: ainalloc.o aindflt1.o aindfpa.o aingeom.o  \
 	ainitial.o ainpla.o ainsetva.o ainspec.o ainvnorm.o ampfar.o  \
 	baviorbt.o cqlcomm.o cqlconf.o diagwrng.o eqinitl.o  \
 	micxinil.o micxinit.o micxiniz.o param.o profiles.o rdc_multi.o  \
 	sigv.o tddiag.o tdeqdsk.o tdnflxs.o tdnpadiag.o tdoutput.o tdplteq.o  \
 	tdpltmne.o tdreadf.o tdrmshst.o tdstin.o tdsxray.o tdtoarad.o  \
 	tdtoaray.o tdtraloc.o tdtrdfus.o tdtrflg.o tdtrmuy.o tdtrvint.o  \
-	tdtrwtl.o tdwrng.o tdxinitl.o urfindfl.o urfinitl.o urfsetup.o  \
+	tdtrwtl.o tdwrng.o tdxinitl.o urfinitl.o urfsetup.o  \
 	wpalloc.o wpchgdy.o wpinitl.o wploweq.o wpmshchk.o wptrmuy.o
 tdinlegw.o: bcast.o cqlcomm.o param.o
 tdinterp.o: zcunix.o
@@ -314,7 +313,6 @@ urfdampa.o: cqlcomm.o param.o
 urfdout.o: cqlcomm.o param.o
 urfedge.o: cqlcomm.o param.o
 urffflx.o: bcast.o cqlcomm.o param.o r8subs.o zcunix.o
-urfindfl.o: cqlcomm.o param.o
 urfinitl.o: cqlcomm.o cqlconf.o param.o
 urfmidv.o: bcast.o cqlcomm.o param.o r8subs.o
 urfpack.o: cqlcomm.o param.o r8subs.o tdnflxs.o urfedge.o urfwrong.o

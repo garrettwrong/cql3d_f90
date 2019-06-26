@@ -75,8 +75,8 @@ contains
     use param_mod
     use cqlcomm_mod
     use cqlconf_mod, only : nml_close
-    use cqlconf_mod, only : print_setup0
     use cqlconf_mod, only : setup0
+    use cqlconf_mod, only : get_setup_from_nml
     use cqlconf_mod, only : get_setup0_from_nml
       use netcdfrf_mod, only : netcdfrf
       use pltmain_mod, only : pltmain
@@ -157,11 +157,9 @@ contains
 !.......................................................................
       call aclear
 
-      ! this shoudl get (re)moved with each nml convers as need,
-      ! eventually totally handled by the config module
-      open(unit=2,file=nml_file,status='old')
-      read(2,setup)  ! Gets pltinput variable, for ainplt routine.
-      rewind(2)
+      ! Gets pltinput variable, for ainplt routine.
+      call get_setup_from_nml(nml_file, close_nml_file=.TRUE.)
+
       sumdtr=zero
 
 !.................................................................

@@ -158,10 +158,10 @@ contains
         melec=2
         if (colmodl.eq.0 .or. colmodl.eq.2) melec=1
         !YuP[05-2017] Looks like in this case only ngen=1 is allowed
-        call tdinterp("free","free",rho_,anecc,npsitm,rya(0),tr(0),lrzp)
-        call tdinterp("free","free",rho_,tekev,npsitm,rya(0),tr1(0), &
+        call tdinterp("free","free",rho_,anecc,npsitm,rya,tr(0),lrzp)
+        call tdinterp("free","free",rho_,tekev,npsitm,rya,tr1(0), &
           lrzp)
-        call tdinterp("free","free",rho_,elecf,npsitm,rya(0),tr2(0), &
+        call tdinterp("free","free",rho_,elecf,npsitm,rya,tr2(0), &
           lrzp)
         ngen=1
         if (melec.eq.2) nmax=nspc+1
@@ -204,10 +204,10 @@ contains
             titmp(l1)=tikev(ku,l1)
             detmp(l1)=anicc(ku,l1)
  55       continue
-          call tdinterp("free","free",rho_,titmp,npsitm,rya(0),tr1(0), &
+          call tdinterp("free","free",rho_,titmp,npsitm,rya,tr1(0), &
             lrzp)
           if (nspc.ne.1)  then
-            call tdinterp("free","free",rho_,detmp,npsitm,rya(0) &
+            call tdinterp("free","free",rho_,detmp,npsitm,rya &
               ,tr(0),lrzp)
           else
             do 56  j=0,setup0%lrzmax
@@ -242,8 +242,8 @@ contains
 
             if (enein(1,k).ne.zero) then
 
-               call tdinterp("zero","linear",ryain,enein(1,k),njene, &
-                    rya(1),tr(1),setup0%lrzmax)
+               call tdinterp("zero","linear",ryain,enein(:,k),njene, &
+                    rya(1:ubound(rya,1)),tr(1),setup0%lrzmax)
                tr(0)=enein(1,k)
                do 13 ll=0,setup0%lrzmax
                   reden(k,ll)=tr(ll)
@@ -289,7 +289,7 @@ contains
             do ij=1,njene
                zeffin(ij)=zeffscal*zeffin(ij)
             enddo
-            call tdinterp("zero","linear",ryain,zeffin(1),njene,rya(1), &
+            call tdinterp("zero","linear",ryain,zeffin(1:ubound(zeffin,1)),njene,rya(1:ubound(rya,1)), &
                  zeff(1),setup0%lrzmax)
          elseif (iprozeff.eq."prbola-t") then
             do it=1,nbctime
@@ -371,8 +371,8 @@ contains
 !$$$                  do ij=1,njene
 !$$$                     enein(ij,k)=enescal*enein(ij,k)
 !$$$                  enddo
-                  call tdinterp("zero","linear",ryain,enein(1,k),njene, &
-                       rya(1),tr(1),setup0%lrzmax)
+                  call tdinterp("zero","linear",ryain,enein(:,k),njene, &
+                       rya(1:ubound(rya,1)),tr(1),setup0%lrzmax)
                   tr(0)=enein(1,k)
                   do ll=0,setup0%lrzmax
                      reden(k,ll)=tr(ll)
@@ -539,7 +539,7 @@ contains
 !100126         enddo
          do 16  k=1,ntotal
             if(bnumb(k).eq.-1.)  then
-               call tdinterp("zero","linear",ryain,tein,njene,rya(1), &
+               call tdinterp("zero","linear",ryain,tein,njene,rya(1:ubound(rya,1)), &
                     tr(1),setup0%lrzmax)
                tr(0)=tein(1)
                do 19  ll=0,setup0%lrzmax
@@ -571,7 +571,7 @@ contains
 !100126         enddo
          do 26  k=1,ntotal
             if(bnumb(k).ne.-1.)  then
-               call tdinterp("zero","linear",ryain,tiin,njene,rya(1), &
+               call tdinterp("zero","linear",ryain,tiin,njene,rya(1:ubound(rya,1)), &
                     tr(1),setup0%lrzmax)
                tr(0)=tiin(1)
                do 29  ll=0,setup0%lrzmax
@@ -617,8 +617,8 @@ contains
             do ij=1,njene
                vphiplin(ij)=vphiscal*vphiplin(ij)
             enddo
-            call tdinterp("zero","linear",ryain,vphiplin(1),njene, &
-                 rya(1),vphipl(1),setup0%lrzmax)
+            call tdinterp("zero","linear",ryain,vphiplin(1:ubound(vphiplin,1)),njene, &
+                 rya(1:ubound(rya,1)),vphipl(1),setup0%lrzmax)
          endif
       endif
 
@@ -633,8 +633,8 @@ contains
                enn(ll,kkk)=ennb(kkk)*exp((rya(ll)-1.)*radmin/ennl(kkk))
             enddo
          elseif (ipronn.eq."spline") then
-            call tdinterp("zero","linear",ryain,ennin(1,kkk),njene, &
-                 rya(1),enn(1,kkk),setup0%lrzmax)
+            call tdinterp("zero","linear",ryain,ennin(:,kkk),njene, &
+                 rya(1:ubound(rya,1)),enn(:,kkk),setup0%lrzmax)
          endif  ! On ipronn
          endif  ! On npa_process
          enddo  ! kkk
@@ -714,8 +714,8 @@ contains
 !100126            do ij=1,njene
 !100126               elecin(ij)=elecscal*elecin(ij)
 !100126            enddo
-            call tdinterp("zero","linear",ryain,elecin,njene,rya(1), &
-                 elecfld(1),setup0%lrzmax)
+            call tdinterp("zero","linear",ryain,elecin,njene,rya(1:ubound(rya,1)), &
+                 elecfld(1:ubound(elecfld,1)),setup0%lrzmax)
 !BH171124: for iproelec=spline-t or prbola-t, elecfld set in profiles
          elseif (iproelec.eq."spline-t".or.iproelec.eq."prbola-t") then
             continue

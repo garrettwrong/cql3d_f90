@@ -16,12 +16,12 @@ module fle_mod
 
 contains
 
-      subroutine fle_pol(setup,lp)
+      subroutine fle_pol(argsetup,lp)
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : luf
       implicit integer (i-n), real(c_double) (a-h,o-z)
-      character*(*) setup
+      character*(*) argsetup
 !
 !.......................................................................
 !  At each poloidal angle, specified by poloidal index lp:
@@ -50,7 +50,7 @@ contains
 !     At the first call, set up the mesh, binning and weighting factors.
 !     The mesh is the same for each poloidal angle, but the factors
 !     vary with poloidal angle.
-      if (setup.eq."setup") then
+      if (argsetup.eq."setup") then
       if (ifirst.eq."first") then
          ifirst="notfirst"
 
@@ -221,12 +221,12 @@ contains
 
 !
 !
-      subroutine fle_fsa(setup)
+      subroutine fle_fsa(argsetup)
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : luf
       implicit integer (i-n), real(c_double) (a-h,o-z)
-      character*(*) setup
+      character*(*) argsetup
 !
 !.......................................................................
 !  Computes a flux-surface averaged reduced distribution function,
@@ -247,7 +247,7 @@ contains
 
       if (setup0%lrz.gt. lz) stop 'in fle_fsa:  Need to adjust setup0%lrz.le.lz'
 
-      if (setup.eq."setup") then
+      if (argsetup.eq."setup") then
 !     At the first call, set up the mesh, binning and weighting factors.
       if (ifirst.eq."first") then
          ifirst="notfirst"
@@ -384,12 +384,12 @@ contains
       end subroutine fle_fsa
 !
 !
-      subroutine fle(setup,lp)
+      subroutine fle(argsetup,lp)
       use param_mod
       use cqlcomm_mod
       use r8subs_mod, only : dcopy
       implicit integer (i-n), real(c_double) (a-h,o-z)
-      character*(*) setup
+      character*(*) argsetup
 !
 !.......................................................................
 !  At each poloidal angle, specified by poloidal index lp:
@@ -413,7 +413,7 @@ contains
 
       if (setup0%lrz.gt. lz) stop 'in fle:  Need to adjust setup0%lrz.le.lz'
 
-      if (setup.eq."setup") then
+      if (argsetup.eq."setup") then
 !     At the first call, set up the mesh.  This is independent of lp.
       if (ifirst.eq."first") then
          ifirst="notfirst"

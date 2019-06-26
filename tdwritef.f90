@@ -75,8 +75,9 @@ contains
 !.......................................................................
 
       write(iunwrif,'(" ")')
+      !NMLXXX, implimetn tdwrite/read correctly
       ! nml name now private, can make a function in the module for this (iunwrif,setup0)
-      write(iunwrif,setup)
+      ! nml name now privatewrite(iunwrif,setup)
       ! nml name now private, can make a function in the module for this write(iunwrif,trsetup)
       !nml name now private, can make a function in the module for this write(iunwrif,sousetup)
       !nml name now private, can make a function in the module for this write(iunwrif,eqsetup)

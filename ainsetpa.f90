@@ -138,12 +138,11 @@ contains
       endif
 
 
+      !XXXXX, we shoudl just move these to param module
 !.......................................................................
 !l    Set some physical, numerical and normalization constants.
 !l    Numerical constants set to help maintain real(c_double) arithmetic.
 !.......................................................................
-      zero=0.d0
-      one=1.d0
       two=2.d0
       three=3.d0
       four=4.d0
@@ -166,7 +165,6 @@ contains
       third=one/three
 
 !      pi=3.141592653589793d0
-      pi=atan2(zero,-one)
       pio180=pi/180.d0
       twopi=two*pi
       fourpi=4.0*pi

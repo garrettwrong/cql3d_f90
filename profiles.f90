@@ -72,12 +72,12 @@ contains
                   temp(k,1)=tempb(nbctime,k)
                endif
 
-               !YuP: called later: call tdxin13d(temp,rya,setup0%lrzmax,ntotala,k,npwr(k),mpwr(k))
+               !YuP: called later: call tdxin13d(temp,rya(1:ubound(rya,1)),setup0%lrzmax,ntotala,k,npwr(k),mpwr(k))
 
             elseif (tmdmeth.eq."method2")  then
 
-               temp(k,0)=tdprof(timet,tempc(1,k),bctime)
-               temp(k,1)=tdprof(timet,tempb(1,k),bctime)
+               temp(k,0)=tdprof(timet,tempc(:,k),bctime)
+               temp(k,1)=tdprof(timet,tempb(:,k),bctime)
 
             endif
 
@@ -108,7 +108,7 @@ contains
 
          do 16  k=1,ntotal
             if(bnumb(k).eq.-1.)  then
-               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
+               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1:ubound(rya,1)), &
                     tr(1),setup0%lrzmax)
                tr(0)=tmpt(1)
                do 19  ll=0,setup0%lrzmax
@@ -142,7 +142,7 @@ contains
 
          do 26  k=1,ntotal
             if(bnumb(k).ne.-1.)  then
-               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
+               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1:ubound(rya,1)), &
                     tr(1),setup0%lrzmax)
                tr(0)=tmpt(1)
                do 29  ll=0,setup0%lrzmax
@@ -294,8 +294,8 @@ contains
 
             elseif (tmdmeth.eq."method2") then
 
-               reden(k,0)=tdprof(timet,redenc(1,k),bctime)
-               reden(k,1)=tdprof(timet,redenb(1,k),bctime)
+               reden(k,0)=tdprof(timet,redenc(:,k),bctime)
+               reden(k,1)=tdprof(timet,redenb(:,k),bctime)
 
             endif
 
@@ -334,7 +334,7 @@ contains
             endif
 
             call tdinterp("zero","linear",ryain,tmpt,njene, &
-                 rya(1),tr(1),setup0%lrzmax)
+                 rya(1:ubound(rya,1)),tr(1),setup0%lrzmax)
             tr(0)=tmpt(1)
             do 13 ll=0,setup0%lrzmax
                reden(k,ll)=tr(ll)
@@ -374,8 +374,8 @@ contains
 
                elseif (tmdmeth.eq."method2") then
 
-                  zeffin(0)=tdprof(timet,zeffc(1),bctime)
-                  zeffin(1)=tdprof(timet,zeffb(1),bctime)
+                  zeffin(0)=tdprof(timet,zeffc,bctime)
+                  zeffin(1)=tdprof(timet,zeffb,bctime)
 
                endif  !On tmdmeth
 
@@ -405,7 +405,7 @@ contains
                      tmpt(l)=zeffin_t(l,nbctime)
                   enddo
                endif
-               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
+               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1:ubound(rya,1)), &
                     tr(1),setup0%lrzmax)
                do  ll=1,setup0%lrzmax
                   zeff(ll)=tr(ll)
@@ -557,7 +557,7 @@ contains
                endif
                !------------
                call tdinterp("zero","linear",ryain,tmpt,njene, &
-                    rya(1),tr(1),setup0%lrzmax)
+                    rya(1:ubound(rya,1)),tr(1),setup0%lrzmax)
                do ll=1,setup0%lrzmax
                enn(ll,kkk)= ennscal(kkk)*tr(ll) ! for tdnpa
                enddo
@@ -618,8 +618,8 @@ contains
 
             elseif (tmdmeth.eq."method2") then
 
-               elecfld(0)=tdprof(timet,elecc(1),bctime)
-               elecfld(1)=tdprof(timet,elecb(1),bctime)
+               elecfld(0)=tdprof(timet,elecc,bctime)
+               elecfld(1)=tdprof(timet,elecb,bctime)
                elecfldc=elecfld(0)
                elecfldb=elecfld(1)
 
@@ -651,7 +651,7 @@ contains
                      tmpt(l)=elecin_t(l,nbctime)
                   enddo
                endif
-               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
+               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1:ubound(rya,1)), &
                     tr(1),setup0%lrzmax)
                do  ll=1,setup0%lrzmax
                   elecfld(ll)=tr(ll)
@@ -696,8 +696,8 @@ contains
 
             elseif (tmdmeth.eq."method2") then
 
-               currxj(0)=tdprof(timet,xjc(1),bctime)
-               currxj(1)=tdprof(timet,xjb(1),bctime)
+               currxj(0)=tdprof(timet,xjc,bctime)
+               currxj(1)=tdprof(timet,xjb,bctime)
 
             endif
 
@@ -727,7 +727,7 @@ contains
                      tmpt(l)=xjin_t(l,nbctime)
                   enddo
                endif
-               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
+               call tdinterp("zero","linear",ryain,tmpt,njene,rya(1:ubound(rya,1)), &
                     tr(1),setup0%lrzmax)
                do  ll=1,setup0%lrzmax
                   currxj(ll)=tr(ll)
@@ -807,8 +807,8 @@ contains
 
          elseif (tmdmeth.eq."method2") then
 
-            vphiplin(0)=tdprof(timet,vphic(1),bctime)
-            vphiplin(1)=tdprof(timet,vphib(1),bctime)
+            vphiplin(0)=tdprof(timet,vphic,bctime)
+            vphiplin(1)=tdprof(timet,vphib,bctime)
 
          endif
 
@@ -837,7 +837,7 @@ contains
                   tmpt(l)=vphiplin_t(l,nbctime)
                enddo
             endif
-            call tdinterp("zero","linear",ryain,tmpt,njene,rya(1), &
+            call tdinterp("zero","linear",ryain,tmpt,njene,rya(1:ubound(rya,1)), &
                  tr(1),setup0%lrzmax)
             do  ll=1,setup0%lrzmax
                vphipl(ll)=vphiscal*tr(ll)

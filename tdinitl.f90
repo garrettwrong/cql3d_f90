@@ -6,7 +6,6 @@ module tdinitl_mod
 
   use ainalloc_mod, only : ainalloc
   use aindflt1_mod, only : aindflt1
-  use aindflt_mod, only : aindflt
   use aindfpa_mod, only : ain_transcribe
   use aingeom_mod, only : aingeom
   use ainitial_mod, only : ainitial
@@ -49,7 +48,6 @@ module tdinitl_mod
   use tdtrwtl_mod, only : tdtrwtl
   use tdwrng_mod, only : tdwrng
   use tdxinitl_mod, only : tdxinitl
-  use urfindfl_mod, only : urfindfl
   use urfinitl_mod, only : urfinitl
   use urfsetup_mod, only : urfsetup
   use wpalloc_mod, only : wpalloc
@@ -73,6 +71,7 @@ contains
         use cqlconf_mod, only : get_rfsetup_from_nml
         use cqlconf_mod, only : get_trsetup_from_nml
         use cqlconf_mod, only : get_sousetup_from_nml
+        use cqlconf_mod, only : get_setup_from_nml
       use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use ampfar_mod, only : ampfalloc
@@ -82,7 +81,6 @@ contains
       use ainpla_mod, only : ainpla
       use aingeom_mod, only : aingeom
       use ainitial_mod, only : ainitial
-      use aindflt_mod, only : aindflt
       use aindflt1_mod, only : aindflt1
       use ainalloc_mod, only : ainalloc
       use aindfpa_mod , only : ain_transcribe
@@ -108,9 +106,6 @@ contains
 !     set defaults for namelisted quantities and other variables
 !..................................................................
 
-      call aindflt
-      !call eqindflt
-      call urfindfl
       call aindflt1
 
 !.......................................................................
@@ -125,22 +120,13 @@ contains
 !..................................................................
 !     read in namelist input for CQL3D
 !..................................................................
-      open(unit=2,file=nml_file,status='old')
-        read(2,setup)
-        !read(2,trsetup)
-        !read(2,sousetup)
-
-        rewind(2) !tmp
-        close(2) !tmp
+        call get_setup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
         call get_trsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
         call get_sousetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
         call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
         call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
-
-        open(unit=2,file=nml_file,status='old') !tmp
-        rewind(2) !tmp
-        
-
+        !open(unit=2,file=nml_file,status='old') !tmp
+        !rewind(2) !tmp
 
       if (partner.eq."selene") then
         open(unit=18,file='kcqlsel',status='old')
@@ -180,15 +166,13 @@ contains
 !.......................................................................
 
       if (setup0%nmlstout.eq."enabled") then
-         open(unit=2,file=nml_file,delim='apostrophe',status='old')
-         write(6,*)'  In tdinitl: '
+         ! NMLXXX write(6,*)'  In tdinitl: '
          ! nml name now private, write function can be added to module write(6,setup0)
-         write(6,setup)
+         ! nml name now private, write function can be added to module write(6,setup)
          ! nml name now private, write function can be added to module write(6,trsetup)
          ! private, writer function can be added to module write(6,sousetup)
          ! private, writer function can be added to module write(6,eqsetup)
          ! private, writer function can be added to module write(6,rfsetup)
-         close(2)
       elseif (setup0%nmlstout.eq."trnscrib") then
          write(6,*)'  In tdinitl: '
          call ain_transcribe("cqlinput")
@@ -204,6 +188,7 @@ contains
       call eqinitl
       call urfinitl ! mrfn= is set here also
       call frinitl
+      !NMLXXX, didn't impliment frsetup nml yet
       open(unit=2,file=nml_file,delim='apostrophe',status='old')
       call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
       close(2)

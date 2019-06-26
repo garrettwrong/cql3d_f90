@@ -46,9 +46,9 @@ contains
       do 10 l=1,setup0%lrzmax
         tr(l)=sorpw_rf(kelecg,l)
  10   continue
-      call tdinterp("free","free",rya(1),tr(1),setup0%lrzmax,rho_,powtsc, &
+      call tdinterp("free","free",rya(1:ubound(rya,1)),tr(1),setup0%lrzmax,rho_,powtsc, &
         npsitm)
-      call tdinterp("free","free",rya(1),currtpz(1),setup0%lrzmax,rho_,currtsc &
+      call tdinterp("free","free",rya(1:ubound(rya,1)),currtpz(1),setup0%lrzmax,rho_,currtsc &
         ,npsitm)
 
 !..................................................................

@@ -7,6 +7,7 @@ module tdreadf_mod
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
   use cqlcomm_mod
+  use cqlconf_mod, only : get_setup_from_nml
   use cqlconf_mod, only : get_eqsetup_from_nml
   use cqlconf_mod, only : get_rfsetup_from_nml
   use cqlconf_mod, only : get_trsetup_from_nml
@@ -116,23 +117,18 @@ contains
       if (setup0%nlrestrt.ne."ncdfdist" .and. setup0%nlrestrt.ne."ncregrid") then !BH080204
 
       ilrestrt=setup0%nlrestrt
-!      read(iunwrif,setup0)  !Commented out, so setup0%mnemonic set by cqlinput
-      read(iunwrif,setup)
-      !read(iunwrif,trsetup)
-      !read(iunwrif,sousetup)
-      ! gbw, this whole block will be able to use the same logic as startup
-      ! simply with difference fname
-      ! just need all nml converted first...
-      ! for now, we'll close their file, open again, close, and open again.
-      !read(iunwrif,eqsetup)
+      !      read(iunwrif,setup0)  !Commented out, so setup0%mnemonic set by cqlinput
       close(iunwrif) !tmp for conversion
+      !NMLXXX, impliment tdread/write correctly for restarts
+      call get_setup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
       call get_trsetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
       call get_sousetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
       call get_eqsetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
       call get_rfsetup_from_nml('distrfunc', close_nml_file=.TRUE., debug_print=.TRUE.)
+
+      !NMLXXX, frsetup nml not converted yet
       open(unit=iunwrif,file='distrfunc') ! tmp for conversion
       rewind(iunwrif) ! tmp for conversion
-
       read(iunwrif,frsetup)
       setup0%nlrestrt=ilrestrt
 
