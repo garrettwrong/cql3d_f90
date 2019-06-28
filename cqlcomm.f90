@@ -2173,7 +2173,9 @@ module cqlcomm_mod
   !common &
   real(c_double) :: argmax
   integer :: nurf ! YuP[2019-04-24] integer
-  !     1  lenj0,  integer :: mrf,mrfn,  &
+  integer ::lenj0
+  integer :: mrf
+  integer :: mrfn
   integer :: nrayn
   integer :: nrayelts=1 !-YuP 101122: added
   integer ::  irftype
