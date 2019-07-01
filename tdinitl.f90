@@ -166,13 +166,7 @@ contains
 !.......................................................................
 
       if (setup0%nmlstout.eq."enabled") then
-         ! NMLXXX write(6,*)'  In tdinitl: '
-         ! nml name now private, write function can be added to module write(6,setup0)
-         ! nml name now private, write function can be added to module write(6,setup)
-         ! nml name now private, write function can be added to module write(6,trsetup)
-         ! private, writer function can be added to module write(6,sousetup)
-         ! private, writer function can be added to module write(6,eqsetup)
-         ! private, writer function can be added to module write(6,rfsetup)
+         call print_all_conf_nml
       elseif (setup0%nmlstout.eq."trnscrib") then
          write(6,*)'  In tdinitl: '
          call ain_transcribe("cqlinput")
