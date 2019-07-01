@@ -18,7 +18,8 @@ module cqlconf_mod
   integer :: ll
   logical, save :: nml_file_open = .FALSE.
   integer, save :: nml_fd = -1
-  real(c_double), parameter :: drya=1.d0/DBLE(lrza)
+  real(c_double), parameter :: drya = 1.d0/DBLE(lrza)
+
   public nml_close
 
   public get_setup0_from_nml
@@ -337,7 +338,8 @@ module cqlconf_mod
           (/ (merge(1.e+5,  merge(1.e+5, 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
           shape=(/ ngena,  nsoa /) )
      ! the following will be initilized to non trivial values in the setter
-     ! this is sort of sketchy logic. When opportunity arises, simplify.
+     ! this is sort of sketchy logic, which I don't like at all.
+     ! When opportunity arises, simplify.
      real(c_double) :: scm2z(ngena,nsoa,0:lrza) = 0.
      real(c_double) :: sellm1z(ngena,nsoa,0:lrza) = 0.
      real(c_double) :: sellm2z(ngena,nsoa,0:lrza) = 0.
@@ -848,65 +850,29 @@ contains
     ! All this code should do is override the defaults
     ! in setup0 with optional args.
 
-    if (present(mnemonic)) then
-       setup0%mnemonic = mnemonic
-    end if
-    if (present(ioutput)) then
-       setup0%ioutput = ioutput
-    end if
-    if (present(iuser)) then
-       setup0%iuser = iuser
-    end if
-    if (present(ibox)) then
-       setup0%ibox = ibox
-    end if
-    if (present(noplots)) then
-       setup0%noplots = noplots
-    end if
-    if (present(lnwidth)) then
-       setup0%lnwidth = lnwidth
-    end if
-    if (present(nmlstout)) then
-       setup0%nmlstout = nmlstout
-    end if
-    if (present(special_calls)) then
-       setup0%special_calls = special_calls
-    end if
-    if (present(cqlpmod)) then
-       setup0%cqlpmod = cqlpmod
-    end if
+    if (present(mnemonic)) setup0%mnemonic = mnemonic
+    if (present(ioutput)) setup0%ioutput = ioutput
+    if (present(iuser)) setup0%iuser = iuser
+    if (present(ibox)) setup0%ibox = ibox
+    if (present(noplots)) setup0%noplots = noplots
+    if (present(lnwidth)) setup0%lnwidth = lnwidth
+    if (present(nmlstout)) setup0%nmlstout = nmlstout
+    if (present(special_calls)) setup0%special_calls = special_calls
+    if (present(cqlpmod)) setup0%cqlpmod = cqlpmod
     if (present(lrz)) then
        setup0%lrz = lrz
     else
        stop 'setup0%lrz is required'
     end if
-    if (present(lrzdiff)) then
-       setup0%lrzdiff = lrzdiff
-    end if
-    if (present(lrzmax)) then
-       setup0%lrzmax = lrzmax
-    end if
-    if (present(lrindx)) then
-       setup0%lrindx = lrindx
-    end if
-    if (present(ls)) then
-       setup0%ls = ls
-    end if
-    if (present(lsmax)) then
-       setup0%lsmax = lsmax
-    end if
-    if (present(lsdiff)) then
-       setup0%lsdiff = lsdiff
-    end if
-    if (present(lsindx)) then
-       setup0%lsindx = lsindx
-    end if
-    if (present(nlrestrt)) then
-       setup0%nlrestrt = nlrestrt
-    end if
-    if (present(nlwritf)) then
-       setup0%nlwritf = nlwritf
-    end if
+    if (present(lrzdiff)) setup0%lrzdiff = lrzdiff
+    if (present(lrzmax)) setup0%lrzmax = lrzmax
+    if (present(lrindx)) setup0%lrindx = lrindx
+    if (present(ls)) setup0%ls = ls
+    if (present(lsmax)) setup0%lsmax = lsmax
+    if (present(lsdiff)) setup0%lsdiff = lsdiff
+    if (present(lsindx)) setup0%lsindx = lsindx
+    if (present(nlrestrt)) setup0%nlrestrt = nlrestrt
+    if (present(nlwritf)) setup0%nlwritf = nlwritf
 
     if ( present(debug_print)) then
        if (debug_print) call print_setup0
@@ -3390,6 +3356,8 @@ contains
     if(present(nr_delta)) setup%nr_delta = nr_delta
     if(present(nz_delta)) setup%nz_delta = nz_delta
     if(present(nt_delta)) setup%nt_delta = nt_delta
+    ! nt_delta should be even per the original code
+    if(mod(setup%nt_delta, 2) .ne. 0) call abort
     if(present(nr_f4d)) setup%nr_f4d = nr_f4d
     if(present(nz_f4d)) setup%nz_f4d = nz_f4d
     if(present(nv_f4d)) setup%nv_f4d = nv_f4d
