@@ -283,7 +283,7 @@ module cqlconf_mod
      integer :: nso = 0
      integer :: nsou = 1
      character(len=8) :: pltso = "enabled"
-     real(c_double) :: mpwrsou(0:ngena) = 3.
+     real(c_double) :: mpwrsou(0:ngena) = (/ (merge(1., 3., ll==0), ll=0,ngena) /)
      real(c_double) :: npwrsou(0:ngena) = 2.
      character(len=8) :: soucoord = "disabled"
      character(len=8) :: knockon = "disabled"
@@ -300,19 +300,34 @@ module cqlconf_mod
      real(c_double) :: xlpctlwr = .1
      real(c_double) :: xlpctmdl = .4
      real(c_double) :: xllwr = 1./43.
-     real(c_double) :: xlmdl = .25
-     ! the following will be initilized to non trivial values in the setter
-     ! we should probably init these to nans, but fortran makes that a chore
-     real(c_double) :: scm2z(ngena,nsoa,0:lrza) = 0.
-     real(c_double) :: scm2(1:ngena,1:nsoa) = 0.
+     real(c_double) :: xlmdl = .2
      real(c_double) :: sellm1(1:ngena,1:nsoa) = 1.
      real(c_double) :: sellm2(1:ngena,1:nsoa) = 1.
-     real(c_double) :: seppm1(1:ngena,1:nsoa) = 0.
+     real(c_double) :: seppm1(1:ngena,1:nsoa) = reshape( &
+          (/ (merge(1.,  merge(1., 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
+          shape=(/ ngena,  nsoa /) )
+     real(c_double) :: seppm2(1:ngena,1:nsoa) = 1.
+     real(c_double) :: sem1(ngena,nsoa) = reshape( &
+          (/ (merge(1600., 0., mod(ll,nsoa)==1), ll=1,nsoa*ngena) /), &
+          shape=(/ ngena,  nsoa /) )
+     real(c_double) :: sem2(ngena,nsoa) = reshape( &
+          (/ (merge(25.,  merge(0.5, 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
+          shape=(/ ngena,  nsoa /) )
+     real(c_double) :: scm2(1:ngena,1:nsoa) = reshape( &
+          (/ (merge(10000.,  merge(0.001, 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
+          shape=(/ ngena,  nsoa /) )
+     real(c_double) :: sthm1(1:ngena,1:nsoa) = reshape( &
+          (/ (merge(5., 0., mod(ll,nsoa)==1), ll=1,nsoa*ngena) /), &
+          shape=(/ ngena,  nsoa /) )
+     real(c_double) :: szm1(ngena,nsoa) = 0.
+     real(c_double) :: szm2(ngena,nsoa) = reshape( &
+          (/ (merge(1.e+5,  merge(1.e+5, 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
+          shape=(/ ngena,  nsoa /) )
+     ! the following will be initilized to non trivial values in the setter
+     ! this is sort of sketchy logic. When opportunity arises, simplify.
+     real(c_double) :: scm2z(ngena,nsoa,0:lrza) = 0.
      real(c_double) :: sellm1z(ngena,nsoa,0:lrza) = 0.
      real(c_double) :: sellm2z(ngena,nsoa,0:lrza) = 0.
-     real(c_double) :: seppm2(1:ngena,1:nsoa) = 1.
-     real(c_double) :: sem1(ngena,nsoa) = 0.
-     real(c_double) :: sem2(ngena,nsoa) = 0.
      real(c_double) :: seppm1z(ngena,nsoa,0:lrza) = 0.
      real(c_double) :: sem1z(ngena,nsoa,0:lrza) = 0.
      real(c_double) :: sem2z(ngena,nsoa,0:lrza) = 0.
@@ -320,9 +335,6 @@ module cqlconf_mod
      real(c_double) :: seppm2z(ngena,nsoa,0:lrza) = 0.
      real(c_double) :: szm1z(ngena,nsoa,0:lrza) = 0.
      real(c_double) :: szm2z(ngena,nsoa,0:lrza) = 0.
-     real(c_double) :: sthm1(ngena,nsoa) = 0.
-     real(c_double) :: szm1(ngena,nsoa) = 0.
-     real(c_double) :: szm2(ngena,nsoa) = 1.
   end type sousetup_t
 
   type, public ::  setup_t
@@ -1693,8 +1705,6 @@ contains
     real(c_double) :: xlpctmdl
     real(c_double) :: xllwr
     real(c_double) :: xlmdl
-    ! the following will be initilized to non trivial values in the setter
-    ! we should probably init these to nans, but fortran makes that a chore
     real(c_double) :: scm2z(ngena,nsoa,0:lrza)
     real(c_double) :: scm2(1:ngena,1:nsoa)
     real(c_double) :: sellm1(1:ngena,1:nsoa)
@@ -1881,155 +1891,85 @@ contains
     real(c_double), intent(in), optional :: szm2(ngena,nsoa)
 
 
-    if(present(asor)) then
-       sousetup%asor = asor
-    else
-       !BH080125  usage of asor.
-       !BH080125         asor(1,1,ll)=.25e+13
-       !BH080125         asor(1,2,ll)=3.25e+1
-    end if
-    if(present(asorz)) then
-       sousetup%asorz = asorz
-    else
-       do ll=1,lrza
-          sousetup%asorz(k,m,ll)=asor(k,m,ll)
-       enddo
-    end if
+    !BH080125  usage of asor.
+    !BH080125         asor(1,1,ll)=.25e+13
+    !BH080125         asor(1,2,ll)=3.25e+1
+    if(present(asor)) sousetup%asor = asor
+    if(present(asorz)) sousetup%asorz = asorz
     if(present(flemodel)) sousetup%flemodel = flemodel
     if(present(nonso)) sousetup%nonso = nonso
     if(present(noffso)) sousetup%noffso = noffso
     if(present(nso)) sousetup%nso = nso
     if(present(nsou)) sousetup%nsou = nsou
     if(present(pltso)) sousetup%pltso = pltso
-    if(present(mpwrsou)) then
-       sousetup%mpwrsou = mpwrsou
-    else
-       sousetup%mpwrsou(0)=1.
-    end if
-    if(present(npwrsou)) then
-       sousetup%npwrsou = npwrsou
-    else
-       sousetup%npwrsou(0)=2.
-    end if
-
-    if(present(scm2)) then
-       sousetup%scm2 = scm2
-    else
-       sousetup%scm2(1,1)=.001
-       sousetup%scm2(1,2)=10000.
-    end if
-    if(present(scm2z)) then
+    if(present(mpwrsou)) sousetup%mpwrsou = mpwrsou
+    if(present(npwrsou)) sousetup%npwrsou = npwrsou
+    if(present(scm2)) sousetup%scm2 = scm2
+    if(present(scm2z) .and. any(scm2z .ne. sousetup%scm2z)) then
        sousetup%scm2z = scm2z
     else
        call sou_init_loop(sousetup%scm2z, sousetup%scm2)
     end if
 
-    if(present(szm1)) then
-       sousetup%szm1 = szm1
-    else
-       sousetup%szm1(1,1)=0.
-       sousetup%szm1(1,2)=0.
-    end if
-
-    if(present(szm1z)) then
+    if(present(szm1)) sousetup%szm1 = szm1
+    if(present(szm1z) .and. any(szm1z .ne. sousetup%szm1z)) then
        sousetup%szm1z = szm1z
     else
        call sou_init_loop(sousetup%szm1z, sousetup%szm1)
     end if
 
-    if(present(szm2)) then
-       sousetup%szm2 = szm2
-    else
-       sousetup%szm2(1,1)=1.e+5
-       sousetup%szm2(1,2)=1.e+5
-    end if
-    if(present(szm2z)) then
+    if(present(szm2)) sousetup%szm2 = szm2
+    if(present(szm2z) .and. any(szm2z .ne. sousetup%szm2z)) then
        sousetup%szm2z = szm2z
     else
        call sou_init_loop(sousetup%szm2z, sousetup%szm2)
     end if
 
-    if(present(sellm1)) then
-       sousetup%sellm1 = sellm1
-    else
-       sousetup%sellm1(1,1)=1.
-       sousetup%sellm1(1,2)=1.
-    end if
-    if(present(sellm1z)) then
+    if(present(sellm1)) sousetup%sellm1 = sellm1
+    if(present(sellm1z) .and. any(sellm1z .ne. sousetup%sellm1z)) then
        sousetup%sellm1z = sellm1z
     else
        call sou_init_loop(sousetup%sellm1z, sousetup%sellm1)
     end if
 
-    if(present(sellm2)) then
-       sousetup%sellm2 = sellm2
-    else
-       sousetup%sellm2(1,1)=1.
-       sousetup%sellm2(1,2)=1.
-    end if
-
-    if(present(sellm2z)) then
+    if(present(sellm2)) sousetup%sellm2 = sellm2
+    if(present(sellm2z) .and. any(sellm2z .ne. sousetup%sellm2z)) then
        sousetup%sellm2z = sellm2z
     else
        call sou_init_loop(sousetup%sellm2z, sousetup%sellm2)
     end if
 
-    if(present(seppm1)) then
-       sousetup%seppm1 = seppm1
-    else
-       sousetup%seppm1(1,1)=1.
-       sousetup%seppm1(1,2)=1.
-    end if
-    if(present(seppm1z)) then
+    if(present(seppm1)) sousetup%seppm1 = seppm1
+    if(present(seppm1z) .and. any(seppm1z .ne. sousetup%seppm1z)) then
        sousetup%seppm1z = seppm1z
     else
        call sou_init_loop(sousetup%seppm1z, sousetup%seppm1)
     end if
 
-    if(present(seppm2)) then
-       sousetup%seppm2 = seppm2
-    else
-       sousetup%seppm2(1,1)=1.
-       sousetup%seppm2(1,2)=1.
-    end if
-    if(present(seppm2z)) then
+    if(present(seppm2)) sousetup%seppm2 = seppm2
+    if(present(seppm2z) .and. any(seppm2z .ne. sousetup%seppm2z)) then
        sousetup%seppm2z = seppm2z
     else
        call sou_init_loop(sousetup%seppm2z, sousetup%seppm2)
     end if
 
-    if(present(sem1)) then
-       sousetup%sem1 = sem1
-    else
-       sousetup%sem1(1,1)=1600.
-       sousetup%sem1(1,2)=0.
-    end if
-    if(present(sem1z)) then
+    if(present(sem1)) sousetup%sem1 = sem1
+    if(present(sem1z) .and. any(sem1z .ne. sousetup%sem1z)) then
        sousetup%sem1z = sem1z
     else
        call sou_init_loop(sousetup%sem1z, sousetup%sem1)
     end if
 
 
-    if(present(sem2)) then
-       sousetup%sem2 = sem2
-    else
-       sousetup%sem2(1,1)=.5
-       sousetup%sem2(1,2)=25.
-    end if
-    if(present(sem2z)) then
+    if(present(sem2)) sousetup%sem2 = sem2
+    if(present(sem2z) .and. any(sem2z .ne. sousetup%sem2z)) then
        sousetup%sem2z = sem2z
     else
        call sou_init_loop(sousetup%sem2z, sousetup%sem2)
     end if
 
-    if(present(sthm1)) then
-       sousetup%sthm1 = sthm1
-    else
-       sousetup%sthm1(1,1)=5.
-       sousetup%sthm1(1,2)=0.
-    end if
-    if(present(sthm1z)) then
+    if(present(sthm1)) sousetup%sthm1 = sthm1
+    if(present(sthm1z) .and. any(sthm1z .ne. sousetup%sthm1z)) then
        sousetup%sthm1z = sthm1z
     else
        call sou_init_loop(sousetup%sthm1z, sousetup%sthm1)
@@ -2050,7 +1990,6 @@ contains
     if(present(xlpctmdl)) sousetup%xlpctmdl = xlpctmdl
     if(present(xllwr)) sousetup%xllwr = xllwr
     if(present(xlmdl)) sousetup%xlmdl = xlmdl
-
     if(present(jfl)) sousetup%jfl = jfl
     if (mod(jfl,2).eq.0) then
        print *, "WARNING, jfl needed to be odd because of jpxyh=(jfl+1)/2 in pltprppr"
