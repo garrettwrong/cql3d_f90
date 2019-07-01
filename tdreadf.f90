@@ -7,11 +7,7 @@ module tdreadf_mod
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
   use cqlcomm_mod
-  use cqlconf_mod, only : get_setup_from_nml
-  use cqlconf_mod, only : get_eqsetup_from_nml
-  use cqlconf_mod, only : get_rfsetup_from_nml
-  use cqlconf_mod, only : get_trsetup_from_nml
-  use cqlconf_mod, only : get_sousetup_from_nml
+  use cqlconf_mod, only : read_all_conf_nml
   !XXXXuse pack21_mod, only : unpack21
   use param_mod
   use tdnflxs_mod, only : tdnflxs
@@ -116,34 +112,24 @@ contains
 !BH080204:  into the netcdf file, for netcdf restart case.
       if (setup0%nlrestrt.ne."ncdfdist" .and. setup0%nlrestrt.ne."ncregrid") then !BH080204
 
-      ilrestrt=setup0%nlrestrt
-      !      read(iunwrif,setup0)  !Commented out, so setup0%mnemonic set by cqlinput
-      close(iunwrif) !tmp for conversion
-      !NMLXXX, impliment tdread/write correctly for restarts
-      call get_setup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
-      call get_trsetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
-      call get_sousetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
-      call get_eqsetup_from_nml('distrfunc', close_nml_file=.FALSE., debug_print=.TRUE.)
-      call get_rfsetup_from_nml('distrfunc', close_nml_file=.TRUE., debug_print=.TRUE.)
+         ilrestrt=setup0%nlrestrt
+         call read_all_conf_nml(iunwrif)
+         !NMLXXX, frsetup nml not converted yet
+         !rewind(iunwrif) ! tmp for conversion, not sure where fr is written in file, start from the top i guess
+         read(iunwrif,frsetup)
+         setup0%nlrestrt=ilrestrt
 
-      !NMLXXX, frsetup nml not converted yet
-      open(unit=iunwrif,file='distrfunc') ! tmp for conversion
-      rewind(iunwrif) ! tmp for conversion
-      read(iunwrif,frsetup)
-      setup0%nlrestrt=ilrestrt
-
-      if ((lrors.ne.setup0%lrz .and. setup0%cqlpmod.ne."enabled") .or. &
-        (lrors.ne.setup0%ls  .and. setup0%cqlpmod.eq."enabled")) then
-!MPIINSERT_IF_RANK_EQ_0
-        PRINT *,' current lrors=',lrors,' does not correspond to old ', &
-          'setup0%lrz=',setup0%lrz,' or setup0%ls=',setup0%ls
-!MPIINSERT_ENDIF_RANK
-        stop 'tdreadf'
-      endif
+         if ((lrors.ne.setup0%lrz .and. setup0%cqlpmod.ne."enabled") .or. &
+              (lrors.ne.setup0%ls  .and. setup0%cqlpmod.eq."enabled")) then
+            !MPIINSERT_IF_RANK_EQ_0
+            PRINT *,' current lrors=',lrors,' does not correspond to old ', &
+                 'setup0%lrz=',setup0%lrz,' or setup0%ls=',setup0%ls
+            !MPIINSERT_ENDIF_RANK
+            stop 'tdreadf'
+         endif
 
       endif ! on setup0%nlrestrt
 
-      close(unit=iunwrif)
       return
 
 !.......................................................................

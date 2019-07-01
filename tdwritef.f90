@@ -13,6 +13,7 @@ contains
 
   subroutine tdwritef
     use cqlconf_mod, only : setup0
+    use cqlconf_mod, only : print_all_conf_nml
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -75,13 +76,8 @@ contains
 !.......................................................................
 
       write(iunwrif,'(" ")')
-      !NMLXXX, implimetn tdwrite/read correctly
-      ! nml name now private, can make a function in the module for this (iunwrif,setup0)
-      ! nml name now privatewrite(iunwrif,setup)
-      ! nml name now private, can make a function in the module for this write(iunwrif,trsetup)
-      !nml name now private, can make a function in the module for this write(iunwrif,sousetup)
-      !nml name now private, can make a function in the module for this write(iunwrif,eqsetup)
-      !nml name now private, can make a function in the module for this write(iunwrif,rfsetup)
+      ! write all the vars known in setup* derived types
+      call print_all_conf_nml(iunwrif)
       write(iunwrif,frsetup)
 !.......................................................................
 !BH070408:  Have added write of frsetup here.  Probably should

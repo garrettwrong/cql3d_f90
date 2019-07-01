@@ -7,6 +7,11 @@ module cqlconf_mod
   use param_mod, only : ndtr1a, negyrga, ntavga, noutpta
   use param_mod, only : pi
   use iso_c_binding, only : c_double, c_double_complex
+  ! we can easily make this portable to ancient compilers as needed...
+  use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, &
+       stdout=>output_unit, &
+       stderr=>error_unit
+
   implicit none
 
   private
@@ -18,29 +23,37 @@ module cqlconf_mod
 
   public get_setup0_from_nml
   public print_setup0
+  public read_setup0
   public set_setup0
+
 
   public get_eqsetup_from_nml
   public print_eqsetup
+  public read_eqsetup
   public set_eqsetup
 
   public get_rfsetup_from_nml
   public print_rfsetup
+  public read_rfsetup
   public set_rfsetup
 
   public get_trsetup_from_nml
   public print_trsetup
+  public read_trsetup
   public set_trsetup
 
   public get_sousetup_from_nml
   public print_sousetup
+  public read_sousetup
   public set_sousetup
 
   public get_setup_from_nml
   public print_setup
+  public read_setup
   public set_setup
 
   public print_all_conf_nml
+  public read_all_conf_nml
 
 
   type, public ::  setup0_t
@@ -901,14 +914,6 @@ contains
 
   end subroutine set_setup0
 
-  subroutine print_setup0()
-    namelist /setup0_nml/ setup0
-    WRITE(*, *) "!----  BEGIN SETUP0 DUMP"
-    WRITE(*, nml = setup0_nml)
-    WRITE(*, *)  "!----  END SETUP0 DUMP"
-  end subroutine print_setup0
-
-
   subroutine get_eqsetup_from_nml(nml_file, close_nml_file, debug_print)
     implicit none
     character(len=*), intent(in) :: nml_file
@@ -1048,15 +1053,6 @@ contains
     end if
 
   end subroutine set_eqsetup
-
-
-  subroutine print_eqsetup()
-    namelist /eqsetup_nml/ eqsetup
-    WRITE(*, *) "!----  BEGIN EQSETUP DUMP"
-    WRITE(*, nml = eqsetup_nml)
-    WRITE(*, *)  "!----  END EQSETUP DUMP"
-  end subroutine print_eqsetup
-
 
   subroutine get_rfsetup_from_nml(nml_file, close_nml_file, debug_print)
     implicit none
@@ -1477,14 +1473,6 @@ contains
 
   end subroutine set_rfsetup
 
-  subroutine print_rfsetup()
-    namelist /rfsetup_nml/ rfsetup
-    WRITE(*, *) "!----  BEGIN RFSETUP DUMP"
-    WRITE(*, nml = rfsetup_nml)
-    WRITE(*, *)  "!----  END RFSETUP DUMP"
-  end subroutine print_rfsetup
-
-
   integer function newunit(unit)
     ! Thanks fortran wiki !
     ! This is a simple function to search for an available unit.
@@ -1663,13 +1651,6 @@ contains
     end if
 
   end subroutine set_trsetup
-
-  subroutine print_trsetup()
-    namelist /trsetup_nml/ trsetup
-    WRITE(*, *) "!----  BEGIN TRSETUP DUMP"
-    WRITE(*, nml = trsetup_nml)
-    WRITE(*, *)  "!----  END TRSETUP DUMP"
-  end subroutine print_trsetup
 
   subroutine get_sousetup_from_nml(nml_file, close_nml_file, debug_print)
     implicit none
@@ -2002,13 +1983,6 @@ contains
     end if
 
   end subroutine set_sousetup
-
-  subroutine print_sousetup()
-    namelist /sousetup_nml/ sousetup
-    WRITE(*, *) "!----  BEGIN SOUSETUP DUMP"
-    WRITE(*, nml = sousetup_nml)
-    WRITE(*, *)  "!----  END SOUSETUP DUMP"
-  end subroutine print_sousetup
 
   subroutine get_setup_from_nml(nml_file, close_nml_file, debug_print)
     implicit none
@@ -3615,31 +3589,153 @@ contains
 
   end subroutine set_setup
 
-  subroutine print_setup()
+  ! dump the derived type contents in NML format
+  !    to stdout or optionally fd
+  subroutine print_setup0(to_fd)
+    integer, intent(in), optional :: to_fd
+    integer :: fd = stdout
+
+    namelist /setup0_nml/ setup0
+
+    if (present(to_fd)) fd = to_fd
+
+    WRITE(fd, nml = setup0_nml)
+
+  end subroutine print_setup0
+
+  subroutine print_eqsetup(to_fd)
+    integer, intent(in), optional :: to_fd
+    integer :: fd = stdout
+
+    namelist /eqsetup_nml/ eqsetup
+
+    if (present(to_fd)) fd = to_fd
+
+    WRITE(fd, nml = eqsetup_nml)
+
+  end subroutine print_eqsetup
+
+  subroutine print_rfsetup(to_fd)
+    integer, intent(in), optional :: to_fd
+    integer :: fd = stdout
+
+    namelist /rfsetup_nml/ rfsetup
+
+    if (present(to_fd)) fd = to_fd
+
+    WRITE(fd, nml = rfsetup_nml)
+
+  end subroutine print_rfsetup
+
+  subroutine print_trsetup(to_fd)
+    integer, intent(in), optional :: to_fd
+    integer :: fd = stdout
+
+    namelist /trsetup_nml/ trsetup
+
+    if (present(to_fd)) fd = to_fd
+
+    WRITE(fd, nml = trsetup_nml)
+
+  end subroutine print_trsetup
+
+  subroutine print_sousetup(to_fd)
+    integer, intent(in), optional :: to_fd
+    integer :: fd = stdout
+
+    namelist /sousetup_nml/ sousetup
+
+    if (present(to_fd)) fd = to_fd
+
+    WRITE(fd, nml = sousetup_nml)
+
+  end subroutine print_sousetup
+
+  subroutine print_setup(to_fd)
+    integer, intent(in), optional :: to_fd
+    integer :: fd = stdout
+
     namelist /setup_nml/ setup
-    WRITE(*, *) "!----  BEGIN SETUP DUMP"
-    WRITE(*, nml = setup_nml)
-    WRITE(*, *)  "!----  END SETUP DUMP"
+
+    if (present(to_fd)) fd = to_fd
+
+    WRITE(fd, nml = setup_nml)
+
   end subroutine print_setup
 
-  subroutine print_all_conf_nml
-    call print_setup0
-    call print_setup
-    call print_trsetup
-    call print_sousetup
-    call print_eqsetup
-    call print_rfsetup
+  subroutine print_all_conf_nml(to_fd)
+    integer, intent(in), optional :: to_fd
+    call print_setup0(to_fd)
+    call print_setup(to_fd)
+    call print_trsetup(to_fd)
+    call print_sousetup(to_fd)
+    call print_eqsetup(to_fd)
+    call print_rfsetup(to_fd)
   end subroutine print_all_conf_nml
 
-  ! function default_fpld(dim1, dim2)
-  !   integer, intent(in) :: dim1, dim2
-  !   real(c_double), dimension(dim1, dim2) :: default_fpld
-  !   default_fpld(1:6,:)=0.
-  !   default_fpld(7,:)=0.
-  !   default_fpld(8,:)=1.e10
-  !   default_fpld(9,:)=0.
-  !   default_fpld(10,:)=pi
-  ! end function default_fpld
+  ! Read back the values dumped by print_* from fd
+  subroutine read_setup0(fd)
+    integer, intent(in) :: fd
 
+    namelist /setup0_nml/ setup0
+
+    READ(fd, nml = setup0_nml)
+
+  end subroutine read_setup0
+
+  subroutine read_setup(fd)
+    integer, intent(in) :: fd
+
+    namelist /setup_nml/ setup
+
+    READ(fd, nml = setup_nml)
+
+  end subroutine read_setup
+
+  subroutine read_trsetup(fd)
+    integer, intent(in) :: fd
+
+    namelist /trsetup_nml/ trsetup
+
+    READ(fd, nml = trsetup_nml)
+
+  end subroutine read_trsetup
+
+  subroutine read_sousetup(fd)
+    integer, intent(in) :: fd
+
+    namelist /sousetup_nml/ sousetup
+
+    READ(fd, nml = sousetup_nml)
+
+  end subroutine read_sousetup
+
+  subroutine read_eqsetup(fd)
+    integer, intent(in) :: fd
+
+    namelist /eqsetup_nml/ eqsetup
+
+    READ(fd, nml = eqsetup_nml)
+
+  end subroutine read_eqsetup
+
+  subroutine read_rfsetup(fd)
+    integer, intent(in) :: fd
+
+    namelist /rfsetup_nml/ rfsetup
+
+    READ(fd, nml = rfsetup_nml)
+
+  end subroutine read_rfsetup
+
+  subroutine read_all_conf_nml(fd)
+    integer, intent(in) :: fd
+    call read_setup0(fd)
+    call read_setup(fd)
+    call read_trsetup(fd)
+    call read_sousetup(fd)
+    call read_eqsetup(fd)
+    call read_rfsetup(fd)
+  end subroutine read_all_conf_nml
 
 end module cqlconf_mod
