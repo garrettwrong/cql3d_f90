@@ -115,7 +115,6 @@ contains
          ilrestrt=setup0%nlrestrt
          call read_all_conf_nml(iunwrif)
          !NMLXXX, frsetup nml not converted yet
-         !rewind(iunwrif) ! tmp for conversion, not sure where fr is written in file, start from the top i guess
          read(iunwrif,frsetup)
          setup0%nlrestrt=ilrestrt
 
