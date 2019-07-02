@@ -13,6 +13,7 @@ contains
 
   subroutine tdwritef
     use cqlconf_mod, only : setup0
+    use cqlconf_mod, only : print_all_conf_nml
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -22,7 +23,6 @@ contains
 !.......................................................................
 
       include 'frname_decl.h'
-      include 'name.h'
       include 'frname.h'
 !MPIINSERT_INCLUDE
 !.......................................................................
@@ -76,12 +76,8 @@ contains
 !.......................................................................
 
       write(iunwrif,'(" ")')
-      ! nml name now private, can be called from module write(iunwrif,setup0)
-      write(iunwrif,setup)
-      write(iunwrif,trsetup)
-      write(iunwrif,sousetup)
-      write(iunwrif,eqsetup)
-      write(iunwrif,rfsetup)
+      ! write all the vars known in setup* derived types
+      call print_all_conf_nml(iunwrif)
       write(iunwrif,frsetup)
 !.......................................................................
 !BH070408:  Have added write of frsetup here.  Probably should

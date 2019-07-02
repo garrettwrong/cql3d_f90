@@ -307,12 +307,15 @@ contains
       WRITE(*,*)'ain_transcibe: filename =',filename
       inquire(file=filename,iostat=kiostat,opened=logic1,number=inumber)
       WRITE(*,*)'ain_transcribe: inquire on ',filename, &
-         ' opened=',logic1,'iostat=',kiostat,'unit=',inumber
-      open(unit=20,file=filename,delim='apostrophe',status="old", &
-           iostat=kiostat)
+           ' opened=',logic1,'iostat=',kiostat,'unit=',inumber
+      if(.NOT. logic1) then
+         iunit = 20
+         open(unit=iunit,file=filename,delim='apostrophe',status="old", &
+              iostat=kiostat)
+       endif
       if (kiostat.ne.0) WRITE(*,*)'ain_transcribe: kiostat=',kiostat
       if (kiostat.ne.0) STOP 'ain_transcribe: prblm with filename'
- 3    read(unit=20,fmt='(a)',end=4) line1
+ 3    read(unit=iunit,fmt='(a)',end=4) line1
       len_line1=len_trim(line1)
       if (len_line1.gt.max_length) max_length=len_line1
       WRITE(*,*) trim(line1)

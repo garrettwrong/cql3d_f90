@@ -6,7 +6,7 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	impavnc0.f90  frplteq.f90 tdeqdsk.f90  \
 	bsl.f90  bsu.f90 \
 	a_cqlp.f90  abchief.f90  achief1.f90  achiefn.f90  aclear.f90 ainalloc.f90  \
-	aindflt.f90  aindflt1.f90 aindfpa.f90  aingeom.f90  ainitial.f90   \
+	aindflt1.f90 aindfpa.f90  aingeom.f90  ainitial.f90   \
 	ainpla.f90  ainplt.f90  ainpltpa.f90   \
 	ainsetpa.f90  ainsetva.f90  ainspec.f90  ainvnorm.f90 ampfar.f90 \
 	aminmx.f90 bavdens.f90  bavgmax.f90  baviorbt.f90   \
@@ -21,7 +21,7 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	diagxswx.f90  dsk_gr.f90 dskout.f90  efield.f90  eflditer.f90 eqalloc.f90   \
 	eqcoord.f90  eqelpse.f90  eqflxavg.f90  eqfn.f90  \
 	eqfndpsi.f90  eqfninv.f90  eqfpsi.f90   \
-	eqindflt.f90  eqinitl.f90  eqjac.f90  eqonovrp.f90  \
+	eqinitl.f90  eqjac.f90  eqonovrp.f90  \
 	eqorbit.f90  eqrhs.f90   \
 	eqtopeol.f90  eqvolpsi.f90  eqwrng.f90  \
 	esefld.f90  exlin.f90  exsweep.f90  exsweept.f90   \
@@ -69,7 +69,7 @@ SOURCES  =   param.f90 cqlcomm.f90 r8subs.f90 advnce.f90 pltmain.f90 \
 	urfavg.f90  urfb0.f90  urfbes.f90   \
 	urfbplt.f90  urfchief.f90  urfdamp0.f90  urfdamp1.f90  \
 	urfdamp2.f90  urfdampa.f90 urfdout.f90  urfedge.f90   \
-	urffflx.f90  urfindfl.f90  urfinitl.f90  urfmidv.f90  \
+	urffflx.f90  urfinitl.f90  urfmidv.f90  \
 	urfpack.f90  urfpackm.f90  urfrays.f90  urfread.f90   \
 	urfread_.f90  urfsetup.f90  urfwrite.f90  urfwrite_.f90  \
 	urfwrong.f90  urfwr0.f90  urfwr0c.f90 \

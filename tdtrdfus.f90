@@ -143,7 +143,7 @@ contains
       rdefr = -1.
       if (rsum.gt.0.) then
         rdefr = 1.
-        call ryaintorz(njene,ryain(1),difin(1),setup0%lrz,rhotr(0),drshape(0))
+        call ryaintorz(njene,ryain,difin,setup0%lrz,rhotr(0),drshape(0))
       endif
 
       do l=0,setup0%lrz-1
@@ -440,8 +440,6 @@ contains
 
       subroutine ryaintorz(npts_in,oldx,oldf,npts,ynewx,ynewf)
       use param_mod
-      !XXXXXXXXX  dim for work() did not match, used comm !YuP: work() is not used.
-      !use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 
 !.......................................................................
@@ -454,10 +452,7 @@ contains
 !     At this stage uses linear interpolation
 !.......................................................................
 
-      !parameter (nwka=3*lrza+1) ! YuP: Not used
-      !XXXXX potentially did not match comm dimension: work(nwka)!YuP: work() is not used.
       dimension oldx(1),oldf(1),ynewx(1),ynewf(1)
-      !dimension secondd(lrza) ! YuP: Not used
 
       do jj = 1,npts_in-1
         do ll = 0,npts

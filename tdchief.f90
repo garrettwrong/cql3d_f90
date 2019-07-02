@@ -75,8 +75,8 @@ contains
     use param_mod
     use cqlcomm_mod
     use cqlconf_mod, only : nml_close
-    use cqlconf_mod, only : print_setup0
     use cqlconf_mod, only : setup0
+    use cqlconf_mod, only : get_setup_from_nml
     use cqlconf_mod, only : get_setup0_from_nml
       use netcdfrf_mod, only : netcdfrf
       use pltmain_mod, only : pltmain
@@ -103,11 +103,26 @@ contains
       ! we can actually make this an argument if we want...
       character(len=*), intent(in), optional :: nml_file
 
-      include 'name.h'
 !MPIINSERT_INCLUDE
 
       character*8 icall,iplotsxr
       data iflag1/0/
+
+!..................................................................
+!     Before we do anything, init cqlcomm  module, exactly once.
+!
+!     This has the effect of associating pointers from comm vars previously
+!       in a huge common block to the derived type targets in cqlconf.
+!
+!     This was done to accomodate a request not to use  module or der types
+!       (on a project that was to impliment derived types and modules)
+!       in the code bc Compx authors found these "did not look good"...
+!
+!     The approach used for setup0, though verbose, actually deleted
+!       the common variables.... reducing code.
+!..................................................................
+      call initialize_cqlcomm
+
 
 !.......................................................................
 !     Open cqlinput NL file and adjust to new setup0/setup structure,
@@ -142,11 +157,9 @@ contains
 !.......................................................................
       call aclear
 
-      ! this shoudl get (re)moved with each nml convers as need,
-      ! eventually totally handled by the config module
-      open(unit=2,file='cqlinput',status='old')
-      read(2,setup)  ! Gets pltinput variable, for ainplt routine.
-      rewind(2)
+      ! Gets pltinput variable, for ainplt routine.
+      call get_setup_from_nml(nml_file, close_nml_file=.TRUE.)
+
       sumdtr=zero
 
 !.................................................................
@@ -187,7 +200,7 @@ contains
          nefiter=1              ! counts iterations; elecfld iterations for
                                 ! one flux surface are not functional;
                             ! set nefiter to 1 for logic control in impavnc0
-         call achief1           ! YuP: only called during n=0; Why needed?
+         call achief1(nml_file)           ! YuP: only called during n=0; Why needed?
                                 ! BH:  In the past, at least, this call with
                                 !      setup0%lrzmax=1, time-stepped the soln
                                 !      to n=nstop in achiefn.
@@ -198,7 +211,7 @@ contains
 !     (and sets n=0, n_(1:lrorsa)=0 though call aindflt1).
 !..................................................................
 
-      call tdinitl !-> call ainitial
+      call tdinitl(nml_file) !-> call ainitial
          ! tdinitl-> eqcoord-> eqfndpsi-> eqorbit-> trace flux surf.
          ! solr(l,lr_), solz(l,lr_) are R,Z coords. of flux surface
       dtr0=dtr

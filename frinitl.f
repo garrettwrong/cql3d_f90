@@ -8,7 +8,6 @@ c
 
       REAL RILIN
 
-      ep100=1.d+100
 
 c..................................................................
 c     Jump past the "fr" namelist if "fr" is disabled.

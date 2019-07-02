@@ -388,7 +388,6 @@ c*********************************************************************
      1  ech,
      1  fw,
      1  lh,
-     1  nmods,
      1  nbssltbl,nondamp,nrfstep2,
      1  nrfpwr,nrfitr1,nrfitr2,nrfitr3,
      1  scaleurf,urfrstrt,urfwrray,

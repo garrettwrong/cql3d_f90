@@ -7,6 +7,7 @@ module tdreadf_mod
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
   use cqlcomm_mod
+  use cqlconf_mod, only : read_all_conf_nml
   !XXXXuse pack21_mod, only : unpack21
   use param_mod
   use tdnflxs_mod, only : tdnflxs
@@ -52,7 +53,6 @@ contains
 
       character*1 blank
       character*8 ilrestrt
-      include 'name.h'
       include 'frname_decl.h'
       include 'frname.h'
 !
@@ -112,28 +112,23 @@ contains
 !BH080204:  into the netcdf file, for netcdf restart case.
       if (setup0%nlrestrt.ne."ncdfdist" .and. setup0%nlrestrt.ne."ncregrid") then !BH080204
 
-      ilrestrt=setup0%nlrestrt
-!      read(iunwrif,setup0)  !Commented out, so setup0%mnemonic set by cqlinput
-      read(iunwrif,setup)
-      read(iunwrif,trsetup)
-      read(iunwrif,sousetup)
-      read(iunwrif,eqsetup)
-      read(iunwrif,rfsetup)
-      read(iunwrif,frsetup)
-      setup0%nlrestrt=ilrestrt
+         ilrestrt=setup0%nlrestrt
+         call read_all_conf_nml(iunwrif)
+         !NMLXXX, frsetup nml not converted yet
+         read(iunwrif,frsetup)
+         setup0%nlrestrt=ilrestrt
 
-      if ((lrors.ne.setup0%lrz .and. setup0%cqlpmod.ne."enabled") .or. &
-        (lrors.ne.setup0%ls  .and. setup0%cqlpmod.eq."enabled")) then
-!MPIINSERT_IF_RANK_EQ_0
-        PRINT *,' current lrors=',lrors,' does not correspond to old ', &
-          'setup0%lrz=',setup0%lrz,' or setup0%ls=',setup0%ls
-!MPIINSERT_ENDIF_RANK
-        stop 'tdreadf'
-      endif
+         if ((lrors.ne.setup0%lrz .and. setup0%cqlpmod.ne."enabled") .or. &
+              (lrors.ne.setup0%ls  .and. setup0%cqlpmod.eq."enabled")) then
+            !MPIINSERT_IF_RANK_EQ_0
+            PRINT *,' current lrors=',lrors,' does not correspond to old ', &
+                 'setup0%lrz=',setup0%lrz,' or setup0%ls=',setup0%ls
+            !MPIINSERT_ENDIF_RANK
+            stop 'tdreadf'
+         endif
 
       endif ! on setup0%nlrestrt
 
-      close(unit=iunwrif)
       return
 
 !.......................................................................
