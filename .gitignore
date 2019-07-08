@@ -1,5 +1,5 @@
 *.o
-xcql3d_gfortran64*
+xcql3d*
 *.mod
 *.log
 *~
