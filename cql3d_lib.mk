@@ -6,7 +6,6 @@ EXEDIR=$(OBJ)/exe
 # These are needed to invoke cql3d from library as done in a_cqlp
 # One day these can migrate to some sort of single api module.
 # For now this is not so bad. I think it even works.
-#PUBMODS=cqlconf_mod.mod impavnc0_mod.mod abchief_mod.mod
 PUBMODS=$(wildcard *.mod)
 
 ## TRANSP build stuff, should set FC90 and FFLAGS.
