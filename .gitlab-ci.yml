@@ -20,10 +20,10 @@ build:centos7:
   - make -f  makefile_gfortran64.CentOS7 all
   artifacts:
     paths:
-    - xcql3d_gfortran64
-    - xcql3d_gfortran64_shared
-    - libxcql3d_gfortran64.so
-    - libxcql3d_gfortran64.a
+    - xcql3d
+    - xcql3d_shared
+    - libxcql3d.so
+    - libxcql3d.a
     expire_in: 1 week
 
 case1:
@@ -31,7 +31,7 @@ case1:
   image: garrettwrong/cql3d_f90_centos-7
   script:
   - cd ci/case1
-  - ../../xcql3d_gfortran64
+  - ../../xcql3d
   - nccmp -dmgfs reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
   artifacts:
     when: always
@@ -48,7 +48,7 @@ case1_shared:
   script:
   - export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
   - cd ci/case1
-  - ../../xcql3d_gfortran64_shared
+  - ../../xcql3d_shared
   - nccmp -dmgfs reference.nc mst_stand_lh00001.MergedCQL3D_direct_lh-dis.nc
   artifacts:
     when: always
@@ -64,7 +64,7 @@ nstx_NBI_urf:
   image: garrettwrong/cql3d_f90_centos-7
   script:
   - cd ci/nstx_NBI_urf
-  - ../../xcql3d_gfortran64
+  - ../../xcql3d
   - nccmp -dmgfs nstx_130608.00352.0_short_rerun190612.nc reference.nc
   - nccmp -dmgfs nstx_130608.00352.0_short_rerun190612_krf001.nc reference_krf001.nc 
   artifacts:
@@ -82,7 +82,7 @@ ampere_faraday:
   image: garrettwrong/cql3d_f90_centos-7
   script:
   - cd ci/ampere_faraday
-  - ../../xcql3d_gfortran64
+  - ../../xcql3d
   - nccmp -dmgfs reference.nc freidberg_full_eps_AF_3rd_root_J0.3.3_nstop10_lrz20.nc
   artifacts:
     when: always
@@ -98,7 +98,7 @@ amp_far_rune_knockon:
   image: garrettwrong/cql3d_f90_centos-7
   script:
   - cd ci/amp_far_rune_knockon
-  - ../../xcql3d_gfortran64
+  - ../../xcql3d
   - nccmp -dmgfs reference.nc tdep_ko_amp-far.4.3_short_test.nc
   artifacts:
     when: always
