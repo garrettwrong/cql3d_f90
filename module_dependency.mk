@@ -351,4 +351,5 @@ wptramu.o: bcast.o cqlcomm.o param.o r8subs.o wpbdry.o wpcheck.o  \
 	znonsym.o
 wptrmuy.o: cqlcomm.o param.o
 wpvptb.o: cqlcomm.o param.o
-wpwrng.o:  cqlcomm.o param.o
+wpwrng.o: cqlcomm.o param.o
+zfreya.o: cqlcomm.o param.o

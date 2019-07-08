@@ -9,20 +9,26 @@ EXEDIR=$(OBJ)/exe
 #PUBMODS=cqlconf_mod.mod impavnc0_mod.mod abchief_mod.mod
 PUBMODS=$(wildcard *.mod)
 
+## TRANSP build stuff, should set FC90 and FFLAGS.
+SHR = $(CODESYSDIR)/source/misc/makeflags.mk
+include $(SHR)
+export
+
 libcql3d_lib: pkg
+	@test -d $(DYLDIR) || mkdir -p $(DYLDIR)
 	@test -d $(LIBDIR) || mkdir -p $(LIBDIR)
 	@test -d $(MODDIR) || mkdir -p $(MODDIR)
 	@test -d $(EXEDIR) || mkdir -p $(EXEDIR)
-	@cp libxcql3d_gfortran64.so $(DYLDIR)/libcql3d_lib.so
-	@cp libxcql3d_gfortran64.a $(LIBDIR)/cql3d_lib.a
+	@cp libxcql3d.so $(DYLDIR)/libcql3d_lib.so
+	@cp libxcql3d.a $(LIBDIR)/cql3d_lib.a
 	@cp $(PUBMODS) $(MODDIR)
-	@cp xcql3d_gfortran64 $(EXEDIR)/xcql3d_gfortran64
+	@cp xcql3d $(EXEDIR)/xcql3d
 
 pkg:
 	$(MAKE) -f makefile_gfortran64.CentOS7 -j all
 
 clean:
-	$(MAKE) -f makefile.CentOS7 clean
+	$(MAKE) -f makefile_gfortran64.CentOS7 clean
 realclean: clean
 
 .PHONY: realclean
