@@ -141,7 +141,9 @@ module cqlconf_mod
      character(len=8) :: fw = "disabled"
      character(len=8) :: rftype(1:nmodsa) = "notset"
      character(len=256) :: rffile(1:nmodsa) = "notset"
-     character(len=256) :: rdcfile(1:nrdca) = (/ (merge("du0u0_input", "notset     ", ll==1), ll=1,nrdca) /)
+     character(len=256) :: rdcfile(1:nrdca) = (/ "du0u0_input", "notset     ", &
+          "notset     ", "notset     ", "notset     ", "notset     ", &
+          "notset     ", "notset     ", "notset     ", "notset     " /)
      character(len=8) :: rfread = "text"
      !..................................................................
      !     nharms.gt.0, then calculate damping for harmonics
@@ -257,7 +259,7 @@ module cqlconf_mod
      integer :: nrdc = 1
      character(len=8) :: rdcmod = "disabled"
      character(len=8) :: rdc_clipping = "disabled"
-     integer :: nrdcspecies(1:nrdca) = (/ (merge(1, 0, ll==1), ll=1,nrdca) /)
+     integer :: nrdcspecies(1:nrdca) = (/ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 /)
      real(c_double) :: rdcscale(1:nrdca) = 1.d0
      ! this may have been undefined in original code
      character(len=8) :: rdc_netcdf = "disabled"
@@ -297,7 +299,7 @@ module cqlconf_mod
      integer :: nso = 0
      integer :: nsou = 1
      character(len=8) :: pltso = "enabled"
-     real(c_double) :: mpwrsou(0:ngena) = (/ (merge(1., 3., ll==0), ll=0,ngena) /)
+     real(c_double) :: mpwrsou(0:ngena) = (/ 1., 3. ,3., 3. /)
      real(c_double) :: npwrsou(0:ngena) = 2.
      character(len=8) :: soucoord = "disabled"
      character(len=8) :: knockon = "disabled"
@@ -318,24 +320,24 @@ module cqlconf_mod
      real(c_double) :: sellm1(1:ngena,1:nsoa) = 1.
      real(c_double) :: sellm2(1:ngena,1:nsoa) = 1.
      real(c_double) :: seppm1(1:ngena,1:nsoa) = reshape( &
-          (/ (merge(1.,  merge(1., 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
+          (/ 1., 1., 0., 1., 1., 0., 1., 1., 0., 1., 1., 0. /), &
           shape=(/ ngena,  nsoa /) )
      real(c_double) :: seppm2(1:ngena,1:nsoa) = 1.
      real(c_double) :: sem1(ngena,nsoa) = reshape( &
-          (/ (merge(1600., 0., mod(ll,nsoa)==1), ll=1,nsoa*ngena) /), &
+          (/ 1600., 0., 0., 1600., 0., 0., 1600., 0., 0., 1600., 0., 0. /), &
           shape=(/ ngena,  nsoa /) )
      real(c_double) :: sem2(ngena,nsoa) = reshape( &
-          (/ (merge(25.,  merge(0.5, 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
+          (/ 0.5, 25., 0., 0.5, 25., 0., 0.5, 25., 0., 0.5, 25., 0. /), &
           shape=(/ ngena,  nsoa /) )
      real(c_double) :: scm2(1:ngena,1:nsoa) = reshape( &
-          (/ (merge(10000.,  merge(0.001, 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
+          (/ 0.001, 10000., 0., 0.001, 10000., 0., 0.001, 10000., 0., 0.001, 10000., 0. /), &
           shape=(/ ngena,  nsoa /) )
      real(c_double) :: sthm1(1:ngena,1:nsoa) = reshape( &
-          (/ (merge(5., 0., mod(ll,nsoa)==1), ll=1,nsoa*ngena) /), &
+          (/ 5., 0., 0., 5., 0., 0., 5., 0., 0., 5., 0., 0. /), &
           shape=(/ ngena,  nsoa /) )
      real(c_double) :: szm1(ngena,nsoa) = 0.
      real(c_double) :: szm2(ngena,nsoa) = reshape( &
-          (/ (merge(1.e+5,  merge(1.e+5, 0., mod(ll,nsoa)==1), mod(ll,nsoa)==2), ll=1,nsoa*ngena) /), &
+          (/ 1.e+5, 1.e+5, 0., 1.e+5, 1.e+5, 0., 1.e+5, 1.e+5, 0., 1.e+5, 1.e+5, 0. /), &
           shape=(/ ngena,  nsoa /) )
      ! the following will be initilized to non trivial values in the setter
      ! this is sort of sketchy logic, which I don't like at all.
@@ -491,7 +493,7 @@ module cqlconf_mod
      character(len=8) :: netcdfvecrf = "disabled"
      character(len=8) :: netcdfvecs = "all"
      integer :: nnspec = 1
-     real(c_double) :: mpwr(0:ntotala) = (/ ( merge(1, 3, ll<4), ll=0,ntotala) /)
+     real(c_double) :: mpwr(0:ntotala) = (/ 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3 /)
      real(c_double) :: megy(ngena) = 0.0
      real(c_double) :: mtorloss(ngena) = 0.0
      integer :: mmsv = 3 ! xxx reset by mx at run time, seems dangerous
@@ -501,13 +503,14 @@ module cqlconf_mod
      integer :: nchgdy = 0
      integer :: ngauss = 0
      integer :: nlagran = 4
-     logical :: nlotp1(noutpta) = (/ (merge(.false., .true., ll==4), ll=1,noutpta) /) 
+     logical :: nlotp1(noutpta) = (/ .true., .true., .true., .false., .true., &
+          .true., .true., .true., .true., .true., .true. /)
      logical :: nlotp2(noutpta) = .false.
      logical :: nlotp3(noutpta) = .false.
      logical :: nlotp4(noutpta) = .false.
      integer :: nmax = nmaxa
      integer :: ngen = ngena
-     integer :: nkconro(ntotala) = (/ (merge(ll, 0, ll<3), ll=1,ntotala) /)
+     integer :: nkconro(ntotala) = (/ 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 /)
      integer :: nplt3d(nplota) = -10000
      integer :: nrskip = 10
      integer :: nen = nena
@@ -515,7 +518,8 @@ module cqlconf_mod
      integer :: nv_npa = 1
      integer :: nen_npa = nena
      integer :: npaproc = 1
-     character(len=8) :: npa_process(npaproca) = (/ (merge("cxh     ", "notset  ", ll==1), ll=1,npaproca) /)
+     character(len=8) :: npa_process(npaproca) = (/ "cxh     ", "notset  ", &
+          "notset  " , "notset  " , "notset  "  /)
      integer :: nr_delta = 65
      integer :: nz_delta = 65
      integer :: nt_delta = 80 !Needs to be even
@@ -614,7 +618,16 @@ module cqlconf_mod
      character(len=8) :: regy(ngena) = "disabled"
      real(c_double) :: rfacz = .7
      character(len=8) :: rzset = "disabled"
-     real(c_double) :: rd(nva) = (/ (merge(100.d0, 0.d0, ll==1), ll=1,nva) /)
+     real(c_double) :: rd(nva) = (/ 100.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 /)
      real(c_double) :: roveram = 1.e-6
      real(c_double) :: rovera(lrza) = .1
      real(c_double) :: rya(0:lrza+1) = (/ ( min(1., (ll - min(dble(ll),0.5))*drya), ll= 0, lrza+1) /)
@@ -647,7 +660,17 @@ module cqlconf_mod
      real(c_double) :: temppar(ntotala,0:lza+1) = 1.
      real(c_double) :: tfac = 1.
      real(c_double) :: tfacz = 1.
-     real(c_double) :: tbnd(lrorsa) = (/ (merge( 0.002, 0., ll==1), ll=1,lrorsa ) /)
+     real(c_double) :: tbnd(lrorsa) = (/ 0.002, 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., &
+          0., 0., 0., 0., 0., 0., 0., 0., 0. /)
      character(len=8) :: tandem = "disabled"
      real(c_double) :: thetd(nva) = 0.0
      character(len=8) :: torloss(ngena) = "disabled"

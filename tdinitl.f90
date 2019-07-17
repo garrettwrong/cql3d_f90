@@ -72,6 +72,7 @@ contains
     use cqlconf_mod, only : get_trsetup_from_nml
     use cqlconf_mod, only : get_sousetup_from_nml
     use cqlconf_mod, only : get_setup_from_nml
+    use cqlconf_mod, only : print_all_conf_nml
     use cqlcomm_mod
     use tdeqdsk_mod, only : tdeqdsk
     use ampfar_mod, only : ampfalloc
