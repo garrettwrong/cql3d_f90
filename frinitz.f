@@ -7,6 +7,8 @@ c
       implicit integer (i-n), real(c_double) (a-h,o-z)
 c
 
+!MPIINSERT_INCLUDE
+
 
 c..................................................................
 c     This routine communicates between common blocks of CQL3D and the

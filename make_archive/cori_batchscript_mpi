@@ -6,7 +6,13 @@
 #SBATCH --account=m77
 #SBATCH -t 0:03:00
 #SBATCH -C haswell
-#SBATCH -N 7  # 7*32=224 (32 tasks/node) In general, should be 32*N=n*(c/2)
+#SBATCH -N 1  
+
+## Note: this batchscript can be used at Edison and Cori.
+## For Edison, comment the line with haswell.
+## Examples of using 480 cores:
+##Edison has 24 cores per compute node, 20*24=480, so use (-N 20, -n 480 -c 1)
+##Cori has 32 cores per node, 15*32=480, so use (-N 15,  -n 480 -c 1) 
 
 cd $SLURM_SUBMIT_DIR
-srun -n 112 -c 4 ./xcql3d_mpi_intel
+srun -n 32 -c 1 ./xcql3d_mpi_intel.cori

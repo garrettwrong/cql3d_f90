@@ -3,7 +3,7 @@
 ## script for converting CQL3D files into parallel form
 ## usage: doparallel.py in.f out.f insertions.f
 ## files: patterns.mpi - strings for cleaning (like "write(*,*)")
-##        block.mpi    - list of output modules for blocking
+##        block.mpi    - list of output modules for blocking (YuP: not used now, but can be if needed)
 ## YuP[07-2016] removed usage of block.mpi as it was inserting lines at wrong place
 ##        dec.mpi      - list of fortran declaration insructions
 ###########################################################################
@@ -76,7 +76,7 @@ def procbuf():
             return
     printbuf()
 
-## main cleaning module
+## main cleaning module (edit patterns.mpi for a list of lines that will be processed->commented)
 def clean():
     global buf, str, pat
     ## reading patterns for cleaning
@@ -89,7 +89,8 @@ def clean():
         ss = cleans(s)
         if ss=='': ## empty or comment line
             buf.append(s)
-        elif ss[5]!=' ': ## continuation line
+        elif ss=='&':   #ss[5]!=' ': ## continuation line
+            # NEED TO COMMENT THE NEXT LINE
             buf.append(s)
             str += ss[6:]
             continue
@@ -103,8 +104,8 @@ def clean():
 ## blocking all outputs from working processes (out->out)
 ###########################################################################
 
-## detecting endpoint of declaration
-def start(s, D):
+## detecting endpoint of declaration (YuP: Need to revise for f90)
+def start(s, D):   # Used in block() only, which is not important now.
     if s=='':
         return False
     if s[0] in 'cC!':
@@ -141,7 +142,7 @@ def block():
             break
     if not check: ## current file shouldn't be blocked
         return
-    ## reading delcaration instructions for detecting inserting point
+    ## reading declaration instructions for detecting inserting point
     D = open('mpi/dec.mpi','r').readlines()
     for i in range(len(D)):
         D[i] = string.strip(D[i])
@@ -163,12 +164,16 @@ def dompi():
     inf = []
     ## reading insertions
     L = open(sys.argv[3],'r').readlines()
+    #print L
     for l in L:
-        if (l[0]=='C') | (l[0]=='!'):
+        if (l[0]=='!'):   
+            #In *.f90 files, these lines start with !MPI, example: !MPIINSERT_INCLUDE
             key = string.strip(l)
             ins[key] = []
+            #print '1. key=',key 
         else:
             ins[key].append(l[:-1])
+            #print '2. key=',key
     ## searching and inserting 
     mode = ''
     for l in out:
@@ -177,12 +182,12 @@ def dompi():
             mode = ''
             continue
         ll = string.strip(l)
-        if ((l[0:4]=='CMPI')|(l[0:4]=='!MPI')) and ins.has_key(ll):
+        if (l[0:4]=='!MPI') and ins.has_key(ll):
             inf.append('!MPI >>>')
             for i in ins[ll]:
                 inf.append(i)
             inf.append('!MPI <<<')
-            if l[0:11]=='CMPIREPLACE':
+            if l[0:11]=='CMPIREPLACE':  # Not present anymore (could skip)
                 mode = 'replace'
             continue
         inf.append(l)
@@ -203,8 +208,8 @@ def main():
     f.close()
     
     ## doing parallelizing    
-    clean() ## clear all outputs on terminal (write(*,*) and so on)
-    block() ## block all outputs for workers 
+    clean() ## clear all outputs on terminal (write(*,*) and so on). YuP:Deal with it later
+    block() ## block all outputs for workers. YuP: not used anymore.
     dompi() ## inserting mpi instructions into code
 
     ## writing result
