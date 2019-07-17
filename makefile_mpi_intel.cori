@@ -1,0 +1,148 @@
+# makefile for CQL3D_f90 (generating MPI version)  to be used on Cori [NERSC]
+# Adjusted by YuP[2019-06-25] based on makefile_gfortran64.OSX
+
+# May/06:  makefile_mpi.xxx  is a system setup by Nikolai Ershov
+#          for creation of mpi version of cql3d from the serial
+#          version.   Therefore, only one version of cql3d needs
+#          be maintained.
+#          Comments (beginning with !MPI) have been inserted in the source.
+#          These are processed using python code from the ./mpi subdirectory
+#          to produce an MPI cql3d version.
+#          The procedure is described in CompX report 
+#          CQL3D_Parallelization_CompX-2006-1.pdf, and has been evolved
+#          by Yuri Petrov.
+#          Please follow this procedure in future cql3d modifications.
+
+## Need first to enter:
+## module unload darshan ; module load cray-netcdf ; module load cray-hdf5
+## or put the comment in your startup scripts
+## e.g., in .bashrc.ext at NERSC
+
+#Intel compiler is now default for Cori ( intel/18.0.1.163  as of 2019 )
+#module unload darshan
+#module load cray-netcdf   ## this will load cray-netcdf/4.6.1.3
+#module load cray-hdf5     ## this will load cray-hdf5/1.10.2.0
+
+#
+#Note:  a simple 'module load netcdf' would satisfy need for netcdf.inc, but
+#       failed in references to hdf5,....
+# For 150320 load:
+# But there is warning from H5PL.c: Using 'dlopen' in statically linked 
+#     applications requires at runtime the shared libraries from the 
+#     glibc version used for linking.
+
+
+#YuP[April 2017] It is strongly advised to add into your .bashrc.ext script:
+#   export FORT_BUFFERED=1
+# or into your .cshrc.ext script:
+#   setenv FORT_BUFFERED 1
+# It was the default option for Edison/NERSC in 2016,
+# but it was disabled by NERSC personnel in 2017
+# because of problems with some newer compilers.
+# As a result of this change, the MPI runs became slower by ~3x
+# when there is I/O of data into one file from all cores.
+
+#190626 Works on Cori
+
+SHELL     = /bin/sh
+NAME      = xcql3d_mpi_intel.cori
+COMPILER=	ftn
+BUILDER=	$(COMPILER)
+LIBTOOL   = libtool -static
+
+# INCLUDE line
+include include_dependency.mk
+# Check if include files have changed i guess
+$(SOURCES):        $(INCLUDES)
+
+# SOURCE line
+include source_dependency.mk
+#--- NO NEED to add mpilib.f90 into source_dependency.mk --------------
+
+OBJECTS   = $(SOURCES:.f90=.o)
+
+#LOCATION=	-L/usr/lib64  -L/usr/local/pgplot
+#LOCATION=	     -L/global/homes/j/jaegeref/pgplot_xt3
+LOCATION=	 -L$(NETCDF_DIR)/lib -L$(HDF5_DIR)/lib -L/global/homes/u/u650/pgplot.edison/5.2/cnl2.0_ifort/lib
+LIBS = \
+ $(LOCATION) -lpgplot -lnetcdff -lnetcdf
+
+#Location of netcdf.inc:
+INCLUDE= -I $(NETCDF_DIR)/include
+# -g is full debug;   -gopt allows optimization
+DEBUG     = -g
+OPTIMIZE  = -fast
+LISTING   = -Mlist/etc/shells
+CSPECIAL  =
+SPECIAL   = -byteswapio -Mbackslash
+#LDSPECIAL = -Wl,-noinhibit-exec 
+LDSPECIAL = 
+#COMPILE   = $(COMPILER) -c $(CSPECIAL) $(INCLUDE) $(DEBUG) # or use $(OPTIMIZE)
+COMPILE   =  $(COMPILER) -c $(CSPECIAL) $(INCLUDE) $(OPTIMIZE) # or use $(DEBUG)
+LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(OPTIMIZE) # $(DEBUG)
+PROTECT   = chmod 755
+DELETE    = rm -f
+
+standalone: $(NAME)
+libs: $(NAME)_shared lib$(NAME).a
+all: standalone libs
+
+$(NAME):           $(OBJECTS)
+	$(LOAD)    $(OBJECTS) $(LOCATION) $(LIBS)
+	$(PROTECT) $(NAME)
+
+# For the libraries, we do not want a main
+LIBOBJS = $(filter-out a_cqlp.o, $(OBJECTS))
+lib$(NAME).so: $(LIBOBJS)
+	$(BUILDER) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBS)
+	$(PROTECT) $@
+
+lib$(NAME).a: $(LIBOBJS)
+	$(LIBTOOL) -o $@ $^
+	$(PROTECT) $@
+
+$(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
+	$(BUILDER) -o $@ $(LDSPECIAL) $(DEBUG)	a_cqlp.o -L. -l$< $(LOCATION) $(LIBS)
+	$(PROTECT) $@
+
+#------ Module generated dependencies
+# Now that we have modules and scope,
+#   we unfortunately do have dependencies.
+# Do not fret, they're not so bad.
+
+include module_dependency.mk
+%.o: %.f90 $(INCLUDES)
+
+# Following use of pattern matching works; 
+# it is based on statements in Sect. 10.7 of gmake Manual
+# by Stallman and McGrath.
+# However, the two rules following this seem clearer to me (BobH).
+#%.o:               %.f        $(INCLUDES)
+#	$(COMPILE) $< -o $@
+
+
+
+#Changes introduced by JCW so obtain saved copy of mpi modified sources
+#	mpi/doparallel.py $< mpitmp.f mpi/mpins_par.f
+#	$(COMPILE) mpitmp.f -o $@
+
+	mpi/doparallel.py $< $*_mpitmp.f90 mpi/mpins_par.f
+	$(COMPILE) $*_mpitmp.f90 -o $@
+
+
+rebuild:
+	$(COMPILE) $(SOURCES)
+	$(LOAD) $(OBJECTS) $(LOCATION) $(LIBS)
+
+
+clean:
+	$(DELETE)  $(NAME) $(OBJECTS)
+	$(DELETE) *.mod
+	$(DELETE) *.so *.a
+	$(DELETE) *.lst  ## *_mpitmp.f90
+
+.PHONY: all
+.PHONY: clean
+.PHONY: libs
+.PHONY: rebuild
+.PHONY: standalone

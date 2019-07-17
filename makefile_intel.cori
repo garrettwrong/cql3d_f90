@@ -1,0 +1,114 @@
+# makefile for CQL3D_f90 (serial version)  to be used on Cori [NERSC]
+# Adjusted by YuP[2019-06-25] based on makefile_gfortran64.OSX
+
+## Need first to enter:
+## module unload darshan ; module load cray-netcdf ; module load cray-hdf5
+## or put the comment in your startup scripts
+## e.g., in .bashrc.ext at NERSC
+
+#Intel compiler is now default for Cori ( intel/18.0.1.163  as of 2019 )
+#module unload darshan
+#module load cray-netcdf   ## this will load cray-netcdf/4.6.1.3
+#module load cray-hdf5     ## this will load cray-hdf5/1.10.2.0
+
+#
+#Note:  a simple 'module load netcdf' would satisfy need for netcdf.inc, but
+#       failed in references to hdf5,....
+# For 150320 load:
+# But there is warning from H5PL.c: Using 'dlopen' in statically linked 
+#     applications requires at runtime the shared libraries from the 
+#     glibc version used for linking.
+
+
+SHELL     = /bin/sh
+NAME      = xcql3d_intel.cori
+COMPILER  =	ftn
+BUILDER   =	$(COMPILER)
+LIBTOOL   = libtool -static
+
+# INCLUDE line
+include include_dependency.mk
+# Check if include files have changed i guess
+$(SOURCES):        $(INCLUDES)
+
+# SOURCE line
+include source_dependency.mk
+
+OBJECTS   = $(SOURCES:.f90=.o)
+#LOCATION  =     -L/usr/lib64  -L/usr/local/pgplot  #Linux box
+#LOCATION  =   -L/global/homes/j/jaegeref/pgplot_xt3
+LOCATION=   -L$(NETCDF_DIR)/lib -L$(HDF5_DIR)/lib -L/global/homes/u/u650/pgplot.edison/5.2/cnl2.0_ifort/lib
+#LIBRARIES=	-lX11 -lnetcdff -lnetcdf -hdf5 -lpgplot
+LIBRARIES = \
+ $(LOCATION) -lpgplot -lnetcdff -lnetcdf
+#Location of netcdf.inc:
+INCLUDE   = -I $(NETCDF_DIR)/include
+# -g is full debug;   -gopt allows optimization
+DEBUG     = -g
+OPTIMIZE  = -fast 
+LISTING   = -Mlist
+CSPECIAL  = 
+SPECIAL   = -byteswapio
+LDSPECIAL = -Wl,-noinhibit-exec 
+#COMPILE   = $(COMPILER) -c $(INCLUDE) $(CSPECIAL) $(DEBUG) # or use $(OPTIMIZE)
+COMPILE   =  $(COMPILER) -c $(INCLUDE) $(CSPECIAL) $(OPTIMIZE) # or use $(DEBUG)
+LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(OPTIMIZE) # $(DEBUG)
+PROTECT   = chmod 755
+DELETE    = rm -f
+
+standalone: $(NAME)
+libs: $(NAME)_shared lib$(NAME).a
+all: standalone libs
+
+$(NAME):           $(OBJECTS)
+	$(LOAD)    $^  $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $(NAME)
+
+# For the libraries, we do not want a main
+LIBOBJS = $(filter-out a_cqlp.o, $(OBJECTS))
+lib$(NAME).so: $(LIBOBJS)
+	$(BUILDER) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $@
+
+lib$(NAME).a: $(LIBOBJS)
+	$(LIBTOOL) -o $@ $^
+	$(PROTECT) $@
+
+$(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
+	$(BUILDER) -o $@ $(LDSPECIAL) $(DEBUG)	a_cqlp.o -L. -l$< $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $@
+
+#------ Module generated dependencies
+# Now that we have modules and scope,
+#   we unfortunately do have dependencies.
+# Do not fret, they're not so bad.
+
+include module_dependency.mk
+%.o: %.f90 $(INCLUDES)
+# Following use of pattern matching works; 
+# it is based on statements in Sect. 10.7 of gmake Manual
+# by Stallman and McGrath.
+# However, the two rules following this seem clearer to me (BobH).
+#%.o:               %.f        $(INCLUDES)
+#	$(COMPILE) $< -o $@
+
+
+
+# see Sect. 4.10.1, Static Pattern Rules.
+
+	$(COMPILE) $< -o $@
+
+rebuild:
+	$(COMPILE) $(SOURCES)
+	$(LOAD) $(OBJECTS) $(LOCATION) $(LIBRARIES)
+
+clean:
+	$(DELETE)  $(NAME) $(OBJECTS)
+	$(DELETE) *.mod
+	$(DELETE) *.so *.a
+
+.PHONY: all
+.PHONY: clean
+.PHONY: libs
+.PHONY: rebuild
+.PHONY: standalone

@@ -12,7 +12,7 @@
       subroutine freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
       use aminmx_mod, only : aminmx
       use bcast_mod, only : bcast
-      use zfreya_mod, only : logint,freyorb,sorspt1,rotate,inject1,inject_old,nbsgxn
+      use zfreya_mod, only : logint,freyorb,sorspt1,rotate,inject1,inject_old,nbsgxn,setrz
       use param_mod
       implicit none
       save
