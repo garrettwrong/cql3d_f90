@@ -63,7 +63,7 @@ module param_mod
   !---END USE
 
 
-  character(len=64), parameter :: version="cql3d_git_190531.0"
+  character(len=64), parameter :: version="cql3d_git_190531.0_YuP_190625"
   character(len=64), parameter :: precursr="cql3d_git_190309.0_GW"
   parameter(machinea=2)
   !BH081218:  Present usage, machinea=2 works with 32- and 64-bit machines

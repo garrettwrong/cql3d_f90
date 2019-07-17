@@ -338,5 +338,6 @@ contains
       return
       end subroutine diagimpd
 
+!MPIINSERT_SUB_SEND_ENTR
 
 end module diagimpd_mod

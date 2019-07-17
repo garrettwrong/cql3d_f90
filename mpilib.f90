@@ -8,156 +8,21 @@ module mpilib_mod
 
   !---END USE
 
-  !YuP[2019-05-31] These subroutines could be moved into mpins_par.f (in /mpi/)
-  !  to be inserted into a_cqlp.f90 (for example);
-  !  Then we would not need mpilib.f90 at all.
+  !YuP[2019-06-26] All subroutines from here are moved into mpins_par.f (in /mpi/)
+  !  to be inserted into a_cqlp.f90, tdchief.f90,  diagimpd.f90.
+  !  Do not need mpilib.f90 anymore.
 
 contains
 
-      subroutine init_mpi  !used in a_cqlp.f90 (only)
-      include 'mpilib.h'
-      call MPI_INIT(mpiierr)
-      call MPI_COMM_SIZE(MPI_COMM_WORLD,mpisize,mpiierr)
-      call MPI_COMM_RANK(MPI_COMM_WORLD,mpirank,mpiierr)
-      if(mpirank.eq.0) PRINT *,'MPISIZE ===',mpisize
-      if(mpisize.le.1) stop '===   Run with number of cores >1   ==='
-      !PRINT *,'Start mpirank=',mpirank
-      if(mpirank.eq.0) then
-         mpitime = MPI_WTIME()
-      endif
-      return
-      end subroutine init_mpi
-
+!      subroutine init_mpi  !used in a_cqlp.f90 (only)  !content is moved to mpins_par.f 
+!      include 'mpilib.h'
+!      return
+!      end subroutine init_mpi
 !-------------------------------------------------------
-
-      subroutine close_mpi  !used in a_cqlp.f90 (only)
-      include 'mpilib.h'
-      if(mpirank.eq.0) then
-         WRITE(*,*) 'MPI Full time =',MPI_WTIME()-mpitime
-      endif
-      call MPI_FINALIZE(mpiierr)
-      !PRINT *,'close_mpi:  mpirank===',mpirank
-      return
-      end subroutine close_mpi
-
+!      subroutine close_mpi  !used in a_cqlp.f90 (only)  !content is moved to mpins_par.f
+!      include 'mpilib.h'
+!      return
+!      end subroutine close_mpi
 !-------------------------------------------------------
-
-      subroutine send_data  !used in tdchief.f90 (only)
-      use param_mod
-      use cqlcomm_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
-      include 'mpilib.h'
-
-      real(c_double), allocatable :: &
-              buff(:) ! (mpifsz+10*mpicsz) Buffer for 11 arrays below
-
-      mpifsz= iyjx2*ngen !For send/recv of f(0:iy+1,0:jx+1,1:ngen,lr_),
-                         !and velsou(0:iy+1,0:jx+1,1:ngen,lr_)
-      mpicsz= iyjx*ngen  !For send/recv of cal(1:iy,1:jx,1:ngen,lr_)
-                         !and other collisional coeffs.,
-                         !and scal(1:iyjx*ngen,lr_)
-      mpisz= mpifsz+11*mpicsz+mpifsz ! buffer size
-
-      if(mpirank.eq.0) then ! receive data from other ranks
-         if (.NOT.ALLOCATED(buff)) allocate(buff(mpisz))
-         call MPI_RECV(buff, mpisz, &
-              MPI_DOUBLE_PRECISION, &
-              MPI_ANY_SOURCE, MPI_ANY_TAG, &
-              MPI_COMM_WORLD,mpistatus,mpiierr)
-         mpil_=mpistatus(MPI_TAG) ! determine which flux surface
-         call dcopy(mpifsz,buff(1:mpifsz),1,           f(0:iy+1,0:jx+1,1:ngen,mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 0*mpicsz+1),1, cal(1:iy,1:jx,1:ngen,  mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 1*mpicsz+1),1, cbl(1:iy,1:jx,1:ngen,  mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 2*mpicsz+1),1, ccl(1:iy,1:jx,1:ngen,  mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 3*mpicsz+1),1, cdl(1:iy,1:jx,1:ngen,  mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 4*mpicsz+1),1, cel(1:iy,1:jx,1:ngen,  mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 5*mpicsz+1),1, cfl(1:iy,1:jx,1:ngen,  mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 6*mpicsz+1),1, eal(1:iy,1:jx,1:ngen,1,mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 7*mpicsz+1),1, eal(1:iy,1:jx,1:ngen,2,mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 8*mpicsz+1),1, ebl(1:iy,1:jx,1:ngen,1,mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+ 9*mpicsz+1),1, ebl(1:iy,1:jx,1:ngen,2,mpil_),1)
-         call dcopy(mpicsz,buff(mpifsz+10*mpicsz+1),1, scal(1:iyjx*ngen,      mpil_),1)
-         !--- Velocity source for radial transport (Note: size=mpifsz)
-         call dcopy(mpifsz,buff(mpifsz+11*mpicsz+1),1,velsou(0:iy+1,0:jx+1,1:ngen,mpil_),1)
-         !PRINT*,'recv: mpirank,mpil_=',mpirank,mpil_
-      else !-> all other ranks send data to rank 0
-         if (.NOT.ALLOCATED(buff)) allocate(buff(mpisz))
-         call dcopy(mpifsz, f(0:iy+1,0:jx+1,1:ngen,lr_),1,buff(1),1)
-         call dcopy(mpicsz, cal(1:iy,1:jx,1:ngen,  lr_),1,buff(mpifsz+ 0*mpicsz+1),1)
-         call dcopy(mpicsz, cbl(1:iy,1:jx,1:ngen,  lr_),1,buff(mpifsz+ 1*mpicsz+1),1)
-         call dcopy(mpicsz, ccl(1:iy,1:jx,1:ngen,  lr_),1,buff(mpifsz+ 2*mpicsz+1),1)
-         call dcopy(mpicsz, cdl(1:iy,1:jx,1:ngen,  lr_),1,buff(mpifsz+ 3*mpicsz+1),1)
-         call dcopy(mpicsz, cel(1:iy,1:jx,1:ngen,  lr_),1,buff(mpifsz+ 4*mpicsz+1),1)
-         call dcopy(mpicsz, cfl(1:iy,1:jx,1:ngen,  lr_),1,buff(mpifsz+ 5*mpicsz+1),1)
-         call dcopy(mpicsz, eal(1:iy,1:jx,1:ngen,1,lr_),1,buff(mpifsz+ 6*mpicsz+1),1)
-         call dcopy(mpicsz, eal(1:iy,1:jx,1:ngen,2,lr_),1,buff(mpifsz+ 7*mpicsz+1),1)
-         call dcopy(mpicsz, ebl(1:iy,1:jx,1:ngen,1,lr_),1,buff(mpifsz+ 8*mpicsz+1),1)
-         call dcopy(mpicsz, ebl(1:iy,1:jx,1:ngen,2,lr_),1,buff(mpifsz+ 9*mpicsz+1),1)
-         call dcopy(mpicsz, scal(1:iyjx*ngen,      lr_),1,buff(mpifsz+10*mpicsz+1),1)
-         !--- Velocity source for radial transport (Note: size=mpifsz)
-         call dcopy(mpifsz,velsou(0:iy+1,0:jx+1,1:ngen,lr_),1,buff(mpifsz+11*mpicsz+1),1)
-         mpitag=lr_ ! tag == flux surface number
-         call MPI_SEND(buff, mpisz, &
-              MPI_DOUBLE_PRECISION, &
-              0, mpitag, &
-              MPI_COMM_WORLD,mpiierr)
-         !PRINT*,'SEND: mpirank,lr_=',mpirank,lr_
-      endif
-
-      return
-      end subroutine send_data
-
-!-------------------------------------------------------
-      subroutine send_entr(k,lefct)  !used in diagimpd.f90 (only)
-      use param_mod
-      use cqlcomm_mod
-      !send/recv entr(k,lefct,l_),pwrrf(1:jx,k,l_),pwrrfs(1:jx,k,l_)
-      implicit integer (i-n), real(c_double) (a-h,o-z)
-      include 'mpilib.h'
-      dimension buff(1+jx)
-
-      if(mpirank.eq.0) then ! receive data from other ranks
-         call MPI_RECV(buff, 1+jx, &
-              MPI_DOUBLE_PRECISION, &
-              MPI_ANY_SOURCE, MPI_ANY_TAG, &
-              MPI_COMM_WORLD,mpistatus,mpiierr)
-         mpitag=mpistatus(MPI_TAG)
-         lefct_=mpitag-2 ! determine which lefct was sent
-         entr(k,lefct_,l_)=buff(1) ! for a given lefct
-         entr(k,4,l_)=entr(k,4,l_)+buff(1) ! sum
-         if (lefct_.eq.3) then
-           call dcopy(jx,buff(2:jx+1),1,pwrrf(1:jx,k,l_),1)
-           pwrrfs(1,k,l_)=dx(1)*pwrrf(1,k,l_)
-           do j=2,jx  ! sum over j
-             pwrrfs(j,k,l_)=pwrrfs(j-1,k,l_)+dx(j)*pwrrf(j,k,l_)
-           enddo
-         endif
-      else !-> all other ranks send data to rank 0
-         buff(1)=entr(k,lefct,l_) ! for a given lefct
-         mpisz=1
-         if (lefct.eq.3) then
-           call dcopy(jx,pwrrf(1:jx,k,l_),1,buff(2:jx+1),1)
-           mpisz=1+jx
-         endif
-         mpitag=lefct+2 ! 2 added to make mpitag>0 (lefct can be -1)
-         call MPI_SEND(buff, mpisz, &
-              MPI_DOUBLE_PRECISION, &
-              0, mpitag, &
-              MPI_COMM_WORLD,mpiierr)
-      endif
-
-      return
-      end subroutine send_entr
-
-!-------------------------------------------------------
-
-      subroutine mpiwtime(s)  ! Not used but can be, when needed
-      character(*) s
-      include 'mpilib.h'
-      mpitime1 = MPI_WTIME()
-      mpitime = mpitime1
-      return
-      end subroutine mpiwtime
-
 
 end module mpilib_mod

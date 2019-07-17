@@ -5074,7 +5074,7 @@ contains
       INCLUDE 'netcdf.inc'
       CHARACTER*(*) TEXT
       integer, intent(in)  :: vid,NCID,LEN
-      integer, intent(in)  :: START(*), COUNTS(*)
+      integer, intent(in)  :: START, COUNTS
       INTEGER, intent(out) :: istatus
       istatus = NF_PUT_VARA_TEXT(NCID, vid, START, COUNTS, TEXT)
       !istatus = NF_PUT_VAR_TEXT(NCID, vid, TEXT)
@@ -5089,8 +5089,8 @@ contains
       integer, intent(in)  :: vid,NCID,LEN
       integer, intent(in)  :: START(*), COUNTS(*)
       INTEGER, intent(out) :: istatus
-      !istatus = NF_PUT_VARA_TEXT(NCID, vid, START, COUNTS, TEXT)
-      istatus = NF_PUT_VAR_TEXT(NCID, vid, TEXT)
+      istatus = NF_PUT_VARA_TEXT(NCID, vid, START, COUNTS, TEXT)
+      !istatus = NF_PUT_VAR_TEXT(NCID, vid, TEXT)
       return
       end subroutine ncvptc2
 

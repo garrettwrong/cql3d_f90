@@ -5,6 +5,8 @@
       use cqlcomm_mod
       implicit none
 
+!MPIINSERT_INCLUDE
+
 !..................................................................
 !     This routine communicates between common blocks of CQL3D and the
 !     segregated CRAY32 (NFREYA ONETWO version) common blocks,
