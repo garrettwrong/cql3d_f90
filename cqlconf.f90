@@ -470,8 +470,10 @@ module cqlconf_mod
      character(len=8) :: kspeci(2,ntotala) = " "
      ! this one is a pain to init
      real(c_double) :: fpld(10,ngena) = reshape( &
-          (/ ( merge(pi, merge(1.d10, 0.d0 , mod(ll,10)==8), &
-          mod(ll,10)==0), ll=1,10*ngena) /), &
+          (/ 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 1.d10,  0.d0, pi, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 1.d10,  0.d0, pi, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 1.d10,  0.d0, pi, &
+          0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 1.d10,  0.d0, pi /), &
           shape=(/10 ,ngena/))
      integer :: lmidpln = 1
      character(len=8) :: locquas = "disabled"
