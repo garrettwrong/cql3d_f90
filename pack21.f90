@@ -36,9 +36,10 @@ end module pack21_mod
       save
       dimension a(ibot:itop,jbot:jtop)
       dimension b(iy*jx)
+      b=0.d0
       do 1 j=1,jx
         i1=(j-1)*iy+1
-        call dcopy(iy,a(1:iy,j),1,b(i1:i1+iy),1)
+        call dcopy(iy,a(1:iy,j),1,b(i1:i1+iy-1),1) ! a-->b
  1    continue
       return
       end
@@ -68,7 +69,7 @@ end module pack21_mod
       a=zero !YuP[2019-06-08]was call bcast(a,zero,(itop-ibot+1)*(jtop-jbot+1))
       do 1 j=1,jx
         i1=(j-1)*iy+1
-        call dcopy(iy,b(i1:i1+iy),1,a(1:iy,j),1)
+        call dcopy(iy,b(i1:i1+iy-1),1,a(1:iy,j),1) ! b-->a
  1    continue
       return
       end
