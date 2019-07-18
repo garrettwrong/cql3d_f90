@@ -504,7 +504,7 @@ module cqlconf_mod
      integer :: ngauss = 0
      integer :: nlagran = 4
      logical :: nlotp1(noutpta) = (/ .true., .true., .true., .false., .true., &
-          .true., .true., .true., .true., .true., .true. /)
+          .true., .true., .true., .true., .true. /)
      logical :: nlotp2(noutpta) = .false.
      logical :: nlotp3(noutpta) = .false.
      logical :: nlotp4(noutpta) = .false.
