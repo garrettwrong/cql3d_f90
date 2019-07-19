@@ -36,7 +36,7 @@ OPTIMIZE  = -O1
 #force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL = -Wl,-noinhibit-exec
 COMPILE   = $(COMPILER) -fPIC -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
-COMPILE_MPI  = $(COMPILER_MPI) -c -D__MPI $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
+COMPILE_MPI  = $(COMPILER_MPI) -fPIC -c -D__MPI $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
 LOAD      = $(COMPILER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
 LOAD_MPI  = $(COMPILER_MPI) -o $(NAME_MPI) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
