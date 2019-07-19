@@ -1,5 +1,5 @@
 Copyright 2019 Garrett Wright, Princeton Plasma Physics Laboratory,
-    contracted by the U.S. Department of Energy (put number here).
+    contracted by the U.S. Department of Energy (putnumberhere).
 
 cql3d_f90 is a derived work of the f77 CompX (compxco) CQL3D,
     by R. W. Harvey et al.
@@ -12,7 +12,7 @@ ensure that the publicly funded code remains open and maintainable.
 
 
 ! Copyright 2019 Garrett Wright, Princeton Plasma Physics Laboratory,
-!    contracted by the U.S. Department of Energy.
+!    contracted by the U.S. Department of Energy (putnumberhere).
 !
 ! This file is part of cql3d_f90. See LICENSE.
 !
