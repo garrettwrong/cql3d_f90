@@ -2696,6 +2696,9 @@ module cqlcomm_mod
   real(c_double) :: fvec(NP)
   integer :: newtv_nn
 
+  ! maybe need for mpi later
+  integer :: cql3d_comm
+
   save
 contains
 

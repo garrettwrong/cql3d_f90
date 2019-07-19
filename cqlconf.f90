@@ -55,6 +55,7 @@ module cqlconf_mod
 
   public print_all_conf_nml
   public read_all_conf_nml
+  public get_all_from_nml
 
 
   type, public ::  setup0_t
@@ -3732,5 +3733,18 @@ contains
     call read_eqsetup(fd)
     call read_rfsetup(fd)
   end subroutine read_all_conf_nml
+
+  subroutine get_all_from_nml(nml_file, close_nml_file, debug_print)
+    character(len=*), intent(in) :: nml_file
+    logical, intent(in), optional :: close_nml_file
+    logical, intent(in), optional :: debug_print
+    call get_setup0_from_nml(nml_file, .false., debug_print)
+    call get_setup_from_nml(nml_file, .false., debug_print)
+    call get_trsetup_from_nml(nml_file, .false., debug_print)
+    call get_sousetup_from_nml(nml_file, .false., debug_print)
+    call get_eqsetup_from_nml(nml_file, .false., debug_print)
+    call get_rfsetup_from_nml(nml_file, close_nml_file, debug_print)
+  end subroutine get_all_from_nml
+
 
 end module cqlconf_mod
