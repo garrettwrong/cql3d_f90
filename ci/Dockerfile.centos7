@@ -5,7 +5,12 @@ RUN yum upgrade -y
 RUN yum group install "Development Tools" -y
 RUN yum group install "X Window System" -y
 RUN yum -y install epel-release
-RUN yum install gcc-gfortran netcdf netcdf-fortran netcdf-devel netcdf-fortran-devel emacs libX11-devel -y
+RUN yum install gcc-gfortran netcdf netcdf-fortran netcdf-devel \
+    netcdf-fortran-devel emacs libX11-devel openmpi openmpi-devel -y
+
+# Complete the setup of openmpi, they used environmentmodules, blehgh
+ENV PATH="/usr/lib64/openmpi/bin:${PATH}"
+ENV LD_LIBRARY_PATH="/usr/lib64/openmpi/lib:${LD_LIBRARY_PATH}"
 
 # setup enough PGPLOT to work with cql3d
 RUN curl -o pgplot522.tar.gz ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot522.tar.gz && \
@@ -29,3 +34,4 @@ RUN curl -L -o nccmp-1.8.3.1.tar.gz https://gitlab.com/remikz/nccmp/-/archive/1.
     ./configure && \
     make && \
     make install
+

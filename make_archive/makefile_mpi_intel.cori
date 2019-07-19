@@ -1,7 +1,5 @@
-# makefile producing MPI version of cql3d.
-
-# YuP[2019-05-31] Made adjustments, based on makefile_gfortran64.CentOS7
-# by Garrett Wright
+# makefile for CQL3D_f90 (generating MPI version)  to be used on Cori [NERSC]
+# Adjusted by YuP[2019-06-25] based on makefile_gfortran64.OSX
 
 # May/06:  makefile_mpi.xxx  is a system setup by Nikolai Ershov
 #          for creation of mpi version of cql3d from the serial
@@ -15,43 +13,53 @@
 #          by Yuri Petrov.
 #          Please follow this procedure in future cql3d modifications.
 
-#Make sure have intel environment:
-#module list
-#Else switch environment:
-#For example: module swap PrgEnv-xxx PrgEnv-intel
+## Need first to enter:
+## module unload darshan ; module load cray-netcdf ; module load cray-hdf5
+## or put the comment in your startup scripts
+## e.g., in .bashrc.ext at NERSC
 
-#make sure have netcdf libraries and includes:
-#module unload darshan; module load cray-netcdf; module load cray-hdf5
+#Intel compiler is now default for Cori ( intel/18.0.1.163  as of 2019 )
+#module unload darshan
+#module load cray-netcdf   ## this will load cray-netcdf/4.6.1.3
+#module load cray-hdf5     ## this will load cray-hdf5/1.10.2.0
+
+#
+#Note:  a simple 'module load netcdf' would satisfy need for netcdf.inc, but
+#       failed in references to hdf5,....
+# For 150320 load:
+# But there is warning from H5PL.c: Using 'dlopen' in statically linked 
+#     applications requires at runtime the shared libraries from the 
+#     glibc version used for linking.
+
 
 #YuP[April 2017] It is strongly advised to add into your .bashrc.ext script:
 #   export FORT_BUFFERED=1
 # or into your .cshrc.ext script:
 #   setenv FORT_BUFFERED 1
-# It was the default option for NERSC in 2016,
+# It was the default option for Edison/NERSC in 2016,
 # but it was disabled by NERSC personnel in 2017
 # because of problems with some newer compilers.
 # As a result of this change, the MPI runs became slower by ~3x
 # when there is I/O of data into one file from all cores.
 
-
+#190626 Works on Cori
 
 SHELL     = /bin/sh
-NAME      = xcql3d_mpi.intel
+NAME      = xcql3d_mpi_intel.cori
 COMPILER=	ftn
 BUILDER=	$(COMPILER)
+LIBTOOL   = libtool -static
 
-###INCLUDES  = frcomm.h frname.h frname_decl.h name.h trans.h wpadvnc.h
 # INCLUDE line
 include include_dependency.mk
-
-
+# Check if include files have changed i guess
+$(SOURCES):        $(INCLUDES)
 
 # SOURCE line
 include source_dependency.mk
-#---------- NEED TO ADD mpilib.f90 into source_dependency.mk --------------
+#--- NO NEED to add mpilib.f90 into source_dependency.mk --------------
 
-F90OBJECTS = $(filter %.o,$(SOURCES:.f90=.o))
-OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
+OBJECTS   = $(SOURCES:.f90=.o)
 
 #LOCATION=	-L/usr/lib64  -L/usr/local/pgplot
 #LOCATION=	     -L/global/homes/j/jaegeref/pgplot_xt3
@@ -60,7 +68,7 @@ LIBS = \
  $(LOCATION) -lpgplot -lnetcdff -lnetcdf
 
 #Location of netcdf.inc:
-INCLUDE= $(NETCDF_DIR)/include
+INCLUDE= -I $(NETCDF_DIR)/include
 # -g is full debug;   -gopt allows optimization
 DEBUG     = -g
 OPTIMIZE  = -fast
@@ -75,13 +83,35 @@ LOAD      = $(BUILDER) -o $(NAME) $(LDSPECIAL) $(OPTIMIZE) # $(DEBUG)
 PROTECT   = chmod 755
 DELETE    = rm -f
 
-# The following gives suffixes to be used in checking for suffix rules.
-# Written without dependencies, it may be useful to turn of such checking?
-.SUFFIXES:
+standalone: $(NAME)
+libs: $(NAME)_shared lib$(NAME).a
+all: standalone libs
 
-$(NAME):           $(F90OBJECTS) $(OBJECTS)
-	$(LOAD)    $(F90OBJECTS) $(OBJECTS) $(LOCATION) $(LIBS)
+$(NAME):           $(OBJECTS)
+	$(LOAD)    $(OBJECTS) $(LOCATION) $(LIBS)
 	$(PROTECT) $(NAME)
+
+# For the libraries, we do not want a main
+LIBOBJS = $(filter-out a_cqlp.o, $(OBJECTS))
+lib$(NAME).so: $(LIBOBJS)
+	$(BUILDER) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBS)
+	$(PROTECT) $@
+
+lib$(NAME).a: $(LIBOBJS)
+	$(LIBTOOL) -o $@ $^
+	$(PROTECT) $@
+
+$(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
+	$(BUILDER) -o $@ $(LDSPECIAL) $(DEBUG)	a_cqlp.o -L. -l$< $(LOCATION) $(LIBS)
+	$(PROTECT) $@
+
+#------ Module generated dependencies
+# Now that we have modules and scope,
+#   we unfortunately do have dependencies.
+# Do not fret, they're not so bad.
+
+include module_dependency.mk
+%.o: %.f90 $(INCLUDES)
 
 # Following use of pattern matching works; 
 # it is based on statements in Sect. 10.7 of gmake Manual
@@ -90,50 +120,29 @@ $(NAME):           $(F90OBJECTS) $(OBJECTS)
 #%.o:               %.f        $(INCLUDES)
 #	$(COMPILE) $< -o $@
 
-#include deps   #Introduced by John Wright (JCW)
-$(SOURCES):        $(INCLUDES)
-#----
-# Now that we have modules and scope,
-#   we unfortunately do have dependencies.
-# Do not fret, they're not so bad.
-#DAGOBJS = param.o cqlcomm.o r8subs.o advnce.o pltmain.o \
-#          pltdf.o eqrhopsi.o equilib.o \
-#          impavnc0.o  frplteq.o tdeqdsk.o bsu.o bsl.o
-# And this describes their dag...
-include module_dependency.mk
 
-
-#----
-# From here we will assume that all deps to build
-# remaining files have been met.
-# (Other words, we assume remaining .f files 
-#  require all DAGOBJS.
-# That is overkill, but simple.
-# As files migrate or evolve, we add small rules for each file.
-# This will also document how the code is structured in practice.
-
-#GBW, until all files have the same extension (90 I hope!)
-# filter out objects with correct extension
-
-# see Sect. 4.10.1, Static Pattern Rules.
-$(filter %.o,$(F90OBJECTS)): %.o: %.f90 $(INCLUDES)
-	mpi/doparallel.py $< $*_mpitmp.f90 mpi/mpins_par.f
-	$(COMPILE) $*_mpitmp.f90 -o $@
-
-$(filter %.o,$(OBJECTS)): %.o: %.f  $(INCLUDES)
-	mpi/doparallel.py $< $*_mpitmp.f mpi/mpins_par.f
-	$(COMPILE) $*_mpitmp.f -o $@
 
 #Changes introduced by JCW so obtain saved copy of mpi modified sources
 #	mpi/doparallel.py $< mpitmp.f mpi/mpins_par.f
 #	$(COMPILE) mpitmp.f -o $@
-#	mpi/doparallel.py $< $*_mpitmp.f mpi/mpins_par.f
-#	$(COMPILE) $*_mpitmp.f -o $@
+
+	mpi/doparallel.py $< $*_mpitmp.f90 mpi/mpins_par.f
+	$(COMPILE) $*_mpitmp.f90 -o $@
+
 
 rebuild:
-	$(COMPILE) $(SOURCES) $(F90SOURCES)
-	$(LOAD) $(OBJECTS)  $(F90OBJECTS) $(LOCATION) $(LIBS)
+	$(COMPILE) $(SOURCES)
+	$(LOAD) $(OBJECTS) $(LOCATION) $(LIBS)
+
 
 clean:
-	$(DELETE)  $(OBJECTS) $(F90OBJECTS) *.lst *_mpitmp.f
+	$(DELETE)  $(NAME) $(OBJECTS)
 	$(DELETE) *.mod
+	$(DELETE) *.so *.a
+	$(DELETE) *.lst  ## *_mpitmp.f90
+
+.PHONY: all
+.PHONY: clean
+.PHONY: libs
+.PHONY: rebuild
+.PHONY: standalone
