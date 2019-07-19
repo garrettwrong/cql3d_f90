@@ -137,7 +137,7 @@ def block():
     ## checking that current file is in the list of blocked files
     check = False
     for l in open('mpi/block.mpi','r').readlines():
-        if string.strip(l)==sys.argv[1]:
+        if string.strip(l)==sys.argv[2]:
             check = True
             break
     if not check: ## current file shouldn't be blocked
@@ -163,7 +163,7 @@ def dompi():
     ins = {}
     inf = []
     ## reading insertions
-    L = open(sys.argv[3],'r').readlines()
+    L = open(sys.argv[1],'r').readlines()
     #print L
     for l in L:
         if (l[0]=='!'):   
@@ -183,10 +183,10 @@ def dompi():
             continue
         ll = string.strip(l)
         if (l[0:4]=='!MPI') and ins.has_key(ll):
-            inf.append('!MPI >>>')
+            inf.append('#ifdef __MPI\n!MPI >>>')
             for i in ins[ll]:
                 inf.append(i)
-            inf.append('!MPI <<<')
+            inf.append('!MPI <<<\n#endif')
             if l[0:11]=='CMPIREPLACE':  # Not present anymore (could skip)
                 mode = 'replace'
             continue
@@ -200,7 +200,7 @@ def main():
     global inf, out
 
     ## reading input file into inf buffer
-    f = open(sys.argv[1],'r')
+    f = open(sys.argv[2],'r')
     s = f.readline()
     while s!='':
         inf.append(string.rstrip(s))

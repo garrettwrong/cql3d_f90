@@ -2,7 +2,9 @@
 
 SHELL     = /bin/sh
 NAME      = xcql3d
+NAME_MPI = $(NAME)_mpi
 COMPILER  = gfortran
+COMPILER_MPI = mpifort
 LIBTOOL   = ar rcs
 
 # TRANSP build stuff
@@ -18,12 +20,12 @@ $(SOURCES):        $(INCLUDES)
 # SOURCE line
 include source_dependency.mk
 
-F90OBJECTS = $(filter %.o,$(SOURCES:.f90=.o))
-OBJECTS = $(filter %.o,$(SOURCES:.f=.o))
+F90OBJECTS = $(filter %.o,$(SOURCES:.F90=.o))
+OBJECTS = $(filter %.o,$(SOURCES:.F=.o))
 
 LOCATION  =   -L/usr/lib64   -L${PGPLOT_DIR}
 LIBRARIES =   -lX11 -lnetcdff -lnetcdf -lpgplot
-INCLUDE=/usr/include
+INCLUDE   =/usr/include
 
 DEBUG     = -g
 #common gfortran dbg flags
@@ -34,7 +36,9 @@ OPTIMIZE  = -O1
 #force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL = -Wl,-noinhibit-exec
 COMPILE   = $(COMPILER) -fPIC -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
+COMPILE_MPI  = $(COMPILER_MPI) -c -D__MPI $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
 LOAD      = $(COMPILER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
+LOAD_MPI  = $(COMPILER_MPI) -o $(NAME_MPI) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
 DELETE    = rm -f
 
@@ -57,7 +61,7 @@ lib$(NAME).a: $(LIBOBJS)
 	$(PROTECT) $@
 
 $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
-	$(COMPILER) -o $@ $(LDSPECIAL) $(DEBUG)	a_cqlp.o -L. -l$< $(LOCATION) $(LIBRARIES)
+	$(COMPILER) -o $@ $(LDSPECIAL) $(DEBUG) a_cqlp.o -L. -l$< $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $@
 
 
@@ -66,7 +70,7 @@ $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
 # by Stallman and McGrath.
 # However, the two rules following this seem clearer to me (BobH).
 # Me too BobH, me too. ;)  (GBW).
-#%.o:               %.f        $(INCLUDES)
+#%.o:               %.F        $(INCLUDES)
 #	$(COMPILE) $< -o $@
 
 
@@ -74,7 +78,7 @@ $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
 # Now that we have modules and scope,
 #   we unfortunately do have dependencies.
 # Do not fret, they're not so bad.
-
+oext = o
 include module_dependency.mk
 
 
@@ -83,11 +87,50 @@ include module_dependency.mk
 # this will simplify greatly once all f90...
 
 # see Sect. 4.10.1, Static Pattern Rules.
-$(filter %.o,$(F90OBJECTS)): %.o: %.f90 $(INCLUDES)
+$(filter %.o,$(F90OBJECTS)): %.o: %.F90 $(INCLUDES)
 	$(COMPILE) $< -o $@
 
-$(filter %.o,$(OBJECTS)): %.o: %.f $(INCLUDES)
+$(filter %.o,$(OBJECTS)): %.o: %.F $(INCLUDES)
 	$(COMPILE) $< -o $@
+
+
+# ------------------------  Similarly for MPI
+
+standalone_mpi: $(NAME_MPI)
+libs_mpi: lib$(NAME_MPI).a lib$(NAME_MPI).so
+mpi: libs_mpi $(NAME_MPI)_shared standalone_mpi
+
+F90OBJECTS_MPI = $(F90OBJECTS:.o=.o_mpi)
+OBJECTS_MPI = $(OBJECTS:.o=.o_mpi)
+#INCLUDE_MPI = $(INCLUDE)
+
+$(NAME_MPI):           $(F90OBJECTS_MPI) $(OBJECTS_MPI)
+	$(LOAD_MPI)    $^  $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $(NAME_MPI)
+
+$(NAME_MPI)_shared: $(NAME_MPI) lib$(NAME_MPI).so a_cqlp.o_mpi
+	$(COMPILER_MPI) -o $@ $(LDSPECIAL) $(DEBUG) a_cqlp.o_mpi -L. -l$< $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $@
+
+LIBOBJS_MPI = $(filter-out a_cqlp.o_mpi, $(F90OBJECTS_MPI) $(OBJECTS_MPI))
+lib$(NAME_MPI).a: $(LIBOBJS_MPI)
+	$(LIBTOOL) -o $@ $^
+	$(PROTECT) $@
+
+lib$(NAME_MPI).so: $(LIBOBJS_MPI)
+	$(COMPILER_MPI) -shared -o $@ $(LDSPECIAL) $(DEBUG) $^ $(LOCATION) $(LIBRARIES)
+	$(PROTECT) $@
+
+$(filter %.o_mpi,$(F90OBJECTS_MPI)): %.o_mpi: %.F90 $(INCLUDES)
+	$(COMPILE_MPI) $< -o $@
+
+$(filter %.o_mpi,$(OBJECTS_MPI)): %.o_mpi: %.F $(INCLUDES)
+	$(COMPILE_MPI) $< -o $@
+
+oext = o_mpi
+include module_dependency.mk
+
+# ------------------------ /MPI
 
 
 rebuild:
@@ -97,10 +140,14 @@ rebuild:
 clean:
 	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
 	$(DELETE) *.mod
-	$(DELETE) *.so *.a $(NAME)_shared
+	$(DELETE) *.so *.a  $(NAME)_shared
+	$(DELETE) $(OBJECTS_MPI) $(F90OBJECTS_MPI)
+	$(DELETE)  $(NAME_MPI) $(OBJECTS_MPI) $(F90OBJECTS_MPI)
 
 .PHONY: all
+.PHONY: mpi
 .PHONY: clean
 .PHONY: libs
 .PHONY: rebuild
 .PHONY: standalone
+.PHONY: standalone_mpi
