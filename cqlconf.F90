@@ -833,6 +833,7 @@ contains
     ! read the nml, which will write into the local vars
 
     call maybe_nml_open(nml_file)
+    rewind(nml_fd)
     read(nml_fd, setup0)
 
     ! external codes can call this, which packs the setup0 derived type.
