@@ -154,7 +154,9 @@ contains
 !     Set default values for setup0 namelist
 !     Read in first namelist, setup0: determines type of run, etc.
 !..................................................................
-      call get_setup0_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+      if(present(nml_file)) then
+         call get_setup0_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+      end if
 
 #ifdef __MPI
 !MPI >>>
@@ -174,7 +176,9 @@ contains
       call aclear
 
       ! Gets pltinput variable, for ainplt routine.
-      call get_setup_from_nml(nml_file, close_nml_file=.TRUE.)
+      if(present(nml_file)) then
+         call get_setup_from_nml(nml_file, close_nml_file=.TRUE.)
+      end if
 
       sumdtr=zero
 
