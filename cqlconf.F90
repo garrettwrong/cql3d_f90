@@ -768,6 +768,7 @@ contains
   subroutine nml_close()
     if (nml_file_open) then
        close(nml_fd)
+       nml_fd = -1
        nml_file_open = .FALSE.
     end if
   end subroutine nml_close
