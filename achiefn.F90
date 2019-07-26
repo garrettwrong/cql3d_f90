@@ -6,7 +6,7 @@ module achiefn_mod
 
   use cfpcoefc_mod, only : cfpcoefc
   use cfpgamma_mod, only : cfpgamma
-  use diag_mod, only : diag
+  use cqldiag_mod, only : cqldiag
   use diaggnde_mod, only : diaggnde
   use dskout_mod, only : dskout
   use efield_mod, only : efield
@@ -222,7 +222,7 @@ contains
 !..................................................
 !     Compute various diagnostics...
 !..................................................
-        call diag
+        call cqldiag
 !..................................................
 !     Obtain data for time dependent plots
 !..................................................

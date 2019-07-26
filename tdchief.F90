@@ -20,7 +20,7 @@ module tdchief_mod
   use coefstup_mod, only : coefstup
   use coefwti_mod, only : coefwti
   use coefwtj_mod, only : coefwtj
-  use diag_mod, only : diag
+  use cqldiag_mod, only : cqldiag
   use diagentr_mod, only : diagentr_vol
   use diaggnde_mod, only : diaggnde
   use diagimpd_mod, only : diagimpd
@@ -1110,7 +1110,7 @@ contains
 !..................................................
 !     Compute various diagnostics...
 !..................................................
-          call diag
+          call cqldiag
 
 !..................................................
 !     Obtain data for time dependent plots
