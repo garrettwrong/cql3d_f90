@@ -8,7 +8,7 @@ achief1.$(oext): achiefn.$(oext) ainalloc.$(oext) aindflt1.$(oext) aindfpa.$(oex
 	cqlcomm.$(oext) cqlconf.$(oext) diagimpd.$(oext) diagscal.$(oext) eqinitl.$(oext)  \
 	micxinit.$(oext) micxiniz.$(oext) ntloop.$(oext) param.$(oext) pltmain.$(oext) profiles.$(oext) r8subs.$(oext)  \
 	tdnflxs.$(oext) wploweq.$(oext)
-achiefn.$(oext): cfpcoefc.$(oext) cfpgamma.$(oext) cqlcomm.$(oext) cqlconf.$(oext) diag.$(oext)  \
+achiefn.$(oext): cfpcoefc.$(oext) cfpgamma.$(oext) cqlcomm.$(oext) cqlconf.$(oext) cqldiag.$(oext)  \
 	diaggnde.$(oext) dskout.$(oext) efield.$(oext) exsweep.$(oext) finit.$(oext) impavnc0.$(oext) ntdstore.$(oext)  \
 	ntloop.$(oext) param.$(oext) pltmain.$(oext) pltrun.$(oext) restvty.$(oext) sourcee.$(oext) tdoutput.$(oext)
 aclear.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext)
@@ -18,7 +18,7 @@ aindflt1.$(oext): cqlcomm.$(oext) param.$(oext)
 aindfpa.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 aingeom.$(oext): cqlcomm.$(oext) diagwrng.$(oext) eqalloc.$(oext) eqcoord.$(oext) eqelpse.$(oext)  \
 	equilib.$(oext) flxfn.$(oext) param.$(oext) zcunix.$(oext)
-ainitial.$(oext): bavgmax.$(oext) coefefld.$(oext) cqlcomm.$(oext) diag.$(oext) diagentr.$(oext)  \
+ainitial.$(oext): bavgmax.$(oext) coefefld.$(oext) cqlcomm.$(oext) cqldiag.$(oext) diagentr.$(oext)  \
 	diaggnde.$(oext) efield.$(oext) finit.$(oext) losscone.$(oext) lossegy.$(oext) micxinim.$(oext)  \
 	ntdstore.$(oext) param.$(oext) pltmain.$(oext) restvty.$(oext) sourcee.$(oext) synchrad.$(oext)  \
 	tdoutput.$(oext) vlf.$(oext) vlh.$(oext) wpvptb.$(oext)
@@ -59,7 +59,7 @@ coefwti.$(oext): advnce.$(oext) bcast.$(oext) coefmidt.$(oext) cqlcomm.$(oext) p
 coefwtj.$(oext): advnce.$(oext) bcast.$(oext) coefmidv.$(oext) cqlcomm.$(oext) param.$(oext)
 cqlcomm.$(oext): cqlconf.$(oext) cqlconf.$(oext) param.$(oext)
 cqlconf.$(oext): param.$(oext)
-diag.$(oext): cqlcomm.$(oext) param.$(oext)
+cqldiag.$(oext): cqlcomm.$(oext) param.$(oext)
 diagcfac.$(oext): bcast.$(oext) zcunix.$(oext)
 diagdens.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext)
 diagdenz.$(oext): bcast.$(oext) cfpleg.$(oext) cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
@@ -212,7 +212,7 @@ tdboothi.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) zcunix.$(oext)
 tdbootst.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) zcunix.$(oext)
 tdchief.$(oext): achief1.$(oext) achiefn.$(oext) aclear.$(oext) aindfpa.$(oext) ainplt.$(oext) ainpltpa.$(oext)  \
 	ainsetpa.$(oext) ampfar.$(oext) cfpgamma.$(oext) coefmidt.$(oext) coefmidv.$(oext) coefstup.$(oext)  \
-	coefwti.$(oext) coefwtj.$(oext) cqlcomm.$(oext) cqlconf.$(oext) cqlconf.$(oext) diag.$(oext) diagentr.$(oext)  \
+	coefwti.$(oext) coefwtj.$(oext) cqlcomm.$(oext) cqlconf.$(oext) cqlconf.$(oext) cqldiag.$(oext) diagentr.$(oext)  \
 	diaggnde.$(oext) diagimpd.$(oext) diagscal.$(oext) dsk_gr.$(oext) dskout.$(oext) eflditer.$(oext)  \
 	esefld.$(oext) netcdfrf.$(oext) ntdstore.$(oext) param.$(oext) pltendn.$(oext) pltinit.$(oext) pltmain.$(oext)  \
 	pltrun.$(oext) profiles.$(oext) r8subs.$(oext) restvty.$(oext) sigv.$(oext) tddiag.$(oext) tdinitl.$(oext)  \

@@ -768,6 +768,7 @@ contains
   subroutine nml_close()
     if (nml_file_open) then
        close(nml_fd)
+       nml_fd = -1
        nml_file_open = .FALSE.
     end if
   end subroutine nml_close
@@ -833,6 +834,7 @@ contains
     ! read the nml, which will write into the local vars
 
     call maybe_nml_open(nml_file)
+    rewind(nml_fd)
     read(nml_fd, setup0)
 
     ! external codes can call this, which packs the setup0 derived type.
@@ -887,11 +889,8 @@ contains
     if (present(nmlstout)) setup0%nmlstout = nmlstout
     if (present(special_calls)) setup0%special_calls = special_calls
     if (present(cqlpmod)) setup0%cqlpmod = cqlpmod
-    if (present(lrz)) then
-       setup0%lrz = lrz
-    else
-       stop 'setup0%lrz is required'
-    end if
+    if (present(lrz)) setup0%lrz = lrz
+    if (setup0%lrz .EQ. 0) stop 'setup0%lrz is required'
     if (present(lrzdiff)) setup0%lrzdiff = lrzdiff
     if (present(lrzmax)) setup0%lrzmax = lrzmax
     if (present(lrindx)) setup0%lrindx = lrindx
@@ -1880,56 +1879,51 @@ contains
     if(present(mpwrsou)) sousetup%mpwrsou = mpwrsou
     if(present(npwrsou)) sousetup%npwrsou = npwrsou
     if(present(scm2)) sousetup%scm2 = scm2
-    if(present(scm2z) .and. any(scm2z .ne. sousetup%scm2z)) then
+    if(present(scm2z)) then
        sousetup%scm2z = scm2z
     else
        call sou_init_loop(sousetup%scm2z, sousetup%scm2)
     end if
-
     if(present(szm1)) sousetup%szm1 = szm1
-    if(present(szm1z) .and. any(szm1z .ne. sousetup%szm1z)) then
+    if(present(szm1z)) then
        sousetup%szm1z = szm1z
     else
        call sou_init_loop(sousetup%szm1z, sousetup%szm1)
     end if
-
     if(present(szm2)) sousetup%szm2 = szm2
-    if(present(szm2z) .and. any(szm2z .ne. sousetup%szm2z)) then
+    if(present(szm2z)) then
        sousetup%szm2z = szm2z
     else
        call sou_init_loop(sousetup%szm2z, sousetup%szm2)
     end if
-
     if(present(sellm1)) sousetup%sellm1 = sellm1
-    if(present(sellm1z) .and. any(sellm1z .ne. sousetup%sellm1z)) then
+    if(present(sellm1z)) then
        sousetup%sellm1z = sellm1z
     else
        call sou_init_loop(sousetup%sellm1z, sousetup%sellm1)
     end if
-
     if(present(sellm2)) sousetup%sellm2 = sellm2
-    if(present(sellm2z) .and. any(sellm2z .ne. sousetup%sellm2z)) then
+    if(present(sellm2z)) then
        sousetup%sellm2z = sellm2z
     else
        call sou_init_loop(sousetup%sellm2z, sousetup%sellm2)
     end if
-
     if(present(seppm1)) sousetup%seppm1 = seppm1
-    if(present(seppm1z) .and. any(seppm1z .ne. sousetup%seppm1z)) then
+    if(present(seppm1z)) then
        sousetup%seppm1z = seppm1z
     else
        call sou_init_loop(sousetup%seppm1z, sousetup%seppm1)
     end if
 
     if(present(seppm2)) sousetup%seppm2 = seppm2
-    if(present(seppm2z) .and. any(seppm2z .ne. sousetup%seppm2z)) then
+    if(present(seppm2z)) then
        sousetup%seppm2z = seppm2z
     else
        call sou_init_loop(sousetup%seppm2z, sousetup%seppm2)
     end if
 
     if(present(sem1)) sousetup%sem1 = sem1
-    if(present(sem1z) .and. any(sem1z .ne. sousetup%sem1z)) then
+    if(present(sem1z)) then
        sousetup%sem1z = sem1z
     else
        call sou_init_loop(sousetup%sem1z, sousetup%sem1)
@@ -1937,14 +1931,14 @@ contains
 
 
     if(present(sem2)) sousetup%sem2 = sem2
-    if(present(sem2z) .and. any(sem2z .ne. sousetup%sem2z)) then
+    if(present(sem2z)) then
        sousetup%sem2z = sem2z
     else
        call sou_init_loop(sousetup%sem2z, sousetup%sem2)
     end if
 
     if(present(sthm1)) sousetup%sthm1 = sthm1
-    if(present(sthm1z) .and. any(sthm1z .ne. sousetup%sthm1z)) then
+    if(present(sthm1z)) then
        sousetup%sthm1z = sthm1z
     else
        call sou_init_loop(sousetup%sthm1z, sousetup%sthm1)
@@ -1966,7 +1960,7 @@ contains
     if(present(xllwr)) sousetup%xllwr = xllwr
     if(present(xlmdl)) sousetup%xlmdl = xlmdl
     if(present(jfl)) sousetup%jfl = jfl
-    if (mod(jfl,2).eq.0) then
+    if (mod(sousetup%jfl,2).eq.0) then
        print *, "WARNING, jfl needed to be odd because of jpxyh=(jfl+1)/2 in pltprppr"
        print *, "   Adjusting with sousetup%jfl=sousetup%jfl-1"
        sousetup%jfl=sousetup%jfl-1

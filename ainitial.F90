@@ -6,7 +6,7 @@ module ainitial_mod
 
   use bavgmax_mod, only : bavgmax
   use coefefld_mod, only : coefefld
-  use diag_mod, only : diag
+  use cqldiag_mod, only : cqldiag
   use diagentr_mod, only : diagentr
   use diaggnde_mod, only : diaggnde
   use efield_mod, only : efield
@@ -177,7 +177,7 @@ contains
 !     Call conservation diagnostic routine..
 !.....................................................................
 
-      call diag
+      call cqldiag
 
 !.....................................................................
 !     Call time plot storage routine...

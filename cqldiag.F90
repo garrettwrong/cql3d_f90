@@ -1,4 +1,4 @@
-module diag_mod
+module cqldiag_mod
 
   !---BEGIN USE
   use iso_c_binding, only : c_float
@@ -11,7 +11,7 @@ module diag_mod
 
 contains
 
-      subroutine diag
+      subroutine cqldiag
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
@@ -93,7 +93,7 @@ contains
 
       pinput=pelec+pwrf+psou
       return
-      end subroutine diag
+    end subroutine cqldiag
 
 
-end module diag_mod
+end module cqldiag_mod
