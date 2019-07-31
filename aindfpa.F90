@@ -9,8 +9,9 @@ module aindfpa_mod
 
 contains
 
-      subroutine ainadjnl(kopt)
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      subroutine ainadjnl(kopt, nml_file)
+        implicit integer (i-n), real(c_double) (a-h,o-z)
+        character(len=*), intent(in) :: nml_file
 #ifdef __MPI
 !MPI >>>
       include 'mpilib.h'
@@ -53,7 +54,7 @@ contains
       if (kopt.eq.0) then
 
          inlmod=0
-         open(unit=4,file="cqlinput",delim='apostrophe',status="old")
+         open(unit=4,file=nml_file,delim='apostrophe',status="old")
  1       read(unit=4,fmt=1003,end=2) line
          if (line.eq." &setup" .or. line.eq." &SETUP" &
              .or. line.eq."&setup" .or. line.eq."&SETUP") then
@@ -78,7 +79,7 @@ contains
          else
 
 !     Copy cqlinput to cqlinput_tmp
-            open(unit=4,file="cqlinput",delim='apostrophe',status="old")
+            open(unit=4,file=nml_file,delim='apostrophe',status="old")
             open(unit=5,file="cqlinput_tmp",delim='apostrophe', &
                  status="replace")
  3          read(unit=4,fmt='(a)',end=4) line1
@@ -95,7 +96,7 @@ contains
 
 !     Reopen cqlinput as new file, and put adjusted namelist into it.
 !     There are 2 &setup namelist sections.
-            open(unit=4,file="cqlinput",delim='apostrophe', &
+            open(unit=4,file=nml_file,delim='apostrophe', &
                  status="replace")
             open(unit=5,file="cqlinput_tmp",delim='apostrophe', &
                  status="old")
@@ -128,7 +129,7 @@ contains
 !     If cqlinput changed, copy cqlinput_tmp back to cqlinput
 !.......................................................................
          if (inlmod.eq.2) then
-            open(unit=5,file="cqlinput",delim='apostrophe', &
+            open(unit=5,file=nml_file,delim='apostrophe', &
                  status="replace")
             open(unit=4,file="cqlinput_tmp",delim='apostrophe', &
                  status="old")
@@ -153,9 +154,10 @@ contains
 !==================================================================
 
 
-      subroutine ainadjnl_fsetup_setup0(kopt)
+      subroutine ainadjnl_fsetup_setup0(kopt, nml_file)
       !YuP[2017]
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+        implicit integer (i-n), real(c_double) (a-h,o-z)
+        character(len=*), intent(in):: nml_file
 #ifdef __MPI
 !MPI >>>
       include 'mpilib.h'
@@ -194,7 +196,7 @@ contains
       if (kopt.eq.0) then
 
          inlmod=0
-         open(unit=4,file="cqlinput",delim='apostrophe',status="old")
+         open(unit=4,file=nml_file,delim='apostrophe',status="old")
  1       read(unit=4,fmt=1003,end=2) line
          if (line.eq." &fsetup" .or. line.eq." &FSETUP" .or. &
              line.eq."&fsetup"  .or. line.eq."&FSETUP"  ) then
@@ -225,7 +227,7 @@ contains
          else ! inlmod=1
 
             !Save the original file as cqlinput_tmp
-            open(unit=4,file="cqlinput",delim='apostrophe',status="old")
+            open(unit=4,file=nml_file,delim='apostrophe',status="old")
             open(unit=5,file="cqlinput_tmp",delim='apostrophe', &
                  status="replace")
  3          read(unit=4,fmt='(a)',end=4) line1
@@ -242,7 +244,7 @@ contains
 
 !     Reopen cqlinput as new file, and put adjusted namelist into it.
 !     There are 2 &setup namelist sections.
-            open(unit=4,file="cqlinput",delim='apostrophe', &
+            open(unit=4,file=nml_file,delim='apostrophe', &
                  status="replace")
             open(unit=5,file="cqlinput_tmp",delim='apostrophe', &
                  status="old")
@@ -275,7 +277,7 @@ contains
 !     If cqlinput changed, copy cqlinput_tmp back to cqlinput
 !.......................................................................
          if (inlmod.eq.1) then
-            open(unit=5,file="cqlinput",delim='apostrophe', &
+            open(unit=5,file=nml_file,delim='apostrophe', &
                  status="replace")
             open(unit=4,file="cqlinput_tmp",delim='apostrophe', &
                  status="old")

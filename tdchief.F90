@@ -103,6 +103,7 @@ contains
 
       ! we can actually make this an argument if we want...
       character(len=*), intent(in), optional :: nml_file
+      
 
 #ifdef __MPI
 !MPI >>>
@@ -126,7 +127,7 @@ contains
 !     The approach used for setup0, though verbose, actually deleted
 !       the common variables.... reducing code.
 !..................................................................
-      if((.not.present(nml_file)) .and. (.not.is_initialized_cqlcomm())) then
+      if((.not.present(nml_file)) .and. (is_initialized_cqlcomm())) then
          print *, "STEP mode, skipping initialize_cqlcomm"
          skip_init = .TRUE.
       end if
@@ -138,7 +139,7 @@ contains
 !     if old two setup namelist sections are present [maintaining
 !     backwards compatibility].  BH070414.
 !.......................................................................
-      call ainadjnl(0) ! at mpirank=0 only (but it can change cqlinput)
+      if(present(nml_file)) call ainadjnl(0, nml_file) ! at mpirank=0 only (but it can change cqlinput)
 #ifdef __MPI
 !MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
@@ -147,7 +148,7 @@ contains
 
       !Look for the presence of &FSETUP namelist,
       !adjust cqlinput: rename &FSETUP to &SETUP0 (later, restore cqlinput)
-      call ainadjnl_fsetup_setup0(0) !at mpirank=0 (but it can change cqlinput)
+      if(present(nml_file)) call ainadjnl_fsetup_setup0(0, nml_file) !at mpirank=0 (but it can change cqlinput)
       !pause
 #ifdef __MPI
 !MPI >>>
@@ -1364,7 +1365,7 @@ contains
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
 !MPI <<<
 #endif
-      call tdtloop
+      call tdtloop(nml_file)
 
       if (n .lt. nstop) go to 10 !-> next time step
 
