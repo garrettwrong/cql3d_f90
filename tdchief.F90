@@ -93,6 +93,7 @@ contains
 
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
+      logical :: skip_init = .FALSE.
 
 !..................................................................
 !     This routine directs the calculation of CQL3d; it controls
@@ -125,8 +126,12 @@ contains
 !     The approach used for setup0, though verbose, actually deleted
 !       the common variables.... reducing code.
 !..................................................................
-      call initialize_cqlcomm
+      if((.not.present(nml_file)) .and. (.not.is_initialized_cqlcomm())) then
+         print *, "STEP mode, skipping initialize_cqlcomm"
+         skip_init = .TRUE.
+      end if
 
+      if(.not.skip_init) call initialize_cqlcomm
 
 !.......................................................................
 !     Open cqlinput NL file and adjust to new setup0/setup structure,
@@ -168,15 +173,15 @@ contains
 !     Set some major input parameters according to
 !     first namelist setup
 !..................................................................
-      call ainsetpa
+      if(.not.skip_init) call ainsetpa
 
 !.......................................................................
 !     Zero/set some arrays
 !.......................................................................
-      call aclear
 
       ! Gets pltinput variable, for ainplt routine.
       if(present(nml_file)) then
+         call aclear
          call get_setup_from_nml(nml_file, close_nml_file=.TRUE.)
       end if
 

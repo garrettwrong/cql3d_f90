@@ -3241,4 +3241,9 @@ contains
     initialized_cqlcomm = .TRUE.
   end subroutine initialize_cqlcomm
 
+  function is_initialized_cqlcomm()
+    logical :: is_initialized_cqlcomm
+    is_initialized_cqlcomm = initialized_cqlcomm
+  end function is_initialized_cqlcomm
+
 end module cqlcomm_mod

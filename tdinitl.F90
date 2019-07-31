@@ -183,9 +183,12 @@ contains
     call urfinitl ! mrfn= is set here also
     call frinitl
     !NMLXXX, didn't impliment frsetup nml yet
-    open(unit=2,file=nml_file,delim='apostrophe',status='old')
-    call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
-    close(2)
+    ! GGGG DEBUG, must FIX!
+    if(present(nml_file)) then
+       open(unit=2,file=nml_file,delim='apostrophe',status='old')
+       call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
+       close(2)
+    end if
 
     if (machine .ne. "toroidal") call tdwrng(1)
     if (setup0%lrzdiff.eq."enabled" .and. frmodp.eq."enabled") &
