@@ -134,9 +134,11 @@ contains
     call frinitl
 
     !NMLXXX, frsetup nml not converted yet
-    open(unit=2,file=nml_file,delim='apostrophe',status="old")
-    call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
-    close(2)
+    if(present(nml_file)) then
+       open(unit=2,file=nml_file,delim='apostrophe',status="old")
+       call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
+       close(2)
+    end if
 
     !..................................................................
     !     Call an initialization routine which determines flux surface
