@@ -4,6 +4,7 @@ module abchief_mod
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
+  use aclear_mod, only : aclear
   use tdchief_mod, only : tdchief
 
   !---END USE
@@ -27,6 +28,7 @@ contains
     !     2d code controlled by achief1, called at beginning of tdchief
     !.......................................................................
     call tdchief(nml_file)
+    call aclear ! reset for STEP mode
     return
   end subroutine abchief
 
