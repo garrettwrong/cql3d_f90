@@ -174,7 +174,7 @@ contains
 !     Set some major input parameters according to
 !     first namelist setup
 !..................................................................
-      if(.not.skip_init) call ainsetpa
+      call ainsetpa
 
 !.......................................................................
 !     Zero/set some arrays
@@ -204,7 +204,7 @@ contains
         ! By reading "setup0" we simply make sure that we are back to the 1st line of cqlinput file?
         ! Not sure about this. Maybe Bob could comment.
         ! (GBW) You just needed to seek/rewind the file, not open and close it in different places.
-        call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
+        if(present(nml_file)) call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
 
         call ainsetpa          !  re-set according to setup0 nml
         call ainpltpa ! plots out the parameters
