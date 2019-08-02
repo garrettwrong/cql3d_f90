@@ -2,7 +2,7 @@
 
 SHELL     = /bin/sh
 NAME      = xcql3d
-NAME_MPI = $(NAME)_mpi
+NAME_MPI = mpi_$(NAME)
 COMPILER  = gfortran
 COMPILER_MPI = mpifort
 LIBTOOL   = libtool -static
@@ -138,11 +138,12 @@ rebuild:
 	$(LOAD) $(OBJECTS) $(F90OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
+	$(DELETE) *.o
 	$(DELETE) *.mod
 	$(DELETE) *.so *.a  $(NAME)_shared
-	$(DELETE) $(OBJECTS_MPI) $(F90OBJECTS_MPI)
-	$(DELETE)  $(NAME_MPI) $(OBJECTS_MPI) $(F90OBJECTS_MPI)
+	$(DELETE) *.o_mpi
+	$(DELETE) $(NAME_MPI) $(NAME_MPI)_shared
+	$(DELETE) $(NAME)
 
 .PHONY: all
 .PHONY: mpi
