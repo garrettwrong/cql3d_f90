@@ -10,7 +10,7 @@ include $(SHR)
 export
 
 libmpi_cql3d_lib: libcql3d_lib
-	$(MAKE) -DNOPGPLOT -f makefile_gfortran64.CentOS7 -j mpi
+	$(MAKE) -f makefile_gfortran64.CentOS7 -j mpi
 	@cp libmpi_xcql3d.so $(DYLDIR)/libmpi_cql3d_lib.so
 	@cp libmpi_xcql3d.a $(LIBDIR)/mpi_cql3d_lib.a
 	@cp cqlmpilib_mod.mod $(MPIMODDIR)
