@@ -18,9 +18,7 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 
@@ -59,18 +57,14 @@ contains
       sorpw_nbi(k,lr_)=s*fions(k)*one_*1.6022e-16*zmaxpsii(lr_) !-YuP->NBI source
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,2i5,e12.4)') &
             'sourcpwr: k,lr, sorpw_nbi', &
                        k,lr_,sorpw_nbi(k,lr_)
       WRITE(*,*)'----------------------------------------------------'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       return

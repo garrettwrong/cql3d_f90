@@ -28,9 +28,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 icall
@@ -52,20 +50,16 @@ contains
 
       do 100  i=1,setup0%lrz           ! keep index 'i' - used by mpiworker_i below
 #ifdef __MPI
-!MPI >>>
          if(mpisize.gt.1) then
             mpiworker= MOD(i-1,mpisize-1)+1
          else
             PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then
 
-!MPI <<<
 #endif
          call tdnflxs(i)        !-> determine flux surface index lr_
 !        Compute reaction rate of general species with self and others.
@@ -76,12 +70,9 @@ contains
 ! Commenting out:
 !YuP            if (isigsgv1.eq.1) call sigv5d
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then !-------------------------------------------
         mpisz=4
         call MPI_RECV(buff, mpisz*4,MPI_DOUBLE_PRECISION,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
@@ -93,10 +84,8 @@ contains
         call dcopy(mpisz, buff(3*mpisz+1),1, sigm(1:mpisz,mpil_),   1)
       endif !-----------------------------------------------------------
 
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then !-----------------------------------
         mpisz=4
         call dcopy(mpisz, fuspwrv(1:mpisz,lr_), 1,buff(0*mpisz+1),1)
@@ -106,22 +95,17 @@ contains
         mpitag= lr_ ! over flux surfaces =1,setup0%lrz
         call MPI_SEND(buff, mpisz*4,MPI_DOUBLE_PRECISION,0,mpitag,MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
-!MPI <<<
 #endif
  100  continue                  ! on i=1,setup0%lrz
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(fuspwrv,4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(fuspwrm,4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(sigf,4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(sigm,4*lrorsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !

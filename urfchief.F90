@@ -87,9 +87,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !...................................................................
@@ -261,15 +259,11 @@ contains
       call cpu_time(t_urf2) !-.-.-.-.-.-.-.-.-.-.-.-.-.
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,f10.3)')'tcpu_URFB0=',t_urf2-t_urf1
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       imprf=1

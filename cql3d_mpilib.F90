@@ -14,7 +14,7 @@ contains
     !     set communicator
     use cqlcomm_mod, only :cql3d_comm
 #ifdef __MPI
-    use mpi_proc_data         ! (from portlib library)
+    ! was for env_comm_add use mpi_proc_data         ! (from portlib library)
     implicit none
     include 'mpilib.h'
 

@@ -48,7 +48,9 @@ contains
 
         write(t_,588) k
  588    format("Loss due to lossmode(k) and torloss(k), k=",i5)
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
         call pltcont(k,1,t_,8) ! itype=8 for pltlosc
         !call GSCPVS(.5,.4)
 !$$$        call gxglfr(0)

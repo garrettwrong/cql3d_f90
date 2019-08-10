@@ -27,15 +27,11 @@ contains
 !BH000506:   De-activated by following goto.
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       go to 999

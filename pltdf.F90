@@ -54,13 +54,17 @@ contains
        call dcopy(iyjx2,f(0:iy+1,0:jx+1,k,l_),1,temp1(0:iy+1,0:jx+1),1)
        write(t_,550) k
 550    format(1x,"Species ",i2," Distribution Function Contour Plot")
+#ifndef NOPGPLOT
                CALL PGPAGE
+#endif
        itype=1 ! means: plots are made for distr.func f
        call pltcont(k,2,t_,itype) ! for f()
        write(t_,560)
 560    format("Contour values:")
        RILIN=10.
+#ifndef NOPGPLOT
                CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
 
        do 11 jcs=1,ncont,4
@@ -70,7 +74,9 @@ contains
              t_(icend:icend)="$"
           endif
           RILIN=RILIN+1.
+#ifndef NOPGPLOT
                     CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 11     end do
 
 
@@ -86,12 +92,16 @@ contains
 20        end do
           write(t_,530) k,n
 530       format(1x, "Contours of df/dt for species",i2,1x,"during timestep",i5)
+#ifndef NOPGPLOT
                   CALL PGPAGE
+#endif
           itype=2 ! means: plots are made for df
                   call pltcont(k,1,t_,itype) ! for df
           RILIN=10.
           write(t_,560)
+#ifndef NOPGPLOT
                   CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
           do 12 jcs=1,ncont,4
              write(t_,570) (tempcntr(jc),jc=jcs,min(jcs+3,ncont))
@@ -100,7 +110,9 @@ contains
                 t_(icend:icend)="$"
              endif
              RILIN=RILIN+1.
+#ifndef NOPGPLOT
                        CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 12        end do
 
        endif !  pltd.eq."df" .or. pltd.eq."df_color"
@@ -133,9 +145,7 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       integer pltcase
@@ -173,9 +183,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -433,7 +441,9 @@ contains
          !write(*,*)'pltcont: t_,lr_,JS,CONT(JS)=',lr_,JS,CONT(JS)
          if(CONT(JS).gt.0.d0)then
            RCONTLOG(JS)=LOG10(CONT(JS)) !Can be used for (as an option):
+#ifndef NOPGPLOT
            !CALL PGCONT(RTEMP2,npar,nprp,1,npar,1,nprp,RCONTLOG,-NCONT,TR)
+#endif
            ! where RTEMP2(ipar,iprp)=log10(fparprp(ipar,iprp))
            ! The LOG10 scale is needed for PGIMAG()
          else
@@ -443,13 +453,21 @@ contains
       IIY=iy
       RXMAXQ=XMAXQ
 
+#ifndef NOPGPLOT
       CALL PGSVP(.2,.8,.65,.9)
+#endif
         IF ( RXMAXQ.eq.0. ) THEN
            RXMAXQ=1.
         ENDIF
+#ifndef NOPGPLOT
       CALL PGSWIN(-RXMAXQ,RXMAXQ,0.,RXMAXQ)
+#endif
+#ifndef NOPGPLOT
       CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
+#ifndef NOPGPLOT
       CALL PGLAB(tx_,ty_,tt_)
+#endif
 
       if( (itype.eq.1 .and. pltd.eq.'color')   .or. &
           (itype.eq.1 .and. pltd.eq.'df_color')      .or. &
@@ -512,24 +530,38 @@ contains
 
       ! Draw the map with PGIMAG.
       ! Valid only for RTEMP2(ipar,iprp) over rectangular grid!
+#ifndef NOPGPLOT
       CALL PGIMAG(RTEMP2,npar,nprp,1,npar,1,nprp,FLOGMIN,FLOGMAX,TRPG)
+#endif
       ! Colorbar:
+#ifndef NOPGPLOT
       CALL pgwedg('RI', 2.0, 5.0, FLOGMIN,FLOGMAX, 'log10(..)')
+#endif
 
       endif ! on color option
 
       ! Overlay contours, with black color:
+#ifndef NOPGPLOT
       CALL PGSCI(1) ! 1==black
+#endif
 
       ! Plot original f(i,j) in (v,pitch) coord
       ! (lin.scale of f, but log scale of RCONT)
+#ifndef NOPGPLOT
       CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,NCONT,PGFUNC1)
+#endif
 
       ! Or plot the interpolated fparprp(ipar,iprp)
       ! over (vpar,vprp) rectangular grid:
+#ifndef NOPGPLOT
       !CALL PGSLW(1) !setup0%lnwidth=1 thin line
+#endif
+#ifndef NOPGPLOT
       !CALL PGCONT(RTEMP2,npar,nprp,1,npar,1,nprp,RCONTLOG,-NCONT,TR)
+#endif
+#ifndef NOPGPLOT
       CALL PGSLW(3) !restore setup0%lnwidth=3 normal line width
+#endif
 
 
 
@@ -539,17 +571,25 @@ contains
          RYPTS(1)=0.
          RXPTS(2)=XMAXQ
          RYPTS(2)=XMAXQ*T0T
+#ifndef NOPGPLOT
          CALL PGLINE(2,RXPTS,RYPTS)
+#endif
          RXPTS(2)=-XMAXQ
+#ifndef NOPGPLOT
          CALL PGLINE(2,RXPTS,RYPTS)
+#endif
       else
          RXPTS(1)=0.
          RYPTS(1)=0.
          RXPTS(2)=XMAXQ/T0T
          RYPTS(2)=XMAXQ
+#ifndef NOPGPLOT
          CALL PGLINE(2,RXPTS,RYPTS)
+#endif
          RXPTS(2)=-XMAXQ/T0T
+#ifndef NOPGPLOT
          CALL PGLINE(2,RXPTS,RYPTS)
+#endif
       endif
 
 
@@ -566,7 +606,9 @@ contains
         RTAB2(i)= sinn(i,lr_) ! v_perp/vnorm
         enddo
       endif
+#ifndef NOPGPLOT
       CALL PGLINE(iy,RTAB1,RTAB2)
+#endif
 
       !plot v=vth line, for the k-th gen. species
 !..................................................................
@@ -588,20 +630,34 @@ contains
       endif
       ! Five different line styles are available:
       ! 1 (full line), 2 (dashed), 3 (dot-dash-dot-dash), 4 (dotted),
+#ifndef NOPGPLOT
       CALL PGSLS(4)
+#endif
+#ifndef NOPGPLOT
       CALL PGLINE(iy,RTAB1,RTAB2)
+#endif
+#ifndef NOPGPLOT
       CALL PGSLS(1) ! 1-> restore solid line
+#endif
+#ifndef NOPGPLOT
       CALL PGSLW(setup0%lnwidth) !setup0%lnwidth=3 line width in units of 0.005
+#endif
 
 
       if (k.eq.0) return
       rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
       write(t_,150) n,timet
+#ifndef NOPGPLOT
         CALL PGMTXT('B',6.,0.,0.,t_)
+#endif
       write(t_,151) rovera(lr_),rr
+#ifndef NOPGPLOT
         CALL PGMTXT('B',7.,0.,0.,t_)
+#endif
       write(t_,153) rya(lr_), rpcon(lr_), lr_
+#ifndef NOPGPLOT
         CALL PGMTXT('B',8.,0.,0.,t_)
+#endif
  150  format("time step n=",i5,5x,"time=",1pe10.2," secs")
  151  format( "r/a=",1pe10.3,5x,"radial position (R)=",1pe12.4," cm")
  153  format( "rya=",1pe10.3,5x,"R=rpcon=",1pe12.4," cm,  Surf#",i4)
@@ -646,9 +702,13 @@ contains
 !      write(*,*) 'visble,x,y,z,xworld,yworld',visble,x,y,z,xworld,yworld
 
       IF (VISBLE.EQ.0) THEN
+#ifndef NOPGPLOT
          CALL PGMOVE(XWORLD,YWORLD)
+#endif
       ELSE
+#ifndef NOPGPLOT
          CALL PGDRAW(XWORLD,YWORLD)
+#endif
       ENDIF
 
       RETURN
@@ -706,19 +766,29 @@ contains
 !
       IF (TYPE.EQ.1) THEN
 !        -- gray scale
+#ifndef NOPGPLOT
          CALL PGCTAB(GL, GR, GG, GB, 2, CONTRA, BRIGHT)
+#endif
       ELSE IF (TYPE.EQ.2) THEN
 !        -- rainbow
+#ifndef NOPGPLOT
          CALL PGCTAB(RL, RR, RG, RB, 9, CONTRA, BRIGHT)
+#endif
       ELSE IF (TYPE.EQ.3) THEN
 !        -- heat
+#ifndef NOPGPLOT
          CALL PGCTAB(HL, HR, HG, HB, 5, CONTRA, BRIGHT)
+#endif
       ELSE IF (TYPE.EQ.4) THEN
 !        -- weird IRAF
+#ifndef NOPGPLOT
          CALL PGCTAB(WL, WR, WG, WB, 10, CONTRA, BRIGHT)
+#endif
       ELSE IF (TYPE.EQ.5) THEN
 !        -- AIPS
+#ifndef NOPGPLOT
          CALL PGCTAB(AL, AR, AG, AB, 20, CONTRA, BRIGHT)
+#endif
       END IF
       END SUBROUTINE PALETT
 

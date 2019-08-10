@@ -21,16 +21,12 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 ! print error messages - on mpirank.eq.0 only
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       if (kerr.eq.1) then
         WRITE(*,10010)
@@ -50,9 +46,7 @@ contains
         WRITE(*,10990)
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       stop 'urfwrong:' ! stop at all MPI cores

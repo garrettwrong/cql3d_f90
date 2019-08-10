@@ -8,9 +8,7 @@ c
 c
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 
@@ -67,18 +65,14 @@ CDIR$ NEXTSCALAR
 cBH180908      if (kelec.eq.0) call diagwrng(9)
       if (kelec.eq.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)
          WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
          WRITE(*,*) '         Have not checked with NBI turned on.'
          WRITE(*,*)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       endif
 

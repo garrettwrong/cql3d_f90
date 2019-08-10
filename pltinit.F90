@@ -21,9 +21,7 @@ contains
 !................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !      integer pgbeg
@@ -33,9 +31,7 @@ contains
       CHARACTER*16 PG_VAL ! YuP
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -48,9 +44,13 @@ contains
       write(t_,1000) setup0%mnemonic(1:length_char(setup0%mnemonic))
  1000 format(a,".ps/VCPS") !YuP: was /VPS (vertical black&white)
                            ! Use /VCPS for vertical Color pages
+#ifndef NOPGPLOT
       ier=PGOPEN(t_)
       CALL PGSCI(1)
+#endif
+#ifndef NOPGPLOT
       CALL PGSLW(setup0%lnwidth)
+#endif
       write(*,*) 'PLTINIT-1 ier=1 is OK: ier=',ier
 !      ier=pgbeg(0,'?',1,1)
 !      if (ier.ne.1) write(*,*)
@@ -78,17 +78,27 @@ contains
       !'CURSOR'    * - does the current device have a graphics cursor?
       !                ('YES' or 'NO').
       ! Two other arg. are outputs:
+#ifndef NOPGPLOT
       CALL PGQINF('TYPE', PG_VAL, PG_L)
+#endif
       WRITE (*,*) 'PGPLOT device type: ', PG_VAL(1:PG_L)
+#ifndef NOPGPLOT
       CALL PGQINF('DEVICE', PG_VAL, PG_L)
+#endif
       WRITE (*,*) 'PGPLOT device: ', PG_VAL(1:PG_L)
+#ifndef NOPGPLOT
       CALL PGQINF('USER', PG_VAL, PG_L)
+#endif
       WRITE (*,*) 'PGPLOT user: ', PG_VAL(1:PG_L)
+#ifndef NOPGPLOT
       CALL PGQINF('NOW', PG_VAL, PG_L)
+#endif
       WRITE (*,*) 'PGPLOT time now: ', PG_VAL(1:PG_L)
 
       !Inquire color index range:
+#ifndef NOPGPLOT
       CALL PGQCIR(PG_C1, PG_C2)
+#endif
       PG_NC = MAX(0, PG_C2-PG_C1+1)
       WRITE (*,*) 'Number of color indices used for image: ', PG_NC
       ! On Yuri's PC: printed --   PG_NC=240

@@ -25,9 +25,7 @@ contains
 !..............................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 !.......................................................................
 
@@ -36,15 +34,11 @@ contains
 !     the subroutine.
 !..................................................................
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'wpalloc:  Entering wpalloc'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       ! YuP-101220: allocation of wcqlb-wcqlf is moved to vlf.f
@@ -87,15 +81,11 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'wpalloc:  Leaving wpalloc'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       return

@@ -24,9 +24,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 pltovlp
@@ -35,9 +33,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -77,18 +73,28 @@ contains
              endif
  560       continue ! krf mode (usually = harmonic number)
            if( MAXVAL(temp1)-MINVAL(temp1) .gt. 0.d0 ) then
+#ifndef NOPGPLOT
              CALL PGPAGE ! new page for each k
+#endif
                itype=4 ! means: plots are made for urfb
              call pltcont(k,1,'Contours of UrfB vs. v_parallel,v_perp', &
                itype) !YuP:summed-up
              write(t_,552)
+#ifndef NOPGPLOT
              CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
              write(t_,553) lr_
+#ifndef NOPGPLOT
              CALL PGMTXT('B',11.,0.,0.,t_)
+#endif
              write(t_,692) MAXVAL(temp1) !YuP[10-2016] max value for this krf
+#ifndef NOPGPLOT
              CALL PGMTXT('B',12.,0.,0.,t_)
+#endif
              write(t_,693) k
+#ifndef NOPGPLOT
              CALL PGMTXT('B',13.,0.,0.,t_)
+#endif
            endif
         enddo ! k species
 
@@ -104,18 +110,26 @@ contains
          enddo
          if (nrfspecies(krfn(krf)) .eq. k) then
          if( MAXVAL(temp1)-MINVAL(temp1) .gt. 0.d0 ) then
+#ifndef NOPGPLOT
           CALL PGPAGE ! opens new page for each krf-mode
+#endif
           itype=4 ! means: plots are made for urfb
           call pltcont(k,1,'Contours of UrfB vs. v_parallel,v_perp', &
             itype)
           write(t_,690)
+#ifndef NOPGPLOT
           CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
           ! write flux surface number and mode number;
           ! also harmonic number and species number (added YuP[10-2016])
           write(t_,691) lr_ ,krf,nharm(krf),k
+#ifndef NOPGPLOT
           CALL PGMTXT('B',11.,0.,0.,t_)
+#endif
           write(t_,692) MAXVAL(temp1) !YuP[10-2016] max value for this krf
+#ifndef NOPGPLOT
           CALL PGMTXT('B',12.,0.,0.,t_)
+#endif
          endif
          endif
  680  continue ! krf

@@ -146,21 +146,43 @@ contains
         REMIN=LOG10(EMIN)
         REMAX=LOG10(EMAX)
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
 
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.35,.9)
+#endif
         IF ( ReMAX-ReMIN .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            ReMAX= ReMIN+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(Rtam1(1),Rtam1(jxq),Remin,Remax)
+#endif
+#ifndef NOPGPLOT
         CALL PGSAVE
+#endif
+#ifndef NOPGPLOT
         CALL PGSCH(0.8)
+#endif
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
+#endif
+#ifndef NOPGPLOT
         CALL PGUNSA
+#endif
+#ifndef NOPGPLOT
         CALL PGSAVE
+#endif
+#ifndef NOPGPLOT
         CALL PGSCH(1.44)
+#endif
+#ifndef NOPGPLOT
         CALL PGLAB(TX_, 'f', 'Cuts of f vs. v, at cnst pitch angle')
+#endif
+#ifndef NOPGPLOT
         CALL PGUNSA
+#endif
 
         do 110 iu=1,5
            if (iu.ne.5) then
@@ -183,7 +205,9 @@ contains
               if(tam2(j).le.emin) tam2(j)=emin
               RTAM2(J)=LOG10(TAM2(J))
  100       continue
+#ifndef NOPGPLOT
            CALL PGLINE(JXQ,RTAM1,RTAM2)
+#endif
           xu=float(iu)
  110   continue
 
@@ -200,20 +224,32 @@ contains
           write(t_,10020)
        endif
 
+#ifndef NOPGPLOT
         CALL PGMTXT('B',7.,0.,0.,t_)
+#endif
         write(T_,10023) K,ENORM
+#ifndef NOPGPLOT
         CALL PGMTXT('B',8.,0.,0.,t_)
+#endif
 
 
 
        write(t_,10010) n,timet
+#ifndef NOPGPLOT
         CALL PGMTXT('B',9.,0.,0.,t_)
+#endif
        write(t_,10011) rovera(lr_),rr
+#ifndef NOPGPLOT
         CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
 
+#ifndef NOPGPLOT
 !        CALL PGEND
+#endif
 !        STOP
+#ifndef NOPGPLOT
 !        CALL PGPAGE
+#endif
 
        endif
 

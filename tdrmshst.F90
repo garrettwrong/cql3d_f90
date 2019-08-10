@@ -38,9 +38,7 @@ contains
       integer itlrza
       parameter(itlrza=3*lrza+1)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       dimension d2equ(lrza),d2areamd(lrza),d2volmid(lrza),worka(lrza)
@@ -190,9 +188,7 @@ contains
       endif  ! On eqmod
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'tdrmshst: lr, dvol(lr), darea(lr) based on eqvolpsi'
       do ll=1,setup0%lrzmax ! YuP[01-2017] was 1,setup0%lrz
@@ -203,9 +199,7 @@ contains
                   sum(dvol),sum(darea)
       WRITE(*,*)'----------------------------------------------------'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 !.......................................................................
 !     Compute H*rho=dV/drho/(4*pi**2*R_0) (used for transport)

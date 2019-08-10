@@ -39,9 +39,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !.......................................................................
@@ -83,16 +81,12 @@ contains
 !     (assume error in namelist:setup0%lrindx=... instead of setup0%lrindx(1)=...)
         if (setup0%lrindx(0) .ne. 0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
           WRITE(*,'(/"  WARNING: setup0%lrindx has been shifted by one index" &
             ," as setup0%lrindx(0).ne.0",/)')
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 !dir$ novector
           do 102 ll=setup0%lrz,1,-1

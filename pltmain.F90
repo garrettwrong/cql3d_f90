@@ -61,15 +61,11 @@ contains
     REAL RILIN
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
     ! make plots on mpirank.eq.0 only
 
@@ -81,30 +77,46 @@ contains
     if (pltend.eq."notplts") goto 10
     if (pltend.eq."last" .and. n.lt.nstop) goto 10
 
+#ifndef NOPGPLOT
           CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
           CALL PGSCH(1.0) ! restore to default font size
+#endif
     !(sometimes font is too big from previous plot)
 
     RILIN=0.
     if (setup0%cqlpmod .ne. "enabled") then
+#ifndef NOPGPLOT
                 CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL RADIAL QUANTITIES")
+#endif
     else
+#ifndef NOPGPLOT
                 CALL PGMTXT('T',-RILIN,0.,0.,"LOCAL PARALLEL QUANTITIES")
+#endif
     endif
     RILIN=RILIN+1.
 
     write(t_,150) n,timet
     RILIN=RILIN+1.
+#ifndef NOPGPLOT
           CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
     write(t_,1501) lr_,setup0%lrz
     RILIN=RILIN+1.
+#ifndef NOPGPLOT
           CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
     write(t_,151) rovera(lr_),rr
     RILIN=RILIN+1.
+#ifndef NOPGPLOT
           CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
     write(t_,153) rya(lr_),rpcon(lr_)
     RILIN=RILIN+1.
+#ifndef NOPGPLOT
           CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 150 format("time step n=",i5,","5x,"time=",1pe12.4," secs")
 1501 format("flux surf=",i3,5x,"total flux surfs=",i3)
 151 format("r/a=",1pe10.3,5x,"radial position (R)=",1pe12.4," cms")
@@ -113,7 +125,9 @@ contains
     if (setup0%cqlpmod .eq. "enabled") then
        write(t_,152) l_,sz(l_)
        RILIN=RILIN+1.
+#ifndef NOPGPLOT
                CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 152    format("orbit at s(",i5,") = ",1pe10.2)
     endif
 
@@ -129,16 +143,24 @@ contains
        write(t_,'(a,f11.3)') ' enorm (kev) =' ,enorm
     endif
     RILIN=RILIN+1.
+#ifndef NOPGPLOT
             CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
     write(t_,161)  vnormdc
     RILIN=RILIN+1.
+#ifndef NOPGPLOT
             CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
     write(t_,162)  vtedc
     RILIN=RILIN+1.
+#ifndef NOPGPLOT
             CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
     write(t_,163)  vtdvnorm
     RILIN=RILIN+1.
+#ifndef NOPGPLOT
             CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
     do k=1,ntotal
        vtdvnorm= vth(k,lr_)/vnorm
        !YuP/note: For time-dependent profiles,
@@ -146,7 +168,9 @@ contains
        ! See profiles.f.
        write(t_,'(a,i2,a,f15.7)') "k=",k, "  vth(k)/vnorm =", vtdvnorm
        RILIN=RILIN+1.
+#ifndef NOPGPLOT
                 CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
     enddo
 
 160 format("enorm (kev) = ",f11.3)
@@ -160,7 +184,9 @@ contains
        write(t_,164) zvthes
        write(t_,165) zvtheon
        RILIN=RILIN+1.
+#ifndef NOPGPLOT
                CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 164    format(";","vthe(s) (sqrt(te/me))/c = ",f15.7)
 165    format("vthe(s)/vnorm = ",f15.7)
     endif
@@ -270,7 +296,9 @@ contains
   !---------------------------------------------------------------------
   subroutine gxglfr(n)
     integer n
+#ifndef NOPGPLOT
             CALL PGPAGE
+#endif
     return
   end subroutine gxglfr
   !---------------------------------------------------------------------
@@ -282,7 +310,9 @@ contains
     PGxmax = xmax
     PGymin = ymin
     PGymax = ymax
+#ifndef NOPGPLOT
             CALL PGSVP(PGxmin,PGxmax,PGymin,PGymax)
+#endif
     ! PGSVP (XLEFT, XRIGHT, YBOT, YTOP)
     ! XLEFT  (input)  : x-coordinate of left hand edge of viewport, in NDC.
     ! XRIGHT (input)  : x-coordinate of right hand edge of viewport,in NDC.
@@ -307,14 +337,24 @@ contains
     IF ( PGymax-PGymin .le. 1.e-16 ) THEN ! YuP [02-23-2016]
        PGymax= PGymin+1.e-16
     ENDIF
+#ifndef NOPGPLOT
             CALL PGSCH(1.) ! set character size; default is 1.
+#endif
     if(scale.eq."linlin$") then
+#ifndef NOPGPLOT
                  CALL PGSWIN(PGxmin,PGxmax,PGymin,PGymax)
+#endif
+#ifndef NOPGPLOT
                  CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
     endif
     if(scale.eq."loglin$") then
+#ifndef NOPGPLOT
                  CALL PGSWIN(log10(PGxmin),log10(PGxmax),PGymin,PGymax)
+#endif
+#ifndef NOPGPLOT
                  CALL PGBOX('BCNSTL',0.,0,'BCNST',0.,0)
+#endif
     endif
     !----------------------------
     PGymin= max(PGymin,1.e-32) ! cannot be negative
@@ -325,12 +365,20 @@ contains
        RPG2= RPG1+1.e-16
     ENDIF
     if(scale.eq."linlog$") then
+#ifndef NOPGPLOT
                  CALL PGSWIN(PGxmin,PGxmax,RPG1,RPG2)
+#endif
+#ifndef NOPGPLOT
                  CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
+#endif
     endif
     if(scale.eq."loglog$") then
+#ifndef NOPGPLOT
                  CALL PGSWIN(log10(PGxmin),log10(PGxmax),RPG1,RPG2)
+#endif
+#ifndef NOPGPLOT
                  CALL PGBOX('BCNSTL',0.,0,'BCNSTL',0.,0)
+#endif
     endif
     return
   end subroutine gswd2d
@@ -366,7 +414,9 @@ contains
           PGyarray(n)= log10( max(small_p,abs(yarray(n))) )
        enddo
     endif
+#ifndef NOPGPLOT
             CALL PGLINE(length,PGxarray,PGyarray)
+#endif
     ! Primitive routine to draw a Polyline. A polyline is one or more
     ! connected straight-line segments.  The polyline is drawn using
     ! the current setting of attributes color-index, line-style, and
@@ -392,10 +442,14 @@ contains
     PGx2 = x2 ! Convert to real(c_float)
     PGy1 = y1 ! Convert to real(c_float)
     PGy2 = y2 ! Convert to real(c_float)
+#ifndef NOPGPLOT
             CALL PGMOVE (PGx1, PGy1)
+#endif
     ! Move the "pen" to the point with world
     ! coordinates (X,Y). No line is drawn.
+#ifndef NOPGPLOT
             CALL PGDRAW (PGx2, PGy2)
+#endif
     ! Draw a line from the current pen position to the point
     ! with world-coordinates (X,Y). The line is clipped at the edge of the
     ! current window. The new pen position is (X,Y) in world coordinates.
@@ -407,7 +461,9 @@ contains
     real size ! take the compiler default
     INTEGER  LW
     LW = int(size*10. + 1.) !-YuP: Not sure if this conversion is ok
+#ifndef NOPGPLOT
             CALL PGSLW(LW)
+#endif
     ! Set the line-width attribute. This attribute affects lines, graph
     ! markers, and text. The line width is specified in units of 1/200
     ! (0.005) inch (about 0.13 mm) and must be an integer in the range
@@ -421,7 +477,9 @@ contains
     ! sets line style: 1-solid, 2-dashed, 3-dotted, 4-dash-dotted, etc.
     implicit none !integer (i-n), real(c_double) (a-h,o-z)
     INTEGER  LS_in
+#ifndef NOPGPLOT
             CALL PGSLS(LS_in)
+#endif
     ! Set the line style attribute for subsequent plotting. This
     ! attribute affects line primitives only; it does not affect graph
     ! markers, text, or area fill.
@@ -465,14 +523,18 @@ contains
     real(c_float) size
     real(c_float) PGsize
     PGsize = size ! Convert to real(c_float)
+#ifndef NOPGPLOT
              CALL PGSCH(90./PGsize) ! set character size; default is 1.
+#endif
     return
   end subroutine gstxno
   !---------------------------------------------------------------------
   subroutine  gptx2d(text)
     ! Plot Text
     character*(*) text
+#ifndef NOPGPLOT
             call PGPTXT(X, Y, ANGLE, FJUST, text)
+#endif
     ! Primitive routine for drawing text. The text may be drawn at any
     ! angle with the horizontal, and may be centered or left- or right-
     ! justified at a specified position.  Routine PGTEXT provides a
@@ -537,17 +599,25 @@ contains
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range
         !write(*,*) 'pltends-1:', ptime(1,l_),ptime(nch(l_),l_),emin,emax
         call GSVP2D(.2,.8,.6,.9) !---------------> 1st subplot
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin, &
              emax*1.05)
         call GPCV2D(ptime(1:nch(l_),l_),pdens(1:nch(l_),k,l_),nch(l_)) ! density(time)
+#ifndef NOPGPLOT
         CALL PGLAB('time (sec)',' ',' ')
+#endif
         !call GSCPVS(.08,.75) ! set current position for text
         write(t_,10120) k
 10120   format("density(s) of species",i2)
         RILIN=0.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('LV',RILIN,0.,0.,t_) ! Left-Vertical
+#endif
 
         call aminmx(pengy(1:nch(l_),k,l_),1,nch(l_), &
                 1,emin,emax,kmin,kmax)
@@ -555,40 +625,58 @@ contains
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range
         !write(*,*) 'pltends-2:', ptime(1,l_),ptime(nch(l_),l_),emin,emax
         call GSVP2D(.2,.8,.2,.5) !---------------> 2nd subplot
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin, &
              emax*1.05)
         call GPCV2D(ptime(1:nch(l_),l_), pengy(1:nch(l_),k,l_), nch(l_)) ! energy(time)
+#ifndef NOPGPLOT
         CALL PGLAB('time (sec)',' ',' ')
+#endif
         !call GSCPVS(.08,.35) ! set current position for text
         write(t_,10110) k
 10110   format("energy(s) of species",i2)
         RILIN=0.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('LV',RILIN,0.,0.,t_) ! Left-Vertical
+#endif
 
         write(t_,10140) denpar(k,ls_),enrgypa(k,ls_)
 10140   format("local density(s) (/cm**2) = ",e15.6, &
           ";  energy(s) (kev) =",e15.6)
         RILIN=3.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
+#endif
 
         write(t_,10150) n,timet,k
 10150   format("time step (n) is",i5,5x,"time=",1pe14.6," secs", &
                "   Species k=",i2)
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
+#endif
 
         write(t_,10152) rovera(lr_),rr
 10152   format("r/a=",e14.6,5x,"radial position (R)=",e14.6," cm")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
+#endif
 
         write(t_,10153) sz(l_)
 10153   format("parallel position (s) =",e14.6," cm")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
+#endif
 
 !...
 !mnt  Generate plot "curr"
@@ -600,18 +688,26 @@ contains
         if(emax.gt.0.) emax=emax*1.05 ! extend the upper range
         !write(*,*) 'pltends-3:', ptime(1,l_),ptime(nch(l_),l_),emin,emax
         call GSVP2D(.2,.8,.6,.9)
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin,emax)
         call GPCV2D(ptime(1:nch(l_),l_),pcurr(1:nch(l_),k,l_),nch(l_)) ! current_dens(time)
+#ifndef NOPGPLOT
         CALL PGLAB('time (sec)',' ',' ')
+#endif
         curramp=currm(k,l_)/3.e9
         write(t_,10160) k,curramp
 10160   format("Local in s current density",";", &
           "of species ",i2," =",e14.5,";", &
           "units are Amps/cm**2")
         RILIN=3.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
+#endif
 
 
  100    continue
@@ -626,26 +722,38 @@ contains
         if (abs(fnmin-fnmax).lt.fnmax*dgts) fnmax=fnmin+.001*abs(fnmin)
         !write(*,*) 'pltends-4:', x(1),x(jx),fnmin,fnmax
         call GSVP2D(.2,.8,.6,.9) !---------------> 1st subplot
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlin$",x(1),x(jx),fnmin,fnmax)
         call GPCV2D(x,currv(1:jx,k,l_),jx)
+#ifndef NOPGPLOT
         CALL PGLAB('v/vnorm','current: J(v)',' ') !
+#endif
 
         call aminmx(currvs(1:jx,k),1,jx, &
            1,fnmin,fnmax,kmin,kmax)
         if (abs(fnmin-fnmax).lt.fnmax*dgts) fnmax=fnmin+.001*abs(fnmin)
         !write(*,*) 'pltends-5:', x(1),x(jx),fnmin,fnmax
         call GSVP2D(.2,.8,.2,.5) !---------------> 2nd subplot
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlin$",x(1),x(jx),fnmin,fnmax)
         call GPCV2D(x,currvs(1:jx,k),jx)
+#ifndef NOPGPLOT
         CALL PGLAB('v/vnorm','Integral from 0 to v of J(v)dv',' ') !
+#endif
 
         write(t_,10183) currvs(jx,k)
 10183   format("current =",e10.4,"Amps/Watt")
         RILIN=3.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
+#endif
 
  220  continue ! k=1,ngen
 !
@@ -664,38 +772,56 @@ contains
         1,emin,emax,kmin,kmax)
       !write(*,*) 'pltends-6:', ptime(1,l_),ptime(nch(l_),l_),emin,emax
       call GSVP2D(.2,.8,.6,.9)
+#ifndef NOPGPLOT
       CALL PGSCH(1.) ! set character size; default is 1.
+#endif
       call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_),emin,emax)
       call GPCV2D(ptime(1:nch(l_),l_),consnp(1:nch(l_),l_),nch(l_))
+#ifndef NOPGPLOT
       CALL PGLAB('time (sec)','consn(l_) conservation diag',' ')
+#endif
 
       write(t_,10250) consn(l_)
 10250 format("consn(l_)=",1pe12.4)
       RILIN=5.
+#ifndef NOPGPLOT
       CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
       CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
       write(t_,10251)
 10251 format("Perfect conservation should yield  machine accuracy,")
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
       write(t_,10252)
 10252 format("or about 1.e-14:")
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
       write(t_,10150) n,timet
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
       write(t_,10152) rovera(lr_),rr
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
       write(t_,10153) sz(l_)
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
 
       do 280 k=1,ngen
@@ -717,16 +843,24 @@ contains
  280  continue
         write(t_,10150) n,timet
         RILIN=0.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('T',RILIN,0.,0.,t_) ! Top
+#endif
 
         write(t_,10152) rovera(lr_),rr
         RILIN=RILIN-1.
+#ifndef NOPGPLOT
         CALL PGMTXT('T',RILIN,0.,0.,t_) ! Top
+#endif
 
         write(t_,10153) sz(l_)
         RILIN=RILIN-1.
+#ifndef NOPGPLOT
         CALL PGMTXT('T',RILIN,0.,0.,t_) ! Top
+#endif
 
       return
       end subroutine pltends
@@ -983,7 +1117,9 @@ contains
 
         call GXGLFR(0) ! new page
         call GSVP2D(.2,.8,.3,.9)
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlog$",tam1(1),tam1(jxq),emin,emax)
         !-YuP:   call GSCVLB(1)
         !-YuP:   call GSCVFT(0.)
@@ -1014,66 +1150,94 @@ contains
  310    continue
         !-YuP:   call GSCVLB(0)
 
+#ifndef NOPGPLOT
        CALL PGLAB(tx_,' ',' ') ! YuP/added: horizontal axis label
+#endif
 
 !     Write previously set title
         RILIN=1.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('T',RILIN,0.,0.,t_) ! Top
+#endif
 
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,10020) k
 10020 format("Flux vs. velocity for some angles; species number = ",i3)
         RILIN=3.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_) ! Bottom
+#endif
 
         write(t_,10010) n,timet
 10010 format("time step (n) is",i5,5x,"time=",e14.6," secs")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10011) rovera(lr_),rr
 10011 format("r/a=",e14.6,5x,"radial position (R) =",e14.6," cm")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10030)
 10030 format("pll    ---- theta = 0 radians")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10031)
 10031 format("pll-pi ---- theta = pi radians")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10032) y(itl,l_)
 10032 format("trp/ps ---- theta = ",e13.5," radians")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10033) trpmd
 10033 format("midtrp ---- theta = ",e13.5," radians")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10034) y(iyh,l_)
 10034 format("perp   ---- theta = ",e13.5," radians")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10035)
 10035 format("avg    ---- theta averaged over pi radians")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
+#ifndef NOPGPLOT
         CALL PGSCH(1.0) ! recover default 1.0 fontsize
+#endif
 
  410    continue
  400    continue ! k species
  500  continue ! skipping handle
 
+#ifndef NOPGPLOT
       CALL PGSCH(1.0) ! recover default 1.0 fontsize
+#endif
 
  910  format("species no.",i2,5x,"combined velocity space fluxes")
  920  format("species no.",i2,5x,"Fokker-Planck velocity space flux")
@@ -1160,7 +1324,9 @@ contains
 
         call GXGLFR(0) ! new page(s)
         call GSVP2D(.2,.8,.25,.95) ! (XLEFT, XRIGHT, YBOT, YTOP)
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlin$",0.d0,xlu,fmin,fmax)
         call GPCV2D(xlm(jpxyh:jpxyh+jpxyh), tem1, jpxyhm)
         call GPCV2D(xlm(jpxyh:jpxyh+jpxyh), tem2, jpxyhm)
@@ -1168,19 +1334,27 @@ contains
         write(t_,10011) k
 10011 format("asymmetric cmpt of f_par, and xpar*cmpt, species:",1x,i5)
         RILIN=5.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10012)
 10012 format("(f_par normed so int(-1,+1)=equatorial ne)")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         call GXGLFR(0) ! new page(s)
         call aminmx(fl(1:2*jpxyhm),1,2*jpxyhm,1,fmin,fmax,kmin,kmax)
         fmin=1.d-08*fmax
         call GSVP2D(.2,.8,.25,.95)
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlog$",xll,xlu,fmin,fmax)
         do 10 jj=1,2*jpxyhm
           if (fl(jj) .lt. fmin ) fl(jj)=fmin
@@ -1192,31 +1366,45 @@ contains
         write(t_,10013) k
 10013 format("parallel distribution function for species:",1x,i5)
         RILIN=3.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10014)
 10014 format("(normed so int(-1,+1)=equatorial ne)")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10020)
 10020 format( "(log plot)")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,10030) n,timet
 10030 format("time step (n) is",i5,5x,"time=",e14.6," secs")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10031) rovera(lr_),rr
 10031 format("r/a=",e14.6,5x,"radial position (R) =",e14.6," cm")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
+#ifndef NOPGPLOT
         CALL PGSCH(1.0) ! recover default 1.0 fontsize
+#endif
 
  20   continue
 
@@ -1254,7 +1442,9 @@ contains
       if (fmin .lt. emin) emin=fmin
       if (fmax .gt. emax) emax=fmax
       call GSVP2D(.2,.8,.6,.9) !---------------> 1st subplot
+#ifndef NOPGPLOT
       CALL PGSCH(1.) ! set character size; default is 1.
+#endif
       call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_), &
        .95d0*emin,1.05d0*emax)
       text(1)="spitzer"
@@ -1270,12 +1460,18 @@ contains
       write(t_,170)
  170  format("upper graph - flux avg and spitzer resistivities")
       RILIN=2.
+#ifndef NOPGPLOT
       CALL PGSCH(0.9) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
       write(t_,171)
  171  format("lower graph - ratio of resist to spitzer or neo resist")
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       illeff=lr_
       if (setup0%cqlpmod .eq. "enabled") illeff=ls_
@@ -1285,7 +1481,9 @@ contains
       call GSVP2D(.2,.8,.2,.5) !---------------> 2nd subplot
       call GSWD2D("linlin$",ptime(1,l_),ptime(nch(l_),l_), &
        .95d0*emin,1.05d0*emax)
+#ifndef NOPGPLOT
       CALL PGLAB('time (sec)',' ',' ')
+#endif
       call GPCV2D(ptime(2:nch(l_)-1,l_), rovsp(2:nch(l_)-1,illeff), &
        nch(l_)-1)
 
@@ -1293,7 +1491,9 @@ contains
          write(t_,10164)
 10164 format("(efswtchn=neo_hh)")
          RILIN=RILIN-1.
+#ifndef NOPGPLOT
          CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
       endif
 
 
@@ -1303,90 +1503,126 @@ contains
       write(t_,70)
  70   format("--calculated resistivity and other related quantities--")
       RILIN=2.
+#ifndef NOPGPLOT
       CALL PGSCH(0.9) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,80) sptzr(l_)
  80   format("spitzer restvty= ",1pe14.5)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,81) resist
  81   format("toroidal restvty=",e14.5)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,82) resistn
  82   format("neoclass restvty=",e14.5)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,83) rovs(lr_)
  83   format("ratio of resistivities=",e14.5)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,84) rovsf
  84   format("O(epsilon**.5) expansion for resistivity ratio=",e14.5)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,85) elecr(lr_)
  85   format("E-Dreicer=",e14.5,"vlts/cm")
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,86) rovsloc(l_)
  86   format("local resistivity over spitzer=",e14.5)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,90) rovscf
  90   format("Small eps(lr_) fla for resist ratio (connor)=",e16.6)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,91) rovsc(lr_)
  91   format("gen. epsilon fla for resist ratio (connor)=",e14.5)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,92) xconn
  92   format("^\i(connor)=",e16.6)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,93) elecfld(lr_)
  93   format("electric field=",e16.6,"vlts/cm")
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,94) eovedd
  94   format("E-parallel/E-Dreicer=",e16.6)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,95) tauee(lr_)
  95   format("tauee(lr_)=",e16.6,"secs")
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 !
 !     add some other relevant quantities
 !
       write(t_,96)(btor0(lr_)/bmod0(lr_))**2
  96   format("b_phi/b at outer midpplane=",1pe14.4)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,97) onovrp(2,lr_)*rpcon(lr_)**2
  97   format("R(z=0)**2 * <1/R**2>      =",  e14.4)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
       write(t_,98) psiavg(2,lr_)
  98   format("<(B(z)/B(0))**2>          =",  e14.4)
       RILIN=RILIN-1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',RILIN,0.,0.,t_)
+#endif
 
 
  190  continue
@@ -1424,9 +1660,7 @@ contains
 !     YuP[2018-01-04] Adjusted, to make plots of streamlines.
 !
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       integer pltcase
@@ -1443,9 +1677,7 @@ contains
       real(c_float) RTAB1(iy),RTAB2(iy) ! local
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -1771,13 +2003,21 @@ contains
 
 
         call GXGLFR(0) ! new page for each k
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.65,.9)
+#endif
         IF ( RXMAXQ.eq.0. ) THEN
            RXMAXQ=1.
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(-RXMAXQ,RXMAXQ,0.,RXMAXQ)
+#endif
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
+#ifndef NOPGPLOT
         CALL PGLAB(tx_,ty_,tt_)
+#endif
 
         t0t=sin(thb(l_))/cos(thb(l_))  ! PLOT t-p boundary (ZOW cone)
         if (t0t .lt. 1.) then
@@ -1785,17 +2025,25 @@ contains
           RYPTS(1)=0.
           RXPTS(2)=XMAXQ
           RYPTS(2)=XMAXQ*T0T
+#ifndef NOPGPLOT
           CALL PGLINE(2,RXPTS,RYPTS)
+#endif
           RXPTS(2)=-XMAXQ
+#ifndef NOPGPLOT
           CALL PGLINE(2,RXPTS,RYPTS)
+#endif
         else
           RXPTS(1)=0.
           RYPTS(1)=0.
           RXPTS(2)=XMAXQ/T0T
           RYPTS(2)=XMAXQ
+#ifndef NOPGPLOT
           CALL PGLINE(2,RXPTS,RYPTS)
+#endif
           RXPTS(2)=-XMAXQ/T0T
+#ifndef NOPGPLOT
           CALL PGLINE(2,RXPTS,RYPTS)
+#endif
         endif
 
         !plot v=vnorm line
@@ -1810,7 +2058,9 @@ contains
           RTAB2(i)= sinn(i,lr_) ! v_perp/vnorm
           enddo
         endif
+#ifndef NOPGPLOT
         CALL PGLINE(iy,RTAB1,RTAB2) ! v=vnorm line (or v=vnorm/c)
+#endif
 
         !plot v=vth line, for the k-th gen. species
 !..................................................................
@@ -1832,29 +2082,49 @@ contains
         endif
         ! Five different line styles are available:
         ! 1 (full line), 2 (dashed), 3 (dot-dash-dot-dash), 4 (dotted),
+#ifndef NOPGPLOT
         CALL PGSLS(4)
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(iy,RTAB1,RTAB2) ! v=vth line
+#endif
+#ifndef NOPGPLOT
         CALL PGSLS(1) ! 1-> restore solid line
+#endif
+#ifndef NOPGPLOT
         CALL PGSLW(setup0%lnwidth) !setup0%lnwidth=3 line width in units of 0.005
+#endif
         !--------------------------------------------------------
+#ifndef NOPGPLOT
         CALL PGCONX(RTEMP1,iy,jx,1,iy,1,JXQ,RCONT,mcont,PGFUNC1)
+#endif
         !subr.PGFUNC1(VISBLE,yplt,xplt,zplt) uses /PGLOCAL1/wx,wy,IIY,JXQ
         !--------------------------------------------------------
         !Add some text on the plot:
+#ifndef NOPGPLOT
         CALL PGSCH(1.0) ! set character size; default is 1.
+#endif
         write(t_,5001) k
  5001   format("Species number k=",i3)
+#ifndef NOPGPLOT
         CALL PGMTXT('B',6.,0.,0.,t_)
+#endif
         write(t_,150) n,timet
  150    format("time step n=",i5,5x," time=",1pe10.2," secs")
+#ifndef NOPGPLOT
         CALL PGMTXT('B',7.,0.,0.,t_)
+#endif
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,151) rovera(lr_),rr
  151    format( "r/a=",1pe10.3,5x," radial position (R)=",1pe12.4," cm")
+#ifndef NOPGPLOT
         CALL PGMTXT('B',8.,0.,0.,t_)
+#endif
         write(t_,153) rya(lr_), rpcon(lr_), lr_
  153    format( "rya=",1pe10.3,5x," R=rpcon=",1pe10.3," cm,  Surf#",i4)
+#ifndef NOPGPLOT
         CALL PGMTXT('B',9.,0.,0.,t_)
+#endif
         ! print contour values under the plot:
         do js=1,mcont
            tempcntr(js)=cont(js)
@@ -1862,7 +2132,9 @@ contains
         write(t_,560)
  560    format("Contour values:")
         RILIN=11.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
         do jcs=1,mcont,4
           write(t_,570) (tempcntr(jc),jc=jcs,min(jcs+3,mcont))
           if ((mcont/4)*4.ne.mcont .and. mcont-jcs.le.2) then
@@ -1870,12 +2142,20 @@ contains
             t_(icend:icend)="$"
           endif
           RILIN=RILIN+1.
+#ifndef NOPGPLOT
           CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
         enddo
 
+#ifndef NOPGPLOT
         CALL PGSLS(1) ! restore: solid line
+#endif
+#ifndef NOPGPLOT
         CALL PGSLW(setup0%lnwidth) ! restore linewidth
+#endif
+#ifndef NOPGPLOT
         CALL PGSCH(1.0) ! recover default 1.0 fontsize
+#endif
 
  500  continue ! k species ------------------------------------------
 
@@ -1923,7 +2203,9 @@ contains
         call aminmx(tam1,1,jxq,1,fmin,fmax,kmin,kmax)
         fmin=1.d-08*fmax
         call GSVP2D(.2,.8,.25,.95)
+#ifndef NOPGPLOT
         CALL PGSCH(1.) ! set character size; default is 1.
+#endif
         call GSWD2D("linlog$",x(1),x(jxq),fmin,fmax)
         do jj=1,jxq
           if (tam1(jj) .lt. fmin ) tam1(jj)=fmin
@@ -1934,41 +2216,59 @@ contains
         write(t_,10040) k
 10040 format("distribution integrated over theta0 for species",2x,i5)
         RILIN=3.
+#ifndef NOPGPLOT
         CALL PGSCH(0.8) ! set character size; default is 1.
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10041)
 10041 format("(normed so that int(0,1)*2pi*x**2*dx=mid-plane ne)")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10042) vnorm
 10042 format("vnorm=",1x,e14.6,"cm/s")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10020)
 10020 format( "(log plot)")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,10030) n,timet
 10030 format("time step (n) is",i5,5x,"time=",e14.6," secs")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10031) rovera(lr_)
 10031 format("r/a=",e14.6)
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
         write(t_,10032) rr
 10032 format("radial position (R) =",e14.6," cm")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
+#ifndef NOPGPLOT
         CALL PGSCH(1.0) ! recover default 1.0 fontsize
+#endif
 
  20   continue
 
@@ -2045,7 +2345,9 @@ contains
          write(t_,550) k
  550     format(1x,"Species ",i2, &
               " Source Function (units: dist. f/sec)")
+#ifndef NOPGPLOT
          CALL PGPAGE
+#endif
          itype=3 ! means: plots are made for source
          call pltcont(k,1,t_,itype) ! for source
 !BH171231         crnt_nbi=xlncur(k,lr_)*zmaxpsii(lr_) ! [ptcl/sec/cm^3]
@@ -2056,16 +2358,22 @@ contains
          write(t_,540) crnt
  540     format("Particle source rate=",1pe11.4," ptcls/cc/sec")
          RILIN=10.
+#ifndef NOPGPLOT
          CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
          write(t_,542) entr(k,5,l_)
  542     format("Total source power [entr(..5..)]=",1pe11.4," W/cc")
          RILIN=RILIN+2.
+#ifndef NOPGPLOT
          CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
          write(t_,560)
  560     format("Contour values:")
          RILIN=RILIN+2.
+#ifndef NOPGPLOT
          CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
          do  jcs=1,ncont,4
             write(t_,570) (tempcntr(jc),jc=jcs,min(jcs+3,ncont))
@@ -2074,7 +2382,9 @@ contains
                t_(icend:icend)="$"
             endif
             RILIN=RILIN+1.
+#ifndef NOPGPLOT
             CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
          enddo
 
@@ -2227,18 +2537,36 @@ contains
         REMIN=LOG10(fmin)
         REMAX=LOG10(fmax)
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.45,.9)
+#endif
         IF ( Remax-Remin .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            Remax= Remin+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(Rtam1(1),RXMAXQ,Remin,Remax)
+#endif
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
+#endif
+#ifndef NOPGPLOT
         CALL PGSAVE
+#endif
+#ifndef NOPGPLOT
         CALL PGSCH(1.44)
+#endif
+#ifndef NOPGPLOT
         CALL PGLAB(tx_, 'Source', 'Pitch Angle Avg Source vs. u')
+#endif
+#ifndef NOPGPLOT
         CALL PGUNSA
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(JXQ,RTAM1,RTAM2)
+#endif
 
 
 
@@ -2246,29 +2574,39 @@ contains
 10040   format("Particle source integrated over theta0 for species",i3)
 
         RILIN=8.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
         write(t_,10041)
 10041   format("(normed so int(0,1)*2pi*x**2*dx=mid-plane source)")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
         write(t_,10042) vnorm
 10042   format("vnorm=",1x,1pe12.4," cm/s")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
 
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,10030) n,timet
 10030   format("time step (n) is",i5,5x,"time=",1pe12.4," secs")
         RILIN=RILIN+2.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
         write(t_,10031) rovera(lr_),rr
 10031   format("r/a=",1pe12.4,5x,"radial position (R) =",1pe12.4," cm")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
 
  20   continue ! k species
@@ -2293,9 +2631,7 @@ contains
 !**********************
 !
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       REAL RILIN
@@ -2359,41 +2695,69 @@ contains
           REMAX=fmax*1.01
         endif
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.45,.9)
+#endif
+#ifndef NOPGPLOT
         CALL PGSWIN(Rtam1(1),Rtam1(iy),Remin,Remax)
+#endif
         if(vert_scale.eq.'log10')then
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
+#endif
         else
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
         endif
+#ifndef NOPGPLOT
         CALL PGSAVE
+#endif
+#ifndef NOPGPLOT
         CALL PGSCH(1.44)
+#endif
+#ifndef NOPGPLOT
         CALL PGLAB('theta0 (degree)','S0(theta0)','v-integrated Source')
+#endif
+#ifndef NOPGPLOT
         CALL PGUNSA
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(iy,RTAM1,RTAM2)
+#endif
 
         write(t_,10040) k
 10040   format("Particle source integrated over v for species",i2)
 
         RILIN=8.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
         write(t_,10041)
 10041   format("(int(0,pi)*S0*2pi*sin(theta0)*dtheta0= ptcls/sec)")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
         rr=rpcon(lr_) !rovera(lr_)*radmin  ! YuP[03-2016] changed to rpcon
         write(t_,10030) n,timet
 10030   format("time step (n) is",i5,5x,"time=",1pe12.4," secs")
         RILIN=RILIN+2.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
         write(t_,10031) rovera(lr_),rr
 10031   format("r/a=",1pe12.4,5x,"radial position (R)=",1pe12.4," cm")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,-.2,0.,t_)
+#endif
 
 
  20   continue ! k species

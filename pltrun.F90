@@ -32,15 +32,11 @@ contains
 !------------------
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -156,18 +152,26 @@ contains
 
 !      Following plot is with pdena,... with 1st dimension up to nch(l_).
 
+#ifndef NOPGPLOT
         CALL PGPAGE
         CALL PGSVP(.2,.8,.6,.9)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
         IF (RPG1.ne.RPG2) THEN
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
            CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+#endif
         ENDIF
+#ifndef NOPGPLOT
         CALL PGLAB('time (secs)','RA density (cm\u-3\d)', &
              'Runaway Density and Current vs. Time')
+#endif
 
 !BH070405       do nt=1,nch(l_)
         do nt=1,nch(ll)
@@ -195,22 +199,34 @@ contains
         RPG2=LOG10(RPG2)
 
 
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.2,.5)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
         IF (RPG1.ne.RPG2) THEN
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
            CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+#endif
         ENDIF
+#ifndef NOPGPLOT
         CALL PGLAB('time (secs)','RA curr den (A/cm\u2\d)',' ')
+#endif
 
 
         write(t_,10010) n,timet
+#ifndef NOPGPLOT
         CALL PGMTXT('B',6.,-.1,0.,t_)
+#endif
         write(t_,10011) rovera(lr_),ll,rr
+#ifndef NOPGPLOT
         CALL PGMTXT('B',7.,-.1,0.,t_)
+#endif
 
 !-----------------------------------------------------------------------
 
@@ -243,18 +259,26 @@ contains
         RPG2=LOG10(RPG2)
 
 
+#ifndef NOPGPLOT
         CALL PGPAGE
         CALL PGSVP(.2,.8,.6,.9)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
         IF (RPG1.ne.RPG2) THEN
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
            CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+#endif
         ENDIF
+#ifndef NOPGPLOT
         CALL PGLAB('time (secs)','Fraction RA density', &
              'Runaway Fraction of Density and Current vs. Time')
+#endif
 
         do nt=1,nch(l_)
           xg(nt)=ptime(nt,1)
@@ -282,21 +306,35 @@ contains
 
 
 
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.2,.5)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
         IF (RPG1.ne.RPG2) THEN
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+#endif
+#ifndef NOPGPLOT
            CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+#endif
         ENDIF
+#ifndef NOPGPLOT
         CALL PGLAB('time (secs)','Fraction RA curr den',' ')
+#endif
 
         write(t_,10010) n,timet
+#ifndef NOPGPLOT
         CALL PGMTXT('B',6.,-.1,0.,t_)
+#endif
         write(t_,10011) rovera(lr_),ll,rr
+#ifndef NOPGPLOT
         CALL PGMTXT('B',7.,-.1,0.,t_)
+#endif
 
 !-----------------------------------------------------------------------
 
@@ -366,18 +404,30 @@ contains
  1022    format("Critical runaway vel/vnorm")
       endif
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.6,.9)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
         IF (RPG1.ne.RPG2) THEN
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+#endif
+#ifndef NOPGPLOT
            CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+#endif
         ENDIF
+#ifndef NOPGPLOT
         CALL PGLAB('time (secs)',t_, &
              'Critical vel(energy) and E/E\dDreicer\u vs. Time')
+#endif
 
 !BH070405      do nt=1,nch(l_)
       do nt=1,nch(ll)
@@ -409,21 +459,35 @@ contains
  1024 format("time(sec)")
 
 
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.2,.5)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
         IF (RPG1.ne.RPG2) THEN
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+#endif
+#ifndef NOPGPLOT
            CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+#endif
         ENDIF
+#ifndef NOPGPLOT
         CALL PGLAB('time (secs)','E-field/E\dDreicer\u',' ')
+#endif
 
         write(t_,10010) n,timet
+#ifndef NOPGPLOT
         CALL PGMTXT('B',6.,-.1,0.,t_)
+#endif
         write(t_,10011) rovera(lr_),ll,rr
+#ifndef NOPGPLOT
         CALL PGMTXT('B',7.,-.1,0.,t_)
+#endif
 
 !-----------------------------------------------------------------------
 
@@ -458,18 +522,30 @@ contains
         RPG2=LOG10(RPG2)
 
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.6,.9)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
         IF (RPG1.ne.RPG2) THEN
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+#endif
+#ifndef NOPGPLOT
            CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+#endif
         ENDIF
+#ifndef NOPGPLOT
         CALL PGLAB('time (secs)','E-field/E0', &
              'E/(Critical E0) and KO Source vs. Time')
+#endif
 
 
 !BH070405      do nt=1,nch(l_)
@@ -498,21 +574,35 @@ contains
         RPG2=LOG10(RPG2)
 
 
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.2,.5)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
         IF (RPG1.ne.RPG2) THEN
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNSTL',0.0,0)
+#endif
+#ifndef NOPGPLOT
            CALL PGLINE(NCH(L_),RNONCHA1,RNONCHA2)
+#endif
         ENDIF
+#ifndef NOPGPLOT
         CALL PGLAB('time (secs)','KO Src(electrons/cm\u3\d/sec)',' ')
+#endif
 
         write(t_,10010) n,timet
+#ifndef NOPGPLOT
         CALL PGMTXT('B',6.,-.1,0.,t_)
+#endif
         write(t_,10011) rovera(lr_),ll,rr
+#ifndef NOPGPLOT
         CALL PGMTXT('B',7.,-.1,0.,t_)
+#endif
 
 !-----------------------------------------------------------------------
 

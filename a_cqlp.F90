@@ -254,16 +254,13 @@ program a_cql3d
   character(len=*),parameter :: nml_file = 'cqlinput'
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 mpirank=0 ! When MPI is used, mpirank is set in init_mpi below
 
 !     Initialize MPI:
 #ifdef __MPI
-!MPI >>>
       call MPI_INIT(mpiierr)
       call MPI_COMM_SIZE(MPI_COMM_WORLD,mpisize,mpiierr)
       call MPI_COMM_RANK(MPI_COMM_WORLD,mpirank,mpiierr)
@@ -273,15 +270,12 @@ mpirank=0 ! When MPI is used, mpirank is set in init_mpi below
       if(mpirank.eq.0) then
          mpitime = MPI_WTIME()
       endif
-!MPI <<<
 #endif
 !     It will insert:
 !      call init_mpi ! Initialize MPI and set mpitime0=MPI_WTIME
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 call cpu_time(tarray(1))    !This is an f95 intrinsic subroutine
@@ -291,42 +285,32 @@ call abchief(nml_file) !-> calls tdchief (only)
 call cpu_time(tarray(2))
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 WRITE(*,'(a,i5,f10.3)') ' a_cqlp: rank, Exec.time tarray(2)-tarray(1)', mpirank, tarray(2)-tarray(1)
 !      WRITE(*,'(a)') ' a_cqlp: END of CQL3D, just before MPI_FINISH'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 call it3ddalloc ! Deallocate it3d related storage
 call de_alloc   ! Deallocate other arrays
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !     close MPI (print 'MPI Full time =',MPI_WTIME()-mpitime0
 !                then - MPI_FINALIZE )
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
          WRITE(*,*) 'MPI Full time =',MPI_WTIME()-mpitime
       endif
       call MPI_FINALIZE(mpiierr)
       !PRINT *,'close_mpi:  mpirank===',mpirank
-!MPI <<<
 #endif
 
 

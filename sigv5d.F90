@@ -41,9 +41,7 @@ contains
 !BH110330:  to SXR case.
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       !YuP[06-2016] Moved outside of if[] below.

@@ -56,9 +56,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !.......................................................................
@@ -239,17 +237,13 @@ contains
           wperp(k,lr_)=wperp_*fions(k)/hn
         endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 !        WRITE(*,*) &
 !       'diaggnde: k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)', &
 !                  k,lr_,l_,en,hn,fions(k),energym(k,l_),energy(k,lr_)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !..................................................................
@@ -284,18 +278,14 @@ contains
           if (setup0%cqlpmod .eq. "enabled") zfact=gni*denpar(k,ls_)
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
           WRITE(*,*)'----------------------- lr_===', lr_
           WRITE(*,'(a,i4,3e12.4)') &
            'diaggnde_n=0 lr_, reden, gn, sum_ij(gone)', &
                          lr_,reden(k,lr_),gn,sum(gone(1:iy,1:jx,k,lr_))
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
           if ( (setup0%nlrestrt.ne."disabled") &

@@ -17,9 +17,7 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       REAL RILIN
@@ -36,36 +34,46 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
       if (setup0%noplots.ne."enabled1") then
+#ifndef NOPGPLOT
       CALL PGPAGE
+#endif
       RILIN=0.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,"PARAMETER VALUES")
+#endif
 
       write(t_,1000)
  1000 format("EQUILIBRIUM model parameters:")
       RILIN=2.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 
       write(t_,1001)
  1001 format("nnra,nnza give the Maximum size the eqdsk")
       RILIN=3.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 
       write(t_,1002) nnra,nnza
  1002 format("====>NNRA = ",i5,"        ====>NNZA = ",i5)
       RILIN=4.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 
       write(t_,1003) nconteqa
  1003 format("====>NCONTEQA = ",i5)
       RILIN=5.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 
       endif
 

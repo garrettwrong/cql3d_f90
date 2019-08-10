@@ -33,9 +33,7 @@ c     using the fortran intrinsic len().
       integer :: numrec1, numrecsave, nwkpack
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 c     This subroutine is only called from MPI rank=0.
@@ -180,9 +178,7 @@ c      character(len=8), dimension(npaproc) :: npa_proc  !automatic var
 Cdeltarhop      data deltap_start/1,1,1/
 c
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 c This subroutine is only called from MPI rank=0.
 
@@ -4279,15 +4275,11 @@ c     Presently, just output of velocity-space flux data.
 c.......................................................................
       save
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! save data on mpirank.eq.0 only
 
@@ -5269,9 +5261,7 @@ c======================================================================
       save
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 c     Write 4D distribution, f(v,pitch,R,Z) to netCDF file.
@@ -5291,9 +5281,7 @@ c     the end of the subroutine.
       real*8,dimension(:,:,:,:),allocatable:: f4d
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       WRITE(*,*)
@@ -5542,9 +5530,7 @@ c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
       include 'netcdf.inc'
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 c     nr_f4d,nz_f4d are R,Z grid dimensions set in namelist
@@ -5578,9 +5564,7 @@ c     nv_f4d,nt_f4d are dims of normalized vel and of pitch angle grids.
       mnemonic = setup0%mnemonic
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       count(1)=nr_f4d

@@ -25,9 +25,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 pltvlfb
@@ -40,9 +38,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -60,13 +56,17 @@ contains
                   temp1(i,j)=cqlb(i,j,indxlr_,k)
  562           continue
  561        continue
+#ifndef NOPGPLOT
             CALL PGPAGE
+#endif
             itype=5 ! means: plots are made for vlfb
             call pltcont(1,1,'Contours of CqlB vs. v_parallel,v_perp', &
                            itype)
             write(t_,552) lr_
  552        format("Flux surface number",i3,"; all modes")
+#ifndef NOPGPLOT
             CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
  560     continue
 
       elseif (setup0%cqlpmod.eq."enabled") then
@@ -86,13 +86,17 @@ contains
               temp1(i,j)=wcqlb(i,j,k,l)
  572        continue
  571      continue
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
           itype=5 ! means: plots are made for urfb
           call pltcont(1,1,'Contours of CqlB vs. v_parallel,v_perp', &
                        itype)
 !$$$          call gstxno(80.)
           write(t_,552) lr_
+#ifndef NOPGPLOT
           CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
  570    continue
 
         enddo
@@ -224,14 +228,20 @@ contains
            enddo
         enddo
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
         itype=5 ! means: plots are made for vlfb
         call pltcont(1,1,'Contours of CqlB vs. v_parallel,v_perp',itype)
 !$$$        call gstxno(80.)
         write(t_,660) lr_,k
+#ifndef NOPGPLOT
         CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
         write(t_,661) vpar21dv,vpar11dv
+#ifndef NOPGPLOT
         CALL PGMTXT('B',11.,0.,0.,t_)
+#endif
 
  680  continue
 
@@ -362,15 +372,21 @@ contains
             temp1(i,j)=wcqlb(i,j,k,l)
  762      continue
  761    continue
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
         itype=5 ! means: plots are made for vlfb
         call pltcont(1,1,'Contours of CqlB vs. v_parallel,v_perp',itype)
 !$$$        call gstxno(80.)
 
         write(t_,660) lr_,k
+#ifndef NOPGPLOT
         CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
         write(t_,661) vpar21dv,vpar11dv
+#ifndef NOPGPLOT
         CALL PGMTXT('B',11.,0.,0.,t_)
+#endif
 
  780  continue
 

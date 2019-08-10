@@ -61,9 +61,7 @@ contains
       include 'netcdf.inc'
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       integer ncid,istatus
@@ -99,15 +97,11 @@ contains
 
       read(iunwrif,*) inbline
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'tdreadf:  inbline= ',inbline
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       do 102 l=1,inbline
         read(iunwrif,'(a)') blank
@@ -154,15 +148,11 @@ contains
       if (setup0%nlrestrt.eq."enabled" .and. l_.eq.lrors) then  !elseif, ln 145
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'tdreadf:  Reading distfunc (text f)'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
          do 210 k=1,ngen
             do 211 il=1,lrors
@@ -223,34 +213,26 @@ contains
 !     Open existing netCDF file [Typically, the distrfunc.nc is linked
 !     to the setup0%mnemonic.nc file from an earlier cql3d run.]
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*) &
          'tdreadf[setup0%nlrestrt="ncdfdist"]: Reading distrfunc.nc (netcdf)'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
          istatus = NF_OPEN('distrfunc.nc', 0, ncid)
          if (istatus .NE. NF_NOERR) then
             t_=trim(setup0%mnemonic(1:length_char(setup0%mnemonic)))//'.nc' !YuP added trim
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
             WRITE(*,*)'tdreadf: distrfunc.nc missing/problem'
             WRITE(*,*)'tdreadf: CHECKING for setup0%mnemonic file : ',t_
             WRITE(*,*)'tdreadf: BUT BE CAREFUL, the file will be '
             WRITE(*,*)'tdreadf:     overwritten at end of present run. '
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
             ! YuP[03-01-2016] Added: if distrfunc.nc is missing,
             ! try reading the setup0%mnemonic.nc file.
@@ -259,9 +241,7 @@ contains
             istatus = NF_OPEN(t_, 0, ncid)
             if (istatus .NE. NF_NOERR) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                WRITE(*,*)
                WRITE(*,*)'tdreadf: Cannot open/missing setup0%mnemonic.nc'// &
@@ -269,21 +249,15 @@ contains
                     ' of distrfunc.nc'
                WRITE(*,*)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
             else ! found the file
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                WRITE(*,*)'tdreadf: found setup0%mnemonic file: ',t_
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
             endif
          endif
@@ -305,18 +279,14 @@ contains
               .or. jx_rstrt.ne.jx &
               .or. lrz_rstrt.ne.setup0%lrz .or. ngen_rstrt.ne.ngen) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
             WRITE(*,*)'Problem with distrfunc.nc file'
             WRITE(*,*)'  iy,jx,setup0%lrz,ngen=',iy,jx,setup0%lrz,ngen, &
                  ' iy_rstrt,jx_rstrt,lrz_rstrt,ngen_rstrt=', &
                  iy_rstrt,jx_rstrt,lrz_rstrt,ngen_rstrt
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
             STOP ' in tdreadf'
          endif
@@ -329,15 +299,11 @@ contains
          do ll=1,setup0%lrz
             if (iy_(ll).ne.iy) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                WRITE(*,*)'tdreadf:Variable iy_(ll), but only cnst setup'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                stop 'in tdtreadf'
             endif
@@ -434,16 +400,12 @@ contains
          istatus= NF_INQ_DIMID(ncid,'f', dimid)
          istatus= NF_INQ_DIMLEN(ncid, dimid, dimlen)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]: dimid=',dimid
          WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]: dimlen=',dimlen
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
          call bcast(f,zero,(iy+2)*(jx+2)*ngen*lrors)  !This f is f_code
 
@@ -493,17 +455,13 @@ contains
 
          istatus=NF_CLOSE(ncid)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]:Done reading f'
          WRITE(*,*)'tdreaf_360: For checkup SUM(f)=', SUM(f)
          !pause
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 
@@ -544,30 +502,22 @@ contains
 
 !     Open existing NetCDF file
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*) &
          'tdreadf[nlrestrt.eq."ncregrid"]: Reading distfunc.nc (netcdf)'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
          istatus = NF_OPEN('distrfunc.nc', 0, ncid)
          if (istatus .NE. NF_NOERR) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
             WRITE(*,*)'tdreadf:  distrfunc.nc missing/problem'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
          endif
 
@@ -590,18 +540,14 @@ contains
 !     1        .or. jx_rstrt.ne.jx
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
             WRITE(*,*)'Problem with distrfunc.nc file'
             WRITE(*,*)'  iy,setup0%lrz,ngen=',iy,setup0%lrz,ngen, &
                  ' iy_rstrt,lrz_rstrt,ngen_rstrt=', &
                  iy_rstrt,lrz_rstrt,ngen_rstrt
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
             STOP ' in tdreadf'
          endif
@@ -612,15 +558,11 @@ contains
          do ll=1,setup0%lrz
             if (iy_(ll).ne.iy) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                WRITE(*,*)'tdreadf: Variable iy_(ll), only cnst setup'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                stop 'in tdtreadf'
             endif
@@ -724,16 +666,12 @@ contains
          istatus= NF_GET_VARA_DOUBLE(ncid,vid,(1),(jx_rstrt),x_rstrt)
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'tdreadf: re-grid, vnorm, vnorm_rstrt =', &
               vnorm,vnorm_rstrt
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
          vnorm_rstrt2=vnorm_rstrt*vnorm_rstrt !Restart grid, momntm/mass
@@ -875,16 +813,12 @@ contains
  10            continue
                if (jf_rstrt(i).lt.10) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                   WRITE(*,*) 'tdreadf: i,jf_rstrt(i)=',i,jf_rstrt(i)
                   WRITE(*,*) 'tdreadf: Need jf_rstrt(i).ge.10'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                   stop
                endif
@@ -979,9 +913,7 @@ contains
                                            !FSA en density from code f.
             senergy_eps=(senergy_code-senergyr)/senergyr
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
             WRITE(*,*)'tdreadf:k=',k,', l_=',l_,' reden_code=', &
                  reden_code, &
@@ -990,9 +922,7 @@ contains
                  senergy_code, &
                 ' Fractional en density chng, senergy_eps_=',senergy_eps
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 !           Renormalize code f to FSA density of restart f:
             reden_rat=redenr/reden_code

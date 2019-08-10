@@ -81,9 +81,7 @@ c --- include file for netCDF declarations
 c --- (obtained from NetCDF distribution)
       include 'netcdf.inc'
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 c --- some stuff for netCDF file ---
@@ -106,9 +104,7 @@ c --- some stuff for netCDF file ---
       data start/1,1,1,1/, start1/1,1,1,1/
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 c This subroutine is only called from MPI rank=0.
 
@@ -1495,9 +1491,7 @@ C==========================================================================
       save
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 c     This subroutine uses netCDF-2 subroutines.
@@ -1525,9 +1519,7 @@ c --- some stuff for netCDF file ---
       data start/1,1,1,1/, start1/1,1,1/
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       WRITE(*,*)'Begin of netcdf_rdc, krf=',krf

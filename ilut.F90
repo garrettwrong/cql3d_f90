@@ -43,7 +43,9 @@ module ilut_mod
 !----------------------------------------------------------------------c
 !                                                                      c
 ! Note: all preconditioners are preprocessors to pgmres.               c
+#ifndef NOPGPLOT
 ! usage: call preconditioner then call pgmres                          c
+#endif
 !                                                                      c
 !----------------------------------------------------------------------c
 
@@ -438,7 +440,9 @@ contains
 !                                                                      *
 ! ILU(0) and MILU(0) are also provided for comparison purposes         *
 ! USAGE: first call ILUT or ILU0 or MILU0 to set up preconditioner and *
+#ifndef NOPGPLOT
 ! then call pgmres.                                                    *
+#endif
 !----------------------------------------------------------------------*
 ! Coded by Y. Saad - This version dated May, 7, 1990.                  *
 !----------------------------------------------------------------------*

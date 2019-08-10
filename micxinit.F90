@@ -35,9 +35,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 !.......................................................................
 
@@ -304,9 +302,7 @@ contains
           endif
        enddo
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a)')"=================================================="
       WRITE(*,'(a,3i4,2f13.8)') &
@@ -320,9 +316,7 @@ contains
       WRITE(*,'(a)')"  Consider increasing jx or setting xfac<1."
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       enddo ! k=1,ngen
 

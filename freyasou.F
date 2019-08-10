@@ -20,9 +20,7 @@ c
       implicit integer (i-n), real*8 (a-h,o-z)
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 multiply,method

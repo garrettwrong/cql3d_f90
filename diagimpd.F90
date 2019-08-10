@@ -61,9 +61,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       dimension lefcti(12) ! local working array-index
@@ -181,45 +179,34 @@ contains
         lefct=lefcti(lfct) ! == -1:3; 5:8; 11,12;
         !(4 is skipped because it's a sum;  9,10 calc-ed below)
 #ifdef __MPI
-!MPI >>>
          if(mpisize.gt.1) then
             mpiworker= MOD(lfct-1,mpisize-1)+1
          else
             PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then
 
-!MPI <<<
 #endif
         call diagentr(lefct,k)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
          call send_entr(k,lefct)
          !send/recv entr(k,:,l_),pwrrf,pwrrfs(:,k,l_)
       endif
 
-!MPI <<<
 #endif
       enddo ! lfct
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(entr(k,-1,l_),1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(entr(k,0,l_),1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(entr(k,1,l_),1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
@@ -234,7 +221,6 @@ contains
       call MPI_BCAST(entr(k,12,l_),1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(pwrrf(1,k,l_),jx,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
-!MPI <<<
 #endif
 
       if (k.eq.kelecg) sorpw_rf(kelecg,lr_)=entr(k,3,l_) !-YuP
@@ -366,9 +352,7 @@ contains
  141  continue
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,2i4,2e15.7)') &
        'diagimpd BEFORE f update. n,l_,MIN(temp2),MAX(temp2)', &
@@ -377,23 +361,17 @@ contains
        'diagimpd neg.val.adjusted n,l_,MIN(temp1),MAX(temp1)', &
          n,l_,MINVAL(temp1),MAXVAL(temp1)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,f(0:iy+1,0:jx+1,k,l_),1)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,2i4,3e15.7)') &
        'diagimpd AFTER  f update. n,l_,MIN(f),MAX(f),SUM(f)=', &
                 n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       !!!if(l_.eq.setup0%lrz)  pause
 
@@ -406,7 +384,6 @@ contains
       end subroutine diagimpd
 
 #ifdef __MPI
-!MPI >>>
       subroutine send_entr(k,lefct)  !used in diagimpd.f90 (only)
       use param_mod
       use cqlcomm_mod
@@ -445,7 +422,6 @@ contains
       endif
       return
       end subroutine send_entr
-!MPI <<<
 #endif
 
 end module diagimpd_mod

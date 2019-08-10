@@ -23,9 +23,7 @@ contains
     implicit integer (i-n), real(c_double) (a-h,o-z)
     save
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 
@@ -52,9 +50,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
     ! make plots on mpirank.eq.0 only
 
@@ -84,8 +80,12 @@ contains
        ztop=.99-(.9-delz)/2.
     endif
 
+#ifndef NOPGPLOT
           CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
           CALL PGSVP(rbot,rtop,zbot,ztop)
+#endif
     RBOT=rmincon
     RTOP=rmaxcon*1.2 ! give 20% more outside of last surface
     if(machine.eq."mirror") then
@@ -93,13 +93,23 @@ contains
     endif
     ZBOT=zmincon
     ZTOP=zmaxcon
+#ifndef NOPGPLOT
           CALL PGSWIN(rbot,rtop,zbot,ztop)
+#endif
+#ifndef NOPGPLOT
           CALL PGWNAD(rbot,rtop,zbot,ztop)  ! limits
+#endif
+#ifndef NOPGPLOT
           CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
           if(machine.eq."mirror") then
+#ifndef NOPGPLOT
           CALL PGLAB('X (cms)','Z (cms)', 'NBI Deposition')
+#endif
           else
+#ifndef NOPGPLOT
           CALL PGLAB('Major radius (cms)','Vert height (cms)', 'NBI Deposition')
+#endif
           endif
     xyplotmax=0. ! to set limits in (X,Y) plots
     do 10 l=1,setup0%lrz,nconskp
@@ -117,9 +127,13 @@ contains
           RTAB1(j)=solr(j,lr_)
           RTAB2(j)=solz(j,lr_)
        enddo
+#ifndef NOPGPLOT
                CALL PGLINE(LORBIT(LR_),RTAB1,RTAB2)
+#endif
        if(machine.eq."mirror") then
+#ifndef NOPGPLOT
                   CALL PGLINE(LORBIT(LR_),-RTAB1,RTAB2) !mirror area to the left of Z-axis
+#endif
        endif
 
        !       if eqsym.ne."none", still need to plot lower flux surface
@@ -130,9 +144,13 @@ contains
           DO J=1,LORBIT(LR_)
              RTAB2(J)=SOLZ(J,LR_)
           ENDDO
+#ifndef NOPGPLOT
                      CALL PGLINE(LORBIT(LR_),RTAB1,RTAB2)
+#endif
           if(machine.eq."mirror") then
+#ifndef NOPGPLOT
                         CALL PGLINE(LORBIT(LR_),-RTAB1,RTAB2) !mirror area to the left of Z-axis
+#endif
           endif
        endif
 
@@ -149,12 +167,20 @@ contains
           RTAB1(ilim)=rcontr(ilim)
           RTAB2(ilim)=zcontr(ilim)
        enddo
+#ifndef NOPGPLOT
                CALL PGSLS(2) ! 2-> dashed
+#endif
+#ifndef NOPGPLOT
                CALL PGLINE(ncontr_,RTAB1,RTAB2)
+#endif
        if(machine.eq."mirror") then
+#ifndef NOPGPLOT
                   CALL PGLINE(ncontr_,-RTAB1,RTAB2) !mirror area to the left of Z-axis
+#endif
        endif
+#ifndef NOPGPLOT
                CALL PGSLS(1) ! 1-> restore solid line
+#endif
     endif
     if(nlimiter.gt.1) then
        ! YuP[2016] Add "last surface" (plasma border), if available
@@ -165,12 +191,20 @@ contains
           RTAB1(ilim)=rlimiter(ilim)
           RTAB2(ilim)=zlimiter(ilim)
        enddo
+#ifndef NOPGPLOT
                CALL PGSLW(setup0%lnwidth*2) ! bold
+#endif
+#ifndef NOPGPLOT
                CALL PGLINE(nline,RTAB1,RTAB2)
+#endif
        if(machine.eq."mirror") then
+#ifndef NOPGPLOT
                   CALL PGLINE(nline,-RTAB1,RTAB2) !mirror area to the left of Z-axis
+#endif
        endif
+#ifndef NOPGPLOT
                CALL PGSLW(setup0%lnwidth) ! restore
+#endif
     endif
 
     !..................................................................
@@ -191,7 +225,9 @@ contains
              ! so the horizontal axis is X
           endif
           RPG2=ZPTS(I)
+#ifndef NOPGPLOT
                       CALL PGPT1(RPG1,RPG2,17)
+#endif
           xyplotmax= max(xyplotmax,RPG1) ! limits for plots in (X,Y)
        enddo
     endif
@@ -201,14 +237,26 @@ contains
     !---- PLOTS in (X,Y) (top view) -------------------------------------------
     rbot=.1
     rtop=.9
+#ifndef NOPGPLOT
           CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
           CALL PGSVP(rbot,rtop,rbot,rtop)
+#endif
     RBOT=-rmaxcon
     RTOP= rmaxcon
+#ifndef NOPGPLOT
           CALL PGSWIN(rbot,rtop,rbot,rtop)
+#endif
+#ifndef NOPGPLOT
           CALL PGWNAD(-xyplotmax,xyplotmax,-xyplotmax,xyplotmax) ! limits
+#endif
+#ifndef NOPGPLOT
           CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
+#ifndef NOPGPLOT
           CALL PGLAB('X (cms)','Y (cms)','NBI Deposition')
+#endif
     ! Plot circles for the largest and smallest FP surfaces.
     nline=LFIELDA ! could be other number, but RTAB1 has LFIELDA size
     r_surf=rpcon(setup0%lrz)  ! R radius of largest FP surf, outboard
@@ -217,28 +265,36 @@ contains
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
+#ifndef NOPGPLOT
           CALL PGLINE(nline,RTAB1,RTAB2)
+#endif
     r_surf=rmcon(setup0%lrz)  ! R radius of largest FP surf, inboard
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
+#ifndef NOPGPLOT
           CALL PGLINE(nline,RTAB1,RTAB2)
+#endif
     r_surf=rpcon(1)  ! R radius of smallest FP surf, outboard
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
+#ifndef NOPGPLOT
           CALL PGLINE(nline,RTAB1,RTAB2)
+#endif
     r_surf=rmcon(1)  ! R radius of smallest FP surf, inboard
     do iline=1,nline
        tora= (iline-1)*twopi/(nline-1)
        RTAB1(iline)= r_surf*cos(tora)
        RTAB2(iline)= r_surf*sin(tora)
     enddo
+#ifndef NOPGPLOT
           CALL PGLINE(nline,RTAB1,RTAB2)
+#endif
 
     if(ncontr.gt.1) then
        ! YuP[2016] Add "last surface" (plasma border), if available
@@ -249,9 +305,15 @@ contains
           RTAB1(iline)= r_surf*cos(tora)
           RTAB2(iline)= r_surf*sin(tora)
        enddo
+#ifndef NOPGPLOT
                CALL PGSLS(2) ! 2-> dashed
+#endif
+#ifndef NOPGPLOT
                CALL PGLINE(nline,RTAB1,RTAB2)
+#endif
+#ifndef NOPGPLOT
                CALL PGSLS(1) ! 1 - solid
+#endif
     endif
     if(nlimiter.gt.1) then
        ! YuP[2016] Add "last surface" (plasma border), if available
@@ -262,9 +324,15 @@ contains
           RTAB1(iline)= r_surf*cos(tora)
           RTAB2(iline)= r_surf*sin(tora)
        enddo
+#ifndef NOPGPLOT
                CALL PGSLW(setup0%lnwidth*2) ! bold
+#endif
+#ifndef NOPGPLOT
                CALL PGLINE(nline,RTAB1,RTAB2)
+#endif
+#ifndef NOPGPLOT
                CALL PGSLW(setup0%lnwidth) ! restore
+#endif
     endif
 
     !..................................................................
@@ -279,7 +347,9 @@ contains
        do i=1,ipts,iskip
           RPG1=XPTS(I)
           RPG2=YPTS(I)
+#ifndef NOPGPLOT
                       CALL PGPT1(RPG1,RPG2,17)
+#endif
        enddo
     endif
 

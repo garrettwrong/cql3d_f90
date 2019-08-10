@@ -20,9 +20,7 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       complex*16 czero
@@ -36,15 +34,11 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'urfalloc:  Entering urfalloc'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !.......................................................................
@@ -81,15 +75,11 @@ contains
         !subr. pack() is not used by urfb_version.eq.2
         !so - no need to define pack,pack16 and to print this out.
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'urfalloc: ipack,ipack16,mrfn=',ipack,ipack16,mrfn
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       !endif
 
@@ -214,15 +204,11 @@ contains
       allocate(jminray(nrayelts,nrayn,mrfn),STAT=istat)
       istat_tot=istat_tot+istat
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'urfalloc: urfpwr* allocated. istat_tot=',istat_tot
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       if(istat.eq.0) call ibcast(jminray,0,SIZE(jminray))
@@ -299,15 +285,11 @@ contains
       istat_tot=istat_tot+istat
       if(istat.eq.0) call bcast(wphi,zero,SIZE(wphi))
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'urfalloc: w* allocated. istat_tot=',istat_tot
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       !if(urfb_version.eq.1)then ! 2 is the new version developed by YuP
@@ -316,54 +298,38 @@ contains
         allocate(ilowp(ipack,mrfn),STAT=istat)
         istat_tot=istat_tot+istat
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,*)'urfalloc  ilowp: istat=',istat
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
         allocate(iupp(ipack,mrfn),STAT=istat)
         istat_tot=istat_tot+istat
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,*)'urfalloc  iupp: istat=',istat
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
         allocate(ifct1_(ipack16,mrfn),STAT=istat)
         istat_tot=istat_tot+istat
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,*)'urfalloc  ifct1_: istat=',istat
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
         allocate(ifct2_(ipack16,mrfn),STAT=istat)
         istat_tot=istat_tot+istat
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,*)'urfalloc  ifct2_: istat=',istat
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
         ! istat=41 means not enough memory for allocation
         call ibcast(ilowp,0,SIZE(ilowp))
@@ -375,17 +341,13 @@ contains
 !     Check that allocations were OK
       if (istat_tot.ne.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'urfalloc.f:  Problem with allocation'
          WRITE(*,*)'urfalloc.f:  Reduce param.h paramaters?'
          WRITE(*,*)'urfalloc.f:  Stopping'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
          STOP
       endif
@@ -394,15 +356,11 @@ contains
 !     Sucessful allocation
 !..................................................................
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'urfalloc:  Leaving urfalloc'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       return

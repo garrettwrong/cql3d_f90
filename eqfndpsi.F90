@@ -24,9 +24,7 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !     Set parameter for trapped particle frac calc (150 in ONETWO).
@@ -61,16 +59,12 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 !      write(*,*)'eqfndpsi: radcoord,rhomax,lr_,erhocon(lr_)= ',
 !     +                     radcoord,rhomax,lr_,erhocon(lr_)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 
@@ -89,9 +83,7 @@ contains
         jval=j
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,*)
         WRITE(*,*)'eqfndpsi: lr_,rhodes,jval,eqrho(jval-1),eqrho(jval)', &
@@ -99,9 +91,7 @@ contains
 !        write(*,*)'eqfndpsi: eqrho(j),j=1,nconteqn',
 !     +                     (eqrho(j),j=1,nconteqn)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !..................................................................
@@ -113,16 +103,12 @@ contains
         psi1=eqpsi(jval-1)
           rho1=eqrho(jval-1)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         !WRITE(*,*)
         !WRITE(*,*)'eqfndpsi: (psi2-psimag)/psimag',(psi2-psimag)/psimag
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
           !psimag=0 in a mirror machine.
         if(jval.le.2) then !-YuP: for better convergence near m.axis
@@ -150,9 +136,7 @@ contains
           thtpol(l1,lr_)=thtpol_(l1)
           eqdell(l1,lr_)=eqdell_(l1)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
           if(eqbpol_(l1).eq.0. )then
              WRITE(*,'(a,i5,2e17.10)') &
@@ -160,9 +144,7 @@ contains
                         l1,eqdell_(l1),eqbpol_(l1)
           endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
  70     continue
         ! The r.h.s. (*_) are values from eqorbit:
@@ -264,17 +246,13 @@ contains
         iter=iter+1 ! count iterations; usually 2-4 is sufficient
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,'(a,2i5,2f16.10,3e17.7,e12.3)') &
         'eqfndpsi: iter,lorbit_,rhonew,rhodes,psinew,R(1),R(l),err', &
               iter,lorbit_,rhonew,rhodes,psinew,solr_(1),solr_(l1),err
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
         if (err.gt.1.e-5 .and. iter.lt.35) then !max number of iter: was 25
@@ -297,17 +275,13 @@ contains
         if (err.gt.1.e-2) then
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
            WRITE(*,'(a,i4,e12.3,i4,e12.3)') &
             'eqfndpsi/WARNING: POOR CONVERG. lr,rhonew,iter,err=', &
                                              lr_,rhonew,iter,err
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
            !!!YuP call eqwrng(4) !-> will stop the job
@@ -465,17 +439,13 @@ contains
       trapfrac(lr_)=1.-0.75*h2fsa*xi0
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'eqfndpsi/END: lr_,iter,rhonew,rhodes=', &
         lr_,iter,rhonew,rhodes
       !pause
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       return

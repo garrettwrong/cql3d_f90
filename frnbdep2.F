@@ -13,9 +13,7 @@ c     component, rzhex, to file 'beamdep' for postprocessing.
 c-----------------------------------------------------------------------
 c     ONETWO DIVERGENCE
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       parameter (nbdep=29)
@@ -116,9 +114,7 @@ c     output subset of rzhex to 'beamdep'
       nout=nbdep
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       open(unit=nout,file='beamdep',status='new')

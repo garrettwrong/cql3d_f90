@@ -50,11 +50,17 @@ contains
 !     SET ARROW HEAD STYLE:
       ANGLE=90.
       BARB=0.7
+#ifndef NOPGPLOT
       CALL PGSAH(1,ANGLE,BARB)
+#endif
 !     SAVE PGPLOT attributes, and reset character/arrowhead size:
+#ifndef NOPGPLOT
       CALL PGSAVE
+#endif
       SIZE=10./jpxy
+#ifndef NOPGPLOT
       CALL PGSCH(SIZE)
+#endif
 !      write(*,*)''
 !      write(*,*)'pltvectr: j,i,x1,y1,x2,y2='
       do 200 i=1,ipxy
@@ -75,12 +81,16 @@ contains
 !     +        (RPX2.ne.0.) .and. (RPY2.ne.0.)) then
           if ((RPY1.ne.0.) .and. &
               (RPY2.ne.0.)) then
+#ifndef NOPGPLOT
               CALL PGARRO(RPX1,RPY1,RPX2,RPY2)
+#endif
            endif
  201    continue
  200  continue
 !     RESTORE PGPLOT ATTRIBUTES
+#ifndef NOPGPLOT
       CALL PGUNSA
+#endif
 !
       return
       end subroutine pltvectr

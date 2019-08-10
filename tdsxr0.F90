@@ -91,9 +91,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 icall,iplotsxr,icalls
@@ -639,20 +637,16 @@ contains
 
         do i=1,setup0%lrzmax
 #ifdef __MPI
-!MPI >>>
          if(mpisize.gt.1) then
             mpiworker= MOD(i-1,mpisize-1)+1
          else
             PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then
 
-!MPI <<<
 #endif
         do j=1,ibin2
         if(sxry(i,j).ne.zero)  then
@@ -667,12 +661,9 @@ contains
         endif
         enddo ! j=1,ibin2
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then !-------------------------------------------
         call MPI_RECV(tem2, mpisz,MPI_DOUBLE_PRECISION,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
         mpitag=mpistatus(MPI_TAG)
@@ -680,16 +671,13 @@ contains
         call dcopy(mpisz,tem2(1:mpisz),1,efluxwk(1:mpisz,mpil_),1)
       endif !-----------------------------------------------------------
 
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then !-----------------------------------
         call dcopy(mpisz,efluxwk(1:mpisz,i),1,tem2(1:mpisz),1)
         mpitag= i ! i=1,setup0%lrzmax
         call MPI_SEND(tem2, mpisz,MPI_DOUBLE_PRECISION,0,mpitag,MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
-!MPI <<<
 #endif
         enddo ! i=1,setup0%lrzmax
 
@@ -702,14 +690,10 @@ contains
         enddo ! ien=1,nen
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(eflux(1:nena,nn),nena,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !.......................................................................

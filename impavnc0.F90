@@ -139,9 +139,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
     !BH080303    real(c_float) etime,tm1,tm(2) !Dclrtns for lf95 ETIME(). See man etime.
@@ -256,17 +254,13 @@ contains
     md1abd= 3*(iy+3)+1 ! Should be at least 2*ml+mu+1 (see below)
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
     if(inewjmax.gt.inewjx)then !YuP[2019-04-24] added printout
       WRITE(*,*)'impavnc0: inewjmax>inewjx', inewjmax,inewjx
     endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
     !YuP[07-2017] Moved this part from micxinit and tdinitl,
@@ -1965,15 +1959,11 @@ contains
                    !         Check coeff storage:
                    if (icoeff.gt.size(a_csr)) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                       WRITE(*,*)'impavnc0:icoeff.gt.size(a_csr)'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                       STOP
                    endif
@@ -2046,16 +2036,12 @@ contains
                      icsrijc,jw_ilu,ierr)
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                 WRITE(*,*)'impavnc0 aft.aplb: ieq_tot, iyjx*setup0%lrz, ierr', &
                      ieq_tot,iyjx*setup0%lrz,ierr
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
                 ieqp=54
@@ -2112,15 +2098,11 @@ contains
                      a_csr,ja_csr,ia_csr,icsrij,ierr_csr)
                 if (ierr_csr.ne.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                    WRITE(*,*)'impavnc0/bndcsr: STOP ierr_csr=',ierr_csr
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                    stop
                 endif
@@ -2210,15 +2192,11 @@ contains
                       !     +             alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1),jw_ilu(1),
                       !     +             iperm_ilu(1),ierr)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                       !WRITE(*,*)'impavnc0 aft.ilut:  l_,ierr',l_,ierr,soln_method
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                       do i=1,n_rows_A
                          rhs0(i)=rhs(i) !Copy rhs, for input to pgmres since
@@ -2236,15 +2214,11 @@ contains
                       !     +             alu(1),jlu(1),ju(1),iwk_ilu,w_ilu(1),jw_ilu(1),
                       !     +             iperm_ilu(1),ierr)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                       !WRITE(*,*)'impavnc0 aft.ilut:  l_,ierr',l_,ierr,soln_method
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                       do i=1,n_rows_A
                          rhs0(i)=rhs(i) !Copy rhs, for input to pgmres since
@@ -2259,15 +2233,11 @@ contains
                 !icount_imp,tm1
                 if (ierr.ne.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                    WRITE(*,*)'impavnc0 after ilut: ierr=',ierr
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                    STOP 'if ierr=-2 or -3, reduce lfil or increase iwk_ilu'
                    ! Try to reduce lfil (say, to 10) or increase iwk_ilu
@@ -2384,42 +2354,40 @@ contains
                 call cpu_time(tm1)
 
                 !--------------------------------------------------------------
+#ifndef NOPGPLOT
                 !     call PGMRES
+#endif
                 !--------------------------------------------------------------
                 !     Put sol into rhs vector (i.e., as in soln from direct solve)
                 if ( soln_method.eq."itsol" .or. soln_method.eq."itsol1" ) then
+#ifndef NOPGPLOT
                    call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                         maxits,iout,a_csr,ja_csr,ia_csr,alu, &
                         jlu,ju,ierr)
+#endif
                    rhs(1:n_rows_A)=sol(1:n_rows_A)
                 elseif(soln_method.eq.'it3dv') then
                    ! perform soln
                    ! only at last flux surface (l_=setup0%lrz).
                    if ( ilast_lr.eq.1 ) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                       !WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
+#ifndef NOPGPLOT
                       call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                            maxits,iout,a_csr,ja_csr,ia_csr,alu, &
                            jlu,ju,ierr)
+#endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                       !WRITE(*,*)'impavnc0  after pgmres:  ierr',ierr
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                       do inr = 1,n_rows_A
                          rhs(inr)=sol(inr)
@@ -2432,29 +2400,23 @@ contains
                    if ( ilast_lr.eq.1 ) then
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                       !WRITE(*,*)'impavnc0 before pgmres:  ierr',ierr,soln_method
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
+#ifndef NOPGPLOT
                       call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                            maxits,iout,ac_csr,jac_csr,iac_csr,alu, &
                            jlu,ju,ierr)
+#endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                       !WRITE(*,*)'impavnc0  after pgmres:  ierr',ierr
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
                       do inr = 1,n_rows_A
@@ -2469,17 +2431,13 @@ contains
                 !write(*,*)'impavnc0: time for pgmres tm1=',tm1
                 if (ierr.ne.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                    WRITE(*,*)'impavnc0 after pgmres, ierr=',ierr
                    WRITE(*,*)'ierr=1 converg. not achieved in itmax iterations'
                    WRITE(*,*)' -1 Initial guess seems to be the exact solution'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                    STOP 'ierr.ne.0, from pgmres'
                 endif
@@ -2498,9 +2456,7 @@ contains
                 call cpu_time(tm1)
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,i4,2e19.11)')  &
        'impavnc rhs before dgbtrf l_,MIN(rhs),MAX(rhs)', &
@@ -2509,9 +2465,7 @@ contains
        'impavnc ABD before dgbtrf l_,MIN(abd),SUM(abd)', &
                 l_,MINVAL(abd),SUM(abd)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
                 !     factorize matrix
@@ -2545,9 +2499,7 @@ contains
                      ipivot,rhs,inewjx,info)
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,i4,2e19.11)')  &
        'impavnc rhs after  dgbtrs l_,MIN(rhs),MAX(rhs)', &
@@ -2556,9 +2508,7 @@ contains
        'impavnc ABD after  dgbtrs l_,MIN(abd),SUM(abd)', &
                 l_,MINVAL(abd),SUM(abd)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
                 if (info .ne. 0) then
@@ -2718,18 +2668,14 @@ contains
              enddo  !  On ll ; finished with updating f
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
      !WRITE(*,'(a,2i6)') 'impavnc[ZOW]: sol.found, f is updated. k,l_=',k,l_
       WRITE(*,'(a,2i4,3e15.7)')  &
        'impavnc[ZOW] f fnd,updatd n,l_,MIN(f),MAX(f),SUM(f)=', &
                 n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
              ! Note, with MPI, and soln_method.eq.'direct',
              ! parallelization is done over ll (l_) index.
@@ -2989,9 +2935,7 @@ contains
       integer :: istat(18)
       integer :: istat0
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !dir$ nobounds
@@ -3020,16 +2964,12 @@ contains
 !     soln_method='itsol1' case.
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'it3dalloc: entering...  soln_method=', &
                  soln_method
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 
@@ -3038,16 +2978,12 @@ contains
         .or. soln_method.eq.'it3drv') then
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'icsrij,icsrip,icsrikry,lfil,iwk_ilu = ', &
                     icsrij,icsrip,icsrikry,lfil,iwk_ilu
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
          istat(1:18)=0
@@ -3087,16 +3023,12 @@ contains
       elseif ( soln_method.eq.'itsol1' ) then
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'lapacki,lapackj,icsrij,icsrip,iwk_ilu = ', &
                     lapacki,lapackj,icsrij,icsrip,iwk_ilu
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
          allocate(abd_lapack(lapacki,lapackj),stat=istat(1))
@@ -3123,15 +3055,11 @@ contains
       endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'it3dalloc: exiting...'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       return
@@ -3145,21 +3073,15 @@ contains
       implicit none
       integer :: istat
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'it3ddalloc: deallocating...'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       if ( soln_method.eq.'itsol' .or. soln_method.eq.'it3dv' &
@@ -3190,9 +3112,7 @@ contains
       implicit none
       integer :: istat
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !  The purpose of this subroutine is to ensure deallocation of variables
@@ -3214,15 +3134,11 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'de_alloc: START deallocating...'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       if(ASSOCIATED(rhs0)) then
@@ -3731,15 +3647,11 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'de_alloc:  DONE deallocating'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       return

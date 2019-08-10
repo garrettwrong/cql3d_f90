@@ -20,9 +20,7 @@ contains
       use frplteq_mod, only : micfrplt, textt
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 pltrays
@@ -39,9 +37,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -78,8 +74,12 @@ contains
       PGZMIN=real(solz_min)
       PGZMAX=real(solz_max)
 
+#ifndef NOPGPLOT
       CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
       CALL PGSVP(.15,.85,.15,ztop)
+#endif
 
       PGER1=er(1)
       PGERNNR=er(nnr)
@@ -88,24 +88,42 @@ contains
       if( (eqsym.ne."none") .and. &
           (urfmod.eq."disabled" .or. pltrays.eq.'disabled') ) then
          !plot half only
+#ifndef NOPGPLOT
 !-YuP         CALL PGSWIN(PGER1,PGERNNR,PGZERO,PGEZNNZ)
+#endif
+#ifndef NOPGPLOT
 !-YuP         CALL PGWNAD(PGER1,PGERNNR,PGZERO,PGEZNNZ)
+#endif
+#ifndef NOPGPLOT
          CALL PGSWIN(PGER1,PGERNNR,PGZMIN,PGZMAX)
+#endif
+#ifndef NOPGPLOT
          CALL PGWNAD(PGER1,PGERNNR,PGZMIN,PGZMAX)
+#endif
       else !eqsym=none; and/or urfmod='enabled',
          ! plot upper and lower halves:
+#ifndef NOPGPLOT
          CALL PGSWIN(PGER1,PGERNNR,-PGEZNNZ,PGEZNNZ)
+#endif
+#ifndef NOPGPLOT
          CALL PGWNAD(PGER1,PGERNNR,-PGEZNNZ,PGEZNNZ)
+#endif
       endif
 
+#ifndef NOPGPLOT
       CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
       if ( (urfmod.ne."disabled") .and. (pltrays.eq.'enabled') &
                                   .and. (krf.gt.0)            ) then
+#ifndef NOPGPLOT
          CALL PGLAB('Major radius (cms)','Vert height (cms)', &
               'Fokker-Planck Flux Surfaces + Rays')
+#endif
       else ! urfmod='disabled', or krf=0
+#ifndef NOPGPLOT
          CALL PGLAB('Major radius (cms)','Vert height (cms)', &
               'Fokker-Planck Flux Surfaces')
+#endif
       endif
 
       IF (setup0%lrzmax.GT.200) STOP 'TDPLTEQ: CHECK DIM OF TEXTT'
@@ -117,7 +135,9 @@ contains
            RTAB2(j)=solz(lorbit(l)+1-j,l)
  20     continue
         text(1)=textt(l)
+#ifndef NOPGPLOT
         CALL PGLINE(LORBIT(L),RTAB1,RTAB2)
+#endif
         ! YuP[03-2016] Added plotting rays in cross-sectional view
         if ( (urfmod.ne."disabled") .and. (pltrays.eq.'enabled') &
              .and. (eqsym.ne.'none')) then
@@ -125,7 +145,9 @@ contains
          ! For up-dn symmetrical case only half of surfaces are plotted
          ! but rays could be in the other hemisphere,
          ! so plot the other half:
+#ifndef NOPGPLOT
          CALL PGLINE(LORBIT(L),RTAB1,-RTAB2)
+#endif
         endif
  10   continue
 
@@ -139,7 +161,9 @@ contains
              RTAB1(ilim)=rcontr(ilim)
              RTAB2(ilim)=zcontr(ilim)
           enddo
+#ifndef NOPGPLOT
           CALL PGLINE(ncontr_,RTAB1,RTAB2)
+#endif
         endif
 
         if(nlimiter.gt.1) then
@@ -149,12 +173,20 @@ contains
              RTAB1(ilim)=rlimiter(ilim)
              RTAB2(ilim)=zlimiter(ilim)
           enddo
+#ifndef NOPGPLOT
           CALL PGSLW(setup0%lnwidth*2) ! bold
+#endif
+#ifndef NOPGPLOT
           CALL PGLINE(nline,RTAB1,RTAB2)
+#endif
           if(machine.eq."mirror") then
+#ifndef NOPGPLOT
           CALL PGLINE(nline,-RTAB1,RTAB2) !mirror area to the left of Z-axis
+#endif
           endif
+#ifndef NOPGPLOT
           CALL PGSLW(setup0%lnwidth) ! restore
+#endif
         endif
 
       endif !eqsym.eq.'none' or (urfmod.ne."disabled")&(pltrays.eq.'enabled')
@@ -181,13 +213,17 @@ contains
            enddo
 !           write(*,*)'tdplteq: krf, minval(wk_ray_r),maxval(wk_ray_r)=',
 !     +                         krf, minval(wk_ray_r),maxval(wk_ray_r)
+#ifndef NOPGPLOT
            CALL PGLINE(nrayelt00,wk_ray_r,wk_ray_z)
+#endif
         enddo  ! iray
         !Add some info on rays:
         write(t_,'(a,i3, a,2i3, a,e12.5)') 'krf=',krf, &
                               '  nharm,nharms=', nharm(krf),nharms(krf), &
                               '    f[Hz]=', freqcy(krf)
+#ifndef NOPGPLOT
         CALL PGMTXT('T',0.9,0.0,0.,t_) ! 0.9=just outside of viewport
+#endif
         !enddo
       endif
 !..................................................................

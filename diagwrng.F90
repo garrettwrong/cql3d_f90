@@ -24,9 +24,7 @@ contains
 !...
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character cptline*80
@@ -34,9 +32,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 ! Print-out from id=0 only:
 
@@ -104,9 +100,7 @@ contains
       WRITE(*,*) 'diagwrng: kerr'
 
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 

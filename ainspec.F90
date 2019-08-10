@@ -52,9 +52,7 @@ contains
 !.......................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       ntotal=ngen+nmax
@@ -85,17 +83,13 @@ contains
 !BH180908      if (kelec.eq.0) call diagwrng(9)
       if (kelec.eq.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)
          WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
          WRITE(*,*)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       endif
 
@@ -143,24 +137,18 @@ contains
 !BHTemp      if (kionn.eq.0) call diagwrng(9)
       if (kionn.eq.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)
          WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
          WRITE(*,*)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)
       WRITE(*,*)'ainspec: ngen,nmax,ntotal', &
@@ -173,9 +161,7 @@ contains
       WRITE(*,*)'ainspec:   iprozeff.ne."disabled"; see cqlinput_help'
       WRITE(*,*)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       return

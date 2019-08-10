@@ -100,7 +100,7 @@ standalone_mpi: $(NAME_MPI)
 libs_mpi: lib$(NAME_MPI).a lib$(NAME_MPI).so
 mpi: libs_mpi $(NAME_MPI)_shared standalone_mpi
 
-F90OBJECTS_MPI = $(F90OBJECTS:.o=.o_mpi) cql3d_mpilib.o
+F90OBJECTS_MPI = $(F90OBJECTS:.o=.o_mpi) cql3d_mpilib.o_mpi
 OBJECTS_MPI = $(OBJECTS:.o=.o_mpi)
 #INCLUDE_MPI = $(INCLUDE)
 

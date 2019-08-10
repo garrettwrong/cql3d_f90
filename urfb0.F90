@@ -36,9 +36,7 @@ contains
 !c..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       allocatable :: urfbwk(:) ! local working array, for MPI
@@ -82,20 +80,16 @@ contains
 !..................................................................
       do 500 krf=1,mrfn
 #ifdef __MPI
-!MPI >>>
          if(mpisize.gt.1) then
             mpiworker= MOD(krf-1,mpisize-1)+1
          else
             PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then
 
-!MPI <<<
 #endif
 
 !       k is general species to which this krf mode is to be applied:
@@ -404,12 +398,9 @@ contains
  10     continue ! iray=1,nray(krf)
 
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then !-------------------------------------------
         mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
         mpisz3=2*mpisz ! storage size for urfb,urfc
@@ -429,10 +420,8 @@ contains
         enddo ! ll
       endif !-----------------------------------------------------------
 
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then !-----------------------------------
         mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
         call dcopy(mpisz,urfb(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
@@ -444,22 +433,17 @@ contains
         mpitag= krf ! wave-mode
         call MPI_SEND(urfbwk,mpisz3+2*setup0%lrz,MPI_DOUBLE_PRECISION,0,mpitag,MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
-!MPI <<<
 #endif
 
  500  continue                  !End loop on krf=1:mrfn
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(urfb,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(urfc,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
-!MPI <<<
 #endif
 
 
@@ -528,30 +512,22 @@ contains
  55         continue    ! i
          enddo          ! j
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 !      WRITE(*,'(a,2i5,e12.3)')'sum_test for urfb0:', ll,krf,sum_test
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       enddo             ! ll=1,setup0%lrz
       enddo             ! krf=1,mrfn
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,e12.3)') &
        'urfb0/AFTER renorm: sum(urfb)=', sum(urfb)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 

@@ -27,9 +27,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !..................................................................
@@ -103,9 +101,7 @@ contains
  1    format(2i5,1pe16.9)
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       krf=0  !  Counter for wave types.
 !     irftype is determined in urfinitl.
@@ -177,24 +173,18 @@ contains
       enddo
       WRITE(*,*)'URFSETUP: nrayn===',nrayn
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(nrayn,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(nray,nmodsa,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(nharm,nmodsa,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(freqcy,nmodsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(omega,nmodsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !---> Allocation of arrays with (nrayn,mrfn) size
@@ -260,9 +250,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 !---> Read rays data file again to get nrayelt(1:nrayn,1:mrfn)
       krf=0  !  Counter for wave types.
@@ -333,21 +321,15 @@ contains
       enddo
       WRITE(*,*)'URFSETUP: nrayelts===',nrayelts
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(nrayelts,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(nrayelt,nrayn*mrfn,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !-YuP 101122-end--------------------------------------------------------
@@ -364,9 +346,7 @@ contains
 
         call urfalloc
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
         do 30 j=1,jx

@@ -13,9 +13,7 @@ contains
         implicit integer (i-n), real(c_double) (a-h,o-z)
         character(len=*), intent(in) :: nml_file
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
       Save inlmod
 
@@ -46,9 +44,7 @@ contains
 !.......................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       if (kopt.eq.0) then
@@ -159,9 +155,7 @@ contains
         implicit integer (i-n), real(c_double) (a-h,o-z)
         character(len=*), intent(in):: nml_file
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
       Save inlmod
 
@@ -188,9 +182,7 @@ contains
 !.......................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       if (kopt.eq.0) then
@@ -304,9 +296,7 @@ contains
       subroutine ain_transcribe(filename)
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !..................................................................
@@ -319,9 +309,7 @@ contains
       logical logic1
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       WRITE(*,*)

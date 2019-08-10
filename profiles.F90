@@ -28,9 +28,7 @@ contains
 !.......................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       real(c_double):: tmpt(njene)  !Temporary array
@@ -212,16 +210,12 @@ contains
       ! If not, print warning.
       if(n.gt.0)then ! skip it at n=0 (x(j) not defined yet)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a)')"==============================================="
       WRITE(*,*)'profiles.f: time step n, timet=',n,timet
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       do k=1,ngen
       do l=1,setup0%lrzmax
@@ -233,9 +227,7 @@ contains
            endif
          enddo
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,'(a,3i4,3f16.11)') &
          "profiles: k,lr, j_thermal, x(j_thermal), vth/vnorm, temp =", &
@@ -249,9 +241,7 @@ contains
            !pause !-------
          endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       enddo ! l=1,setup0%lrzmax
       enddo ! k=1,ngen
@@ -893,9 +883,7 @@ contains
 !dir$ nextscalar
 !
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       do 123 jk=1,ntotal
          if(n.gt.0)then
@@ -944,9 +932,7 @@ contains
          endif
  123  continue
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
  9120 format(/" species no. ",i3,2x,a,a8,"    charge number: ",f6.2 &

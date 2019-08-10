@@ -29,7 +29,9 @@ contains
       REAL RPGMIN,RPGMAX
       REAL RILIN,PGCOORD
 
+#ifndef NOPGPLOT
       CALL PGSAVE
+#endif
 
 !
       if (setup0%noplots.eq."enabled1") return
@@ -45,8 +47,12 @@ contains
           if (fmin/fmax .lt. fu) fu=fmin/fmax
  3006   continue
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.45,.95)
+#endif
 
         DO L=1,LZ
            RTAM1(L)=pol(l,lr_)
@@ -55,8 +61,12 @@ contains
         RPGMAX=1.
 
 
+#ifndef NOPGPLOT
         CALL PGSWIN(RTAM1(1),RTAM1(LZ),RPGMIN,RPGMAX)
+#endif
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
 
 
         xu=negyrg
@@ -71,44 +81,64 @@ contains
           DO L=1,LZ
              RTAM2(L)=tz1(l)
           ENDDO
+#ifndef NOPGPLOT
           CALL PGSLS(MOD(NY,5))
+#endif
+#ifndef NOPGPLOT
           CALL PGLINE(LZ,RTAM1,RTAM2)
+#endif
 
  3002   continue
+#ifndef NOPGPLOT
         CALL PGLAB('Poloidal angle (radians)','Normalized density', &
              'Density as a function of poloidal angle(=pi*z/zmax) ')
+#endif
 
         PGCOORD=-.15
 !        RILIN=5.
+#ifndef NOPGPLOT
 !        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+#endif
         write(T_,611)
  611    FORMAT("(curves are normalized to a maximum of 1.)")
         RILIN=5.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+#endif
         write(T_,6111)
  6111   FORMAT( &
         "(Line order: full,dashed,dot-dash,dotted,dash-dot-dot-dot)")
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+#endif
         write(t_,612) k,rovera(lr_),n,timet
  612    FORMAT( &
         "species",i2,"  r/a=",1pe8.2,"  n=",i5,"  time= ",1pe11.4)
         RILIN=RILIN+2.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+#endif
 !        write(t_,613) xlndnz(k,negyrg)
 ! 613    FORMAT("line density (line-integration) =",1pe16.5)
 !        RILIN=RILIN+1.
+#ifndef NOPGPLOT
 !        CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+#endif
 
 
         RILIN=RILIN+1.
         do 3005 ny=1,negyrg
            RILIN=RILIN+1.
            write(t_,3003) eegy(ny,1,k,lr_),eegy(ny,2,k,lr_)
+#ifndef NOPGPLOT
            CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+#endif
            RILIN=RILIN+1.
            write(t_,3004) tam1(ny)
+#ifndef NOPGPLOT
            CALL PGMTXT('B',RILIN,PGCOORD,0.,T_)
+#endif
  3005      continue
 
  3003   format("lower egy =",1pe10.2," kev;  upper egy =",1pe10.2,"kev")
@@ -119,7 +149,9 @@ contains
 
  100  continue
 
+#ifndef NOPGPLOT
       CALL PGUNSA
+#endif
 
       return
       end subroutine pltdnz
