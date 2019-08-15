@@ -5,10 +5,12 @@ program a_cql3d
   use impavnc0_mod, only : de_alloc
   use impavnc0_mod, only : it3dalloc
   use impavnc0_mod, only : it3ddalloc
-  use cqlmpilib_mod, only : cql_mpi_init
   use iso_c_binding, only : c_double
   use iso_c_binding, only : c_float
-
+#ifdef __MPI
+  use cqlmpilib_mod, only : cql_mpi_init
+#endif
+  
 !***********************************************************************
 !
 !   Copyright R.W. Harvey and Yu. V Petrov
