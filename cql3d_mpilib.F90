@@ -8,7 +8,33 @@ module cqlmpilib_mod
 
   !---END USE
 
+#ifdef __MPI
+      include 'mpilib.h'
+#endif
+
 contains
+
+  subroutine cql_mpi_init(skip_mpi_init)
+    logical, intent(in), optional :: skip_mpi_init
+    logical ::  do_mpi_init
+
+    ! in standalone, we are repsonsible for MPI init
+    do_mpi_init = .TRUE.
+    if(present(skip_mpi_init)) then
+       if(skip_mpi_init) do_mpi_init=.FALSE.
+    end if
+
+    if(do_mpi_init) call MPI_INIT(mpiierr)
+
+    call MPI_COMM_SIZE(MPI_COMM_WORLD,mpisize,mpiierr)
+    call MPI_COMM_RANK(MPI_COMM_WORLD,mpirank,mpiierr)
+    if(mpirank.eq.0) PRINT *,'MPISIZE ===',mpisize
+    if(mpisize.le.1) stop '===   Run with number of cores >1   ==='
+    PRINT *,'Start mpirank=',mpirank
+    if(mpirank.eq.0) then
+       mpitime = MPI_WTIME()
+    endif
+  end subroutine cql_mpi_init
 
   subroutine cql3d_set_comm(comm)
     !     set communicator

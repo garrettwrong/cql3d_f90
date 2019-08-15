@@ -55,7 +55,6 @@ contains
 
 !yup      character*8 ifirst
 !yup      data ifirst/"first"/
-
       call bcast(powrft(1:setup0%lrzmax),zero,setup0%lrzmax)
       call bcast(powurf(0:nmodsa),zero,nmodsa+1)
       call bcast(powurfc(0:nmodsa),zero,nmodsa+1)
@@ -108,14 +107,11 @@ contains
 
 #ifdef __MPI
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-#endif
-#ifdef __MPI
       call MPI_BCAST(urfpwr, nrayelts*nrayn*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(urfpwrc,nrayelts*nrayn*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(urfpwrl,nrayelts*nrayn*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(scalurf,nrayelts*nrayn*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(salphac,nrayelts*nrayn*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-
 #endif
 
 

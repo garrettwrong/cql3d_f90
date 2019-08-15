@@ -5,6 +5,7 @@ program a_cql3d
   use impavnc0_mod, only : de_alloc
   use impavnc0_mod, only : it3dalloc
   use impavnc0_mod, only : it3ddalloc
+  use cqlmpilib_mod, only : cql_mpi_init
   use iso_c_binding, only : c_double
   use iso_c_binding, only : c_float
 
@@ -261,20 +262,9 @@ mpirank=0 ! When MPI is used, mpirank is set in init_mpi below
 
 !     Initialize MPI:
 #ifdef __MPI
-      call MPI_INIT(mpiierr)
-      call MPI_COMM_SIZE(MPI_COMM_WORLD,mpisize,mpiierr)
-      call MPI_COMM_RANK(MPI_COMM_WORLD,mpirank,mpiierr)
-      if(mpirank.eq.0) PRINT *,'MPISIZE ===',mpisize
-      if(mpisize.le.1) stop '===   Run with number of cores >1   ==='
-      !PRINT *,'Start mpirank=',mpirank
-      if(mpirank.eq.0) then
-         mpitime = MPI_WTIME()
-      endif
-#endif
+      call cql_mpi_init()
 !     It will insert:
 !      call init_mpi ! Initialize MPI and set mpitime0=MPI_WTIME
-
-#ifdef __MPI
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
 #endif
 
@@ -286,26 +276,23 @@ call cpu_time(tarray(2))
 
 #ifdef __MPI
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-#endif
-
-#ifdef __MPI
       if(mpirank.eq.0) then
 #endif
+
 WRITE(*,'(a,i5,f10.3)') ' a_cqlp: rank, Exec.time tarray(2)-tarray(1)', mpirank, tarray(2)-tarray(1)
 !      WRITE(*,'(a)') ' a_cqlp: END of CQL3D, just before MPI_FINISH'
+
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
 
 call it3ddalloc ! Deallocate it3d related storage
 call de_alloc   ! Deallocate other arrays
+
 #ifdef __MPI
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-#endif
-
 !     close MPI (print 'MPI Full time =',MPI_WTIME()-mpitime0
 !                then - MPI_FINALIZE )
-#ifdef __MPI
       if(mpirank.eq.0) then
          WRITE(*,*) 'MPI Full time =',MPI_WTIME()-mpitime
       endif

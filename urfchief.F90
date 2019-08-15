@@ -254,15 +254,14 @@ contains
 !     Radial surfaces: setup0%lrz (and not lrors)
 !     Generate B,C,E and F
 !..................................................................
+
       call cpu_time(t_urf1) !-.-.-.-.-.-.-.-.-.-.-.-.-.
       call urfb0  ! YuP-110222: Now includes all lr_ internally
       call cpu_time(t_urf2) !-.-.-.-.-.-.-.-.-.-.-.-.-.
 
 #ifdef __MPI
       if(mpirank.eq.0) then
-#endif
       WRITE(*,'(a,f10.3)')'tcpu_URFB0=',t_urf2-t_urf1
-#ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
 

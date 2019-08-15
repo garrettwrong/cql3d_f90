@@ -95,7 +95,9 @@ contains
     !     functions and quasilinear coefficients.
     !..................................................................
 
-    !MPIINSERT_INCLUDE
+#ifdef __MPI
+      include 'mpilib.h'
+#endif
 
     character*8 icall,iplotsxr
     character*128 filenm ! template for file name with data
@@ -274,14 +276,18 @@ contains
 
 110 end do ! ll=setup0%lrzmax,1,-1
 
-    !MPIINSERT_IF_RANK_EQ_0
+
+#ifdef __MPI
+    if(mpirank.eq.0) then
+#endif
     do ir=1,setup0%lrz
        WRITE(*,'(a,i3,4e13.5)')'ir,rya,rpcon,rmcon,equilpsi=', &
             ir,rya(ir),rpcon(ir),rmcon(ir),equilpsi(ir)
     enddo
     !pause
-    !MPIINSERT_ENDIF_RANK
-
+#ifdef __MPI
+    endif
+#endif
 
 
     !.......................................................................

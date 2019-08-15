@@ -6,6 +6,7 @@ module urfb0_mod
   use r8subs_mod, only : dcopy
   use bcast_mod, only : bcast
   use tdnflxs_mod, only : tdnflxs
+  use cqlconf_mod, only : setup0
 
   !use urfpackm_mod, only : unpack
   !use urfpackm_mod, only : unpack16
@@ -86,10 +87,7 @@ contains
             PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
-#endif
-#ifdef __MPI
       if(mpirank.eq.mpiworker) then
-
 #endif
 
 !       k is general species to which this krf mode is to be applied:
@@ -103,7 +101,6 @@ contains
 !..................................................................
 !     Set indicators of electrons or ions
 !..................................................................
-
 !BH080920      if (kionn.eq.1) then
          if (kiongg(k).eq.k) then
             signi=1.0
@@ -130,7 +127,6 @@ contains
 !     nrayelt0 contains lengths of ray in which significant power
 !     remains (determined in urfdamp0).
 !..................................................................
-
             do 20 is=1,nrayelt0(iray,krf)
 !ccYuP110222   Removing this if statement, all ray elements are treated
 !cc            with one call to urfb0, rather than ouside loop over radius.
@@ -399,11 +395,10 @@ contains
 
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
-#endif
-#ifdef __MPI
       if(mpirank.eq.0) then !-------------------------------------------
         mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
         mpisz3=2*mpisz ! storage size for urfb,urfc
+!call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
         call MPI_RECV(urfbwk, mpisz3+2*setup0%lrz,MPI_DOUBLE_PRECISION,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
         mpitag=mpistatus(MPI_TAG)
         mpikrf=mpitag ! determine which krf wave mode
@@ -419,13 +414,22 @@ contains
         enddo
         enddo ! ll
       endif !-----------------------------------------------------------
-
-#endif
-#ifdef __MPI
       if(mpirank.eq.mpiworker) then !-----------------------------------
-        mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
-        call dcopy(mpisz,urfb(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
-        call dcopy(mpisz,urfc(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(1*mpisz+1),1) ! 1*mpisz+1 : 2*mpisz
+         mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
+         !call dcopy(mpisz,urfb(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
+         ! dcopy is the debbil
+         iterfoo=1
+         do ifoo=1,iy
+            do jfoo=1,jx
+               do kfoo=1,setup0%lrz
+                  urfbwk(iterfoo) = urfb(ifoo, jfoo, kfoo, krf)
+                  urfbwk(mpisz + iterfoo) = urfc(ifoo, jfoo, kfoo, krf)
+                  iterfoo = iterfoo + 1
+               enddo
+            enddo
+         end do
+!call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
+         !call dcopy(mpisz,urfc(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(1*mpisz+1),1) ! 1*mpisz+1 : 2*mpisz
         ! urfb and urfc are dimensioned as (1:iy,1:jx,1:setup0%lrz,1:mrfn)
         mpisz3=2*mpisz ! the last elem. in above
         urfbwk(mpisz3+0*setup0%lrz+1 : mpisz3+1*setup0%lrz) = powrfl(1:setup0%lrz,krf) !linear damp.
@@ -439,13 +443,10 @@ contains
 
 #ifdef __MPI
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-#endif
-#ifdef __MPI
       call MPI_BCAST(urfb,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(urfc,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
 #endif
-
 
       ! Renormalize urf* coeffs.
       do krf=1,mrfn
