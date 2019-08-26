@@ -2354,17 +2354,13 @@ contains
                 call cpu_time(tm1)
 
                 !--------------------------------------------------------------
-#ifndef NOPGPLOT
                 !     call PGMRES
-#endif
                 !--------------------------------------------------------------
                 !     Put sol into rhs vector (i.e., as in soln from direct solve)
                 if ( soln_method.eq."itsol" .or. soln_method.eq."itsol1" ) then
-#ifndef NOPGPLOT
                    call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                         maxits,iout,a_csr,ja_csr,ia_csr,alu, &
                         jlu,ju,ierr)
-#endif
                    rhs(1:n_rows_A)=sol(1:n_rows_A)
                 elseif(soln_method.eq.'it3dv') then
                    ! perform soln
@@ -2377,11 +2373,9 @@ contains
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
-#ifndef NOPGPLOT
                       call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                            maxits,iout,a_csr,ja_csr,ia_csr,alu, &
                            jlu,ju,ierr)
-#endif
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
@@ -2406,11 +2400,9 @@ contains
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
-#ifndef NOPGPLOT
                       call pgmres(n_rows_A,krylov1,rhs0,sol,vv,epsilon, &
                            maxits,iout,ac_csr,jac_csr,iac_csr,alu, &
                            jlu,ju,ierr)
-#endif
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
@@ -3155,8 +3147,11 @@ contains
         deallocate(ampfda,ampfdd,ampfaa)
       endif
       if(ASSOCIATED(fh)) then
-        deallocate(fh,fg)
-      endif
+        deallocate(fh)
+     endif
+     if(ASSOCIATED(fg)) then
+        deallocate(fg)
+     endif
       if(ASSOCIATED(urfb)) then
         deallocate(ilim1,ilim2,ifct1,ifct2,jminray,jmaxray,lloc,llray)
         deallocate(urfb,urfc,cosmz,urftmp,urfpwr,urfpwrc,urfpwrl)

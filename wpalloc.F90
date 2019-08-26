@@ -68,6 +68,8 @@ contains
       call bcast(fnp1,zero,SIZE(fnp1))
       allocate(dls(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
       call bcast(dls,zero,SIZE(dls))
+      allocate(fg(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
+      call bcast(fg,zero,SIZE(fg))
       allocate(fh(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
       call bcast(fh,zero,SIZE(fh))
 
