@@ -124,6 +124,9 @@ contains
     real(c_double) :: xnorm != 1.  !XXXX should this be initialized? YuP: xnorm is output of impnorm()
     real(c_double) :: zrhsj1
 
+    real(c_double) :: f_min, f_max, f_mean
+    integer :: i_mean, im
+
     !.................................................................
     !     Impose unicity point at u=0 as boundary condition
     !
@@ -137,10 +140,10 @@ contains
     !     Calc h and g functions for iterative Amp-Far eqn solve
     !.................................................................
 
-
 #ifdef __MPI
       include 'mpilib.h'
 #endif
+
 
     !BH080303    real(c_float) etime,tm1,tm(2) !Dclrtns for lf95 ETIME(). See man etime.
     !BH080303    Using f95 intrinsic subroutine, cpu_time
@@ -254,8 +257,9 @@ contains
     md1abd= 3*(iy+3)+1 ! Should be at least 2*ml+mu+1 (see below)
 
 #ifdef __MPI
-      if(mpirank.eq.0) then
+    if(mpirank.eq.0) then
 #endif
+
     if(inewjmax.gt.inewjx)then !YuP[2019-04-24] added printout
       WRITE(*,*)'impavnc0: inewjmax>inewjx', inewjmax,inewjx
     endif
@@ -1026,7 +1030,6 @@ contains
                 !.................................................................
                 !     Define the r.h.s.
                 !.................................................................
-
                 rhs(ieq)=z00(i,j,k)
 
                 !.................................................................
@@ -1958,13 +1961,13 @@ contains
                    !write(*,*)'impavnc0: Estimate of of icoeff=', icoeff_est
                    !         Check coeff storage:
                    if (icoeff.gt.size(a_csr)) then
-#ifdef __MPI
-      if(mpirank.eq.0) then
-#endif
+! #ifdef __MPI
+!       if(mpirank.eq.0) then
+! #endif
                       WRITE(*,*)'impavnc0:icoeff.gt.size(a_csr)'
-#ifdef __MPI
-      endif  ! for if(mpirank.eq.***)
-#endif
+! #ifdef __MPI
+!       endif  ! for if(mpirank.eq.***)
+! #endif
                       STOP
                    endif
                 endif  ! on soln_method.ne.'direct'
@@ -2448,16 +2451,21 @@ contains
                 call cpu_time(tm1)
 
 #ifdef __MPI
-      if(mpirank.eq.0) then
-#endif
+      if(mpirank.EQ.mpiworker) then
+      WRITE(*,'(a,2i4,2e19.11)')  &
+       'impavnc rhs before dgbtrf mpirank, l_,MIN(rhs),MAX(rhs)', &
+                mpirank, l_,MINVAL(rhs),MAXVAL(rhs)
+      WRITE(*,'(a,2i4,2e19.11)')  &
+       'impavnc ABD before dgbtrf mpirank, l_,MIN(abd),SUM(abd)', &
+       mpirank, l_,MINVAL(abd),SUM(abd)
+      endif
+#else
       WRITE(*,'(a,i4,2e19.11)')  &
        'impavnc rhs before dgbtrf l_,MIN(rhs),MAX(rhs)', &
                 l_,MINVAL(rhs),MAXVAL(rhs)
       WRITE(*,'(a,i4,2e19.11)')  &
        'impavnc ABD before dgbtrf l_,MIN(abd),SUM(abd)', &
                 l_,MINVAL(abd),SUM(abd)
-#ifdef __MPI
-      endif  ! for if(mpirank.eq.***)
 #endif
 
                 !     factorize matrix
@@ -2491,16 +2499,21 @@ contains
                      ipivot,rhs,inewjx,info)
 
 #ifdef __MPI
-      if(mpirank.eq.0) then
-#endif
+      if(mpirank.eq.mpiworker) then
+         WRITE(*,'(a,2i4,2e19.11)')  &
+              'impavnc rhs after  dgbtrs l_,MIN(rhs),MAX(rhs)', &
+              mpirank,l_,MINVAL(rhs),MAXVAL(rhs)
+         WRITE(*,'(a,2i4,2e19.11)')  &
+              'impavnc ABD after  dgbtrs l_,MIN(abd),SUM(abd)', &
+              mpirank,l_,MINVAL(abd),SUM(abd)
+      end if
+#else
       WRITE(*,'(a,i4,2e19.11)')  &
-       'impavnc rhs after  dgbtrs l_,MIN(rhs),MAX(rhs)', &
-                l_,MINVAL(rhs),MAXVAL(rhs)
+           'impavnc rhs after  dgbtrs l_,MIN(rhs),MAX(rhs)', &
+           l_,MINVAL(rhs),MAXVAL(rhs)
       WRITE(*,'(a,i4,2e19.11)')  &
-       'impavnc ABD after  dgbtrs l_,MIN(abd),SUM(abd)', &
-                l_,MINVAL(abd),SUM(abd)
-#ifdef __MPI
-      endif  ! for if(mpirank.eq.***)
+           'impavnc ABD after  dgbtrs l_,MIN(abd),SUM(abd)', &
+           l_,MINVAL(abd),SUM(abd)
 #endif
 
                 if (info .ne. 0) then

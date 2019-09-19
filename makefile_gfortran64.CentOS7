@@ -30,14 +30,14 @@ ifdef MPIMODDIR
 	INCLUDE := $(INCLUDE) -I$(MPIMODDIR)
 endif
 
-#NOPGPLOT=TRUE
-ifndef NOPGPLOT
+ifdef NOPGPLOT
+	PGFLAG = -DNOPGPLOT
+else
 	LOCATION += -L${PGPLOT_DIR}
 	LIBRARIES += -lpgplot
-	PGFLAG = -DNOPGPLOT
 endif
 
-DEBUG     = -g
+DEBUG     = -g -fbacktrace
 #common gfortran dbg flags
 #-g -Wall -Wextra -Warray-temporaries -Wconversion -fimplicit-none -fbacktrace -ffree-line-length-0 -fcheck=all -ffpe-trap=zero,overflow,underflow -finit-real=nan
 # Will bring in FFLAGS from parent env, ex TRANSP, if defined, or you may override it here.

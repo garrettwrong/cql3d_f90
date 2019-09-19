@@ -127,9 +127,9 @@ contains
 
       sden=0.
       do 3 j=1,jx
-        sgain(5,k)=sgain(5,k)+tam5(j)*cint2(j)*one_
-        sgain(6,k)=sgain(6,k)+tam6(j)*cint2(j)*one_
-        sden=sden+tam4(j)*cint2(j)*one_
+        sgain(5,k)=sgain(5,k)+tam5(j)*cint2(j)
+        sgain(6,k)=sgain(6,k)+tam6(j)*cint2(j)
+        sden=sden+tam4(j)*cint2(j)
 !     For diagnostic purposes to compare with tem5 at end of diaggnde:
 !     Summing tam7 over j will give flux surface averaged density.
         tam7(j)=tam4(j)*cint2(j)/zmaxpsi(lr_)
@@ -148,7 +148,7 @@ contains
 !..................................................................
       do 6 i=1,iy
         do 5 j=1,jx
-          vflux(j,k,l_)=vflux(j,k,l_)+one_*gfi(i,j,k)*cynt2(i,l_)
+          vflux(j,k,l_)=vflux(j,k,l_) + gfi(i,j,k)*cynt2(i,l_)
  5      continue
  6    continue
 
@@ -194,6 +194,7 @@ contains
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
+
 #ifdef __MPI
       if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
          call send_entr(k,lefct)
@@ -304,8 +305,8 @@ contains
 !     values of distribution to 0.
 !
       call diagdens(xline,xmidp,eline)
-      sgain(8,k)=xline*one_
-      engain(k)=eline*one_
+      sgain(8,k)=xline
+      engain(k)=eline
 
       elseif(ineg.eq."renorm") then
 
@@ -342,8 +343,8 @@ contains
  531        continue
  530      continue
 !     change of line density (/2) and line energy density
-          sgain(8,k)=(xline1-xline0)*one_
-          engain(k)=(eline1-eline0)*one_
+          sgain(8,k)=(xline1-xline0)
+          engain(k)=(eline1-eline0)
         endif ! on fmin
 
       endif  ! on ineg
@@ -363,7 +364,9 @@ contains
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
+
       call dcopy(iyjx2,temp1(0:iy+1,0:jx+1),1,f(0:iy+1,0:jx+1,k,l_),1)
+
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif

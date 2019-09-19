@@ -24,8 +24,18 @@ F90OBJECTS = $(filter %.o,$(SOURCES:.F90=.o))
 OBJECTS = $(filter %.o,$(SOURCES:.F=.o))
 
 LOCATION  =   -L /usr/lib -L/usr/local/lib
-LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
+LIBRARIES =   -lnetcdff -lnetcdf
 INCLUDE   =/usr/local/include
+ifdef MPIMODDIR
+	INCLUDE := $(INCLUDE) -I$(MPIMODDIR)
+endif
+
+ifdef NOPGPLOT
+	PGFLAG = -DNOPGPLOT
+else
+	LOCATION += -L${PGPLOT_DIR}
+	LIBRARIES += -lpgplot
+endif
 
 DEBUG     = -g -fbacktrace
 #common gfortran dbg flags

@@ -103,7 +103,6 @@ contains
 
       ! we can actually make this an argument if we want...
       character(len=*), intent(in), optional :: nml_file
-      
 
 #ifdef __MPI
       include 'mpilib.h'
@@ -239,11 +238,12 @@ contains
 !     If netcdfshort.eq.'lngshrtf' determine number of distn saves.
 !..................................................................
 
+      nsavet=0 !YuP[2019-06-07] Should be defined in any case of netcdfshort
+      isave=0  !YuP[2019-06-08] Initialize here: Index for nonzero values of increasing nsave(1:nsavea)
+
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      nsavet=0 !YuP[2019-06-07] Should be defined in any case of netcdfshort
-      isave=0  !YuP[2019-06-08] Initialize here: Index for nonzero values of increasing nsave(1:nsavea)
       ! And for 'lngshrtf', it is set below:
       if (netcdfshort.eq.'lngshrtf') then
          do i=1,nsavea
@@ -753,11 +753,12 @@ contains
 
 #ifdef __MPI
       if(soln_method.eq.'direct' .and. setup0%lrzmax.gt.1) then
-      ! Parallelization for the impavnc0 solver is limited
-      ! for soln_method='direct' (for now)
-      if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
-         call send_data ! send or recv data on f and coll.coeffs.
-      endif
+         ! Parallelization for the impavnc0 solver is limited
+         ! for soln_method='direct' (for now)
+         !if(mpirank.eq.0) f=0. ! this seems to help
+         if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
+            call send_data ! send or recv data on f and coll.coeffs.
+         endif
       endif
 
 #endif
@@ -765,6 +766,10 @@ contains
 !     soln_method='direct' (for now)
 
  1    continue ! End loop over radius:  New f is obtained for each ll
+
+#ifdef __MPI
+      call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
+#endif
 
 #ifdef __MPI
       if(mpirank.eq.0) then
@@ -776,9 +781,7 @@ contains
       endif  ! for if(mpirank.eq.***)
 #endif
 
-#ifdef __MPI
-      call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-#endif
+
 #ifdef __MPI
       call MPI_BCAST(f,iyjx2*ngen*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 #endif

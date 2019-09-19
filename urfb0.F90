@@ -416,20 +416,9 @@ contains
       endif !-----------------------------------------------------------
       if(mpirank.eq.mpiworker) then !-----------------------------------
          mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
-         !call dcopy(mpisz,urfb(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
-         ! dcopy is the debbil
-         iterfoo=1
-         do ifoo=1,iy
-            do jfoo=1,jx
-               do kfoo=1,setup0%lrz
-                  urfbwk(iterfoo) = urfb(ifoo, jfoo, kfoo, krf)
-                  urfbwk(mpisz + iterfoo) = urfc(ifoo, jfoo, kfoo, krf)
-                  iterfoo = iterfoo + 1
-               enddo
-            enddo
-         end do
-!call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-         !call dcopy(mpisz,urfc(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(1*mpisz+1),1) ! 1*mpisz+1 : 2*mpisz
+         call dcopy(mpisz,urfb(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
+         ! ! dcopy is the debbil
+         call dcopy(mpisz,urfc(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(1*mpisz+1),1) ! 1*mpisz+1 : 2*mpisz
         ! urfb and urfc are dimensioned as (1:iy,1:jx,1:setup0%lrz,1:mrfn)
         mpisz3=2*mpisz ! the last elem. in above
         urfbwk(mpisz3+0*setup0%lrz+1 : mpisz3+1*setup0%lrz) = powrfl(1:setup0%lrz,krf) !linear damp.
@@ -446,6 +435,13 @@ contains
       call MPI_BCAST(urfb,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(urfc,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
+#endif
+#ifdef __MPI
+      WRITE(*,'(a,i4,e12.3)') &
+              'urfb0/BEFORE renorm: rank sum(urfb)=', mpirank, sum(urfb)
+#else
+      WRITE(*,'(a,e12.3)') &
+           'urfb0/BEFORE renorm: sum(urfb)=', sum(urfb)
 #endif
 
       ! Renormalize urf* coeffs.
@@ -509,13 +505,13 @@ contains
                !YuP[03/18/2015] urfe,urff are expressed through urfb,urfc
                !No need to save into (large) arrays.
                !..................................................................
-               !sum_test= sum_test +urfb(i,j,indxlr_,krf)*sum_test_ren
+               sum_test= sum_test +urfb(i,j,indxlr_,krf)
  55         continue    ! i
          enddo          ! j
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-!      WRITE(*,'(a,2i5,e12.3)')'sum_test for urfb0:', ll,krf,sum_test
+      WRITE(*,'(a,2i5,e12.3)')'sum_test for urfb0:', ll,krf,sum_test
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -523,12 +519,11 @@ contains
       enddo             ! krf=1,mrfn
 
 #ifdef __MPI
-      if(mpirank.eq.0) then
-#endif
+      WRITE(*,'(a,i4,e12.3)') &
+              'urfb0/AFTER renorm: rank sum(urfb)=', mpirank, sum(urfb)
+#else
       WRITE(*,'(a,e12.3)') &
-       'urfb0/AFTER renorm: sum(urfb)=', sum(urfb)
-#ifdef __MPI
-      endif  ! for if(mpirank.eq.***)
+           'urfb0/AFTER renorm: sum(urfb)=', sum(urfb)
 #endif
 
 

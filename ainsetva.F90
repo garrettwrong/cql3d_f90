@@ -256,6 +256,7 @@ contains
 !.......................................................................
 
       !-YuP: Why needed ???      COMMENTING it out:
+      ! GBW, this does seem to happen a lot, fwiw, is that bad?
 !cc      if(2*jx*(mx+5)*(mx+5).gt.(iy+2)*(jx+2)) then
 !cc      write(*,*)'ainsetva: Possible tamt1 and tamt2 overwrite',jx,iy,mx
 !cc         stop 'problem with tamt1 and tamt2 overwrite'
