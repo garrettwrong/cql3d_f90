@@ -37,7 +37,7 @@ else
 	LIBRARIES += -lpgplot
 endif
 
-DEBUG     = -g -fbacktrace
+DEBUG     = -g
 #common gfortran dbg flags
 #-g -Wall -Wextra -Warray-temporaries -Wconversion -fimplicit-none -fbacktrace -ffree-line-length-0 -fcheck=all -ffpe-trap=zero,overflow,underflow -finit-real=nan
 # Will bring in FFLAGS from parent env, ex TRANSP, if defined, or you may override it here.
