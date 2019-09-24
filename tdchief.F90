@@ -93,6 +93,7 @@ contains
 
       implicit integer (i-n), real(c_double) (a-h,o-z)
       save
+      logical :: skip_init = .FALSE.
 
 !..................................................................
 !     This routine directs the calculation of CQL3d; it controls
@@ -104,9 +105,7 @@ contains
       character(len=*), intent(in), optional :: nml_file
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 icall,iplotsxr
@@ -125,29 +124,29 @@ contains
 !     The approach used for setup0, though verbose, actually deleted
 !       the common variables.... reducing code.
 !..................................................................
-      call initialize_cqlcomm
+      if((.not.present(nml_file)) .and. (is_initialized_cqlcomm())) then
+         print *, "STEP mode, skipping initialize_cqlcomm"
+         skip_init = .TRUE.
+      end if
 
+      if(.not.skip_init) call initialize_cqlcomm
 
 !.......................................................................
 !     Open cqlinput NL file and adjust to new setup0/setup structure,
 !     if old two setup namelist sections are present [maintaining
 !     backwards compatibility].  BH070414.
 !.......................................................................
-      call ainadjnl(0) ! at mpirank=0 only (but it can change cqlinput)
+      if(present(nml_file)) call ainadjnl(0, nml_file) ! at mpirank=0 only (but it can change cqlinput)
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
       !Look for the presence of &FSETUP namelist,
       !adjust cqlinput: rename &FSETUP to &SETUP0 (later, restore cqlinput)
-      call ainadjnl_fsetup_setup0(0) !at mpirank=0 (but it can change cqlinput)
+      if(present(nml_file)) call ainadjnl_fsetup_setup0(0, nml_file) !at mpirank=0 (but it can change cqlinput)
       !pause
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !.......................................................................
@@ -159,9 +158,7 @@ contains
       end if
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !..................................................................
@@ -173,10 +170,10 @@ contains
 !.......................................................................
 !     Zero/set some arrays
 !.......................................................................
-      call aclear
 
       ! Gets pltinput variable, for ainplt routine.
       if(present(nml_file)) then
+         call aclear
          call get_setup_from_nml(nml_file, close_nml_file=.TRUE.)
       end if
 
@@ -198,7 +195,7 @@ contains
         ! By reading "setup0" we simply make sure that we are back to the 1st line of cqlinput file?
         ! Not sure about this. Maybe Bob could comment.
         ! (GBW) You just needed to seek/rewind the file, not open and close it in different places.
-        call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
+        if(present(nml_file)) call get_setup0_from_nml(nml_file, close_nml_file=.TRUE.)
 
         call ainsetpa          !  re-set according to setup0 nml
         call ainpltpa ! plots out the parameters
@@ -241,13 +238,12 @@ contains
 !     If netcdfshort.eq.'lngshrtf' determine number of distn saves.
 !..................................................................
 
-#ifdef __MPI
-!MPI >>>
-      if(mpirank.eq.0) then
-!MPI <<<
-#endif
       nsavet=0 !YuP[2019-06-07] Should be defined in any case of netcdfshort
       isave=0  !YuP[2019-06-08] Initialize here: Index for nonzero values of increasing nsave(1:nsavea)
+
+#ifdef __MPI
+      if(mpirank.eq.0) then
+#endif
       ! And for 'lngshrtf', it is set below:
       if (netcdfshort.eq.'lngshrtf') then
          do i=1,nsavea
@@ -262,9 +258,7 @@ contains
          call netcdfrw2(0)
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !.......................................................................
@@ -273,9 +267,7 @@ contains
  10   continue  !Loop back point, from end of subroutine
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 !MPIINSERT_STARTTIMESTEP
       call cpu_time(t_n_start) !-.-.-.-.-.-.-.-.-.-.-.-.-.
@@ -393,21 +385,15 @@ contains
         call urfchief
         call cpu_time(t_urf2) !-.-.-.-.-.-.-.-.-.-.-.-.-.
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,*) 'tdchief after urfchief'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 !       Set up netcdf store of rf data.
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         if (netcdfnm.ne."disabled" .and. n.eq.0) then
            do krf=1,mrf !YuP:04-2010: Separate data file for each wave type krf
@@ -416,9 +402,7 @@ contains
            enddo
         endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
         call cpu_time(t_urf3) !-.-.-.-.-.-.-.-.-.-.-.-.-.
         !YuP[03-2016] Repeat plotting surfaces, but now - with rays
@@ -636,9 +620,7 @@ contains
 
       call cpu_time(t_before_soln) !-.-.-.-.-.-.-.-.-.-.-.-.-.
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !     Copy current distribution f into f_
@@ -681,17 +663,13 @@ contains
 !BH131107 Moved the ll=1,ilend reversal to above if(ampfmod.eq.enabled..
 !.......................................................................
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f befor achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       do 1 ll=1,ilend   !ilend=setup0%lrz for setup0%cqlpmod.ne.'enabled'
         !determine local variables depending on flux surface (l_,iy,..)
@@ -741,7 +719,6 @@ contains
 !......................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(soln_method.eq.'direct' .and. setup0%lrzmax.gt.1) then
          ! Parallelization for the impavnc0 solver is limited
          ! for soln_method='direct' (for now)
@@ -759,7 +736,6 @@ contains
       !if(mpirank.eq.mpiworker) then
       !  write(*,*)'n,n_(ll),ll=',n,n_(ll),ll,' mpiworker=',mpiworker
       !endif
-!MPI <<<
 #endif
 !    It will insert :
 !      if(soln_method.eq.'direct' .and. setup0%lrzmax.gt.1) then
@@ -776,16 +752,15 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(soln_method.eq.'direct' .and. setup0%lrzmax.gt.1) then
-      ! Parallelization for the impavnc0 solver is limited
-      ! for soln_method='direct' (for now)
-      if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
-         call send_data ! send or recv data on f and coll.coeffs.
-      endif
+         ! Parallelization for the impavnc0 solver is limited
+         ! for soln_method='direct' (for now)
+         !if(mpirank.eq.0) f=0. ! this seems to help
+         if(mpirank.eq.0.or.mpirank.eq.mpiworker) then
+            call send_data ! send or recv data on f and coll.coeffs.
+         endif
       endif
 
-!MPI <<<
 #endif
 !     It will send or recv data, but only in case of
 !     soln_method='direct' (for now)
@@ -793,31 +768,24 @@ contains
  1    continue ! End loop over radius:  New f is obtained for each ll
 
 #ifdef __MPI
-!MPI >>>
+      call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
+#endif
+
+#ifdef __MPI
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f after achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
+
 #ifdef __MPI
-!MPI >>>
-      call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
-#endif
-#ifdef __MPI
-!MPI >>>
       call MPI_BCAST(f,iyjx2*ngen*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(cal,iyjx*ngen*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(cbl,iyjx*ngen*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(ccl,iyjx*ngen*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
@@ -826,17 +794,12 @@ contains
       call MPI_BCAST(cfl,iyjx*ngen*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(eal,iyjx*ngen*2*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(ebl,iyjx*ngen*2*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(scal,iyjx*ngen*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(velsou,iyjx2*ngen*lrors,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
       call cpu_time(t_after_soln) !-.-.-.-.-.-.-.-.-.-.-.-.-.
 
@@ -865,17 +828,13 @@ contains
         enddo ! k
       enddo ! ll
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f rescaled.      n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       call cpu_time(t_after_diag1) !-.-.-.-.-.-.-.-.-.-.-.-.-.
@@ -924,9 +883,7 @@ contains
  21   continue
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !     Accumulate favg time average, if tavg.ne."disabled"
@@ -960,9 +917,7 @@ contains
            if(sumdtr.lt.em90)then
              ! YuP[03-01-2016] fix added for sumdtr=0 case
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
            WRITE(*,*)'tdchief WARNING: No time averaging of f was done'
            WRITE(*,*)'tdchief WARNING: Probably t=nstop*dtr is less'
@@ -971,9 +926,7 @@ contains
            WRITE(*,*)'tdchief WARNING: the last available f() will be'
            WRITE(*,*)'tdchief WARNING: saved into setup0%mnemonic.nc file. '
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
              do ll=1,ilend
              do k=1,ngen
@@ -1021,9 +974,7 @@ contains
       enddo ! ll
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 !......................................................................
@@ -1275,9 +1226,7 @@ contains
 !     write netCDF output file, if netcdfnm.ne."disabled"
 !.......................................................................
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       if (netcdfnm.ne."disabled" .and. nstop.ne.0) then
          if (netcdfshort.eq.'lngshrtf') then
@@ -1297,9 +1246,7 @@ contains
          endif
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 !.......................................................................
 !     re-write ray data at last step, if urfmod & urfwrray="enabled"
@@ -1327,14 +1274,10 @@ contains
 !.......................................................................
       call cpu_time(t_end) !-.-.-.-.-.-.-.-.-.-.-.-.-.
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,'(a,f10.3,a,f10.3,a,f10.3)') &
                       'TDCHIEF: tcpu_urfchief=',t_urf2-t_urf1, &
@@ -1349,17 +1292,13 @@ contains
                                 '     tcpu(sec.)==',  t_end-t_n_start
          WRITE(*,'(/)')
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
-      call tdtloop
+      call tdtloop(nml_file)
 
       if (n .lt. nstop) go to 10 !-> next time step
 
@@ -1378,7 +1317,6 @@ contains
       end subroutine tdchief
 
 #ifdef __MPI
-!MPI >>>
       subroutine send_data  !used in tdchief.f90 (only)
       use param_mod
       use cqlcomm_mod
@@ -1442,7 +1380,6 @@ contains
       endif
       return
       end subroutine send_data
-!MPI <<<
 #endif
 
 end module tdchief_mod

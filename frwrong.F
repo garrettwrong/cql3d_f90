@@ -5,16 +5,12 @@ c
       use cqlcomm_mod
       implicit integer (i-n), real*8 (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 ! print error messages - on mpirank.eq.0 only
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       if (kerr.eq.1 .or. kerr.eq.2) then
         WRITE(*,10010)
@@ -28,9 +24,7 @@ c
         WRITE(*,10990)
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 10010 format("kspeci not properly input for use with fr-module")

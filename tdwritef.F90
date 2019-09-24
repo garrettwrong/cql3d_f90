@@ -25,16 +25,12 @@ contains
       include 'frname_decl.h'
       include 'frname.h'
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 !.......................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
       iunwrif=19
@@ -58,9 +54,7 @@ contains
  101    continue
         enddo
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,*) &
         'tdwritef[nlwritf.ne."ncdfdist"]:Writing data into distrfunc.nc'
@@ -69,9 +63,7 @@ contains
         WRITE(*,*)'tdwritef_44: For checkup SUM(totcurz),SUM(rovs)=', &
          SUM(totcurz),SUM(rovs)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       else
@@ -114,17 +106,13 @@ contains
       if (setup0%nlwritf.ne."ncdfdist") then
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*) &
            'tdwritef[nlwritf.ne."ncdfdist"]:Writing f into distrfunc.nc'
          WRITE(*,*)'tdwritef_83: For checkup SUM(f)=', SUM(f)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 !BH050328:  Problem with reading the given format with index
 !BH050328:  numbers .lt.1.e-99
@@ -139,15 +127,11 @@ contains
  221    continue
  220    continue
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'tdwritef_98: For checkup SUM(f)=', SUM(f)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       endif ! nlwritf.ne."ncdfdist"

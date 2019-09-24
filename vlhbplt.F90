@@ -23,9 +23,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 pltvlhb
@@ -37,9 +35,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -56,7 +52,9 @@ contains
               temp1(i,j)=cqlb(i,j,indxlr_,k)
  562        continue
  561      continue
+#ifndef NOPGPLOT
           CALL PGPAGE
+#endif
           itype=6 ! means: plots are made for vlhb
           call pltcont(1,1,'Contours of CqlB vs. v_parallel,v_perp', &
                        itype)
@@ -64,7 +62,9 @@ contains
 !$$$          call gscpvs(.15,.35)
           write(t_,552) lr_
  552      format(" Flux surface number",i3,";   all modes")
+#ifndef NOPGPLOT
           CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
 
  560    continue
 
@@ -104,15 +104,21 @@ contains
            enddo
         enddo
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
         itype=6 ! means: plots are made for vlhb
         call pltcont(1,1,'Contours of CqlB vs. v_parallel,v_perp',itype)
 !$$$        call gstxno(80.)
 !$$$        call gscpvs(.15,.35)
         write(t_,660) lr_,k
+#ifndef NOPGPLOT
         CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
         write(t_,661) vpar21dv,vpar11dv
+#ifndef NOPGPLOT
         CALL PGMTXT('B',11.,0.,0.,t_)
+#endif
 
  680  continue
  660  format("Flux surface number",i3," mode=",i1)

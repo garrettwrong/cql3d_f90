@@ -64,9 +64,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character cptline*80
@@ -123,10 +121,8 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then
 
-!MPI <<<
 #endif
 !..................................................
 !     generate collisional F.P. coefficients...
@@ -137,9 +133,7 @@ contains
 !..................................................................
       if (implct .eq. "enabled") call impavnc0(kopt)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !...........................................................
@@ -179,19 +173,15 @@ contains
 
 ! For ZOW, parallelization (in lr) is done here.
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then
 
-!MPI <<<
 #endif
           !collisional F.P. coefficients:
           call cfpcoefc ! time-consuming calculations
           !call implicit time advancement:
           if (implct .eq. "enabled") call impavnc0(kopt)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 !BH110309:  Restore n
 !BH110309:        n=n-1
@@ -258,7 +248,9 @@ contains
 !cc        endif
         if(n.eq.nstop) then
            call dskout(l_)
+#ifndef NOPGPLOT
            call pgend
+#endif
 !BH080106           cputime=etime(tarray)
            call cpu_time(cputime)
            write (*,*) 'achiefn/setup0%lrzmax=1: CPU time (seconds)', cputime

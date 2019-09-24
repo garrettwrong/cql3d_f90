@@ -108,9 +108,13 @@ contains
 
       call GXGLFR(0) ! new page
       call GSVP2D(.2,.8,.6,.9)
+#ifndef NOPGPLOT
       CALL PGSCH(1.) ! set character size; default is 1.
+#endif
       call GSWD2D("linlin$",xpar(1),xpar(jpxy),xperp(1),xperp(ipxy))
+#ifndef NOPGPLOT
       call PGLAB('u/unorm_par','u/unorm_perp',' ')
+#endif
       if (k2.gt.1) then
         call GSLNST(2)
         call GSLNSZ(.2)
@@ -120,8 +124,12 @@ contains
       call GSLNSZ(.2)
       call GSLNSZ(0.)
 
+#ifndef NOPGPLOT
       CALL PGSLS(1) ! restore: solid line
+#endif
+#ifndef NOPGPLOT
       CALL PGSLW(setup0%lnwidth) ! restore linewidth
+#endif
 
       return
       end subroutine prpprctr

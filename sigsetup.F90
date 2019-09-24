@@ -23,9 +23,7 @@ contains
       implicit integer (i-n), real(c_double) (a-h,o-z)
 !
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !     Written by m.g. mccoy, revised for cql3d by bobH (dec94).
@@ -158,9 +156,7 @@ contains
 
 !.......................................................................
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'sigsetup: Fusion Reactants in four types of reactions:'
       WRITE(*,'(a,4i3)') &
@@ -175,9 +171,7 @@ contains
       WRITE(*,*)'sigsetup: indicator of calc. of reaction rates:'
       WRITE(*,'(a,4i3)')'sigsetup: isigmas(1:4)=', isigmas(1:4)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !     If there is no general species, D, T or He3,
@@ -201,18 +195,14 @@ contains
 
       if (iigenrl.eq.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)
          WRITE(*,*) 'sigsetup:  No nuclear fusion species'
          WRITE(*,*) 'sigsetup:  Setting isigmod=disabled'
          WRITE(*,*)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
          sigmamod='disabled'
       endif

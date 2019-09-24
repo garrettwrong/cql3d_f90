@@ -15,16 +15,12 @@ contains
       use param_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 ! print error messages - on mpirank.eq.0 only
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'eqwrng(kerr) stopped with kerr=',kerr
       if (kerr.eq.1) then
@@ -55,9 +51,7 @@ contains
         WRITE(*,10990)
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 10010 format("subroutine eqorbit - do loop 10 error")

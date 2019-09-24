@@ -79,12 +79,13 @@ contains
     !.....................................................................
     !     Read in driver input namelist setup
     !.....................................................................
-    call get_setup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
-    call get_trsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
-    call get_sousetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
-    call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
-    call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
-
+    if(present(nml_file)) then
+       call get_setup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
+       call get_trsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
+       call get_sousetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
+       call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
+       call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+    end if
     !..................................................................
     !     Call routine which finds electron and ion species indices.
     !..................................................................
@@ -133,9 +134,11 @@ contains
     call frinitl
 
     !NMLXXX, frsetup nml not converted yet
-    open(unit=2,file=nml_file,delim='apostrophe',status="old")
-    call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
-    close(2)
+    if(present(nml_file)) then
+       open(unit=2,file=nml_file,delim='apostrophe',status="old")
+       call frset(setup0%lrz,setup0%noplots,setup0%nmlstout)   ! Uses unit 2
+       close(2)
+    end if
 
     !..................................................................
     !     Call an initialization routine which determines flux surface
@@ -187,8 +190,12 @@ contains
 
     if (nstop.eq.0) then
        call pltmain
+#ifndef NOPGPLOT
        write(*,*) 'In ACHIEF1, before call pgend'
+#endif
+#ifndef NOPGPLOT
        call pgend
+#endif
        stop 'achief1: nstop=0'
     endif
 

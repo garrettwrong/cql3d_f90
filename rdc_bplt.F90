@@ -23,9 +23,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8 pltvlhb
@@ -36,9 +34,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -56,13 +52,17 @@ contains
             temp1(i,j)=rdcb(i,j,lr_,krf)
  562     continue
  561  continue
+#ifndef NOPGPLOT
       CALL PGPAGE
+#endif
       itype=7 ! means: plots are made for rdcb
       call pltcont(nrdcspecies(krf),1, &
            'Contours of RdcB vs. v_parallel,v_perp',7)
       write(t_,552) lr_
  552  format(" Flux surface number",i3,";   all modes, krf=",i2)
+#ifndef NOPGPLOT
       CALL PGMTXT('B',10.,0.,0.,t_)
+#endif
 
 !$$$  560    continue
 

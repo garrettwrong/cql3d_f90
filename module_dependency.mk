@@ -146,7 +146,7 @@ micxinim.$(oext): cqlcomm.$(oext) param.$(oext)
 micxinit.$(oext): cqlcomm.$(oext) diagwrng.$(oext) micgetr.$(oext) param.$(oext) tdtry.$(oext) zcunix.$(oext)
 micxiniz.$(oext): cqlcomm.$(oext) diagwrng.$(oext) micgetr.$(oext) param.$(oext) psif.$(oext) tdxin13d.$(oext)  \
 	zcunix.$(oext)
-mpilib.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
+cql3d_mpilib.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
 netcdfrf.$(oext): bcast.$(oext) cqlcomm.$(oext) pack21.$(oext) param.$(oext)
 netcdfrw2.$(oext): advnce.$(oext) bcast.$(oext) coeffpad.$(oext) coefmidt.$(oext) coefstup.$(oext)  \
 	cqlcomm.$(oext) diagentr.$(oext) param.$(oext) prppr.$(oext) r8subs.$(oext) tdfinterp.$(oext) zcunix.$(oext)

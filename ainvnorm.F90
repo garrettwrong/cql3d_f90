@@ -28,9 +28,7 @@ contains
 !.....................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 
@@ -49,18 +47,14 @@ contains
         xmdl=1.
         xpctmdl=.35
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(*,*)' WARNING/ainvnorm: For tandem=enabled, &
          xfac,xlwr,xpctlwr,xmdl,xpctmdl are reset'
         WRITE(*,*)' ainvnorm: xfac,xlwr,xpctlwr,xmdl,xpctmdl=', &
                               xfac,xlwr,xpctlwr,xmdl,xpctmdl
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       elseif((kenorm.ge.1).and.(kenorm.le.ngen).and.(enorm.gt.0.)) then

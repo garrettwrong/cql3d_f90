@@ -20,9 +20,7 @@ contains
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !dir$ nobounds
@@ -1191,17 +1189,13 @@ contains
 !     Check that allocations were OK
       if (istat_tot.ne.0) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'ainalloc.f:  Problem with allocation'
          WRITE(*,*)'ainalloc.f:  Reduce param.h paramaters?'
          WRITE(*,*)'ainalloc.f:  Stopping'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
          STOP
       endif

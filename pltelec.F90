@@ -38,8 +38,12 @@ contains
 !$$$      call gsvp2d(.2,.8,.25,.95)
 !$$$      call gpgr80("linlin$")
 
+#ifndef NOPGPLOT
       CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
       CALL PGSVP(.2,.8,.45,.95)
+#endif
 
       DO L=1,LZ
          RTAM1(L)=pol(L,lr_)
@@ -51,7 +55,9 @@ contains
       IF ( RPGMAX-RPGMIN .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPGMAX= RPGMIN+1.e-16
       ENDIF
+#ifndef NOPGPLOT
       CALL PGSWIN(RTAM1(1),RTAM1(LZ),RPGMIN,RPGMAX)
+#endif
 
 !$$$      do 3001 l=1,lz
 !$$$        tz1(l)=densz(l,ngen+1,negyrg,lr_)
@@ -61,7 +67,9 @@ contains
       do 3001 l=1,lz
          RTAM2(L)=densz(l,ngen+1,negyrg,lr_)
  3001 continue
+#ifndef NOPGPLOT
       CALL PGLINE(LZ,RTAM1,RTAM2)
+#endif
 
  3002 continue
 !$$$      call gscvlb(0)
@@ -71,13 +79,19 @@ contains
 !$$$      write(t_,610) kelec,n,timet,xlndnz(ngen+1,negyrg)
 !$$$      call gptx2d(t_)
       RILIN=1.
+#ifndef NOPGPLOT
       CALL PGMTXT(B,RILIN,0.,0.,T_)
+#endif
       write(t_,611) kelec,n,timet
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT(B,RILIN,0.,0.,T_)
+#endif
       write(t_,612) xlndnz(ngen+1,negyrg)
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT(B,RILIN,0.,0.,T_)
+#endif
  610  format("Density as a function of poloidal angle(=pi*z/zmax)")
  611  format("species ",i3, " (electrons)   n= ",i5,"  time= ",1pe14.4)
  612  format("density (line-integration) =",1pe16.5)

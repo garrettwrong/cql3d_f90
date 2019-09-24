@@ -299,15 +299,11 @@ contains
 
         nprim=nspc
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
         WRITE(6,'(/A/)') ' WARNING: nimp not defined in comm.h'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
          nion=nprim+nimp
       else if (eqsource.eq."eqdsk" .or. eqsource.eq."topeol") then
@@ -414,15 +410,11 @@ contains
       endif
       if (partner.ne."selene") then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'tdeqdsk: work reqd to write xcontr,ycontr,xlimiter,ylimiter'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 !        write(17,221) ncontr,nlimiter
 !        if (ncontr.ne.0) then

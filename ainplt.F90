@@ -25,9 +25,7 @@ contains
 !....................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*300 line, line_
@@ -38,9 +36,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -66,25 +62,39 @@ contains
 !BH111102         text24='setup0%special_calls.ne.enabled'
 !BH111102      endif
 
+#ifndef NOPGPLOT
       CALL PGPAGE
+#endif
       write(t_,2001)
       RILIN=0.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       write(t_,2002)
       RILIN=RILIN+2.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       write(t_,2003)
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       write(t_,2004)
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       write(t_,2005)
       RILIN=RILIN+1.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       write(t_,2006) text24
       RILIN=RILIN+2.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 
 !     Get, write, and plot machine characteristics
 !     by writing a file, reading it, and removing.
@@ -155,37 +165,55 @@ contains
 
       write(t_,2007)
       RILIN=RILIN+2.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 !      write(line_,1002) line
 !      RILIN=RILIN+1.
+#ifndef NOPGPLOT
 !      CALL PGMTXT('T',-RILIN,0.,0.,line_)
+#endif
       do i=1,(lenmac/60+1)
          write(line_,1004) line(1+(i-1)*60:i*60)
          RILIN=RILIN+1.
+#ifndef NOPGPLOT
          CALL PGMTXT('T',-RILIN,0.,0.,line_)
+#endif
       enddo
       write(t_,2008)
       RILIN=RILIN+2.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       do i=1,(lenpwd/60+1)
          write(text256_,1004) text256(1+(i-1)*60:i*60)
          RILIN=RILIN+1.
+#ifndef NOPGPLOT
          CALL PGMTXT('T',-RILIN,0.,0.,text256_)
+#endif
       enddo
       write(line,2009) trim(version)
       RILIN=RILIN+2.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,line)
+#endif
 
 !     PGQINF('VERSION', enquires pgplot version being used.
+#ifndef NOPGPLOT
       CALL PGQINF('VERSION',t_,ilength)
+#endif
       if (ilength.gt.100) stop 'unlikely ilength problem in ainplt'
       write(line,2010) t_(1:ilength)
       RILIN=RILIN+2.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,line)
+#endif
 
       WRITE(*,*) line
 !
+#ifndef NOPGPLOT
       CALL PGPAGE
+#endif
 
 
  2001 format("OUTPUT FROM THE FOKKER-PLANCK CODE CQL3D.")
@@ -229,7 +257,9 @@ contains
         ! will be printed at the new page, so it will take iend lines.
         n_count=iend !!1 ! restart counting from new page
         RILIN=-1.
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
       endif
       !The "wrapping" procedure:
       do i=1,iend
@@ -241,12 +271,16 @@ contains
          !i=5: line(241: 300)  [max possible i, with present setup]
          !Note -- it is declared: character*300 line, line_
          RILIN=RILIN+1. !shift the text position down by one character height
+#ifndef NOPGPLOT
          CALL PGMTXT('T',-RILIN,0.,0.,line_)
+#endif
       enddo
       !YuP: old version, without wrapping:
       !write(line_,1002) line
       !RILIN=RILIN+1.
+#ifndef NOPGPLOT
       !CALL PGMTXT('T',-RILIN,0.,0.,line_)
+#endif
       go to 1 ! back to next line
  3    close(unit=iunit)
 

@@ -21,9 +21,7 @@ contains
 !................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !      integer pgbeg
@@ -33,9 +31,7 @@ contains
       CHARACTER*16 PG_VAL ! YuP
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -48,6 +44,7 @@ contains
       write(t_,1000) setup0%mnemonic(1:length_char(setup0%mnemonic))
  1000 format(a,".ps/VCPS") !YuP: was /VPS (vertical black&white)
                            ! Use /VCPS for vertical Color pages
+#ifndef NOPGPLOT
       ier=PGOPEN(t_)
       CALL PGSCI(1)
       CALL PGSLW(setup0%lnwidth)
@@ -86,7 +83,6 @@ contains
       WRITE (*,*) 'PGPLOT user: ', PG_VAL(1:PG_L)
       CALL PGQINF('NOW', PG_VAL, PG_L)
       WRITE (*,*) 'PGPLOT time now: ', PG_VAL(1:PG_L)
-
       !Inquire color index range:
       CALL PGQCIR(PG_C1, PG_C2)
       PG_NC = MAX(0, PG_C2-PG_C1+1)
@@ -98,6 +94,7 @@ contains
       ELSE
          WRITE (*,*)
       END IF
+#endif
 
       return
       end subroutine pltinit

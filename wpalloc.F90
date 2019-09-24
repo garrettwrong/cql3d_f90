@@ -25,9 +25,7 @@ contains
 !..............................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 !.......................................................................
 
@@ -36,15 +34,11 @@ contains
 !     the subroutine.
 !..................................................................
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'wpalloc:  Entering wpalloc'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       ! YuP-101220: allocation of wcqlb-wcqlf is moved to vlf.f
@@ -74,6 +68,8 @@ contains
       call bcast(fnp1,zero,SIZE(fnp1))
       allocate(dls(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
       call bcast(dls,zero,SIZE(dls))
+      allocate(fg(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
+      call bcast(fg,zero,SIZE(fg))
       allocate(fh(0:iy+1,0:jx+1,ngen,0:ls+1),STAT=istat)
       call bcast(fh,zero,SIZE(fh))
 
@@ -87,15 +83,11 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,*)'wpalloc:  Leaving wpalloc'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
       return

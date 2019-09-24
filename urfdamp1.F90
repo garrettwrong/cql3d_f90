@@ -36,9 +36,7 @@ contains
 !.......................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       complex*16 cwz,cwxyp,cwxym,cei
@@ -103,7 +101,6 @@ contains
       do 10 iray=nray0,nray(krf)
         ipwr=0 ! For MPI: initialize
 #ifdef __MPI
-!MPI >>>
          iraykrf= iray + nrayn*(krf-1)
          if(mpisize.gt.1) then
             mpiworker= MOD(iraykrf-1,mpisize-1)+1
@@ -114,13 +111,10 @@ contains
       !if(mpirank.eq.mpiworker) then
       !PRINT *,'n,iray,krf,mpiworker=',n,iray,krf,mpiworker
       !endif
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then
 
-!MPI <<<
 #endif
         prf_ray_sum=0.d0 !For print-out only: sum of prf_rayel over rayel
 
@@ -420,23 +414,18 @@ contains
  20     continue ! do is=1,nrayelt(iray,krf)
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       if(prf_ray_sum.gt.0.1)then
       WRITE(*,'(a,3i4,e12.4)')'URFDAMP1: n,iray,krf, prf_ray_sum=', &
                            n,iray,krf, prf_ray_sum
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 
 #ifdef __MPI
-!MPI >>>
          !PRINT*,'SEND_urfpwr: mpirank,krf,iray=',mpirank,krf,iray
          ! Count number of elements for this ray
          irayis=0
@@ -462,15 +451,11 @@ contains
          !PRINT*,'SEND_urfpwr: krf,iray,mpirank=',krf,iray,mpirank
       !-----------------------------------------------------------
 
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then !-------------------------------------------
          !PRINT*,'recv_urfpwr: mpirank,krf,iray=',mpirank,krf,iray
          call MPI_RECV(ipwr,nrayelts,MPI_INTEGER1,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
@@ -496,7 +481,6 @@ contains
          !                    mpikrf,mpiray,mpisz
       endif !-----------------------------------------------------------
 
-!MPI <<<
 #endif
  10   continue ! do iray=nray0,nray(krf)
 

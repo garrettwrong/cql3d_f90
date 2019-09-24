@@ -6,6 +6,7 @@ module urfb0_mod
   use r8subs_mod, only : dcopy
   use bcast_mod, only : bcast
   use tdnflxs_mod, only : tdnflxs
+  use cqlconf_mod, only : setup0
 
   !use urfpackm_mod, only : unpack
   !use urfpackm_mod, only : unpack16
@@ -36,9 +37,7 @@ contains
 !c..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       allocatable :: urfbwk(:) ! local working array, for MPI
@@ -82,20 +81,13 @@ contains
 !..................................................................
       do 500 krf=1,mrfn
 #ifdef __MPI
-!MPI >>>
          if(mpisize.gt.1) then
             mpiworker= MOD(krf-1,mpisize-1)+1
          else
             PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
-!MPI <<<
-#endif
-#ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then
-
-!MPI <<<
 #endif
 
 !       k is general species to which this krf mode is to be applied:
@@ -109,7 +101,6 @@ contains
 !..................................................................
 !     Set indicators of electrons or ions
 !..................................................................
-
 !BH080920      if (kionn.eq.1) then
          if (kiongg(k).eq.k) then
             signi=1.0
@@ -136,7 +127,6 @@ contains
 !     nrayelt0 contains lengths of ray in which significant power
 !     remains (determined in urfdamp0).
 !..................................................................
-
             do 20 is=1,nrayelt0(iray,krf)
 !ccYuP110222   Removing this if statement, all ray elements are treated
 !cc            with one call to urfb0, rather than ouside loop over radius.
@@ -404,15 +394,11 @@ contains
  10     continue ! iray=1,nray(krf)
 
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
-#endif
-#ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then !-------------------------------------------
         mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
         mpisz3=2*mpisz ! storage size for urfb,urfc
+!call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
         call MPI_RECV(urfbwk, mpisz3+2*setup0%lrz,MPI_DOUBLE_PRECISION,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,mpistatus,mpiierr)
         mpitag=mpistatus(MPI_TAG)
         mpikrf=mpitag ! determine which krf wave mode
@@ -428,15 +414,11 @@ contains
         enddo
         enddo ! ll
       endif !-----------------------------------------------------------
-
-!MPI <<<
-#endif
-#ifdef __MPI
-!MPI >>>
       if(mpirank.eq.mpiworker) then !-----------------------------------
-        mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
-        call dcopy(mpisz,urfb(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
-        call dcopy(mpisz,urfc(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(1*mpisz+1),1) ! 1*mpisz+1 : 2*mpisz
+         mpisz=iyjx*setup0%lrz ! number of elements in urfb(i,j,lr)
+         call dcopy(mpisz,urfb(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(0*mpisz+1),1) !         1 : mpisz
+         ! ! dcopy is the debbil
+         call dcopy(mpisz,urfc(1:iy,1:jx,1:setup0%lrz,krf),1,urfbwk(1*mpisz+1),1) ! 1*mpisz+1 : 2*mpisz
         ! urfb and urfc are dimensioned as (1:iy,1:jx,1:setup0%lrz,1:mrfn)
         mpisz3=2*mpisz ! the last elem. in above
         urfbwk(mpisz3+0*setup0%lrz+1 : mpisz3+1*setup0%lrz) = powrfl(1:setup0%lrz,krf) !linear damp.
@@ -444,24 +426,23 @@ contains
         mpitag= krf ! wave-mode
         call MPI_SEND(urfbwk,mpisz3+2*setup0%lrz,MPI_DOUBLE_PRECISION,0,mpitag,MPI_COMM_WORLD,mpiierr)
       endif !-----------------------------------------------------------
-!MPI <<<
 #endif
 
  500  continue                  !End loop on krf=1:mrfn
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
-#endif
-#ifdef __MPI
-!MPI >>>
       call MPI_BCAST(urfb,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(urfc,iyjx*setup0%lrz*mrfn,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
 
-!MPI <<<
 #endif
-
+#ifdef __MPI
+      WRITE(*,'(a,i4,e12.3)') &
+              'urfb0/BEFORE renorm: rank sum(urfb)=', mpirank, sum(urfb)
+#else
+      WRITE(*,'(a,e12.3)') &
+           'urfb0/BEFORE renorm: sum(urfb)=', sum(urfb)
+#endif
 
       ! Renormalize urf* coeffs.
       do krf=1,mrfn
@@ -524,34 +505,25 @@ contains
                !YuP[03/18/2015] urfe,urff are expressed through urfb,urfc
                !No need to save into (large) arrays.
                !..................................................................
-               !sum_test= sum_test +urfb(i,j,indxlr_,krf)*sum_test_ren
+               sum_test= sum_test +urfb(i,j,indxlr_,krf)
  55         continue    ! i
          enddo          ! j
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
-!      WRITE(*,'(a,2i5,e12.3)')'sum_test for urfb0:', ll,krf,sum_test
+      WRITE(*,'(a,2i5,e12.3)')'sum_test for urfb0:', ll,krf,sum_test
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
       enddo             ! ll=1,setup0%lrz
       enddo             ! krf=1,mrfn
 
 #ifdef __MPI
-!MPI >>>
-      if(mpirank.eq.0) then
-!MPI <<<
-#endif
+      WRITE(*,'(a,i4,e12.3)') &
+              'urfb0/AFTER renorm: rank sum(urfb)=', mpirank, sum(urfb)
+#else
       WRITE(*,'(a,e12.3)') &
-       'urfb0/AFTER renorm: sum(urfb)=', sum(urfb)
-#ifdef __MPI
-!MPI >>>
-      endif  ! for if(mpirank.eq.***)
-!MPI <<<
+           'urfb0/AFTER renorm: sum(urfb)=', sum(urfb)
 #endif
 
 

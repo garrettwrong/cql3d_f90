@@ -17,13 +17,14 @@ module tdtloop_mod
 
 contains
 
-  subroutine tdtloop
+  subroutine tdtloop(nml_file)
     use cqlconf_mod, only : setup0
       use param_mod
       use cqlcomm_mod
       use tdeqdsk_mod, only : tdeqdsk
       use aindfpa_mod, only : ainadjnl_fsetup_setup0, ainadjnl
       implicit integer (i-n), real(c_double) (a-h,o-z)
+      character(len=*), intent(in), optional :: nml_file
       save
 
 !..................................................................
@@ -31,9 +32,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character cptline*80
@@ -49,19 +48,17 @@ contains
       call tdeqdsk
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       ! make plots on mpirank.eq.0 only
       if (setup0%noplots.ne."enabled1") then
+#ifndef NOPGPLOT
          call pgclos  ! PGCLOS
+#endif
          PRINT *,'PGPLOT CLOSED at time step n=',n
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !..................................................................
@@ -84,38 +81,28 @@ contains
       if (setup0%nlwritf.ne."disabled") call tdwritef
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
-         call ainadjnl(1)
+         if(present(nml_file)) call ainadjnl(1, nml_file)
          !restore cqlinput if &FSETUP was renamed to &SETUP0 (earlier)
-         call ainadjnl_fsetup_setup0(1)
+         if(present(nml_file)) call ainadjnl_fsetup_setup0(1, nml_file)
          !pause
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
       call cpu_time(cputime)
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       PRINT *, 'tdtloop: >>> END OF CQL3D PROGRAM <<<'
       PRINT *, 'tdtloop: Execution time (seconds)', cputime
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 

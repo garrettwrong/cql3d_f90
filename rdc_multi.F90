@@ -26,9 +26,7 @@ contains
     save
 !
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
     !     Pointers for dynamic memory allocation, local usage:
@@ -86,9 +84,7 @@ contains
        IF(rdcmod.eq.'format1'  .or.  rdcmod.eq.'aorsa') THEN
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 
           iunit=14
@@ -109,24 +105,18 @@ contains
           ! to = max upar.
           ! min uprp=0.
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(n_uprp,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(n_upar,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(n_psi,1, MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(vc_cgs,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(upar_min,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(upar_max,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
           uprp_min=0.d0
@@ -198,9 +188,7 @@ contains
 !     Read in the grids and diffusion coeffs:
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 !     Normalized radius rho_a, uprp, upar (normalized to input vc_cgs)
       read (iunit, 3310) (rho_a(i_psi), i_psi = 1, n_psi)
@@ -228,17 +216,12 @@ contains
 
       close(iunit)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(rho_a,n_psi,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(uprp,n_uprp,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(upar,n_upar,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
@@ -246,7 +229,6 @@ contains
       call MPI_BCAST(rdc_cqlc,n_uprp*n_upar*n_psi,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(rdc_cqle,n_uprp*n_upar*n_psi,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(rdc_cqlf,n_uprp*n_upar*n_psi,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
       !.......................................................................
@@ -259,9 +241,7 @@ contains
       !-1-> READ general parameters for grid, min/max, etc. ------------------
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       iunit=14
       open(unit=iunit,file='du0u0_grid',status='old',iostat=kode)
@@ -281,24 +261,18 @@ contains
                                             ! min uprp=0.
       close(iunit)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(n_uprp,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(n_upar,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(n_psi,1, MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(vc_cgs,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(upar_min,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(upar_max,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
       uprp_min=0.d0
@@ -362,9 +336,7 @@ contains
       call bcast(tmpf,zero,SIZE(tmpf))
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       iunit=14
 !-3-> READ data for diff.coeffs from separate files --------------------
@@ -406,17 +378,12 @@ contains
       close(iunit)
 
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(rho_a,n_psi,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(uprp,n_uprp,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(upar,n_upar,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
@@ -424,7 +391,6 @@ contains
       call MPI_BCAST(rdc_cqlc,n_uprp*n_upar*n_psi,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(rdc_cqle,n_uprp*n_upar*n_psi,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(rdc_cqlf,n_uprp*n_upar*n_psi,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
       !-----------------------------------------------------------------------
 

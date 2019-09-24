@@ -2492,9 +2492,9 @@ module cqlcomm_mod
   !common /dptr95/ fnp1
   real(c_double), pointer :: dls(:,:,:,:)
   !common /dptr95/ dls
-  real(c_double), pointer :: fh(:,:,:,:)
+  real(c_double), pointer :: fh(:,:,:,:)=>null()
   !common /dptr95/ fh
-  real(c_double), pointer :: fg(:,:,:,:)
+  real(c_double), pointer :: fg(:,:,:,:)=>null()
   !common /dptr95/ fg
   real(c_double), pointer :: fedge(:,:,:,:)
   !common /dptr95/ fedge
@@ -3238,7 +3238,16 @@ contains
     call initialize_tr_pointers
     call initialize_sou_pointers
     call initialize_setup_pointers
+    allocate(fg(0:iy+1,0:jx+1,1,1:setup0%lrz))
+    fg = 0.
+    allocate(fh(0:iy+1,0:jx+1,1,1:setup0%lrz))
+    fh = 0.
     initialized_cqlcomm = .TRUE.
   end subroutine initialize_cqlcomm
+
+  function is_initialized_cqlcomm()
+    logical :: is_initialized_cqlcomm
+    is_initialized_cqlcomm = initialized_cqlcomm
+  end function is_initialized_cqlcomm
 
 end module cqlcomm_mod

@@ -33,7 +33,9 @@ contains
       do 100 k=1,ngen
         if (colmodl.eq.4 .and. k.eq.ngen) goto 100
 !$$$        call gxglfr(0)
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
         emin=ep90
         emax=-em90
         do 192 lu=-1,11
@@ -49,7 +51,9 @@ contains
  192    continue
         emax=emax+.05*(abs(emax))
         emin=emin-.05*(abs(emin))
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.4,.95)
+#endif
         DO I=1,NCH(L_)
            RNONCHA1(I)=ptime(i,l_)
         ENDDO
@@ -58,88 +62,132 @@ contains
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RNONCHA1(1),RNONCHA1(NCH(L_)),RPG1,RPG2)
+#endif
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+#endif
+#ifndef NOPGPLOT
         CALL PGLAB('Time (sec)','Power Den (W/cm\u3\d)',' ')
+#endif
         ! Note: pentr(nch(l_),k,is,l_)=entr(k,is,l_)
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,4,l_) !total - sum of all power sources
         ENDDO
+#ifndef NOPGPLOT
         CALL PGSLS(1) ! 1-> solid
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,9,l_) !Power computed from df/dt.
         ENDDO                          !Should equal entr(k,4,l_).
+#ifndef NOPGPLOT
         CALL PGSLS(2) ! 2-> dashed
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,3,l_) !RF - radio frequency heating
         ENDDO
+#ifndef NOPGPLOT
         CALL PGSLS(3) ! 3-> -.-.-
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,2,l_) !ohmic - electric field term
         ENDDO
+#ifndef NOPGPLOT
         CALL PGSLS(4) ! 4-> .....
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,1,l_) !collisional transfer from gens.
         ENDDO
+#ifndef NOPGPLOT
         CALL PGSLS(1) ! 1-> solid
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,5,l_) !particle sources
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,6,l_) !loss-lossmode
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,7,l_) !losses-torloss
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,-1,l_) !collisional transfer from Maxw. elec.
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,0,l_) !collisional transfer from Maxw. ions
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,8,l_) !losses due to runaway
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,10,l_) !setting neg f to zero
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
 
         if (k .ne. kelecg .or. syncrad .eq. "disabled") go to 300
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,11,l_) !synchrotron rad losses
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
  300    continue
 
         if(tauegy(k,lr_).gt.0.)  then
         DO I=1,NCH(L_)
            RNONCHA2(I)=pentr(i,k,12,l_) !phenomenological energy losses
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(nch(l_),RNONCHA1,RNONCHA2)
+#endif
         endif
 
 !$$$ 200    format("COMPONENT BY COMPONENT POWER FLOW: SPECIES",i2,";",
@@ -158,44 +206,70 @@ contains
         RILIN=4.
         write(t_,210) k ! Gen. species number
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,211) entr(k,4,l_),entr(k,9,l_) !sum over all components
                                         !and from df/dt (should be same)
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,212) entr(k,-1,l_) !collisional transfer from Maxwellian elec.
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,213) entr(k,0,l_)  !collisional transfer from Maxwellian ions
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,214) entr(k,1,l_)  !collisional transfer from gens.
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,215) entr(k,2,l_)  !ohmic drive
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,216) entr(k,3,l_)  !RF drive
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,217) entr(k,5,l_)  !particle sources
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,218) entr(k,6,l_),entr(k,7,l_) !loss-lossmode;losses-torloss
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,219) entr(k,8,l_)  !losses due to runaway
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,220) entr(k,10,l_) !setting neg f to zero
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,221) entr(k,11,l_) !synchrotron rad losses
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
         write(t_,222) entr(k,12,l_) !phenomenological energy losses
         RILIN=RILIN+1.
+#ifndef NOPGPLOT
         CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
  210    format("Species k=",i2, "    Final powers in Watts/cc are:")
  211    format("sum over all comp=",1pe10.2, 3x, &

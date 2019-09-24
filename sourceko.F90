@@ -43,9 +43,7 @@ contains
 !.......................................................................
 !      save
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 !      The ii0m1 method is an alternative translation from
@@ -512,7 +510,9 @@ contains
          close(unit=iunit)
          call tdoutput(2)
 !990307         call geglxx(0)
+#ifndef NOPGPLOT
          call pgend
+#endif
          stop 'Wrote disk file from subroutine souceko: fpld_dsk'
       endif
       if (knockon.eq."fpld_ds1") then
@@ -537,7 +537,9 @@ contains
          close(unit=iunit)
          call tdoutput(2)
 !990307         call geglxx(0)
+#ifndef NOPGPLOT
          call pgend
+#endif
          stop 'Wrote disk files from subroutine souceko: fpld_dskx'
       endif
       endif

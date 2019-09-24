@@ -24,34 +24,34 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       ! make plots on mpirank.eq.0 only
       if (setup0%noplots.ne."enabled1") then
       write(t_,1000)
  1000 format("Urf (lower hybrid, fast wave, ech, ebw...) parameters:")
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-7.,0.,0.,t_)
+#endif
 
 !      write(t_,1001) nrayn,nrayelts
  1001 format("====>NRAYn =",i5,"     ====>NRAYELTs = ",i5)
+#ifndef NOPGPLOT
 !      CALL PGMTXT('T',-8.,0.,0.,t_)
+#endif
 
       write(t_,1002) nmodsa
  1002 format("====>NMODSA = ", i3)
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-9.,0.,0.,t_)
+#endif
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !..................................................................

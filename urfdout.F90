@@ -23,9 +23,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*1 line(132)
@@ -35,9 +33,7 @@ contains
       data ifirst /0/
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
 
 !..................................................................

@@ -7,9 +7,7 @@ c
       include 'frcomm.h77'
       include 'frname.h77'
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*1024 t_
@@ -136,31 +134,33 @@ c     Reset npart, for nubeam list case
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       ! make plots on mpirank.eq.0 only
       if (noplots .ne. "enabled1") then
       write(t_,1000)
  1000 format("FR (freya beam deposition) model parameters:")
       RILIN=11.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 
       write(t_,1001)
  1001 format("npart is the number of ions launched")
       RILIN=12.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 
       write(t_,1002) npart
  1002 format("====>npart = ",i7)
       RILIN=13.
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       endif
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 

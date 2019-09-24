@@ -23,9 +23,7 @@ contains
 
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       real(c_float) RTAM1(nena),RTAM2(nena)
@@ -52,9 +50,7 @@ contains
 !      write(*,*)'tdsxrplt: softxry=',softxry
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -96,28 +92,50 @@ contains
       !write(*,*)'tdsxrplt: LOG10(fmin),LOG10(fmax)=',REMIN,REMAX
 
 
+#ifndef NOPGPLOT
       CALL PGPAGE
+#endif
+#ifndef NOPGPLOT
 !     CALL PGENV(Rtam1(1),Rtam1(nen),Remin,Remax,0,20)
+#endif
+#ifndef NOPGPLOT
       CALL PGSVP(.2,.8,.45,.9)
+#endif
+#ifndef NOPGPLOT
       CALL PGSWIN(Rtam1(1),Rtam1(nen),Remin,Remax)
+#endif
+#ifndef NOPGPLOT
       CALL PGBOX('BCNST',0.,0,'BCNSTL',0.,0)
+#endif
+#ifndef NOPGPLOT
       CALL PGSAVE
+#endif
+#ifndef NOPGPLOT
       CALL PGSCH(1.44)
+#endif
       if (softxry.eq.'enabled') then
+#ifndef NOPGPLOT
       CALL PGLAB('Photon Energy k (keV)', &
            'd\u2\d\(0555)/dtdk (ergs/cm\u2\d-sec-ster-eV)', &
            'SXR Energy Flux versus Photon Energy')
+#endif
       else
+#ifndef NOPGPLOT
       CALL PGLAB('Particle Energy k (keV)', &
            'd\u2\dN/dtdk (#/cm\u2\d-sec-ster-eV)', &
            'NPA Flux versus Energy')
+#endif
       endif
 
+#ifndef NOPGPLOT
       CALL PGUNSA
+#endif
 
       do 200 nn=1,nv ! view lines
         if (inegsxr(nn) .le. 1) go to 200
+#ifndef NOPGPLOT
         CALL PGSLW(lnwidth) ! line thickness/width
+#endif
         DO J=1,inegsxr(nn)
            rtam2(J)=rbound(eflux(j,nn))
 !           write(*,*)'tdsxrplt.f: nn,j,eflux(j,nn),rtam2(j):',
@@ -129,10 +147,14 @@ contains
               RTAM2(j)=1.0
            endif
         ENDDO ! J=1,inegsxr(nn)
+#ifndef NOPGPLOT
         CALL PGLINE(inegsxr(nn),RTAM1,RTAM2)
+#endif
  200  continue ! nn
 
+#ifndef NOPGPLOT
        CALL PGSLW(lnwidth) ! restore line thickness/width
+#endif
 
       if (softxry.eq.'enabled') then
          write(t_,610)
@@ -142,7 +164,9 @@ contains
  610  format("total flux, enmin to enmax (ergs/cm**2-sec-ster):")
  613  format("total flux, enmin_npa to enmax_npa (#/cm**2-sec-ster):")
 
+#ifndef NOPGPLOT
       CALL PGMTXT('B',7.,-0.1,0.,t_)
+#endif
 
       do 300  nn=1,nv,2
          if (nn.eq.nv .and. ((nv/2)*2 .ne. nv)) then
@@ -150,7 +174,9 @@ contains
          else
             write(t_,611)  (efluxt(in),in=nn,nn+1)
          endif
+#ifndef NOPGPLOT
          CALL PGMTXT('B',7.5+0.5*nn,0.,0.,t_)
+#endif
  300  continue
 !$$$      do 300  nn=1,nv,4
 !$$$         if (nn.eq.nv .and. ((nv/4)*4 .ne. nv)) then
@@ -158,7 +184,9 @@ contains
 !$$$         else
 !$$$            write(t_,611)  (efluxt(in),in=nn,nn+3)
 !$$$         endif
+#ifndef NOPGPLOT
 !$$$         CALL PGMTXT('B',7.+nn,0.,0.,t_)
+#endif
 !$$$ 300  continue
  611  format(1p4e12.2)
  612  format(1pe12.2,12x)
@@ -176,9 +204,7 @@ contains
         use cqlcomm_mod, only : lorbit, solr, solz, rcontr, zcontr, lensxr
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       character*8  pltsxrvw
@@ -201,9 +227,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -211,7 +235,9 @@ contains
       if (pltsxrvw.eq."disabled") return
 
 
+#ifndef NOPGPLOT
       CALL PGPAGE
+#endif
 
       if (eqsym.ne."none") then
          ztop=2.*.5*ez(nnz)/(er(nnr)-er(1))+.05
@@ -219,23 +245,37 @@ contains
          ztop=.95
       endif
 
+#ifndef NOPGPLOT
       CALL PGSVP(.15,.85,.15,ztop)
+#endif
 
       PGER1=er(1)
       PGERNNR=er(nnr)
 !      write(*,*)'tdsxrvw: PGER1,PGERNNR=',PGER1,PGERNNR
       PGEZNNZ=ez(nnz)
+#ifndef NOPGPLOT
       CALL PGSWIN(PGER1,PGERNNR,-PGEZNNZ,PGEZNNZ)
+#endif
+#ifndef NOPGPLOT
       CALL PGWNAD(PGER1,PGERNNR,-PGEZNNZ,PGEZNNZ)
+#endif
+#ifndef NOPGPLOT
       CALL PGBOX('BCNST',0.,0,'BCNST',0.,0)
+#endif
+#ifndef NOPGPLOT
       CALL PGSLW(lnwidth) ! line thickness/width
+#endif
 
       if (softxry.eq."enabled") then
+#ifndef NOPGPLOT
          CALL PGLAB('Major radius (cms)','Vert height (cms)', &
               'Flux Surfaces and SXR Chords')
+#endif
       else  ! NPA
+#ifndef NOPGPLOT
          CALL PGLAB('Major radius (cms)','Vert height (cms)', &
               'Flux Surfaces and NPA Chords')
+#endif
       endif
 
       do 10 l=1,setup0%lrzmax
@@ -247,12 +287,16 @@ contains
               RTAB1(j)=solr(lorbit(l)+1-j,l)
               RTAB2(j)=abs(solz(lorbit(l)+1-j,l))
  20        continue
+#ifndef NOPGPLOT
            CALL PGLINE(LORBIT(L),RTAB1,RTAB2)
+#endif
            do 21 j=1,lorbit(l)
               RTAB1(j)=solr(lorbit(l)+1-j,l)
               RTAB2(j)=-abs(solz(lorbit(l)+1-j,l))
  21        continue
+#ifndef NOPGPLOT
            CALL PGLINE(LORBIT(L),RTAB1,RTAB2)
+#endif
 
         else
 !     Full flux surface contours are plotted:
@@ -266,7 +310,9 @@ contains
               RTAB1(j)=solr(lorbit(l)+1-j,l)
               RTAB2(j)=solz(lorbit(l)+1-j,l)
            enddo
+#ifndef NOPGPLOT
            CALL PGLINE(LORBIT(L),RTAB1,RTAB2)
+#endif
         endif
  10   continue
 
@@ -277,7 +323,9 @@ contains
            RTAB1(ilim)=rcontr(ilim)
            RTAB2(ilim)=zcontr(ilim)
         enddo
+#ifndef NOPGPLOT
         CALL PGLINE(ncontr_,RTAB1,RTAB2)
+#endif
       endif
 
       iistep=0
@@ -296,7 +344,9 @@ contains
 !        write(*,*) 'tdsxrvw: RRTAB1',(RRTAB1(jj),jj=1,lensxr(nn))
 !        write(*,*) 'tdsxrvw: RRTAB2',(RRTAB2(jj),jj=1,lensxr(nn))
 
+#ifndef NOPGPLOT
         CALL PGLINE(lensxr(nn),RRTAB1,RRTAB2)
+#endif
 
         iistep=iistep+lensxr(nn)
 

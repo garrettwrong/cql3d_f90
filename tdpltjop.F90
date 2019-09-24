@@ -21,9 +21,7 @@ contains
       use aminmx_mod, only : aminmx
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       REAL RILIN
@@ -44,9 +42,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.ne.0) return
-!MPI <<<
 #endif
  ! make plots on mpirank.eq.0 only
 
@@ -151,78 +147,158 @@ contains
         ,";","bs - Bootstrap current",3x,"tot - total current","$")
 
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+#endif
 
         ! FIRST PANEL: profiles vs rho
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.6,.9)
+#endif
+#ifndef NOPGPLOT
         CALL PGSAVE
+#endif
+#ifndef NOPGPLOT
         CALL PGSCH(1.44)
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('T',2.5,0.5,0.5,'CURRENT (AMPS/CM\u2\d)')
+#endif
+#ifndef NOPGPLOT
         CALL PGUNSA
+#endif
 !..................................................................
 !     currents, printed and plotted next
 !..................................................................
  4012 format("fi [solid]=  ",1pe10.3,5x,"fi+e[--]= ",  1pe10.3)
  4013 format("bs_e[-.-]= ",1pe10.3,5x,"bs_i[.....]= ", 1pe10.3, " Amps")
         write(t_,4012) currtza,currtpza
+#ifndef NOPGPLOT
         CALL PGMTXT('T',2.,0.,0.,t_)
+#endif
         write(t_,4013) bscurma(1,kke),bscurma(2,kki) ! (e,*), (i,*)
+#ifndef NOPGPLOT
         CALL PGMTXT('T',1.,0.,0.,t_)
+#endif
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
+#endif
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+#endif
         ! fi (general ions):
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
+#endif
         ! fi+e [can be general ions (if any) + general electrons,
         ! or general ions + screening current from e; see eleccomp='enabled' option]:
+#ifndef NOPGPLOT
         CALL PGSLS(2) ! ---
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+#endif
         ! Bootstrap for e, based on jhirsh88/99 models:
+#ifndef NOPGPLOT
         CALL PGSLS(3) ! -.-
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
+#endif
         ! Bootstrap for ions, based on jhirsh88/99 models:
+#ifndef NOPGPLOT
         CALL PGSLS(4) ! ...
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP14(1:setup0%lrzmax))
+#endif
+#ifndef NOPGPLOT
         CALL PGSLS(1) ! Restore solid line
+#endif
 !yup        ! Total: [YuP: do not plot anymore]
 !yup        DO I=1,setup0%lrzmax
 !yup           RLRZAP13(I)=totcurz(i)
 !yup        ENDDO
+#ifndef NOPGPLOT
 !yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
+#endif
+#ifndef NOPGPLOT
         CALL PGSAVE
+#endif
+#ifndef NOPGPLOT
         CALL PGSCH(1.44)
+#endif
+#ifndef NOPGPLOT
         CALL PGLAB(' ','curr density (A/cm\u2\d)',' ')
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('B',1.8,0.5,0.5,t_horiz)
+#endif
+#ifndef NOPGPLOT
         CALL PGUNSA
+#endif
 
         ! SECOND PANEL: same profiles vs R
+#ifndef NOPGPLOT
         CALL PGSVP(.2,.8,.2,.5)
+#endif
         RPGmin=min(RLRZAP(1),rmag)
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RPGmin,RLRZAP(setup0%lrzmax),RPG1,RPG2)
+#endif
+#ifndef NOPGPLOT
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+#endif
         ! fi (general ions):
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
+#endif
         ! fi+e [can be general ions (if any) + general electrons,
         ! or general ions + screening current from e; see eleccomp='enabled' option]:
+#ifndef NOPGPLOT
         CALL PGSLS(2) ! ---
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+#endif
         ! Bootstrap for e, based on jhirsh88/99 models:
+#ifndef NOPGPLOT
         CALL PGSLS(3) ! -.-
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
+#endif
         ! Bootstrap for ions, based on jhirsh88/99 models:
+#ifndef NOPGPLOT
         CALL PGSLS(4) ! ...
+#endif
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP(1:setup0%lrzmax),RLRZAP14(1:setup0%lrzmax))
+#endif
+#ifndef NOPGPLOT
         CALL PGSLS(1) ! Restore solid line
+#endif
+#ifndef NOPGPLOT
         CALL PGSAVE
+#endif
+#ifndef NOPGPLOT
         CALL PGSCH(1.44)
+#endif
+#ifndef NOPGPLOT
         CALL PGLAB(' ','curr density (A/cm\u2\d)',' ')
+#endif
+#ifndef NOPGPLOT
         CALL PGMTXT('B',1.8,0.5,0.5,'R (=rpcon)  (cm)')
+#endif
+#ifndef NOPGPLOT
         CALL PGUNSA
+#endif
 
 
 
@@ -230,16 +306,22 @@ contains
 !     Partially integrated in rho (or psi)
 !..................................................................
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+
         CALL PGSVP(.2,.8,.2,.6)
 
         CALL PGSAVE
+
         CALL PGSCH(1.44)
+
         CALL PGMTXT('T',6.,0.5,0.5, &
-                    'CURRENT (AMPS)')
+             'CURRENT (AMPS)')
+
         CALL PGMTXT('T',5.,0.5,0.5, &
                     '(INTEGRATED UP TO RHO or PSI)')
         CALL PGUNSA
+#endif
 
 !..................................................................
 !     plots of partial integration of currents
@@ -286,28 +368,45 @@ contains
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
+
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+#endif
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=currtzi(i)
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
+
         CALL PGSLS(2)
+#endif
         DO I=1,setup0%lrzmax
            RLRZAP12(I)=currtpzi(i)
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+
 !yup        CALL PGSLS(3)
+#endif
 !yup        DO I=1,setup0%lrzmax
 !yup           RLRZAP13(I)=totcurzi(i)
 !yup        ENDDO
+#ifndef NOPGPLOT
 !yup        CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax))
+
         CALL PGSLS(1)
+
         CALL PGSAVE
+
         CALL PGSCH(1.44)
+
         CALL PGLAB(' ','current  (Amps)',' ')
+
         CALL PGMTXT('B',1.8,0.5,0.5,t_horiz)
+
         CALL PGUNSA
+#endif
 
 
 !..................................................................
@@ -329,20 +428,33 @@ contains
 !%OS
       ! PRINT OUT OF SOURCE POWER (WATTS/CC):
       ! sorpwt(l),sorpw_nbi(kfrsou,l),sorpw_rf(1,l),sorpw_rf(2,l),sorpw_rf(3,l)
+#ifndef NOPGPLOT
       CALL PGPAGE
+
       CALL PGSVP(.05,.95,.05,.95)
+#endif
       RILIN=0.
+#ifndef NOPGPLOT
       CALL PGSAVE
+
       CALL PGSCH(1.44)
+
       CALL PGMTXT('T',-RILIN,.5,.5, &
            'SOURCE POWER: (WATTS/CC)')
+#endif
       RILIN=RILIN+3.
+#ifndef NOPGPLOT
       CALL PGSCH(1.)
+#endif
       write(t_,6013) pltvs
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+2.
       write(t_,6014) pltvs
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+2.
 
  6013 format(4x,a8,"   NBI+RF      NBI", &
@@ -362,14 +474,19 @@ contains
           write(t_,6017) tr(l),sorpwt(l),sorpw_nbi(kfrsou1,l), &
             sorpw_rf(1,l),sorpw_rf(2,l),sorpw_rf(3,l)
         endif
+#ifndef NOPGPLOT
         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
         RILIN=RILIN+1.
  10   continue
 
 !     Continue printing results on second page, if setup0%lrzmax.gt.40
       if (setup0%lrzmax.gt.40) then
+#ifndef NOPGPLOT
          CALL PGPAGE
+
          CALL PGSVP(.05,.95,.05,.95)
+#endif
          RILIN=0.+3.
          do l=41,setup0%lrzmax
             if (ngen.eq.1) then
@@ -382,7 +499,9 @@ contains
                write(t_,6017) tr(l),sorpwt(l),sorpw_nbi(kfrsou1,l), &
                     sorpw_rf(1,l),sorpw_rf(2,l),sorpw_rf(3,l)
             endif
+#ifndef NOPGPLOT
             CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
             RILIN=RILIN+1.
          enddo
       endif
@@ -394,27 +513,39 @@ contains
 
       RILIN=RILIN+2.
       write(t_,6022) sorpwtza !sorpwtza=sorpwti(setup0%lrzmax) !NBI+RF, all gen.species
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+1.
       write(t_,6023) sorpw_nbii(kfrsou1,setup0%lrzmax)     ! NBI only
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+1.
       if (ngen.ge.1) then
          write(t_,6024) sorpw_rfi(1,setup0%lrzmax) ! RF(1st gen.species) only
+#ifndef NOPGPLOT
          CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
          RILIN=RILIN+1.
       endif
       if (ngen.ge.2) then
          write(t_,6025) sorpw_rfi(2,setup0%lrzmax) ! RF(2nd gen.species) only
+#ifndef NOPGPLOT
          CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
          RILIN=RILIN+1.
       endif
       if (ngen.ge.3) then
          write(t_,6026) sorpw_rfi(3,setup0%lrzmax) ! RF(3rd gen.species) only
+#ifndef NOPGPLOT
          CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
          RILIN=RILIN+1.
       endif
+#ifndef NOPGPLOT
       CALL PGUNSA
+#endif
  6022 format("Power integr. over radius (RF+NBI, all gen.species)=", &
              1pe12.4,"Watts")
  6023 format("Power from NBI (sorpw_nbii)=",1pe12.4,"Watts")
@@ -429,20 +560,33 @@ contains
 
       ! PRINT OUT OF DEPOSITED POWER (WATTS/CC):
       ! powrft(l), powrf(l,1),...,powrf(l,5)
+#ifndef NOPGPLOT
       CALL PGPAGE
+
       CALL PGSVP(.05,.95,.05,.95)
+#endif
       RILIN=0.
+#ifndef NOPGPLOT
       CALL PGSAVE
+
       CALL PGSCH(1.3) !PGSCH(1.44) ! set character size; default is 1.
+
       CALL PGMTXT('T',-RILIN,.5,.5, &
            'DEPOSITED POWER: (WATTS/CC)')
+#endif
       RILIN=RILIN+3.
+#ifndef NOPGPLOT
       CALL PGSCH(1.) ! set character size; default is 1.
+#endif
       write(t_,6113) pltvs
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+2.
       write(t_,6114) pltvs
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+2.
 
  6113 format(1x,a8,"TOTAL", &
@@ -466,14 +610,19 @@ contains
           write(t_,6119) tr(l),powrft(l),powrf(l,1),powrf(l,2), &
                                powrf(l,3),powrf(l,4),powrf(l,5)
         endif
+#ifndef NOPGPLOT
         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
         RILIN=RILIN+1.
       enddo
 
 !     Continue printing results on second page, if setup0%lrzmax.gt.40
       if (setup0%lrzmax.gt.40) then
+#ifndef NOPGPLOT
          CALL PGPAGE
+
          CALL PGSVP(.05,.95,.05,.95)
+#endif
          RILIN=0.+3.
          do l=41,setup0%lrzmax
            if (mrfn.eq.1) then
@@ -490,7 +639,9 @@ contains
              write(t_,6119) tr(l),powrft(l),powrf(l,1),powrf(l,2), &
                                   powrf(l,3),powrf(l,4),powrf(l,5)
            endif
+#ifndef NOPGPLOT
            CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
            RILIN=RILIN+1.
          enddo
       endif
@@ -503,15 +654,21 @@ contains
 
       RILIN=RILIN+2.
       write(t_,6122) sorpwtza
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+1.
       write(t_,6123) powurf(0)
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+1.
 
       do krf=1,mrfn ! Print-out for all harmonics now (was 5 only)
          write(t_,6131) krf,nharm(krf),powurf(krf)
+#ifndef NOPGPLOT
          CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
          RILIN=RILIN+1.
       enddo
  6131 format("      mode/harmonic krf, nharm(krf), powurf(krf)=", &
@@ -519,37 +676,53 @@ contains
 
 !      if (mrfn.ge.1) then
 !         write(t_,6124) powurf(1)
+#ifndef NOPGPLOT
 !         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 !         RILIN=RILIN+1.
 !      endif
 !      if (mrfn.ge.2) then
 !         write(t_,6125) powurf(2)
+#ifndef NOPGPLOT
 !         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 !         RILIN=RILIN+1.
 !      endif
 !      if (mrfn.ge.3) then
 !         write(t_,6126) powurf(3)
+#ifndef NOPGPLOT
 !         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 !         RILIN=RILIN+1.
 !      endif
 !      if (mrfn.ge.4) then
 !         write(t_,6127) powurf(4)
+#ifndef NOPGPLOT
 !         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 !         RILIN=RILIN+1.
 !      endif
 !      if (mrfn.ge.5) then
 !         write(t_,6128) powurf(5)
+#ifndef NOPGPLOT
 !         CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 !         RILIN=RILIN+1.
 !      endif
 
       write(t_,6129) powurfc(0)
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       RILIN=RILIN+1.
       write(t_,6130) powurfl(0)
+#ifndef NOPGPLOT
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
 
+#ifndef NOPGPLOT
       CALL PGUNSA
+#endif
 
  6122 format &
        ("Power sources integr. over rad. (RF+NBI, all gen.species)=", &
@@ -586,11 +759,17 @@ contains
         tr1(l)=powrft(l)
       enddo
 
+#ifndef NOPGPLOT
       CALL PGPAGE ! START FSA SOURCE POWER DEN
+
       CALL PGSVP(.2,.8,.2,.6)
+
       CALL PGSAVE
+
       CALL PGSCH(1.44) ! set character size; default is 1.
+
       CALL PGSLW(setup0%lnwidth) ! line thickness/width
+
       CALL PGMTXT('T',6.,0.5,0.5, &
                     'FSA SOURCE POWER DEN: (WATTS/CM\u3\d)')
       CALL PGMTXT('T',5.,0.,0., &
@@ -602,6 +781,7 @@ contains
       CALL PGMTXT('T',2.,0.,0., &
          "Other: RF general species (each) [sorpw_rf]")
       CALL PGUNSA
+#endif
 
         DO I=1,setup0%lrzmax
            RLRZAP1(I)=tr(i)
@@ -614,49 +794,79 @@ contains
       IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
          RPG2= RPG1+1.e-16
       ENDIF
+#ifndef NOPGPLOT
       CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
+
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+
         CALL PGSLS(1) ! 1-> solid
+#endif
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=sorpwt(i) ! solid: NBI+RF(all gen.species)
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
+
         CALL PGSLS(2) ! 2-> dashed
+#endif
         DO I=1,setup0%lrzmax
            RLRZAP12(I)=sorpw_nbi(kfrsou1,I) ! dashed: NBI only
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+#endif
       do k=1,ngen ! rf sources for general species
          DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rf(k,I)
          ENDDO
+#ifndef NOPGPLOT
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
+
          CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+#endif
       enddo ! k=1,ngen
       !
+#ifndef NOPGPLOT
       CALL PGSLS(1) ! solid
+
       CALL PGSLW(setup0%lnwidth+1) ! bold
+#endif
       DO I=1,setup0%lrzmax
          RLRZAP13(I)=powrft(i)
       ENDDO
+#ifndef NOPGPLOT
       CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax)) !solid bold: total rf
+
       CALL PGSLS(1)
+
       CALL PGSLW(setup0%lnwidth) !
+
       CALL PGSAVE
+
       CALL PGSCH(1.44)
+
       CALL PGLAB(' ','power density (W/cm\u3\d)',' ')
+
       CALL PGMTXT('B',1.8,0.5,0.5,t_horiz)
+
       CALL PGUNSA
+#endif
       ! DONE FSA SOURCE POWER
 
 
       !YuP[08-2017] Make a separate page for only RF-power density
       !(because, if the power level is too small, the curve can be too low)
+#ifndef NOPGPLOT
       CALL PGPAGE ! START RF-only POWER DEN
+
       CALL PGSVP(.2,.8,.2,.6)
+
       CALL PGSAVE
+
       CALL PGSCH(1.44) ! set character size; default is 1.
+
       CALL PGSLW(setup0%lnwidth) ! line thickness/width
+
       CALL PGMTXT('T',6.,0.5,0.5, &
                     'FSA RF POWER DEN: (WATTS/CM\u3\d)')
       CALL PGMTXT('T',3.,0.,0., &
@@ -664,6 +874,7 @@ contains
       CALL PGMTXT('T',2.,0.,0., &
          "Other: RF general species (each) [sorpw_rf]")
       CALL PGUNSA
+#endif
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
       RPGmax=RLRZAP1(setup0%lrzmax)
@@ -677,29 +888,47 @@ contains
       IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
          RPG2= RPG1+1.e-16
       ENDIF
+#ifndef NOPGPLOT
       CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
+
       CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+#endif
       do k=1,ngen ! rf sources for general species
          DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rf(k,I)
          ENDDO
+#ifndef NOPGPLOT
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
+
          CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+#endif
       enddo ! k=1,ngen
       !
+#ifndef NOPGPLOT
       CALL PGSLS(1) ! solid
+
       CALL PGSLW(setup0%lnwidth+1) ! bold
+#endif
       DO I=1,setup0%lrzmax
          RLRZAP13(I)=powrft(i)
       ENDDO
+#ifndef NOPGPLOT
       CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax)) !solid bold: total rf
+
       CALL PGSLS(1)
+
       CALL PGSLW(setup0%lnwidth) !
+
       CALL PGSAVE
+
       CALL PGSCH(1.44)
+
       CALL PGLAB(' ','power density (W/cm\u3\d)',' ')
+
       CALL PGMTXT('B',1.8,0.5,0.5,t_horiz)
+
       CALL PGUNSA
+#endif
       ! DONE RF-only POWER
 
 
@@ -722,10 +951,15 @@ contains
       RPG2=fmax
       RPG1=min(fmin,0.) !Make lower limit 0 when fmin>0
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+
         CALL PGSVP(.2,.8,.2,.6)
+
         CALL PGSAVE
+
         CALL PGSCH(1.44)
+
         CALL PGMTXT('T',6.,0.5,0.5, &
                     'SOURCE POWER (integr. up to rho or psi) (WATTS)')
         CALL PGMTXT('T',5.,0.,0., &
@@ -737,6 +971,7 @@ contains
         CALL PGMTXT('T',2.,0.,0., &
          "Other: RF general ions (each) [sorpw_rfi]")
         CALL PGUNSA
+#endif
 
         DO I=1,setup0%lrzmax
            RLRZAP1(I)=tr(i)
@@ -751,38 +986,62 @@ contains
         IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
            RPG2= RPG1+1.e-16
         ENDIF
+#ifndef NOPGPLOT
         CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
+
         CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+
         CALL PGSLS(1) ! 1-> Solid line
+#endif
         DO I=1,setup0%lrzmax
            RLRZAP11(I)=sorpwti(i) ! solid: NBI+RF(all gen.species)
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP11(1:setup0%lrzmax))
+
         CALL PGSLS(2) ! 2-> dashed
+#endif
         DO I=1,setup0%lrzmax
            RLRZAP12(I)=sorpw_nbii(kfrsou1,I) ! dashed: NBI only
         ENDDO
+#ifndef NOPGPLOT
         CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+#endif
       do k=1,ngen ! rf sources for general species
          DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rfi(k,I)
          ENDDO
+#ifndef NOPGPLOT
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
+
          CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+#endif
       enddo ! k=1,ngen
+#ifndef NOPGPLOT
       CALL PGSLS(1) ! solid
+
       CALL PGSLW(setup0%lnwidth+1) ! bold
+#endif
       DO I=1,setup0%lrzmax
          RLRZAP13(I)=powurfi(i,0) ! = SUM_harmonics{powurfi(l,harmonics)}
       ENDDO
+#ifndef NOPGPLOT
       CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax)) !solid bold: total rf
+
       CALL PGSLS(1) ! restore: solid line
+
       CALL PGSLW(setup0%lnwidth) ! restore
+
       CALL PGSAVE
+
       CALL PGSCH(1.44)
+
       CALL PGLAB(' ','Int power: 0 to psi (or rho)',' ')
+
       CALL PGMTXT('B',1.8,0.5,0.5,t_horiz)
+
       CALL PGUNSA ! restore
+#endif
 
 
 !..................................................................
@@ -797,18 +1056,23 @@ contains
       RPG2=gmax*1.2 ! give 20% more
       RPG1=min(gmin,0.) !Make lower limit 0 when gmin>0
 
+#ifndef NOPGPLOT
         CALL PGPAGE
+
         CALL PGSVP(.2,.8,.2,.6)
+
         CALL PGSAVE
+
         CALL PGSCH(1.3)
+
         CALL PGMTXT('T',6.,0.5,0.5, &
                     'RF POWER (integr. up to rho or psi) (WATTS)')
         CALL PGMTXT('T',3.,0.,0., &
          "Solid-bold: total absorbed RF [powurfi(*,0)]")
         CALL PGMTXT('T',2.,0.,0., &
-         "Other: RF general species (each) [sorpw_rfi]")
-
+             "Other: RF general species (each) [sorpw_rfi]")
         CALL PGUNSA
+#endif
 
       ! If the horizontal coord is rho, set the limits to [0.,1.]
       RPGmin=RLRZAP1(1)
@@ -819,30 +1083,49 @@ contains
       IF ( RPG2-RPG1 .le. 1.e-16 ) THEN ! YuP [02-23-2016]
           RPG2= RPG1+1.e-16
       ENDIF
+#ifndef NOPGPLOT
       CALL PGSWIN(RPGmin,RPGmax,RPG1,RPG2)
+
       CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+
       CALL PGSLS(1) ! 1-> Solid line
+#endif
       !
       do k=1,ngen ! rf sources for general species
          DO I=1,setup0%lrzmax
             RLRZAP12(I)=sorpw_rfi(k,I)
          ENDDO
+#ifndef NOPGPLOT
          CALL PGSLS(k+2) ! 3-> -.-.- ;   4-> .....
+
          CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP12(1:setup0%lrzmax))
+#endif
       enddo ! k=1,ngen
+#ifndef NOPGPLOT
       CALL PGSLS(1) ! solid
+
       CALL PGSLW(setup0%lnwidth+1) ! bold
+#endif
       DO I=1,setup0%lrzmax
          RLRZAP13(I)=powurfi(i,0) ! = SUM_harmonics{powurfi(l,harmonics)}
       ENDDO
+#ifndef NOPGPLOT
       CALL PGLINE(setup0%lrzmax,RLRZAP1(1:setup0%lrzmax),RLRZAP13(1:setup0%lrzmax)) !solid bold: total rf
+
       CALL PGSLS(1) ! restore: solid line
+
       CALL PGSLW(setup0%lnwidth) ! restore
+
       CALL PGSAVE
+
       CALL PGSCH(1.44)
+
       CALL PGLAB(' ','Int power: 0 to psi (or rho)',' ')
+
       CALL PGMTXT('B',1.8,0.5,0.5,t_horiz)
+
       CALL PGUNSA ! restore
+#endif
 
 !..................................................................
 !     J/P print out

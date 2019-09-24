@@ -94,8 +94,12 @@ contains
             xmaxq=pltlimmm
          endif
 
+#ifndef NOPGPLOT
 !BH060411         CALL PGSVP(.2,.8,.25,.55)
+#endif
+#ifndef NOPGPLOT
          CALL PGSVP(.2,.8,.25,.50)
+#endif
          RILIN=5.
 !
          call bcast(da,zero,iyjxp1)
@@ -109,9 +113,13 @@ contains
          if (lefct .eq. 3) go to 80    !rf
          if (lefct .eq. 4) go to 100   !total
  50      call coeffpad(k)
+#ifndef NOPGPLOT
          CALL PGPAGE
+#endif
          write(t_,200) k
+#ifndef NOPGPLOT
          CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
          go to 120
  60      if (abs(elecfld(lr_)) .lt. 1.e-09) go to 190
          call coefefad(k)
@@ -129,9 +137,13 @@ contains
 !$$$         write(*,*)'pltvec:((df(i,j),i=46,50),j=1,20)',
 !$$$     +                    ((df(i,j),i=46,50),j=1,20)
 
+#ifndef NOPGPLOT
          CALL PGPAGE
+#endif
          write(t_,210) k
+#ifndef NOPGPLOT
          CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
          go to 120
  80      continue
          xrf=0.
@@ -139,25 +151,37 @@ contains
          call coefrfad(k,xrf)
  90      continue
          if (xrf.gt.0.) then
+#ifndef NOPGPLOT
             CALL PGPAGE
+#endif
             write(t_,220) k
+#ifndef NOPGPLOT
             CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
          endif
          go to 120
  100     continue
          call coefstup(k)
+#ifndef NOPGPLOT
          CALL PGPAGE
+#endif
          write(t_,230) k
+#ifndef NOPGPLOT
          CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
          write(t_,231)
          RILIN=RILIN+1.
+#ifndef NOPGPLOT
          CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
  120     continue
 
          RILIN=RILIN+2.
          write(t_,398) n,timet,rovera(lr_)
+#ifndef NOPGPLOT
          CALL PGMTXT('B',RILIN,0.,0.,t_)
+#endif
 
  200     format("species no.",i2,5x,"Flux Due to Coulomb Collisions")
  210     format("species no.",i2,5x,"Flux Due to Electric Field")
@@ -298,8 +322,12 @@ contains
 
 
          RPG1=xmaxq
+#ifndef NOPGPLOT
          CALL PGSWIN(-RPG1,RPG1,0.,RPG1)
+#endif
+#ifndef NOPGPLOT
          CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+#endif
          if (pltlim.eq.'u/c') then
             write(t_,10184)
          elseif (pltlim.eq.'energy') then
@@ -310,7 +338,9 @@ contains
 10184    format("u/c")
 10185    format("energy (keV)")
 10186    format("u/unorm")
+#ifndef NOPGPLOT
          CALL PGLAB('Parallel '//t_,'Perp '//t_,' ')
+#endif
 !     Plot vector field, vector lengths proportional to |flux|:
 
 !      write(*,*)'pltvec:  lr_,lefct =',lr_,lefct
@@ -333,18 +363,26 @@ contains
             RPGX(2)=xmaxq
 !BH060411            RPGY(2)=xmaxq
             RPGY(2)=xmaxq*t0t
+#ifndef NOPGPLOT
             CALL PGLINE(2,RPGX,RPGY)
+#endif
 !BH060411            RPGX(2)=-xmaxq*t0t
             RPGX(2)=-xmaxq
+#ifndef NOPGPLOT
             CALL PGLINE(2,RPGX,RPGY)
+#endif
          else
             RPGX(1)=0.
             RPGY(1)=0.
             RPGX(2)=xmaxq/t0t
             RPGY(2)=xmaxq
+#ifndef NOPGPLOT
             CALL PGLINE(2,RPGX,RPGY)
+#endif
             RPGX(2)=-xmaxq/t0t
+#ifndef NOPGPLOT
             CALL PGLINE(2,RPGX,RPGY)
+#endif
          endif
 
          rhmin=ep90
@@ -367,11 +405,19 @@ contains
                  yhead(j,i)=yhead(j,i)*rhlog/rhead
  171          continue
  170       continue
+#ifndef NOPGPLOT
 !BH060411           CALL PGSVP(.2,.8,.6,.9)
+#endif
+#ifndef NOPGPLOT
            CALL PGSVP(.2,.8,.65,.9)
+#endif
            RPG1=xmaxq
+#ifndef NOPGPLOT
            CALL PGSWIN(-RPG1,RPG1,0.,RPG1)
+#endif
+#ifndef NOPGPLOT
            CALL PGBOX('BCNST',0.0,0,'BCNST',0.0,0)
+#endif
            if (pltlim.eq.'u/c') then
               write(t_,10184)
            elseif (pltlim.eq.'energy') then
@@ -379,7 +425,9 @@ contains
            else
               write(t_,10186)
            endif
+#ifndef NOPGPLOT
            CALL PGLAB(' ','Perp '//t_,' ')
+#endif
 !     Plot vector field, vector lengths proportional to log(abs(flux)),
 !     from max(abs(flux)) to contrmin*max(abs(flux)):
            call pltvectr(xtail,ytail,xhead,yhead,rheads,jpxy,ipxy, &
@@ -392,18 +440,26 @@ contains
               RPGX(2)=xmaxq
 !BH170721            RPGY(2)=xmaxq
               RPGY(2)=xmaxq*t0t
+#ifndef NOPGPLOT
               CALL PGLINE(2,RPGX,RPGY)
+#endif
 !BH170721            RPGX(2)=-xmaxq*t0t
               RPGX(2)=-xmaxq
+#ifndef NOPGPLOT
               CALL PGLINE(2,RPGX,RPGY)
+#endif
            else
               RPGX(1)=0.
               RPGX(2)=xmaxq/t0t
               RPGY(1)=0.
               RPGY(2)=xmaxq
+#ifndef NOPGPLOT
               CALL PGLINE(2,RPGX,RPGY)
+#endif
               RPGX(2)=-xmaxq/t0t
+#ifndef NOPGPLOT
               CALL PGLINE(2,RPGX,RPGY)
+#endif
            endif
  190    continue
       return

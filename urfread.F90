@@ -36,16 +36,12 @@ contains
 !.......................................................................
 
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
 
       krf=0  !  Counter for wave types.
@@ -146,29 +142,22 @@ contains
       endif  ! on irftype.eq.1
 
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(nrayn,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(nray,nmodsa,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(nharm,nmodsa,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(freqcy,nmodsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(omega,nmodsa,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(nrayelts,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(nrayelt,nrayn*mrfn,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BCAST(nharm1,nmodsa,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(nharms,nmodsa,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(jslofas,nrayn*mrfn,MPI_INTEGER,0,MPI_COMM_WORLD,mpiierr)
@@ -202,12 +191,9 @@ contains
       call MPI_BCAST(cwexde,nrayelts*nrayn*mrfn,MPI_DOUBLE_COMPLEX,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(cweyde,nrayelts*nrayn*mrfn,MPI_DOUBLE_COMPLEX,0,MPI_COMM_WORLD,mpiierr)
       call MPI_BCAST(cwezde,nrayelts*nrayn*mrfn,MPI_DOUBLE_COMPLEX,0,MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 #ifdef __MPI
-!MPI >>>
       call MPI_BARRIER(MPI_COMM_WORLD,mpiierr)
-!MPI <<<
 #endif
 
 

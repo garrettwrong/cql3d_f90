@@ -2,7 +2,7 @@
 
 SHELL     = /bin/sh
 NAME      = xcql3d
-NAME_MPI = $(NAME)_mpi
+NAME_MPI = mpi_$(NAME)
 COMPILER  = gfortran
 COMPILER_MPI = mpifort
 LIBTOOL   = libtool -static
@@ -24,8 +24,18 @@ F90OBJECTS = $(filter %.o,$(SOURCES:.F90=.o))
 OBJECTS = $(filter %.o,$(SOURCES:.F=.o))
 
 LOCATION  =   -L /usr/lib -L/usr/local/lib
-LIBRARIES =   -lnetcdff -lnetcdf -lpgplot
+LIBRARIES =   -lnetcdff -lnetcdf
 INCLUDE   =/usr/local/include
+ifdef MPIMODDIR
+	INCLUDE := $(INCLUDE) -I$(MPIMODDIR)
+endif
+
+ifdef NOPGPLOT
+	PGFLAG = -DNOPGPLOT
+else
+	LOCATION += -L${PGPLOT_DIR}
+	LIBRARIES += -lpgplot
+endif
 
 DEBUG     = -g -fbacktrace
 #common gfortran dbg flags
@@ -36,7 +46,7 @@ OPTIMIZE  = -O1
 #force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL =
 COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
-COMPILE_MPI  = $(COMPILER_MPI) -c -D__MPI $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
+COMPILE_MPI  = $(COMPILER_MPI) -c -D__MPI -DNOPGPLOT $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
 LOAD      = $(COMPILER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
 LOAD_MPI  = $(COMPILER_MPI) -o $(NAME_MPI) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
@@ -100,7 +110,7 @@ standalone_mpi: $(NAME_MPI)
 libs_mpi: lib$(NAME_MPI).a lib$(NAME_MPI).so
 mpi: libs_mpi $(NAME_MPI)_shared standalone_mpi
 
-F90OBJECTS_MPI = $(F90OBJECTS:.o=.o_mpi)
+F90OBJECTS_MPI = $(F90OBJECTS:.o=.o_mpi) cql3d_mpilib.o_mpi
 OBJECTS_MPI = $(OBJECTS:.o=.o_mpi)
 #INCLUDE_MPI = $(INCLUDE)
 
@@ -138,11 +148,12 @@ rebuild:
 	$(LOAD) $(OBJECTS) $(F90OBJECTS) $(LOCATION) $(LIBRARIES)
 
 clean:
-	$(DELETE)  $(NAME) $(OBJECTS) $(F90OBJECTS)
+	$(DELETE) *.o
 	$(DELETE) *.mod
 	$(DELETE) *.so *.a  $(NAME)_shared
-	$(DELETE) $(OBJECTS_MPI) $(F90OBJECTS_MPI)
-	$(DELETE)  $(NAME_MPI) $(OBJECTS_MPI) $(F90OBJECTS_MPI)
+	$(DELETE) *.o_mpi
+	$(DELETE) $(NAME_MPI) $(NAME_MPI)_shared
+	$(DELETE) $(NAME)
 
 .PHONY: all
 .PHONY: mpi

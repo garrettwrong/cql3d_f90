@@ -33,9 +33,7 @@ contains
 !     computes the normalized radial mesh.
 !..................................................................
 #ifdef __MPI
-!MPI >>>
       include 'mpilib.h'
-!MPI <<<
 #endif
 
       dimension titmp(250),detmp(250)
@@ -121,18 +119,14 @@ contains
       ! rya grid is uniform in range [0.01;0.99], with step = 0.02.
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
       WRITE(*,'(a,2e13.4)')'tdxinitl: rrmax,ram=',rrmax,ram
       do ll=1,setup0%lrzmax
       WRITE(*,'(a,i6,2e13.4)')'tdxinitl: ll,rrz,rya=',ll,rrz(ll),rya(ll)
       enddo
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
  21   continue
@@ -314,16 +308,12 @@ contains
          endif
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)'tdxinitl, zeff(1:setup0%lrzmax)= ',(zeff(ll),ll=1,setup0%lrzmax)
          !pause
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !     Check that range of bnumb for Maxl species brackets zeff
@@ -333,16 +323,12 @@ contains
          fminn=1000.
          do k=1,nionm
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
             WRITE(*,*)'k,kionm(k),bnumb(kionm(k))=', &
                        k,kionm(k),bnumb(kionm(k))
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
             fmaxx=max(fmaxx,bnumb(kionm(k)))
             fminn=min(fminn,bnumb(kionm(k)))
@@ -352,9 +338,7 @@ contains
          do 121 ll=1,setup0%lrzmax
             if(zeff(ll).gt.fmaxx .or. zeff(ll).lt.fminn) then
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
                WRITE(*,*) &
                 'tdxinitl, max/min of bnumb(kionm(k)), fmaxx,fminn=', &
@@ -362,9 +346,7 @@ contains
                WRITE(*,*)'tdxinitl.f: ', &
                     'Adjust bnumb(kion) for compatibility with zeff'
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
                stop
             endif
@@ -382,18 +364,14 @@ contains
          enddo
 
 #ifdef __MPI
-!MPI >>>
       if(mpirank.eq.0) then
-!MPI <<<
 #endif
          WRITE(*,*)
          WRITE(*,*)'tdxinitl: Number Maxl ion species w diffrnt bnumb'
          WRITE(*,*)'tdxinitl: ndif_bnumb= ',ndif_bnumb
          WRITE(*,*)
 #ifdef __MPI
-!MPI >>>
       endif  ! for if(mpirank.eq.***)
-!MPI <<<
 #endif
 
 !     Interpolate input ion densities onto rya grid
