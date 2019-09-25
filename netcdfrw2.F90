@@ -2161,19 +2161,26 @@ contains
       istatus= NF_INQ_VARID(ncid,'ntotal',vid)  !-YuP: NetCDF-f77 get vid
       istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),(ntotal))
 
-      !istatus= NF_INQ_VARID(ncid,'kspeci',vid)  !-YuP: NetCDF-f77 get vid
+      istatus= NF_INQ_VARID(ncid,'kspeci',vid)  !-YuP: NetCDF-f77 get vid
       !ll=8*2*ntotal
       !call ncvptc0(ncid,vid,start(1:3),kspeci_count(1:3),kspeci(1:2,1:ntotal),ll,istatus)
-      !do kk=1,ntotal
-      !   do ii=1,2
-      !   call ncvptc0(ncid,vid,(1),(8),kspeci(ii,kk),8,istatus)
-      !   write(*,*)'netcdfrw2: kspeci(ii,kk)=', kspeci(ii,kk)
-      !   enddo
-      !enddo
+      ! do kk=1,ntotal
+      !    do ii=1,2
+      !    call ncvptc0(ncid,vid,(1),(8),kspeci(ii,kk),8,istatus)
+      !    write(*,*)'netcdfrw2: kspeci(ii,kk)=', kspeci(ii,kk)
+      !    enddo
+      ! enddo
       !??? istatus= NF_PUT_VAR_TEXT(ncid,vid,kspeci) !YuP: does not work, either
       !Note: start(1:3)= {1,1,1}
       !kspeci_count(1:3)={chardim,twodim,kdim} <--> {8,2,ntotal}
       !kspeci(1:2,1:ntotala) is character(len=8)
+      !!!!  ^^^ oh my ^^^
+      ! dearest yuri, please rest assured netcdf does work here.
+      ! As I discovered many uses cql3d are awkward/improper at best... Sadly,
+      ! I could not convince that it was worth improving...  In any case,
+      ! for you I have applied this function as defined in netcdf documention.
+      !     Behold:
+      istatus= NF_PUT_VARA_TEXT(ncid,vid,(/1,1,1/),kspeci_count, kspeci)
 
       istatus= NF_INQ_VARID(ncid,'bnumb',vid)  !-YuP: NetCDF-f77 get vid
       istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(ntotal),bnumb)
