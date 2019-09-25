@@ -24,9 +24,17 @@ OBJECTS = $(SOURCES:.F90=.o)
 
 LOCATION  =   -L/usr/lib64
 LIBRARIES =   -lX11 -lnetcdff -lnetcdf
-INCLUDE   =   -I/usr/include -I/usr/lib64/gfortran/modules/
+INCLUDE   =   -I/usr/include
 ifdef MPIMODDIR
-	INCLUDE := $(INCLUDE) -I$(MPIMODDIR)
+	INCLUDE += -I$(MPIMODDIR)
+endif
+
+# if netcdf_dir env var is set (like by a module), use it:
+ifdef NETCDF_DIR
+	INCLUDE += -I$(NETCDF_DIR)/include
+else
+        # otherwise, use typical place on centos7 w/ gfort
+	INCLUDE += -I/usr/lib64/gfortran/modules/
 endif
 
 ifdef NOPGPLOT

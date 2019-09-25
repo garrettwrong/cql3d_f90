@@ -26,7 +26,7 @@ LOCATION  =   -L /usr/lib -L/usr/local/lib
 LIBRARIES =   -lnetcdff -lnetcdf
 INCLUDE   =/usr/local/include
 ifdef MPIMODDIR
-	INCLUDE := $(INCLUDE) -I$(MPIMODDIR)
+	INCLUDE += -I$(MPIMODDIR)
 endif
 
 ifdef NOPGPLOT
