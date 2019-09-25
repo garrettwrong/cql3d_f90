@@ -4268,7 +4268,7 @@ contains
       integer :: lefct, igrid ! input
       integer :: nwkpack, istat, ll, llcount, i, j, k ! local
       integer :: n_netcdf ! local
-      real(c_double) xll,xlu,xlp,xpl,xpu,xmaxq,pltlimm,pltlimmm ! local scalars, input for other functions
+      real(c_double) xll,xlu,xlp,xpl,xpu,xmaxq,pltlimmm ! local scalars, input for other functions
       real(c_double) xrf ! local scalar, input for call coefrfad()
       real(c_double) rya_netcdf(lrza) ! local, and input for ncvpt_doubl2
       integer :: ll_netcdf(lrza),itl_netcdf(lrza),itu_netcdf(lrza) ! local, and input for ncvpt_int2

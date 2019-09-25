@@ -24,7 +24,7 @@ OBJECTS = $(SOURCES:.F90=.o)
 
 LOCATION  =   -L/usr/lib64
 LIBRARIES =   -lX11 -lnetcdff -lnetcdf
-INCLUDE   =   -I/usr/include
+INCLUDE   =   -I/usr/include -I/usr/lib64/gfortran/modules/
 ifdef MPIMODDIR
 	INCLUDE := $(INCLUDE) -I$(MPIMODDIR)
 endif
@@ -74,15 +74,6 @@ $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
 	$(PROTECT) $@
 
 
-# Following use of pattern matching works;
-# it is based on statements in Sect. 10.7 of gmake Manual
-# by Stallman and McGrath.
-# However, the two rules following this seem clearer to me (BobH).
-# Me too BobH, me too. ;)  (GBW).
-#%.o:               %.F        $(INCLUDES)
-#	$(COMPILE) $< -o $@
-
-
 #------ Module generated dependencies
 # Now that we have modules and scope,
 #   we unfortunately do have dependencies.
@@ -90,10 +81,10 @@ $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
 oext = o
 include module_dependency.mk
 
-# see Sect. 4.10.1, Static Pattern Rules.
 
-%.o: %.F90 $(INCLUDES)
+$(OBJECTS): %.o: %.F90 $(INCLUDES)
 	$(COMPILE) $< -o $@
+
 
 # ------------------------  Similarly for MPI
 

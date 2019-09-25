@@ -14,12 +14,11 @@ endif
 
 # INCLUDE line
 include include_dependency.mk
-# Check if inlude files have changed i guess
+# Check if inlude files have changed
 $(SOURCES):        $(INCLUDES)
 
 # SOURCE line
 include source_dependency.mk
-
 
 OBJECTS = $(SOURCES:.F90=.o)
 
@@ -33,7 +32,7 @@ endif
 ifdef NOPGPLOT
 	PGFLAG = -DNOPGPLOT
 else
-	LOCATION += -L${PGPLOT_DIR}
+	#brew installed to /usr/local/lib LOCATION += -L${PGPLOT_DIR}
 	LIBRARIES += -lpgplot
 endif
 
@@ -75,15 +74,6 @@ $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
 	$(PROTECT) $@
 
 
-# Following use of pattern matching works;
-# it is based on statements in Sect. 10.7 of gmake Manual
-# by Stallman and McGrath.
-# However, the two rules following this seem clearer to me (BobH).
-# Me too BobH, me too. ;)  (GBW).
-#%.o:               %.F        $(INCLUDES)
-#	$(COMPILE) $< -o $@
-
-
 #------ Module generated dependencies
 # Now that we have modules and scope,
 #   we unfortunately do have dependencies.
@@ -91,9 +81,8 @@ $(NAME)_shared: $(NAME) lib$(NAME).so a_cqlp.o
 oext = o
 include module_dependency.mk
 
-# see Sect. 4.10.1, Static Pattern Rules.
 
-%.o: %.F90 $(INCLUDES)
+$(OBJECTS): %.o: %.F90 $(INCLUDES)
 	$(COMPILE) $< -o $@
 
 

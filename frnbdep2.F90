@@ -30,9 +30,7 @@
       integer i,j,ib,ie,n,nout ! local
       integer :: mi,mj,mf, nrpat,nzpat,me,mb,iopt ! arg. in subr.  
       integer igrid,mfm1,ier,ifail ! local (and arg. in called subroutines)
-      real(c_double) :: zero,dr,dz ! local
-
-      zero=0.d0
+      real(c_double) :: dr,dz ! local
 
 !     set (r,z) grid modification option
       igrid=iopt-1

@@ -165,12 +165,8 @@
 !..................................................................
  300  continue
 
-      zero=0.d0
-      one=1.d0
       two=2.d0
       half=0.5d0
-!      pi=4.d0*atan2(one,one)
-      pi=atan2(zero,-one)
 
       allocate(rpts(npart),STAT=istat)
       write(*,*)'frset  rpts: istat=',istat

@@ -7,7 +7,7 @@
 
 !................................................................
       integer nion,nneu,nk,nkt,nj,nbctim,njs,ialignf1
-      real(c_double) :: zero,one,two,half,pi
+      real(c_double) :: two,half
 
 !     ONETWO DIVERGENCE
 
