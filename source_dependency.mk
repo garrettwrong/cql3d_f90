@@ -1,5 +1,4 @@
 # Source line to be included in makefiles
-# YuP[2019-05-31] frhexdrv.F is removed - not used
 
 SOURCES  =   param.F90 cqlcomm.F90 r8subs.F90 advnce.F90 pltmain.F90 \
 	pltdf.F90 eqrhopsi.F90 equilib.F90 \
@@ -26,16 +25,16 @@ SOURCES  =   param.F90 cqlcomm.F90 r8subs.F90 advnce.F90 pltmain.F90 \
 	eqtopeol.F90  eqvolpsi.F90  eqwrng.F90  \
 	esefld.F90  exlin.F90  exsweep.F90  exsweept.F90   \
 	exsweepx.F90  finit.F90  firstdrv.F90  fle.F90 flxfn.F90  \
-	freya.F  freyasou.F  \
-	frinitl.F  frinitz.F  frnbdep2.F  frnfreya.F  \
-	frset.F frsmooth.F  frsplft.F   \
-	frstup.F  frsubs.F  frsuppor.F  frwrong.F  \
+	freya.F90  freyasou.F90  \
+	frinitl.F90  frinitz.F90  frnbdep2.F90  frnfreya.F90  \
+	frset.F90 frsmooth.F90  frsplft.F90   \
+	frstup.F90  frsubs.F90  frsuppor.F90  frwrong.F90  \
 	ilut.F90  impchk.F90  impnorm.F90  \
 	lookup.F90  losscone.F90  lossegy.F90  lossorbm.F90  \
 	losstor.F90  micgetr.F90   \
 	micgmbnd.F90  micgnbnd.F90  micxinil.F90  micxinim.F90  micxinit.F90  \
 	micxiniz.F90  \
-	netcdfrf.F  netcdfrw2.F \
+	netcdfrf.F90  netcdfrw2.F90 \
 	ntdstore.F90   \
 	ntloop.F90  pack21.F90 pltcycl.F90 \
 	pltdnz.F90  pltelec.F90  pltendn.F90   \
@@ -43,7 +42,7 @@ SOURCES  =   param.F90 cqlcomm.F90 r8subs.F90 advnce.F90 pltmain.F90 \
 	pltpower.F90  \
 	pltrun.F90  pltvec.F90  pltvectr.F90  \
 	pltvflux.F90  profaxis.F90  profiles.F90 prppr.F90   \
-	prpprctr.F90  psif.F90 r8lsode.F  \
+	prpprctr.F90  psif.F90 r8lsode.F90  \
 	rdc_multi.F90 rdc_bplt.F90 restcon.F90 resthks.F90  \
 	restvty.F90  rf.F90  sigalloc.F90  siggy.F90  sigmax.F90  sigsetup.F90  \
 	sigv5d.F90 sigfn.F90 sigie.F90  sigmaxwl.F90   sigv.F90  \
@@ -78,4 +77,4 @@ SOURCES  =   param.F90 cqlcomm.F90 r8subs.F90 advnce.F90 pltmain.F90 \
 	wpcheck.F90  wpchgdy.F90 wpcthta.F90  wpelecf.F90   \
 	wpinitl.F90  wploweq.F90  wpsavf.F90  wptrafx.F90  wptramu.F90  \
 	wptrmuy.F90  wpvptb.F90  wpwrng.F90  wpmshchk.F90 \
-	zblock.F90  zcunix.F90  zfreya.F   znonsym.F90
+	zblock.F90  zcunix.F90  zfreya.F90  znonsym.F90

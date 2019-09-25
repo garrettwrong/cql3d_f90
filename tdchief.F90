@@ -63,6 +63,7 @@ module tdchief_mod
   use wpsavf_mod, only : wpsavf
   use wptrafx_mod, only : wptrafx
   use wptramu_mod, only : wptramu
+  use netcdfrw2_mod, only : netcdfmain,netcdfrw2
 
   !---END USE
 
@@ -1315,6 +1316,7 @@ contains
 
       return
       end subroutine tdchief
+
 
 #ifdef __MPI
       subroutine send_data  !used in tdchief.f90 (only)

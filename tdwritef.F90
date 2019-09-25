@@ -16,17 +16,19 @@ contains
     use cqlconf_mod, only : print_all_conf_nml
       use param_mod
       use cqlcomm_mod
-      implicit integer (i-n), real(c_double) (a-h,o-z)
+      implicit none !integer (i-n), real(c_double) (a-h,o-z)
+      integer i,j,k,l,il,iunwrif ! local
 !.......................................................................
 !     Save current parameters ,distribution function and spatial source
 !     to enable complete restart of run
 !.......................................................................
 
       include 'frname_decl.h'
-      include 'frname.h'
+      include 'frname.h' ! contains namelist variables; To write (*,frsetup)
 #ifdef __MPI
       include 'mpilib.h'
 #endif
+
 !.......................................................................
 
 #ifdef __MPI

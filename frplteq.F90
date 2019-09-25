@@ -20,7 +20,8 @@ contains
     use param_mod
     use cqlcomm_mod
     use r8subs_mod, only : dcopy
-    implicit integer (i-n), real(c_double) (a-h,o-z)
+    implicit none
+    
     save
 #ifdef __MPI
       include 'mpilib.h'
@@ -29,7 +30,11 @@ contains
 
     character(len=8) frplt
 
-    dimension xpts(*),ypts(*),zpts(*),rpts(*),vx(*),vy(*),vz(*)
+    integer ipts,nfrplt ! input
+    real(c_double) :: xpts(*),ypts(*),zpts(*),rpts(*),vx(*),vy(*),vz(*) ! arguments
+    real(c_double) :: curdep ! input, but not used?
+    integer l,l1,j,ilim,iline,nline,i,iskip,nconskp,ncontr_ ! local
+    real(c_double) :: rmincon1,delr,delz, r_surf, tora ! local
 
     real(c_float) RBOT,RTOP,ZBOT,ZTOP
     real(c_float) RTAB1(LFIELDA),RTAB2(LFIELDA)
@@ -378,7 +383,7 @@ contains
   end subroutine frplteq
 
   subroutine micfrplt
-    implicit integer (i-n), real(c_double) (a-h,o-z)
+    implicit none
     save
 
     textt(1)="1$"

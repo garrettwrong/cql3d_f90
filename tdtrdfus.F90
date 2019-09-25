@@ -3,6 +3,8 @@ module tdtrdfus_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
+  use netcdfrw2_mod, only : ncvdef0,ncvdef2,ncaptc2,ncvptc0, &
+                            length_char,check_err
 
   use bcast_mod, only : bcast
   use cqlcomm_mod
@@ -592,70 +594,70 @@ contains
       call ncaptc2(ncid,NCGLOBAL,'title',NCCHAR,length_char(ltitle), &
            ltitle,istatus)
 
-      vid=ncvdef2(ncid,'version',NCCHAR,1,char64dim,istatus)
+      vid=ncvdef0(ncid,'version',NCCHAR,1,char64dim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,20, &
                 'CQL3D version number',istatus)
 
-      vid=ncvdef2(ncid,'setup0%mnemonic',NCCHAR,1,char64dim,istatus)
+      vid=ncvdef0(ncid,'setup0%mnemonic',NCCHAR,1,char64dim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,23, &
                 'Mnemonic run identifier',istatus)
 
 !  Mesh related quantities
 
-      vid=ncvdef2(ncid,'setup0%lrzmax',NCLONG,0,0,istatus)
+      vid=ncvdef0(ncid,'setup0%lrzmax',NCLONG,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,25, &
                   'Number of radial surfaces',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'rya',NCDOUBLE,1,r0dim,istatus)
+      vid=ncvdef0(ncid,'rya',NCDOUBLE,1,r0dim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,22, &
                  'Normalized radial mesh',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'rpconz',NCDOUBLE,1,r0dim,istatus)
+      vid=ncvdef0(ncid,'rpconz',NCDOUBLE,1,r0dim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,39, &
                  'Major radius at outside of flux surface',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'rhomax',NCDOUBLE,0,0,istatus)
+      vid=ncvdef0(ncid,'rhomax',NCDOUBLE,0,0,istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,3, &
                  'cms',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'setup0%lrz',NCLONG,0,0,istatus)
+      vid=ncvdef0(ncid,'setup0%lrz',NCLONG,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,29, &
                   'Number of FPd radial surfaces',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'setup0%lrindx',NCLONG,1,rdim,istatus)
+      vid=ncvdef0(ncid,'setup0%lrindx',NCLONG,1,rdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,30, &
                  'Radial indices of FPd surfaces',istatus)
 
-      vid=ncvdef2(ncid,'jx',NCLONG,0,0,istatus)
+      vid=ncvdef0(ncid,'jx',NCLONG,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,27, &
                   'momentum-per-mass dimension',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'x',NCDOUBLE,1,xdim,istatus)
+      vid=ncvdef0(ncid,'x',NCDOUBLE,1,xdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,28, &
                  'normalized momentum-per-mass',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'vnorm',NCDOUBLE,0,0,istatus)
+      vid=ncvdef0(ncid,'vnorm',NCDOUBLE,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,33, &
                  'velocity (momentum-per-mass) norm',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,7, &
                            'cms/sec',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'enorm',NCDOUBLE,0,0,istatus)
+      vid=ncvdef0(ncid,'enorm',NCDOUBLE,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,20, &
                            'Energy normalization',istatus)
       call ncaptc2(ncid,vid,'units',NCCHAR,3, &
                            'keV',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'iy',NCLONG,0,0,istatus)
+      vid=ncvdef0(ncid,'iy',NCLONG,0,0,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,25, &
                   'Max pitch angle dimension',istatus)
       call check_err(istatus)
@@ -667,16 +669,16 @@ contains
                  'radians',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'iy_',NCLONG,1,rdim,istatus)
+      vid=ncvdef0(ncid,'iy_',NCLONG,1,rdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,36, &
                   'Pitch angle dimension at each radius',istatus)
       call check_err(istatus)
 
-      vid=ncvdef2(ncid,'itl',NCLONG,1,rdim,istatus)
+      vid=ncvdef0(ncid,'itl',NCLONG,1,rdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,26, &
                  'lower trapped-passing bndy',istatus)
 
-      vid=ncvdef2(ncid,'itu',NCLONG,1,rdim,istatus)
+      vid=ncvdef0(ncid,'itu',NCLONG,1,rdim,istatus)
       call ncaptc2(ncid,vid,'long_name',NCCHAR,26, &
                  'upper trapped-passing bndy',istatus)
       call check_err(istatus)
@@ -741,59 +743,59 @@ contains
 
       istatus= NF_INQ_VARID(ncid,'version',vid)
       ll=length_char(version)
-      call ncvptc2(ncid,vid,1,ll,version,ll,istatus)
+      call ncvptc0(ncid,vid,(1),(ll),version,ll,istatus)
 
       istatus= NF_INQ_VARID(ncid,'setup0%mnemonic',vid)
       ll=length_char(setup0%mnemonic)
-      call ncvptc2(ncid,vid,1,ll,setup0%mnemonic,ll,istatus)
+      call ncvptc0(ncid,vid,(1),(ll),setup0%mnemonic,ll,istatus)
 
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrzmax',vid)
-      call ncvpt_int2(ncid,vid,1,1,setup0%lrzmax,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),setup0%lrzmax)
 
       istatus= NF_INQ_VARID(ncid,'rya',vid)
-      call ncvpt_doubl2(ncid,vid,(1),setup0%lrzmax,rya(1),istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),setup0%lrzmax,rya(1))
 
       istatus= NF_INQ_VARID(ncid,'rpconz',vid)
-      call ncvpt_doubl2(ncid,vid,(1),setup0%lrzmax,rpconz(1),istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),setup0%lrzmax,rpconz(1))
 
       istatus= NF_INQ_VARID(ncid,'rhomax',vid)
-      call ncvpt_doubl2(ncid,vid,(1),1,rhomax,istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(1),(rhomax))
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrz',vid)
-      call ncvpt_int2(ncid,vid,1,1,setup0%lrz,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),setup0%lrz)
 
       istatus= NF_INQ_VARID(ncid,'setup0%lrindx',vid)
-      call ncvpt_int2(ncid,vid,1,setup0%lrz,setup0%lrindx(1),istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),setup0%lrz,setup0%lrindx(1))
 
       istatus= NF_INQ_VARID(ncid,'jx',vid)
-      call ncvpt_int2(ncid,vid,1,1,jx,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),(jx))
 
       istatus= NF_INQ_VARID(ncid,'x',vid)
-      call ncvpt_doubl2(ncid,vid,(1),jx,x,istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(jx),x)
 
       istatus= NF_INQ_VARID(ncid,'vnorm',vid)
-      call ncvpt_doubl2(ncid,vid,(1),1,vnorm,istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(1),(vnorm))
 
       istatus= NF_INQ_VARID(ncid,'enorm',vid)
-      call ncvpt_doubl2(ncid,vid,(1),1,enorm,istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,(1),(1),(enorm))
 
       istatus= NF_INQ_VARID(ncid,'iy',vid)
-      call ncvpt_int2(ncid,vid,1,1,iymax,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),(1),(iymax))
 
       if (iy*lrors.gt.iyjx2) stop 'netcdfrf:  Need to set jx>lrza'
       call pack21(y,1,iy,1,lrors,tem1,iymax,lrors)
       istatus= NF_INQ_VARID(ncid,'y',vid)
-      call ncvpt_doubl2(ncid,vid,start1,y_count,tem1,istatus)
+      istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,y_count,tem1)
 
       istatus= NF_INQ_VARID(ncid,'iy_',vid)
-      call ncvpt_int2(ncid,vid,1,setup0%lrz,iy_,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),setup0%lrz,iy_)
 
       istatus= NF_INQ_VARID(ncid,'itl',vid)
-      call ncvpt_int2(ncid,vid,1,setup0%lrz,itl_,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),setup0%lrz,itl_)
 
       istatus= NF_INQ_VARID(ncid,'itu',vid)
-      call ncvpt_int2(ncid,vid,1,setup0%lrz,itu_,istatus)
+      istatus = NF_PUT_VARA_INT(ncid,vid,(1),setup0%lrz,itu_)
 
 !  n_d_rr is the number of diffused general species
       if (n_d_rr.eq.1) then
@@ -807,7 +809,7 @@ contains
             enddo
             call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
             start1(3)=ll
-            call ncvpt_doubl2(ncid,vid,start1,count1,wkpack,istatus)
+            istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,wkpack)
          enddo
          if (kopt.eq.2) then
          istatus= NF_INQ_VARID(ncid,'d_r',vid)
@@ -819,7 +821,7 @@ contains
             enddo
             call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
             start1(3)=ll
-            call ncvpt_doubl2(ncid,vid,start1,count1,wkpack,istatus)
+            istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start1,count1,wkpack)
          enddo
          endif  !On kopt.eq.2
 
@@ -836,7 +838,7 @@ contains
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                startg(3)=ll
                startg(4)=k
-               call ncvpt_doubl2(ncid,vid,startg,countg,wkpack,istatus)
+               istatus = NF_PUT_VARA_DOUBLE(ncid,vid,startg,countg,wkpack)
             enddo               !  On ll
          enddo                  !  On k
          if (kopt.eq.2) then
@@ -851,7 +853,7 @@ contains
                call pack21(temp1,0,iyp1,0,jxp1,wkpack,iy,jx)
                startg(3)=ll
                startg(4)=k
-               call ncvpt_doubl2(ncid,vid,startg,countg,wkpack,istatus)
+               istatus = NF_PUT_VARA_DOUBLE(ncid,vid,startg,countg,wkpack)
             enddo               !  On ll
          enddo                  !  On k
          endif  !On kopt.eq.2
