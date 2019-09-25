@@ -354,4 +354,4 @@ wptramu.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) r8subs.$(oext) wpbd
 wptrmuy.$(oext): cqlcomm.$(oext) param.$(oext)
 wpvptb.$(oext): cqlcomm.$(oext) param.$(oext)
 wpwrng.$(oext): cqlcomm.$(oext) param.$(oext)
-zfreya.$(oext): cqlcomm.$(oext) param.$(oext)
+zfreya.$(oext): cqlcomm.$(oext) frsubs.$(oext) param.$(oext)
