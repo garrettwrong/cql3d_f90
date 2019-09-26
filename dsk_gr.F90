@@ -45,7 +45,7 @@ contains
 !BH000506:   De-activated by following goto.
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 #ifdef __MPI

@@ -27,7 +27,7 @@ module cqlmpilib_mod
   !---END USE
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 contains
@@ -60,7 +60,7 @@ contains
 #ifdef __MPI
     ! was for env_comm_add use mpi_proc_data         ! (from portlib library)
     implicit none
-    include 'mpilib.h'
+    include 'cql3d_mpilib.h'
 
     integer, intent(in) :: comm ! communicator
 
@@ -80,7 +80,7 @@ contains
     ! set proc id
     implicit none
 #ifdef __MPI
-    include 'mpilib.h'
+    include 'cql3d_mpilib.h'
 #endif
     integer, intent(in) :: procid
 
@@ -94,7 +94,7 @@ contains
     ! set proc id
     implicit none
 #ifdef __MPI
-    include 'mpilib.h'
+    include 'cql3d_mpilib.h'
 #endif
     integer, intent(in) :: nprocs
 

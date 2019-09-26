@@ -44,7 +44,7 @@ contains
     save
 !
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
     !     Pointers for dynamic memory allocation, local usage:

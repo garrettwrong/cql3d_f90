@@ -573,7 +573,7 @@ contains
       ! Plot the change in Total N of ptcles as a func of time.
       ! Calculations are done in sub. fow_cons()
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 !     Conversion to real function for PGPLOT
       !XXX real(c_float) RBOUND

@@ -59,7 +59,7 @@ contains
 !BH110330:  to SXR case.
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       !YuP[06-2016] Moved outside of if[] below.

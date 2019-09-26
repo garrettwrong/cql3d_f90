@@ -44,7 +44,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       dimension powtsc(nrada),currtsc(nrada)

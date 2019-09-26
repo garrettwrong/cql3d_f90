@@ -45,7 +45,7 @@ contains
 !     (Also a time-dependent plot of fusion rate.)
 !
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
       dimension trilr(lrza),tr1s(lrorsa),tr2s(lrorsa)
 !     real(c_float) variables (and function rbound) for pgplot:

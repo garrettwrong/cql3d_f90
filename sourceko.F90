@@ -61,7 +61,7 @@ contains
 !.......................................................................
 !      save
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 !      The ii0m1 method is an alternative translation from

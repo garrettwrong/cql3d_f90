@@ -124,7 +124,7 @@ contains
       character(len=*), intent(in), optional :: nml_file
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       character*8 icall,iplotsxr
@@ -1341,7 +1341,7 @@ contains
       use param_mod
       use cqlcomm_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 
       real(c_double), allocatable :: &
               buff(:) ! (mpifsz+10*mpicsz) Buffer for 11 arrays below

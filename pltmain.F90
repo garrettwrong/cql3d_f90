@@ -79,7 +79,7 @@ contains
     REAL RILIN
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 #ifdef __MPI
@@ -1678,7 +1678,7 @@ contains
 !     YuP[2018-01-04] Adjusted, to make plots of streamlines.
 !
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       integer pltcase
@@ -2649,7 +2649,7 @@ contains
 !**********************
 !
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       REAL RILIN

@@ -46,7 +46,7 @@ contains
 !.......................................................................
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       real(c_double):: tmpt(njene)  !Temporary array

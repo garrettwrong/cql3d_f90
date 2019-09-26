@@ -80,7 +80,7 @@ contains
       include 'netcdf.inc'
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       integer kopt ! input

@@ -8,7 +8,7 @@
       integer kerr ! input
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 ! print error messages - on mpirank.eq.0 only

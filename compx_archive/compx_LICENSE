@@ -72,8 +72,21 @@ c..................................................................
 c
 c     Highlights of code history (see also a_change):
 c
+c     2019 (cql3d_f90)
+c     * Bulk rewrite to F90 using modules and derived types.
+c     * Removal of common blocks (spare freya).
+c     * Improved numerical resolution, and bug fixes including bitwise
+c          reproducibility, culminating in fully automated testing.
+c     * MPI Re-Implementation and fixes MPI.
+c     * Static and shared library based API implementation supporting
+c          further integration with TRANSP.
+c     * Consolidation of makefiles.
+c     * CentOS7 distribution via Docker container.
+c     * Makefile option to compile and run without pgplot library.
+c     * ...and more... see cql3d_f90 git... (GBW)
+c
 c     10/01/2017
-c     Ampere-Faraday equations solved self-consistently for the 
+c     Ampere-Faraday equations solved self-consistently for the
 c     time-dependent toroidal electric field. (bh, YuP)
 c
 c     02/01/2011

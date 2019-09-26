@@ -44,7 +44,7 @@ contains
       include 'frname_decl.h'
       include 'frname.h' ! contains namelist variables; To write (*,frsetup)
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 !.......................................................................

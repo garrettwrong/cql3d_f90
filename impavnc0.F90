@@ -159,7 +159,7 @@ contains
     !.................................................................
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 
@@ -2958,7 +2958,7 @@ contains
       integer :: istat(18)
       integer :: istat0
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 !dir$ nobounds
@@ -3096,7 +3096,7 @@ contains
       implicit none
       integer :: istat
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 #ifdef __MPI
@@ -3135,7 +3135,7 @@ contains
       implicit none
       integer :: istat
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 !  The purpose of this subroutine is to ensure deallocation of variables

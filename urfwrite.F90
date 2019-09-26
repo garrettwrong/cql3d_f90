@@ -41,7 +41,7 @@ contains
 !..................................................................
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 #ifdef __MPI

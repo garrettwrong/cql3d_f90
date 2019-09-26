@@ -41,7 +41,7 @@ contains
 
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       real(c_float) RTAM1(nena),RTAM2(nena)
@@ -222,7 +222,7 @@ contains
         use cqlcomm_mod, only : lorbit, solr, solz, rcontr, zcontr, lensxr
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       character*8  pltsxrvw

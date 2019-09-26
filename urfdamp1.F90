@@ -54,7 +54,7 @@ contains
 !.......................................................................
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       complex*16 cwz,cwxyp,cwxym,cei

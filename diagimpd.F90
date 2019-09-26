@@ -79,7 +79,7 @@ contains
 
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       dimension lefcti(12) ! local working array-index
@@ -410,7 +410,7 @@ contains
       use cqlcomm_mod
       !send/recv entr(k,lefct,l_),pwrrf(1:jx,k,l_),pwrrfs(1:jx,k,l_)
       implicit integer (i-n), real(c_double) (a-h,o-z)
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
       dimension buff(1+jx)
       if(mpirank.eq.0) then ! receive data from other ranks
          call MPI_RECV(buff, 1+jx, &

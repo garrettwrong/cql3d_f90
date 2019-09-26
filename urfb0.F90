@@ -55,7 +55,7 @@ contains
 !c..................................................................
 
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       allocatable :: urfbwk(:) ! local working array, for MPI

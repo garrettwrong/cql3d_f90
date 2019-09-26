@@ -51,7 +51,7 @@ contains
 !     computes the normalized radial mesh.
 !..................................................................
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       dimension titmp(250),detmp(250)

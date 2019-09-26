@@ -56,7 +56,7 @@ contains
       integer itlrza
       parameter(itlrza=3*lrza+1)
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
       dimension d2equ(lrza),d2areamd(lrza),d2volmid(lrza),worka(lrza)

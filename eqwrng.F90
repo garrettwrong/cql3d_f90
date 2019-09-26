@@ -33,7 +33,7 @@ contains
       use param_mod
       implicit integer (i-n), real(c_double) (a-h,o-z)
 #ifdef __MPI
-      include 'mpilib.h'
+      include 'cql3d_mpilib.h'
 #endif
 
 ! print error messages - on mpirank.eq.0 only
