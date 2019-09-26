@@ -79,7 +79,7 @@ c     * Improved numerical resolution, and bug fixes including bitwise
 c          reproducibility, culminating in fully automated testing.
 c     * MPI Re-Implementation and fixes MPI.
 c     * Static and shared library based API implementation supporting
-c          further integration with TRANSP.
+c          further integration with other softwares.
 c     * Consolidation of makefiles.
 c     * CentOS7 distribution via Docker container.
 c     * Makefile option to compile and run without pgplot library.
