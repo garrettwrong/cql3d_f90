@@ -13,8 +13,8 @@ ifdef FC90
 endif
 
 # INCLUDE line
-include include_dependency.mk
-# Check if inlude files have changed
+INCLUDES = $(wildcard *.h)
+# Check if include files have changed
 $(SOURCES):        $(INCLUDES)
 
 # SOURCE line
