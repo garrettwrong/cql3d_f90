@@ -2,7 +2,7 @@
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/garrettwrong/cql3d_f90?include_prereleases)
 ![master pipeline](https://gitlab.com/geebdubya/cql3d_f90/badges/master/pipeline.svg)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3463591.svg)](https://doi.org/10.5281/zenodo.3463591)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3463590.svg)](https://doi.org/10.5281/zenodo.3463590)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 ## About
