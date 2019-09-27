@@ -8,7 +8,7 @@
 ## About
 
 cql3d_f90 is a derived work of the FORTRAN IV/F77 CompX (compxco) CQL3D,
-    a relatavistic Collisional/QuasiLinear Fokker-Planck code,
+    a relativistic Collisional/QuasiLinear Fokker-Planck code,
         by R. W. Harvey et al.
 
 Per Harvey, compx\_archive/compx\_LICENSE:
