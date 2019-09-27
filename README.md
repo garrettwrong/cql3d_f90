@@ -1,5 +1,12 @@
 # cql3d_f90
 
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/garrettwrong/cql3d_f90?include_prereleases)
+![master pipeline](https://gitlab.com/geebdubya/cql3d_f90/badges/master/pipeline.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3463591.svg)](https://doi.org/10.5281/zenodo.3463591)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+
+## About
+
 cql3d_f90 is a derived work of the FORTRAN IV/F77 CompX (compxco) CQL3D,
     a relatavistic Collisional/QuasiLinear Fokker-Planck code,
         by R. W. Harvey et al.
@@ -185,4 +192,9 @@ provided file `ci/Dockerfile.centos7` used in this distribution, building and
  tagging as you would any docker image.
 
 
+## Support
+
+This project was supported by TRANSP development at the
+Princeton Plasma Physics Laboratory via
+`U.S. Department of Energy (DE-AC02-09CH11466)`.
 
