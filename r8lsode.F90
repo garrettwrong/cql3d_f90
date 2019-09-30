@@ -944,8 +944,8 @@
 !  daxpy, dscal, idamax, and ddot   are basic linear algebra modules
 !           (blas) used by the above linpack routines.
 !  d1mach   computes the unit roundoff in a machine-independent manner.
-!  xerrwv, xsetun, and xsetf   handle the printing of all error
-!           messages and warnings.  xerrwv is machine-dependent.
+!  cqlerrwv, xsetun, and xsetf   handle the printing of all error
+!           messages and warnings.  cqlerrwv is machine-dependent.
 ! note..  vnorm_lsode, idamax, ddot, and d1mach are function routines.
 ! all the others are subroutines.
 !
@@ -1259,17 +1259,17 @@
  280  if ((tn + h) .ne. tn) go to 290
       nhnil = nhnil + 1
       if (nhnil .gt. mxhnil) go to 290
-      call xerrwv(50hlsode--  warning..internal t (=r1) and h (=r2) are, &
+      call cqlerrwv(50hlsode--  warning..internal t (=r1) and h (=r2) are, &
          50, 101, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv( &
+      call cqlerrwv( &
         60h      such that in the machine, t + h = t on the next step  , &
          60, 101, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv(50h      (h = step size). solver will continue anyway, &
+      call cqlerrwv(50h      (h = step size). solver will continue anyway, &
          50, 101, 0, 0, 0, 0, 2, tn, h)
       if (nhnil .lt. mxhnil) go to 290
-      call xerrwv(50hlsode--  above warning has been issued i1 times.  , &
+      call cqlerrwv(50hlsode--  above warning has been issued i1 times.  , &
          50, 102, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv(50h      it will not be issued again for this problem, &
+      call cqlerrwv(50h      it will not be issued again for this problem, &
          50, 102, 0, 1, mxhnil, 0, 0, 0.0d0, 0.0d0)
  290  continue
 !-----------------------------------------------------------------------
@@ -1339,7 +1339,7 @@
 !
  430  ntrep = ntrep + 1
       if (ntrep .lt. 5) return
-      call xerrwv( &
+      call cqlerrwv( &
         60hlsode--  repeated calls with istate = 1 and tout = t (=r1)  , &
          60, 301, 0, 0, 0, 0, 1, t, 0.0d0)
       go to 800
@@ -1353,39 +1353,39 @@
 ! the work arrays before returning.
 !-----------------------------------------------------------------------
 ! the maximum number of steps was taken before reaching tout. ----------
- 500  call xerrwv(50hlsode--  at current t (=r1), mxstep (=i1) steps   , &
+ 500  call cqlerrwv(50hlsode--  at current t (=r1), mxstep (=i1) steps   , &
          50, 201, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv(50h      taken on this call before reaching tout     , &
+      call cqlerrwv(50h      taken on this call before reaching tout     , &
          50, 201, 0, 1, mxstep, 0, 1, tn, 0.0d0)
       istate = -1
       go to 580
 ! ewt(i) .le. 0.0 for some i (not at start of problem). ----------------
  510  ewti = rwork(lewt+i-1)
-      call xerrwv(50hlsode--  at t (=r1), ewt(i1) has become r2 .le. 0., &
+      call cqlerrwv(50hlsode--  at t (=r1), ewt(i1) has become r2 .le. 0., &
          50, 202, 0, 1, i, 0, 2, tn, ewti)
       istate = -6
       go to 580
 ! too much accuracy requested for machine precision. -------------------
- 520  call xerrwv(50hlsode--  at t (=r1), too much accuracy requested  , &
+ 520  call cqlerrwv(50hlsode--  at t (=r1), too much accuracy requested  , &
          50, 203, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv(50h      for precision of machine..  see tolsf (=r2) , &
+      call cqlerrwv(50h      for precision of machine..  see tolsf (=r2) , &
          50, 203, 0, 0, 0, 0, 2, tn, tolsf)
       rwork(14) = tolsf
       istate = -2
       go to 580
 ! kflag = -1.  error test failed repeatedly or with abs(h) = hmin. -----
- 530  call xerrwv(50hlsode--  at t(=r1) and step size h(=r2), the error, &
+ 530  call cqlerrwv(50hlsode--  at t(=r1) and step size h(=r2), the error, &
          50, 204, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv(50h      test failed repeatedly or with abs(h) = hmin, &
+      call cqlerrwv(50h      test failed repeatedly or with abs(h) = hmin, &
          50, 204, 0, 0, 0, 0, 2, tn, h)
       istate = -4
       go to 560
 ! kflag = -2.  convergence failed repeatedly or with abs(h) = hmin. ----
- 540  call xerrwv(50hlsode--  at t (=r1) and step size h (=r2), the    , &
+ 540  call cqlerrwv(50hlsode--  at t (=r1) and step size h (=r2), the    , &
          50, 205, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv(50h      corrector convergence failed repeatedly     , &
+      call cqlerrwv(50h      corrector convergence failed repeatedly     , &
          50, 205, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv(30h      or with abs(h) = hmin   , &
+      call cqlerrwv(30h      or with abs(h) = hmin   , &
          30, 205, 0, 0, 0, 0, 2, tn, h)
       istate = -5
 ! compute imxer if relevant. -------------------------------------------
@@ -1420,108 +1420,108 @@
 ! 5 consecutive such returns just before this call to the solver,
 ! the run is halted.
 !-----------------------------------------------------------------------
- 601  call xerrwv(30hlsode--  istate (=i1) illegal , &
+ 601  call cqlerrwv(30hlsode--  istate (=i1) illegal , &
          30, 1, 0, 1, istate, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 602  call xerrwv(30hlsode--  itask (=i1) illegal  , &
+ 602  call cqlerrwv(30hlsode--  itask (=i1) illegal  , &
          30, 2, 0, 1, itask, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 603  call xerrwv(50hlsode--  istate .gt. 1 but lsode not initialized  , &
+ 603  call cqlerrwv(50hlsode--  istate .gt. 1 but lsode not initialized  , &
          50, 3, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 604  call xerrwv(30hlsode--  neq (=i1) .lt. 1     , &
+ 604  call cqlerrwv(30hlsode--  neq (=i1) .lt. 1     , &
          30, 4, 0, 1, neq(1), 0, 0, 0.0d0, 0.0d0)
       go to 700
- 605  call xerrwv(50hlsode--  istate = 3 and neq increased (i1 to i2)  , &
+ 605  call cqlerrwv(50hlsode--  istate = 3 and neq increased (i1 to i2)  , &
          50, 5, 0, 2, n, neq(1), 0, 0.0d0, 0.0d0)
       go to 700
- 606  call xerrwv(30hlsode--  itol (=i1) illegal   , &
+ 606  call cqlerrwv(30hlsode--  itol (=i1) illegal   , &
          30, 6, 0, 1, itol, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 607  call xerrwv(30hlsode--  iopt (=i1) illegal   , &
+ 607  call cqlerrwv(30hlsode--  iopt (=i1) illegal   , &
          30, 7, 0, 1, iopt, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 608  call xerrwv(30hlsode--  mf (=i1) illegal     , &
+ 608  call cqlerrwv(30hlsode--  mf (=i1) illegal     , &
          30, 8, 0, 1, mf, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 609  call xerrwv(50hlsode--  ml (=i1) illegal.. .lt.0 or .ge.neq (=i2), &
+ 609  call cqlerrwv(50hlsode--  ml (=i1) illegal.. .lt.0 or .ge.neq (=i2), &
          50, 9, 0, 2, ml, neq(1), 0, 0.0d0, 0.0d0)
       go to 700
- 610  call xerrwv(50hlsode--  mu (=i1) illegal.. .lt.0 or .ge.neq (=i2), &
+ 610  call cqlerrwv(50hlsode--  mu (=i1) illegal.. .lt.0 or .ge.neq (=i2), &
          50, 10, 0, 2, mu, neq(1), 0, 0.0d0, 0.0d0)
       go to 700
- 611  call xerrwv(30hlsode--  maxord (=i1) .lt. 0  , &
+ 611  call cqlerrwv(30hlsode--  maxord (=i1) .lt. 0  , &
          30, 11, 0, 1, maxord, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 612  call xerrwv(30hlsode--  mxstep (=i1) .lt. 0  , &
+ 612  call cqlerrwv(30hlsode--  mxstep (=i1) .lt. 0  , &
          30, 12, 0, 1, mxstep, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 613  call xerrwv(30hlsode--  mxhnil (=i1) .lt. 0  , &
+ 613  call cqlerrwv(30hlsode--  mxhnil (=i1) .lt. 0  , &
          30, 13, 0, 1, mxhnil, 0, 0, 0.0d0, 0.0d0)
       go to 700
- 614  call xerrwv(40hlsode--  tout (=r1) behind t (=r2)      , &
+ 614  call cqlerrwv(40hlsode--  tout (=r1) behind t (=r2)      , &
          40, 14, 0, 0, 0, 0, 2, tout, t)
-      call xerrwv(50h      integration direction is given by h0 (=r1)  , &
+      call cqlerrwv(50h      integration direction is given by h0 (=r1)  , &
          50, 14, 0, 0, 0, 0, 1, h0, 0.0d0)
       go to 700
- 615  call xerrwv(30hlsode--  hmax (=r1) .lt. 0.0  , &
+ 615  call cqlerrwv(30hlsode--  hmax (=r1) .lt. 0.0  , &
          30, 15, 0, 0, 0, 0, 1, hmax, 0.0d0)
       go to 700
- 616  call xerrwv(30hlsode--  hmin (=r1) .lt. 0.0  , &
+ 616  call cqlerrwv(30hlsode--  hmin (=r1) .lt. 0.0  , &
          30, 16, 0, 0, 0, 0, 1, hmin, 0.0d0)
       go to 700
- 617  call xerrwv( &
+ 617  call cqlerrwv( &
         60hlsode--  rwork length needed, lenrw (=i1), exceeds lrw (=i2), &
          60, 17, 0, 2, lenrw, lrw, 0, 0.0d0, 0.0d0)
       go to 700
- 618  call xerrwv( &
+ 618  call cqlerrwv( &
         60hlsode--  iwork length needed, leniw (=i1), exceeds liw (=i2), &
          60, 18, 0, 2, leniw, liw, 0, 0.0d0, 0.0d0)
       go to 700
- 619  call xerrwv(40hlsode--  rtol(i1) is r1 .lt. 0.0        , &
+ 619  call cqlerrwv(40hlsode--  rtol(i1) is r1 .lt. 0.0        , &
          40, 19, 0, 1, i, 0, 1, rtoli, 0.0d0)
       go to 700
- 620  call xerrwv(40hlsode--  atol(i1) is r1 .lt. 0.0        , &
+ 620  call cqlerrwv(40hlsode--  atol(i1) is r1 .lt. 0.0        , &
          40, 20, 0, 1, i, 0, 1, atoli, 0.0d0)
       go to 700
  621  ewti = rwork(lewt+i-1)
-      call xerrwv(40hlsode--  ewt(i1) is r1 .le. 0.0         , &
+      call cqlerrwv(40hlsode--  ewt(i1) is r1 .le. 0.0         , &
          40, 21, 0, 1, i, 0, 1, ewti, 0.0d0)
       go to 700
- 622  call xerrwv( &
+ 622  call cqlerrwv( &
         60hlsode--  tout (=r1) too close to t(=r2) to start integration, &
          60, 22, 0, 0, 0, 0, 2, tout, t)
       go to 700
- 623  call xerrwv( &
+ 623  call cqlerrwv( &
         60hlsode--  itask = i1 and tout (=r1) behind tcur - hu (= r2)  , &
          60, 23, 0, 1, itask, 0, 2, tout, tp)
       go to 700
- 624  call xerrwv( &
+ 624  call cqlerrwv( &
         60hlsode--  itask = 4 or 5 and tcrit (=r1) behind tcur (=r2)   , &
          60, 24, 0, 0, 0, 0, 2, tcrit, tn)
       go to 700
- 625  call xerrwv( &
+ 625  call cqlerrwv( &
         60hlsode--  itask = 4 or 5 and tcrit (=r1) behind tout (=r2)   , &
          60, 25, 0, 0, 0, 0, 2, tcrit, tout)
       go to 700
- 626  call xerrwv(50hlsode--  at start of problem, too much accuracy   , &
+ 626  call cqlerrwv(50hlsode--  at start of problem, too much accuracy   , &
          50, 26, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
-      call xerrwv( &
+      call cqlerrwv( &
         60h      requested for precision of machine..  see tolsf (=r1) , &
          60, 26, 0, 0, 0, 0, 1, tolsf, 0.0d0)
       rwork(14) = tolsf
       go to 700
- 627  call xerrwv(50hlsode--  trouble from intdy. itask = i1, tout = r1, &
+ 627  call cqlerrwv(50hlsode--  trouble from intdy. itask = i1, tout = r1, &
          50, 27, 0, 1, itask, 0, 1, tout, 0.0d0)
 !
  700  if (illin .eq. 5) go to 710
       illin = illin + 1
       istate = -3
       return
- 710  call xerrwv(50hlsode--  repeated occurrences of illegal input    , &
+ 710  call cqlerrwv(50hlsode--  repeated occurrences of illegal input    , &
          50, 302, 0, 0, 0, 0, 0, 0.0d0, 0.0d0)
 !
- 800  call xerrwv(50hlsode--  run aborted.. apparent infinite loop     , &
+ 800  call cqlerrwv(50hlsode--  run aborted.. apparent infinite loop     , &
          50, 303, 2, 0, 0, 0, 0, 0.0d0, 0.0d0)
       return
 !----------------------- end of subroutine lsode -----------------------
@@ -1782,13 +1782,13 @@
  60     dky(i) = r*dky(i)
       return
 !
- 80   call xerrwv(30hintdy--  k (=i1) illegal      , &
+ 80   call cqlerrwv(30hintdy--  k (=i1) illegal      , &
          30, 51, 0, 1, k, 0, 0, 0.0d0, 0.0d0)
       iflag = -1
       return
- 90   call xerrwv(30hintdy--  t (=r1) illegal      , &
+ 90   call cqlerrwv(30hintdy--  t (=r1) illegal      , &
          30, 52, 0, 0, 0, 0, 1, t, 0.0d0)
-      call xerrwv( &
+      call cqlerrwv( &
         60h      t not in interval tcur - hu (= r1) to tcur (=r2)      , &
          60, 52, 0, 0, 0, 0, 2, tp, tn)
       iflag = -2
@@ -2591,14 +2591,14 @@
       
       
       
-      subroutine xerrwv (msg, nmes, nerr, level, ni, i1, i2, nr, r1, r2)
+      subroutine cqlerrwv (msg, nmes, nerr, level, ni, i1, i2, nr, r1, r2)
       use iso_c_binding, only : c_double
       integer msg, nmes, nerr, level, ni, i1, i2, nr
       integer i, lun, lunit, mesflg, ncpw, nch, nwds
       real(c_double) r1, r2
       dimension msg(nmes)
 !-----------------------------------------------------------------------
-! subroutines xerrwv, xsetf, and xsetun, as given here, constitute
+! subroutines cqlerrwv, xsetf, and xsetun, as given here, constitute
 ! a simplified version of the slatec error handling package.
 ! written by a. c. hindmarsh at llnl.  version of march 30, 1987.
 ! this version is in real(c_double).
@@ -2704,8 +2704,8 @@
 ! abort the run if level = 2. ------------------------------------------
  100  if (level .ne. 2) return
       stop 'r8lsode:'
-!----------------------- end of subroutine xerrwv ----------------------
-      end subroutine xerrwv
+!----------------------- end of subroutine cqlerrwv ----------------------
+      end subroutine cqlerrwv
       
       
       
