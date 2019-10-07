@@ -1,5 +1,7 @@
 *.o
+*.o_mpi
 xcql3d*
+mpi_xcql3d*
 *.mod
 *.log
 *~
