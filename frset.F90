@@ -142,7 +142,8 @@
 !MPIINSERT_IF_RANK_EQ_0
       ! make plots on mpirank.eq.0 only
       if (noplots .ne. "enabled1") then
-      write(t_,1000)
+#ifndef NOPGPLOT
+         write(t_,1000)
  1000 format("FR (freya beam deposition) model parameters:")
       RILIN=11.
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
@@ -156,6 +157,7 @@
  1002 format("====>npart = ",i7)
       RILIN=13.
       CALL PGMTXT('T',-RILIN,0.,0.,t_)
+#endif
       endif
 !MPIINSERT_ENDIF_RANK
 
