@@ -10,6 +10,7 @@ LIBTOOL   = ar rcs
 # TRANSP build stuff
 ifdef FC90
     COMPILER = $(FC90)
+    NOPGPLOT = TRUE
 endif
 
 # INCLUDE line
@@ -32,6 +33,7 @@ endif
 # if netcdf_dir env var is set (like by a module), use it:
 ifdef NETCDF_DIR
 	INCLUDE += -I$(NETCDF_DIR)/include
+	LOCATION += -L$(NETCDF_DIR)/lib
 else
         # otherwise, use typical place on centos7 w/ gfort
 	INCLUDE += -I/usr/lib64/gfortran/modules/
