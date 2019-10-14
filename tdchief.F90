@@ -173,7 +173,7 @@ contains
 !     Read in first namelist, setup0: determines type of run, etc.
 !..................................................................
       if(present(nml_file)) then
-         call get_setup0_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+         call get_setup0_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.FALSE.)
       end if
 
 #ifdef __MPI
