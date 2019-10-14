@@ -52,7 +52,7 @@ build:centos7openmpi:
   - make -f  makefile_gfortran64.CentOS7 mpi
   artifacts:
     paths:
-    - mpi_xql3d
+    - mpi_xcql3d
     - mpi_xcql3d_shared
     - libmpi_xcql3d.so
     - libmpi_xcql3d.a
