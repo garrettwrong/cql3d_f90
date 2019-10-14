@@ -146,7 +146,8 @@ transp_cmod:
   image: garrettwrong/cql3d_f90_centos-7
   script:
   - cd ci/transp_cmod
-  - mpirun -n 4 ../../mpi_xcql3d
+  # note, _inside the docker container_, we are root
+  - mpirun --allow-run-as-root -n 4 ../../mpi_xcql3d
   - nccmp -dmgfs cql3d.nc reference.nc
   - nccmp -dmgfs cql3d_krf001.nc reference_krf001.nc
   artifacts:
