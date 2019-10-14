@@ -153,9 +153,16 @@ contains
          call dscal(iyjx2,ratio(k,lr_),f(0:iy+1,0:jx+1,k,l_),1) !rescale f
 !         write(*,'(a,3i4,3e13.5)')'diagscal: n,k,lr,xlndn00,runden,gn',&
 !                                    n,k,lr_,xlndn00(k,lr_),runden,gn
-         write(*,'(a,3i4,e13.5)') &
-          'diagscal: n,k,lr=;  f is rescaled by ratio()=', &
-                     n,k,lr_,  ratio(k,lr_)
+#ifdef __MPI
+         ! for MPI, only print from master
+         if(mpirank.eq.0) then
+#endif
+            write(*,'(a,3i4,e13.5)') &
+                 'diagscal: n,k,lr=;  f is rescaled by ratio()=', &
+                 n,k,lr_,  ratio(k,lr_)
+#ifdef __MPI
+         endif !mpirank 0
+#endif
          ! Note: it is not always a good idea to rescale the distr.func.
          ! Example: When there is a large-power NBI source,
          ! comparing to the initial background
