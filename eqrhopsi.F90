@@ -42,6 +42,9 @@ module eqrhopsi_mod
   use param_mod
   use cqlcomm_mod
   use iso_c_binding, only : c_double
+#ifdef __MPI
+  include 'cql3d_mpilib.h'
+#endif
   real(c_double), private :: btor00,bthr00,bmod00
   save
 
@@ -417,7 +420,14 @@ contains
 
          ! Check that eqpsi is strictly descending:
          do j=2,nconteqn
+#ifdef __MPI
+         ! for MPI, only print from master
+         if(mpirank.eq.0) then
+#endif
             write(*,'(a,i4,e16.8)')' j,eqpsi(j)-psilim=',j,eqpsi(j)-psilim
+#ifdef __MPI
+         endif !mpirank 0
+#endif
             if(eqpsi(j)-eqpsi(j-1).ge.0.d0)then
                WRITE(*,*)'eqrhopsi: eqpsi is not descending for j,j-1=',j,j-1
                stop
