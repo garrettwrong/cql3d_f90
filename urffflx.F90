@@ -26,6 +26,9 @@ module urffflx_mod
   use zcunix_mod, only : terp2
 
   !---END USE
+#ifdef __MPI
+  include 'cql3d_mpilib.h'
+#endif
 
 !
 !
@@ -124,9 +127,22 @@ contains
                if (icount_outside_lim.eq.0) &
                write(*,*)'urffflx: Ray elements outside of rho=1'
                icount_outside_lim=icount_outside_lim+1 !for a printout
-               write(*,'(a,i4,2i7)') &
-                   'urffflx:l>setup0%lrzmax; iray,is,icount_outside_lim', &
-                                      iray,is,icount_outside_lim
+#ifdef __MPI
+               ! for MPI, only print from master
+               if(mpirank.eq.0) then
+#endif
+                  if(icount_outside_lim.LT.10) then
+                     write(*,'(a,i4,2i7)') &
+                          'urffflx:l>setup0%lrzmax; iray,is,icount_outside_lim', &
+                          iray,is,icount_outside_lim
+                  end if
+                  if(icount_outside_lim.EQ.10) then
+                     write(*,'(a)') &
+                          'urffflx:l>setup0%lrzmax; GT 10 elem outside, quieting...'
+                  end if
+#ifdef __MPI
+         endif !mpirank 0
+#endif
                l=setup0%lrzmax ! Adjusted
             endif
 !$$$            if (l.le.0) then
@@ -136,9 +152,23 @@ contains
             lloc(is,iray,irfn(krf))=l
 !BH090602            if (l.gt.setup0%lrzmax) go to 30
             ncontrib(l)=ncontrib(l)+1
- 30       continue
- 20     continue
- 100  continue !  krf=1,mrf
+30       end do
+20    end do
+100 end do !  krf=1,mrf
+
+! if we "quietted" log, report totals now
+#ifdef __MPI
+         ! for MPI, only print from master
+         if(mpirank.eq.0) then
+#endif
+            if(icount_outside_lim.GT.0) then
+               write(*,'(a,i4)')  &
+                    'urffflx:l>setup0%lrzmax; total icount_outside_lim: ', &
+                    icount_outside_lim
+            end if
+#ifdef __MPI
+         endif !mpirank 0
+#endif
 
 !     Duplicate data for psiloc and lloc into multi-harmonic
 !     related arrays.

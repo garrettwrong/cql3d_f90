@@ -142,11 +142,11 @@ contains
     !     read in namelist input for CQL3D
     !..................................................................
     if(present(nml_file)) then
-       call get_setup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
-       call get_trsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
-       call get_sousetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
-       call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.TRUE.)
-       call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.TRUE.)
+       call get_setup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.FALSE.)
+       call get_trsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.FALSE.)
+       call get_sousetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.FALSE.)
+       call get_eqsetup_from_nml(nml_file, close_nml_file=.FALSE., debug_print=.FALSE.)
+       call get_rfsetup_from_nml(nml_file, close_nml_file=.TRUE., debug_print=.FALSE.)
     end if
     if (partner.eq."selene") then
        open(unit=18,file='kcqlsel',status='old')
