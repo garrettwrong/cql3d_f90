@@ -1979,13 +1979,13 @@ contains
                    !write(*,*)'impavnc0: Estimate of of icoeff=', icoeff_est
                    !         Check coeff storage:
                    if (icoeff.gt.size(a_csr)) then
-! #ifdef __MPI
-!       if(mpirank.eq.0) then
-! #endif
+#ifdef __MPI
+       if(mpirank.eq.0) then
+#endif
                       WRITE(*,*)'impavnc0:icoeff.gt.size(a_csr)'
-! #ifdef __MPI
-!       endif  ! for if(mpirank.eq.***)
-! #endif
+#ifdef __MPI
+       endif  ! for if(mpirank.eq.***)
+#endif
                       STOP
                    endif
                 endif  ! on soln_method.ne.'direct'
@@ -2470,12 +2470,12 @@ contains
 
 #ifdef __MPI
       if(mpirank.EQ.mpiworker) then
-      WRITE(*,'(a,2i4,2e19.11)')  &
-       'impavnc rhs before dgbtrf mpirank, l_,MIN(rhs),MAX(rhs)', &
-                mpirank, l_,MINVAL(rhs),MAXVAL(rhs)
-      WRITE(*,'(a,2i4,2e19.11)')  &
-       'impavnc ABD before dgbtrf mpirank, l_,MIN(abd),SUM(abd)', &
-       mpirank, l_,MINVAL(abd),SUM(abd)
+         WRITE(*,'(a,2i4,2e19.11)')  &
+              'impavnc rhs before dgbtrf mpirank, l_,MIN(rhs),MAX(rhs)', &
+              mpirank, l_,MINVAL(rhs),MAXVAL(rhs)
+         WRITE(*,'(a,2i4,2e19.11)')  &
+              'impavnc ABD before dgbtrf mpirank, l_,MIN(abd),SUM(abd)', &
+              mpirank, l_,MINVAL(abd),SUM(abd)
       endif
 #else
       WRITE(*,'(a,i4,2e19.11)')  &
@@ -2519,10 +2519,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.mpiworker) then
          WRITE(*,'(a,2i4,2e19.11)')  &
-              'impavnc rhs after  dgbtrs l_,MIN(rhs),MAX(rhs)', &
+              'impavnc rhs after  dgbtrs mpirank, l_,MIN(rhs),MAX(rhs)', &
               mpirank,l_,MINVAL(rhs),MAXVAL(rhs)
          WRITE(*,'(a,2i4,2e19.11)')  &
-              'impavnc ABD after  dgbtrs l_,MIN(abd),SUM(abd)', &
+              'impavnc ABD after  mpirank, dgbtrs l_,MIN(abd),SUM(abd)', &
               mpirank,l_,MINVAL(abd),SUM(abd)
       end if
 #else
