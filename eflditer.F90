@@ -30,6 +30,9 @@ module eflditer_mod
   use soucrit_mod, only : soucrit
 
   !---END USE
+#ifdef __MPI
+      include 'cql3d_mpilib.h'
+#endif
 
 !
 !
@@ -184,12 +187,19 @@ contains
 !        Save elecfld values for diagnostic purposes:
 !BH171230         elecfldn(nefiter,n,l_)=elecfld(lr_)
          elecn(l_,n,nefiter)=elecfld(lr_)
-      write(*,'(a,i5,4e12.4)')'elecfld,currpar/psifct,currxj0,currerrf', &
-           lr_,elecfld(lr_),currpar(lr_)/psifct1,currxj0(lr_),currerrf
+
+#ifdef __MPI
+         ! for MPI, only print from master
+         if(mpirank.eq.0) then
+#endif
+            write(*,'(a,i5,4e12.4)')'elecfld,currpar/psifct,currxj0,currerrf', &
+                 lr_,elecfld(lr_),currpar(lr_)/psifct1,currxj0(lr_),currerrf
+
+#ifdef __MPI
+         endif !mpirank 0
+#endif
 
       endif
-
-
 
       return
       end subroutine eflditer
