@@ -45,6 +45,19 @@ build:centos7:
     - libxcql3d.a
     expire_in: 1 week
 
+build:centos7openmpi:
+  stage: build
+  image: garrettwrong/cql3d_f90_centos-7
+  script:
+  - make -f  makefile_gfortran64.CentOS7 mpi
+  artifacts:
+    paths:
+    - mpi_xcql3d
+    - mpi_xcql3d_shared
+    - libmpi_xcql3d.so
+    - libmpi_xcql3d.a
+    expire_in: 1 week
+
 case1:
   stage: test
   image: garrettwrong/cql3d_f90_centos-7
@@ -127,3 +140,21 @@ amp_far_rune_knockon:
     expire_in: 1 week
   dependencies:
   - build:centos7
+
+transp_cmod:
+  stage: test
+  image: garrettwrong/cql3d_f90_centos-7
+  script:
+  - cd ci/transp_cmod
+  # note, _inside the docker container_, we are root
+  - mpirun --allow-run-as-root -n 4 ../../mpi_xcql3d
+  - nccmp -dmgfs --exclude powers,powers_int cql3d.nc reference.nc
+  - nccmp -dmgfs cql3d_krf001.nc reference_krf001.nc
+  artifacts:
+    when: always
+    paths:
+    - ci/transp_cmod/cql3d.nc
+    - ci/transp_cmod/cql3d_krf001.nc
+    expire_in: 1 week
+  dependencies:
+  - build:centos7openmpi
