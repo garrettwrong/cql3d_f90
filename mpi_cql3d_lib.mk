@@ -9,7 +9,7 @@ SHR = $(CODESYSDIR)/source/misc/makeflags.mk
 include $(SHR)
 export
 
-libmpi_cql3d_lib: | install clean
+libmpi_cql3d_lib: | clean install clean
 
 install: pkg
 	@cp libmpi_xcql3d.so $(DYLDIR)/libmpi_cql3d_lib.so

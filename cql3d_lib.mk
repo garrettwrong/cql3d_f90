@@ -8,7 +8,7 @@ SHR = $(CODESYSDIR)/source/misc/makeflags.mk
 include $(SHR)
 export
 
-libcql3d_lib: | install clean
+libcql3d_lib: | clean install clean
 
 install: pkg
 	@test -d $(DYLDIR) || mkdir -p $(DYLDIR)
