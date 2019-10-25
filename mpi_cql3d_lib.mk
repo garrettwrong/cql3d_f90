@@ -9,12 +9,16 @@ SHR = $(CODESYSDIR)/source/misc/makeflags.mk
 include $(SHR)
 export
 
-libmpi_cql3d_lib: libcql3d_lib
-	$(MAKE) -f makefile_gfortran64.CentOS7 -j mpi
+libmpi_cql3d_lib: | install clean
+
+install: pkg
 	@cp libmpi_xcql3d.so $(DYLDIR)/libmpi_cql3d_lib.so
 	@cp libmpi_xcql3d.a $(LIBDIR)/mpi_cql3d_lib.a
 	@cp cqlmpilib_mod.mod $(MPIMODDIR)
 	@cp mpi_xcql3d $(EXEDIR)/mpi_xcql3d
+
+pkg:
+	$(MAKE) -f makefile_gfortran64.CentOS7 -j mpi
 
 clean:
 	$(MAKE) -f makefile_gfortran64.CentOS7 clean
@@ -22,6 +26,7 @@ realclean: clean
 
 .PHONY: realclean
 .PHONY: clean
+.PHONY: install
 .PHONY: pkg
-.PHONY: libcql3d_lib
+.PHONY: libmpi_cql3d_lib
 .PHONY: all
