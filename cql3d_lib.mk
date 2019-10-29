@@ -8,7 +8,12 @@ SHR = $(CODESYSDIR)/source/misc/makeflags.mk
 include $(SHR)
 export
 
-libcql3d_lib: | clean install clean
+libcql3d_lib: install
+	@echo CQL3D Post Install Cleanup
+	$(MAKE) -f makefile_gfortran64.CentOS7 clean
+
+pkg: clean
+	$(MAKE) -f makefile_gfortran64.CentOS7 -j all
 
 install: pkg
 	@test -d $(DYLDIR) || mkdir -p $(DYLDIR)
@@ -20,9 +25,6 @@ install: pkg
 	@cp *.mod $(MODDIR)
 	@cp xcql3d $(EXEDIR)/xcql3d
 
-pkg:
-	$(MAKE) -f makefile_gfortran64.CentOS7 -j all
-
 clean:
 	$(MAKE) -f makefile_gfortran64.CentOS7 clean
 realclean: clean
@@ -32,4 +34,3 @@ realclean: clean
 .PHONY: install
 .PHONY: pkg
 .PHONY: libcql3d_lib
-.PHONY: all
