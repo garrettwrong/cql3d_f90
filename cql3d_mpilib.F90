@@ -46,9 +46,7 @@ contains
 
     call MPI_COMM_SIZE(MPI_COMM_WORLD,mpisize,mpiierr)
     call MPI_COMM_RANK(MPI_COMM_WORLD,mpirank,mpiierr)
-    if(mpirank.eq.0) PRINT *,'MPISIZE ===',mpisize
     if(mpisize.le.1) stop '===   Run with number of cores >1   ==='
-    PRINT *,'Start mpirank=',mpirank
     if(mpirank.eq.0) then
        mpitime = MPI_WTIME()
     endif
