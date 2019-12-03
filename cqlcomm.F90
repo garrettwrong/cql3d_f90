@@ -3250,7 +3250,9 @@ contains
   end subroutine initialize_setup_pointers
 
   subroutine initialize_cqlcomm
+
     if(initialized_cqlcomm) call abort
+
     call initialize_eq_pointers
     call initialize_rf_pointers
     call initialize_tr_pointers

@@ -76,8 +76,7 @@ contains
             if (inlmod.eq.2) go to 2
          endif
          go to 1
- 2       continue
-         WRITE(*,*)'inlmod = ',inlmod
+2        continue
          close(4)
 
  1003    format(a8)
