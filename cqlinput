@@ -5,6 +5,7 @@
  noplots='enabled',
  lrz=18
  mnemonic = 'mst_stand_lh00001.MergedCQL3D_direct_lh-dis'
+ verbose= .false.
  &end
 
 

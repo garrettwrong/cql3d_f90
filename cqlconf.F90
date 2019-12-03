@@ -33,6 +33,7 @@ module cqlconf_mod
   implicit none
 
   private
+  character(len=*), parameter :: nullfile="/dev/null"
   integer :: ll
   logical, save :: nml_file_open = .FALSE.
   integer, save :: nml_fd = -1
@@ -102,6 +103,7 @@ module cqlconf_mod
      integer :: lsindx(0:lrorsa) =  (/ (ll, ll=0,lrorsa) /)
      character(len=8) :: nlrestrt = "disabled"
      character(len=8) :: nlwritf = "disabled"
+     logical :: verbose = .TRUE.
   end type setup0_t
 
   type, public :: eqsetup_t
@@ -776,7 +778,6 @@ contains
   subroutine maybe_nml_open(nml_file)
     character(len=*), intent(in) :: nml_file
     if (.not. nml_file_open) then
-       print *, "Opening nml_file: ", nml_file
        nml_fd = newunit()
        open(unit=nml_fd, file=nml_file, status='old')
        nml_file_open = .TRUE.
@@ -820,12 +821,13 @@ contains
     integer :: lsindx(0:lrorsa)
     character(len=8) :: nlrestrt
     character(len=8) :: nlwritf
+    logical :: verbose
 
     ! state the namelist, with associated vars
 
     namelist/setup0/ mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
          nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
-         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf
+         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf,verbose
 
     ! copy defaults to local vars
 
@@ -848,6 +850,7 @@ contains
     lsindx = setup0_%lsindx
     nlrestrt = setup0_%nlrestrt
     nlwritf = setup0_%nlwritf
+    verbose = setup0_%verbose
 
     ! read the nml, which will write into the local vars
 
@@ -858,7 +861,7 @@ contains
     ! external codes can call this, which packs the setup0 derived type.
     call set_setup0(mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
          nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
-         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf, debug_print)
+         ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf,verbose, debug_print)
 
     ! we optionally close the nml file.
     if (present(close_nml_file)) then
@@ -871,7 +874,7 @@ contains
 
   subroutine set_setup0(mnemonic,ioutput,iuser,ibox,noplots,lnwidth, &
        nmlstout,special_calls,cqlpmod,lrz,lrzdiff,lrzmax,lrindx, &
-       ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf, &
+       ls,lsmax,lsdiff,lsindx,nlrestrt,nlwritf,verbose, &
        debug_print)
     logical, intent(in), optional :: debug_print
     !
@@ -894,6 +897,7 @@ contains
     integer, intent(in), optional :: lsindx(0:lrorsa)
     character(len=8), intent(in), optional :: nlrestrt
     character(len=8), intent(in), optional :: nlwritf
+    logical, intent(in), optional :: verbose
 
     ! All this code should do is override the defaults
     ! in setup0 with optional args.
@@ -918,10 +922,19 @@ contains
     if (present(lsindx)) setup0%lsindx = lsindx
     if (present(nlrestrt)) setup0%nlrestrt = nlrestrt
     if (present(nlwritf)) setup0%nlwritf = nlwritf
+    if (present(verbose)) setup0%verbose = verbose
 
     if ( present(debug_print)) then
        if (debug_print) call print_setup0
     end if
+
+    if(.not. setup0%verbose) then
+       ! send stdout to /dev/null,
+       !   this approach avoids branching every single write and print statement
+       ! stdout fd will be closed when the process ends.
+       open(stdout, file=nullfile, status="old")
+    end if
+
 
   end subroutine set_setup0
 
