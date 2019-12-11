@@ -2,6 +2,7 @@
 !
       subroutine frset(lrz,noplots,nmlstout)
       use bcast_mod, only : bcast
+      use cqlconf_mod, only : setup0
       use param_mod
       use zfreya_mod, only : random_my
 

@@ -27,6 +27,7 @@
 
 program a_cql3d
   use abchief_mod, only : abchief
+  use cqlconf_mod, only : setup0
   use impavnc0_mod, only : de_alloc
   use impavnc0_mod, only : it3dalloc
   use impavnc0_mod, only : it3ddalloc

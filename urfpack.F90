@@ -167,8 +167,8 @@ contains
               !For a mirror machine: ray can get outside of zbox
               !which defines the border of ez() equilibrium grid
               ![so that zbox=ez(nnz)-ez(1)]
-              if (icount_outside_ez.eq.0) &
-              if(setup0%verbose>0) write(*,*)'urfpack: Ray elements outside of ez grid'
+               if (icount_outside_ez.eq.0 .and. setup0%verbose>0) &
+                    write(*,*)'urfpack: Ray elements outside of ez grid'
               icount_outside_ez=icount_outside_ez+1 !for a printout
               if(setup0%verbose>0) write(*,*)'urfpack: zray>ez; iray,is,icount_outside_ez', &
                                            iray,is,icount_outside_ez
@@ -178,8 +178,8 @@ contains
               !although not likely to happen.
             endif
             if(zray.lt.ez(1))then
-              if (icount_outside_ez.eq.0) &
-              if(setup0%verbose>0) write(*,*)'urfpack: Ray elements outside of ez grid'
+              if (icount_outside_ez.eq.0 .and. setup0%verbose>0) &
+                   write(*,*)'urfpack: Ray elements outside of ez grid'
               icount_outside_ez=icount_outside_ez+1 !for a printout
               if(setup0%verbose>0) write(*,*)'urfpack: zray<ez; iray,is,icount_outside_ez', &
                                            iray,is,icount_outside_ez

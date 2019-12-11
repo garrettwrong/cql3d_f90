@@ -5,6 +5,7 @@ module netcdfrf_mod
   use param_mod, only : nmodsa
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
+  use cqlconf_mod, only : setup0
   use netcdfrw2_mod, only : ncvdef0,ncvdef2,ncaptc2,ncvptc0
   use netcdfrw2_mod, only : length_char,check_err
   !use pack21_mod, only : pack21
@@ -1021,9 +1022,8 @@ contains
                 sbsign=sign(one,bsign)
                 do is=1,nrayelt(iray,krf)
                    sbtot(is,iray,krf)=bsign1(krf)*sbtot(is,iray,krf)
-                   if (sbtot(is,iray,krf).lt.0.) &
-                        if(setup0%verbose>0) WRITE(*,*)'urfread: Sign Problem with sbtot:is,iray=', &
-                        is,iray
+                   if (sbtot(is,iray,krf).lt.0. .and. setup0%verbose>0) &
+                        WRITE(*,*)'urfread: Sign Problem with sbtot:is,iray=',is,iray
                    wnpar(is,iray,krf)=sbsign*wnpar(is,iray,krf)
                    cwexde(is,iray,krf)=sbsign*cwexde(is,iray,krf)
                    cweyde(is,iray,krf)=sbsign*cweyde(is,iray,krf)
@@ -1340,9 +1340,8 @@ contains
              endif
              do is=1,nrayelt(iray,krf)
                 sbtot(is,iray,krf)=bsign1(krf)*sbtot(is,iray,krf)
-                if (sbtot(is,iray,krf).lt.0.) &
-                     if(setup0%verbose>0) WRITE(*,*)'urfread: Sign Problem with sbtot, is,iray=', &
-                     is,iray
+                if (sbtot(is,iray,krf).lt.0. .and. setup0%verbose>0) &
+                     WRITE(*,*)'urfread: Sign Problem with sbtot, is,iray=',is,iray
                 wnpar(is,iray,krf)=sbsign*wnpar(is,iray,krf)
                 cwexde(is,iray,krf)=sbsign*cwexde(is,iray,krf)
                 cweyde(is,iray,krf)=sbsign*cweyde(is,iray,krf)

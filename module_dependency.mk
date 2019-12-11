@@ -1,6 +1,6 @@
 #------ Module generated dependencies, to be included in makefiles...
 
-a_cqlp.$(oext): abchief.$(oext) impavnc0.$(oext)
+a_cqlp.$(oext): abchief.$(oext) cqlconf.$(oext) impavnc0.$(oext)
 abchief.$(oext): cqlcomm.$(oext) param.$(oext) tdchief.$(oext)
 achief1.$(oext): achiefn.$(oext) ainalloc.$(oext) aindflt1.$(oext) aindfpa.$(oext)  \
 	aingeom.$(oext) ainitial.$(oext) ainpla.$(oext) ainsetva.$(oext) ainspec.$(oext) ainvnorm.$(oext)  \
@@ -121,7 +121,7 @@ frinitz.$(oext): cqlcomm.$(oext) param.$(oext)
 frnbdep2.$(oext): cqlcomm.$(oext) param.$(oext)
 frnfreya.$(oext): cqlcomm.$(oext) cqlconf.$(oext) frplteq.$(oext) param.$(oext)
 frplteq.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext) tdnflxs.$(oext)
-frset.$(oext): cqlcomm.$(oext) param.$(oext) zfreya.$(oext)
+frset.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) zfreya.$(oext)
 frsmooth.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 frsplft.$(oext): cqlcomm.$(oext) param.$(oext)
 frsuppor.$(oext): cqlcomm.$(oext) param.$(oext)
@@ -147,8 +147,8 @@ micxinit.$(oext): cqlcomm.$(oext) diagwrng.$(oext) micgetr.$(oext) param.$(oext)
 micxiniz.$(oext): cqlcomm.$(oext) diagwrng.$(oext) micgetr.$(oext) param.$(oext) psif.$(oext) tdxin13d.$(oext)  \
 	zcunix.$(oext)
 cql3d_mpilib.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
-netcdfrf.$(oext): bcast.$(oext) cqlcomm.$(oext) pack21.$(oext) netcdfrw2.$(oext)  param.$(oext)
-netcdfrw2.$(oext): advnce.$(oext) bcast.$(oext) coeffpad.$(oext) coefmidt.$(oext) coefstup.$(oext)  \
+netcdfrf.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) pack21.$(oext) netcdfrw2.$(oext)  param.$(oext)
+netcdfrw2.$(oext): advnce.$(oext) bcast.$(oext) cqlconf.$(oext) coeffpad.$(oext) coefmidt.$(oext) coefstup.$(oext)  \
 	cqlcomm.$(oext) diagentr.$(oext) param.$(oext) prppr.$(oext) r8subs.$(oext) tdfinterp.$(oext) zcunix.$(oext)
 ntdstore.$(oext): cqlcomm.$(oext) param.$(oext) restvty.$(oext)
 ntloop.$(oext): cqlcomm.$(oext) param.$(oext)

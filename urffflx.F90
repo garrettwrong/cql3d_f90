@@ -124,8 +124,8 @@ contains
             l=luf(apsi,tr2(1),setup0%lrzmax)
 !BH090602   Ray elements outside LCFS (rho=1 surface) will be attributed to setup0%lrzmax
             if (l.gt.setup0%lrzmax) then
-               if (icount_outside_lim.eq.0) &
-               if(setup0%verbose>0) write(*,*)'urffflx: Ray elements outside of rho=1'
+               if (icount_outside_lim.eq.0 .and. setup0%verbose>0) &
+                    write(*,*)'urffflx: Ray elements outside of rho=1'
                icount_outside_lim=icount_outside_lim+1 !for a printout
 #ifdef __MPI
                ! for MPI, only print from master

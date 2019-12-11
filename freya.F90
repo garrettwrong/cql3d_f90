@@ -1115,6 +1115,7 @@
 !
 !     Read NUBEAM data file
 !
+      use cqlconf_mod, only : setup0
       use iso_c_binding, only : c_double
       implicit none
 
@@ -1273,6 +1274,7 @@
 !====================================================================
       subroutine zone(drutpi,ki,mfm1, mim1, mjm1,dri,dzi,psiax,psi,r,z, &
            xpos,ypos,zpos,pzone,izone)
+      use cqlconf_mod, only : setup0
       use iso_c_binding, only : c_double
       use zfreya_mod, only : pfit
       implicit none

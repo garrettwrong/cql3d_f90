@@ -2,6 +2,7 @@
 !
 module netcdfrw2_mod
   use iso_c_binding, only : c_double
+  use cqlconf_mod, only : setup0
       use param_mod, only : nmodsa
       use bcast_mod, only : bcast
       use bcast_mod, only : ibcast
