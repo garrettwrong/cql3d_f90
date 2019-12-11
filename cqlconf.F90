@@ -103,7 +103,7 @@ module cqlconf_mod
      integer :: lsindx(0:lrorsa) =  (/ (ll, ll=0,lrorsa) /)
      character(len=8) :: nlrestrt = "disabled"
      character(len=8) :: nlwritf = "disabled"
-     logical :: verbose = .TRUE.
+     integer :: verbose = 1
   end type setup0_t
 
   type, public :: eqsetup_t
@@ -821,7 +821,7 @@ contains
     integer :: lsindx(0:lrorsa)
     character(len=8) :: nlrestrt
     character(len=8) :: nlwritf
-    logical :: verbose
+    integer :: verbose
 
     ! state the namelist, with associated vars
 
@@ -897,7 +897,7 @@ contains
     integer, intent(in), optional :: lsindx(0:lrorsa)
     character(len=8), intent(in), optional :: nlrestrt
     character(len=8), intent(in), optional :: nlwritf
-    logical, intent(in), optional :: verbose
+    integer, intent(in), optional :: verbose
 
     ! All this code should do is override the defaults
     ! in setup0 with optional args.
@@ -927,14 +927,6 @@ contains
     if ( present(debug_print)) then
        if (debug_print) call print_setup0
     end if
-
-    if(.not. setup0%verbose) then
-       ! send stdout to /dev/null,
-       !   this approach avoids branching every single write and print statement
-       ! stdout fd will be closed when the process ends.
-       open(stdout, file=nullfile, status="old")
-    end if
-
 
   end subroutine set_setup0
 
