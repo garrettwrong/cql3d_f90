@@ -56,7 +56,7 @@ contains
       do krf=1,mrfn
          nharmx=MAX(nharmx,nharm(krf))
       enddo
-      write(*,*)'urfbes:  Before allocation, nharmx=',nharmx
+      if(setup0%verbose>0) write(*,*)'urfbes:  Before allocation, nharmx=',nharmx
       allocate(besl(nharmx+2),STAT=istat) !-YuP->added
       !XXXcall bcast(besl,0.0,SIZE(besl))     !-YuP->added
       besl = 0.d0
@@ -69,7 +69,7 @@ contains
       allocate(jbp1(nbssltbl,mrfn),STAT=istat) !-YuP->added
       !XXXcall bcast(jbp1,0.0,SIZE(jbm1))          !-YuP->added
       jbp1 = 0.d0 ! for all (1:nbssltbl,1:mrfn)
-      write(*,*)'urfbes:  After allocation'
+      if(setup0%verbose>0) write(*,*)'urfbes:  After allocation'
 
 !..................................................................
 !     Loop over excitation modes
@@ -119,7 +119,7 @@ contains
 !..................................................................
 
         argmax=xkp*vnorm/wcemin*1.4
-        write(*,*)'urfbes: argmax,nharm(krf),bvalmin = ', &
+        if(setup0%verbose>0) write(*,*)'urfbes: argmax,nharm(krf),bvalmin = ', &
                            argmax,nharm(krf),bvalmin
         bsslstp(krf)=argmax/(nbssltbl-1)
         arg=0.
@@ -129,7 +129,7 @@ contains
 !BH150620: Try letting simple accuracy loss get by ok
 !BH150620:
            if (ncalc.ne.nharm(krf)+2) then
-             write(*,*)'zzbeslri accuracy loss: arg,nharm(krf)+2,ncalc=' &
+             if(setup0%verbose>0) write(*,*)'zzbeslri accuracy loss: arg,nharm(krf)+2,ncalc=' &
                   ,arg,nharm(krf)+2,ncalc
              if (ncalc.lt.0) then
                 stop ' in urfbes; ncalc.lt.0'
@@ -150,7 +150,7 @@ contains
 
  200  continue ! krf=1,mrfn
 
-      write(*,*)'End urfbes'
+      if(setup0%verbose>0) write(*,*)'End urfbes'
 
       return
       end subroutine urfbes

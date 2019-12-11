@@ -139,9 +139,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a,2e13.4)')'tdxinitl: rrmax,ram=',rrmax,ram
+      if(setup0%verbose>0) WRITE(*,'(a,2e13.4)')'tdxinitl: rrmax,ram=',rrmax,ram
       do ll=1,setup0%lrzmax
-      WRITE(*,'(a,i6,2e13.4)')'tdxinitl: ll,rrz,rya=',ll,rrz(ll),rya(ll)
+      if(setup0%verbose>0) WRITE(*,'(a,i6,2e13.4)')'tdxinitl: ll,rrz,rya=',ll,rrz(ll),rya(ll)
       enddo
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -275,7 +275,7 @@ contains
             else
 !BH131029: Following do only correct for tr already set when
 !BH131029: k.eq.kelecg??
-               write(*,*) 'tdxinitl: Check coding here'
+               if(setup0%verbose>0) write(*,*) 'tdxinitl: Check coding here'
                do 9  ll=0,setup0%lrzmax
                   reden(k,ll)=tr(ll)/abs(bnumb(k))
  9             continue
@@ -328,7 +328,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'tdxinitl, zeff(1:setup0%lrzmax)= ',(zeff(ll),ll=1,setup0%lrzmax)
+         if(setup0%verbose>0) WRITE(*,*)'tdxinitl, zeff(1:setup0%lrzmax)= ',(zeff(ll),ll=1,setup0%lrzmax)
          !pause
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -343,7 +343,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'k,kionm(k),bnumb(kionm(k))=', &
+            if(setup0%verbose>0) WRITE(*,*)'k,kionm(k),bnumb(kionm(k))=', &
                        k,kionm(k),bnumb(kionm(k))
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -358,10 +358,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*) &
+               if(setup0%verbose>0) WRITE(*,*) &
                 'tdxinitl, max/min of bnumb(kionm(k)), fmaxx,fminn=', &
                  fmaxx,fminn
-               WRITE(*,*)'tdxinitl.f: ', &
+               if(setup0%verbose>0) WRITE(*,*)'tdxinitl.f: ', &
                     'Adjust bnumb(kion) for compatibility with zeff'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -384,10 +384,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*)'tdxinitl: Number Maxl ion species w diffrnt bnumb'
-         WRITE(*,*)'tdxinitl: ndif_bnumb= ',ndif_bnumb
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'tdxinitl: Number Maxl ion species w diffrnt bnumb'
+         if(setup0%verbose>0) WRITE(*,*)'tdxinitl: ndif_bnumb= ',ndif_bnumb
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

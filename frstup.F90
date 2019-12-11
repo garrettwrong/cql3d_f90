@@ -66,10 +66,10 @@
       mfm1=nconteqn-1
       mf=mfm1+1
 
-      write(*,*)
-      write(*,*)'Number of flux zones (mfm1) used in FREYA=',mfm1
-      write(*,*)'Adjust mfm1=nconteqn-1 throught NL input of nconteqn'
-      write(*,*)
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'Number of flux zones (mfm1) used in FREYA=',mfm1
+      if(setup0%verbose>0) write(*,*)'Adjust mfm1=nconteqn-1 throught NL input of nconteqn'
+      if(setup0%verbose>0) write(*,*)
 
 !..................................................................
 !     Interpolate densities, temperatures etc over to the
@@ -172,7 +172,7 @@
       call frsplft(lrzmax,equilpsp(1),zeff(1),mfm1,eqpsi,zeffctv(1))
 !
        if(nprim.eq.1 .and. nimp.eq.1) then
-         write(*,*) 'copying Zeff into zzi...'
+         if(setup0%verbose>0) write(*,*) 'copying Zeff into zzi...'
          do k=1,mfm1
            zzi(k,nion+2)=zeff(k)
 !           write(*,*) 'zzi(k,nion+2) = ',zzi(k,nion+2)
@@ -197,7 +197,7 @@
       !elong=0 ! YuP: not used here?
       codeid="twodee"
       rin=rmincon
-      write(*,*)'frstup: rmincon,rmaxcon=',rmincon,rmaxcon
+      if(setup0%verbose>0) write(*,*)'frstup: rmincon,rmaxcon=',rmincon,rmaxcon
       rmax=rmaxcon
       zminn=zmincon
       zmaxx=zmaxcon

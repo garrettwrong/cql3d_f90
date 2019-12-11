@@ -223,7 +223,7 @@ contains
 !         enddo
 !      endif
 
-      write(*,*)'-------------- done with ampfinit ------------'
+      if(setup0%verbose>0) write(*,*)'-------------- done with ampfinit ------------'
 
       return
 
@@ -438,9 +438,9 @@ contains
          enddo
       enddo
 
-      write(*,'(a,2i4)')'ampfsoln: nn,it-1=', nn,it-1
+      if(setup0%verbose>0) write(*,'(a,2i4)')'ampfsoln: nn,it-1=', nn,it-1
       do ll=0,setup0%lrz+1
-        write(*,'(a,i4,2e15.6)') &
+        if(setup0%verbose>0) write(*,'(a,i4,2e15.6)') &
       'ampfsoln before soln: ll,elecfldn(ll,nn,it-1)*300,elecfld(ll)=', &
                              ll,elecfldn(ll,nn,it-1)*300,elecfld(ll)
       enddo
@@ -491,7 +491,7 @@ contains
       !evaluated at bin centers ll=1:setup0%lrz.
 
       if (info .ne. 0) then
-         print *,' warning after dgesv in ampfsoln: info= ',info
+         if(setup0%verbose>0) print *,' warning after dgesv in ampfsoln: info= ',info
          stop 'ampfsoln'
       endif
 
@@ -506,7 +506,7 @@ contains
 
 
       do ll=0,setup0%lrz+1
-        write(*,'(a,i4,2e15.6)') &
+        if(setup0%verbose>0) write(*,'(a,i4,2e15.6)') &
       'ampfsoln  after soln: ll,elecfldn(ll,nn,it)*300,elecfld(ll)=', &
                              ll,elecfldn(ll,nn,it)*300,elecfld(ll)
       enddo

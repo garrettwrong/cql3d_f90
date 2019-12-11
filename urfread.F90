@@ -77,7 +77,7 @@ contains
                call urfread_(krf,23)
                close(unit=23)
             else
-               WRITE(*,*)'urfread: check that "rayech" file is present'
+               if(setup0%verbose>0) WRITE(*,*)'urfread: check that "rayech" file is present'
                stop
             endif
          endif
@@ -98,7 +98,7 @@ contains
                call urfread_(krf,24)
                close(unit=24)
             else
-               write(*,*)'urfread: check that "rayfw" file is present'
+               if(setup0%verbose>0) write(*,*)'urfread: check that "rayfw" file is present'
                stop
             endif
          endif
@@ -117,7 +117,7 @@ contains
                call urfread_(krf,20)
                close(unit=20)
             else
-               write(*,*)'urfread: check that "raylh" file is present'
+               if(setup0%verbose>0) write(*,*)'urfread: check that "raylh" file is present'
                stop
             endif
          endif
@@ -329,16 +329,16 @@ contains
 
 
 
-      write(*,*)
-      write(*,*)'urfread: mrf = ',mrf
-      write(*,*)'urfread: mrfn = ',mrfn
-      write(*,*)'urfread: irfn = ',(irfn(krf),krf=1,mrf)
-      write(*,*)'urfread: irfm = ',(irfm(krf),krf=1,mrf)
-      write(*,*)'urfread: irffile = ',(irffile(krf),krf=1,mrf)
-      write(*,*)'urfread: krfn = ',(krfn(krf),krf=1,mrfn)
-      write(*,*)'urfread: nharm1 = ',(nharm1(krf),krf=1,mrf)
-      write(*,*)'urfread: nharms = ',(nharms(krf),krf=1,mrf)
-      write(*,*)'urfread: nharm = ',(nharm(krf),krf=1,mrfn)
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'urfread: mrf = ',mrf
+      if(setup0%verbose>0) write(*,*)'urfread: mrfn = ',mrfn
+      if(setup0%verbose>0) write(*,*)'urfread: irfn = ',(irfn(krf),krf=1,mrf)
+      if(setup0%verbose>0) write(*,*)'urfread: irfm = ',(irfm(krf),krf=1,mrf)
+      if(setup0%verbose>0) write(*,*)'urfread: irffile = ',(irffile(krf),krf=1,mrf)
+      if(setup0%verbose>0) write(*,*)'urfread: krfn = ',(krfn(krf),krf=1,mrfn)
+      if(setup0%verbose>0) write(*,*)'urfread: nharm1 = ',(nharm1(krf),krf=1,mrf)
+      if(setup0%verbose>0) write(*,*)'urfread: nharms = ',(nharms(krf),krf=1,mrf)
+      if(setup0%verbose>0) write(*,*)'urfread: nharm = ',(nharm(krf),krf=1,mrfn)
 
 
 !     Duplicate ray data in sets nharms(krf) long using the first ray data

@@ -2,6 +2,7 @@
 !
       subroutine frinitl
       use param_mod
+      use cqlconf_mod, only : setup0
       implicit none
       include 'frname_decl.h'
       character*8 machinei
@@ -263,7 +264,7 @@
       nsourc=1
 !
       if (ke.lt.3) then
-         WRITE(*,*)'frinitl:  parameter ke needs to be .ge.3'
+         if(setup0%verbose>0) WRITE(*,*)'frinitl:  parameter ke needs to be .ge.3'
          stop
       endif
 !
@@ -287,7 +288,7 @@
         bvdiv(i)   = .45
         ebkev(i)   = 80.0
         if (ke.lt.3) then
-           WRITE(*,*)'frinitl:  parameter ke needs to be .ge.3'
+           if(setup0%verbose>0) WRITE(*,*)'frinitl:  parameter ke needs to be .ge.3'
            stop
         else
            fbcur(1,i) = .6
@@ -304,7 +305,7 @@
         rpivot(i)  = 270.
         zpivot(i)  = 89.
         if (nap.lt.2) then
-           WRITE(*,*)'frinitl:  parameter nap needs to be .ge.2'
+           if(setup0%verbose>0) WRITE(*,*)'frinitl:  parameter nap needs to be .ge.2'
            stop
         else
            ashape(1,i)='s-vert'
@@ -343,7 +344,7 @@
         bhdiv(i)=.50
         bvdiv(i)=1.3
         if (ke.lt.3) then
-           WRITE(*,*)'frinitl:  parameter ke needs to be .ge.3'
+           if(setup0%verbose>0) WRITE(*,*)'frinitl:  parameter ke needs to be .ge.3'
            stop
         else
            fbcur(1,i)=0.7
@@ -363,7 +364,7 @@
         rpivot(i)=286.6
         zpivot(i)=0.0d0
         if (nap.lt.4) then
-           WRITE(*,*)'frinitl:  parameter nap needs to be .ge.4'
+           if(setup0%verbose>0) WRITE(*,*)'frinitl:  parameter nap needs to be .ge.4'
            stop
         else
            ashape(1,i)='s-rect'

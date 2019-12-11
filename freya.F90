@@ -12,6 +12,7 @@
       subroutine freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
       use aminmx_mod, only : aminmx
       use bcast_mod, only : bcast
+      use cqlconf_mod, only : setup0
       use zfreya_mod, only : logint,freyorb,sorspt1,rotate,inject1,inject_old,nbsgxn,setrz
       use param_mod
       implicit none
@@ -385,8 +386,8 @@
          nbeams=1
          mb=1
          if (codeid.eq.'onedee') then
-            WRITE(*,*)'Freya: nubeam list not setup for this codeid'
-            WRITE(*,*)'STOP'
+            if(setup0%verbose>0) WRITE(*,*)'Freya: nubeam list not setup for this codeid'
+            if(setup0%verbose>0) WRITE(*,*)'STOP'
             STOP
          endif
       endif
@@ -481,11 +482,11 @@
 !        are birth points for particle guiding centers.
          ncalls=ncalls+1
          if (ncalls.gt.nbirth_pts_files) then
-            write(*,*)'FREYA WARNING: Insufficient birth_pts_files'
-            write(*,*)'FREYA WARNING: Stepping back to last file'
+            if(setup0%verbose>0) write(*,*)'FREYA WARNING: Insufficient birth_pts_files'
+            if(setup0%verbose>0) write(*,*)'FREYA WARNING: Stepping back to last file'
             ncalls=ncalls-1
          else
-            write(*,*)'Freya: read_birth_pts case, ncalls=',ncalls
+            if(setup0%verbose>0) write(*,*)'Freya: read_birth_pts case, ncalls=',ncalls
          endif
          filenm=trim(birth_pts_files(ncalls))
          call read_nubeam_data(filenm,nbirth_pts,atwb, &
@@ -565,8 +566,8 @@
        enddo
       endif
 !
-      write(*,*) 'calling nbsgxn ...'
-      write(*,*) 'iexcit = ',iexcit
+      if(setup0%verbose>0) write(*,*) 'calling nbsgxn ...'
+      if(setup0%verbose>0) write(*,*) 'iexcit = ',iexcit
 !       write(*,*) 'zte:'
 !       write(*,'(5(2x,1pe14.5))') (zte(j),j=1,kz)
 !       write(*,*) 'zti:'
@@ -621,10 +622,10 @@
 !     calculate total plasma volume
       volume = 0.
       do i=1,mfm1
-        write(*,*)'freya: i,psivol(i)=',i,psivol(i)
+        if(setup0%verbose>0) write(*,*)'freya: i,psivol(i)=',i,psivol(i)
         volume = volume + psivol(i)
       enddo
-      write(*,*)'freya: volume(sum of psivol)=',volume
+      if(setup0%verbose>0) write(*,*)'freya: volume(sum of psivol)=',volume
       !Note: psivol is based on eqvol() which is calc-ed by subr.eqvolpsi.
       !Can be a little different from alternative definition
       ! of flux surface volume as setup in subr.tdrmshst.
@@ -798,7 +799,7 @@
               ii=ii+1
               if (ie_nub(ii).eq.ie) exit
               if (ii.gt.npart) then
-                WRITE(*,*)'Freya: Nubeam list inconsistency'
+                if(setup0%verbose>0) WRITE(*,*)'Freya: Nubeam list inconsistency'
                 STOP
               endif
             enddo
@@ -946,7 +947,7 @@
 !... normalize average pitch angle cosine. normalize momentum and birth
 !    mode in each shell to a single particle.
 !
-            write(*,*) '** end loop over particles **'
+            if(setup0%verbose>0) write(*,*) '** end loop over particles **'
 !          do i=1,mfm1
 !        write(*,'(3i4,2x,1p1e10.4,a16)')i,ie,ib,hibrz(i,ie,ib),' hibrz'
 !          enddo
@@ -1019,7 +1020,7 @@
           fber(ie,ib) = fber(ie,ib)/nparx
 !
  201    continue  ! end loop over energy components
-        write(*,*) '** end loop over energy components **'
+        if(setup0%verbose>0) write(*,*) '** end loop over energy components **'
  200  continue  ! end loop over beams
 !
 !----------------------------------------------------------------------
@@ -1027,14 +1028,14 @@
 !     end loop over beams and components
 !
 !----------------------------------------------------------------------
-      write(*,*) 'end loop over beams...'
-      write(*,*) 'ie,ib,ipar = ',ie,ib,ipar
+      if(setup0%verbose>0) write(*,*) 'end loop over beams...'
+      if(setup0%verbose>0) write(*,*) 'ie,ib,ipar = ',ie,ib,ipar
 !
       if (read_birth_pts.ne."enabled") then
 !
-       write(*,*) 'hibrz(i,1,1),hibrz(i,2,1),hibrz(i,3,1)'
+       if(setup0%verbose>0) write(*,*) 'hibrz(i,1,1),hibrz(i,2,1),hibrz(i,3,1)'
        do i=1,mfm1
-         write(*,'(i4,2x,0p9f9.4)') i, hibrz(i,1,1), &
+         if(setup0%verbose>0) write(*,'(i4,2x,0p9f9.4)') i, hibrz(i,1,1), &
               hibrz(i,2,1),hibrz(i,3,1), &
               hibrz(i,1,2),hibrz(i,2,2),hibrz(i,3,2), &
               hibrz(i,1,3),hibrz(i,2,3),hibrz(i,3,3) 
@@ -1075,18 +1076,18 @@
 !       (in the future) to adjust the calculation of izone, perhaps
 !       to base it on the rho coordinate and rotsid,  and to
 !       fill in the rotsid() array.
-      write(*,*)
-      write(*,*)'freya, hot ion birth rate vs rotsid, for ib=1, ie=1:3'
-      write(*,*) (rotsid(i),i=1,mfm1)
-      write(*,*) (hibrz(i,1,1),i=1,mfm1)
-      write(*,*) (hibrz(i,2,1),i=1,mfm1)
-      write(*,*) (hibrz(i,3,1),i=1,mfm1)
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'freya, hot ion birth rate vs rotsid, for ib=1, ie=1:3'
+      if(setup0%verbose>0) write(*,*) (rotsid(i),i=1,mfm1)
+      if(setup0%verbose>0) write(*,*) (hibrz(i,1,1),i=1,mfm1)
+      if(setup0%verbose>0) write(*,*) (hibrz(i,2,1),i=1,mfm1)
+      if(setup0%verbose>0) write(*,*) (hibrz(i,3,1),i=1,mfm1)
 !
-      write(*,*)
-      write(*,*) 'fap(ie=1:3)',(fap(i,1),i=1,3)
-      write(*,*) 'fwall(ie=1:3)',(fwall(i,1),i=1,3)
-      write(*,*) 'forb(ie=1:3)',(forb(i,1),i=1,3)
-      write(*,*)
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*) 'fap(ie=1:3)',(fap(i,1),i=1,3)
+      if(setup0%verbose>0) write(*,*) 'fwall(ie=1:3)',(fwall(i,1),i=1,3)
+      if(setup0%verbose>0) write(*,*) 'forb(ie=1:3)',(forb(i,1),i=1,3)
+      if(setup0%verbose>0) write(*,*)
 !      write(*,*)
 !      write(*,*)'freya:i,xpts(i),ypts(i),zpts(i),rpts(i),vx(i),vy(i),vz(i)'
 !      do i=1,5
@@ -1159,7 +1160,7 @@
       iunit=14
       open(unit=iunit,file=filenm,status='old',iostat=kode)
       if (kode.ne.0) then
-         WRITE(*,*)'NUBEAM file', filenm,' cannot be opened'
+         if(setup0%verbose>0) WRITE(*,*)'NUBEAM file', filenm,' cannot be opened'
          STOP
       endif
 
@@ -1178,9 +1179,9 @@
 
 !     Check n_birth_pts_nub against namelist value
       if (nbirth_pts_nub .ne. nbirth_pts) then
-         WRITE(*,*)'STOP: inconsistency with NUBEAM file n_birth_pts'
-         WRITE(*,*)'Namelist n_birth_pts =',nbirth_pts
-         WRITE(*,*)'NUBEAM   n_birth_pts =',nbirth_pts_nub
+         if(setup0%verbose>0) WRITE(*,*)'STOP: inconsistency with NUBEAM file n_birth_pts'
+         if(setup0%verbose>0) WRITE(*,*)'Namelist n_birth_pts =',nbirth_pts
+         if(setup0%verbose>0) WRITE(*,*)'NUBEAM   n_birth_pts =',nbirth_pts_nub
          STOP
       endif
 
@@ -1257,11 +1258,11 @@
       enddo
 
 !     printout birth_rates, as check for consistency
-      write(*,*)
-      write(*,*)'birth rate(particles/sec) for each cmpt based on'
-      write(*,*)' cmpt   total power    total birth rate'
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'birth rate(particles/sec) for each cmpt based on'
+      if(setup0%verbose>0) write(*,*)' cmpt   total power    total birth rate'
       do i=1,3
-        write(*,106) i,birth_rate_cmpts_nub(i),birth_rate_cmpts_nub1(i)
+        if(setup0%verbose>0) write(*,106) i,birth_rate_cmpts_nub(i),birth_rate_cmpts_nub1(i)
       enddo
  106  format(i3,5x,e13.6,5x,e13.6)
 

@@ -2,6 +2,7 @@
 !
       subroutine frnfreya(frmod_,fr_gyro_,beamplse_,beampon_,beampoff_, &
            hibrz_,mfm1_,noplots)
+      use cqlconf_mod, only : setup0
       use param_mod
       use frplteq_mod, only :frplteq
       implicit none
@@ -70,11 +71,11 @@
 !     Call NFREYA (cray32 from ONETWO)
 !..................................................................
 
-      write(*,*)'frnfreya:mi,mj,codeid',mi,mj,codeid
-      write(*,*)'frnfreya:rin,rmax',rin,rmax
-      write(*,*)'frnfreya:zax,zmin,zmax',zax,zmin,zmax
+      if(setup0%verbose>0) write(*,*)'frnfreya:mi,mj,codeid',mi,mj,codeid
+      if(setup0%verbose>0) write(*,*)'frnfreya:rin,rmax',rin,rmax
+      if(setup0%verbose>0) write(*,*)'frnfreya:zax,zmin,zmax',zax,zmin,zmax
       call freya(ipts,mi,mj,codeid,rin,rmax,zax,zmin,zmax)
-      write(*,*) 'Done calling freya...'
+      if(setup0%verbose>0) write(*,*) 'Done calling freya...'
       if (ipts.eq.0)write(*,*)'frnfreya: WARNING, ipts=0, NB missed plasma?'
 
 !..................................................................

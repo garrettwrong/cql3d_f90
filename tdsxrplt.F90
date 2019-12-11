@@ -21,6 +21,7 @@ module tdsxrplt_mod
   !---BEGIN USE
 
   use aminmx_mod, only : aminmx
+  use cqlconf_mod, only : setup0
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
@@ -87,7 +88,7 @@ contains
       ! to -ep100. This can happen when all sightlines missed plasma.
       !YuP[2018-02-08] Added:
       if(fmax.lt.0.d0)then
-        WRITE(*,*)'tdsxrplt: All sightlines missed plasma. Skip plots.'
+        if(setup0%verbose>0) WRITE(*,*)'tdsxrplt: All sightlines missed plasma. Skip plots.'
         return
       endif
 
@@ -318,8 +319,8 @@ contains
 
         else
 !     Full flux surface contours are plotted:
-           write(*,*)
-           write(*,*)'tdsxrplt: l,lorbit(l)=',l,lorbit(l)
+           if(setup0%verbose>0) write(*,*)
+           if(setup0%verbose>0) write(*,*)'tdsxrplt: l,lorbit(l)=',l,lorbit(l)
            do j=1,lorbit(l)
 !BH091031             write(*,*)'j,solr(j,l),solz(j,l)=',
 !BH091031    +             j,solr(j,l),solz(j,l)
@@ -354,7 +355,7 @@ contains
              RRTAB1(j)=sqrt(tempp4(iistep+j)**2+tempp5(iistep+j)**2)
              RRTAB2(j)=tempp6(iistep+j)
            else
-             write(*,*)'tdsxrvw: Increase dimension of rrtab1,2'
+             if(setup0%verbose>0) write(*,*)'tdsxrvw: Increase dimension of rrtab1,2'
              STOP
            endif
  40     continue

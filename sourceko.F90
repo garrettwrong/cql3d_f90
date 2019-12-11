@@ -130,17 +130,17 @@ contains
             gam1p2m1=gam1p2-1.d0 ! can be ~0.
             alf1=2.*(gam1p-1.d0) ! can be ~0.
             if(ppar1p.eq.zero)then
-             write(*,*)'sourceko: ppar1p=0=',ppar1p
+             if(setup0%verbose>0) write(*,*)'sourceko: ppar1p=0=',ppar1p
              !pause
             endif
             if(alf1.eq.zero)then
-             write(*,*)'sourceko: alf1=0=',alf1
+             if(setup0%verbose>0) write(*,*)'sourceko: alf1=0=',alf1
              !pause
             endif
             aaa=(1.d0/alf1)-(1.d0/ppar1p2) !cannot have ppar1p2=0
             bbb=1.d0/ppar1p
             if(aaa.eq.zero)then
-             write(*,*)'sourceko: aaa=0=',aaa ! see further: 1/(2.*aaa)
+             if(setup0%verbose>0) write(*,*)'sourceko: aaa=0=',aaa ! see further: 1/(2.*aaa)
              !pause
             endif
 
@@ -153,17 +153,17 @@ contains
                ccc=-p02/alf1
 
             if(bbb*bbb-4.d0*aaa*ccc.lt.zero)then
-             write(*,*)'sourceko: bbb*bbb-4.d0*aaa*ccc=', &
+             if(setup0%verbose>0) write(*,*)'sourceko: bbb*bbb-4.d0*aaa*ccc=', &
               bbb*bbb-4.d0*aaa*ccc
              !pause
             endif
             if(p02-ppars(j,jf)*ppars(j,jf).lt.zero)then
-             write(*,*)'sourceko: p02-ppars(j,jf)*ppars(j,jf)=', &
+             if(setup0%verbose>0) write(*,*)'sourceko: p02-ppars(j,jf)*ppars(j,jf)=', &
               p02-ppars(j,jf)*ppars(j,jf)
              !pause
             endif
             if(gam1p2m1*gam0m1*gam0m1*gam1pmg*gam1pmg.eq.zero)then
-             write(*,*) &
+             if(setup0%verbose>0) write(*,*) &
               'sourceko: gam1p2m1*gam0m1*gam0m1*gam1pmg*gam1pmg=', &
               gam1p2m1*gam0m1*gam0m1*gam1pmg*gam1pmg
              !pause

@@ -1984,8 +1984,8 @@ contains
     if(present(xlmdl)) sousetup%xlmdl = xlmdl
     if(present(jfl)) sousetup%jfl = jfl
     if (mod(sousetup%jfl,2).eq.0) then
-       print *, "WARNING, jfl needed to be odd because of jpxyh=(jfl+1)/2 in pltprppr"
-       print *, "   Adjusting with sousetup%jfl=sousetup%jfl-1"
+       if(setup0%verbose>0) print *, "WARNING, jfl needed to be odd because of jpxyh=(jfl+1)/2 in pltprppr"
+       if(setup0%verbose>0) print *, "   Adjusting with sousetup%jfl=sousetup%jfl-1"
        sousetup%jfl=sousetup%jfl-1
     end if
 

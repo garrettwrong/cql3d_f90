@@ -128,7 +128,7 @@ contains
       allocate(tempp5(itempp),STAT=istat5)
       allocate(tempp6(itempp),STAT=istat6)
       if (istat4.ne.0 .or. istat5.ne.0 .or. istat6.ne.0) then
-         write(*,*)'tdsxr0, tempp1: allocation problem'
+         if(setup0%verbose>0) write(*,*)'tdsxr0, tempp1: allocation problem'
          STOP
       endif
 !.......................................................................
@@ -264,7 +264,7 @@ contains
 !BH180207          if(istep.gt.(1000/fds).and.istart.eq.1)  then
 !BH180207: Needed a few more steps for a difficult case.
           if(istep.gt.(2000/fds).and.istart.eq.1)  then
-             write(*,*) 'Warning: SXR sightline',nn, &
+             if(setup0%verbose>0) write(*,*) 'Warning: SXR sightline',nn, &
                         " missed or didn't reach plasma"
              go to 420
           endif
@@ -428,7 +428,7 @@ contains
 !BH180207     165   if(istep.gt.(1000/fds).and.istart.eq.1)  then
 !BH180207: Needed a few more steps for a difficult case.
  165      if(istep.gt.(2000/fds).and.istart.eq.1)  then
-             write(*,*) 'Warning: SXR sightline',nn, &
+             if(setup0%verbose>0) write(*,*) 'Warning: SXR sightline',nn, &
                         " missed or didn't reach plasma"
 
              go to 420
@@ -471,7 +471,7 @@ contains
 !.......................................................................
           ibin1=ibin1-1
           if(ibin1.lt.1) then
-             write(*,*) 'stop 4 in tdsxr0'
+             if(setup0%verbose>0) write(*,*) 'stop 4 in tdsxr0'
              stop
           endif
           go to 190
@@ -658,7 +658,7 @@ contains
          if(mpisize.gt.1) then
             mpiworker= MOD(i-1,mpisize-1)+1
          else
-            PRINT*, '------- WARNING: mpisize=1 -------'
+            if(setup0%verbose>0) PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
 #endif

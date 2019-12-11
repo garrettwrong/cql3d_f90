@@ -2747,38 +2747,42 @@
 
       subroutine dgesl(dum,idum1,idum2,idum3,ddum,idum4)
       use iso_c_binding, only : c_double
+      use cqlconf_mod, only : setup0
       real(c_double) dum,ddum
       dimension ddum(*)
       integer idum1,idum2,idum3,idum4
-      write(*,*)'LINPACK subroutine dgesl not presently installed'
+      if(setup0%verbose>0) write(*,*)'LINPACK subroutine dgesl not presently installed'
       STOP
       return
       end subroutine dgesl
 
       subroutine dgbsl(dum,idum1,idum2,idum3,idum4,idum5,ddum,idum6)
       use iso_c_binding, only : c_double
+      use cqlconf_mod, only : setup0
       real(c_double) dum,ddum
       dimension ddum(*)
       integer idum1,idum2,idum3,idum4,idum5,idum6
-      write(*,*)'LINPACK subroutine dgbsl not presently installed'
+      if(setup0%verbose>0) write(*,*)'LINPACK subroutine dgbsl not presently installed'
       STOP
       return
       end subroutine dgbsl
 
       subroutine dgefa(dum,idum1,idum2,idum3,idum4)
       use iso_c_binding, only : c_double
+      use cqlconf_mod, only : setup0
       real(c_double) dum
       integer idum1,idum2,idum3,idum4
-      write(*,*)'LINPACK subroutine dgefa not presently installed'
+      if(setup0%verbose>0) write(*,*)'LINPACK subroutine dgefa not presently installed'
       STOP
       return
       end subroutine dgefa
 
       subroutine dgbfa(dum,idum1,idum2,idum3,idum4,idum5,idum6)
       use iso_c_binding, only : c_double
+      use cqlconf_mod, only : setup0
       real(c_double) dum
       integer idum1,idum2,idum3,idum4,idum5,idum6
-      write(*,*)'LINPACK subroutine dgbfa not presently installed'
+      if(setup0%verbose>0) write(*,*)'LINPACK subroutine dgbfa not presently installed'
       STOP
       return
       end subroutine dgbfa

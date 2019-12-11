@@ -3,6 +3,7 @@ module zfreya_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
+  use cqlconf_mod, only : setup0
 
   !---END USE
 
@@ -11,7 +12,7 @@ contains
 
       real(c_double) function bkef(vpar, tpar, emzpar)
       use frsubs_mod, only : asimp
-      implicit none 
+      implicit none
 !
 !     This routine evaluates the function Ke, which is related to the trans-
 !     fer of parallel momentum from fast ions slowing down on electrons.
@@ -1235,7 +1236,7 @@ contains
  1340 continue
 !
 !%OS
-      print *,' WARNING: xtest not defined in EIGEN'
+      if(setup0%verbose>0) print *,' WARNING: xtest not defined in EIGEN'
 !%OS
       do 1330 j = 1,ns
         in(j) = 0.
@@ -2504,9 +2505,9 @@ contains
 !
     5 continue
       nsp1=ns+1
-      print *,'****************************************'
-      print *,' warning er0old not defined in zfreya'
-      print *,'****************************************'
+      if(setup0%verbose>0) print *,'****************************************'
+      if(setup0%verbose>0) print *,' warning er0old not defined in zfreya'
+      if(setup0%verbose>0) print *,'****************************************'
       if(er0.ne.er0old) ister0=1
 !
 !--   ion reactions-----------------------------------------------
@@ -5736,7 +5737,7 @@ contains
 !    0 for Freeman-Jones
 ! ----------------------------------------------------------------------
       if (iexcit.le.0) then
-        write(*,*) 'Calling Freeman-Jones routine...'
+        if(setup0%verbose>0) write(*,*) 'Calling Freeman-Jones routine...'
         call crsecs(iexcit,atw,ebkev,ibion,mb,mfm1,nion,vbeam, &
                     zne,zni,zte,zzi,dtemax,dnemax,dzemax, &
                     sgvxne,sgxn,sgxnmi)
@@ -5755,7 +5756,7 @@ contains
 ! Use ADAS routines (iexcit = 5)
 ! ----------------------------------------------------------------------
       if (iexcit .eq. 5) then
-        write(*,*) 'Calling adassgxn routine...'
+        if(setup0%verbose>0) write(*,*) 'Calling adassgxn routine...'
         call adassgxn (namep,namei,mb,mfm1,nprim,nimp,nion,atw, &
                        ebkev,ebfac,ibion,nebin,vbeam,zne,zni,zte, &
                        zti,zzi,debin,sgxn,sgxnmi,atw_beam)
@@ -6653,7 +6654,7 @@ contains
            seval=y(1)
            return
          else
-           write(*,100)u,x(1),x(n)
+           if(setup0%verbose>0) write(*,100)u,x(1),x(n)
             write(nout,100)u,x(1),x(n)
 !           call STOP('subroutine SEVAL: Bad Interpolation', 1226)
            write(nout,*)'subroutine SEVAL: Bad Interpolation'
@@ -6664,7 +6665,7 @@ contains
            seval=y(n)
            return
          else
-           write(*,100)u,x(1),x(n)
+           if(setup0%verbose>0) write(*,100)u,x(1),x(n)
             write(nout,100)u,x(1),x(n)
 !           call STOP('subroutine SEVAL: Bad Interpolation', 1226)
            write(nout,*)'subroutine SEVAL: Bad Interpolation'
@@ -6883,21 +6884,21 @@ contains
 !
         do isp=1,nsp
           call getioun(nunadas,nunadas)
-          print *,'file =',code_xsct(1:nchars_12)//dsn(isp,bmz) !jmp.den
+          if(setup0%verbose>0) print *,'file =',code_xsct(1:nchars_12)//dsn(isp,bmz) !jmp.den
           open (unit = nunadas, &
              file = code_xsct(1:nchars_12)//dsn(isp,bmz),status='OLD', &
              action='read',iostat=ierror)
           if (ierror.ne.0) then
              call getioun(nunadas,nunadas)
-             print *,'file = ','/usr/local/adas_dir/'//dsn(isp,bmz) !jmp.den
+             if(setup0%verbose>0) print *,'file = ','/usr/local/adas_dir/'//dsn(isp,bmz) !jmp.den
              open (unit = nunadas, &
              file='/usr/local/adas_dir/'//dsn(isp,bmz),status='OLD', &
              action='read',iostat=ierror)
              if (ierror.ne.0) then
-                WRITE(*,*)
-                WRITE(*,*) 'Error finding adas_dir: It is neither in'
-                WRITE(*,*) 'the execution directory, or in /usr/local .'
-                WRITE(*,*) 'Refer to zfreya.f for more information'
+                if(setup0%verbose>0) WRITE(*,*)
+                if(setup0%verbose>0) WRITE(*,*) 'Error finding adas_dir: It is neither in'
+                if(setup0%verbose>0) WRITE(*,*) 'the execution directory, or in /usr/local .'
+                if(setup0%verbose>0) WRITE(*,*) 'Refer to zfreya.f for more information'
                 stop
              endif
           endif

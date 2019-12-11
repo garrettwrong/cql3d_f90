@@ -41,7 +41,7 @@ contains
 
 
       if(kk.eq.0) then
-         WRITE(*,*)'sigmax: invalid species number kk=0'
+         if(setup0%verbose>0) WRITE(*,*)'sigmax: invalid species number kk=0'
          stop
       endif
 

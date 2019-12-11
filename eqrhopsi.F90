@@ -233,18 +233,18 @@ contains
           eqpsi(1)=psimag
        endif  !On eqsym
 
-       write(*,*)'eqrhopsi: psilim=',psilim
+       if(setup0%verbose>0) write(*,*)'eqrhopsi: psilim=',psilim
        !write(*,*)'eqrhopsi: ez(jmag+-1)',ez(jmag-1),ez(jmag),ez(jmag+1)
 
-       write(*,'(a,i6,2e13.4)')'eqrhopsi: imag, rmag_old/new =', &
+       if(setup0%verbose>0) write(*,'(a,i6,2e13.4)')'eqrhopsi: imag, rmag_old/new =', &
             imag, rmag_old, rmag
-       write(*,'(a,i6,2e13.4)')'eqrhopsi: jmag, zmag_old/new =', &
+       if(setup0%verbose>0) write(*,'(a,i6,2e13.4)')'eqrhopsi: jmag, zmag_old/new =', &
             jmag, zmag_old, zmag
-       write(*,'(a,2e13.4)')'eqrhopsi: psimag_old/new', &
+       if(setup0%verbose>0) write(*,'(a,2e13.4)')'eqrhopsi: psimag_old/new', &
             psimag_old, psimag
-       write(*,'(a,e13.4)')'eqrhopsi: epsi(imag,jmag)=',epsi(imag,jmag)
-       write(*,'(a,e13.4)')'eqrhopsi: er(imag)=',er(imag)
-       write(*,'(a,e13.4)')'eqrhopsi: ez(jmag)=',ez(jmag)
+       if(setup0%verbose>0) write(*,'(a,e13.4)')'eqrhopsi: epsi(imag,jmag)=',epsi(imag,jmag)
+       if(setup0%verbose>0) write(*,'(a,e13.4)')'eqrhopsi: er(imag)=',er(imag)
+       if(setup0%verbose>0) write(*,'(a,e13.4)')'eqrhopsi: ez(jmag)=',ez(jmag)
 
        !      endif  !On eqcall
     endif   !On lr_.eq..rzmax
@@ -257,7 +257,7 @@ contains
     !     the specific definition of the radial coordinate.
     !..................................................................
 
-      write(*,*)'eqrhopsi: generate,radcoord: ',generate,radcoord
+      if(setup0%verbose>0) write(*,*)'eqrhopsi: generate,radcoord: ',generate,radcoord
 
     if (generate.eq."enabled") then     ! generate eqpsi
        !        nzc=(nnz-1)/2+1                   ! up-down symmetry assumed
@@ -283,7 +283,7 @@ contains
       eqpmn1=epsi(nnr,nzc)
 2     continue
       jpsimnr=iminval + 1 - 1/(nnr+1-iminval)
-      write(*,*)'eqrhopsi: iminval,jpsimnr=',iminval,jpsimnr
+      if(setup0%verbose>0) write(*,*)'eqrhopsi: iminval,jpsimnr=',iminval,jpsimnr
       !
       !       Find jpsimnl such that psi~psilim (at the inboard)
       jpsimnl= jpsimnr ! will be over-written in  a tokamak machine
@@ -334,7 +334,7 @@ contains
          !         Prior to moving calc of 2D spline of epsi to beginning of
          !         this subroutine, following call appears to be a bug (BH091016).
          !         [There must have been some prior rearrangement.]
-         write(*,*)'eqrhopsi: rmaxcon,zmag,rmag =',rmaxcon,zmag,rmag
+         if(setup0%verbose>0) write(*,*)'eqrhopsi: rmaxcon,zmag,rmag =',rmaxcon,zmag,rmag
          psilim=terp2  (rmaxcon,zmag,nnr,er,nnz,ez,epsi,epsirr, &
               epsizz,epsirz,nnra,0,0)
          eqpsimin=psilim
@@ -424,12 +424,12 @@ contains
          ! for MPI, only print from master
          if(mpirank.eq.0) then
 #endif
-            write(*,'(a,i4,e16.8)')' j,eqpsi(j)-psilim=',j,eqpsi(j)-psilim
+            if(setup0%verbose>0) write(*,'(a,i4,e16.8)')' j,eqpsi(j)-psilim=',j,eqpsi(j)-psilim
 #ifdef __MPI
          endif !mpirank 0
 #endif
             if(eqpsi(j)-eqpsi(j-1).ge.0.d0)then
-               WRITE(*,*)'eqrhopsi: eqpsi is not descending for j,j-1=',j,j-1
+               if(setup0%verbose>0) WRITE(*,*)'eqrhopsi: eqpsi is not descending for j,j-1=',j,j-1
                stop
             endif
          enddo
@@ -559,11 +559,11 @@ contains
 
        endif
 
-       write(*,*)'eqrhopsi: psilim,psimag',psilim,psimag
-       write(*,*)'eqrhopsi: rmag,zmag',rmag,zmag
-       write(*,*)'eqrhopsi: eqpsi(j),j=1,nconteqn', &
+       if(setup0%verbose>0) write(*,*)'eqrhopsi: psilim,psimag',psilim,psimag
+       if(setup0%verbose>0) write(*,*)'eqrhopsi: rmag,zmag',rmag,zmag
+       if(setup0%verbose>0) write(*,*)'eqrhopsi: eqpsi(j),j=1,nconteqn', &
             (eqpsi(j),j=1,nconteqn)
-       write(*,*)'eqrhopsi: eqrho(j),j=1,nconteqn', &
+       if(setup0%verbose>0) write(*,*)'eqrhopsi: eqrho(j),j=1,nconteqn', &
             (eqrho(j),j=1,nconteqn)
 
        rhomax=exlin(eqrho(nconteqn-1),eqrho(nconteqn), &
@@ -572,7 +572,7 @@ contains
        btor00=fpsi_/rpcon_
        bthr00=eqbpol_(1)
        bmod00=sqrt(btor00**2+bthr00**2)
-       write(*,*)'eqrhospi: rhomax = ',rhomax
+       if(setup0%verbose>0) write(*,*)'eqrhospi: rhomax = ',rhomax
 
        !.................................................................
        !     Setup 1D spline coeffs for eqrho (determined according to
@@ -601,7 +601,7 @@ contains
           zmaxcon=max(abs(zmincon),abs(zmaxcon))
           zmincon=-zmaxcon
        endif
-       write(*,*)'eqrhospi: zmincon,zmaxcon',zmincon,zmaxcon
+       if(setup0%verbose>0) write(*,*)'eqrhospi: zmincon,zmaxcon',zmincon,zmaxcon
 
        !-----------------------------------------------------------------------
        !     Determine some approx geometrical factors needed to calculate

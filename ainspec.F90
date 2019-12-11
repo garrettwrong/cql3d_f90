@@ -103,9 +103,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -157,9 +157,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -168,16 +168,16 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)
-      WRITE(*,*)'ainspec: ngen,nmax,ntotal', &
+      if(setup0%verbose>0) WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,*)'ainspec: ngen,nmax,ntotal', &
                           ngen,nmax,ntotal
-      WRITE(*,*)'ainspec: kelecg,kelecm,kelec', &
+      if(setup0%verbose>0) WRITE(*,*)'ainspec: kelecg,kelecm,kelec', &
                           kelecg,kelecm,kelec
-      WRITE(*,*)'ainspec: niong,kiong(1:niong)',niong,kiong(1:niong)
-      WRITE(*,*)'ainspec: nionm,kionm(1:nionm)',nionm,kionm(1:nionm)
-      WRITE(*,*)'ainspec: nionm/kionm may be adjusted upwards when'
-      WRITE(*,*)'ainspec:   iprozeff.ne."disabled"; see cqlinput_help'
-      WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,*)'ainspec: niong,kiong(1:niong)',niong,kiong(1:niong)
+      if(setup0%verbose>0) WRITE(*,*)'ainspec: nionm,kionm(1:nionm)',nionm,kionm(1:nionm)
+      if(setup0%verbose>0) WRITE(*,*)'ainspec: nionm/kionm may be adjusted upwards when'
+      if(setup0%verbose>0) WRITE(*,*)'ainspec:   iprozeff.ne."disabled"; see cqlinput_help'
+      if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

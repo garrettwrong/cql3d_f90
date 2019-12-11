@@ -95,11 +95,11 @@ contains
       endif
 
       if(epsicon_.le.psilim) then ! YuP[2015/05/03] Just in case:
-         write(*,*)'eqorbit: WARNING: epsicon_.le.psilim'
-         write(*,*)'eqorbit: epsicon_, psilim =', epsicon_, psilim
-         write(*,*)'eqorbit: Resetting epsicon_ to be inside LCFS'
+         if(setup0%verbose>0) write(*,*)'eqorbit: WARNING: epsicon_.le.psilim'
+         if(setup0%verbose>0) write(*,*)'eqorbit: epsicon_, psilim =', epsicon_, psilim
+         if(setup0%verbose>0) write(*,*)'eqorbit: Resetting epsicon_ to be inside LCFS'
          epsicon_= psilim + 0.001*(psimag-psilim)
-         write(*,*)'eqorbit: epsicon_, psilim =', epsicon_, psilim
+         if(setup0%verbose>0) write(*,*)'eqorbit: epsicon_, psilim =', epsicon_, psilim
       endif
 
 !..................................................................
@@ -495,7 +495,7 @@ contains
             if (bpsi_(l-1).gt.bpsi_(l)) then
                iwarn=iwarn+1
                if (iwarn.eq.1) then
-                 write(*,1000) l,rmag,rcon ! XXX had , bug  YuP:agreed
+                 if(setup0%verbose>0) write(*,1000) l,rmag,rcon ! XXX had , bug  YuP:agreed
                  !print*,bpsi_(1:l)
                end if
                bpsi_(l)=bpsi_(l-1)+em40 !YuP[2015/05/03] redefine: increasing

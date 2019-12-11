@@ -48,7 +48,7 @@ contains
         xvpr=0.
       endif
       if (vdalp .lt. 1.e-8) then
-         write(*,*)'vlhd: ***WARNING***  vdalp.lt.1.e-8, reset to 0.03'
+         if(setup0%verbose>0) write(*,*)'vlhd: ***WARNING***  vdalp.lt.1.e-8, reset to 0.03'
          vdalp=.03
       endif
 !

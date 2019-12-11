@@ -77,10 +77,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a,2i5,e12.4)') &
+      if(setup0%verbose>0) WRITE(*,'(a,2i5,e12.4)') &
             'sourcpwr: k,lr, sorpw_nbi', &
                        k,lr_,sorpw_nbi(k,lr_)
-      WRITE(*,*)'----------------------------------------------------'
+      if(setup0%verbose>0) WRITE(*,*)'----------------------------------------------------'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

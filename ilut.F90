@@ -24,7 +24,8 @@ module ilut_mod
 
   use iso_c_binding, only : c_double
   use r8subs_mod, only : daxpy
-
+  use cqlconf_mod, only : setup0
+  
   !---END USE
 
 !----------------------------------------------------------------------c
@@ -186,7 +187,7 @@ contains
             tnorm = tnorm+abs(a(k))
  501     continue
          if (tnorm .eq. 0.0) then
-            write(*,*)'ilut (in SPARSKIT):ii,ia(ii),ia(ii+1),a(j1:j2)=', &
+            if(setup0%verbose>0) write(*,*)'ilut (in SPARSKIT):ii,ia(ii),ia(ii+1),a(j1:j2)=', &
                                           ii,ia(ii),ia(ii+1),a(j1:j2)
             goto 999
          endif

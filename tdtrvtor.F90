@@ -98,7 +98,7 @@ contains
  10   continue
 
       elseif (ipacktp.ne.0) then
-         write(*,*)'STOP in tdtrvtor:  Check ipacktp'
+         if(setup0%verbose>0) write(*,*)'STOP in tdtrvtor:  Check ipacktp'
          stop
       endif
 

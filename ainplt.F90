@@ -69,11 +69,11 @@ contains
 !     ctime is a unix library function which
 !     returns the time as a character*24 variable.
 !     Doesn't work with pathscale compiler.
-      WRITE(*,*)
-      WRITE(*,*)'ainplt:  If setup0%special_calls.eq."enabled" (default nml)'
-      WRITE(*,*)'ainplt:    then code will bomb with compilers not'
-      WRITE(*,*)'ainplt:    implementing SYSTEM call'
-      WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,*)'ainplt:  If setup0%special_calls.eq."enabled" (default nml)'
+      if(setup0%verbose>0) WRITE(*,*)'ainplt:    then code will bomb with compilers not'
+      if(setup0%verbose>0) WRITE(*,*)'ainplt:    implementing SYSTEM call'
+      if(setup0%verbose>0) WRITE(*,*)
 !BH111102      if (setup0%special_calls.eq.'enabled') then
          call GET_DATE_TIME (text24)
 !BH111102      else
@@ -154,27 +154,27 @@ contains
 
       endif                     ! on setup0%special_calls
 
-      WRITE(*,*) ' '
-      WRITE(*,2006) text24
-      WRITE(*,*) ' '
+      if(setup0%verbose>0) WRITE(*,*) ' '
+      if(setup0%verbose>0) WRITE(*,2006) text24
+      if(setup0%verbose>0) WRITE(*,*) ' '
 !     write MACHINE:
-      WRITE(*,2007)
+      if(setup0%verbose>0) WRITE(*,2007)
       lenmac=len_trim(line)
 !      WRITE(*,100) line
       do i=1,(lenmac/60+1)
-         write(*,102)line(1+(i-1)*60:i*60)
+         if(setup0%verbose>0) write(*,102)line(1+(i-1)*60:i*60)
       enddo
 !     write PWD:
-      WRITE(*,2008)
+      if(setup0%verbose>0) WRITE(*,2008)
       lenpwd=len_trim(text256)
 !      write(*,*)'lenpwd=',lenpwd
       do i=1,(lenpwd/60+1)
-         write(*,102)text256(1+(i-1)*60:i*60)
+         if(setup0%verbose>0) write(*,102)text256(1+(i-1)*60:i*60)
       enddo
 !      WRITE(*,101) text256
 
-      WRITE(*,2009) version
-      WRITE(*,*) ' '
+      if(setup0%verbose>0) WRITE(*,2009) version
+      if(setup0%verbose>0) WRITE(*,*) ' '
  100  format(a100)
  101  format(a256)
  102  format(a60)
@@ -227,7 +227,7 @@ contains
       CALL PGMTXT('T',-RILIN,0.,0.,line)
 #endif
 
-      WRITE(*,*) line
+      if(setup0%verbose>0) WRITE(*,*) line
 !
 #ifndef NOPGPLOT
       CALL PGPAGE

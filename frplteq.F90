@@ -236,9 +236,9 @@ contains
     !..................................................................
 
     iskip=1+ipts/nfrplt
-       write(*,*)'frplteq: ipts,nfrplt,iskip',ipts,nfrplt,iskip
+       if(setup0%verbose>0) write(*,*)'frplteq: ipts,nfrplt,iskip',ipts,nfrplt,iskip
     if (iskip .eq. 0) then
-       write(*,*) 'frplteq: iskip=0, beam missing plasma? '
+       if(setup0%verbose>0) write(*,*) 'frplteq: iskip=0, beam missing plasma? '
     else
        do i=1,ipts,iskip
           RPG1=RPTS(I)
@@ -365,7 +365,7 @@ contains
 
     iskip=1+ipts/nfrplt
     if (iskip .eq. 0) then
-       write(*,*) 'frplteq: iskip=0, beam missing plasma? '
+       if(setup0%verbose>0) write(*,*) 'frplteq: iskip=0, beam missing plasma? '
     else
        do i=1,ipts,iskip
           RPG1=XPTS(I)

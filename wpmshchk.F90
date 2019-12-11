@@ -56,7 +56,7 @@ contains
 !%OS  write(6,9101) i,(sinn(i,l)/sqrt(psis(l)),
 !%OS  !        coss(i,l)*dy(i,l)/sqrt(psis(l)),l=1,l_upper(i))
 !%OS  100  continue
-      print *," for each i, coss(i,l)*cynt2(i,l)/psis(l),l=1,l_upper(i)"
+      if(setup0%verbose>0) print *," for each i, coss(i,l)*cynt2(i,l)/psis(l),l=1,l_upper(i)"
       do 101 i=1,iymax/2
         write(6,9101) i,(cynt2(i,l)/psis(l)*coss(i,l) &
           ,l=1,l_upper(i))
@@ -65,14 +65,14 @@ contains
             ,l=lrors-l_upper(i)+2,lrors+1)
         endif
  101  continue
-      print *,' i coss(i,l) sin(thp)*dthp*bbpsi*cos(thp)/sin(th)/dth  ', &
+      if(setup0%verbose>0) print *,' i coss(i,l) sin(thp)*dthp*bbpsi*cos(thp)/sin(th)/dth  ', &
         'sqrt(1-bbpsi*sin(thp)**2)'
       do 1011 i=1,iymax/2
         write(6,9102) i,(coss(i,l),cynt2(i,1)*psis(l)*coss(i,1) &
           /cynt2(i,l) &
           ,sqrt(1.-psis(l)*sinn(i,1)**2),l=1,l_upper(i))
  1011 continue
-      print *,'  l',' sin*dth','  (dthp)'
+      if(setup0%verbose>0) print *,'  l',' sin*dth','  (dthp)'
       do 102 l=1,setup0%ls
         zsum0=0.
         zsums=0.
@@ -80,7 +80,7 @@ contains
           zsum0=zsum0+cynt2(i,1)*psis(l)*coss(i,1)/coss(i,l)
           zsums=zsums+cynt2(i,l)
           if (l .eq. 2) then
-            print *,cynt2(i,l),cynt2(i,1)*psis(l)*coss(i,1)/coss(i,l)
+            if(setup0%verbose>0) print *,cynt2(i,l),cynt2(i,1)*psis(l)*coss(i,1)/coss(i,l)
           endif
  103    continue
         write(6,'(i3,1p2e12.3)') l,zsums,zsum0
@@ -89,7 +89,7 @@ contains
       if (setup0%ls.gt.10 .or. setup0%cqlpmod.ne."enabled" .or. transp.ne."enabled") &
         go to 999
 
-      print *,' dy adjusted and dy at iyh'
+      if(setup0%verbose>0) print *,' dy adjusted and dy at iyh'
       zsum0=0.0
       do 1031 i=1,iyh_(1)
         zsum0=zsum0+cynt2(i,1)
@@ -100,7 +100,7 @@ contains
           zsum1=zsum1+cynt2(i,l)
  1033   continue
         zzdyh=(zsum0-zsum1)/twopi/sinn(i,l)
-        print *,zzdyh,dy(iyh_(l),l),(zzdyh-dy(iyh_(l),l))/dy(iyh_(l),l) &
+        if(setup0%verbose>0) print *,zzdyh,dy(iyh_(l),l),(zzdyh-dy(iyh_(l),l))/dy(iyh_(l),l) &
           *100.
  1032 continue
       l=1
@@ -131,8 +131,8 @@ contains
         write(6,'(/," y(i+1)-y(i)(l),dyp5(l); l=",i3,/,(1p10e12.4))') &
           l,(y(i+1,l)-y(i,l),dyp5(i,l),i=1,iyh_(l))
  104  continue
-      print *,' '
-      print *,'  l',' sum(2*pi*sin*dth)(l)',' sum (dth0) with new dy(l)'
+      if(setup0%verbose>0) print *,' '
+      if(setup0%verbose>0) print *,'  l',' sum(2*pi*sin*dth)(l)',' sum (dth0) with new dy(l)'
       do 1021 l=1,setup0%ls
         zsum0=0.
         zsums=0.
@@ -140,7 +140,7 @@ contains
           zsum0=zsum0+cynt2(i,1)*psis(l)*coss(i,1)/coss(i,l)
           zsums=zsums+cynt2(i,l)
           if (l .eq. 2 .and. i.le.iyh_(2)) then
-            print *,cynt2(i,l),cynt2(i,1)*psis(l)*coss(i,1)/coss(i,l)
+            if(setup0%verbose>0) print *,cynt2(i,l),cynt2(i,1)*psis(l)*coss(i,1)/coss(i,l)
           endif
  1022   continue
         write(6,'(i3,1p2e12.3)') l,zsums,zsum0

@@ -129,7 +129,7 @@ contains
         REMIN=EMIN
         REMAX=EMAX
         TEST=ABS((EMAX-EMIN)/EMAX)
-        write(*,*) 'pltvflux: n,emax,emin,test ',n,emax,emin,test
+        if(setup0%verbose>0) write(*,*) 'pltvflux: n,emax,emin,test ',n,emax,emin,test
         !write(*,*)'RTAM1=',RTAM1
         !write(*,*)'RTAM2=',RTAM2
         IF (TEST .lt. 0.0001) THEN

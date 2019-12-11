@@ -202,7 +202,7 @@ contains
 !MPIINSERT_IF_RANK_NE_0_RETURN
 ! This subroutine is only called from MPI rank=0.
 
-       WRITE(*,*) 'inside netcdfrw2.f...'
+       if(setup0%verbose>0) WRITE(*,*) 'inside netcdfrw2.f...'
 !       WRITE(*,*) 'frmodp=',frmodp
 !       WRITE(*,*) 'hibrzp(i,1,1),hibrzp(i,2,1),hibrzp(i,3,1)'
 !       do i=1,22
@@ -378,7 +378,7 @@ contains
 !
 
 ! --- begin if ---
-      WRITE(*,*)'netcdfrw2 initialize, kopt=',kopt,'n=',n
+      if(setup0%verbose>0) WRITE(*,*)'netcdfrw2 initialize, kopt=',kopt,'n=',n
       if ((kopt.eq.0) .and. (n.eq.0)) then !endif at l 3282
 
 !-----------------------------------------------------------------------
@@ -445,7 +445,7 @@ contains
                               !radial entry.
       count_elecfldn(2)=nstop+1
       count_elecfldn(3)=nampfmax+1
-      print*,'count_elecfldn(1:3)=',count_elecfldn
+      if(setup0%verbose>0) print*,'count_elecfldn(1:3)=',count_elecfldn
       istatus= NF_DEF_DIM(ncid,'nampfmax_dim',nampfmax+1,nampfmax_dim)
       istatus= NF_DEF_DIM(ncid,'nonch_dim',   nstop+1,   nonch_dim)
       istatus= NF_DEF_DIM(ncid,'nrho_dim',    lrz+1,     nrho_dim)
@@ -1601,11 +1601,11 @@ contains
 !     mrfn=number of modes =1, in subroutine rdc_multi.
       if (rdcmod.ne."disabled") then
          if (rdcmod.eq."enabled" .and. urfmod.ne."disabled") then
-            WRITE(*,*)
-            WRITE(*,*)'Warning: netcdfrw2 not set up for both'
-            WRITE(*,*)'Warning: rdcmod and urfmod.ne.disabled.'
-            WRITE(*,*)'Warning: urfmod output will overwrite rdcmod o/p'
-            WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)'Warning: netcdfrw2 not set up for both'
+            if(setup0%verbose>0) WRITE(*,*)'Warning: rdcmod and urfmod.ne.disabled.'
+            if(setup0%verbose>0) WRITE(*,*)'Warning: urfmod output will overwrite rdcmod o/p'
+            if(setup0%verbose>0) WRITE(*,*)
          endif
          vid=ncvdef2(ncid,'rfpwr',NCDOUBLE,3,rfpwr_dims,istatus)
          call ncaptc2(ncid,vid,'long_name0',NCCHAR,40, &
@@ -1624,7 +1624,7 @@ contains
 !
 !... new Freya stuff
 !
-        WRITE(*,*) frmodp
+        if(setup0%verbose>0) WRITE(*,*) frmodp
       if (frmodp.eq."enabled") then
 
            vid=ncvdef2(ncid,'hibrz',NCDOUBLE,3,hibr_dims,istatus)
@@ -2459,9 +2459,9 @@ contains
          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,delta_start,delta_count,deltarz)
          istatus= NF_INQ_VARID(ncid,'deltarz',vid)
          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,delta_start,delta_count,deltarz)
-        WRITE(*,*)'netcdfrw2:start,z_count1=', &
+        if(setup0%verbose>0) WRITE(*,*)'netcdfrw2:start,z_count1=', &
              start(1:3),z_count1(1:3)
-        WRITE(*,*)'netcdfrw2:delta_start,delta_count=', &
+        if(setup0%verbose>0) WRITE(*,*)'netcdfrw2:delta_start,delta_count=', &
              delta_start(1:3),delta_count(1:3)
 
 !BH         vid=ncvid_doubl2(ncid,'delta_bdb0',istatus)
@@ -3215,9 +3215,9 @@ contains
 
                k=1 !
                if (tavg.ne."disabled") then
-                 PRINT *,'netcdfrw2 WARNING: favg is saved (NOT f)'
-                 PRINT *,'netcdfrw2 WARN:  but if time(nstop)<tavg1(1)'
-                 PRINT *,'netcdfrw2 WARNING: then favg = f.'
+                 if(setup0%verbose>0) PRINT *,'netcdfrw2 WARNING: favg is saved (NOT f)'
+                 if(setup0%verbose>0) PRINT *,'netcdfrw2 WARN:  but if time(nstop)<tavg1(1)'
+                 if(setup0%verbose>0) PRINT *,'netcdfrw2 WARNING: then favg = f.'
                endif
                do ll=1,lrz
                   if (tavg.eq."disabled") then
@@ -3238,7 +3238,7 @@ contains
                      !if(gone(i,j,k,lrindx(ll)).lt.-0.1) temp1(i,j)=em90
                      enddo
                      enddo
-                     WRITE(*,'(a,i6,2e13.4)') &
+                     if(setup0%verbose>0) WRITE(*,'(a,i6,2e13.4)') &
                      'nstop0.netcdfrw2/tavg=en ll,sumij(favg),sumij(f)', &
                        ll,sum(temp1),sum(f(:,:,k,lrindx(ll)))
                   endif  !On tavg
@@ -4028,9 +4028,9 @@ contains
 
       if(ampfmod.eq.'enabled')then !elecfldn(0:,0:,0:) saved at the last t step
          istatus= NF_INQ_VARID(ncid,'elecfldn',vid)
-         write(*,*)'netcdfrw2: n=1,it=0,elecfldn(:,n,0)*300=', &
+         if(setup0%verbose>0) write(*,*)'netcdfrw2: n=1,it=0,elecfldn(:,n,0)*300=', &
                                     elecfldn(0:lrz+1,1,0)*300
-         write(*,*)'netcdfrw2: n=1,it=1,elecfldn(:,n,1)*300=', &
+         if(setup0%verbose>0) write(*,*)'netcdfrw2: n=1,it=1,elecfldn(:,n,1)*300=', &
                                     elecfldn(0:lrz+1,1,1)*300
          istatus = NF_PUT_VARA_DOUBLE(ncid,vid,start_elecfldn,count_elecfldn,elecfldn(0:,0:,0:))
       endif
@@ -4052,15 +4052,15 @@ contains
 
             k=1 !
             if (tavg.ne."disabled") then
-              PRINT *,'netcdfrw2 WARNING: favg is saved (NOT f)'
-              PRINT *,'netcdfrw2 WARNING: but if time(nstop) < tavg1(1)'
-              PRINT *,'netcdfrw2 WARNING: then favg == f.'
+              if(setup0%verbose>0) PRINT *,'netcdfrw2 WARNING: favg is saved (NOT f)'
+              if(setup0%verbose>0) PRINT *,'netcdfrw2 WARNING: but if time(nstop) < tavg1(1)'
+              if(setup0%verbose>0) PRINT *,'netcdfrw2 WARNING: then favg == f.'
             endif
-            WRITE(*,*) &
+            if(setup0%verbose>0) WRITE(*,*) &
               'netcdfrw2[netcdfshort=disabled]:Write f into mnemonic.nc'
-            WRITE(*,*)'netcdfrw2_4060: For checkup SUM(f),SUM(gone)=', &
+            if(setup0%verbose>0) WRITE(*,*)'netcdfrw2_4060: For checkup SUM(f),SUM(gone)=', &
                        SUM(f),SUM(gone)
-            WRITE(*,*)'netcdfrw2_4060: For checkup MIN(f),MAX(f)=', &
+            if(setup0%verbose>0) WRITE(*,*)'netcdfrw2_4060: For checkup MIN(f),MAX(f)=', &
                        MINVAL(f),MAXVAL(f)
             do ll=1,lrz
                if (tavg.eq."disabled") then
@@ -4083,7 +4083,7 @@ contains
                      !if you want to leave favg intact.
                   enddo
                   enddo
-                  WRITE(*,'(a,i6,2e13.4)') &
+                  if(setup0%verbose>0) WRITE(*,'(a,i6,2e13.4)') &
                   'nstop.netcdfrw2/tavg=en. ll, sumij(favg), sumij(f)', &
                    ll,sum(temp1),sum(f(:,:,k,lrindx(ll)))
                endif  !On tavg
@@ -4164,8 +4164,8 @@ contains
       integer iret
       include 'netcdf.inc'
       if (iret .ne. NF_NOERR) then
-         PRINT *, 'netCDF error:', iret
-         PRINT *, NF_STRERROR(iret) ! print error explanation
+         if(setup0%verbose>0) PRINT *, 'netCDF error:', iret
+         if(setup0%verbose>0) PRINT *, NF_STRERROR(iret) ! print error explanation
          call abort
       endif
       end subroutine check_err
@@ -5141,14 +5141,14 @@ contains
 
 !MPIINSERT_IF_RANK_NE_0_RETURN
 
-      WRITE(*,*)
-      WRITE(*,*)'Entering subroutine f4dwrite'
+      if(setup0%verbose>0) WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,*)'Entering subroutine f4dwrite'
 
 !     Only set up for one (the first) general species:
       if (ngen.gt.1) then
-         WRITE(*,*)
-         WRITE(*,*)'WARNING: Output f4d dist ftn for 1st gen spec only'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'WARNING: Output f4d dist ftn for 1st gen spec only'
+         if(setup0%verbose>0) WRITE(*,*)
          k=1 ! First general species only, for now
       endif
 
@@ -5165,7 +5165,7 @@ contains
       if (istat1.ne.0 .or. istat2.ne.0 .or. istat3.ne.0 .or. &
           istat4.ne.0 .or. istat5.ne.0 .or. &
           istat6.ne.0 .or. istat7.ne.0) then
-         WRITE(*,*)'f4dwrite: allocation problem'
+         if(setup0%verbose>0) WRITE(*,*)'f4dwrite: allocation problem'
          STOP
       endif
 
@@ -5218,9 +5218,9 @@ contains
 !.......................................................................
 
       if (eqsource.ne."eqdsk") then
-         WRITE(*,*)
-         WRITE(*,*) 'f4dwrite only set up for eqsource=eqdsk'
-         WRITE(*,*) 'Easy to generalize, if useful'
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*) 'f4dwrite only set up for eqsource=eqdsk'
+         if(setup0%verbose>0) WRITE(*,*) 'Easy to generalize, if useful'
          STOP
       endif
 
@@ -5355,12 +5355,12 @@ contains
       enddo
 
       if (eqsym.eq."none") then
-         WRITE(*,*)
-         WRITE(*,*)'************************************************'
-         WRITE(*,*)'WARNING:  NPA CALC ASSUMING UP-DOWN SYMM'
-         WRITE(*,*)'          and eqsym=none.  Need to check coding'
-         WRITE(*,*)'************************************************'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'************************************************'
+         if(setup0%verbose>0) WRITE(*,*)'WARNING:  NPA CALC ASSUMING UP-DOWN SYMM'
+         if(setup0%verbose>0) WRITE(*,*)'          and eqsym=none.  Need to check coding'
+         if(setup0%verbose>0) WRITE(*,*)'************************************************'
+         if(setup0%verbose>0) WRITE(*,*)
       endif
 
 !.......................................................................

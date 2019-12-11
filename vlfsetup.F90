@@ -57,7 +57,7 @@ contains
       mrf=vlfmodes   !i.e., number of wave types
 
       if (mrf.gt.nmodsa) then
-         write(*,*)'STOP:    vlfmodes.gt.nmodsa'
+         if(setup0%verbose>0) write(*,*)'STOP:    vlfmodes.gt.nmodsa'
       endif
 
       deps=1.e-10
@@ -81,7 +81,7 @@ contains
       enddo
 
       if (mrfn.gt.nmodsa) then
-         write(*,*)'vlfsetup: mrfn>nmodsa.  mrfn,nmodsa=',mrfn,nmodsa
+         if(setup0%verbose>0) write(*,*)'vlfsetup: mrfn>nmodsa.  mrfn,nmodsa=',mrfn,nmodsa
          STOP 'Increase nmodsa.'
       endif
 
@@ -120,14 +120,14 @@ contains
          enddo
       enddo
 
-      write(*,*)
-      write(*,*)'vlfsetup: mrf = ',mrf
-      write(*,*)'vlfsetup: mrfn = ',mrfn
-      write(*,*)'vlfsetup: irfn = ',irfn
-      write(*,*)'vlfsetup: krfn = ',krfn
-      write(*,*)'vlfsetup: nharm1 = ',nharm1
-      write(*,*)'vlfsetup: nharms = ',nharms
-      write(*,*)'vlfsetup: nharm = ',nharm
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'vlfsetup: mrf = ',mrf
+      if(setup0%verbose>0) write(*,*)'vlfsetup: mrfn = ',mrfn
+      if(setup0%verbose>0) write(*,*)'vlfsetup: irfn = ',irfn
+      if(setup0%verbose>0) write(*,*)'vlfsetup: krfn = ',krfn
+      if(setup0%verbose>0) write(*,*)'vlfsetup: nharm1 = ',nharm1
+      if(setup0%verbose>0) write(*,*)'vlfsetup: nharms = ',nharms
+      if(setup0%verbose>0) write(*,*)'vlfsetup: nharm = ',nharm
 
 
 !     Duplicate ray data in sets nharms(krf) long using the first ray data
@@ -150,7 +150,7 @@ contains
          vlfdnorm(k)=vlfdnorm(krfn(k))
       enddo
 
-      write(*,*)'vlfsetup: vlfdnorm(k),k=1,mrfn ', &
+      if(setup0%verbose>0) write(*,*)'vlfsetup: vlfdnorm(k),k=1,mrfn ', &
                           (vlfdnorm(k),k=1,mrfn)
 
       vlfpol_inrange=0.d0
@@ -170,10 +170,10 @@ contains
       enddo
       if(vlfpol_inrange.eq.0.d0)then
         ! the above condition was not met for any vlfpol(k)
-        WRITE(*,*)'vlfsetup: vlfpol is outside of pol.angle range.'
-        WRITE(*,*)'vlfsetup: pol(1,setup0%lrz)=',pol(1,setup0%lrz), &
+        if(setup0%verbose>0) WRITE(*,*)'vlfsetup: vlfpol is outside of pol.angle range.'
+        if(setup0%verbose>0) WRITE(*,*)'vlfsetup: pol(1,setup0%lrz)=',pol(1,setup0%lrz), &
                           '  pol(lz,setup0%lrz)=',pol(lz,setup0%lrz)
-        WRITE(*,*)'vlfsetup: vlfpol(k)=',vlfpol ! print for all k
+        if(setup0%verbose>0) WRITE(*,*)'vlfsetup: vlfpol(k)=',vlfpol ! print for all k
         stop
       endif
 
@@ -210,7 +210,7 @@ contains
       do k=1,mrfn
          nharmx=MAX(nharmx,nharm(k))
       enddo
-      write(*,*)'vlfsetup:  Before allocate'
+      if(setup0%verbose>0) write(*,*)'vlfsetup:  Before allocate'
       allocate(besl(nharmx+2),STAT=istat) !-YuP->added
       call bcast(besl,zero,SIZE(besl))     !-YuP->added
       allocate(jbm1(nbssltbl,mrfn),STAT=istat) !-YuP-> modified to real
@@ -219,7 +219,7 @@ contains
       call bcast(jb0,zero,SIZE(jbm1))           !-YuP-> modified to real
       allocate(jbp1(nbssltbl,mrfn),STAT=istat) !-YuP-> modified to real
       call bcast(jbp1,zero,SIZE(jbm1))          !-YuP-> modified to real
-      write(*,*)'vlfsetup:  After allocate'
+      if(setup0%verbose>0) write(*,*)'vlfsetup:  After allocate'
 !..................................................................
 !     Loop over excitation modes
 !..................................................................
@@ -252,7 +252,7 @@ contains
 !..................................................................
 
         argmax=xkp*vnorm/wcemin*1.4
-        write(*,'(a,3i6,2e12.3)')'vlfsetup: n,lr_,krf,bvalmin,argmax=', &
+        if(setup0%verbose>0) write(*,'(a,3i6,2e12.3)')'vlfsetup: n,lr_,krf,bvalmin,argmax=', &
           n,lr_,k,bvalmin,argmax
         bsslstp(k)=argmax/(nbssltbl-1)
         arg=0.

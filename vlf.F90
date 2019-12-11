@@ -888,7 +888,7 @@ contains
            C0E0= cqlc(i,j,indxlr_,krfmode)*cqle(i,j,indxlr_,krfmode)
            BF_CE= B0F0-C0E0
            if( abs(BF_CE) .gt. 1.e-8*(abs(B0F0)+abs(C0E0)) ) then
-              write(*,*)'vlf: abs(BF-CE) > 1e-8*abs(BF) ',j,i,B0F0,C0E0
+              if(setup0%verbose>0) write(*,*)'vlf: abs(BF-CE) > 1e-8*abs(BF) ',j,i,B0F0,C0E0
               BF_CE_0=BF_CE
            endif
         enddo

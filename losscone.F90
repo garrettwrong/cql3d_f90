@@ -400,7 +400,7 @@ contains
             else
                enormc=(gammac-1.d0)*fmass(1)*clite2/ergtkev
             endif
-            write(*,*)'Enorm in losscone, gammac =',enormc,gammac
+            if(setup0%verbose>0) write(*,*)'Enorm in losscone, gammac =',enormc,gammac
 
 !.................................................................
 !     The rho_a radial mesh and associated coeffc will be reduced
@@ -425,7 +425,7 @@ contains
 !.................................................................
 
          n_psi=n_psi/2
-         write(*,*)'losscone: n_psi,setup0%lrz=',n_psi,setup0%lrz
+         if(setup0%verbose>0) write(*,*)'losscone: n_psi,setup0%lrz=',n_psi,setup0%lrz
          do i_psi=1,n_psi
             rho_a(i_psi)=rho_a(2*i_psi)
             do i_upar=1,n_upar
@@ -436,13 +436,13 @@ contains
             enddo
          enddo
 
-         write(*,*)'losscone: rho_a, no. elements/2:', &
+         if(setup0%verbose>0) write(*,*)'losscone: rho_a, no. elements/2:', &
               (rho_a(i),i=1,n_psi)
 
       endif
 
       if (n_psi.ne.setup0%lrz) then
-         WRITE(*,*)'losscone:  n_psi.ne.setup0%lrz'
+         if(setup0%verbose>0) WRITE(*,*)'losscone:  n_psi.ne.setup0%lrz'
          STOP
       endif
 
@@ -520,7 +520,7 @@ contains
          jc=luf(vc_cgs/vnorm,x,jx)-1 !Will be less than jx if
                                   !vc_cgs/vnorm.lt.x(jx-1)
 
-         write(*,*)'losscone: jx,jc=',jx,jc
+         if(setup0%verbose>0) write(*,*)'losscone: jx,jc=',jx,jc
 
          do i=1,iy
          if (jc.lt.jx .and. gone(i,jc,k,ll).eq.-one) then

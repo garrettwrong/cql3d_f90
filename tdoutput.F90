@@ -438,7 +438,7 @@ contains
  142  continue
 
       do j=1,jx ! YuP[2018-01-05] added - print in columns: x,dx,u/c
-       WRITE(*,'(a,i7,3e13.5)')'j,x,dx,u/c=',j,x(j),dxp5(j),uoc(j)
+       if(setup0%verbose>0) WRITE(*,'(a,i7,3e13.5)')'j,x,dx,u/c=',j,x(j),dxp5(j),uoc(j)
       enddo
 
  149  continue
@@ -506,7 +506,7 @@ contains
 
       if (niong.ne.0) then
          do kkk=1,mrfn
-         WRITE(*,*) 'mode = ',kkk, 'nharm(kkk) = ',nharm(kkk), &
+         if(setup0%verbose>0) WRITE(*,*) 'mode = ',kkk, 'nharm(kkk) = ',nharm(kkk), &
                  'powurf =',powurf(kkk)
          enddo
       endif
@@ -699,38 +699,38 @@ contains
 !     zre12=ONETWO (H&H, 1976) formula, with collisionality and Zeff.
 !     rovsc*0.706/0.93=Connor asymptotic, as eps==>1.
 
-      WRITE(*,99)
+      if(setup0%verbose>0) WRITE(*,99)
  99   format(//)
-      WRITE(*,*)'If efflag="toroidal", then code electric field is'
-      WRITE(*,*)'                      assumed to be purely toroidal,'
-      WRITE(*,*)'                      varying like elecfld*(Rmag/R).'
-      WRITE(*,*)'If efflag="parallel", then code electric field is'
-      WRITE(*,*)'                      assumed to be purely parallel,'
-      WRITE(*,*)'                      varying like elecfld*(Rmag/R).'
-      WRITE(*,99)
-      WRITE(*,*)'Explanation of following table, for each column:'
-      WRITE(*,*)'================================================'
-      WRITE(*,*)'epsilon=rho/R'
-      WRITE(*,*)'resist_phi=Resistivity, calc''d from distn'
-      WRITE(*,*)'                             fnctn results'
-      WRITE(*,*)'          =<E_phi/R>/<j_phi/R>, toroidal resistivity'
-      WRITE(*,*)'           Except, if efswtchn.eq."neo_hh" .and.'
-      WRITE(*,*)'           setup0%cqlpmod.ne."enabled" ==>'
-      WRITE(*,*)'           restp=(pol x-section-area avg of E)/currpar'
-      WRITE(*,*)'               and currpar is sum of Hinton-Hazeltine '
-      WRITE(*,*)'               neoclassical current + runaway current.'
-      WRITE(*,*)'           Units: statV-cm/statA = seconds'
-      WRITE(*,*)'restp/sptzr=resist_phi/sptzr (sptzr incls ONETWO Zeff)'
-      WRITE(*,*)'resist_neo=<E_parall*B>/<j_parall*B> (seconds)'
-      WRITE(*,*)'res_neo/sptzr=<E_parall*B>/<j_parall*B>/sptzr'
-      WRITE(*,*)'elecfld(lr_)=toroidal or parallel electric fld (V/cm)'
-      WRITE(*,*)'             at Rmag, depending on efflag.'
-      WRITE(*,*)'E/E-Driecer=elecfld/E_Driecer'
-      WRITE(*,*)'Connor=Connor formula, banana regime, over sptzr'
-      WRITE(*,*)'rovsc*0.706/0.93=Connor asymptotic, as eps==>1.'
-      WRITE(*,*)'Zeff'
-      WRITE(*,*)'ONETWO low collisionality limit (H&H, 1976)/sptzr'
-      WRITE(*,*)'Check tdoutput.f for references.'
+      if(setup0%verbose>0) WRITE(*,*)'If efflag="toroidal", then code electric field is'
+      if(setup0%verbose>0) WRITE(*,*)'                      assumed to be purely toroidal,'
+      if(setup0%verbose>0) WRITE(*,*)'                      varying like elecfld*(Rmag/R).'
+      if(setup0%verbose>0) WRITE(*,*)'If efflag="parallel", then code electric field is'
+      if(setup0%verbose>0) WRITE(*,*)'                      assumed to be purely parallel,'
+      if(setup0%verbose>0) WRITE(*,*)'                      varying like elecfld*(Rmag/R).'
+      if(setup0%verbose>0) WRITE(*,99)
+      if(setup0%verbose>0) WRITE(*,*)'Explanation of following table, for each column:'
+      if(setup0%verbose>0) WRITE(*,*)'================================================'
+      if(setup0%verbose>0) WRITE(*,*)'epsilon=rho/R'
+      if(setup0%verbose>0) WRITE(*,*)'resist_phi=Resistivity, calc''d from distn'
+      if(setup0%verbose>0) WRITE(*,*)'                             fnctn results'
+      if(setup0%verbose>0) WRITE(*,*)'          =<E_phi/R>/<j_phi/R>, toroidal resistivity'
+      if(setup0%verbose>0) WRITE(*,*)'           Except, if efswtchn.eq."neo_hh" .and.'
+      if(setup0%verbose>0) WRITE(*,*)'           setup0%cqlpmod.ne."enabled" ==>'
+      if(setup0%verbose>0) WRITE(*,*)'           restp=(pol x-section-area avg of E)/currpar'
+      if(setup0%verbose>0) WRITE(*,*)'               and currpar is sum of Hinton-Hazeltine '
+      if(setup0%verbose>0) WRITE(*,*)'               neoclassical current + runaway current.'
+      if(setup0%verbose>0) WRITE(*,*)'           Units: statV-cm/statA = seconds'
+      if(setup0%verbose>0) WRITE(*,*)'restp/sptzr=resist_phi/sptzr (sptzr incls ONETWO Zeff)'
+      if(setup0%verbose>0) WRITE(*,*)'resist_neo=<E_parall*B>/<j_parall*B> (seconds)'
+      if(setup0%verbose>0) WRITE(*,*)'res_neo/sptzr=<E_parall*B>/<j_parall*B>/sptzr'
+      if(setup0%verbose>0) WRITE(*,*)'elecfld(lr_)=toroidal or parallel electric fld (V/cm)'
+      if(setup0%verbose>0) WRITE(*,*)'             at Rmag, depending on efflag.'
+      if(setup0%verbose>0) WRITE(*,*)'E/E-Driecer=elecfld/E_Driecer'
+      if(setup0%verbose>0) WRITE(*,*)'Connor=Connor formula, banana regime, over sptzr'
+      if(setup0%verbose>0) WRITE(*,*)'rovsc*0.706/0.93=Connor asymptotic, as eps==>1.'
+      if(setup0%verbose>0) WRITE(*,*)'Zeff'
+      if(setup0%verbose>0) WRITE(*,*)'ONETWO low collisionality limit (H&H, 1976)/sptzr'
+      if(setup0%verbose>0) WRITE(*,*)'Check tdoutput.f for references.'
 
       WRITE(6,9230)
  9230 format(//," Resistivity:",/,1x,12("="),/,"  l",3x, &
@@ -769,22 +769,22 @@ contains
  230  continue
  9231 format(i3,1p9e11.3,1p1e13.5,1p1e11.3)
 
-      WRITE(*,*)'res_BK Braams-Karney normalization resistivity [cgs]=', &
+      if(setup0%verbose>0) WRITE(*,*)'res_BK Braams-Karney normalization resistivity [cgs]=', &
        res_BK, restp(nch(l_),1)
       if(restp(nch(l_),1).ne.0.) WRITE(*,*) &
         'Normalized conductivity: sigma_code/sigma_BK=', &
        res_BK/restp(nch(l_),1)
       do ktot1=1,ntotal
       do ktot2=1,ntotal
-        WRITE(*,*)'k1,k2, ln(Lambda)==gama(k1,k2)=', &
+        if(setup0%verbose>0) WRITE(*,*)'k1,k2, ln(Lambda)==gama(k1,k2)=', &
                    ktot1,ktot2,  gama(ktot1,ktot2)
       enddo
       enddo
 
 !%OS
-      WRITE(*,99)
-      WRITE(*,*)'For explanation of following table, see tdoutput.f'
-      WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,99)
+      if(setup0%verbose>0) WRITE(*,*)'For explanation of following table, see tdoutput.f'
+      if(setup0%verbose>0) WRITE(*,*)
       WRITE(6,9238)
  9238 format(/,"epsilon",2x,"res_neo/sp",4x,"Connor",3x &
         ,"Con.largep",2x,"Zeff",2x,"One2/spt(Z)",3x,"Iconnor",2x, &

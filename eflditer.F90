@@ -192,7 +192,7 @@ contains
          ! for MPI, only print from master
          if(mpirank.eq.0) then
 #endif
-            write(*,'(a,i5,4e12.4)')'elecfld,currpar/psifct,currxj0,currerrf', &
+            if(setup0%verbose>0) write(*,'(a,i5,4e12.4)')'elecfld,currpar/psifct,currxj0,currerrf', &
                  lr_,elecfld(lr_),currpar(lr_)/psifct1,currxj0(lr_),currerrf
 
 #ifdef __MPI

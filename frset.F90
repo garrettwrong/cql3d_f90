@@ -79,14 +79,14 @@
 
 !     Check nbeams not too large.
       if (nbeams .gt. kb) then
-         WRITE(*,*)
-         WRITE(*,*)'Namelist nbeams.gt.kb:  increase parameter kb'
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'Namelist nbeams.gt.kb:  increase parameter kb'
          stop
-         write(*,*)
+         if(setup0%verbose>0) write(*,*)
       endif
 
       if (multiply.ne."disabled".and.multiplyn.eq.0) then
-         WRITE(*,214)
+         if(setup0%verbose>0) WRITE(*,214)
  214     format(//,'Must set multiplyn, if multiply.ne.disabled',//)
          stop 'Must set multiplyn'
       endif
@@ -171,31 +171,31 @@
       half=0.5d0
 
       allocate(rpts(npart),STAT=istat)
-      write(*,*)'frset  rpts: istat=',istat
+      if(setup0%verbose>0) write(*,*)'frset  rpts: istat=',istat
       if(istat.eq.0) call bcast(rpts,zero,npart)
 
       allocate(xpts(npart),STAT=istat)
-      write(*,*)'frset  xpts: istat=',istat
+      if(setup0%verbose>0) write(*,*)'frset  xpts: istat=',istat
       if(istat.eq.0) call bcast(xpts,zero,npart)
 
       allocate(ypts(npart),STAT=istat)
-      write(*,*)'frset  ypts: istat=',istat
+      if(setup0%verbose>0) write(*,*)'frset  ypts: istat=',istat
       if(istat.eq.0) call bcast(ypts,zero,npart)
 
       allocate(zpts(npart),STAT=istat)
-      write(*,*)'frset  zpts: istat=',istat
+      if(setup0%verbose>0) write(*,*)'frset  zpts: istat=',istat
       if(istat.eq.0) call bcast(zpts,zero,npart)
 
       allocate(vx(npart),STAT=istat)
-      write(*,*)'frset  vx: istat=',istat
+      if(setup0%verbose>0) write(*,*)'frset  vx: istat=',istat
       if(istat.eq.0) call bcast(vx,zero,npart)
 
       allocate(vy(npart),STAT=istat)
-      write(*,*)'frset  vy: istat=',istat
+      if(setup0%verbose>0) write(*,*)'frset  vy: istat=',istat
       if(istat.eq.0) call bcast(vy,zero,npart)
 
       allocate(vz(npart),STAT=istat)
-      write(*,*)'frset  vz: istat=',istat
+      if(setup0%verbose>0) write(*,*)'frset  vz: istat=',istat
       if(istat.eq.0) call bcast(vz,zero,npart)
 
       return

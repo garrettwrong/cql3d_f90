@@ -62,7 +62,7 @@ contains
 !cc      call bcast(temp1(1,0),zero,iy*(jx+1)) ! YuP-101215: error?
       call bcast(temp1(0:iy+1,0:jx+1),zero,iyjx2)  !temp1(0:iyp1,0:jxp1)
 
-      write(*,*)'rdc_bplt(krf): mrfn =',mrfn,' krf=',krf
+      if(setup0%verbose>0) write(*,*)'rdc_bplt(krf): mrfn =',mrfn,' krf=',krf
 
 !$$   do 560 k=1,mrfn
       do 561 j=1,jx

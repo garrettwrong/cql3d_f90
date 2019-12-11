@@ -956,7 +956,7 @@ contains
         if (n .lt. nonrf(k) .or. n .ge. noffrf(k)) go to 41
 
         call coefrfad(k,xrf)
-          write(*,'(a,2i6,e12.2)') &
+          if(setup0%verbose>0) write(*,'(a,2i6,e12.2)') &
           'pltfluxs->coefrfad: n,lr_,sum(dbb)=', &
           n,lr_,sum(dbb)
 
@@ -2682,7 +2682,7 @@ contains
            !cint2= x**2 *dx  (and remember that temp3 includes vnorm^3)
            !cynt2= 2pi*sin(theta0)*dtheta0
         enddo
-        WRITE(*,'(a,2i5,2e13.5)') &
+        if(setup0%verbose>0) WRITE(*,'(a,2i5,2e13.5)') &
          'pltso_theta: lr_,i,y(i,lr_)*180.0/pi,wk_so(i)=', &
               lr_,i, y(i,lr_)*180.0/pi, wk_so(i)
         enddo

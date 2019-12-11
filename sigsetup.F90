@@ -54,7 +54,7 @@ contains
 !     Presently , up to msig=4 nuclear rxs plus simple impact and CX
 !     are treated.  Storage only setup for any 4 of these processes.
       if (msig.gt.4) then
-        write(*,1000)
+        if(setup0%verbose>0) write(*,1000)
  1000   format('Need to check code for msig.gt.4, resetting sigmamod')
         sigmamod="disabled"
         return
@@ -176,18 +176,18 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'sigsetup: Fusion Reactants in four types of reactions:'
-      WRITE(*,'(a,4i3)') &
+      if(setup0%verbose>0) WRITE(*,*)'sigsetup: Fusion Reactants in four types of reactions:'
+      if(setup0%verbose>0) WRITE(*,'(a,4i3)') &
       'sigsetup: 1st reactant (D,D,D,D)   igenrl(1,1:4)= ',igenrl(1,1:4)
-      WRITE(*,'(a,4i3)') &
+      if(setup0%verbose>0) WRITE(*,'(a,4i3)') &
       'sigsetup: 2nd reactant (T,He3,D,D) igenrl(2,1:4)= ',igenrl(2,1:4)
-      WRITE(*,'(a,4i3)') &
+      if(setup0%verbose>0) WRITE(*,'(a,4i3)') &
       'sigsetup: 1st reactant (D,D,D,D)   imaxwln(1,1:4)=',imaxwln(1,:)
-      WRITE(*,'(a,4i3)') &
+      if(setup0%verbose>0) WRITE(*,'(a,4i3)') &
       'sigsetup: 2nd reactant (T,He3,D,D) imaxwln(2,1:4)=',imaxwln(2,:)
       !----------------------------------------------------------------
-      WRITE(*,*)'sigsetup: indicator of calc. of reaction rates:'
-      WRITE(*,'(a,4i3)')'sigsetup: isigmas(1:4)=', isigmas(1:4)
+      if(setup0%verbose>0) WRITE(*,*)'sigsetup: indicator of calc. of reaction rates:'
+      if(setup0%verbose>0) WRITE(*,'(a,4i3)')'sigsetup: isigmas(1:4)=', isigmas(1:4)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -215,10 +215,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*) 'sigsetup:  No nuclear fusion species'
-         WRITE(*,*) 'sigsetup:  Setting isigmod=disabled'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*) 'sigsetup:  No nuclear fusion species'
+         if(setup0%verbose>0) WRITE(*,*) 'sigsetup:  Setting isigmod=disabled'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

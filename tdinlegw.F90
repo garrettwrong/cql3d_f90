@@ -114,7 +114,7 @@ contains
 
       inxgau=(ipoints-1)*ngauss
       if (mdxgau .lt. max(inxgau,iigstrt+inxgau-1)) then
-        print *,' mdxgau= ',mdxgau,' too small for ',ipoints-1,'*' &
+        if(setup0%verbose>0) print *,' mdxgau= ',mdxgau,' too small for ',ipoints-1,'*' &
           ,ngauss,' Gaussian points'
         stop 'tdinlegw'
       endif

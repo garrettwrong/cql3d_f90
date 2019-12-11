@@ -91,9 +91,9 @@ contains
         lpt(ii)=lpt(i)
  100  continue
 
-      write(*,*)'tdtrflg:  iytr(1:lrors)=',iytr(1:lrors)
-      write(*,*)'tdtrflg:  l_lower(1:iytr)=',l_lower(1:iytr(lrors))
-      write(*,*)'tdtrflg:  lpt(1:iytr)=',lpt(1:iytr(lrors))
+      if(setup0%verbose>0) write(*,*)'tdtrflg:  iytr(1:lrors)=',iytr(1:lrors)
+      if(setup0%verbose>0) write(*,*)'tdtrflg:  l_lower(1:iytr)=',l_lower(1:iytr(lrors))
+      if(setup0%verbose>0) write(*,*)'tdtrflg:  lpt(1:iytr)=',lpt(1:iytr(lrors))
 !.......................................................................
 !     initialize coefficients for v to r velocity meshes transformation
 !.......................................................................

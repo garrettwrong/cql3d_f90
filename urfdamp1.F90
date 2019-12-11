@@ -123,7 +123,7 @@ contains
          if(mpisize.gt.1) then
             mpiworker= MOD(iraykrf-1,mpisize-1)+1
          else
-            PRINT*, '------- WARNING: mpisize=1 -------'
+            if(setup0%verbose>0) PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
       !if(mpirank.eq.mpiworker) then
@@ -435,7 +435,7 @@ contains
       if(mpirank.eq.0) then
 #endif
       if(prf_ray_sum.gt.0.1)then
-      WRITE(*,'(a,3i4,e12.4)')'URFDAMP1: n,iray,krf, prf_ray_sum=', &
+      if(setup0%verbose>0) WRITE(*,'(a,3i4,e12.4)')'URFDAMP1: n,iray,krf, prf_ray_sum=', &
                            n,iray,krf, prf_ray_sum
       endif
 #ifdef __MPI

@@ -210,7 +210,7 @@ contains
     if (nstop.eq.0) then
        call pltmain
 #ifndef NOPGPLOT
-       write(*,*) 'In ACHIEF1, before call pgend'
+       if(setup0%verbose>0) write(*,*) 'In ACHIEF1, before call pgend'
 #endif
 #ifndef NOPGPLOT
        call pgend
