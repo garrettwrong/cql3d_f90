@@ -188,12 +188,12 @@ contains
     if (setup0%nmlstout.eq."enabled") then
        call print_all_conf_nml
     elseif (setup0%nmlstout.eq."trnscrib") then
-       write(6,*)'  In tdinitl: '
+       if(setup0%verbose>0) write(6,*)'  In tdinitl: '
        call ain_transcribe("cqlinput")
     else
-       write(6,*)
-       write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
-       write(6,*)
+       if(setup0%verbose>0) write(6,*)
+       if(setup0%verbose>0) write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
+       if(setup0%verbose>0) write(6,*)
     endif
 
     !..................................................................

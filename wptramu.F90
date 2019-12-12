@@ -23,6 +23,7 @@ module wptramu_mod
   use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
+  use cqlconf_mod, only : setup0
   use r8subs_mod, only : dcopy
   use wpbdry_mod, only : wpbdry
   use wpcheck_mod, only : wpcheck
@@ -528,7 +529,7 @@ contains
               zerr=1.0e-08
               call nonsym(zmat,zxdumy,rhspar(1:ilslen,j,iic),ilslen,ileft &
                 ,iright,zerr,icond)
-              if (icond .ne. 0) write(6,'(/," WARNING: bad condition in" &
+              if (icond .ne. 0 .and. setup0%verbose>0) write(6,'(/," WARNING: bad condition in" &
                 ," nonsym: icond = ",i4)') icond
 
 !%OS  check solution

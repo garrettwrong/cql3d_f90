@@ -19,6 +19,7 @@
 module wpavg_mod
 
   !---BEGIN USE
+  use cqlconf_mod, only : setup0
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
@@ -68,16 +69,17 @@ contains
       zcuravg=zcuravg/z1oravg
       zeleavg=zeleavg/z1oravg
 
-      write(6,'(/" surface averages:  <j_par/R>/<1/R>= ",1pe13.4,/ &
-        "                    <E_par/R>/<1/R>= ",1pe13.4,/ &
-        "                    <j_par*B>      = ",1pe13.4,/ &
-        "                    <E_par/B>      = ",1pe13.4,/ &
-        "        <E_par/R>/<j_par/R>/sptz(1)= ",1pe13.4,/ &
-        "        <E_par*B>/<j_par*B>/sptz(1)= ",1pe13.4,/ &
-        "  <1/R>= ",1pe13.4,"   flxavg= ",1pe13.4, &
-        " flxavg2= ",1pe13.4,"  n=",i4)') &
-        zcuravg,zeleavg,zcuravg2,zeleavg2,zeleavg/zcuravg/sptzr(1), &
-        zeleavg2/zcuravg2/sptzr(1),z1oravg,zflxavg,zflxavg2,n
+      if(setup0%verbose>0) &
+           write(6,'(/" surface averages:  <j_par/R>/<1/R>= ",1pe13.4,/ &
+           "                    <E_par/R>/<1/R>= ",1pe13.4,/ &
+           "                    <j_par*B>      = ",1pe13.4,/ &
+           "                    <E_par/B>      = ",1pe13.4,/ &
+           "        <E_par/R>/<j_par/R>/sptz(1)= ",1pe13.4,/ &
+           "        <E_par*B>/<j_par*B>/sptz(1)= ",1pe13.4,/ &
+           "  <1/R>= ",1pe13.4,"   flxavg= ",1pe13.4, &
+           " flxavg2= ",1pe13.4,"  n=",i4)') &
+           zcuravg,zeleavg,zcuravg2,zeleavg2,zeleavg/zcuravg/sptzr(1), &
+           zeleavg2/zcuravg2/sptzr(1),z1oravg,zflxavg,zflxavg2,n
 
       return
       end subroutine wpavg

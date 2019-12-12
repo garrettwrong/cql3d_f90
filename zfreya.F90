@@ -3092,21 +3092,21 @@ contains
       real(c_double) :: dge(ms+1),dgi(ms+1)
 !
 !cc*   dump c arrays
-!     write(60,3310) cii
+!     if(setup0%verbose>0) write(60,3310) cii
 !c3310 format(/,' cii= ',/,(1x,1p5e11.3))
-!     write(60,3315) ccxii
+!     if(setup0%verbose>0) write(60,3315) ccxii
 !c3315 format(/,' ccxii= ',/,(1x,1p5e11.3))
-!     write(60,3320) cei
+!     if(setup0%verbose>0) write(60,3320) cei
 !c3320 format(/,' cei= ',/,(1x,1p5e11.3))
-!     write(60,3330) ciz
+!     if(setup0%verbose>0) write(60,3330) ciz
 !c3330 format(/,' ciz= ',/,(1x,1p5e11.3))
-!     write(60,3335) ccxz
+!     if(setup0%verbose>0) write(60,3335) ccxz
 !c3335 format(/,' ccxz= ',/,(1x,1p5e11.3))
-!     write(60,3340) cez
+!     if(setup0%verbose>0) write(60,3340) cez
 !c3340 format(/,' cez= ',/,(1x,1p5e11.3))
-!     write(60,3350) cie
+!     if(setup0%verbose>0) write(60,3350) cie
 !c3350 format(/,' cie= ',/,(1x,1p5e11.3))
-!     write(60,3360) cee
+!     if(setup0%verbose>0) write(60,3360) cee
 !c3360 format(/,' cee= ',/,(1x,1p5e11.3))
 
 !BH080118      call second(cpua)
@@ -3816,8 +3816,8 @@ contains
       icall = icall + 1
       iter = 0
       test = 1.0e6
-      if(iprint.ne.0) write(6,800) icall
-      if(iprint.ne.0) write(6,801) iter,xa
+      if(iprint.ne.0 .and. setup0%verbose>0) write(6,800) icall
+      if(iprint.ne.0 .and. setup0%verbose>0) write(6,801) iter,xa
  800  format(/' debug print for call',i4,' to scalit'/ &
         ,' x value at end of each iteration printed below',/)
  801  format(' cycle',i3,3x,e15.8)
@@ -3873,7 +3873,7 @@ contains
 !*    ** first extrapolate previous xa and dxa to get a value for xb.
       dxb = fc*dxa
       xb = xa + dxb
-      if(iprint.ne.0) write(6,801) iter,xb
+      if(iprint.ne.0 .and. setup0%verbose>0) write(6,801) iter,xb
 !
 !*    ** check limits of xb
       call chek(xb,xmin,xmax,imin,imax,ick)

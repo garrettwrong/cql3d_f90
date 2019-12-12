@@ -128,15 +128,15 @@ contains
     !.......................................................................
 
     if (setup0%nmlstout.eq."enabled") then
-       write(6,*)'  In achief1: '
+       if(setup0%verbose>0) write(6,*)'  In achief1: '
        call print_all_conf_nml
     elseif (setup0%nmlstout.eq."trnscrib") then
-       write(6,*)'  In achief1: '
+       if(setup0%verbose>0) write(6,*)'  In achief1: '
        call ain_transcribe(nml_file)
     else
-       write(6,*)
-       write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
-       write(6,*)
+       if(setup0%verbose>0) write(6,*)
+       if(setup0%verbose>0) write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
+       if(setup0%verbose>0) write(6,*)
     endif
 
     !.....................................................................

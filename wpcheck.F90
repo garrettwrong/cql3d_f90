@@ -19,6 +19,7 @@
 module wpcheck_mod
 
   !---BEGIN USE
+  use cqlconf_mod, only : setup0
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
@@ -633,14 +634,14 @@ contains
  920      continue
 !
 !%OS  if (ll.eq.1 .and. (n/2)*2.eq.n)
-!%OS  + write(6,'(1pe10.2,2i5)') (zermx(ii,ll),imx(ii,ll),jmx(ii,ll),ii=1,10)
+!%OS  + if(setup0%verbose>0) write(6,'(1pe10.2,2i5)') (zermx(ii,ll),imx(ii,ll),jmx(ii,ll),ii=1,10)
  901    continue
 
 
 !     check solution for each species
         zerror=2.*abs(sumleft-sumrigt)/(sumleft+sumrigt)
 !%OS  if (abs(zerror) .gt. 1.0E-08) then
-        write(6,'(/," error in parallel transport equation =",1pe11.3, &
+        if(setup0%verbose>0) write(6,'(/," error in parallel transport equation =",1pe11.3, &
           " time-step n =",i4,"  dn1/2= ",e11.3,"  dn1= ", &
           e11.3)') zerror,n,sumleft,sumlftn
         if (iactst .eq. "abort") stop 'wpcheck'

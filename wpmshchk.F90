@@ -19,6 +19,7 @@
 module wpmshchk_mod
 
   !---BEGIN USE
+  use cqlconf_mod, only : setup0
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
@@ -46,29 +47,29 @@ contains
 !l    1. compare sin(th)dth with Bdmu
 !
 !%OS  do 100 i=2,iymax/2
-!%OS  write(6,9100) i,(sinn(i,l+1)*dy(i,l+1)/(sinn(i,l)*dy(i,l)),
+!%OS  if(setup0%verbose>0) write(6,9100) i,(sinn(i,l+1)*dy(i,l+1)/(sinn(i,l)*dy(i,l)),
 !%OS  !         psis(l+1)/psis(l)*coss(i,l)/coss(i,l+1),l=1,l_upper(i)-1)
 !%OS  100  continue
 !%OS  9100 format(i3,1p10e12.4,/,(3x,1p10e12.4))
 
-!%OS  write(6,9100)
+!%OS  if(setup0%verbose>0) write(6,9100)
 !%OS  do 100 i=1,iymax/2
-!%OS  write(6,9101) i,(sinn(i,l)/sqrt(psis(l)),
+!%OS  if(setup0%verbose>0) write(6,9101) i,(sinn(i,l)/sqrt(psis(l)),
 !%OS  !        coss(i,l)*dy(i,l)/sqrt(psis(l)),l=1,l_upper(i))
 !%OS  100  continue
       if(setup0%verbose>0) print *," for each i, coss(i,l)*cynt2(i,l)/psis(l),l=1,l_upper(i)"
       do 101 i=1,iymax/2
-        write(6,9101) i,(cynt2(i,l)/psis(l)*coss(i,l) &
+        if(setup0%verbose>0) write(6,9101) i,(cynt2(i,l)/psis(l)*coss(i,l) &
           ,l=1,l_upper(i))
         if (l_upper(i) .lt. lrors) then
-          write(6,9101) i,(cynt2(i,l)/psis(l)*coss(i,l) &
+          if(setup0%verbose>0) write(6,9101) i,(cynt2(i,l)/psis(l)*coss(i,l) &
             ,l=lrors-l_upper(i)+2,lrors+1)
         endif
  101  continue
       if(setup0%verbose>0) print *,' i coss(i,l) sin(thp)*dthp*bbpsi*cos(thp)/sin(th)/dth  ', &
         'sqrt(1-bbpsi*sin(thp)**2)'
       do 1011 i=1,iymax/2
-        write(6,9102) i,(coss(i,l),cynt2(i,1)*psis(l)*coss(i,1) &
+        if(setup0%verbose>0) write(6,9102) i,(coss(i,l),cynt2(i,1)*psis(l)*coss(i,1) &
           /cynt2(i,l) &
           ,sqrt(1.-psis(l)*sinn(i,1)**2),l=1,l_upper(i))
  1011 continue
@@ -83,7 +84,7 @@ contains
             if(setup0%verbose>0) print *,cynt2(i,l),cynt2(i,1)*psis(l)*coss(i,1)/coss(i,l)
           endif
  103    continue
-        write(6,'(i3,1p2e12.3)') l,zsums,zsum0
+        if(setup0%verbose>0) write(6,'(i3,1p2e12.3)') l,zsums,zsum0
  102  continue
 
       if (setup0%ls.gt.10 .or. setup0%cqlpmod.ne."enabled" .or. transp.ne."enabled") &
@@ -104,7 +105,7 @@ contains
           *100.
  1032 continue
       l=1
-      write(6,'(/," y(i+1)-y(i)(l),dyp5(l); l=",i3,/,(1p10e12.4))') &
+      if(setup0%verbose>0) write(6,'(/," y(i+1)-y(i)(l),dyp5(l); l=",i3,/,(1p10e12.4))') &
         l,(y(i+1,l)-y(i,l),dyp5(i,l),i=1,iyh_(l))
       do 104 l=2,setup0%ls
         do 105 i=2,iyh_(l)
@@ -128,7 +129,7 @@ contains
         dyp5(iy,l)=0.0
         dy(iy,l)=0.5*dyp5(iy,l)
         cynt2(iy,l)=psis(l)*cynt2(iy,1)
-        write(6,'(/," y(i+1)-y(i)(l),dyp5(l); l=",i3,/,(1p10e12.4))') &
+        if(setup0%verbose>0) write(6,'(/," y(i+1)-y(i)(l),dyp5(l); l=",i3,/,(1p10e12.4))') &
           l,(y(i+1,l)-y(i,l),dyp5(i,l),i=1,iyh_(l))
  104  continue
       if(setup0%verbose>0) print *,' '
@@ -143,7 +144,7 @@ contains
             if(setup0%verbose>0) print *,cynt2(i,l),cynt2(i,1)*psis(l)*coss(i,1)/coss(i,l)
           endif
  1022   continue
-        write(6,'(i3,1p2e12.3)') l,zsums,zsum0
+        if(setup0%verbose>0) write(6,'(i3,1p2e12.3)') l,zsums,zsum0
  1021 continue
 
  9100 format(" i ","[sin/sqrt(bbpsi);cos*dth/sqrt(ps)], l=1,l_upper(i)")

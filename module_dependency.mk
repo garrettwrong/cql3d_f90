@@ -337,21 +337,21 @@ vlhbplt.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) plt
 vlhd.$(oext): cqlcomm.$(oext) param.$(oext)
 wpalloc.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wparsou.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
-wpavg.$(oext): cqlcomm.$(oext) param.$(oext)
+wpavg.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wpbdry.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
-wpcheck.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext)
+wpcheck.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wpchgdy.$(oext): cqlcomm.$(oext) param.$(oext)
 wpcthta.$(oext): cqlcomm.$(oext) param.$(oext)
 wpelecf.$(oext): advnce.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext)
 wpinitl.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) r8subs.$(oext) wpwrng.$(oext)
 wploweq.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
-wpmshchk.$(oext): cqlcomm.$(oext) param.$(oext)
+wpmshchk.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wpsavf.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
-wptrafx.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) r8subs.$(oext) wpbdry.$(oext) wpcheck.$(oext)  \
+wptrafx.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext) wpbdry.$(oext) wpcheck.$(oext)  \
 	wpwrng.$(oext) znonsym.$(oext)
-wptramu.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) r8subs.$(oext) wpbdry.$(oext) wpcheck.$(oext)  \
+wptramu.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext) wpbdry.$(oext) wpcheck.$(oext)  \
 	znonsym.$(oext)
-wptrmuy.$(oext): cqlcomm.$(oext) param.$(oext)
+wptrmuy.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wpvptb.$(oext): cqlcomm.$(oext) param.$(oext)
 wpwrng.$(oext): cqlcomm.$(oext) param.$(oext)
 zcunix.$(oext): cqlconf.$(oext)

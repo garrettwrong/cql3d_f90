@@ -36,7 +36,7 @@
       if (lrz.eq.1) then
          ranseed=7**7
          read(2,frsetup)
-         if (nmlstout.eq."enabled") write(6,frsetup)
+         if (nmlstout.eq."enabled" .and. setup0%verbose>0) write(6,frsetup)
          dummy=RANDOM_my(ranseed)
          goto 300 !-> allocate vars. and return
       endif
@@ -66,7 +66,7 @@
 !..................................................................
 
       read(2,frsetup)
-      if (nmlstout.eq."enabled") write(6,frsetup)
+      if (nmlstout.eq."enabled" .and. setup0%verbose>0) write(6,frsetup)
 
       if (frmod.eq."disabled") return
 

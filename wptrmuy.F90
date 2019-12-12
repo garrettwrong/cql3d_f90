@@ -22,6 +22,7 @@ module wptrmuy_mod
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
 
+  use cqlconf_mod, only : setup0
   !---END USE
 
 !
@@ -75,11 +76,11 @@ contains
           zyfix(l)=2.*zmidth0(l)-zyfix(l+1)
  115    continue
 !     check mesh
-        write(6,'(/," y mesh in trap region at s=1:",/,(1p10e13.4))') &
+        if(setup0%verbose>0) write(6,'(/," y mesh in trap region at s=1:",/,(1p10e13.4))') &
           (zyfix(l),l=1,ilshalf-1)
-        write(6,'(/," (y(i)+y(i+1))/2 at s=1:",/,(1p10e13.4))') &
+        if(setup0%verbose>0) write(6,'(/," (y(i)+y(i+1))/2 at s=1:",/,(1p10e13.4))') &
           (0.5*(zyfix(l)+zyfix(l+1)),l=1,ilshalf-1)
-        write(6,'(/," y-mid mesh in trap region :",/,(1p10e13.4))') &
+        if(setup0%verbose>0) write(6,'(/," y-mid mesh in trap region :",/,(1p10e13.4))') &
           (zmidth0(l),l=1,ilshalf)
         do 116 l=1,ilshalf-2
           if (zyfix(l+1) .le. zyfix(l)) stop 'bad yfix'
