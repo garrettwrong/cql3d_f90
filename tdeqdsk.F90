@@ -430,7 +430,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'tdeqdsk: work reqd to write xcontr,ycontr,xlimiter,ylimiter'
+         if(setup0%verbose>0) WRITE(*,*)'tdeqdsk: work reqd to write xcontr,ycontr,xlimiter,ylimiter'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

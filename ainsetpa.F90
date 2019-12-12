@@ -101,7 +101,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-          WRITE(*,'(/"  WARNING: setup0%lrindx has been shifted by one index" &
+          if(setup0%verbose>0) WRITE(*,'(/"  WARNING: setup0%lrindx has been shifted by one index" &
             ," as setup0%lrindx(0).ne.0",/)')
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)

@@ -144,7 +144,7 @@ contains
 !       the common variables.... reducing code.
 !..................................................................
       if((.not.present(nml_file)) .and. (is_initialized_cqlcomm())) then
-         print *, "STEP mode, skipping initialize_cqlcomm"
+         if(setup0%verbose>0) print *, "STEP mode, skipping initialize_cqlcomm"
          skip_init = .TRUE.
       end if
 
@@ -313,7 +313,7 @@ contains
 !.......................................................................
 
       if ((n+1).eq.nonvphi .or. (n+1).eq.noffvphi) then
-        write(*,*)'tdchief/nonvphi: call frnfreya, n=',n,'time=',timet
+        if(setup0%verbose>0) write(*,*)'tdchief/nonvphi: call frnfreya, n=',n,'time=',timet
         call frnfreya(frmodp,fr_gyrop,beamplsep,beamponp,beampoffp, &
                       hibrzp,mfm1p,setup0%noplots)
       endif
@@ -340,7 +340,7 @@ contains
               if (timedf.le.timeon) then
                  ibeampon=1
                  if (ibeamponp.eq.0.and.nbctime.ne.0) then
-                 write(*,*)'tdchief/nbctime:frnfreya,n=',n,'time=',timet
+                 if(setup0%verbose>0) write(*,*)'tdchief/nbctime:frnfreya,n=',n,'time=',timet
                    call frnfreya(frmodp,fr_gyrop,beamplsep,beamponp, &
                          beampoffp,hibrzp,mfm1p,setup0%noplots)
                    ibeamponp=1
@@ -406,7 +406,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*) 'tdchief after urfchief'
+        if(setup0%verbose>0) WRITE(*,*) 'tdchief after urfchief'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -417,7 +417,7 @@ contains
         if (netcdfnm.ne."disabled" .and. n.eq.0) then
            do krf=1,mrf !YuP:04-2010: Separate data file for each wave type krf
               call netcdfrf(0,krf) !kopt=0: initialize and write grids,...
-              WRITE(*,*) 'after netcdfrf(0,krf)  krf=', krf
+              if(setup0%verbose>0) WRITE(*,*) 'after netcdfrf(0,krf)  krf=', krf
            enddo
         endif
 #ifdef __MPI
@@ -528,9 +528,9 @@ contains
          endif
 
          if (kelecg.eq.0) then
-            write(*,*)
-            WRITE(*,*)'Amp-Faraday eqns require electron gen species'
-            write(*,*)
+            if(setup0%verbose>0) write(*,*)
+            if(setup0%verbose>0) WRITE(*,*)'Amp-Faraday eqns require electron gen species'
+            if(setup0%verbose>0) write(*,*)
             stop
          endif
 !        Find dtr for this time-step
@@ -599,7 +599,7 @@ contains
                !YuP[2019-05-30] Note that fh() and fg() are allocated as
                ! fh(0:iy+1,0:jx+1,1,1:setup0%lrz), i.e. k=1 index (for now).
                ! If kelec>1, we can get a problem here.
-               write(*,'(a,3i4,3e12.4)') &
+               if(setup0%verbose>0) write(*,'(a,3i4,3e12.4)') &
                  'after achiefn(3): n,it,ll,integrals f, f-h, g:', &
                   n,it,ll, amp_f, amp_f-amp_h, amp_g
                ! YuP test/printout:
@@ -684,7 +684,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a,2i4,3e15.7)') &
+      if(setup0%verbose>0) WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f befor achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
@@ -744,7 +744,7 @@ contains
          if(mpisize.gt.1) then
             mpiworker= MOD(ll-1,mpisize-1)+1  !1...(mpisize-1)
          else
-            PRINT*, '------- WARNING: mpisize=1 -------'
+            if(setup0%verbose>0) PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
       else
@@ -793,7 +793,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a,2i4,3e15.7)') &
+      if(setup0%verbose>0) WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f after achiefn. n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
@@ -849,7 +849,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a,2i4,3e15.7)') &
+      if(setup0%verbose>0) WRITE(*,'(a,2i4,3e15.7)') &
       'tdchief: f rescaled.      n,l_,MIN(f),MAX(f),SUM(f)=', &
                n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
@@ -866,7 +866,7 @@ contains
          if (nefiter .gt. nefitera) go to 21
          ! Stop iterations if n<(control turn on step):
          if (n .le. noncntrl) go to 21
-         write(*,*)'TDCHIEF/EFLDITER: Time step=',n, &
+         if(setup0%verbose>0) write(*,*)'TDCHIEF/EFLDITER: Time step=',n, &
                    '    Starting iteration #',nefiter
          nefiter_all=0 ! Summ-up nefiter_out (output of eflditer)
          do ll=1,ilend ! Check current for each flux surface
@@ -938,12 +938,12 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-           WRITE(*,*)'tdchief WARNING: No time averaging of f was done'
-           WRITE(*,*)'tdchief WARNING: Probably t=nstop*dtr is less'
-           WRITE(*,*)'tdchief WARNING: than tavg1(1).'
-           WRITE(*,*)'tdchief WARNING: Instead of favg(), '
-           WRITE(*,*)'tdchief WARNING: the last available f() will be'
-           WRITE(*,*)'tdchief WARNING: saved into setup0%mnemonic.nc file. '
+           if(setup0%verbose>0) WRITE(*,*)'tdchief WARNING: No time averaging of f was done'
+           if(setup0%verbose>0) WRITE(*,*)'tdchief WARNING: Probably t=nstop*dtr is less'
+           if(setup0%verbose>0) WRITE(*,*)'tdchief WARNING: than tavg1(1).'
+           if(setup0%verbose>0) WRITE(*,*)'tdchief WARNING: Instead of favg(), '
+           if(setup0%verbose>0) WRITE(*,*)'tdchief WARNING: the last available f() will be'
+           if(setup0%verbose>0) WRITE(*,*)'tdchief WARNING: saved into setup0%mnemonic.nc file. '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1100,7 +1100,7 @@ contains
             call tdtrfcop(1)
             call diaggnde
             if (l_ .eq. lmdpln_) then
-              write(*,*)'tdchief before xlndnr: n,l_',n,l_
+              if(setup0%verbose>0) write(*,*)'tdchief before xlndnr: n,l_',n,l_
               do 25 k=1,ngen
                 xlndnr(k,lr_)=xlndn(k,lr_)
                 energyr(k,lr_)=energy(k,lr_)
@@ -1112,7 +1112,7 @@ contains
               call tdtrfcop(2)
               call diaggnde
               if (l_ .eq. lmdpln_) then
-              write(*,*)'tdchief before xlndnv: n,l_',n,l_
+              if(setup0%verbose>0) write(*,*)'tdchief before xlndnv: n,l_',n,l_
                 do 26 k=1,ngen
                   xlndnv(k,lr_)=xlndn(k,lr_)
                   energyv(k,lr_)=energy(k,lr_)
@@ -1186,9 +1186,9 @@ contains
 !.......................................................................
 
       if (setup0%lrzmax.lt.3 .and. softxry.ne."disabled") then
-         write(*,*)'*******************************************'
-         write(*,*)'tdchief:  SXR not computed for setup0%lrzmax.lt.3'
-         write(*,*)'*******************************************'
+         if(setup0%verbose>0) write(*,*)'*******************************************'
+         if(setup0%verbose>0) write(*,*)'tdchief:  SXR not computed for setup0%lrzmax.lt.3'
+         if(setup0%verbose>0) write(*,*)'*******************************************'
       else
          if (softxry.ne."disabled".and.kelecg.gt.0) then
             icall="notfrst"
@@ -1283,9 +1283,9 @@ contains
          do ii=1,ntavga
             tavg12=tavg12+(tavg2(ii)-tavg1(ii))
          enddo
-         write(*,*)
-         write(*,*)'tavg.ne.disabled: tavg12 and sumdtr should be close'
-         write(*,*)'at end of run: tavg12,sumdtr = ',tavg12,sumdtr
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) write(*,*)'tavg.ne.disabled: tavg12 and sumdtr should be close'
+         if(setup0%verbose>0) write(*,*)'at end of run: tavg12,sumdtr = ',tavg12,sumdtr
       endif
 
 !.......................................................................
@@ -1298,18 +1298,18 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,'(a,f10.3,a,f10.3,a,f10.3)') &
+         if(setup0%verbose>0) WRITE(*,'(a,f10.3,a,f10.3,a,f10.3)') &
                       'TDCHIEF: tcpu_urfchief=',t_urf2-t_urf1, &
                       '    tcpu_netcdf=',   t_urf3-t_urf2, &
                       '    tcpu_impavnc=', t_after_soln-t_before_soln
 
-         WRITE(*,'(a,2f10.3)') ' tcpu_diagnostics 1 and 2:', &
+         if(setup0%verbose>0) WRITE(*,'(a,2f10.3)') ' tcpu_diagnostics 1 and 2:', &
                                 t_after_diag1-t_after_soln, &
                                 t_after_diag2-t_after_diag1
 
-         WRITE(*,'(a,i5,a,f10.3)') ' Finished Time Step ======>',  n, &
+         if(setup0%verbose>0) WRITE(*,'(a,i5,a,f10.3)') ' Finished Time Step ======>',  n, &
                                 '     tcpu(sec.)==',  t_end-t_n_start
-         WRITE(*,'(/)')
+         if(setup0%verbose>0) WRITE(*,'(/)')
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

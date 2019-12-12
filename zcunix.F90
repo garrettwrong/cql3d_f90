@@ -21,7 +21,7 @@ module zcunix_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
-
+  use cqlconf_mod, only : setup0
   !---END USE
 
 !
@@ -1648,7 +1648,7 @@ contains
 !mnt  if this message is suppressable by an zzxset call,
 !mnt  then explain zzxset usage.
       if (nchars.gt.0) print 10030
-      print 10040
+      if(setup0%verbose>0) print 10040
       stop
 10010 format(/31h zzrchk was called incorrectly.)
 10020 format (30h zzrchk message limit reached.)
@@ -1701,7 +1701,7 @@ contains
 !mnt  for data terminals, use
 !mnt  1 format (1x,7a10)
       nwords = (nchars+nch-1)/nch
-      print 10010,(narray(i),i=1,nwords)
+      if(setup0%verbose>0) print 10010,(narray(i),i=1,nwords)
       return
 10010 format (1x,13a10)
       end subroutine zzrprt
@@ -1778,7 +1778,7 @@ contains
 !------------------------------------------------------------------
       character *(*) var
       integer istat,myid
-      write(*,1)var,istat,myid
+      if(setup0%verbose>0) write(*,1)var,istat,myid
  1    format(2x,"Memory Allocation error encountered",/, &
              2x,"Unable to allocate ",a,/, &
              2x,"status =",i5)
@@ -1792,7 +1792,7 @@ contains
 !---------------------------------------------------------------------
       character *(*) var
       integer istat, myid
-      write(*,1)var,istat,myid
+      if(setup0%verbose>0) write(*,1)var,istat,myid
  1    format(2x,"Memory DE-Allocation error encountered",/, &
              2x,"Unable to deallocate ",a,/, &
              2x,"status =",i5, " process rank =",i5)

@@ -300,7 +300,7 @@ contains
                psifct1=psiovr(lr_)/onovrp(1,lr_)
             endif
 
-            write(*,*)'efield:elecfld,currpar/psifct,currxj', &
+            if(setup0%verbose>0) write(*,*)'efield:elecfld,currpar/psifct,currxj', &
                   elecfld(lr_),currpar(lr_)/psifct1,currxj(lr_)
 
             currxj0(lr_)=currxj(lr_)
@@ -309,7 +309,7 @@ contains
                  (sign(one,currxj(lr_)) &
                  *max(abs(currpar(lr_)/psifct1),abs(currxj(lr_)))))
 
-            write(*,*)'efield:elecfld',elecfld(lr_)
+            if(setup0%verbose>0) write(*,*)'efield:elecfld',elecfld(lr_)
 
          endif ! n
 

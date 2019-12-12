@@ -50,8 +50,8 @@ contains
 !BH081106:  circ plasma model, or the eqmod.eq."enabled" eqdsk
 !BH081106:  equilibria.
       if (eqmod.ne.'enabled') then
-         if (radcoord.ne.'sqtorflx') &
-            write(*,*)'tdsxray: WARNING, check our radial coord further'
+         if (radcoord.ne.'sqtorflx' .and. setup0%verbose>0) &
+              write(*,*)'tdsxray: WARNING, check our radial coord further'
          call tdsxr0(rrz,tr1(1),icall,iplotsxr)
       else
          call tdsxr0(rpmconz,tr1(1),icall,iplotsxr)

@@ -67,9 +67,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*)' WARNING/ainvnorm: For tandem=enabled, &
+        if(setup0%verbose>0) WRITE(*,*)' WARNING/ainvnorm: For tandem=enabled, &
          xfac,xlwr,xpctlwr,xmdl,xpctmdl are reset'
-        WRITE(*,*)' ainvnorm: xfac,xlwr,xpctlwr,xmdl,xpctmdl=', &
+        if(setup0%verbose>0) WRITE(*,*)' ainvnorm: xfac,xlwr,xpctlwr,xmdl,xpctmdl=', &
                               xfac,xlwr,xpctlwr,xmdl,xpctmdl
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)

@@ -50,7 +50,7 @@ contains
        real(c_double),dimension(setup0%lrzmax)::ene
 
 !       print*, "lam called"
-       print*,setup0%lrzmax, nen_npa
+       if(setup0%verbose>0) print*,setup0%lrzmax, nen_npa
        do 200 nn=1,setup0%lrzmax !flux surface
        do 100 mm=1,nen_npa !energy
 !$$$       print*,'lam: loop enetered'

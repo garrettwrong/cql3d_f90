@@ -46,7 +46,7 @@ contains
 !     A check on allocations is sucessful entering then exiting
 !     the subroutine.
 !..................................................................
-      write(*,*)'eqalloc:  Entering eqalloc'
+      if(setup0%verbose>0) write(*,*)'eqalloc:  Entering eqalloc'
 
       lnlfield=lfielda*setup0%lrzmax
       lndumeq=4*lnlfield
@@ -61,7 +61,7 @@ contains
       allocate(solz(lfielda,setup0%lrzmax),STAT=istat)
       call bcast(solz,zero,SIZE(solz))
 
-      write(*,*)'eqalloc:  Leaving eqalloc'
+      if(setup0%verbose>0) write(*,*)'eqalloc:  Leaving eqalloc'
 
       return
       end subroutine eqalloc

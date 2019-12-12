@@ -16,15 +16,15 @@
       if(mpirank.eq.0) then
 #endif
       if (kerr.eq.1 .or. kerr.eq.2) then
-        WRITE(*,10010)
+        if(setup0%verbose>0) WRITE(*,10010)
       elseif (kerr.eq.3) then
-        WRITE(*,10030)
+        if(setup0%verbose>0) WRITE(*,10030)
       elseif (kerr.eq.4) then
-        WRITE(*,10040)
+        if(setup0%verbose>0) WRITE(*,10040)
       elseif (kerr.eq.5) then
-        WRITE(*,10050)
+        if(setup0%verbose>0) WRITE(*,10050)
       else
-        WRITE(*,10990)
+        if(setup0%verbose>0) WRITE(*,10990)
       endif
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)

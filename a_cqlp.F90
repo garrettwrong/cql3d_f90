@@ -27,6 +27,7 @@
 
 program a_cql3d
   use abchief_mod, only : abchief
+  use cqlconf_mod, only : setup0
   use impavnc0_mod, only : de_alloc
   use impavnc0_mod, only : it3dalloc
   use impavnc0_mod, only : it3ddalloc
@@ -65,7 +66,7 @@ call cpu_time(tarray(2))
       if(mpirank.eq.0) then
 #endif
 
-WRITE(*,'(a,i5,f10.3)') ' a_cqlp: rank, Exec.time tarray(2)-tarray(1)', mpirank, tarray(2)-tarray(1)
+if(setup0%verbose>0) WRITE(*,'(a,i5,f10.3)') ' a_cqlp: rank, Exec.time tarray(2)-tarray(1)', mpirank, tarray(2)-tarray(1)
 !      WRITE(*,'(a)') ' a_cqlp: END of CQL3D, just before MPI_FINISH'
 
 #ifdef __MPI
@@ -80,7 +81,7 @@ call de_alloc   ! Deallocate other arrays
 !     close MPI (print 'MPI Full time =',MPI_WTIME()-mpitime0
 !                then - MPI_FINALIZE )
       if(mpirank.eq.0) then
-         WRITE(*,*) 'MPI Full time =',MPI_WTIME()-mpitime
+         if(setup0%verbose>0) WRITE(*,*) 'MPI Full time =',MPI_WTIME()-mpitime
       endif
       call MPI_FINALIZE(mpiierr)
       !PRINT *,'close_mpi:  mpirank===',mpirank

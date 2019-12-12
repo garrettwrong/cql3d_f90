@@ -171,7 +171,7 @@ contains
     if (eqsym.eq."none" .and. iupdown.eq.-1) isign=-1
 
     if (yval.lt.1. .or. yval.gt.psimx(lr_)) then
-       write(*,*)'psiinv: lr_, yval, psimx(lr_)=', lr_, yval,psimx(lr_)
+       if(setup0%verbose>0) write(*,*)'psiinv: lr_, yval, psimx(lr_)=', lr_, yval,psimx(lr_)
        call diagwrng(7)
     else if (yval.eq.1.) then
        psiinv=0.

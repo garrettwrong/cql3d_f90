@@ -102,7 +102,7 @@ contains
          if(mpisize.gt.1) then
             mpiworker= MOD(krf-1,mpisize-1)+1
          else
-            PRINT*, '------- WARNING: mpisize=1 -------'
+            if(setup0%verbose>0) PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
       if(mpirank.eq.mpiworker) then
@@ -455,10 +455,10 @@ contains
 
 #endif
 #ifdef __MPI
-      WRITE(*,'(a,i4,e12.3)') &
+      if(setup0%verbose>0) WRITE(*,'(a,i4,e12.3)') &
               'urfb0/BEFORE renorm: rank sum(urfb)=', mpirank, sum(urfb)
 #else
-      WRITE(*,'(a,e12.3)') &
+      if(setup0%verbose>0) WRITE(*,'(a,e12.3)') &
            'urfb0/BEFORE renorm: sum(urfb)=', sum(urfb)
 #endif
 
@@ -529,7 +529,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a,2i5,e12.3)')'sum_test for urfb0:', ll,krf,sum_test
+      if(setup0%verbose>0) WRITE(*,'(a,2i5,e12.3)')'sum_test for urfb0:', ll,krf,sum_test
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -537,10 +537,10 @@ contains
       enddo             ! krf=1,mrfn
 
 #ifdef __MPI
-      WRITE(*,'(a,i4,e12.3)') &
+      if(setup0%verbose>0) WRITE(*,'(a,i4,e12.3)') &
               'urfb0/AFTER renorm: rank sum(urfb)=', mpirank, sum(urfb)
 #else
-      WRITE(*,'(a,e12.3)') &
+      if(setup0%verbose>0) WRITE(*,'(a,e12.3)') &
            'urfb0/AFTER renorm: sum(urfb)=', sum(urfb)
 #endif
 

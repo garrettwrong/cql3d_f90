@@ -73,7 +73,7 @@ contains
 #ifndef NOPGPLOT
          call pgclos  ! PGCLOS
 #endif
-         PRINT *,'PGPLOT CLOSED at time step n=',n
+         if(setup0%verbose>0) PRINT *,'PGPLOT CLOSED at time step n=',n
       endif
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -88,7 +88,7 @@ contains
         i=9999               !Dummy value
         write(cptline,100) i,ichkpnt
  100    format("chkpnt -p ",i5," -f ",a8)
-        print *,cptline
+        if(setup0%verbose>0) print *,cptline
 !        i=dropfile(ichkpnt)
       endif
 
@@ -117,8 +117,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      PRINT *, 'tdtloop: >>> END OF CQL3D PROGRAM <<<'
-      PRINT *, 'tdtloop: Execution time (seconds)', cputime
+      if(setup0%verbose>0) PRINT *, 'tdtloop: >>> END OF CQL3D PROGRAM <<<'
+      if(setup0%verbose>0) PRINT *, 'tdtloop: Execution time (seconds)', cputime
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

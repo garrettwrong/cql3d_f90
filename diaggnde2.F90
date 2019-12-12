@@ -206,7 +206,7 @@ contains
 
         if (n.eq.0) then
 !%OS
-          print *,'diaggnde2: l_= ',l_,'  gn= ',gn
+          if(setup0%verbose>0) print *,'diaggnde2: l_= ',l_,'  gn= ',gn
 !%OS
           gni=1./gn
           hni=0.0
@@ -422,7 +422,7 @@ contains
          enddo
 
       else
-         write(*,*) 'Problem with izeff specification'
+         if(setup0%verbose>0) write(*,*) 'Problem with izeff specification'
          stop
       endif
 

@@ -21,6 +21,7 @@ module znonsym_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
+  use cqlconf_mod, only : setup0
 
   !---END USE
 
@@ -221,7 +222,7 @@ contains
 !
 !     ZERO PIVOT ENCOUNTERED
  510  CONTINUE
-      PRINT 9510
+      if(setup0%verbose>0) PRINT 9510
       STOP 'ZERO PIVOT IN NONCYM'
 !
 !-----------------------------------------------------------------------

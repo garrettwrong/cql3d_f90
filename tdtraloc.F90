@@ -60,7 +60,7 @@ contains
 !     A check on allocations is sucessful entering then exiting
 !     the subroutine.
 !..................................................................
-      write(*,*)'tdtraloc:  Entering tdtraloc'
+      if(setup0%verbose>0) write(*,*)'tdtraloc:  Entering tdtraloc'
 
       allocate(frn_2(0:iy+1,0:jx+1,ngen,0:setup0%lrz),STAT=istat)
       call bcast(frn_2,zero,SIZE(frn_2))
@@ -108,7 +108,7 @@ contains
       allocate(fg_(jx,2,setup0%lrz),STAT=istat)
       call bcast(fg_,zero,SIZE(fg_))
 
-      write(*,*)'tdtraloc:  Leaving tdtraloc'
+      if(setup0%verbose>0) write(*,*)'tdtraloc:  Leaving tdtraloc'
 
       return
       end subroutine tdtraloc

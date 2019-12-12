@@ -157,7 +157,7 @@ contains
          ! for MPI, only print from master
          if(mpirank.eq.0) then
 #endif
-            write(*,'(a,3i4,e13.5)') &
+            if(setup0%verbose>0) write(*,'(a,3i4,e13.5)') &
                  'diagscal: n,k,lr=;  f is rescaled by ratio()=', &
                  n,k,lr_,  ratio(k,lr_)
 #ifdef __MPI

@@ -70,7 +70,7 @@ contains
 
 !BH111124      if(iotalim.ge.750) then
       if(iotalim.ge.6400) then
-        write(*,*)'micxinit: Check iotalim'
+        if(setup0%verbose>0) write(*,*)'micxinit: Check iotalim'
         call exit(1)
       endif
       do 1 i=0,iotalim
@@ -252,13 +252,13 @@ contains
       inewjx_(l_)=inew_(l_)*jx         !Number eqns for l_
 
       if (itl.eq.iyh) then
-         write(*,*)
-         write(*,*)'***************************************************'
-         write(*,*)'micxinit: itl.eq.iyh.   There are some problems'
-         write(*,*)' in the code, e.g. in impavnc0, for this condition.'
-         write(*,*)' It can be avoided by larger rya(1) or iy.'
-         write(*,*)'***************************************************'
-         write(*,*)
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) write(*,*)'***************************************************'
+         if(setup0%verbose>0) write(*,*)'micxinit: itl.eq.iyh.   There are some problems'
+         if(setup0%verbose>0) write(*,*)' in the code, e.g. in impavnc0, for this condition.'
+         if(setup0%verbose>0) write(*,*)' It can be avoided by larger rya(1) or iy.'
+         if(setup0%verbose>0) write(*,*)'***************************************************'
+         if(setup0%verbose>0) write(*,*)
       endif
 
 
@@ -322,16 +322,16 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a)')"=================================================="
-      WRITE(*,'(a,3i4,2f13.8)') &
+      if(setup0%verbose>0) WRITE(*,'(a)')"=================================================="
+      if(setup0%verbose>0) WRITE(*,'(a,3i4,2f13.8)') &
        "micxinit: k,lr, j_thermal, x(j_thermal), vth/vnorm =", &
         k, lr_, j_thermal, x(j_thermal), vth(k,lr_)/vnorm
       if(j_thermal.lt.3)then
-      WRITE(*,'(a)')"  WARNING(micxinit): V-grid is too coarse."
-      WRITE(*,'(a)')"  Thermal part of distribution is covered by only"
-      WRITE(*,'(a,i5,a)')"    j=", j_thermal," points."
-      WRITE(*,'(a)')"  The solution may become unstable."
-      WRITE(*,'(a)')"  Consider increasing jx or setting xfac<1."
+      if(setup0%verbose>0) WRITE(*,'(a)')"  WARNING(micxinit): V-grid is too coarse."
+      if(setup0%verbose>0) WRITE(*,'(a)')"  Thermal part of distribution is covered by only"
+      if(setup0%verbose>0) WRITE(*,'(a,i5,a)')"    j=", j_thermal," points."
+      if(setup0%verbose>0) WRITE(*,'(a)')"  The solution may become unstable."
+      if(setup0%verbose>0) WRITE(*,'(a)')"  Consider increasing jx or setting xfac<1."
       endif
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)

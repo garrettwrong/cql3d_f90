@@ -188,12 +188,12 @@ contains
     if (setup0%nmlstout.eq."enabled") then
        call print_all_conf_nml
     elseif (setup0%nmlstout.eq."trnscrib") then
-       write(6,*)'  In tdinitl: '
+       if(setup0%verbose>0) write(6,*)'  In tdinitl: '
        call ain_transcribe("cqlinput")
     else
-       write(6,*)
-       write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
-       write(6,*)
+       if(setup0%verbose>0) write(6,*)
+       if(setup0%verbose>0) write(6,*) 'setup0%mnemonic = ',setup0%mnemonic
+       if(setup0%verbose>0) write(6,*)
     endif
 
     !..................................................................
@@ -299,7 +299,7 @@ contains
     if(mpirank.eq.0) then
 #endif
     do ir=1,setup0%lrz
-       WRITE(*,'(a,i3,4e13.5)')'ir,rya,rpcon,rmcon,equilpsi=', &
+       if(setup0%verbose>0) WRITE(*,'(a,i3,4e13.5)')'ir,rya,rpcon,rmcon,equilpsi=', &
             ir,rya(ir),rpcon(ir),rmcon(ir),equilpsi(ir)
     enddo
     !pause
@@ -564,10 +564,10 @@ contains
     !     Call the neutral beam source module
     !..................................................................
 
-    write(*,*)'tdinitl:call frnfreya, n=',n,'time=',timet
+    if(setup0%verbose>0) write(*,*)'tdinitl:call frnfreya, n=',n,'time=',timet
     call frnfreya(frmodp,fr_gyrop,beamplsep,beamponp,beampoffp, &
          hibrzp,mfm1p,setup0%noplots)
-    write(*,*) 'mfm1 (freya) = ',mfm1p
+    if(setup0%verbose>0) write(*,*) 'mfm1 (freya) = ',mfm1p
     !       write(*,*) 'hibrzp(i,1,1),hibrzp(i,2,1),hibrzp(i,3,1)'
     !       do i=1,mfm1p
     !         write(*,'(i4,2x,0p9f9.4)') i, hibrzp(i,1,1),

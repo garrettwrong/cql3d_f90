@@ -141,7 +141,7 @@ contains
        !write(*,*) i,parray(i)-parray(i-1)
        if(parray(i)-parray(i-1) .lt. 0.d-15) then
           !write(*,*) 'Function LUF: parray(i)=',  parray(1:kn)
-          write(*,*) 'Function LUF: array/table should be increasing.',i
+          if(setup0%verbose>0) write(*,*) 'Function LUF: array/table should be increasing.',i
           goto 5
           !STOP
        endif
@@ -183,7 +183,7 @@ contains
     do i= 2,kn !max(2,iguess), kn
        if(parray(i)-parray(i-1) .lt. 0.d0) then
           !write(*,*) 'Function LUG: parray(i)=',  parray(1:kn)
-          write(*,*) 'Function LUG: array/table should be increasing.',i
+          if(setup0%verbose>0) write(*,*) 'Function LUG: array/table should be increasing.',i
           goto 5
           !pause
           !STOP
@@ -327,7 +327,7 @@ contains
        DMACH(4) = B**(1-DIGITS(X))      ! the largest relative spacing.
        DMACH(5) = LOG10(B)
 
-       write(*,*)'d1mach_new_f90 : dmach(1:5)=',dmach(1:5)
+       if(setup0%verbose>0) write(*,*)'d1mach_new_f90 : dmach(1:5)=',dmach(1:5)
        ifirst=0
        d1mach=dmach(i)
     else

@@ -116,7 +116,7 @@
       ipts=iqts*ma
       mrans=ipts*3
 
-      write(*,*)'freyasou: allocating ipts 6 times, ipts=',ipts
+      if(setup0%verbose>0) write(*,*)'freyasou: allocating ipts 6 times, ipts=',ipts
       allocate(px(ipts),STAT=istat)
       call bcast(px,zero,SIZE(px))
       allocate(py(ipts),STAT=istat)
@@ -165,7 +165,7 @@
           pz(ipar)=qz(ipar)
  45     continue
       endif  !on multiply
-      write(*,*)'freyasou: After allocate'
+      if(setup0%verbose>0) write(*,*)'freyasou: After allocate'
 
 !      write(*,*)
 !      write(*,*)'freyasou:i,qx(i),qy(i),qz(i),qr(i),vx(i),vy(i),vz(i):'
@@ -486,8 +486,8 @@
 !         Allowing for some tolerance, these cases are adjusted.
           if (bratio.lt.1.) then
             bratio=1.0
-            if (bratio.lt.0.99) &
-            write(*,*)'freyasou: bratio=[should be=1, else stop]',bratio
+            if (bratio.lt.0.99 .and. setup0%verbose>0) &
+                 write(*,*)'freyasou: bratio=[should be=1, else stop]',bratio
 !BH041215            if (bratio.le.0.9) stop 'freyasou: bratio.le.0.9'
           endif
           tmdplne=asin(sqrt((1.-cospitch**2)/bratio))
@@ -507,7 +507,7 @@
           if (j.gt.jx) go to 100
           i=luf_bin(tmdplne,ymid(1:iy,l_)) !iy
           if (i.gt.iy) then
-             write(*,*)'freyasou: ll,i,j,iy,ipar,tmdplne=', &
+             if(setup0%verbose>0) write(*,*)'freyasou: ll,i,j,iy,ipar,tmdplne=', &
                   ll,i,j,iy,ipar,tmdplne
              call frwrong(5)
           endif

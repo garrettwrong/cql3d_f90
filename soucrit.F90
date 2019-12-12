@@ -51,7 +51,7 @@ contains
         eoe0(k,lr_)=fack
 
             if((fack-1.).eq.zero)then
-             write(*,*)'soucrit: (fack-1.)=0=',(fack-1.)
+             if(setup0%verbose>0) write(*,*)'soucrit: (fack-1.)=0=',(fack-1.)
              !pause
             endif
 

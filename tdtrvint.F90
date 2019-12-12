@@ -98,7 +98,7 @@ contains
         vptb_(itu-1,ilr)=0.
 
         elseif (ipacktp.ne.0) then
-           write(*,*)'STOP in tdtrvint:  Check ipacktp'
+           if(setup0%verbose>0) write(*,*)'STOP in tdtrvint:  Check ipacktp'
            stop
         endif
 

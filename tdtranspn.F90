@@ -113,7 +113,7 @@ contains
 !       except for pinch.eq."disabled" (adv()=0.).
 !..............................................................
       if (ngen.gt.1) then
-         write(*,*)'Presently set up for only 1 gen species: STOP'
+         if(setup0%verbose>0) write(*,*)'Presently set up for only 1 gen species: STOP'
          stop
       endif
       kprofile=kelecm

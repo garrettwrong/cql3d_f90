@@ -48,7 +48,7 @@ contains
       io1=0
       io2=0
       read(i_,1) nray(krf),nharm(krf),freqcy(krf)
-      WRITE(*,*)'urfread_:nray,nharm,freqcy=', &
+      if(setup0%verbose>0) WRITE(*,*)'urfread_:nray,nharm,freqcy=', &
                  nray(krf),nharm(krf),freqcy(krf)
       omega(krf)=2.*pi*freqcy(krf)
 
@@ -58,7 +58,7 @@ contains
 
       if (nray(krf).gt.nrayn) then
         nr=nrayn
-        WRITE(*,200) nray(krf),nr
+        if(setup0%verbose>0) WRITE(*,200) nray(krf),nr
         nray(krf)=nrayn
       endif
  200  format("Ray tracing code provides more rays than CQL parameter",/, &
@@ -186,7 +186,7 @@ contains
           call urfwrong(6)
         endif
         if (nrayelt(iray,krf).eq.0) then
-           WRITE(*,*) 'urfread_: nrayelt(iray,krf)=0, iray,krf= ', &
+           if(setup0%verbose>0) WRITE(*,*) 'urfread_: nrayelt(iray,krf)=0, iray,krf= ', &
                        iray,krf
            go to 10
         endif
@@ -272,7 +272,7 @@ contains
            sbsign=sign(one,bsign)
            if (iray.eq.1) then
               bsign1(krf)=sign(one,sbtot(1,iray,krf))
-              WRITE(*,*)'urfread_:eqsource,bsign,bsign1 = ', &
+              if(setup0%verbose>0) WRITE(*,*)'urfread_:eqsource,bsign,bsign1 = ', &
                    eqsource,bsign,bsign1
            endif
            do is=1,nrayelt(iray,krf)
@@ -353,7 +353,7 @@ contains
           call urfwrong(6)
         endif
         if (nrayelt(iray,krf).eq.0) then
-           WRITE(*,*) 'urfread_: nrayelt(iray,krf)=0, iray,krf= ', &
+           if(setup0%verbose>0) WRITE(*,*) 'urfread_: nrayelt(iray,krf)=0, iray,krf= ', &
                        iray,krf
            go to 110
         endif
@@ -395,7 +395,7 @@ contains
            sbsign=sign(one,bsign)
            if (iray.eq.1) then
               bsign1(krf)=sign(one,sbtot(1,iray,krf))
-              WRITE(*,*)'urfread_:eqsource,bsign,bsign1 = ', &
+              if(setup0%verbose>0) WRITE(*,*)'urfread_:eqsource,bsign,bsign1 = ', &
                    eqsource,bsign,bsign1
            endif
            do is=1,nrayelt(iray,krf)
@@ -426,7 +426,7 @@ contains
 
       endif
 
-      WRITE(*,*)'urfread_:iformat1,iformat2,io1,io2=', &
+      if(setup0%verbose>0) WRITE(*,*)'urfread_:iformat1,iformat2,io1,io2=', &
                           iformat1,iformat2,io1,io2
 
  1    format(2i5,1pe16.9)
@@ -501,7 +501,7 @@ contains
           skphi(iray,krf)
 
         if (nrayelt(iray,krf).eq.0) then
-           WRITE(*,*)'urfread_i in do10: nrayelt(iray,krf)=0,iray,krf=', &
+           if(setup0%verbose>0) WRITE(*,*)'urfread_i in do10: nrayelt(iray,krf)=0,iray,krf=', &
                        iray,krf
            go to 10
         endif
@@ -561,7 +561,7 @@ contains
           skphi(iray,krf)
 
         if (nrayelt(iray,krf).eq.0) then
-          WRITE(*,*)'urfread_i in do110: nrayelt(iray,krf)=0,iray,krf=', &
+          if(setup0%verbose>0) WRITE(*,*)'urfread_i in do110: nrayelt(iray,krf)=0,iray,krf=', &
                        iray,krf
           go to 110
         endif
@@ -596,7 +596,7 @@ contains
 
       endif ! iformat2=1
 
-      WRITE(*,*)'urfread_i: iformat1,iformat2,io1,io2=', &
+      if(setup0%verbose>0) WRITE(*,*)'urfread_i: iformat1,iformat2,io1,io2=', &
                             iformat1,iformat2,io1,io2
 
  1    format(2i5,1pe16.9)

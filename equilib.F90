@@ -247,13 +247,13 @@ contains
 250    format( (5(e21.14)) )
 251    format(5i5)
 
-       write(*,*)
-       write(*,98) raxis,zaxis,psimag,psilim,qar(1),qar(nnv)
-       write(*,99) rbox,zbox,rboxdst,ymideqd
+       if(setup0%verbose>0) write(*,*)
+       if(setup0%verbose>0) write(*,98) raxis,zaxis,psimag,psilim,qar(1),qar(nnv)
+       if(setup0%verbose>0) write(*,99) rbox,zbox,rboxdst,ymideqd
 98     format('ORIGINAL Eqdsk values [mks units]:  &
        raxis,zaxis,psimag,psilim,qar(1),qar(nnv)=',  6(1pe12.4))
 99     format('Eqdsk values: rbox,zbox,rboxdst,ymideqd=',4(1pe12.4))
-       write(*,*)
+       if(setup0%verbose>0) write(*,*)
 
        !.......................................................................
        !     CQL cannot work correctly with B<0 (Lin-Liu)
@@ -266,29 +266,29 @@ contains
        endif
        if (btor.lt.0.) then
           if (rdcmod.ne."disabled") then
-             write(*,*) " "
-             write(*,*) " "
-             write(*,*) "   *******************************************"
-             write(*,*) "   **BTOR .lt.0, Check RDC_UPAR_SIGN,      ***"
-             write(*,*) "   **when using rdcmod.  DC coeffs use  -1.***"
-             write(*,*) "   *******************************************"
-             write(*,*) " "
-             write(*,*) " "
+             if(setup0%verbose>0) write(*,*) " "
+             if(setup0%verbose>0) write(*,*) " "
+             if(setup0%verbose>0) write(*,*) "   *******************************************"
+             if(setup0%verbose>0) write(*,*) "   **BTOR .lt.0, Check RDC_UPAR_SIGN,      ***"
+             if(setup0%verbose>0) write(*,*) "   **when using rdcmod.  DC coeffs use  -1.***"
+             if(setup0%verbose>0) write(*,*) "   *******************************************"
+             if(setup0%verbose>0) write(*,*) " "
+             if(setup0%verbose>0) write(*,*) " "
           endif
           if ( bsign.lt.0. ) then
              btor=bsign * btor
              do ii=1,nnv
                 fpsiar(ii)=bsign * fpsiar(ii)
              enddo
-             write(*,*)'equilib: Sign of btor and fpsiar is reversed'
+             if(setup0%verbose>0) write(*,*)'equilib: Sign of btor and fpsiar is reversed'
           else
-             write(*,*) " "
-             write(*,*) " "
-             write(*,*) "   *******************************************"
-             write(*,*) "   ****BTOR .lt.0, Check BSIGN if using urf***"
-             write(*,*) "   *******************************************"
-             write(*,*) " "
-             write(*,*) " "
+             if(setup0%verbose>0) write(*,*) " "
+             if(setup0%verbose>0) write(*,*) " "
+             if(setup0%verbose>0) write(*,*) "   *******************************************"
+             if(setup0%verbose>0) write(*,*) "   ****BTOR .lt.0, Check BSIGN if using urf***"
+             if(setup0%verbose>0) write(*,*) "   *******************************************"
+             if(setup0%verbose>0) write(*,*) " "
+             if(setup0%verbose>0) write(*,*) " "
              stop "BTOR .lt.0, Check BSIGN"
           endif
        endif
@@ -342,7 +342,7 @@ contains
           psimag=-psimag
           psilim=-psilim ! now psimag < psilim
 
-          write(*,1000)
+          if(setup0%verbose>0) write(*,1000)
 1000      format(//,1x,'WARNING: Sign of epsi,psilim,psimag reversed')
 
        endif
@@ -606,7 +606,7 @@ contains
                 epsi(i,j)=-epsi(i,j)*1.e8  ! reversed !
 6            continue ! now psimag > psilim;  epsi has min. at edge !
 5         continue
-          write(*,1000)
+          if(setup0%verbose>0) write(*,1000)
           ! 1000      format(//,1x,'WARNING: Sign of epsi,psilim,psimag reversed')
 
           btor=btor*1.e+4
@@ -699,12 +699,12 @@ contains
          call eqwrng(10)
       endif
 
-      write(*,*)
-      write(*,598) rmag,zmag,psimag,psilim,qar(1),qar(nnv)
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,598) rmag,zmag,psimag,psilim,qar(1),qar(nnv)
 598   format('ADJUSTED (possible sign change; rescaled) [cgs]: &
            rmag,zmag,psimag,psilim,qar(1),qar(nnv)=',  6(1pe12.4))
-      write(*,*)' btor,bsign,fpsiar(nnv)',btor,bsign,fpsiar(nnv)
-      write(*,*)'equilib/setup: done'
+      if(setup0%verbose>0) write(*,*)' btor,bsign,fpsiar(nnv)',btor,bsign,fpsiar(nnv)
+      if(setup0%verbose>0) write(*,*)'equilib/setup: done'
       !pause
 
 

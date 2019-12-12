@@ -21,7 +21,8 @@ module eqwrng_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
-
+  use cqlconf_mod, only : setup0
+  
   !---END USE
 
 !
@@ -40,33 +41,33 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'eqwrng(kerr) stopped with kerr=',kerr
+      if(setup0%verbose>0) WRITE(*,*)'eqwrng(kerr) stopped with kerr=',kerr
       if (kerr.eq.1) then
-        WRITE(*,10010)
+        if(setup0%verbose>0) WRITE(*,10010)
       elseif (kerr.eq.2) then
-        WRITE(*,10020)
+        if(setup0%verbose>0) WRITE(*,10020)
       elseif (kerr.eq.3) then
-        WRITE(*,10030)
+        if(setup0%verbose>0) WRITE(*,10030)
       elseif (kerr.eq.4) then
-        WRITE(*,10040)
+        if(setup0%verbose>0) WRITE(*,10040)
       elseif (kerr.eq.5) then
-        WRITE(*,10050)
+        if(setup0%verbose>0) WRITE(*,10050)
       elseif (kerr.eq.6) then
-        WRITE(*,10060)
+        if(setup0%verbose>0) WRITE(*,10060)
       elseif (kerr.eq.7) then
-        WRITE(*,10070)
+        if(setup0%verbose>0) WRITE(*,10070)
       elseif (kerr.eq.8) then
-        WRITE(*,10080)
+        if(setup0%verbose>0) WRITE(*,10080)
       elseif (kerr.eq.9) then
-        WRITE(*,10090)
+        if(setup0%verbose>0) WRITE(*,10090)
       elseif (kerr.eq.10) then
-        WRITE(*,10100)
+        if(setup0%verbose>0) WRITE(*,10100)
       elseif (kerr.eq.11) then
-        WRITE(*,10110)
+        if(setup0%verbose>0) WRITE(*,10110)
       elseif (kerr.eq.12) then
-        WRITE(*,10120)
+        if(setup0%verbose>0) WRITE(*,10120)
       else
-        WRITE(*,10990)
+        if(setup0%verbose>0) WRITE(*,10990)
       endif
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)

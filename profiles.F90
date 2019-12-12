@@ -134,8 +134,8 @@ contains
                do 19  ll=0,setup0%lrzmax
                   temp(k,ll)=tr(ll)
                   if(temp(k,ll).le.0.001)then
-                   write(*,*)'temp<0.001.  tmpt(1:njene)=',tmpt
-                   write(*,*)'temp<0.001.  temp(k,ll)=',k,ll,temp(k,ll)
+                   if(setup0%verbose>0) write(*,*)'temp<0.001.  tmpt(1:njene)=',tmpt
+                   if(setup0%verbose>0) write(*,*)'temp<0.001.  temp(k,ll)=',k,ll,temp(k,ll)
                    !pause    ! temp<0.001
                   endif
  19            continue ! ll
@@ -174,7 +174,7 @@ contains
 
       do l=1,setup0%lrzmax
       if (tempc(l,kelec).le.zero .and. tein_t(l,1).le.zero) then
-         WRITE(*,*) "Time-dependent Te profile input problem at l=",l
+         if(setup0%verbose>0) WRITE(*,*) "Time-dependent Te profile input problem at l=",l
          STOP
       endif
       enddo
@@ -182,7 +182,7 @@ contains
 !     Assume any time dep in tempc is in first ion species.
       do l=1,setup0%lrzmax
       if (tempc(l,kionn).le.zero .and. tiin_t(l,1).le.zero) then
-         WRITE(*,*) "Time-dependent Ti profile input problem at l=",l
+         if(setup0%verbose>0) WRITE(*,*) "Time-dependent Ti profile input problem at l=",l
          STOP
       endif
       enddo
@@ -200,7 +200,7 @@ contains
          endif
          do l=1,setup0%lrzmax
             if (temp(k,l).le.zero) then
-              WRITE(*,*) "profiles.f: temp(k,l)<0 at k,l=",k,l
+              if(setup0%verbose>0) WRITE(*,*) "profiles.f: temp(k,l)<0 at k,l=",k,l
               STOP
             endif
          enddo ! l
@@ -230,8 +230,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a)')"==============================================="
-      WRITE(*,*)'profiles.f: time step n, timet=',n,timet
+      if(setup0%verbose>0) WRITE(*,'(a)')"==============================================="
+      if(setup0%verbose>0) WRITE(*,*)'profiles.f: time step n, timet=',n,timet
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -247,15 +247,15 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,'(a,3i4,3f16.11)') &
+         if(setup0%verbose>0) WRITE(*,'(a,3i4,3f16.11)') &
          "profiles: k,lr, j_thermal, x(j_thermal), vth/vnorm, temp =", &
                k, l, j_thermal, x(j_thermal), vth(k,l)/vnorm, temp(k,l)
          if(j_thermal.lt.3)then
-           WRITE(*,'(a)')" WARNING(profiles.f): V-grid is too coarse."
-           WRITE(*,'(a)')" Thermal part of distrib. is covered by only"
-           WRITE(*,'(a,i5,a)')"    j=", j_thermal," points."
-           WRITE(*,'(a)')" The solution may become unstable."
-           WRITE(*,'(a)')" Consider increasing jx or setting xfac<1."
+           if(setup0%verbose>0) WRITE(*,'(a)')" WARNING(profiles.f): V-grid is too coarse."
+           if(setup0%verbose>0) WRITE(*,'(a)')" Thermal part of distrib. is covered by only"
+           if(setup0%verbose>0) WRITE(*,'(a,i5,a)')"    j=", j_thermal," points."
+           if(setup0%verbose>0) WRITE(*,'(a)')" The solution may become unstable."
+           if(setup0%verbose>0) WRITE(*,'(a)')" Consider increasing jx or setting xfac<1."
            !pause !-------
          endif
 #ifdef __MPI
@@ -454,7 +454,7 @@ contains
          enddo
          do 121 ll=1,setup0%lrzmax
             if(zeff(ll).gt.fmaxx .or. zeff(ll).lt.fminn) then
-               WRITE(*,*)'profiles.f: ', &
+               if(setup0%verbose>0) WRITE(*,*)'profiles.f: ', &
                     'Adjust bnumb(kion) for compatibility with zeff'
                stop
             endif
@@ -875,8 +875,8 @@ contains
       endif                     !On iprovphi
 
 
-      write(*,*)
-      write(*,*)'profiles: time step n, timet=',n,timet
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'profiles: time step n, timet=',n,timet
 
 !     From tdoutput.f:
 !.......................................................................
@@ -973,9 +973,9 @@ contains
         "tor vel(cm/s)")
  9129 format(i3,1p7e13.5)
 
-      write(*,*)
-      write(*,*)'profiles: zeff(1:setup0%lrzmax)=',(zeff(il), il=1,setup0%lrzmax)
-      write(*,*)
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'profiles: zeff(1:setup0%lrzmax)=',(zeff(il), il=1,setup0%lrzmax)
+      if(setup0%verbose>0) write(*,*)
 
 !
 

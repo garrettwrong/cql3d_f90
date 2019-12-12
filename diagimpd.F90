@@ -200,7 +200,7 @@ contains
          if(mpisize.gt.1) then
             mpiworker= MOD(lfct-1,mpisize-1)+1
          else
-            PRINT*, '------- WARNING: mpisize=1 -------'
+            if(setup0%verbose>0) PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
 #endif
@@ -373,10 +373,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a,2i4,2e15.7)') &
+      if(setup0%verbose>0) WRITE(*,'(a,2i4,2e15.7)') &
        'diagimpd BEFORE f update. n,l_,MIN(temp2),MAX(temp2)', &
          n,l_,MINVAL(temp2),MAXVAL(temp2)
-      WRITE(*,'(a,2i4,2e15.7)') &
+      if(setup0%verbose>0) WRITE(*,'(a,2i4,2e15.7)') &
        'diagimpd neg.val.adjusted n,l_,MIN(temp1),MAX(temp1)', &
          n,l_,MINVAL(temp1),MAXVAL(temp1)
 #ifdef __MPI
@@ -388,7 +388,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,'(a,2i4,3e15.7)') &
+      if(setup0%verbose>0) WRITE(*,'(a,2i4,3e15.7)') &
        'diagimpd AFTER  f update. n,l_,MIN(f),MAX(f),SUM(f)=', &
                 n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI

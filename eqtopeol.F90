@@ -68,13 +68,13 @@ contains
 !
       read(10,2) char
       read(10,*) nnr,nnz
-      write(*,*)
-      write(*,*)'eqtopeol: nnr,nnz =', nnr,nnz
-      write(*,*)
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'eqtopeol: nnr,nnz =', nnr,nnz
+      if(setup0%verbose>0) write(*,*)
  3    format(2i5)
       read(10,2) char
       read(10,*) rmincon,rmaxcon
-      write(*,*) 'eqtopeol: rmincon,rmaxcon =',rmincon,rmaxcon
+      if(setup0%verbose>0) write(*,*) 'eqtopeol: rmincon,rmaxcon =',rmincon,rmaxcon
       read(10,2) char
       read(10,1) (er(i),i=1,nnr)
 !      write(*,*)'eqtopeol:er(i),i=1,nnr =', (er(i),i=1,nnr)
@@ -96,7 +96,7 @@ contains
 !BH   We assume nnz is an odd number, so that ez(nzc) gives
 !BH   the equatorial plane.   Checking
       if (abs(ez(nzc)).gt.1.e-9) then
-         write(*,*)'eqtopeol:  Problem, ez(nzc).ne.0'
+         if(setup0%verbose>0) write(*,*)'eqtopeol:  Problem, ez(nzc).ne.0'
          stop
       endif
 
@@ -261,7 +261,7 @@ contains
       zmag=0.                 ! Up-down symmetry
 
 !      write(*,*)'eqtopeol: imag,iout,jq =',imag,iout,jq
-      write(*,*)'eqtopeol: rbox,zbox,radmaj,rboxdst,ymideqd,btor =', &
+      if(setup0%verbose>0) write(*,*)'eqtopeol: rbox,zbox,radmaj,rboxdst,ymideqd,btor =', &
                            rbox,zbox,radmaj,rboxdst,ymideqd,btor
 !$$$      write(*,*)'eqtopeol: jq, psiar_,i=1,jq =',jq,(psiar_(i),i=1,jq)
 !$$$      write(*,*)'eqtopeol: jq, fpsiar_,i=1,jq =',jq,(fpsiar_(i),i=1,jq)
@@ -275,7 +275,7 @@ contains
 
       psimag_=psiar_(jq)
       psilim_=psiar_(1)
-      write(*,*)'eqtopeol,  AT exit: radmaj,psimag,psilim =', &
+      if(setup0%verbose>0) write(*,*)'eqtopeol,  AT exit: radmaj,psimag,psilim =', &
                                      radmaj,psimag_,psilim_
       dpsi_=(psimag_-psilim_)/(nnr-1)
       do i=1,nnr

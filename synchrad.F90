@@ -126,10 +126,10 @@ contains
 
     endif
 
-      write(*,*) 'syncrad: synca_gyro: ',synca_gyro
-      write(*,*) 'syncrad: syncd_gyro: ',syncd_gyro
-      write(*,*) 'syncrad: synca_geom: ',synca_geom
-      write(*,*) 'syncrad: syncd_geom: ',syncd_geom
+      if(setup0%verbose>0) write(*,*) 'syncrad: synca_gyro: ',synca_gyro
+      if(setup0%verbose>0) write(*,*) 'syncrad: syncd_gyro: ',syncd_gyro
+      if(setup0%verbose>0) write(*,*) 'syncrad: synca_geom: ',synca_geom
+      if(setup0%verbose>0) write(*,*) 'syncrad: syncd_geom: ',syncd_geom
 
 
     return

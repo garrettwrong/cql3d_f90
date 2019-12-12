@@ -158,7 +158,7 @@ contains
 !...................................................................
 !     Read in ray data
 !...................................................................
-        write(*,*)'call urfread: n, nurf=',n,nurf
+        if(setup0%verbose>0) write(*,*)'call urfread: n, nurf=',n,nurf
         call urfread
 
 !...................................................................
@@ -239,7 +239,7 @@ contains
         nraypts3=nraypts3+nrfstep2
         call urfwrite
         call urfrays(initrf,nraypts1,nraypts2,nraypts3)
-                write(*,*)'call urfread: n, nurf,irfitr2,irfitr3=' &
+                if(setup0%verbose>0) write(*,*)'call urfread: n, nurf,irfitr2,irfitr3=' &
                ,n,nurf,irfitr2,irfitr3
         call urfread
 
@@ -279,7 +279,7 @@ contains
 
 #ifdef __MPI
       if(mpirank.eq.0) then
-      WRITE(*,'(a,f10.3)')'tcpu_URFB0=',t_urf2-t_urf1
+      if(setup0%verbose>0) WRITE(*,'(a,f10.3)')'tcpu_URFB0=',t_urf2-t_urf1
       endif  ! for if(mpirank.eq.***)
 #endif
 
@@ -294,7 +294,7 @@ contains
         call tdnflxs(lmdpln(ll))
 !%os
         if (indxlr_ .ne. ll) then
-          print *,' error in defining l_,indxlr_,... in urfchief'
+          if(setup0%verbose>0) print *,' error in defining l_,indxlr_,... in urfchief'
           stop 'urfchief: error in defining l_,indxlr_,...'
         endif
 !%os

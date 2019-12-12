@@ -49,7 +49,7 @@ contains
 !     a code stopping fault (e.g. Segmentation fault). See istat_tot
 !     comments below.
 !..................................................................
-      write(*,*)'ainalloc:  Entering ainalloc'
+      if(setup0%verbose>0) write(*,*)'ainalloc:  Entering ainalloc'
 
       ! YuP-101220: Moved allocation of cqlb()-cqlf() to vlh and vlf
 
@@ -1209,9 +1209,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'ainalloc.f:  Problem with allocation'
-         WRITE(*,*)'ainalloc.f:  Reduce param.h paramaters?'
-         WRITE(*,*)'ainalloc.f:  Stopping'
+         if(setup0%verbose>0) WRITE(*,*)'ainalloc.f:  Problem with allocation'
+         if(setup0%verbose>0) WRITE(*,*)'ainalloc.f:  Reduce param.h paramaters?'
+         if(setup0%verbose>0) WRITE(*,*)'ainalloc.f:  Stopping'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1224,7 +1224,7 @@ contains
 !..................................................................
 !     Sucessful ainalloc
 !..................................................................
-      write(*,*)'ainalloc:  Leaving ainalloc'
+      if(setup0%verbose>0) write(*,*)'ainalloc:  Leaving ainalloc'
 
       return
     end subroutine ainalloc

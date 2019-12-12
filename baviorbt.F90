@@ -99,12 +99,12 @@ contains
       nii=25 ! nii=1 gives bad profile of j_bs(lr) in bootcalc test
       if (nii*nstps .gt. iyjx-1) then
          nstps=iyjx/nii
-         write(*,*) 'WARNING: nstps in baviorbt reduced to',nstps
+         if(setup0%verbose>0) write(*,*) 'WARNING: nstps in baviorbt reduced to',nstps
       endif
 
       if (nii.gt.iy) then
          nii=iy
-         write(*,*) 'WARNING: nii in baviorbt reduced to iy',nii
+         if(setup0%verbose>0) write(*,*) 'WARNING: nii in baviorbt reduced to iy',nii
       endif
 
 !...................................................................
@@ -776,7 +776,7 @@ contains
 !     See BH notes: 090821.
 
 
-      write(*,*)'deltar: Beginning of deltarho orbit-shift calc'
+      if(setup0%verbose>0) write(*,*)'deltar: Beginning of deltarho orbit-shift calc'
       k=1  !ONLY setup for one species, ngen=1
 
 !......................................................................
@@ -1153,11 +1153,11 @@ contains
                   deltarz(ir,iz,i)=weightl*deltarhop(i,lll-1,lr) &
                                   +weightu*deltarhop(i,lll,lr)
                enddo
-               write(*,*)'deltar: deltarz(ir,iz,1:4),deltarz(ir,iz,10)', &
+               if(setup0%verbose>0) write(*,*)'deltar: deltarz(ir,iz,1:4),deltarz(ir,iz,10)', &
                                  deltarz(ir,iz,1:4),deltarz(ir,iz,10)
 
             else
-               write(*,*)"deltar:  Shouldn't happen!"
+               if(setup0%verbose>0) write(*,*)"deltar:  Shouldn't happen!"
                STOP
             endif
 

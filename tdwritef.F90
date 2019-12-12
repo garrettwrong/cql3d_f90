@@ -76,11 +76,11 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*) &
+        if(setup0%verbose>0) WRITE(*,*) &
         'tdwritef[nlwritf.ne."ncdfdist"]:Writing data into distrfunc.nc'
-        WRITE(*,*)'tdwritef_43: For checkup SUM(reden),SUM(energy)=', &
+        if(setup0%verbose>0) WRITE(*,*)'tdwritef_43: For checkup SUM(reden),SUM(energy)=', &
          SUM(reden),SUM(energy)
-        WRITE(*,*)'tdwritef_44: For checkup SUM(totcurz),SUM(rovs)=', &
+        if(setup0%verbose>0) WRITE(*,*)'tdwritef_44: For checkup SUM(totcurz),SUM(rovs)=', &
          SUM(totcurz),SUM(rovs)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -128,9 +128,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*) &
+         if(setup0%verbose>0) WRITE(*,*) &
            'tdwritef[nlwritf.ne."ncdfdist"]:Writing f into distrfunc.nc'
-         WRITE(*,*)'tdwritef_83: For checkup SUM(f)=', SUM(f)
+         if(setup0%verbose>0) WRITE(*,*)'tdwritef_83: For checkup SUM(f)=', SUM(f)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -149,7 +149,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'tdwritef_98: For checkup SUM(f)=', SUM(f)
+         if(setup0%verbose>0) WRITE(*,*)'tdwritef_98: For checkup SUM(f)=', SUM(f)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

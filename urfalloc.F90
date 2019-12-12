@@ -54,7 +54,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'urfalloc:  Entering urfalloc'
+      if(setup0%verbose>0) WRITE(*,*)'urfalloc:  Entering urfalloc'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -95,7 +95,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'urfalloc: ipack,ipack16,mrfn=',ipack,ipack16,mrfn
+         if(setup0%verbose>0) WRITE(*,*)'urfalloc: ipack,ipack16,mrfn=',ipack,ipack16,mrfn
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -224,7 +224,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'urfalloc: urfpwr* allocated. istat_tot=',istat_tot
+      if(setup0%verbose>0) WRITE(*,*)'urfalloc: urfpwr* allocated. istat_tot=',istat_tot
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -305,7 +305,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'urfalloc: w* allocated. istat_tot=',istat_tot
+      if(setup0%verbose>0) WRITE(*,*)'urfalloc: w* allocated. istat_tot=',istat_tot
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -318,7 +318,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*)'urfalloc  ilowp: istat=',istat
+        if(setup0%verbose>0) WRITE(*,*)'urfalloc  ilowp: istat=',istat
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -327,7 +327,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*)'urfalloc  iupp: istat=',istat
+        if(setup0%verbose>0) WRITE(*,*)'urfalloc  iupp: istat=',istat
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -336,7 +336,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*)'urfalloc  ifct1_: istat=',istat
+        if(setup0%verbose>0) WRITE(*,*)'urfalloc  ifct1_: istat=',istat
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -345,7 +345,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*)'urfalloc  ifct2_: istat=',istat
+        if(setup0%verbose>0) WRITE(*,*)'urfalloc  ifct2_: istat=',istat
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -361,9 +361,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'urfalloc.f:  Problem with allocation'
-         WRITE(*,*)'urfalloc.f:  Reduce param.h paramaters?'
-         WRITE(*,*)'urfalloc.f:  Stopping'
+         if(setup0%verbose>0) WRITE(*,*)'urfalloc.f:  Problem with allocation'
+         if(setup0%verbose>0) WRITE(*,*)'urfalloc.f:  Reduce param.h paramaters?'
+         if(setup0%verbose>0) WRITE(*,*)'urfalloc.f:  Stopping'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -376,7 +376,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'urfalloc:  Leaving urfalloc'
+      if(setup0%verbose>0) WRITE(*,*)'urfalloc:  Leaving urfalloc'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

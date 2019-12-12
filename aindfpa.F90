@@ -21,6 +21,7 @@ module aindfpa_mod
   !---BEGIN USE
   use iso_c_binding, only : c_float
   use iso_c_binding, only : c_double
+  use cqlconf_mod, only : setup0
 
   !---END USE
 
@@ -98,7 +99,7 @@ contains
  3          read(unit=4,fmt='(a)',end=4) line1
             len_line1=len_trim(line1)
             if (len_line1.ge.(long_enough-1)) then
-               WRITE(*,*)'len_line1,long_enough',len_line1,long_enough
+               if(setup0%verbose>0) WRITE(*,*)'len_line1,long_enough',len_line1,long_enough
                STOP 'Adjust long_enough'
             endif
             write(unit=5, fmt='(a)') trim(line1)
@@ -210,10 +211,10 @@ contains
          if (line.eq." &fsetup" .or. line.eq." &FSETUP" .or. &
              line.eq."&fsetup"  .or. line.eq."&FSETUP"  ) then
              inlmod=inlmod+1
-           WRITE(*,*)'FSETUP namelist is present.'
-           WRITE(*,*)'cqlinput is adjusted to change FSETUP to SETUP0.'
-           WRITE(*,*)'After reading from the adjusted file,'
-           WRITE(*,*)'  it will be restored back.'
+           if(setup0%verbose>0) WRITE(*,*)'FSETUP namelist is present.'
+           if(setup0%verbose>0) WRITE(*,*)'cqlinput is adjusted to change FSETUP to SETUP0.'
+           if(setup0%verbose>0) WRITE(*,*)'After reading from the adjusted file,'
+           if(setup0%verbose>0) WRITE(*,*)'  it will be restored back.'
            if (inlmod.eq.1) go to 2
          endif
          go to 1
@@ -242,7 +243,7 @@ contains
  3          read(unit=4,fmt='(a)',end=4) line1
             len_line1=len_trim(line1)
             if (len_line1.ge.(long_enough-1)) then
-               WRITE(*,*)'len_line1,long_enough',len_line1,long_enough
+               if(setup0%verbose>0) WRITE(*,*)'len_line1,long_enough',len_line1,long_enough
                STOP 'Adjust long_enough'
             endif
             write(unit=5, fmt='(a)') trim(line1)
@@ -329,15 +330,15 @@ contains
       if(mpirank.ne.0) return
 #endif
 
-      WRITE(*,*)
-      WRITE(*,*)  'ain_transcribe write of nl to stdout:'
-      WRITE(*,*)  '[set nmlstout="disabled" to turn it off]'
-      WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,*)  'ain_transcribe write of nl to stdout:'
+      if(setup0%verbose>0) WRITE(*,*)  '[set nmlstout="disabled" to turn it off]'
+      if(setup0%verbose>0) WRITE(*,*)
 
       max_length=0
-      WRITE(*,*)'ain_transcibe: filename =',filename
+      if(setup0%verbose>0) WRITE(*,*)'ain_transcibe: filename =',filename
       inquire(file=filename,iostat=kiostat,opened=logic1,number=inumber)
-      WRITE(*,*)'ain_transcribe: inquire on ',filename, &
+      if(setup0%verbose>0) WRITE(*,*)'ain_transcribe: inquire on ',filename, &
            ' opened=',logic1,'iostat=',kiostat,'unit=',inumber
       if(.NOT. logic1) then
          iunit = 20
@@ -349,16 +350,16 @@ contains
  3    read(unit=iunit,fmt='(a)',end=4) line1
       len_line1=len_trim(line1)
       if (len_line1.gt.max_length) max_length=len_line1
-      WRITE(*,*) trim(line1)
+      if(setup0%verbose>0) WRITE(*,*) trim(line1)
       if (len_line1.ge.(long_enough-1)) then
-         WRITE(*,*)'ain_transcribe,long_enough',len_line1,long_enough
+         if(setup0%verbose>0) WRITE(*,*)'ain_transcribe,long_enough',len_line1,long_enough
          STOP 'Adjust long_enough'
       endif
       go to 3
  4    continue
-      WRITE(*,*)'ain_transcribe:  max line length =',max_length
+      if(setup0%verbose>0) WRITE(*,*)'ain_transcribe:  max line length =',max_length
       close(20)
-      WRITE(*,*)
+      if(setup0%verbose>0) WRITE(*,*)
 
       return
       end subroutine ain_transcribe

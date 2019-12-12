@@ -103,8 +103,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*)
-        WRITE(*,*)'eqfndpsi: lr_,rhodes,jval,eqrho(jval-1),eqrho(jval)', &
+        if(setup0%verbose>0) WRITE(*,*)
+        if(setup0%verbose>0) WRITE(*,*)'eqfndpsi: lr_,rhodes,jval,eqrho(jval-1),eqrho(jval)', &
                              lr_,rhodes,jval,eqrho(jval-1),eqrho(jval)
 !        write(*,*)'eqfndpsi: eqrho(j),j=1,nconteqn',
 !     +                     (eqrho(j),j=1,nconteqn)
@@ -157,7 +157,7 @@ contains
       if(mpirank.eq.0) then
 #endif
           if(eqbpol_(l1).eq.0. )then
-             WRITE(*,'(a,i5,2e17.10)') &
+             if(setup0%verbose>0) WRITE(*,'(a,i5,2e17.10)') &
              'eqfndpsi: l1,eqdell_(l1),eqbpol_(l1) ', &
                         l1,eqdell_(l1),eqbpol_(l1)
           endif
@@ -266,7 +266,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,'(a,2i5,2f16.10,3e17.7,e12.3)') &
+        if(setup0%verbose>0) WRITE(*,'(a,2i5,2f16.10,3e17.7,e12.3)') &
         'eqfndpsi: iter,lorbit_,rhonew,rhodes,psinew,R(1),R(l),err', &
               iter,lorbit_,rhonew,rhodes,psinew,solr_(1),solr_(l1),err
 #ifdef __MPI
@@ -295,7 +295,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-           WRITE(*,'(a,i4,e12.3,i4,e12.3)') &
+           if(setup0%verbose>0) WRITE(*,'(a,i4,e12.3,i4,e12.3)') &
             'eqfndpsi/WARNING: POOR CONVERG. lr,rhonew,iter,err=', &
                                              lr_,rhonew,iter,err
 #ifdef __MPI
@@ -459,7 +459,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'eqfndpsi/END: lr_,iter,rhonew,rhodes=', &
+      if(setup0%verbose>0) WRITE(*,*)'eqfndpsi/END: lr_,iter,rhonew,rhodes=', &
         lr_,iter,rhonew,rhodes
       !pause
 #ifdef __MPI

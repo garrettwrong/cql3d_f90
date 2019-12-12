@@ -5,6 +5,7 @@ module netcdfrf_mod
   use param_mod, only : nmodsa
   use bcast_mod, only : bcast
   use bcast_mod, only : ibcast
+  use cqlconf_mod, only : setup0
   use netcdfrw2_mod, only : ncvdef0,ncvdef2,ncaptc2,ncvptc0
   use netcdfrw2_mod, only : length_char,check_err
   !use pack21_mod, only : pack21
@@ -117,7 +118,7 @@ contains
 
 
 
-    WRITE(*,*)'Begin of netcdfrf, kopt,krf,n:',kopt,krf,n
+    if(setup0%verbose>0) WRITE(*,*)'Begin of netcdfrf, kopt,krf,n:',kopt,krf,n
 
     if(n.eq.0) call ibcast(numrec,1,SIZE(numrec)) ! counter for data recording
 
@@ -143,7 +144,7 @@ contains
        !     Only set up for cqlpmod.ne."enabled",ngen=1, for the time being.
        !-----------------------------------------------------------------------
        if (setup0%cqlpmod.eq."enabled" ) then  !-YuP: removed  .or. ngen.ne.1   ???
-          WRITE(*,*) 'WARNING: netcdfrf subroutine not implemented'
+          if(setup0%verbose>0) WRITE(*,*) 'WARNING: netcdfrf subroutine not implemented'
           return
        endif
 
@@ -1021,9 +1022,8 @@ contains
                 sbsign=sign(one,bsign)
                 do is=1,nrayelt(iray,krf)
                    sbtot(is,iray,krf)=bsign1(krf)*sbtot(is,iray,krf)
-                   if (sbtot(is,iray,krf).lt.0.) &
-                        WRITE(*,*)'urfread: Sign Problem with sbtot:is,iray=', &
-                        is,iray
+                   if (sbtot(is,iray,krf).lt.0. .and. setup0%verbose>0) &
+                        WRITE(*,*)'urfread: Sign Problem with sbtot:is,iray=',is,iray
                    wnpar(is,iray,krf)=sbsign*wnpar(is,iray,krf)
                    cwexde(is,iray,krf)=sbsign*cwexde(is,iray,krf)
                    cweyde(is,iray,krf)=sbsign*cweyde(is,iray,krf)
@@ -1086,7 +1086,7 @@ contains
        !-YuP      endif
        istatus = NF_OPEN(rffile(krf), 0, ncid) !-YuP: NetCDF-f77
        if (istatus .NE. NF_NOERR) then         !-YuP: NetCDF-f77
-          WRITE(*,*)'   ***   Problem opening rf .nc data file   ***'
+          if(setup0%verbose>0) WRITE(*,*)'   ***   Problem opening rf .nc data file   ***'
           Stop
        endif                                   !-YuP: NetCDF-f77
 
@@ -1144,7 +1144,7 @@ contains
        !     modes, may be read.
        if (nray(krf).gt.nrayn) then
           nr=nrayn
-          WRITE(*,200) nray(krf),nr
+          if(setup0%verbose>0) WRITE(*,200) nray(krf),nr
           nray(krf)=nrayn
        endif
 200    format("Ray tracing code provides more rays than CQL parameter",/, &
@@ -1165,9 +1165,9 @@ contains
 
 
        if (nrays.gt.nrayn .or. neltmax.gt.nrayelts) then
-          WRITE(*,*)'netcdfrf:  nrays,neltmax= ', nrays,neltmax
-          WRITE(*,*)'netcdfrf:  Need to be .le. nrayn,nrayelts'
-          WRITE(*,*)'netcdfrf:  nrayn,nrayelts= ',nrayn,nrayelts
+          if(setup0%verbose>0) WRITE(*,*)'netcdfrf:  nrays,neltmax= ', nrays,neltmax
+          if(setup0%verbose>0) WRITE(*,*)'netcdfrf:  Need to be .le. nrayn,nrayelts'
+          if(setup0%verbose>0) WRITE(*,*)'netcdfrf:  nrayn,nrayelts= ',nrayn,nrayelts
           STOP
        endif
 
@@ -1217,12 +1217,12 @@ contains
 !!!-YuP       call NCPOPT(NCVERBOS)
        istatus= NF_INQ_VARID(ncid,'sdpwr',vid)  !-YuP: NetCDF-f77 get vid
        if (istatus.ne.0) then
-          WRITE(*,*)
-          WRITE(*,*)'***************************************************'
-          WRITE(*,*)'netcdfrf: sdpwr istatus =',istatus
-          WRITE(*,*)'sdpwr variable not found, but not needed from toray'
-          WRITE(*,*)'***************************************************'
-          WRITE(*,*)
+          if(setup0%verbose>0) WRITE(*,*)
+          if(setup0%verbose>0) WRITE(*,*)'***************************************************'
+          if(setup0%verbose>0) WRITE(*,*)'netcdfrf: sdpwr istatus =',istatus
+          if(setup0%verbose>0) WRITE(*,*)'sdpwr variable not found, but not needed from toray'
+          if(setup0%verbose>0) WRITE(*,*)'***************************************************'
+          if(setup0%verbose>0) WRITE(*,*)
        else
           istatus= NF_GET_VARA_DOUBLE(ncid,vid,start,ray_count,urftmp) !-YuP: NetCDF-f77
           call unpack21(sdpwr(1,1,krf),1,nrayelts,1,nrayn, &
@@ -1238,14 +1238,14 @@ contains
 !!!-YuP       call NCPOPT(NCVERBOS)
        istatus= NF_INQ_VARID(ncid,'wdnpar',vid)  !-YuP: NetCDF-f77 get vid
        if (istatus.ne.0) then
-          WRITE(*,*)
-          WRITE(*,*)'***************************************************'
-          WRITE(*,*)'netcdfrf: wdnpar istatus =',istatus
-          WRITE(*,*)'wdnpar variable not found, set equal to standard'
-          WRITE(*,*)'DIII-D value 0.006297 for half-width at half-power'
-          WRITE(*,*)'equal to 1.7 degrees.'
-          WRITE(*,*)'***************************************************'
-          WRITE(*,*)
+          if(setup0%verbose>0) WRITE(*,*)
+          if(setup0%verbose>0) WRITE(*,*)'***************************************************'
+          if(setup0%verbose>0) WRITE(*,*)'netcdfrf: wdnpar istatus =',istatus
+          if(setup0%verbose>0) WRITE(*,*)'wdnpar variable not found, set equal to standard'
+          if(setup0%verbose>0) WRITE(*,*)'DIII-D value 0.006297 for half-width at half-power'
+          if(setup0%verbose>0) WRITE(*,*)'equal to 1.7 degrees.'
+          if(setup0%verbose>0) WRITE(*,*)'***************************************************'
+          if(setup0%verbose>0) WRITE(*,*)
           do j=1,nray(krf)
              do i=1,neltmax ! depends on krf
                 wdnpar(i,j,krf)=0.006297
@@ -1335,14 +1335,13 @@ contains
              sbsign=sign(one,bsign)
              if (iray.eq.1) then
                 bsign1(krf)=sign(one,sbtot(1,iray,krf))
-                WRITE(*,*)'netcdf,kopt=2: eqsource,bsign,bsign1 = ', &
+                if(setup0%verbose>0) WRITE(*,*)'netcdf,kopt=2: eqsource,bsign,bsign1 = ', &
                      eqsource,bsign,bsign1
              endif
              do is=1,nrayelt(iray,krf)
                 sbtot(is,iray,krf)=bsign1(krf)*sbtot(is,iray,krf)
-                if (sbtot(is,iray,krf).lt.0.) &
-                     WRITE(*,*)'urfread: Sign Problem with sbtot, is,iray=', &
-                     is,iray
+                if (sbtot(is,iray,krf).lt.0. .and. setup0%verbose>0) &
+                     WRITE(*,*)'urfread: Sign Problem with sbtot, is,iray=',is,iray
                 wnpar(is,iray,krf)=sbsign*wnpar(is,iray,krf)
                 cwexde(is,iray,krf)=sbsign*cwexde(is,iray,krf)
                 cweyde(is,iray,krf)=sbsign*cweyde(is,iray,krf)
@@ -1420,7 +1419,7 @@ contains
 
     !MPIINSERT_IF_RANK_NE_0_RETURN
 
-    WRITE(*,*)'Begin of netcdf_rdc, krf=',krf
+    if(setup0%verbose>0) WRITE(*,*)'Begin of netcdf_rdc, krf=',krf
 
     !$$$!-----------------------------------------------------------------------
     !$$$!     Only set up for setup0%cqlpmod.ne."enabled",ngen=1, for the time being.
@@ -1463,7 +1462,7 @@ contains
 
     write(t_,100) setup0%mnemonic(1:length_char(setup0%mnemonic)),krf
 100 format(a,"_rdc.",i1,".nc")
-    WRITE(*,*)'netcdf_rdcb:t_ = ',t_(1:length_char(t_))
+    if(setup0%verbose>0) WRITE(*,*)'netcdf_rdcb:t_ = ',t_(1:length_char(t_))
     istatus = NF_CREATE(t_, NF_CLOBBER, ncid) !-YuP: NetCDF-f77
     call check_err(istatus)
 

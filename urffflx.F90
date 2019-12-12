@@ -81,10 +81,10 @@ contains
               !For a mirror machine: ray can get outside of zbox
               !which defines the border of ez() equilibrium grid
               ![so that zbox=ez(nnz)-ez(1)]
-              if (icount_outside_ez.eq.0) &
-              write(*,*)'urffflx: Ray elements outside of ez grid'
+               if (icount_outside_ez.eq.0 .and. setup0%verbose>0) &
+                    write(*,*)'urffflx: Ray elements outside of ez grid'
               icount_outside_ez=icount_outside_ez+1 !for a printout
-              write(*,'(a,i4,2i7)') &
+              if(setup0%verbose>0) write(*,'(a,i4,2i7)') &
                   'urffflx: zray>ez; iray,is,icount_outside_ez', &
                                      iray,is,icount_outside_ez
               ! Make an adjustment:
@@ -93,10 +93,10 @@ contains
               !although not likely to happen.
             endif
             if(zray.lt.ez(1))then
-              if (icount_outside_ez.eq.0) &
-              write(*,*)'urffflx: Ray elements outside of ez grid'
+               if (icount_outside_ez.eq.0 .and. setup0%verbose>0) &
+                    write(*,*)'urffflx: Ray elements outside of ez grid'
               icount_outside_ez=icount_outside_ez+1 !for a printout
-              write(*,'(a,i4,2i7)') &
+              if(setup0%verbose>0) write(*,'(a,i4,2i7)') &
                   'urffflx: zray<ez; iray,is,icount_outside_ez', &
                                      iray,is,icount_outside_ez
               ! Similarly, Make an adjustment:
@@ -124,20 +124,20 @@ contains
             l=luf(apsi,tr2(1),setup0%lrzmax)
 !BH090602   Ray elements outside LCFS (rho=1 surface) will be attributed to setup0%lrzmax
             if (l.gt.setup0%lrzmax) then
-               if (icount_outside_lim.eq.0) &
-               write(*,*)'urffflx: Ray elements outside of rho=1'
+               if (icount_outside_lim.eq.0 .and. setup0%verbose>0) &
+                    write(*,*)'urffflx: Ray elements outside of rho=1'
                icount_outside_lim=icount_outside_lim+1 !for a printout
 #ifdef __MPI
                ! for MPI, only print from master
                if(mpirank.eq.0) then
 #endif
                   if(icount_outside_lim.LT.10) then
-                     write(*,'(a,i4,2i7)') &
+                     if(setup0%verbose>0) write(*,'(a,i4,2i7)') &
                           'urffflx:l>setup0%lrzmax; iray,is,icount_outside_lim', &
                           iray,is,icount_outside_lim
                   end if
                   if(icount_outside_lim.EQ.10) then
-                     write(*,'(a)') &
+                     if(setup0%verbose>0) write(*,'(a)') &
                           'urffflx:l>setup0%lrzmax; GT 10 elem outside, quieting...'
                   end if
 #ifdef __MPI
@@ -162,7 +162,7 @@ contains
          if(mpirank.eq.0) then
 #endif
             if(icount_outside_lim.GT.0) then
-               write(*,'(a,i4)')  &
+               if(setup0%verbose>0) write(*,'(a,i4)')  &
                     'urffflx:l>setup0%lrzmax; total icount_outside_lim: ', &
                     icount_outside_lim
             end if

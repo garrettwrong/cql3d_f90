@@ -64,7 +64,7 @@ contains
     !.................................................................
     !.................................................................
 
-      write(*,*) 'Begin rdc_multi'
+      if(setup0%verbose>0) write(*,*) 'Begin rdc_multi'
 
     !.................................................................
     !     Allocate rdc diffusion arrays on iy,jx,setup0%lrz grid
@@ -108,7 +108,7 @@ contains
           iunit=14
           open(unit=iunit,file=rdcfile(krf),status='old',iostat=kode)
           if (kode.ne.0) then
-             WRITE(*,*) 'File rdcfile(krf) cannot be opened, rdcmod.ne.disabled'
+             if(setup0%verbose>0) WRITE(*,*) 'File rdcfile(krf) cannot be opened, rdcmod.ne.disabled'
              STOP
           endif
 
@@ -140,9 +140,9 @@ contains
           uprp_min=0.d0
           uprp_max=upar_max
 
-          write(*,*)'rdc_multi: n_uprp,n_upar,n_psi', n_uprp,n_upar,n_psi
-      write(*,*)'rdc_multi: upar_min,upar_max,uprp_min,uprp_max', upar_min,upar_max,uprp_min,uprp_max
-      write(*,*)'rdc_multi: vc_cgs=',vc_cgs
+          if(setup0%verbose>0) write(*,*)'rdc_multi: n_uprp,n_upar,n_psi', n_uprp,n_upar,n_psi
+      if(setup0%verbose>0) write(*,*)'rdc_multi: upar_min,upar_max,uprp_min,uprp_max', upar_min,upar_max,uprp_min,uprp_max
+      if(setup0%verbose>0) write(*,*)'rdc_multi: vc_cgs=',vc_cgs
 
       !     Check enorm for rf full-wave data:
 
@@ -153,7 +153,7 @@ contains
       else
          enormc=(gammac-1.d0)*fmass(1)*clite2/ergtkev
       endif
-      write(*,*)'Enorm in rdc_multi, gammac =',enormc,gammac
+      if(setup0%verbose>0) write(*,*)'Enorm in rdc_multi, gammac =',enormc,gammac
 
 
 !     Allocate local pointered memory:
@@ -229,7 +229,7 @@ contains
            i_uprp = 1, n_uprp), i_upar = 1, n_upar), &
            i_psi = 1, n_psi)
 
-      WRITE(*,*)'rdc_multi w format1: n_psi,rho_a', &
+      if(setup0%verbose>0) WRITE(*,*)'rdc_multi w format1: n_psi,rho_a', &
                 n_psi,(rho_a(i_psi),i_psi=1,n_psi)
 
       close(iunit)
@@ -264,7 +264,7 @@ contains
       iunit=14
       open(unit=iunit,file='du0u0_grid',status='old',iostat=kode)
       if (kode.ne.0) then
-         WRITE(*,*) 'File du0u0_grid cannot be opened, rdcmod.ne.disabled'
+         if(setup0%verbose>0) WRITE(*,*) 'File du0u0_grid cannot be opened, rdcmod.ne.disabled'
          STOP
       endif
 
@@ -305,7 +305,7 @@ contains
       else
          enormc=(gammac-1.d0)*fmass(1)*clite2/ergtkev
       endif
-      write(*,*)'Enorm in rdc_multi, gammac =',enormc,gammac
+      if(setup0%verbose>0) write(*,*)'Enorm in rdc_multi, gammac =',enormc,gammac
 
 !-2-> ALLOCATE ARRAYS --------------------------------------------------
 
@@ -369,7 +369,7 @@ contains
 
         open(unit=iunit,file='du0u0_r'//i_psi_index,status='old', iostat=kode)
         if (kode.ne.0) then
-           WRITE(*,*) 'File du0u0_r### for i_psi=',i_psi,' cannot be opened'
+           if(setup0%verbose>0) WRITE(*,*) 'File du0u0_r### for i_psi=',i_psi,' cannot be opened'
            STOP
         endif
 
@@ -392,7 +392,7 @@ contains
 
       ENDDO ! loop in i_psi
 
-      WRITE(*,*)'rdc_multi w format2: n_psi,rho_a', n_psi,(rho_a(i_psi),i_psi=1,n_psi)
+      if(setup0%verbose>0) WRITE(*,*)'rdc_multi w format2: n_psi,rho_a', n_psi,(rho_a(i_psi),i_psi=1,n_psi)
       close(iunit)
 
 #ifdef __MPI
@@ -417,7 +417,7 @@ contains
 
 
 
-      write(*,*)'rdc_multi: after read of rdcfile(krf), krf=',krf
+      if(setup0%verbose>0) write(*,*)'rdc_multi: after read of rdcfile(krf), krf=',krf
 
 
 
@@ -443,7 +443,7 @@ contains
       !.................................................................
 
          n_psi=n_psi/2
-         write(*,*)'rdc_multi: n_psi,setup0%lrz=',n_psi,setup0%lrz
+         if(setup0%verbose>0) write(*,*)'rdc_multi: n_psi,setup0%lrz=',n_psi,setup0%lrz
          do i_psi=1,n_psi
             rho_a(i_psi)=rho_a(2*i_psi)
             do i_upar=1,n_upar
@@ -460,12 +460,12 @@ contains
             enddo
          enddo
 
-         write(*,*)'rdc_multi: rho_a, no. elements/2:', (rho_a(i),i=1,n_psi)
+         if(setup0%verbose>0) write(*,*)'rdc_multi: rho_a, no. elements/2:', (rho_a(i),i=1,n_psi)
 
       endif
 
       if (n_psi.ne.setup0%lrz) then
-         WRITE(*,*)'rdc_multi:  n_psi.ne.setup0%lrz'
+         if(setup0%verbose>0) WRITE(*,*)'rdc_multi:  n_psi.ne.setup0%lrz'
          STOP
       endif
 
@@ -495,8 +495,8 @@ contains
             enddo
          enddo
       enddo
-      write(*,*)'rdc_multi: rdc_cqlbmax =',rdc_cqlbmax
-      write(*,*)'rdc_multi: rdc_cqlfmax =',rdc_cqlfmax
+      if(setup0%verbose>0) write(*,*)'rdc_multi: rdc_cqlbmax =',rdc_cqlbmax
+      if(setup0%verbose>0) write(*,*)'rdc_multi: rdc_cqlfmax =',rdc_cqlfmax
 
 
 
@@ -664,8 +664,8 @@ contains
             enddo
          enddo
       enddo
-      write(*,*)'rdc_multi: rdc_cqlbmax.1 =',rdc_cqlbmax
-      write(*,*)'rdc_multi: rdc_cqlfmax.1 =',rdc_cqlfmax
+      if(setup0%verbose>0) write(*,*)'rdc_multi: rdc_cqlbmax.1 =',rdc_cqlbmax
+      if(setup0%verbose>0) write(*,*)'rdc_multi: rdc_cqlfmax.1 =',rdc_cqlfmax
 
 
       !  The velocity grids are assumed to be equi-spaced.  Renormalize
@@ -786,7 +786,7 @@ contains
             enddo
          enddo
       enddo
-      write(*,*)'rdc_multi: krf=',krf,' rdcbmax.1 =',rdcbmax
+      if(setup0%verbose>0) write(*,*)'rdc_multi: krf=',krf,' rdcbmax.1 =',rdcbmax
 
       !.................................................................
       !     Scaling diffusion coeffs
@@ -831,8 +831,8 @@ contains
          enddo
       enddo
 
-      write(*,*)'rdc_multi: krf=',krf,' sum_pos_duu,sum_neg_duu', krf,sum_pos_duu,sum_neg_duu
-      write(*,*)'rdc_multi: sum_pos_dtt,sum_neg_dtt', krf,sum_pos_dtt,sum_neg_dtt
+      if(setup0%verbose>0) write(*,*)'rdc_multi: krf=',krf,' sum_pos_duu,sum_neg_duu', krf,sum_pos_duu,sum_neg_duu
+      if(setup0%verbose>0) write(*,*)'rdc_multi: sum_pos_dtt,sum_neg_dtt', krf,sum_pos_dtt,sum_neg_dtt
 
       !$$$c     Non-symmetry of rdcc,rdce  [Visual exam shows
       !$$$c       this non-symmetry is general].
@@ -978,7 +978,7 @@ contains
             enddo
          enddo
       enddo
-      write(*,*)'rdc_multi: krf=',krf,' rdcbmax.2 =',rdcbmax0
+      if(setup0%verbose>0) write(*,*)'rdc_multi: krf=',krf,' rdcbmax.2 =',rdcbmax0
 
       if (ineg.eq."trunc_d") then
          if (jx.le.11) stop 'rdc_multi:  Need jx>11'
@@ -1004,7 +1004,7 @@ contains
             enddo
          enddo
       enddo
-      write(*,*)'rdc_multi: krf=',krf,' rdcbmax.3 =',rdcbmax
+      if(setup0%verbose>0) write(*,*)'rdc_multi: krf=',krf,' rdcbmax.3 =',rdcbmax
 
       !.................................................................
       !     Plotting diffusion coefficient
@@ -1035,7 +1035,7 @@ contains
          endif
       endif
 
-      write(*,*)' END of rdc_multi'
+      if(setup0%verbose>0) write(*,*)' END of rdc_multi'
       !      write(*,*)'STOP: END of rdc_multi'
       !      STOP
 
@@ -1047,7 +1047,7 @@ contains
       deallocate(rdc_cqlb,rdc_cqlc,rdc_cqle,rdc_cqlf,STAT=istat2)
       deallocate(tmpb,tmpc,tmpe,tmpf,STAT=istat3)
       if (istat1.ne.0 .or. istat2.ne.0 .or. istat3.ne.0) then
-         WRITE(*,*)'rdc_multi: dallocation error'
+         if(setup0%verbose>0) WRITE(*,*)'rdc_multi: dallocation error'
          STOP
       endif
 

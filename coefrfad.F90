@@ -56,7 +56,7 @@ contains
       if (vlhmod.eq."enabled" .or. vlfmod.eq."enabled") then
 !     vlhmod and vlfmod are only set up for nrf=1
       if (nrf.gt.1) then
-         write(*,*)'coefrfad: STOP, Problem with nrf'
+         if(setup0%verbose>0) write(*,*)'coefrfad: STOP, Problem with nrf'
          STOP
       endif
       do 10 kk=1,nrf
@@ -86,7 +86,7 @@ contains
 !cc      if (vlhmod.eq."enabled" .or. vlfmod.eq."enabled") then
 !     vlhmod and vlfmod are only set up for nrf=1
         if (nrf.gt.1) then
-           write(*,*)'coefrfad: STOP, Problem with nrf'
+           if(setup0%verbose>0) write(*,*)'coefrfad: STOP, Problem with nrf'
            STOP
         endif
         if (k .eq. kk) then

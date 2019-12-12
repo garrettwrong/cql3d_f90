@@ -53,8 +53,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)''
-      WRITE(*,*)'In ainsetva'
+      if(setup0%verbose>0) WRITE(*,*)''
+      if(setup0%verbose>0) WRITE(*,*)'In ainsetva'
 !
 !.......................................................................
 !     0. Check for consistency of some parameter settings
@@ -102,10 +102,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'ainsetva/pltprpp:  setup0%lrz=', setup0%lrz, ' lz=', lz
-         WRITE(*,*)'Need setup0%lrz.le.lz for pltprpp or knockon enabled'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva/pltprpp:  setup0%lrz=', setup0%lrz, ' lz=', lz
+         if(setup0%verbose>0) WRITE(*,*)'Need setup0%lrz.le.lz for pltprpp or knockon enabled'
          lz=setup0%lrz
-         WRITE(*,*)'WARNING: lz is reset to setup0%lrz=', setup0%lrz
+         if(setup0%verbose>0) WRITE(*,*)'WARNING: lz is reset to setup0%lrz=', setup0%lrz
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -120,7 +120,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,220)
+         if(setup0%verbose>0) WRITE(*,220)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -144,7 +144,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,223)
+         if(setup0%verbose>0) WRITE(*,223)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -159,9 +159,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)
-            WRITE(*,*)'WARNING: ZOW NB ions, but using fr_gyro=enabled'
-            WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)'WARNING: ZOW NB ions, but using fr_gyro=enabled'
+            if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -172,7 +172,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,224)
+         if(setup0%verbose>0) WRITE(*,224)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -185,7 +185,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,225)
+         if(setup0%verbose>0) WRITE(*,225)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -198,7 +198,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,226)
+         if(setup0%verbose>0) WRITE(*,226)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -211,10 +211,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,227)
+         if(setup0%verbose>0) WRITE(*,227)
  227     format(//,'ERROR:  Presently ndeltarho calls are only setup',/ &
                    '        for urfdmp.ne.disabled',//)
-         WRITE(*,228)
+         if(setup0%verbose>0) WRITE(*,228)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -231,7 +231,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'WARNING: lz reset to lza =', lza
+         if(setup0%verbose>0) WRITE(*,*)'WARNING: lz reset to lza =', lza
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -298,7 +298,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-          WRITE(*,101) nondtr1(i),i
+          if(setup0%verbose>0) WRITE(*,101) nondtr1(i),i
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -321,7 +321,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-              WRITE(*,*)"STOP: Not sensible to use ion neocl for e's"
+              if(setup0%verbose>0) WRITE(*,*)"STOP: Not sensible to use ion neocl for e's"
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -345,7 +345,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)"STOP: ndifus_io_t.gt.nbctimea"
+         if(setup0%verbose>0) WRITE(*,*)"STOP: ndifus_io_t.gt.nbctimea"
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -427,9 +427,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-          WRITE(*,*)'ainsetva: Impurity species added, k=',k
-          WRITE(*,*)'ainsetva: bnumb=',bnumb(kionm(nionm))
-          WRITE(*,*)'ainsetva: fmass/proton_mass=', &
+          if(setup0%verbose>0) WRITE(*,*)'ainsetva: Impurity species added, k=',k
+          if(setup0%verbose>0) WRITE(*,*)'ainsetva: bnumb=',bnumb(kionm(nionm))
+          if(setup0%verbose>0) WRITE(*,*)'ainsetva: fmass/proton_mass=', &
                                fmass(kionm(nionm))/proton
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -437,8 +437,8 @@ contains
         elseif (ndif_bnumb.eq.2) then
           continue
         else ! ndif_bnumb ne.1, ne.2
-          WRITE(*,*)'ainsetva: iprozeff=', iprozeff
-          WRITE(*,*)'ainsetva: ndif_bnumb=',ndif_bnumb
+          if(setup0%verbose>0) WRITE(*,*)'ainsetva: iprozeff=', iprozeff
+          if(setup0%verbose>0) WRITE(*,*)'ainsetva: ndif_bnumb=',ndif_bnumb
           stop 'ainsetva: ion species problem. ndif_bnumb'
         endif
 
@@ -460,12 +460,12 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'------------------------------------------------'
-            WRITE(*,*) 'ainsetva: nbctime=',nbctime
-            WRITE(*,*) 'If nbctime.ne.0: CHECK ipro*** settings.'
-            WRITE(*,*) 'Some of them (or all) are set to "parabola" .'
-            WRITE(*,*) 'Resetting those to time-dependent "prbola-t" '
-            WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)'------------------------------------------------'
+            if(setup0%verbose>0) WRITE(*,*) 'ainsetva: nbctime=',nbctime
+            if(setup0%verbose>0) WRITE(*,*) 'If nbctime.ne.0: CHECK ipro*** settings.'
+            if(setup0%verbose>0) WRITE(*,*) 'Some of them (or all) are set to "parabola" .'
+            if(setup0%verbose>0) WRITE(*,*) 'Resetting those to time-dependent "prbola-t" '
+            if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -478,7 +478,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'iprone is reset to "prbola-t" '
+               if(setup0%verbose>0) WRITE(*,*)'iprone is reset to "prbola-t" '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -488,7 +488,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'iprote is reset to "prbola-t" '
+               if(setup0%verbose>0) WRITE(*,*)'iprote is reset to "prbola-t" '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -498,7 +498,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'iproti is reset to "prbola-t" '
+               if(setup0%verbose>0) WRITE(*,*)'iproti is reset to "prbola-t" '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -508,7 +508,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'iprozeff is reset to "prbola-t" '
+               if(setup0%verbose>0) WRITE(*,*)'iprozeff is reset to "prbola-t" '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -518,7 +518,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'iproelec is reset to "prbola-t" '
+               if(setup0%verbose>0) WRITE(*,*)'iproelec is reset to "prbola-t" '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -528,7 +528,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'iprocur is reset to "prbola-t" '
+               if(setup0%verbose>0) WRITE(*,*)'iprocur is reset to "prbola-t" '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -538,7 +538,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'iprovphi is reset to "prbola-t" '
+               if(setup0%verbose>0) WRITE(*,*)'iprovphi is reset to "prbola-t" '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -546,7 +546,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'------------------------------------------------'
+            if(setup0%verbose>0) WRITE(*,*)'------------------------------------------------'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -562,7 +562,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-              WRITE(*,*)'ainsetva:k,reden(0:1,k)',k,reden(k,0:1)
+              if(setup0%verbose>0) WRITE(*,*)'ainsetva:k,reden(0:1,k)',k,reden(k,0:1)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -611,7 +611,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'Warning:  Re-setting tmdmeth=method1'
+               if(setup0%verbose>0) WRITE(*,*)'Warning:  Re-setting tmdmeth=method1'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -669,7 +669,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-          PRINT *,' eoved changed to disabled'
+          if(setup0%verbose>0) PRINT *,' eoved changed to disabled'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -710,11 +710,11 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*) 'If nstop greater than i5 format, then can'
-         WRITE(*,*) 'obtain incorrect results from the code.'
-         WRITE(*,*) 'Recode output of time step n for greater values.'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*) 'If nstop greater than i5 format, then can'
+         if(setup0%verbose>0) WRITE(*,*) 'obtain incorrect results from the code.'
+         if(setup0%verbose>0) WRITE(*,*) 'Recode output of time step n for greater values.'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -726,10 +726,10 @@ contains
 !     finite-orbit-width FOW effects included.  We keep fow
 !     related namelist names for backward compatibility.
       if (fow.ne.'disabled') then
-         write(*,*)
-         write(*,*) "This is a ZOW version of cql3d."
-         write(*,*) "fow reset to 'disabled'"
-         write(*,*)
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) write(*,*) "This is a ZOW version of cql3d."
+         if(setup0%verbose>0) write(*,*) "fow reset to 'disabled'"
+         if(setup0%verbose>0) write(*,*)
       endif
       fow='disabled' ! just in case, reset anyway
 
@@ -741,9 +741,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'For lossmode(k) banana losses, with NB it is '// &
+         if(setup0%verbose>0) WRITE(*,*)'For lossmode(k) banana losses, with NB it is '// &
          'ADVISEABLE to consistently use ndeltarho = enabled or freya'
-         WRITE(*,*)'Check cqlinput_help for updates on this'
+         if(setup0%verbose>0) WRITE(*,*)'Check cqlinput_help for updates on this'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -759,8 +759,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-             WRITE(*,*)'lossmode(k)=simplbn1 or simplbn2 are not ready'
-             WRITE(*,*)'--------- Resetting to simplban --------------'
+             if(setup0%verbose>0) WRITE(*,*)'lossmode(k)=simplbn1 or simplbn2 are not ready'
+             if(setup0%verbose>0) WRITE(*,*)'--------- Resetting to simplban --------------'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -773,7 +773,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'f4d_out=tavg, but tavg=disabled'
+         if(setup0%verbose>0) WRITE(*,*)'f4d_out=tavg, but tavg=disabled'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -801,7 +801,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,399)
+         if(setup0%verbose>0) WRITE(*,399)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -813,7 +813,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,400)
+         if(setup0%verbose>0) WRITE(*,400)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -825,7 +825,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'WARNING:  Resetting tfac=-1. for transp=enabled/' &
+         if(setup0%verbose>0) WRITE(*,*)'WARNING:  Resetting tfac=-1. for transp=enabled/' &
                    //'soln_method not =direct'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -839,7 +839,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,'(/"  WARNING: meshy has been changed to ""free"" ", &
+        if(setup0%verbose>0) WRITE(*,'(/"  WARNING: meshy has been changed to ""free"" ", &
           "as setup0%lrzmax=1 (does not work otherwise)"/)')
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -850,7 +850,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,'(/"  WARNING: meshy has been changed to ""fixed_y"" ", &
+        if(setup0%verbose>0) WRITE(*,'(/"  WARNING: meshy has been changed to ""fixed_y"" ", &
           "as soln_method=it3drv (does not work otherwise)"/)')
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -860,7 +860,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,398)
+         if(setup0%verbose>0) WRITE(*,398)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -886,7 +886,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-          WRITE(*,401)
+          if(setup0%verbose>0) WRITE(*,401)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -903,7 +903,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-          WRITE(*,402)
+          if(setup0%verbose>0) WRITE(*,402)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -934,7 +934,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-          WRITE(*,404)
+          if(setup0%verbose>0) WRITE(*,404)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -946,7 +946,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,203)
+            if(setup0%verbose>0) WRITE(*,203)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -969,7 +969,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,204)
+         if(setup0%verbose>0) WRITE(*,204)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -982,7 +982,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,205)
+         if(setup0%verbose>0) WRITE(*,205)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -999,7 +999,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,206)
+         if(setup0%verbose>0) WRITE(*,206)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1011,7 +1011,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,207)
+         if(setup0%verbose>0) WRITE(*,207)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1026,7 +1026,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,230)
+            if(setup0%verbose>0) WRITE(*,230)
  230        format(//,'WARNING for knockon calc: Need jfl=jx in fle',//)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -1041,7 +1041,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,208)
+         if(setup0%verbose>0) WRITE(*,208)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1054,7 +1054,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,209)
+         if(setup0%verbose>0) WRITE(*,209)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1065,7 +1065,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,210)
+         if(setup0%verbose>0) WRITE(*,210)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1083,8 +1083,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'Warning: Setting soln_method=direct: for ampfmod'
-            WRITE(*,*)'      Code not presently set up for it3dv/it3drv'
+            if(setup0%verbose>0) WRITE(*,*)'Warning: Setting soln_method=direct: for ampfmod'
+            if(setup0%verbose>0) WRITE(*,*)'      Code not presently set up for it3dv/it3drv'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1095,9 +1095,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)
-            WRITE(*,*)'STOP: Not good to use setup0%lrz.ne.setup0%lrzmax'
-            WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)'STOP: Not good to use setup0%lrz.ne.setup0%lrzmax'
+            if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1112,7 +1112,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'STOP1: Incorrectly specd boundary elec fld'
+               if(setup0%verbose>0) WRITE(*,*)'STOP1: Incorrectly specd boundary elec fld'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1122,7 +1122,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'STOP2: Incorrectly specd boundary elec fld'
+            if(setup0%verbose>0) WRITE(*,*)'STOP2: Incorrectly specd boundary elec fld'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1135,7 +1135,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'STOP Incorrectly specd ryain for ampfar case'
+               if(setup0%verbose>0) WRITE(*,*)'STOP Incorrectly specd ryain for ampfar case'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1147,7 +1147,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'STOP: AmpFar assumes toroidal elec fld calc'
+            if(setup0%verbose>0) WRITE(*,*)'STOP: AmpFar assumes toroidal elec fld calc'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1158,7 +1158,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'STOP: AmpFar restart assumes elecscal=1.'
+            if(setup0%verbose>0) WRITE(*,*)'STOP: AmpFar restart assumes elecscal=1.'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1169,7 +1169,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'WARNING: AmpFar restart assumes nonampf=0'
+            if(setup0%verbose>0) WRITE(*,*)'WARNING: AmpFar restart assumes nonampf=0'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1182,9 +1182,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         write(*,*)
-         WRITE(*,*)'STOP: ampfmod.ne.enabled with setup0%cqlpmod.eq.enabled'
-         write(*,*)
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'STOP: ampfmod.ne.enabled with setup0%cqlpmod.eq.enabled'
+         if(setup0%verbose>0) write(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1195,10 +1195,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         write(*,*)
-         WRITE(*,*)'WARNING: Check that did not have netcdfshort='
-         WRITE(*,*)'         longer_f or lngshrtf'
-         write(*,*)
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'WARNING: Check that did not have netcdfshort='
+         if(setup0%verbose>0) WRITE(*,*)'         longer_f or lngshrtf'
+         if(setup0%verbose>0) write(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1208,11 +1208,11 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         write(*,*)
-         WRITE(*,*)'WARNING: If this run to be restarted, ensure that'
-         WRITE(*,*)'         netcdfshort .ne. longer_f or lngshrtf.'
-         WRITE(*,*)'         Only save f at last time step'
-         write(*,*)
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'WARNING: If this run to be restarted, ensure that'
+         if(setup0%verbose>0) WRITE(*,*)'         netcdfshort .ne. longer_f or lngshrtf.'
+         if(setup0%verbose>0) WRITE(*,*)'         Only save f at last time step'
+         if(setup0%verbose>0) write(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1227,7 +1227,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,211)
+            if(setup0%verbose>0) WRITE(*,211)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1246,7 +1246,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,216)
+            if(setup0%verbose>0) WRITE(*,216)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1257,7 +1257,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,219)
+            if(setup0%verbose>0) WRITE(*,219)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1271,10 +1271,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*)'WARNING:  Re-setting eqsym="average":'
-         WRITE(*,*)'          It should not ="none" for eqmod/eqsource'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'WARNING:  Re-setting eqsym="average":'
+         if(setup0%verbose>0) WRITE(*,*)'          It should not ="none" for eqmod/eqsource'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1289,7 +1289,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,217)
+         if(setup0%verbose>0) WRITE(*,217)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1327,7 +1327,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'WARNING: transp=enabled not setup for '// &
+         if(setup0%verbose>0) WRITE(*,*)'WARNING: transp=enabled not setup for '// &
                          'radcoord.ne.sqtorflx'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -1343,7 +1343,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-                WRITE(*,*)'ainsetva: Check/re-configure itsol storage'// &
+                if(setup0%verbose>0) WRITE(*,*)'ainsetva: Check/re-configure itsol storage'// &
                           ' for setup0%cqlpmod/symtrap/nadjoint.ne.0 cases'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -1357,9 +1357,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'ainsetva: If transp.eq.disabled, then soln_method'
-         WRITE(*,*)'ainsetva: should eq direct,itsol,itsol1, or it3dv'
-         WRITE(*,*)'ainsetva: Resetting soln_method it3drv ==> it3dv'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: If transp.eq.disabled, then soln_method'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: should eq direct,itsol,itsol1, or it3dv'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: Resetting soln_method it3drv ==> it3dv'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1384,11 +1384,11 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*)'Warning: setting urfmod=disabled, since'
-         WRITE(*,*)'         lh, ech, and fw, =disabled, '
-         WRITE(*,*)' and all rftype(1:nmodsa)= notset'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'Warning: setting urfmod=disabled, since'
+         if(setup0%verbose>0) WRITE(*,*)'         lh, ech, and fw, =disabled, '
+         if(setup0%verbose>0) WRITE(*,*)' and all rftype(1:nmodsa)= notset'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1399,7 +1399,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*) 'Check nrfspecies.lt.ngen'
+            if(setup0%verbose>0) WRITE(*,*) 'Check nrfspecies.lt.ngen'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1448,7 +1448,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'ainsetva:  STOP, rdcmod requires setup0%lrzdiff=disabled'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva:  STOP, rdcmod requires setup0%lrzdiff=disabled'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1460,7 +1460,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         write(*,*) "STOP: Need to increase nrdca in param.h"
+         if(setup0%verbose>0) write(*,*) "STOP: Need to increase nrdca in param.h"
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1472,8 +1472,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         write(*,*) "STOP: Need nrdc=1 for rdcmod=format2"
-         write(*,*) "      Else, need to recode"
+         if(setup0%verbose>0) write(*,*) "STOP: Need nrdc=1 for rdcmod=format2"
+         if(setup0%verbose>0) write(*,*) "      Else, need to recode"
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1485,9 +1485,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*)'**** ainsetva: resetting rdcscale(1)=pwrscale(1) **'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'**** ainsetva: resetting rdcscale(1)=pwrscale(1) **'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1499,9 +1499,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*)'**** ainsetva: Inappropriate calc of SXR ******'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'**** ainsetva: Inappropriate calc of SXR ******'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1537,9 +1537,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*)'**** ainsetva: Inappropriate calc of NPA ******'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'**** ainsetva: Inappropriate calc of NPA ******'
+         if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1548,13 +1548,13 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)
-         WRITE(*,*)'ainsetva: STOP'
-         WRITE(*,*)'ainsetva: Code not complete set up for simultaneous'
-         WRITE(*,*)'ainsetva: calc of SXR and NPA.  Need separate'
-         WRITE(*,*)'ainsetva: storage for mx related variables, unless'
-         WRITE(*,*)'ainsetva: the related data is recalculed for each'
-         WRITE(*,*)'ainsetva: use of the diagnostics.'
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: STOP'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: Code not complete set up for simultaneous'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: calc of SXR and NPA.  Need separate'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: storage for mx related variables, unless'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: the related data is recalculed for each'
+         if(setup0%verbose>0) WRITE(*,*)'ainsetva: use of the diagnostics.'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1602,7 +1602,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*) 'ip0,ip255,iu0,iu255 ',ip0,ip255,iu0,iu255
+            if(setup0%verbose>0) WRITE(*,*) 'ip0,ip255,iu0,iu255 ',ip0,ip255,iu0,iu255
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1637,7 +1637,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,214)
+         if(setup0%verbose>0) WRITE(*,214)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1649,7 +1649,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,215)
+         if(setup0%verbose>0) WRITE(*,215)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1661,7 +1661,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,221)
+         if(setup0%verbose>0) WRITE(*,221)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1682,7 +1682,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'WARNING: irzplt(i).gt.lrors are set =0, i=',i
+               if(setup0%verbose>0) WRITE(*,*)'WARNING: irzplt(i).gt.lrors are set =0, i=',i
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -1696,7 +1696,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-                  WRITE(*,*) &
+                  if(setup0%verbose>0) WRITE(*,*) &
                          'WARNING: Non-distinct irzplt(j) set =0, j=',j
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -1745,8 +1745,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-        WRITE(*,*)"lbdry(k)=",lbdry(k)
-        WRITE(*,*)"lbdry(k) can only be 'conserv', 'consscal'," // &
+        if(setup0%verbose>0) WRITE(*,*)"lbdry(k)=",lbdry(k)
+        if(setup0%verbose>0) WRITE(*,*)"lbdry(k) can only be 'conserv', 'consscal'," // &
         "'fixed', or 'scale'  "
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)

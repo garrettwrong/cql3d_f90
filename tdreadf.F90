@@ -126,7 +126,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'tdreadf:  inbline= ',inbline
+      if(setup0%verbose>0) WRITE(*,*)'tdreadf:  inbline= ',inbline
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -154,7 +154,7 @@ contains
          if ((lrors.ne.setup0%lrz .and. setup0%cqlpmod.ne."enabled") .or. &
               (lrors.ne.setup0%ls  .and. setup0%cqlpmod.eq."enabled")) then
             !MPIINSERT_IF_RANK_EQ_0
-            PRINT *,' current lrors=',lrors,' does not correspond to old ', &
+            if(setup0%verbose>0) PRINT *,' current lrors=',lrors,' does not correspond to old ', &
                  'setup0%lrz=',setup0%lrz,' or setup0%ls=',setup0%ls
             !MPIINSERT_ENDIF_RANK
             stop 'tdreadf'
@@ -177,7 +177,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'tdreadf:  Reading distfunc (text f)'
+         if(setup0%verbose>0) WRITE(*,*)'tdreadf:  Reading distfunc (text f)'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -242,7 +242,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*) &
+         if(setup0%verbose>0) WRITE(*,*) &
          'tdreadf[setup0%nlrestrt="ncdfdist"]: Reading distrfunc.nc (netcdf)'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -254,10 +254,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'tdreadf: distrfunc.nc missing/problem'
-            WRITE(*,*)'tdreadf: CHECKING for setup0%mnemonic file : ',t_
-            WRITE(*,*)'tdreadf: BUT BE CAREFUL, the file will be '
-            WRITE(*,*)'tdreadf:     overwritten at end of present run. '
+            if(setup0%verbose>0) WRITE(*,*)'tdreadf: distrfunc.nc missing/problem'
+            if(setup0%verbose>0) WRITE(*,*)'tdreadf: CHECKING for setup0%mnemonic file : ',t_
+            if(setup0%verbose>0) WRITE(*,*)'tdreadf: BUT BE CAREFUL, the file will be '
+            if(setup0%verbose>0) WRITE(*,*)'tdreadf:     overwritten at end of present run. '
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -270,11 +270,11 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)
-               WRITE(*,*)'tdreadf: Cannot open/missing setup0%mnemonic.nc'// &
+               if(setup0%verbose>0) WRITE(*,*)
+               if(setup0%verbose>0) WRITE(*,*)'tdreadf: Cannot open/missing setup0%mnemonic.nc'// &
                     ' for which opening has been attempted in lieu'// &
                     ' of distrfunc.nc'
-               WRITE(*,*)
+               if(setup0%verbose>0) WRITE(*,*)
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -282,7 +282,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'tdreadf: found setup0%mnemonic file: ',t_
+               if(setup0%verbose>0) WRITE(*,*)'tdreadf: found setup0%mnemonic file: ',t_
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -308,8 +308,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'Problem with distrfunc.nc file'
-            WRITE(*,*)'  iy,jx,setup0%lrz,ngen=',iy,jx,setup0%lrz,ngen, &
+            if(setup0%verbose>0) WRITE(*,*)'Problem with distrfunc.nc file'
+            if(setup0%verbose>0) WRITE(*,*)'  iy,jx,setup0%lrz,ngen=',iy,jx,setup0%lrz,ngen, &
                  ' iy_rstrt,jx_rstrt,lrz_rstrt,ngen_rstrt=', &
                  iy_rstrt,jx_rstrt,lrz_rstrt,ngen_rstrt
 #ifdef __MPI
@@ -327,7 +327,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'tdreadf:Variable iy_(ll), but only cnst setup'
+               if(setup0%verbose>0) WRITE(*,*)'tdreadf:Variable iy_(ll), but only cnst setup'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -362,9 +362,9 @@ contains
          if (netcdfshort.eq."enabled" .or. &
              netcdfshort.eq."longer_f" .or. &
              netcdfshort.eq."lngshrtf") then
-            WRITE(*,*)
-            WRITE(*,*)'STOP: distrfunc.nc not setup for single time f'
-            WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)
+            if(setup0%verbose>0) WRITE(*,*)'STOP: distrfunc.nc not setup for single time f'
+            if(setup0%verbose>0) WRITE(*,*)
             stop
          endif
 
@@ -427,8 +427,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]: dimid=',dimid
-         WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]: dimlen=',dimlen
+         if(setup0%verbose>0) WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]: dimid=',dimid
+         if(setup0%verbose>0) WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]: dimlen=',dimlen
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -482,8 +482,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]:Done reading f'
-         WRITE(*,*)'tdreaf_360: For checkup SUM(f)=', SUM(f)
+         if(setup0%verbose>0) WRITE(*,*)'tdreaf[nlrestrt="ncdfdist"]:Done reading f'
+         if(setup0%verbose>0) WRITE(*,*)'tdreaf_360: For checkup SUM(f)=', SUM(f)
          !pause
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -529,7 +529,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*) &
+         if(setup0%verbose>0) WRITE(*,*) &
          'tdreadf[nlrestrt.eq."ncregrid"]: Reading distfunc.nc (netcdf)'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -540,7 +540,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'tdreadf:  distrfunc.nc missing/problem'
+            if(setup0%verbose>0) WRITE(*,*)'tdreadf:  distrfunc.nc missing/problem'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -567,8 +567,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'Problem with distrfunc.nc file'
-            WRITE(*,*)'  iy,setup0%lrz,ngen=',iy,setup0%lrz,ngen, &
+            if(setup0%verbose>0) WRITE(*,*)'Problem with distrfunc.nc file'
+            if(setup0%verbose>0) WRITE(*,*)'  iy,setup0%lrz,ngen=',iy,setup0%lrz,ngen, &
                  ' iy_rstrt,lrz_rstrt,ngen_rstrt=', &
                  iy_rstrt,lrz_rstrt,ngen_rstrt
 #ifdef __MPI
@@ -586,7 +586,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-               WRITE(*,*)'tdreadf: Variable iy_(ll), only cnst setup'
+               if(setup0%verbose>0) WRITE(*,*)'tdreadf: Variable iy_(ll), only cnst setup'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -695,7 +695,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'tdreadf: re-grid, vnorm, vnorm_rstrt =', &
+         if(setup0%verbose>0) WRITE(*,*)'tdreadf: re-grid, vnorm, vnorm_rstrt =', &
               vnorm,vnorm_rstrt
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -843,8 +843,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-                  WRITE(*,*) 'tdreadf: i,jf_rstrt(i)=',i,jf_rstrt(i)
-                  WRITE(*,*) 'tdreadf: Need jf_rstrt(i).ge.10'
+                  if(setup0%verbose>0) WRITE(*,*) 'tdreadf: i,jf_rstrt(i)=',i,jf_rstrt(i)
+                  if(setup0%verbose>0) WRITE(*,*) 'tdreadf: Need jf_rstrt(i).ge.10'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -943,10 +943,10 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-            WRITE(*,*)'tdreadf:k=',k,', l_=',l_,' reden_code=', &
+            if(setup0%verbose>0) WRITE(*,*)'tdreadf:k=',k,', l_=',l_,' reden_code=', &
                  reden_code, &
                  ' Fractional density chng, reden_eps_=',reden_eps
-            WRITE(*,*)'tdreadf: senergy_code=', &
+            if(setup0%verbose>0) WRITE(*,*)'tdreadf: senergy_code=', &
                  senergy_code, &
                 ' Fractional en density chng, senergy_eps_=',senergy_eps
 #ifdef __MPI
@@ -974,7 +974,7 @@ contains
               tam2r,cint2r,STAT=ist1)
          if (ist1.ne.0) then
 !     MPIINSERT_IF_RANK_EQ_0
-            WRITE(*,*)'rdc_multi: dallocation error'
+            if(setup0%verbose>0) WRITE(*,*)'rdc_multi: dallocation error'
 !     MPIINSERT_ENDIF_RANK
             STOP
          endif

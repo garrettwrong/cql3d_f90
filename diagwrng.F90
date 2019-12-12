@@ -55,53 +55,53 @@ contains
 ! Print-out from id=0 only:
 
       if (kerr.eq.1) then
-        WRITE(*,10010)
+        if(setup0%verbose>0) WRITE(*,10010)
       elseif (kerr.eq.2) then
-        WRITE(*,10020)
+        if(setup0%verbose>0) WRITE(*,10020)
       elseif (kerr.eq.3) then
-        WRITE(*,10030)
+        if(setup0%verbose>0) WRITE(*,10030)
       elseif (kerr.eq.4) then
-        WRITE(*,10040)
+        if(setup0%verbose>0) WRITE(*,10040)
       elseif (kerr.eq.5) then
-        WRITE(*,10050)
+        if(setup0%verbose>0) WRITE(*,10050)
       elseif (kerr.eq.6) then
-        WRITE(*,10060)
+        if(setup0%verbose>0) WRITE(*,10060)
       elseif (kerr.eq.7) then
-        WRITE(*,10070)
+        if(setup0%verbose>0) WRITE(*,10070)
       elseif (kerr.eq.8) then
-        WRITE(*,10080)
+        if(setup0%verbose>0) WRITE(*,10080)
       elseif (kerr .eq. 9) then
-        WRITE(*,10090)
+        if(setup0%verbose>0) WRITE(*,10090)
       elseif (kerr .eq. 10) then
-        WRITE(*,10100)
+        if(setup0%verbose>0) WRITE(*,10100)
       elseif (kerr .eq. 11) then
-        WRITE(*,10110)
+        if(setup0%verbose>0) WRITE(*,10110)
       elseif (kerr.eq.12) then
-        WRITE(*,10120)
+        if(setup0%verbose>0) WRITE(*,10120)
       elseif(kerr.eq.13) then
-        WRITE(*,10130)
+        if(setup0%verbose>0) WRITE(*,10130)
       elseif(kerr.eq.14) then
-        WRITE(*,10140)
+        if(setup0%verbose>0) WRITE(*,10140)
       elseif(kerr.eq.15) then
-        WRITE(*,10150)
+        if(setup0%verbose>0) WRITE(*,10150)
       elseif(kerr.eq.16) then
-        WRITE(*,10160)
+        if(setup0%verbose>0) WRITE(*,10160)
       elseif (kerr.eq.17) then
-        WRITE(*,10170)
+        if(setup0%verbose>0) WRITE(*,10170)
       elseif (kerr.eq.18) then
-        WRITE(*,10180)
+        if(setup0%verbose>0) WRITE(*,10180)
       elseif (kerr.eq.19) then
-        WRITE(*,10190)
+        if(setup0%verbose>0) WRITE(*,10190)
       elseif (kerr.eq.20) then
-        WRITE(*,10200) iyh,iy,l_
+        if(setup0%verbose>0) WRITE(*,10200) iyh,iy,l_
       elseif (kerr.eq.21) then
-        WRITE(*,10210) itu,iy,itl,l_
+        if(setup0%verbose>0) WRITE(*,10210) itu,iy,itl,l_
       elseif (kerr.eq.22) then
-        WRITE(*,10220)
+        if(setup0%verbose>0) WRITE(*,10220)
       elseif (kerr.eq.99) then
-        WRITE(*,10990)
+        if(setup0%verbose>0) WRITE(*,10990)
       else
-        WRITE(*,10990)
+        if(setup0%verbose>0) WRITE(*,10990)
       endif
 
 !..................................................................
@@ -111,11 +111,11 @@ contains
 !BH080118        i=getpid(0)
         WRITE(cptline,100) i,ichkpnt
  100    format("chkpnt -p ",i5," -f ",a8)
-        PRINT *,cptline
+        if(setup0%verbose>0) PRINT *,cptline
 !        i=dropfile(ichkpnt)
       endif
 
-      WRITE(*,*) 'diagwrng: kerr'
+      if(setup0%verbose>0) WRITE(*,*) 'diagwrng: kerr'
 
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)

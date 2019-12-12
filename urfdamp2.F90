@@ -149,7 +149,7 @@ contains
          if(mpisize.gt.1) then
             mpiworker= MOD(iraykrf-1,mpisize-1)+1
          else
-            PRINT*, '------- WARNING: mpisize=1 -------'
+            if(setup0%verbose>0) PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
       !if(mpirank.eq.mpiworker) then

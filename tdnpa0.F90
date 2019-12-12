@@ -138,7 +138,7 @@ contains
       integer::jj
       real(c_double), allocatable, dimension(:):: tempp4,tempp5,tempp6
 
-      print*, 'tdnpa0::Doing NPA diagnostic, CQL at step', n
+      if(setup0%verbose>0) print*, 'tdnpa0::Doing NPA diagnostic, CQL at step', n
       eflux_npa(:,:)=0.
 
       if(nv_npa.gt.nva) stop 'nv_npa.gt.nva in tdnpa0'
@@ -158,7 +158,7 @@ contains
       allocate(tempp5(itempp),STAT=istat5)
       allocate(tempp6(itempp),STAT=istat6)
       if (istat4.ne.0 .or. istat5.ne.0 .or. istat6.ne.0) then
-         write(*,*)'tdsxr0, tempp1: allocation problem'
+         if(setup0%verbose>0) write(*,*)'tdsxr0, tempp1: allocation problem'
          STOP
       endif
 !.......................................................................
@@ -215,7 +215,7 @@ contains
           xs_(1)=x_npa(nn)
           xs_(3)=z_npa(nn)
        endif
-       print*,'tdnpa0: starting x,y,z',xs_(1),xs_(2),xs_(3)
+       if(setup0%verbose>0) print*,'tdnpa0: starting x,y,z',xs_(1),xs_(2),xs_(3)
 
 !.......................................................................
 !     Calculate viewing cosines.
@@ -317,9 +317,9 @@ contains
 
         if (eqmod.ne."enabled")  then
 
-           write(*,*)
-           write(*,*)'tdnpa0:CAUTION: Circular SXR NOT ADJUSTED FOR NPA'
-           write(*,*)
+           if(setup0%verbose>0) write(*,*)
+           if(setup0%verbose>0) write(*,*)'tdnpa0:CAUTION: Circular SXR NOT ADJUSTED FOR NPA'
+           if(setup0%verbose>0) write(*,*)
 
 !.......................................................................
 !     Minor radius of source point
@@ -334,7 +334,7 @@ contains
 !.......................................................................
 
           if(istep.gt.(1000/fds_npa).and.istart.eq.1)  then
-             write(*,*) 'Warning: NPA sightline',nn, &
+             if(setup0%verbose>0) write(*,*) 'Warning: NPA sightline',nn, &
                         " missed or didn't reach plasma"
              go to 420
           endif
@@ -493,7 +493,7 @@ contains
 !.......................................................................
 
  165      if(istep.gt.(1000/fds_npa).and.istart.eq.1)  then
-             write(*,*) 'Warning: npa sightline',nn, &
+             if(setup0%verbose>0) write(*,*) 'Warning: npa sightline',nn, &
                         " missed or didn't reach plasma"
 
              go to 420
@@ -770,7 +770,7 @@ contains
          if(mpisize.gt.1) then
             mpiworker= MOD(i-1,mpisize-1)+1
          else
-            PRINT*, '------- WARNING: mpisize=1 -------'
+            if(setup0%verbose>0) PRINT*, '------- WARNING: mpisize=1 -------'
             mpiworker=0
          endif
 #endif

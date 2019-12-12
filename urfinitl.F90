@@ -121,7 +121,7 @@ contains
       enddo
       if ( (lh.eq."enabled" .or. fw.eq."enabled" .or. &
            ech.eq."enabled") .and. irftype.eq.1) then
-         WRITE(*,*)"STOP: Can't set both lh/fw/ech and rftype()"
+         if(setup0%verbose>0) WRITE(*,*)"STOP: Can't set both lh/fw/ech and rftype()"
          STOP
       endif
 
@@ -131,10 +131,10 @@ contains
 !.......................................................................
 
       if (irftype.eq.1 .and. rfread.ne."netcdf") then
-         write(*,*)
-         WRITE(*,*)"urfinitl STOP: Incompatible rftype and rfread"
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) WRITE(*,*)"urfinitl STOP: Incompatible rftype and rfread"
          STOP
-         write(*,*)
+         if(setup0%verbose>0) write(*,*)
       endif
 
 !.......................................................................
@@ -201,7 +201,7 @@ contains
       enddo
 
       if (mrfn.gt.nmodsa) then
-         write(*,*)'urfinitl: mrfn>nmodsa.  mrfn,nmodsa=',mrfn,nmodsa
+         if(setup0%verbose>0) write(*,*)'urfinitl: mrfn>nmodsa.  mrfn,nmodsa=',mrfn,nmodsa
          STOP 'Increase nmodsa.'
       endif
 
@@ -239,14 +239,14 @@ contains
 !     Here we use achar(48+1)="1", etc., to name input files
             do i=1,mrf-1
                if (mrf.gt.10) then
-                  WRITE(*,*)'urfinitl:  Expand calc of file name'
+                  if(setup0%verbose>0) WRITE(*,*)'urfinitl:  Expand calc of file name'
                   STOP
                endif
                write(t_,111) setup0%mnemonic(1:length_char(setup0%mnemonic)),i
  111           format(a,"_rf.",i1,".nc")
                rffile(i)=t_
 
-               write(*,*)'urfinitl: i,rffile(i) =',i,rffile(i)
+               if(setup0%verbose>0) write(*,*)'urfinitl: i,rffile(i) =',i,rffile(i)
             enddo
          endif
       endif  !On rfread

@@ -54,7 +54,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'wpalloc:  Entering wpalloc'
+      if(setup0%verbose>0) WRITE(*,*)'wpalloc:  Entering wpalloc'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -103,7 +103,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'wpalloc:  Leaving wpalloc'
+      if(setup0%verbose>0) WRITE(*,*)'wpalloc:  Leaving wpalloc'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

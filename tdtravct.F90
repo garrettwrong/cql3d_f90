@@ -23,6 +23,7 @@ module tdtravct_mod
   use iso_c_binding, only : c_double
 
   use bcast_mod, only : bcast
+  use cqlconf_mod, only : setup0
   use r8subs_mod, only : dcopy
   use tdtrrtov2_mod, only : tdtrrtov2
   use tdtrrtov_mod, only : tdtrrtov
@@ -430,7 +431,7 @@ contains
                 d_r(i,j,k,l)=adv(k,l)*drrt(k)*d_rr(i,j,k,l)
              enddo ! j
           enddo ! i
-          write(*,'(i4,7e11.3)') &
+          if(setup0%verbose>0) write(*,'(i4,7e11.3)') &
           l, tr1(l),tr2(l),tr3(l), dentarget(l),reden(k,l), &
           h_r(l), d_r(iy/4,jx/2,k,l)
        enddo ! l
@@ -477,10 +478,10 @@ contains
 !     See Numerical Recipes in Fortran, Sec.9.7.
 !.......................................................................
 
-      write(*,*) 'tdtravct: [l,adv,d_r,drp5] BEFORE NEWTON ITERATIONS:'
+      if(setup0%verbose>0) write(*,*) 'tdtravct: [l,adv,d_r,drp5] BEFORE NEWTON ITERATIONS:'
 
       do l=1,setup0%lrz-1
-      write(*,'(i4,3e15.5)') l,adv(k,l),d_r(iy/4,jx/2,k,l),drp5(l)
+      if(setup0%verbose>0) write(*,'(i4,3e15.5)') l,adv(k,l),d_r(iy/4,jx/2,k,l),drp5(l)
          reden_norm(l)=dentarget(l)
          adv_norm(l)=adv(k,l)
          xx(l)=1.0
@@ -490,7 +491,7 @@ contains
       nn=setup0%lrz-1
       call newt(xx,nn,iters,check)
 
-      write(*,*)'tdtravct:[l,adv,d_r,xx] AFTER NEWTON ITERATIONS:',iters
+      if(setup0%verbose>0) write(*,*)'tdtravct:[l,adv,d_r,xx] AFTER NEWTON ITERATIONS:',iters
 
       if (check) then
          stop 'tdtravct: Newton Iteration failed'
@@ -503,7 +504,7 @@ contains
                   d_r(i,j,k,l)=adv(k,l)*drrt(k)*d_rr(i,j,k,l)
                enddo
             enddo ! i
-            write(*,'(i4,3e15.5)') l,adv(k,l),d_r(iy/4,jx/2,k,l),xx(l)
+            if(setup0%verbose>0) write(*,'(i4,3e15.5)') l,adv(k,l),d_r(iy/4,jx/2,k,l),xx(l)
          enddo ! l
       elseif (pinch.eq."case2n") then
          do l=1,setup0%lrz-1
@@ -513,7 +514,7 @@ contains
                   d_r(i,j,k,l)=adv(k,l)
                enddo
             enddo ! i
-            write(*,'(i4,3e15.5)') l,adv(k,l),d_r(iy/4,jx/2,k,l),xx(l)
+            if(setup0%verbose>0) write(*,'(i4,3e15.5)') l,adv(k,l),d_r(iy/4,jx/2,k,l),xx(l)
          enddo ! l
       endif
 
@@ -966,7 +967,7 @@ contains
          enddo
          if(test.lt.TOLX)return
       enddo
-      write(*,*) 'MAXITS exceeded in newt'
+      if(setup0%verbose>0) write(*,*) 'MAXITS exceeded in newt'
       END subroutine newt
 
 
@@ -1135,7 +1136,7 @@ contains
          enddo
          if (aamax.eq.zero) then
             icall_count=icall_count+1 !-YuP Counting calls
-            write(*,*) 'singular matrix in ludcmp',icall_count
+            if(setup0%verbose>0) write(*,*) 'singular matrix in ludcmp',icall_count
             !pause
             aamax=TINY ! YuP-2011: added
          endif

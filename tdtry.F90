@@ -55,7 +55,7 @@ contains
       endif
       if (numclas .eq. 1) ilzhfs=lz/2+1
 
-      write(*,*)'tdtry:  ipacktp =',ipacktp
+      if(setup0%verbose>0) write(*,*)'tdtry:  ipacktp =',ipacktp
 
       if (setup0%cqlpmod .ne."enabled") then
         zsntrp2=1./bbpsi(ilzhfs,lr_)
@@ -126,8 +126,8 @@ contains
            if (iu .eq. 0) iu=iyh
            itl=iu
         else
-           WRITE(*,*)'tdtry:  ipacktp =',ipacktp
-           WRITE(*,*)'STOP in tdtry:  Check ipacktp'
+           if(setup0%verbose>0) WRITE(*,*)'tdtry:  ipacktp =',ipacktp
+           if(setup0%verbose>0) WRITE(*,*)'STOP in tdtry:  Check ipacktp'
            stop
         endif
         itl_(l_)=itl
@@ -163,8 +163,8 @@ contains
            if (iu .eq. 0) iu=iyh
            itl=iu
         else
-           WRITE(*,*)'tdtry:  ipacktp =',ipacktp
-           WRITE(*,*)'STOP in tdtry:  Check ipacktp'
+           if(setup0%verbose>0) WRITE(*,*)'tdtry:  ipacktp =',ipacktp
+           if(setup0%verbose>0) WRITE(*,*)'STOP in tdtry:  Check ipacktp'
            stop
         endif
 

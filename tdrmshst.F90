@@ -208,14 +208,14 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'tdrmshst: lr, dvol(lr), darea(lr) based on eqvolpsi'
+      if(setup0%verbose>0) WRITE(*,*)'tdrmshst: lr, dvol(lr), darea(lr) based on eqvolpsi'
       do ll=1,setup0%lrzmax ! YuP[01-2017] was 1,setup0%lrz
-          WRITE(*,'(i6,2e12.4)') ll,  dvol(ll),  darea(ll)
+          if(setup0%verbose>0) WRITE(*,'(i6,2e12.4)') ll,  dvol(ll),  darea(ll)
       enddo
-      WRITE(*,'(a,2e12.4)') &
+      if(setup0%verbose>0) WRITE(*,'(a,2e12.4)') &
        'tdrmshst: sum(dvol),sum(darea) based on eqvolpsi', &
                   sum(dvol),sum(darea)
-      WRITE(*,*)'----------------------------------------------------'
+      if(setup0%verbose>0) WRITE(*,*)'----------------------------------------------------'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

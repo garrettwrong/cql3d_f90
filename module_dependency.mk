@@ -1,6 +1,6 @@
 #------ Module generated dependencies, to be included in makefiles...
 
-a_cqlp.$(oext): abchief.$(oext) impavnc0.$(oext)
+a_cqlp.$(oext): abchief.$(oext) cqlconf.$(oext) impavnc0.$(oext)
 abchief.$(oext): cqlcomm.$(oext) param.$(oext) tdchief.$(oext)
 achief1.$(oext): achiefn.$(oext) ainalloc.$(oext) aindflt1.$(oext) aindfpa.$(oext)  \
 	aingeom.$(oext) ainitial.$(oext) ainpla.$(oext) ainsetva.$(oext) ainspec.$(oext) ainvnorm.$(oext)  \
@@ -103,7 +103,7 @@ eqrhs.$(oext): cqlcomm.$(oext) param.$(oext) zcunix.$(oext)
 eqtopeol.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext) zcunix.$(oext)
 equilib.$(oext): cqlcomm.$(oext) eqtopeol.$(oext) eqwrng.$(oext) param.$(oext) r8subs.$(oext) zcunix.$(oext)
 eqvolpsi.$(oext): cqlcomm.$(oext) eqorbit.$(oext) param.$(oext)
-eqwrng.$(oext): param.$(oext)
+eqwrng.$(oext): cqlconf.$(oext) param.$(oext)
 esefld.$(oext): cqlconf.$(oext) param.$(oext)
 exsweep.$(oext): advnce.$(oext) coefmidt.$(oext) coefmidv.$(oext) coefstup.$(oext) coefwti.$(oext)  \
 	coefwtj.$(oext) cqlcomm.$(oext) diagxswt.$(oext) diagxswx.$(oext) exsweept.$(oext) exsweepx.$(oext)  \
@@ -113,21 +113,21 @@ exsweepx.$(oext): advnce.$(oext) cqlcomm.$(oext) diagentr.$(oext) diagwrng.$(oex
 finit.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) lossorbm.$(oext) param.$(oext) tdreadf.$(oext)
 fle.$(oext): bcast.$(oext) cqlcomm.$(oext) diagwrng.$(oext) micgetr.$(oext) param.$(oext) r8subs.$(oext)
 flxfn.$(oext): cqlcomm.$(oext) diagwrng.$(oext) param.$(oext)
-freya.$(oext): aminmx.$(oext) bcast.$(oext) param.$(oext) zfreya.$(oext)
+freya.$(oext): aminmx.$(oext) bcast.$(oext) cqlconf.$(oext) param.$(oext) zfreya.$(oext)
 freyasou.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) eqfpsi.$(oext) param.$(oext) r8subs.$(oext) sourcpwr.$(oext)  \
 	tdnflxs.$(oext) tdtoaray.$(oext) urfb0.$(oext) zcunix.$(oext)
-frinitl.$(oext): cqlcomm.$(oext) param.$(oext)
+frinitl.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 frinitz.$(oext): cqlcomm.$(oext) param.$(oext)
 frnbdep2.$(oext): cqlcomm.$(oext) param.$(oext)
-frnfreya.$(oext): cqlcomm.$(oext) frplteq.$(oext) param.$(oext)
+frnfreya.$(oext): cqlcomm.$(oext) cqlconf.$(oext) frplteq.$(oext) param.$(oext)
 frplteq.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext) tdnflxs.$(oext)
-frset.$(oext): cqlcomm.$(oext) param.$(oext) zfreya.$(oext)
+frset.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) zfreya.$(oext)
 frsmooth.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 frsplft.$(oext): cqlcomm.$(oext) param.$(oext)
 frsuppor.$(oext): cqlcomm.$(oext) param.$(oext)
 frstup.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 frwrong.$(oext): cqlcomm.$(oext) param.$(oext)
-ilut.$(oext): r8subs.$(oext)
+ilut.$(oext): cqlconf.$(oext) r8subs.$(oext)
 impavnc0.$(oext): advnce.$(oext) bcast.$(oext) bsl.$(oext) bsu.$(oext) coefmidt.$(oext) coefmidv.$(oext)  \
 	coefstup.$(oext) coefwti.$(oext) coefwtj.$(oext) cqlcomm.$(oext) cqlconf.$(oext) esefld.$(oext) ilut.$(oext)  \
 	impchk.$(oext) impnorm.$(oext) param.$(oext) r8subs.$(oext) tdtranspn.$(oext) tdtrvsou.$(oext)
@@ -147,8 +147,8 @@ micxinit.$(oext): cqlcomm.$(oext) diagwrng.$(oext) micgetr.$(oext) param.$(oext)
 micxiniz.$(oext): cqlcomm.$(oext) diagwrng.$(oext) micgetr.$(oext) param.$(oext) psif.$(oext) tdxin13d.$(oext)  \
 	zcunix.$(oext)
 cql3d_mpilib.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
-netcdfrf.$(oext): bcast.$(oext) cqlcomm.$(oext) pack21.$(oext) netcdfrw2.$(oext)  param.$(oext)
-netcdfrw2.$(oext): advnce.$(oext) bcast.$(oext) coeffpad.$(oext) coefmidt.$(oext) coefstup.$(oext)  \
+netcdfrf.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) pack21.$(oext) netcdfrw2.$(oext)  param.$(oext)
+netcdfrw2.$(oext): advnce.$(oext) bcast.$(oext) cqlconf.$(oext) coeffpad.$(oext) coefmidt.$(oext) coefstup.$(oext)  \
 	cqlcomm.$(oext) diagentr.$(oext) param.$(oext) prppr.$(oext) r8subs.$(oext) tdfinterp.$(oext) zcunix.$(oext)
 ntdstore.$(oext): cqlcomm.$(oext) param.$(oext) restvty.$(oext)
 ntloop.$(oext): cqlcomm.$(oext) param.$(oext)
@@ -179,7 +179,7 @@ profiles.$(oext): cfpmodbe.$(oext) cqlcomm.$(oext) param.$(oext) profaxis.$(oext
 prppr.$(oext): bcast.$(oext) cqlcomm.$(oext) diagwrng.$(oext) param.$(oext) r8subs.$(oext)
 prpprctr.$(oext): aminmx.$(oext) cqlcomm.$(oext) param.$(oext) pltdf.$(oext) pltmain.$(oext)
 psif.$(oext): cqlcomm.$(oext) diagwrng.$(oext) param.$(oext) zcunix.$(oext)
-r8lsode.$(oext): r8subs.$(oext)
+r8lsode.$(oext): cqlconf.$(oext) r8subs.$(oext)
 r8subs.$(oext): cqlcomm.$(oext)
 rdc_bplt.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) pltdf.$(oext)
 rdc_multi.$(oext): bcast.$(oext) cqlcomm.$(oext) netcdfrf.$(oext) param.$(oext) r8subs.$(oext) rdc_bplt.$(oext)  \
@@ -292,7 +292,7 @@ tdtry.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) tdwrng.$(oext)
 tdtscinp.$(oext): cqlcomm.$(oext) param.$(oext) tdeqdsk.$(oext)
 tdtscout.$(oext): cqlcomm.$(oext) param.$(oext) tdinterp.$(oext)
 tdwritef.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
-tdwrng.$(oext): param.$(oext)
+tdwrng.$(oext): cqlconf.$(oext) param.$(oext)
 tdxin13d.$(oext): param.$(oext) profaxis.$(oext)
 tdxin23d.$(oext): param.$(oext) profaxis.$(oext)
 tdxin33d.$(oext): param.$(oext) profaxis.$(oext)
@@ -325,7 +325,7 @@ urfsetup.$(oext): bcast.$(oext) cqlcomm.$(oext) netcdfrf.$(oext) param.$(oext) u
 	urfread_.$(oext)
 urfwrite.$(oext): cqlcomm.$(oext) param.$(oext) urfwrite_.$(oext)
 urfwrite_.$(oext): cqlcomm.$(oext) param.$(oext) urfwr0.$(oext) urfwr0c.$(oext)
-urfwrong.$(oext): param.$(oext)
+urfwrong.$(oext): cqlconf.$(oext) param.$(oext)
 vlf.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext) urfedge.$(oext)  \
 	urfwrong.$(oext) vlfbplt.$(oext) vlfsetup.$(oext) zcunix.$(oext)
 vlfalloc.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext)
@@ -337,21 +337,23 @@ vlhbplt.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) plt
 vlhd.$(oext): cqlcomm.$(oext) param.$(oext)
 wpalloc.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wparsou.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
-wpavg.$(oext): cqlcomm.$(oext) param.$(oext)
+wpavg.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wpbdry.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
-wpcheck.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext)
+wpcheck.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wpchgdy.$(oext): cqlcomm.$(oext) param.$(oext)
 wpcthta.$(oext): cqlcomm.$(oext) param.$(oext)
 wpelecf.$(oext): advnce.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext)
 wpinitl.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) r8subs.$(oext) wpwrng.$(oext)
 wploweq.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
-wpmshchk.$(oext): cqlcomm.$(oext) param.$(oext)
+wpmshchk.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wpsavf.$(oext): cqlcomm.$(oext) param.$(oext) r8subs.$(oext)
-wptrafx.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) r8subs.$(oext) wpbdry.$(oext) wpcheck.$(oext)  \
+wptrafx.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext) wpbdry.$(oext) wpcheck.$(oext)  \
 	wpwrng.$(oext) znonsym.$(oext)
-wptramu.$(oext): bcast.$(oext) cqlcomm.$(oext) param.$(oext) r8subs.$(oext) wpbdry.$(oext) wpcheck.$(oext)  \
+wptramu.$(oext): bcast.$(oext) cqlcomm.$(oext) cqlconf.$(oext) param.$(oext) r8subs.$(oext) wpbdry.$(oext) wpcheck.$(oext)  \
 	znonsym.$(oext)
-wptrmuy.$(oext): cqlcomm.$(oext) param.$(oext)
+wptrmuy.$(oext): cqlcomm.$(oext) cqlconf.$(oext) param.$(oext)
 wpvptb.$(oext): cqlcomm.$(oext) param.$(oext)
 wpwrng.$(oext): cqlcomm.$(oext) param.$(oext)
-zfreya.$(oext): cqlcomm.$(oext) frsubs.$(oext) param.$(oext)
+zcunix.$(oext): cqlconf.$(oext)
+znonsym.$(oext): cqlconf.$(oext)
+zfreya.$(oext): cqlcomm.$(oext) cqlconf.$(oext) frsubs.$(oext) param.$(oext)

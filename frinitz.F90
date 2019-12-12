@@ -63,10 +63,10 @@
 !BH180908      if (kelec.eq.0) call diagwrng(9)
       if (kelec.eq.0) then
 !MPIINSERT_IF_RANK_EQ_0
-         WRITE(*,*)
-         WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
-         WRITE(*,*) '         Have not checked with NBI turned on.'
-         WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*)
+         if(setup0%verbose>0) WRITE(*,*) 'WARNING: Unphysical plasma, only one species.'
+         if(setup0%verbose>0) WRITE(*,*) '         Have not checked with NBI turned on.'
+         if(setup0%verbose>0) WRITE(*,*)
 !MPIINSERT_ENDIF_RANK
       endif
 
@@ -94,7 +94,7 @@
 !     Now define the namep and namei array as used in ONETWO
 !..................................................................
 
-      write(*,*) 'frinitz: nprim,nimp = ',nprim,nimp
+      if(setup0%verbose>0) write(*,*) 'frinitz: nprim,nimp = ',nprim,nimp
 
       kk=0
       do 500 k=1,ntotal
@@ -106,7 +106,7 @@
         namep(kk)=kspeci(1,k)
  500  continue
       if(ibion.le.0)then
-        WRITE(*,*)'frinitz: ibion=0, probably kfrsou=0; Set to proper k'
+        if(setup0%verbose>0) WRITE(*,*)'frinitz: ibion=0, probably kfrsou=0; Set to proper k'
         STOP
       endif
 !BH081022      kk=0
@@ -120,8 +120,8 @@
 !BH081022:  Take impurities to be distinct species with atw.gt.4.
 
       if (nimp.gt.1) then
-         write(*,*)
-         WRITE(*,*)'STOP:  NBI (Freya setup) only for nimp.le.1.'
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) WRITE(*,*)'STOP:  NBI (Freya setup) only for nimp.le.1.'
          STOP
       endif
       do kk=1,nimp
@@ -136,7 +136,7 @@
 
 
 
-      write(*,*) 'frinitz:namep(1),namep(2),namei(1),ibion   ', &
+      if(setup0%verbose>0) write(*,*) 'frinitz:namep(1),namep(2),namei(1),ibion   ', &
                   namep(1),namep(2),namei(1),ibion
 
 
@@ -163,7 +163,7 @@
            trim(namep(i)).eq.'HE' .or. &
            trim(namep(i)).eq.'He') atw(i)=4.
 
-        write(*,*) 'frinitz: i, trim(namep(i)), atw(i)', &
+        if(setup0%verbose>0) write(*,*) 'frinitz: i, trim(namep(i)), atw(i)', &
                              i, trim(namep(i)), atw(i)
         if(atw(i).eq.zero) call frwrong(1)
  3410 continue
@@ -232,7 +232,7 @@
 
       if(nimp.gt.0) then
          do i=1,nimp
-            write(*,*)'frinitz: trim(namei(i)),atw(nprim+i)', &
+            if(setup0%verbose>0) write(*,*)'frinitz: trim(namei(i)),atw(nprim+i)', &
                                 trim(namei(i)),atw(nprim+i)
          enddo
       endif

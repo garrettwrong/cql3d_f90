@@ -42,7 +42,7 @@ contains
 !     A check on allocations is sucessful entering then exiting
 !     the subroutine.
 !..................................................................
-      write(*,*)'sigalloc:  Entering sigalloc'
+      if(setup0%verbose>0) write(*,*)'sigalloc:  Entering sigalloc'
 
 
 
@@ -72,7 +72,7 @@ contains
       call bcast(tamm1,zero,SIZE(tamm1))
       call ibcast(iind,0,SIZE(iind))
 
-      write(*,*)'sigalloc:  Leaving sigalloc'
+      if(setup0%verbose>0) write(*,*)'sigalloc:  Leaving sigalloc'
 
       return
       end subroutine sigalloc

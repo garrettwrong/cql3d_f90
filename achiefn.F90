@@ -276,7 +276,7 @@ contains
            if (ichkpnt.ne."disabled") then
              write(cptline,100) i,ichkpnt
  100         format("chkpnt -p ",i5," -f ",a8)
-             print *,cptline
+             if(setup0%verbose>0) print *,cptline
            endif
         endif ! n.eq.nstop
       endif ! setup0%lrzmax=1

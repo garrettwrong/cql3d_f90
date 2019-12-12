@@ -24,6 +24,7 @@ module tdoutput_mod
   use netcdfrw2_mod, only : length_char
 
   use bcast_mod, only : bcast
+  use cqlconf_mod, only: setup0
   use cfpgamma_mod, only : cfpgamma
   use restcon_mod, only : restcon
   use resthks_mod, only : resthks
@@ -133,17 +134,17 @@ contains
 !l    1.1 some equilibrium quantities
 !.......................................................................
 
-      WRITE(6,9110) radmaj, rhomax, &
+      if(setup0%verbose>0) WRITE(6,9110) radmaj, rhomax, &
         r0geomp, rgeomp, eps0, &
         zgeomp, rgeom1, rgeom2, zgeomp/rgeomp, &
         rmag, rmag-r0geomp,zshift, &
         psimag,psilim, &
         btor, toteqd/3.e9 &
         ,volmid(setup0%lrzmax), areamid(setup0%lrzmax)
-      if (setup0%cqlpmod .eq. "enabled") WRITE(6,9114) z(1,setup0%lrindx(1)), &
-        z(setup0%lsmax,setup0%lrindx(1))
+      if (setup0%cqlpmod .eq. "enabled" .and. setup0%verbose>0) &
+           WRITE(6,9114) z(1,setup0%lrindx(1)), z(setup0%lsmax,setup0%lrindx(1))
 
-      WRITE(6,9111)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9111)
       do l=1,setup0%lrzmax
       if( (psilim-psimag).ne.0.d0 ) then !YuP[2018-01-03] added
         ! Sometimes psilim=psimag (in setup0%lrz=1 runs)
@@ -152,21 +153,21 @@ contains
         sqrt_psinorm=0.d0
       endif
       ! Note: 91111 is format(i3,1p10e13.4)
-      WRITE(6,91111) l,rovera(l),eps(l),btor0(l),bthr0(l), &
+      IF(SETUP0%VERBOSE>0) WRITE(6,91111) l,rovera(l),eps(l),btor0(l),bthr0(l), &
         bmod0(l),btor0(l)/bmod0(l),qsafety(l),psimx(l), &
         equilpsi(l),  sqrt_psinorm
       enddo
 
 
-      WRITE(6,9109) (l,rmcon(l),zmcon(l),rpconz(l),zpcon(l),l=1,setup0%lrzmax)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9109) (l,rmcon(l),zmcon(l),rpconz(l),zpcon(l),l=1,setup0%lrzmax)
 !
-      WRITE(6,9112)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9112)
 !     The last number in the following write is the ratio
 !     of curr/(<j.B>/<B>), where curr is the toroidal-area
 !     averaged parallel current plotted out from cql3d.
       do 110 ll=1,setup0%lrzmax
         zr0=rpcon(ll)
-        WRITE(6,9113) ll,rgeom(ll),rovera(ll)*rhomax &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9113) ll,rgeom(ll),rovera(ll)*rhomax &
           ,zr0*onovrp(1,ll),psiavg(1,ll) &
           ,zr0**2*onovrp(2,ll),psiovr(ll)*zr0 &
           ,psiavg(2,ll),darea(ll),dvol(ll) &
@@ -177,10 +178,10 @@ contains
 !     (assumes setup0%lrz=1)
       if (setup0%cqlpmod .eq. "enabled") then
         ilr=setup0%lrindx(1)
-        WRITE(6,9115)
+        IF(SETUP0%VERBOSE>0) WRITE(6,9115)
         do 112 ll=1,lrors
           zbfiob=fpsi(ilr)/solrs(ll)/psis(ll)/bmidplne(ilr)
-          WRITE(6,9116) setup0%lsindx(ll),sz(ll),solrs(ll),solzs(ll), &
+          IF(SETUP0%VERBOSE>0) WRITE(6,9116) setup0%lsindx(ll),sz(ll),solrs(ll),solzs(ll), &
             zbfiob,psis(ll),psisp(ll),psipols(ll)
  112    continue
       endif
@@ -221,7 +222,7 @@ contains
 !l    1.2.0 species numbers
 !.......................................................................
 
-      WRITE(6,8110)
+      IF(SETUP0%VERBOSE>0) WRITE(6,8110)
  8110 format(//,'Species numbers, from ainspec.f:',/, &
       'kelecg = the index of the general species electrons ',/, &
       'kelecm = the background Maxwlln species electrons (0,if none)',/, &
@@ -232,20 +233,20 @@ contains
       'nionm = number of background Maxwellian species ions',/, &
       'kionm(1:nionm) = Maxwellian ion specie indices (otherwise 0)')
 
-      WRITE(6,8111) kelecg,kelecm,kionn,kelec,niong
+      IF(SETUP0%VERBOSE>0) WRITE(6,8111) kelecg,kelecm,kionn,kelec,niong
       if (niong.ne.0) then
-         WRITE(6,8112) (kiong(i),i=1,niong)
+         IF(SETUP0%VERBOSE>0) WRITE(6,8112) (kiong(i),i=1,niong)
       else
-         WRITE(6,*) 'kiong(1) =  0'
+         IF(SETUP0%VERBOSE>0) WRITE(6,*) 'kiong(1) =  0'
       endif
-      WRITE(6,8113) nionm
+      IF(SETUP0%VERBOSE>0) WRITE(6,8113) nionm
       if (nionm.ne.0) then
-         WRITE(6,8114) (kionm(i),i=1,nionm)
+         IF(SETUP0%VERBOSE>0) WRITE(6,8114) (kionm(i),i=1,nionm)
       else
-         WRITE(6,*) 'kionm(1) =  0'
+         IF(SETUP0%VERBOSE>0) WRITE(6,*) 'kionm(1) =  0'
       endif
 
-      WRITE(6,*)
+      IF(SETUP0%VERBOSE>0) WRITE(6,*)
 ! 9118 format(30i3)
  8111 format(' kelecg =',i3,/,' kelecm =',i3,/,' kionn =',i3,/, &
            ' kelec =',i3,/,' niong =',i3)
@@ -260,15 +261,15 @@ contains
 !.......................................................................
 
       do igen=1,ngen
-         WRITE(6,*)
-         WRITE(6,8115) igen, n
+         IF(SETUP0%VERBOSE>0) WRITE(6,*)
+         IF(SETUP0%VERBOSE>0) WRITE(6,8115) igen, n
          do ll=1,setup0%lrz
             call tdnflxs(ll)
             call cfpgamma
-            WRITE(6,8116) lr_,(gama(igen,ispec),ispec=1,ntotal)
+            IF(SETUP0%VERBOSE>0) WRITE(6,8116) lr_,(gama(igen,ispec),ispec=1,ntotal)
          enddo
       enddo
-      WRITE(6,*)
+      IF(SETUP0%VERBOSE>0) WRITE(6,*)
  8115 format('Coulomb logrithm for general species number igen =',i2, &
            '   time step =', i4)
  8116 format(' lr_ =',i3, &
@@ -315,30 +316,30 @@ contains
          if (ipronn.eq."disabled".or.jk.ne.nnspec) then
             if(kspeci(2,jk).eq.'general' .and. &
                         iprovphi.ne.'disabled') then
-              WRITE(6,9126) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
-              WRITE(6,9127) (il,ztr(il),reden(jk,il),temp(jk,il), &
+              IF(SETUP0%VERBOSE>0) WRITE(6,9126) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
+              IF(SETUP0%VERBOSE>0) WRITE(6,9127) (il,ztr(il),reden(jk,il),temp(jk,il), &
                  vth(jk,il),energy(jk,il),vphipl(il),il=1,setup0%lrzmax)
             else
-              WRITE(6,9120) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
-              WRITE(6,9121) (il,ztr(il),reden(jk,il),temp(jk,il), &
+              IF(SETUP0%VERBOSE>0) WRITE(6,9120) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
+              IF(SETUP0%VERBOSE>0) WRITE(6,9121) (il,ztr(il),reden(jk,il),temp(jk,il), &
                  vth(jk,il), energy(jk,il), &
                  rban_vth(il), dn_scale(il), dt_scale(il), il=1,setup0%lrzmax)
             endif
          elseif (nnspec.eq.jk) then
             if(kspeci(2,jk).eq.'general' .and. &
                         iprovphi.ne.'disabled') then
-              WRITE(6,9128) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
-              WRITE(6,9129) (il,ztr(il),reden(jk,il),temp(jk,il), &
+              IF(SETUP0%VERBOSE>0) WRITE(6,9128) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
+              IF(SETUP0%VERBOSE>0) WRITE(6,9129) (il,ztr(il),reden(jk,il),temp(jk,il), &
                  vth(jk,il),energy(jk,il),enn(il,1),vphipl(il), &
                  il=1,setup0%lrzmax)
             else
-              WRITE(6,9122) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
-              WRITE(6,9123) (il,ztr(il),reden(jk,il),temp(jk,il), &
+              IF(SETUP0%VERBOSE>0) WRITE(6,9122) jk,kspeci(1,jk),kspeci(2,jk),bnumb(jk),ztext
+              IF(SETUP0%VERBOSE>0) WRITE(6,9123) (il,ztr(il),reden(jk,il),temp(jk,il), &
                  vth(jk,il),energy(jk,il),enn(il,1),il=1,setup0%lrzmax)
             endif
          endif
-        if (setup0%cqlpmod .eq. "enabled") &
-          WRITE(6,9125) setup0%lrindx(1),(il,z(il,setup0%lrindx(1)),denpar(jk,il) &
+         if (setup0%cqlpmod .eq. "enabled" .and. SETUP0%VERBOSE>0) &
+              WRITE(6,9125) setup0%lrindx(1),(il,z(il,setup0%lrindx(1)),denpar(jk,il) &
           ,temppar(jk,il),vthpar(jk,il),enrgypa(jk,il),il=1,setup0%lsmax)
  123  continue
       !pause
@@ -370,11 +371,11 @@ contains
 
 
       if (setup0%cqlpmod .ne. "enabled") then
-         WRITE(6,9130) (il,tauee(il),zmax(il),zmax(il)/vth(1,il), &
+         IF(SETUP0%VERBOSE>0) WRITE(6,9130) (il,tauee(il),zmax(il),zmax(il)/vth(1,il), &
               zmax(il)/vth(2,il),taueeh(il),starnue(il), &
           starnue(il)*eps(il)**1.5,zeff(il),il=1,setup0%lrzmax)
       else
-        WRITE(6,9131) (il,tauee(il),zmax(il),zmax(il)/vth(1,il), &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9131) (il,tauee(il),zmax(il),zmax(il)/vth(1,il), &
               zmax(il)/vth(2,il),taueeh(il),starnue(il), &
           starnue(il)*eps(setup0%lrindx(1))**1.5,zeff(il),il=1,setup0%lsmax)
       endif
@@ -392,7 +393,7 @@ contains
 !.......................................................................
 
       if (setup0%cqlpmod .ne. "enabled") then
-        WRITE(6,9132) (il,tauii(il),rhol(il),rhol_pol(il), &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9132) (il,tauii(il),rhol(il),rhol_pol(il), &
            drr_gs(il),tau_neo(il),taubi(il),rhol_b(il),rhol_pol_b(il), &
            drr_gs_b(il),tau_neo_b(il),il=1,setup0%lrzmax)
       endif
@@ -415,30 +416,30 @@ contains
       if (.not. nlotp1(4)) go to 149
 
 !     y mesh for l_=1 and l_=lrors
-      WRITE(6,9140) (l,iy_(l),iyh_(l),itl_(l),itu_(l),l=1,lrors)
-      WRITE(6,9141)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9140) (l,iy_(l),iyh_(l),itl_(l),itu_(l),l=1,lrors)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9141)
       do 140 i=1,iy_(1),10
-        WRITE(6,9142) (y(ii,1),ii=i,min(i+9,iy_(1)))
-        WRITE(6,9143) (dyp5(ii,1),ii=i,min(i+8,iy_(1)-1))
+        IF(SETUP0%VERBOSE>0) WRITE(6,9142) (y(ii,1),ii=i,min(i+9,iy_(1)))
+        IF(SETUP0%VERBOSE>0) WRITE(6,9143) (dyp5(ii,1),ii=i,min(i+8,iy_(1)-1))
  140  continue
       if (lrors.gt.1) then
-!        WRITE(6,9144) lrors
+!        IF(SETUP0%VERBOSE>0) WRITE(6,9144) lrors
         do 141 i=1,iy_(lrors),10
-          WRITE(6,9142) (y(ii,lrors),ii=i,min(i+9,iy_(lrors)))
-          WRITE(6,9143) (dyp5(ii,lrors),ii=i,min(i+8,iy_(lrors)-1))
+          IF(SETUP0%VERBOSE>0) WRITE(6,9142) (y(ii,lrors),ii=i,min(i+9,iy_(lrors)))
+          IF(SETUP0%VERBOSE>0) WRITE(6,9143) (dyp5(ii,lrors),ii=i,min(i+8,iy_(lrors)-1))
  141    continue
       endif
 
 !     x mesh
-      WRITE(6,9145) jx,vnorm
+      IF(SETUP0%VERBOSE>0) WRITE(6,9145) jx,vnorm
       do 142 j=1,jx,10
-        WRITE(6,9142) (x(jj),jj=j,min(j+9,jx))
-        WRITE(6,9143) (dxp5(jj),jj=j,min(j+8,jx-1))
+        IF(SETUP0%VERBOSE>0) WRITE(6,9142) (x(jj),jj=j,min(j+9,jx))
+        IF(SETUP0%VERBOSE>0) WRITE(6,9143) (dxp5(jj),jj=j,min(j+8,jx-1))
         !Note: dxp5(j)=x(j+1)-x(j)
  142  continue
 
       do j=1,jx ! YuP[2018-01-05] added - print in columns: x,dx,u/c
-       WRITE(*,'(a,i7,3e13.5)')'j,x,dx,u/c=',j,x(j),dxp5(j),uoc(j)
+       if(setup0%verbose>0) WRITE(*,'(a,i7,3e13.5)')'j,x,dx,u/c=',j,x(j),dxp5(j),uoc(j)
       enddo
 
  149  continue
@@ -457,7 +458,7 @@ contains
 !.......................................................................
 
  200  continue
-      WRITE(6,9200) n,timet
+      IF(SETUP0%VERBOSE>0) WRITE(6,9200) n,timet
  9200 format(///,15x,55("*"),/,15x,"*    PERIODIC OUTPUT:   n =",i5, &
         " , time =",1pe11.4,"    *" ,/,15x,55("*"),//)
 
@@ -466,15 +467,15 @@ contains
 !.......................................................................
 
       do igen=1,ngen
-         WRITE(6,*)
-         WRITE(6,9201) igen
+         IF(SETUP0%VERBOSE>0) WRITE(6,*)
+         IF(SETUP0%VERBOSE>0) WRITE(6,9201) igen
          do ll=1,setup0%lrz
             call tdnflxs(ll)
             call cfpgamma
-            WRITE(6,9202) lr_,(gama(igen,ispec),ispec=1,ntotal)
+            IF(SETUP0%VERBOSE>0) WRITE(6,9202) lr_,(gama(igen,ispec),ispec=1,ntotal)
          enddo
       enddo
-      WRITE(6,*)
+      IF(SETUP0%VERBOSE>0) WRITE(6,*)
  9201 format('Coulomb logrithm for general species number igen =',i2)
  9202 format(' lr_ =',i3, &
               '  ln_lambda(igen,ispec=1,ntotal) =',10(1pe10.3))
@@ -485,28 +486,28 @@ contains
 !     Same structure as in tdpltmne.f
 !.......................................................................
       if (kelecg.ne.0) then
-        WRITE (6,9210) kelecg,pltvs
-        WRITE(6,9211) (ztr(setup0%lrindx(l)),reden(kelecg,setup0%lrindx(l)), &
+        if(setup0%verbose>0) WRITE(6,9210) kelecg,pltvs
+        IF(SETUP0%VERBOSE>0) WRITE(6,9211) (ztr(setup0%lrindx(l)),reden(kelecg,setup0%lrindx(l)), &
           energy(kelecg,setup0%lrindx(l)),(powrf(setup0%lrindx(l),kk),kk=1,3), &
           sorpwt(setup0%lrindx(l)),sorpwti(setup0%lrindx(l)), &
           bdre(setup0%lrindx(l)),bdrep(setup0%lrindx(l)),vfluxz(lmdpln(l)),l=1,setup0%lrz)
-        WRITE(6,9212) sorpwtza,(powurf(kk),kk=0,3), &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9212) sorpwtza,(powurf(kk),kk=0,3), &
           powurfc(0),powurfl(0)
       endif
 
       if (niong.ne.0) then
-        WRITE (6,9210) kiong(1),pltvs
-        WRITE(6,9211) (ztr(setup0%lrindx(l)),reden(kiong(1),setup0%lrindx(l)), &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9210) kiong(1),pltvs
+        IF(SETUP0%VERBOSE>0) WRITE(6,9211) (ztr(setup0%lrindx(l)),reden(kiong(1),setup0%lrindx(l)), &
           energy(kiong(1),setup0%lrindx(l)),(powrf(setup0%lrindx(l),kk),kk=1,3), &
           sorpwt(setup0%lrindx(l)),sorpwti(setup0%lrindx(l)),bdre(setup0%lrindx(l)), &
           bdrep(setup0%lrindx(l)),vfluxz(lmdpln(l)),l=1,setup0%lrz)
-        WRITE(6,9212) sorpwtza,(powurf(kk),kk=0,3), &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9212) sorpwtza,(powurf(kk),kk=0,3), &
           powurfc(0),powurfl(0)
       endif
 
       if (niong.ne.0) then
          do kkk=1,mrfn
-         WRITE(*,*) 'mode = ',kkk, 'nharm(kkk) = ',nharm(kkk), &
+         if(setup0%verbose>0) WRITE(*,*) 'mode = ',kkk, 'nharm(kkk) = ',nharm(kkk), &
                  'powurf =',powurf(kkk)
          enddo
       endif
@@ -534,8 +535,8 @@ contains
             endif
  220      continue
 
-        WRITE(6,9270)
-        WRITE(6,9271) (ztr(setup0%lrindx(l)),xj(setup0%lrindx(l)), &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9270)
+        IF(SETUP0%VERBOSE>0) WRITE(6,9271) (ztr(setup0%lrindx(l)),xj(setup0%lrindx(l)), &
           xp(setup0%lrindx(l)),xe(setup0%lrindx(l)),xc(setup0%lrindx(l)), &
           l=1,setup0%lrz)
  221    continue
@@ -549,8 +550,8 @@ contains
 
 !     parallel profile
       if (setup0%cqlpmod .eq. "enabled") then
-        WRITE(6,9213) kelecg,setup0%lrindx(1)
-        WRITE(6,9214) (sz(l),denpar(kelecg,setup0%lsindx(l)), &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9213) kelecg,setup0%lrindx(1)
+        IF(SETUP0%VERBOSE>0) WRITE(6,9214) (sz(l),denpar(kelecg,setup0%lsindx(l)), &
           enrgypa(kelecg,setup0%lsindx(l)),l=1,lrors)
         if (setup0%ls .ge. 3) then
           zdensto=0.0
@@ -561,7 +562,7 @@ contains
             zenrgto=zenrgto+enrgypa(kelecg,setup0%lsindx(l))*dsz(l)
             zlsto=zlsto+dsz(l)
  210      continue
-          WRITE(6,9215) zdensto/zlsto,zenrgto/zlsto
+          IF(SETUP0%VERBOSE>0) WRITE(6,9215) zdensto/zlsto,zenrgto/zlsto
         endif
       endif
 
@@ -591,12 +592,12 @@ contains
 !l    2.2.1 radial profile
 !.......................................................................
 
-      WRITE(6,9220) pltvs
-      WRITE(6,9221) (ztr(setup0%lrindx(l)),currtz(setup0%lrindx(l)), &
+      IF(SETUP0%VERBOSE>0) WRITE(6,9220) pltvs
+      IF(SETUP0%VERBOSE>0) WRITE(6,9221) (ztr(setup0%lrindx(l)),currtz(setup0%lrindx(l)), &
         currtpz(setup0%lrindx(l)),bscurm(setup0%lrindx(l),1,1),totcurz(setup0%lrindx(l)), &
         totcurzi(setup0%lrindx(l))-totcurzi(setup0%lrindx(l-1)), &
         totcurzi(setup0%lrindx(l)),l=1,setup0%lrz) !NOTE: bscurm(l,1,1) is for e_maxw only !
-      WRITE(6,9222) currtza,currtpza,bscurma,totcurza
+      IF(SETUP0%VERBOSE>0) WRITE(6,9222) currtza,currtpza,bscurma,totcurza
  9220 format(//" Flux surf. avg. current densities [Amps/cm**2] " &
         "and integrated currents [Amps]:",/,1x, &
         78("="),/,7x,a8,6x,"fi",9x,"fi+e",7x,"bootstr_e",6x,"total", &
@@ -608,11 +609,11 @@ contains
 !l    2.2.2 radial profile of toroidal and poloidal cmpnts of current
 !.......................................................................
 
-      WRITE(6,9320) pltvs
-      WRITE(6,9321) (ztr(setup0%lrindx(l)), &
+      IF(SETUP0%VERBOSE>0) WRITE(6,9320) pltvs
+      IF(SETUP0%VERBOSE>0) WRITE(6,9321) (ztr(setup0%lrindx(l)), &
         curpol(setup0%lrindx(l)),ccurpol(setup0%lrindx(l)), &
         curtor(setup0%lrindx(l)),ccurtor(setup0%lrindx(l)),l=1,setup0%lrz)
-      WRITE(6,9322) ccurpol(setup0%lrzmax),ccurtor(setup0%lrzmax)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9322) ccurpol(setup0%lrzmax),ccurtor(setup0%lrzmax)
  9320 format(//" Poloidal and toroidal  current densities [Amps/cm**2] " &
         "and integrated currents [Amps]:",/,1x, &
         78("="),/,25x,a8,5x,"pol",3x,"intg. pol.",13x,"tor", &
@@ -627,8 +628,8 @@ contains
 
       if (setup0%cqlpmod .ne. "enabled") go to 222
 
-      WRITE(6,9223)
-      WRITE(6,9224) (sz(l),currmtz(l),currmtpz(l),currmtpz(l)/psis(l), &
+      IF(SETUP0%VERBOSE>0) WRITE(6,9223)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9224) (sz(l),currmtz(l),currmtpz(l),currmtpz(l)/psis(l), &
         l=1,lrors)
  9223 format(//" Flux surf. avg. current density [Amps/cm**2] ", &
         "(along magnetic field):"/,1x, &
@@ -699,40 +700,40 @@ contains
 !     zre12=ONETWO (H&H, 1976) formula, with collisionality and Zeff.
 !     rovsc*0.706/0.93=Connor asymptotic, as eps==>1.
 
-      WRITE(*,99)
+      if(setup0%verbose>0) WRITE(*,99)
  99   format(//)
-      WRITE(*,*)'If efflag="toroidal", then code electric field is'
-      WRITE(*,*)'                      assumed to be purely toroidal,'
-      WRITE(*,*)'                      varying like elecfld*(Rmag/R).'
-      WRITE(*,*)'If efflag="parallel", then code electric field is'
-      WRITE(*,*)'                      assumed to be purely parallel,'
-      WRITE(*,*)'                      varying like elecfld*(Rmag/R).'
-      WRITE(*,99)
-      WRITE(*,*)'Explanation of following table, for each column:'
-      WRITE(*,*)'================================================'
-      WRITE(*,*)'epsilon=rho/R'
-      WRITE(*,*)'resist_phi=Resistivity, calc''d from distn'
-      WRITE(*,*)'                             fnctn results'
-      WRITE(*,*)'          =<E_phi/R>/<j_phi/R>, toroidal resistivity'
-      WRITE(*,*)'           Except, if efswtchn.eq."neo_hh" .and.'
-      WRITE(*,*)'           setup0%cqlpmod.ne."enabled" ==>'
-      WRITE(*,*)'           restp=(pol x-section-area avg of E)/currpar'
-      WRITE(*,*)'               and currpar is sum of Hinton-Hazeltine '
-      WRITE(*,*)'               neoclassical current + runaway current.'
-      WRITE(*,*)'           Units: statV-cm/statA = seconds'
-      WRITE(*,*)'restp/sptzr=resist_phi/sptzr (sptzr incls ONETWO Zeff)'
-      WRITE(*,*)'resist_neo=<E_parall*B>/<j_parall*B> (seconds)'
-      WRITE(*,*)'res_neo/sptzr=<E_parall*B>/<j_parall*B>/sptzr'
-      WRITE(*,*)'elecfld(lr_)=toroidal or parallel electric fld (V/cm)'
-      WRITE(*,*)'             at Rmag, depending on efflag.'
-      WRITE(*,*)'E/E-Driecer=elecfld/E_Driecer'
-      WRITE(*,*)'Connor=Connor formula, banana regime, over sptzr'
-      WRITE(*,*)'rovsc*0.706/0.93=Connor asymptotic, as eps==>1.'
-      WRITE(*,*)'Zeff'
-      WRITE(*,*)'ONETWO low collisionality limit (H&H, 1976)/sptzr'
-      WRITE(*,*)'Check tdoutput.f for references.'
+      if(setup0%verbose>0) WRITE(*,*)'If efflag="toroidal", then code electric field is'
+      if(setup0%verbose>0) WRITE(*,*)'                      assumed to be purely toroidal,'
+      if(setup0%verbose>0) WRITE(*,*)'                      varying like elecfld*(Rmag/R).'
+      if(setup0%verbose>0) WRITE(*,*)'If efflag="parallel", then code electric field is'
+      if(setup0%verbose>0) WRITE(*,*)'                      assumed to be purely parallel,'
+      if(setup0%verbose>0) WRITE(*,*)'                      varying like elecfld*(Rmag/R).'
+      if(setup0%verbose>0) WRITE(*,99)
+      if(setup0%verbose>0) WRITE(*,*)'Explanation of following table, for each column:'
+      if(setup0%verbose>0) WRITE(*,*)'================================================'
+      if(setup0%verbose>0) WRITE(*,*)'epsilon=rho/R'
+      if(setup0%verbose>0) WRITE(*,*)'resist_phi=Resistivity, calc''d from distn'
+      if(setup0%verbose>0) WRITE(*,*)'                             fnctn results'
+      if(setup0%verbose>0) WRITE(*,*)'          =<E_phi/R>/<j_phi/R>, toroidal resistivity'
+      if(setup0%verbose>0) WRITE(*,*)'           Except, if efswtchn.eq."neo_hh" .and.'
+      if(setup0%verbose>0) WRITE(*,*)'           setup0%cqlpmod.ne."enabled" ==>'
+      if(setup0%verbose>0) WRITE(*,*)'           restp=(pol x-section-area avg of E)/currpar'
+      if(setup0%verbose>0) WRITE(*,*)'               and currpar is sum of Hinton-Hazeltine '
+      if(setup0%verbose>0) WRITE(*,*)'               neoclassical current + runaway current.'
+      if(setup0%verbose>0) WRITE(*,*)'           Units: statV-cm/statA = seconds'
+      if(setup0%verbose>0) WRITE(*,*)'restp/sptzr=resist_phi/sptzr (sptzr incls ONETWO Zeff)'
+      if(setup0%verbose>0) WRITE(*,*)'resist_neo=<E_parall*B>/<j_parall*B> (seconds)'
+      if(setup0%verbose>0) WRITE(*,*)'res_neo/sptzr=<E_parall*B>/<j_parall*B>/sptzr'
+      if(setup0%verbose>0) WRITE(*,*)'elecfld(lr_)=toroidal or parallel electric fld (V/cm)'
+      if(setup0%verbose>0) WRITE(*,*)'             at Rmag, depending on efflag.'
+      if(setup0%verbose>0) WRITE(*,*)'E/E-Driecer=elecfld/E_Driecer'
+      if(setup0%verbose>0) WRITE(*,*)'Connor=Connor formula, banana regime, over sptzr'
+      if(setup0%verbose>0) WRITE(*,*)'rovsc*0.706/0.93=Connor asymptotic, as eps==>1.'
+      if(setup0%verbose>0) WRITE(*,*)'Zeff'
+      if(setup0%verbose>0) WRITE(*,*)'ONETWO low collisionality limit (H&H, 1976)/sptzr'
+      if(setup0%verbose>0) WRITE(*,*)'Check tdoutput.f for references.'
 
-      WRITE(6,9230)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9230)
  9230 format(//," Resistivity:",/,1x,12("="),/,"  l",3x, &
         "epsilon",2x,"resist_phi",1x,"resp/sptzr",1x,"resist_neo",1x, &
         "res_neo/sptzr", &
@@ -761,7 +762,7 @@ contains
         else
            res_BK_ratio=zero
         endif
-        WRITE(6,9231) l_,zeps,restp(nch(l_),lr_),rovs(lr_) &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9231) l_,zeps,restp(nch(l_),lr_),rovs(lr_) &
           ,restnp(nch(l_),lr_),rovsn(lr_),elecfld(lr_) &
           ,elecfld(lr_)/zelecr,rovsc(lr_) &
           ,rovsc_hi(lr_),res_BK_ratio,zre12
@@ -769,23 +770,23 @@ contains
  230  continue
  9231 format(i3,1p9e11.3,1p1e13.5,1p1e11.3)
 
-      WRITE(*,*)'res_BK Braams-Karney normalization resistivity [cgs]=', &
+      if(setup0%verbose>0) WRITE(*,*)'res_BK Braams-Karney normalization resistivity [cgs]=', &
        res_BK, restp(nch(l_),1)
       if(restp(nch(l_),1).ne.0.) WRITE(*,*) &
         'Normalized conductivity: sigma_code/sigma_BK=', &
        res_BK/restp(nch(l_),1)
       do ktot1=1,ntotal
       do ktot2=1,ntotal
-        WRITE(*,*)'k1,k2, ln(Lambda)==gama(k1,k2)=', &
+        if(setup0%verbose>0) WRITE(*,*)'k1,k2, ln(Lambda)==gama(k1,k2)=', &
                    ktot1,ktot2,  gama(ktot1,ktot2)
       enddo
       enddo
 
 !%OS
-      WRITE(*,99)
-      WRITE(*,*)'For explanation of following table, see tdoutput.f'
-      WRITE(*,*)
-      WRITE(6,9238)
+      if(setup0%verbose>0) WRITE(*,99)
+      if(setup0%verbose>0) WRITE(*,*)'For explanation of following table, see tdoutput.f'
+      if(setup0%verbose>0) WRITE(*,*)
+      IF(SETUP0%VERBOSE>0) WRITE(6,9238)
  9238 format(/,"epsilon",2x,"res_neo/sp",4x,"Connor",3x &
         ,"Con.largep",2x,"Zeff",2x,"One2/spt(Z)",3x,"Iconnor",2x, &
         "I33/1.95/rep",3x,"Hinton",6x,"Kim",8x,"g",5x,"(eta-1)/g")
@@ -809,7 +810,7 @@ contains
         zelecr=300.*fmass(kelec)*vth(kelec,lr_)/(2.*charge*tauee(lr_))
         zg=(1.-xconn)/xconn
         rovsc_hi(lr_)=rovsc(lr_)*0.706/0.93
-        WRITE(6,9239) zeps,rovsn(lr_),rovsc(lr_) &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9239) zeps,rovsn(lr_),rovsc(lr_) &
           ,rovsc_hi(lr_),zeff(lr_),zre12, &
           xconn,zi33o95,zreshin(lr_),zreskim(lr_),zg,(rovsn(lr_)-1.)/zg
  2301 continue
@@ -818,26 +819,28 @@ contains
 !%OS
 
       call tdnflxs(il_old)
-      if (setup0%cqlpmod .eq. "enabled") &
+      if (setup0%cqlpmod .eq. "enabled" .and. setup0%verbose>0) &
         WRITE(6,9232) (l,sz(l),rovsloc(l),sptzr(l),l=1,lrors)
  9232 format(/," Local in s resistivity divided by spitzer:",//, &
         "  l",5x,"s",6x,"res/spitz",3x,"spitzer",/,(i3,1p3e11.3))
 
       if (n .lt. nstop) go to 233
 
-      if (setup0%cqlpmod .ne. "enabled") WRITE(6,9233) setup0%lrindx(1)
+      if (setup0%cqlpmod .ne. "enabled" .and. setup0%verbose>0) &
+           WRITE(6,9233) setup0%lrindx(1)
  9233 format(/" res/spitz. per time step: for first flux surface:" &
         ," lr_= ",i3,":",/" ========================")
-      if (setup0%cqlpmod .eq. "enabled") WRITE(6,9234)setup0%lrindx(1),setup0%lsindx(1)
+      if (setup0%cqlpmod .eq. "enabled" .and. setup0%verbose>0) &
+           WRITE(6,9234)setup0%lrindx(1),setup0%lsindx(1)
  9234 format(/" res/spitz. per time step: at flux surface:" &
         ," lr_= ",i3," for first orbit position ls_=",i3,":", &
         /" ========================")
       illeff=setup0%lrindx(1)
       if (setup0%cqlpmod .eq. "enabled") illeff=setup0%lsindx(1)
       do 231 l=1,nch(1),8
-        WRITE(6,9235) (il,rovsp(il,illeff),il=l,min(l+7,nch(1)))
+        IF(SETUP0%VERBOSE>0) WRITE(6,9235) (il,rovsp(il,illeff),il=l,min(l+7,nch(1)))
         !-YuP: added: evolution of resistivity for first flux surface [cgs]
-        WRITE(6,9235) (il,restp(il,1) ,il=l,min(l+7,nch(1)))
+        IF(SETUP0%VERBOSE>0) WRITE(6,9235) (il,restp(il,1) ,il=l,min(l+7,nch(1)))
  231  continue
  9235 format(8(i5,":",1pe11.4))
 
@@ -845,7 +848,8 @@ contains
       if (efiter.eq."enabled") then
 !BH171230:  Using efldn(,,) storage, not elecfldn(,,) for this case.
 !BH171230:  This storage had been set up before, but not used.
-         if (setup0%cqlpmod .ne. "enabled") WRITE(6,9247) setup0%lrindx(1)
+         if (setup0%cqlpmod .ne. "enabled" .and. setup0%verbose>0) &
+              WRITE(6,9247) setup0%lrindx(1)
  9247 format(/" iteration elecn per time step: for 1st flux surface:" &
         ," lr_= ",i3,":",/" ========================")
          do 234 niter=1,nefitera
@@ -862,7 +866,7 @@ contains
             do 235 l=1,nch(1),8
                !YuP[21-08-2017] from ampf: elecn(1:setup0%lrz,0:nstop,nefitera).
                !Corrected:
-               WRITE(6,9235) (il,elecn(illeff,il,niter), &
+               IF(SETUP0%VERBOSE>0) WRITE(6,9235) (il,elecn(illeff,il,niter), &
                     il=l,min(l+7,nch(1)))
  235        continue
  234     continue
@@ -872,16 +876,19 @@ contains
       if (lrors .eq. 1) go to 233
 
       ilprin=lrors/2+1
-      if (setup0%cqlpmod .ne. "enabled") WRITE(6,9236) ilprin,setup0%lrindx(ilprin)
+      if (setup0%cqlpmod .ne. "enabled" .and. setup0%verbose>0) &
+           WRITE(6,9236) ilprin,setup0%lrindx(ilprin)
  9236 format(/" res/spitz. per time step: for surface: ", &
         "setup0%lrindx(",i3,")=",i3," :",/" ========================")
-      if (setup0%cqlpmod .eq. "enabled") WRITE(6,9237) ilprin,setup0%lsindx(ilprin)
+      if (setup0%cqlpmod .eq. "enabled" .and. setup0%verbose>0) &
+           WRITE(6,9237) ilprin,setup0%lsindx(ilprin)
  9237 format(/" res/spitz. per time step: for orbit pos.: ", &
         "setup0%lsindx(",i3,")=",i3," :",/" ========================")
       illeff=setup0%lrindx(ilprin)
-      if (setup0%cqlpmod .eq. "enabled") illeff=setup0%lsindx(ilprin)
+      if (setup0%cqlpmod .eq. "enabled" .and. setup0%verbose>0) &
+           illeff=setup0%lsindx(ilprin)
       do 232 l=1,nch(ilprin),8
-        WRITE(6,9235) (il,rovsp(il,illeff),il=l,min(l+7,nch(ilprin)))
+        IF(SETUP0%VERBOSE>0) WRITE(6,9235) (il,rovsp(il,illeff),il=l,min(l+7,nch(ilprin)))
  232  continue
 
  233  continue
@@ -894,14 +901,14 @@ contains
 !.......................................................................
 
       if (lrors .gt. 1) then
-        WRITE(6,9240)
+        IF(SETUP0%VERBOSE>0) WRITE(6,9240)
         do 240 l=1,lrors,8
-          WRITE(6,9235) (il,consnp(nch(il),il),il=l,min(l+7,lrors))
+          IF(SETUP0%VERBOSE>0) WRITE(6,9235) (il,consnp(nch(il),il),il=l,min(l+7,lrors))
  240    continue
       else if (nch(1) .ge. nstop) then
-        WRITE(6,9241)
+        IF(SETUP0%VERBOSE>0) WRITE(6,9241)
         do 241 l=1,nch(1),8
-          WRITE(6,9235) (it,consnp(it,1),it=l,min(l+7,nch(1)))
+          IF(SETUP0%VERBOSE>0) WRITE(6,9235) (it,consnp(it,1),it=l,min(l+7,nch(1)))
  241    continue
       endif
  9240 format(//," Conservation diagnostic: per flux surface (should " &
@@ -914,12 +921,12 @@ contains
 !     transport conservation diagnostic
 
       if (transp.eq."enabled" .and. setup0%cqlpmod.ne."enabled") then
-        WRITE(6,9242)
+        IF(SETUP0%VERBOSE>0) WRITE(6,9242)
         do 242 l=1,lrors,8
-          WRITE(6,9235) (il,constp(nch(il),il),il=l,min(l+7,lrors))
+          IF(SETUP0%VERBOSE>0) WRITE(6,9235) (il,constp(nch(il),il),il=l,min(l+7,lrors))
  242    continue
         call tdtrflx
-        WRITE(6,9243) flxout
+        IF(SETUP0%VERBOSE>0) WRITE(6,9243) flxout
       endif
  9242 format(//," Transport conserv. diagnostic: per flux surface" &
         ,/,1x,9("="),/)
@@ -931,7 +938,7 @@ contains
 !.......................................................................
 
       do 250 k=1,ngen
-        WRITE(6,9250) k,(l,entr(k,-1,l),entr(k,2,l) &
+        IF(SETUP0%VERBOSE>0) WRITE(6,9250) k,(l,entr(k,-1,l),entr(k,2,l) &
           ,entr(k,1,l),entr(k,3,l) &
           ,entr(k,5,l),entr(k,6,l),entr(k,7,l) &
           ,entr(k,8,l),entr(k,11,l),entr(k,10,l) &
@@ -960,25 +967,27 @@ contains
 !     at most 20 points printed
       ishift=ienmax/20
       if (ishift .le. 0) ishift=1
-      if (nv .le. 9) WRITE(6,9261) nv
-      if (nv .gt. 9) WRITE(6,92612) nv
+      if (nv .le. 9 .and. setup0%verbose>0) WRITE(6,9261) nv
+      if (nv .gt. 9 .and. setup0%verbose>0) WRITE(6,92612) nv
       do 262 ien=1,ienmax,ishift
-        WRITE(6,9262) ien,en_(ien),(eflux(ien,iview),iview=1,min(nv,9))
+        IF(SETUP0%VERBOSE>0) WRITE(6,9262) ien,en_(ien),(eflux(ien,iview),iview=1,min(nv,9))
  262  continue
-      if ((ienmax/ishift)*ishift .ne. ienmax) WRITE(6,9262) &
-        ienmax,en_(ienmax),(eflux(ienmax,iview),iview=1,min(nv,9))
-      WRITE(6,9264) (efluxt(iview),iview=1,min(nv,9))
+        if ((ienmax/ishift)*ishift .ne. ienmax .and. setup0%verbose>0) &
+             WRITE(6,9262) &
+             ienmax,en_(ienmax),(eflux(ienmax,iview),iview=1,min(nv,9))
+      IF(SETUP0%VERBOSE>0) WRITE(6,9264) (efluxt(iview),iview=1,min(nv,9))
 
       if (nv .gt. 9) then
-        WRITE(6,9263) nv
+        IF(SETUP0%VERBOSE>0) WRITE(6,9263) nv
         do 263 ien=1,ienmax,ishift
-          WRITE(6,9262) ien,en_(ien),(eflux(ien,iview), &
+          IF(SETUP0%VERBOSE>0) WRITE(6,9262) ien,en_(ien),(eflux(ien,iview), &
             iview=10,min(nv,18))
  263    continue
-        if ((ienmax/ishift)*ishift .ne. ienmax) WRITE(6,9262) &
-          ienmax,en_(ienmax),(eflux(ienmax,iview),iview=10,min(nv,18))
+          if ((ienmax/ishift)*ishift .ne. ienmax .and. setup0%verbose>0) &
+               WRITE(6,9262) &
+               ienmax,en_(ienmax),(eflux(ienmax,iview),iview=10,min(nv,18))
       endif
-      if (nv.ge.10) &
+      if (nv.ge.10 .and. setup0%verbose>0) &
           WRITE(6,9264) (efluxt(iview),iview=10,min(nv,18))
  9261 format(//" SXR energy flux versus photon energy",/, &
         " ====================================",//, &

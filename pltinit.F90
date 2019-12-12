@@ -67,7 +67,7 @@ contains
       ier=PGOPEN(t_)
       CALL PGSCI(1)
       CALL PGSLW(setup0%lnwidth)
-      write(*,*) 'PLTINIT-1 ier=1 is OK: ier=',ier
+      if(setup0%verbose>0) write(*,*) 'PLTINIT-1 ier=1 is OK: ier=',ier
 !      ier=pgbeg(0,'?',1,1)
 !      if (ier.ne.1) write(*,*)
 !     +              'Problem1 with initiating PGPLOT library'

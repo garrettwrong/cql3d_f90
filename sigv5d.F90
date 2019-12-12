@@ -258,7 +258,7 @@ contains
       fuspwrm(4,lr_)=sigm(4,lr_)*3.27*1.602e-13
       fuspwrv(4,lr_)=sigf(4,lr_)*3.27*1.602e-13
 !     17.6, etc : Energies of fusion products [MeV]
-      write(*,'(a,i5,4e12.3)') &
+      if(setup0%verbose>0) write(*,'(a,i5,4e12.3)') &
        'sigv5d: lr_, fuspwrv(1:4,lr_)',lr_,fuspwrv(1:4,lr_)
 
 

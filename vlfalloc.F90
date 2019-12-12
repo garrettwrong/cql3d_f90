@@ -44,7 +44,7 @@ contains
 !     A check on allocations is sucessful entering then exiting
 !     the subroutine.
 !..................................................................
-      write(*,*)'vlfalloc:  Entering vlfalloc'
+      if(setup0%verbose>0) write(*,*)'vlfalloc:  Entering vlfalloc'
 
 !.......................................................................
 !     Called from subroutine vlfsetup
@@ -99,7 +99,7 @@ contains
       allocate(ifct2(jjx),STAT=istat)
       call ibcast(ifct2,0,SIZE(ifct2))
 
-      write(*,*)'vlfalloc:  Leaving vlfalloc'
+      if(setup0%verbose>0) write(*,*)'vlfalloc:  Leaving vlfalloc'
 
       return
       end subroutine vlfalloc

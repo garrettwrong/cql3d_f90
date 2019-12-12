@@ -82,7 +82,7 @@ contains
  35   continue
 !
       if(relativ .eq. "fully") then
-        write(*,*)'cnorm=',cnorm
+        if(setup0%verbose>0) write(*,*)'cnorm=',cnorm
         one6 = 1.d0/6.d0
         do 36 j=1,jx
           alphan(j,-1)=x(j)/cnorm
@@ -100,7 +100,7 @@ contains
             gamman(j,i)=gamman(j,1)**i
             alphan(j,i)=alphan(j,-1)**(-i)  !BH080327, Needs checking?
  38       continue
-        write(*,*)'i,alphan(1:4,i)',i,(alphan(j,i),j=1,4)
+        if(setup0%verbose>0) write(*,*)'i,alphan(1:4,i)',i,(alphan(j,i),j=1,4)
  37     continue
       endif
 !      write(*,*)'((gamman(j,i),j=1,4),i=-2,3)'

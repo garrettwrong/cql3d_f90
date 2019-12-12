@@ -279,7 +279,7 @@ contains
 #endif
 
     if(inewjmax.gt.inewjx)then !YuP[2019-04-24] added printout
-      WRITE(*,*)'impavnc0: inewjmax>inewjx', inewjmax,inewjx
+      if(setup0%verbose>0) WRITE(*,*)'impavnc0: inewjmax>inewjx', inewjmax,inewjx
     endif
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -1982,7 +1982,7 @@ contains
 #ifdef __MPI
        if(mpirank.eq.0) then
 #endif
-                      WRITE(*,*)'impavnc0:icoeff.gt.size(a_csr)'
+                      if(setup0%verbose>0) WRITE(*,*)'impavnc0:icoeff.gt.size(a_csr)'
 #ifdef __MPI
        endif  ! for if(mpirank.eq.***)
 #endif
@@ -2059,7 +2059,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-                WRITE(*,*)'impavnc0 aft.aplb: ieq_tot, iyjx*setup0%lrz, ierr', &
+                if(setup0%verbose>0) WRITE(*,*)'impavnc0 aft.aplb: ieq_tot, iyjx*setup0%lrz, ierr', &
                      ieq_tot,iyjx*setup0%lrz,ierr
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -2121,7 +2121,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-                   WRITE(*,*)'impavnc0/bndcsr: STOP ierr_csr=',ierr_csr
+                   if(setup0%verbose>0) WRITE(*,*)'impavnc0/bndcsr: STOP ierr_csr=',ierr_csr
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -2256,7 +2256,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-                   WRITE(*,*)'impavnc0 after ilut: ierr=',ierr
+                   if(setup0%verbose>0) WRITE(*,*)'impavnc0 after ilut: ierr=',ierr
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -2446,9 +2446,9 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-                   WRITE(*,*)'impavnc0 after pgmres, ierr=',ierr
-                   WRITE(*,*)'ierr=1 converg. not achieved in itmax iterations'
-                   WRITE(*,*)' -1 Initial guess seems to be the exact solution'
+                   if(setup0%verbose>0) WRITE(*,*)'impavnc0 after pgmres, ierr=',ierr
+                   if(setup0%verbose>0) WRITE(*,*)'ierr=1 converg. not achieved in itmax iterations'
+                   if(setup0%verbose>0) WRITE(*,*)' -1 Initial guess seems to be the exact solution'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -2470,18 +2470,18 @@ contains
 
 #ifdef __MPI
       if(mpirank.EQ.mpiworker) then
-         WRITE(*,'(a,2i4,2e19.11)')  &
+         if(setup0%verbose>0) WRITE(*,'(a,2i4,2e19.11)')  &
               'impavnc rhs before dgbtrf mpirank, l_,MIN(rhs),MAX(rhs)', &
               mpirank, l_,MINVAL(rhs),MAXVAL(rhs)
-         WRITE(*,'(a,2i4,2e19.11)')  &
+         if(setup0%verbose>0) WRITE(*,'(a,2i4,2e19.11)')  &
               'impavnc ABD before dgbtrf mpirank, l_,MIN(abd),SUM(abd)', &
               mpirank, l_,MINVAL(abd),SUM(abd)
       endif
 #else
-      WRITE(*,'(a,i4,2e19.11)')  &
+      if(setup0%verbose>0) WRITE(*,'(a,i4,2e19.11)')  &
        'impavnc rhs before dgbtrf l_,MIN(rhs),MAX(rhs)', &
                 l_,MINVAL(rhs),MAXVAL(rhs)
-      WRITE(*,'(a,i4,2e19.11)')  &
+      if(setup0%verbose>0) WRITE(*,'(a,i4,2e19.11)')  &
        'impavnc ABD before dgbtrf l_,MIN(abd),SUM(abd)', &
                 l_,MINVAL(abd),SUM(abd)
 #endif
@@ -2495,7 +2495,7 @@ contains
                    ! XXX  YuP:ok
                    call dgbtrf(inewjx,inewjx,ml,mu,abd,md1abd,ipivot,info)
                    if (info .ne. 0) then
-                      print *,' warning after sgbtrf in impavnc0: info = ',info
+                      if(setup0%verbose>0) print *,' warning after sgbtrf in impavnc0: info = ',info
                       stop 'impavnc0 1'
                    endif
                 endif
@@ -2518,24 +2518,24 @@ contains
 
 #ifdef __MPI
       if(mpirank.eq.mpiworker) then
-         WRITE(*,'(a,2i4,2e19.11)')  &
+         if(setup0%verbose>0) WRITE(*,'(a,2i4,2e19.11)')  &
               'impavnc rhs after  dgbtrs mpirank, l_,MIN(rhs),MAX(rhs)', &
               mpirank,l_,MINVAL(rhs),MAXVAL(rhs)
-         WRITE(*,'(a,2i4,2e19.11)')  &
+         if(setup0%verbose>0) WRITE(*,'(a,2i4,2e19.11)')  &
               'impavnc ABD after  mpirank, dgbtrs l_,MIN(abd),SUM(abd)', &
               mpirank,l_,MINVAL(abd),SUM(abd)
       end if
 #else
-      WRITE(*,'(a,i4,2e19.11)')  &
+      if(setup0%verbose>0) WRITE(*,'(a,i4,2e19.11)')  &
            'impavnc rhs after  dgbtrs l_,MIN(rhs),MAX(rhs)', &
            l_,MINVAL(rhs),MAXVAL(rhs)
-      WRITE(*,'(a,i4,2e19.11)')  &
+      if(setup0%verbose>0) WRITE(*,'(a,i4,2e19.11)')  &
            'impavnc ABD after  dgbtrs l_,MIN(abd),SUM(abd)', &
            l_,MINVAL(abd),SUM(abd)
 #endif
 
                 if (info .ne. 0) then
-                   print *,' warning after sgbtrs in impavnc0: info = ',info
+                   if(setup0%verbose>0) print *,' warning after sgbtrs in impavnc0: info = ',info
                    stop 'impavnc0 2'
                 endif
                 !       tm1 = etime(tm) - tm1
@@ -2694,7 +2694,7 @@ contains
       if(mpirank.eq.0) then
 #endif
      !WRITE(*,'(a,2i6)') 'impavnc[ZOW]: sol.found, f is updated. k,l_=',k,l_
-      WRITE(*,'(a,2i4,3e15.7)')  &
+      if(setup0%verbose>0) WRITE(*,'(a,2i4,3e15.7)')  &
        'impavnc[ZOW] f fnd,updatd n,l_,MIN(f),MAX(f),SUM(f)=', &
                 n,l_,MINVAL(f),MAXVAL(f),SUM(f)
 #ifdef __MPI
@@ -2989,7 +2989,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'it3dalloc: entering...  soln_method=', &
+      if(setup0%verbose>0) WRITE(*,*)'it3dalloc: entering...  soln_method=', &
                  soln_method
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -3003,7 +3003,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'icsrij,icsrip,icsrikry,lfil,iwk_ilu = ', &
+         if(setup0%verbose>0) WRITE(*,*)'icsrij,icsrip,icsrikry,lfil,iwk_ilu = ', &
                     icsrij,icsrip,icsrikry,lfil,iwk_ilu
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -3023,7 +3023,7 @@ contains
          allocate(vv(icsrikry),stat=istat(11))
          i2=11
          if (soln_method .eq. 'it3drv') then
-            write(*,*)'icsrijr,icsrijc = ',icsrijr,icsrijc
+            if(setup0%verbose>0) write(*,*)'icsrijr,icsrijc = ',icsrijr,icsrijc
             allocate(ipofi(iy,setup0%lrz),stat=istat(12))
             allocate( ar_csr(icsrijr),stat=istat(13))
             allocate(jar_csr(icsrijr),stat=istat(14))
@@ -3036,7 +3036,7 @@ contains
          istat0=0
          do i=1,i2 !!12
             if (istat(i).ne.0) then
-               write(*,*)'it3dalloc:  i,istat(i)=',i,istat(i)
+               if(setup0%verbose>0) write(*,*)'it3dalloc:  i,istat(i)=',i,istat(i)
                istat0=max(istat0,1)
             endif
          enddo
@@ -3048,7 +3048,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-         WRITE(*,*)'lapacki,lapackj,icsrij,icsrip,iwk_ilu = ', &
+         if(setup0%verbose>0) WRITE(*,*)'lapacki,lapackj,icsrij,icsrip,iwk_ilu = ', &
                     lapacki,lapackj,icsrij,icsrip,iwk_ilu
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
@@ -3069,7 +3069,7 @@ contains
          istat0=0
          do i=1,11
             if (istat(i).ne.0) then
-               write(*,*)'it3dalloc:  i,istat(i)=',i,istat(i)
+               if(setup0%verbose>0) write(*,*)'it3dalloc:  i,istat(i)=',i,istat(i)
                istat0=max(istat0,1)
             endif
          enddo
@@ -3080,7 +3080,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'it3dalloc: exiting...'
+      if(setup0%verbose>0) WRITE(*,*)'it3dalloc: exiting...'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -3102,7 +3102,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'it3ddalloc: deallocating...'
+      if(setup0%verbose>0) WRITE(*,*)'it3ddalloc: deallocating...'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -3159,7 +3159,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'de_alloc: START deallocating...'
+      if(setup0%verbose>0) WRITE(*,*)'de_alloc: START deallocating...'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -3408,7 +3408,7 @@ contains
       if(ASSOCIATED(ampf2ebar)) then
          deallocate(ampf2ebar)
       endif
-              write(*,*)'it3dalloc-1.0'
+              if(setup0%verbose>0) write(*,*)'it3dalloc-1.0'
 
       if(ASSOCIATED(dym5)) deallocate(dym5)
       if(ASSOCIATED(dyp5)) deallocate(dyp5)
@@ -3434,7 +3434,7 @@ contains
       if(ASSOCIATED(sinn)) deallocate(sinn)
       if(ASSOCIATED(tann)) deallocate(tann)
       if(ASSOCIATED(ymid)) deallocate(ymid)
-              write(*,*)'it3dalloc-1.1'
+              if(setup0%verbose>0) write(*,*)'it3dalloc-1.1'
       if(ASSOCIATED(tau)) deallocate(tau)
       if(ASSOCIATED(vptb)) deallocate(vptb)
       if(ASSOCIATED(zboun)) deallocate(zboun)
@@ -3460,7 +3460,7 @@ contains
       if(ASSOCIATED(es)) deallocate(es)
       if(ASSOCIATED(bpsi)) deallocate(bpsi)
       if(ASSOCIATED(d2bpsi)) deallocate(d2bpsi)
-              write(*,*)'it3dalloc-1.2'
+              if(setup0%verbose>0) write(*,*)'it3dalloc-1.2'
       if(ASSOCIATED(d2solrz)) deallocate(d2solrz)
       if(ASSOCIATED(d2solzz)) deallocate(d2solzz)
       if(ASSOCIATED(d2bpolz)) deallocate(d2bpolz)
@@ -3492,7 +3492,7 @@ contains
       if(ASSOCIATED(shx)) deallocate(shx)
       if(ASSOCIATED(shxx)) deallocate(shxx)
       if(ASSOCIATED(shxxx)) deallocate(shxxx)
-              write(*,*)'it3dalloc-1.3'
+              if(setup0%verbose>0) write(*,*)'it3dalloc-1.3'
       if(ASSOCIATED(tam1)) deallocate(tam1)
       if(ASSOCIATED(tam2)) deallocate(tam2)
       if(ASSOCIATED(tam3)) deallocate(tam3)
@@ -3524,7 +3524,7 @@ contains
       if(ASSOCIATED(tam29)) deallocate(tam29)
       if(ASSOCIATED(tam30)) deallocate(tam30)
       if(ASSOCIATED(x)) deallocate(x)
-              write(*,*)'it3dalloc-1.4'
+              if(setup0%verbose>0) write(*,*)'it3dalloc-1.4'
       if(ASSOCIATED(xmidpt)) deallocate(xmidpt)
       if(ASSOCIATED(xi)) deallocate(xi)
       if(ASSOCIATED(xsq)) deallocate(xsq)
@@ -3551,20 +3551,20 @@ contains
       if(ASSOCIATED(temc4)) deallocate(temc4)
       if(ASSOCIATED(itemc1)) deallocate(itemc1)
       if(ASSOCIATED(itemc2)) deallocate(itemc2)
-              write(*,*)'it3dalloc-1.5'
+              if(setup0%verbose>0) write(*,*)'it3dalloc-1.5'
       if(ASSOCIATED(l_lower)) deallocate(l_lower)
       if(ASSOCIATED(lpt)) deallocate(lpt)
       if(ASSOCIATED(mun)) deallocate(mun)
       if(ASSOCIATED(fll)) deallocate(fll,STAT=istat)
-              write(*,*)'it3dalloc fll', istat
+              if(setup0%verbose>0) write(*,*)'it3dalloc fll', istat
       if(ASSOCIATED(xpar)) deallocate(xpar,STAT=istat)
-              write(*,*)'it3dalloc xpar', istat
+              if(setup0%verbose>0) write(*,*)'it3dalloc xpar', istat
       if(ASSOCIATED(rheads)) deallocate(rheads,STAT=istat)
-              write(*,*)'it3dalloc rheads', istat
+              if(setup0%verbose>0) write(*,*)'it3dalloc rheads', istat
       if(ASSOCIATED(dfvlle)) deallocate(dfvlle,STAT=istat)
-              write(*,*)'it3dalloc dfvlle', istat
+              if(setup0%verbose>0) write(*,*)'it3dalloc dfvlle', istat
       if(ASSOCIATED(dfvlli)) deallocate(dfvlli,STAT=istat)
-              write(*,*)'it3dalloc dfvlli', istat
+              if(setup0%verbose>0) write(*,*)'it3dalloc dfvlli', istat
 !BH180430: Next statement causing Seg fault. Don't see why??
 !      if(ASSOCIATED(xperp)) deallocate(xperp,STAT=istat)
 !              write(*,*)'it3dalloc xperp', istat
@@ -3605,7 +3605,7 @@ contains
       if(ASSOCIATED(item5)) deallocate(item5)
       if(ASSOCIATED(item6)) deallocate(item6)
       if(ASSOCIATED(rhs)) deallocate(rhs)
-              write(*,*)'it3dalloc-1.7'
+              if(setup0%verbose>0) write(*,*)'it3dalloc-1.7'
 
       if(ASSOCIATED(da)) deallocate(da)
       if(ASSOCIATED(db)) deallocate(db)
@@ -3619,7 +3619,7 @@ contains
       if(ASSOCIATED(ce)) deallocate(ce)
       if(ASSOCIATED(cd)) deallocate(cd)
       if(ASSOCIATED(cf)) deallocate(cf)
-              write(*,*)'it3dalloc-1.8'
+              if(setup0%verbose>0) write(*,*)'it3dalloc-1.8'
 
       if(ASSOCIATED(bqlm)) deallocate(bqlm)
       if(ASSOCIATED(tem1)) deallocate(tem1)
@@ -3633,7 +3633,7 @@ contains
       if(ASSOCIATED(ytail)) deallocate(ytail)
       if(ASSOCIATED(yhead)) deallocate(yhead)
       if(ASSOCIATED(fpn)) deallocate(fpn)
-        write(*,*)'it3dalloc-1.9'
+        if(setup0%verbose>0) write(*,*)'it3dalloc-1.9'
       if(ASSOCIATED(dyi)) deallocate(dyi)
       if(ASSOCIATED(pleg)) deallocate(pleg)
       if(ASSOCIATED(tfl)) deallocate(tfl)
@@ -3675,7 +3675,7 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-      WRITE(*,*)'de_alloc:  DONE deallocating'
+      if(setup0%verbose>0) WRITE(*,*)'de_alloc:  DONE deallocating'
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

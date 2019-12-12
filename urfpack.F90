@@ -78,7 +78,7 @@ contains
 !..................................................................
 
       do 500 krf=1,mrfn
-        write(*,*)'urfpack: krf(1:mrfn) = ', krf
+        if(setup0%verbose>0) write(*,*)'urfpack: krf(1:mrfn) = ', krf
 
 !       k is general species to which this krf mode is to be applied:
         k=nrfspecies(krfn(krf))
@@ -167,10 +167,10 @@ contains
               !For a mirror machine: ray can get outside of zbox
               !which defines the border of ez() equilibrium grid
               ![so that zbox=ez(nnz)-ez(1)]
-              if (icount_outside_ez.eq.0) &
-              write(*,*)'urfpack: Ray elements outside of ez grid'
+               if (icount_outside_ez.eq.0 .and. setup0%verbose>0) &
+                    write(*,*)'urfpack: Ray elements outside of ez grid'
               icount_outside_ez=icount_outside_ez+1 !for a printout
-              write(*,*)'urfpack: zray>ez; iray,is,icount_outside_ez', &
+              if(setup0%verbose>0) write(*,*)'urfpack: zray>ez; iray,is,icount_outside_ez', &
                                            iray,is,icount_outside_ez
               ! Make an adjustment:
               zray=ez(nnz)
@@ -178,10 +178,10 @@ contains
               !although not likely to happen.
             endif
             if(zray.lt.ez(1))then
-              if (icount_outside_ez.eq.0) &
-              write(*,*)'urfpack: Ray elements outside of ez grid'
+              if (icount_outside_ez.eq.0 .and. setup0%verbose>0) &
+                   write(*,*)'urfpack: Ray elements outside of ez grid'
               icount_outside_ez=icount_outside_ez+1 !for a printout
-              write(*,*)'urfpack: zray<ez; iray,is,icount_outside_ez', &
+              if(setup0%verbose>0) write(*,*)'urfpack: zray<ez; iray,is,icount_outside_ez', &
                                            iray,is,icount_outside_ez
               ! Similarly, Make an adjustment:
               zray=ez(1)
@@ -252,7 +252,7 @@ contains
                          thetapol= pol(lz,lr_) !adjusted
                       endif
                       if(ll.gt.lz) then ! still could not find: stop the run
-                         WRITE(*,*)'urfpack/urfwrong: lr_,ll,Rray,Zray', &
+                         if(setup0%verbose>0) WRITE(*,*)'urfpack/urfwrong: lr_,ll,Rray,Zray', &
                              lr_,ll, rray,zray, &
                              solrz(lz,lr_),  solzz(lz,lr_), &
                              solrz(lz,lr_-1),solzz(lz,lr_-1)
@@ -720,11 +720,11 @@ contains
 
       !if(urfb_version.eq.1)then ! 2 is the new version developed by YuP
          ! if 1, it will use the original version
-          write(*,*)'URFpacked ifct1 to ifct1_; Sizes=', &
+          if(setup0%verbose>0) write(*,*)'URFpacked ifct1 to ifct1_; Sizes=', &
                      size(ifct1),size(ifct1_)
       !endif
 
-      write(*,*)'urfpack:  END'
+      if(setup0%verbose>0) write(*,*)'urfpack:  END'
       return
       end subroutine urfpack
 

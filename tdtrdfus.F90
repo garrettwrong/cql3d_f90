@@ -134,7 +134,7 @@ contains
       if ( l.eq.0) write(*,*)'tdtrdfus: enerkev', &
          (enerkev(j,k),j=1,jx) !YuP[2018-01-08] added 2nd index (k)
       if ( l.eq.0) write(*,*)'tdtrdfus: d_rr',(d_rr(iyh,j,k,ilr),j=1,jx)
-      write(*,*)'tdtrdfus: jkev,d_rr(iyh,1,k,ilr),d_rr(iyh,jkev,k,ilr) ' &
+      if(setup0%verbose>0) write(*,*)'tdtrdfus: jkev,d_rr(iyh,1,k,ilr),d_rr(iyh,jkev,k,ilr) ' &
               ,jkev,d_rr(iyh,1,k,ilr),d_rr(iyh,jkev,k,ilr)
       enddo  !  on l
 
@@ -523,7 +523,7 @@ contains
       data start1/1,1,1/
       data startg/1,1,1,1/
 
-      WRITE(*,*) 'In diffus_io, kopt=',kopt
+      if(setup0%verbose>0) WRITE(*,*) 'In diffus_io, kopt=',kopt
 
 !     Maximum iy as function of radius:
       iyy=0
@@ -895,7 +895,7 @@ contains
 
       istatus=NF_OPEN(t_,NF_NOWRITE,ncid)
       if (istatus .NE. NF_NOERR) then
-         WRITE(*,*)'   ***   Problem opening d_rr .nc data file   ***'
+         if(setup0%verbose>0) WRITE(*,*)'   ***   Problem opening d_rr .nc data file   ***'
          Stop
       endif
 
@@ -918,8 +918,8 @@ contains
 !     Check the data dimensions in the input file
 
       if (jx*iy*setup0%lrz*n_d_rr.ne.jx_file*iy_file*lrz_file*n_d_rr_file) then
-         write(*,*)
-         write(*,*)'  WRONG DIMENSIONS IN _difus_io.nc file: STOP'
+         if(setup0%verbose>0) write(*,*)
+         if(setup0%verbose>0) write(*,*)'  WRONG DIMENSIONS IN _difus_io.nc file: STOP'
          STOP
       endif
 

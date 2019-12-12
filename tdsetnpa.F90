@@ -146,9 +146,9 @@ contains
          do ien=1,nen_npa
             e=en_(ien)*(proton/fmass(1))
             if (e.lt.en_b(1)) then
-               write(*,*)
-               write(*,*)'tdsetnpa:  energy less than Boron table'
-               write(*,*)
+               if(setup0%verbose>0) write(*,*)
+               if(setup0%verbose>0) write(*,*)'tdsetnpa:  energy less than Boron table'
+               if(setup0%verbose>0) write(*,*)
             endif
             if (e.lt.en_b(6)) then
                call terp1(ncoefs,en_b,cx_b,w,e,istride,tab,itab)
@@ -183,10 +183,10 @@ contains
 
       do kk=1,npaproc
          if (npa_process(kk).ne.'notset'.and.kk.ne.5) then
-            print*,"npa_process,en_,sigmanpa=",npa_process(kk)
-            print*,(en_(ien),sigmanpa(ien,kk),ien=1,nen_npa)
+            if(setup0%verbose>0) print*,"npa_process,en_,sigmanpa=",npa_process(kk)
+            if(setup0%verbose>0) print*,(en_(ien),sigmanpa(ien,kk),ien=1,nen_npa)
          else
-            print*,"npa_process,en_,sigmanpa=set elsewhere", &
+            if(setup0%verbose>0) print*,"npa_process,en_,sigmanpa=set elsewhere", &
                  npa_process(kk)
          endif
       enddo

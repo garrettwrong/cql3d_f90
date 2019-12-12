@@ -298,8 +298,8 @@ contains
 #ifdef __MPI
       if(mpirank.eq.0) then
 #endif
-          WRITE(*,*)'----------------------- lr_===', lr_
-          WRITE(*,'(a,i4,3e12.4)') &
+          if(setup0%verbose>0) WRITE(*,*)'----------------------- lr_===', lr_
+          if(setup0%verbose>0) WRITE(*,'(a,i4,3e12.4)') &
            'diaggnde_n=0 lr_, reden, gn, sum_ij(gone)', &
                          lr_,reden(k,lr_),gn,sum(gone(1:iy,1:jx,k,lr_))
 #ifdef __MPI
@@ -563,7 +563,7 @@ contains
          enddo
 
       else
-         write(*,*) 'Problem with izeff specification'
+         if(setup0%verbose>0) write(*,*) 'Problem with izeff specification'
          stop
       endif
 

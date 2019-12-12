@@ -135,7 +135,7 @@ contains
                read(23,1) nray(krf),nharm(krf),freqcy(krf)
                close(unit=23)
             else
-               WRITE(*,*)'urfread: check that "rayech" file is present'
+               if(setup0%verbose>0) WRITE(*,*)'urfread: check that "rayech" file is present'
                stop
             endif
          endif
@@ -151,7 +151,7 @@ contains
                read(24,1) nray(krf),nharm(krf),freqcy(krf)
                close(unit=24)
             else
-               WRITE(*,*)'urfread: check that "rayfw" file is present'
+               if(setup0%verbose>0) WRITE(*,*)'urfread: check that "rayfw" file is present'
                stop
             endif
          endif
@@ -167,7 +167,7 @@ contains
                read(20,1) nray(krf),nharm(krf),freqcy(krf)
                close(unit=20)
             else
-               WRITE(*,*)'urfread: check that "raylh" file is present'
+               if(setup0%verbose>0) WRITE(*,*)'urfread: check that "raylh" file is present'
                stop
             endif
          endif
@@ -186,10 +186,10 @@ contains
       nrayn=1
       do krf=1,mrf
          nrayn= max(nrayn,nray(krf))
-        WRITE(*,'(a,2i9,e12.4)')'URFSETUP: nray(krf),nharm(krf),freqcy', &
+        if(setup0%verbose>0) WRITE(*,'(a,2i9,e12.4)')'URFSETUP: nray(krf),nharm(krf),freqcy', &
           nray(krf),nharm(krf),freqcy(krf)
       enddo
-      WRITE(*,*)'URFSETUP: nrayn===',nrayn
+      if(setup0%verbose>0) WRITE(*,*)'URFSETUP: nrayn===',nrayn
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif
@@ -261,8 +261,8 @@ contains
 !     Check that allocations were OK
 !    (should not happen because (nrayn,mrfn)-size is quite small)
       if (istat_tot.ne.0) then
-         write(*,*)'urfsetup.f:  Problem with allocation'
-         write(*,*)'urfsetup.f:  Stopping. istat_tot=', istat_tot
+         if(setup0%verbose>0) write(*,*)'urfsetup.f:  Problem with allocation'
+         if(setup0%verbose>0) write(*,*)'urfsetup.f:  Stopping. istat_tot=', istat_tot
          STOP
       endif
 
@@ -283,7 +283,7 @@ contains
                call urfread_i(krf,23)
                close(unit=23)
             else
-               WRITE(*,*)'urfread: check that "rayech" file is present'
+               if(setup0%verbose>0) WRITE(*,*)'urfread: check that "rayech" file is present'
                stop
             endif
          endif
@@ -298,7 +298,7 @@ contains
                call urfread_i(krf,24)
                close(unit=24)
             else
-               WRITE(*,*)'urfread: check that "rayfw" file is present'
+               if(setup0%verbose>0) WRITE(*,*)'urfread: check that "rayfw" file is present'
                stop
             endif
          endif
@@ -313,7 +313,7 @@ contains
                call urfread_i(krf,20)
                close(unit=20)
             else
-               WRITE(*,*)'urfread: check that "raylh" file is present'
+               if(setup0%verbose>0) WRITE(*,*)'urfread: check that "raylh" file is present'
                stop
             endif
          endif
@@ -333,11 +333,11 @@ contains
       do krf=1,mrf
       do iray=1,nray(krf)
          nrayelts= max(nrayelts,nrayelt(iray,krf))
-         WRITE(*,'(a,3i9)')'URFSETUP: iray,krf,nrayelt(iray,krf)=', &
+         if(setup0%verbose>0) WRITE(*,'(a,3i9)')'URFSETUP: iray,krf,nrayelt(iray,krf)=', &
                                       iray,krf,nrayelt(iray,krf)
       enddo
       enddo
-      WRITE(*,*)'URFSETUP: nrayelts===',nrayelts
+      if(setup0%verbose>0) WRITE(*,*)'URFSETUP: nrayelts===',nrayelts
 #ifdef __MPI
       endif  ! for if(mpirank.eq.***)
 #endif

@@ -44,8 +44,8 @@ contains
 
       character*8 iplotnbi
 
-      write(*,*)
-      write(*,*)'tdnpadiag, time step ',n
+      if(setup0%verbose>0) write(*,*)
+      if(setup0%verbose>0) write(*,*)'tdnpadiag, time step ',n
 
 
 !     Call npa routines to calc and plot output....
