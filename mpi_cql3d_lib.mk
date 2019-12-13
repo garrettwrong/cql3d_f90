@@ -13,9 +13,6 @@ export
 libmpi_cql3d_lib: install
 
 pkg:
-	$(MAKE) -f makefile_gfortran64.CentOS7 -j mpi
-
-install: pkg
 	@test -d $(DYLDIR) || mkdir -p $(DYLDIR)
 	@test -d $(LIBDIR) || mkdir -p $(LIBDIR)
 	@test -d $(MODDIR) || mkdir -p $(MODDIR)
@@ -23,9 +20,12 @@ install: pkg
 	@test -d $(EXEDIR) || mkdir -p $(EXEDIR)
 	@test -d $(BUILDDIR) || mkdir -p $(BUILDDIR)
 	$(MAKE) -f makefile_gfortran64.CentOS7 -j mpi
+
+install: pkg
+	$(MAKE) -f makefile_gfortran64.CentOS7 -j mpi
 	@cp $(BUILDDIR)/libmpi_xcql3d.so $(DYLDIR)/libmpi_cql3d_lib.so
 	@cp $(BUILDDIR)/libmpi_xcql3d.a $(LIBDIR)/mpi_cql3d_lib.a
-	@mv cqlmpilib_mod.mod $(MPIMODDIR)
+	@cp $(BUILDDIR)/cqlmpilib_mod.mod $(MPIMODDIR)
 	@cp $(BUILDDIR)/mpi_xcql3d $(EXEDIR)/mpi_xcql3d
 
 clean:

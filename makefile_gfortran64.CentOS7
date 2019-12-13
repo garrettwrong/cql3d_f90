@@ -15,6 +15,14 @@ endif
 ifndef BUILDDIR
     BUILDDIR=.
 endif
+ifneq (,$(findstring ifort, $(FC90)))
+	MODDIRF = -module $(BUILDDIR)
+	MPIMODDIRF = -module $(BUILDDIR)
+else
+	# use gnu style
+	MODDIRF = -J$(BUILDDIR)
+	MPIMODDIRF = -J$(BUILDDIR)
+endif
 
 # INCLUDE line
 INCLUDES = $(wildcard *.h)
@@ -60,8 +68,8 @@ CSPECIAL  = $(FFLAGS)
 OPTIMIZE  = -O1
 #force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL = -Wl,-noinhibit-exec
-COMPILE   = $(COMPILER) -fPIC -c $(PGFLAG) $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
-COMPILE_MPI  = $(COMPILER_MPI) -fPIC -c -D__MPI $(PGFLAG) $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
+COMPILE   = $(COMPILER) -fPIC -c $(PGFLAG) $(DEBUG) $(CSPECIAL) $(MODDIRF) $(OPTIMIZE) $(INCLUDE)
+COMPILE_MPI  = $(COMPILER_MPI) -fPIC -c -D__MPI $(PGFLAG) $(DEBUG) $(CSPECIAL) $(MPIMODDIRF) $(OPTIMIZE) $(INCLUDE)
 LOAD      = $(COMPILER) -o $(BUILDDIR)/$(NAME) $(LDSPECIAL) $(DEBUG)
 LOAD_MPI  = $(COMPILER_MPI) -o $(BUILDDIR)/$(NAME_MPI) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
