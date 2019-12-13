@@ -6,7 +6,7 @@ NAME_MPI = mpi_$(NAME)
 COMPILER  = gfortran
 COMPILER_MPI = mpifort
 LIBTOOL   = libtool -static
-
+BUILDDIR = .
 # TRANSP build stuff
 ifdef FC90
     COMPILER = $(FC90)
@@ -24,7 +24,7 @@ OBJECTS = $(SOURCES:.F90=.o)
 
 LOCATION  =   -L /usr/lib -L/usr/local/lib
 LIBRARIES =   -lnetcdff -lnetcdf
-INCLUDE   =/usr/local/include
+INCLUDE   =   -I/usr/local/include -I$(BUILDDIR)
 ifdef MPIMODDIR
 	INCLUDE += -I$(MPIMODDIR)
 endif
@@ -44,8 +44,8 @@ CSPECIAL  = $(FFLAGS)
 OPTIMIZE  = -O1
 #force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL =
-COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
-COMPILE_MPI  = $(COMPILER_MPI) -c -D__MPI -DNOPGPLOT $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) -I $(INCLUDE)
+COMPILE   = $(COMPILER) -c $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
+COMPILE_MPI  = $(COMPILER_MPI) -c -D__MPI -DNOPGPLOT $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
 LOAD      = $(COMPILER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
 LOAD_MPI  = $(COMPILER_MPI) -o $(NAME_MPI) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
