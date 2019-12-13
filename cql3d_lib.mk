@@ -2,18 +2,11 @@ MODDIR=$(OBJ)/mod
 LIBDIR=$(OBJ)/lib
 DYLDIR=$(OBJ)/dylib
 EXEDIR=$(OBJ)/exe
-BUILDDIR=$(OBJ)/obj/cql3dlib
+BUILDDIR=$(OBJ)/obj/cql3d_lib
 
 ## TRANSP build stuff, should set FC90 and FFLAGS.
 SHR = $(CODESYSDIR)/source/misc/makeflags.mk
 include $(SHR)
-MODDIRFLAG = "-J$(BUILDDIR)"
-ifeq ($(FC90), ifort)
-    MODDIRFLAG = "-module $(BUILDDIR)"
-endif
-ifeq ($(FC90), mpifort)
-    MODDIRFLAG = "-module $(BUILDDIR)"
-endif
 export
 
 libcql3d_lib: install
@@ -29,7 +22,7 @@ install: pkg
 	@test -d $(BUILDDIR) || mkdir -p $(BUILDDIR)
 	@cp $(BUILDDIR)/libxcql3d.so $(DYLDIR)/libcql3d_lib.so
 	@cp $(BUILDDIR)/libxcql3d.a $(LIBDIR)/cql3d_lib.a
-	@cp $(BUILDDIR)/*.mod $(MODDIR)
+	@mv *.mod $(MODDIR)
 	@cp $(BUILDDIR)/xcql3d $(EXEDIR)/xcql3d
 
 clean:

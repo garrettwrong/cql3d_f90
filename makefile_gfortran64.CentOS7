@@ -12,7 +12,7 @@ ifdef FC90
     COMPILER = $(FC90)
     NOPGPLOT = TRUE
 endif
-ifndef BUIDDIR
+ifndef BUILDDIR
     BUILDDIR=.
 endif
 
@@ -29,6 +29,9 @@ OBJECTS = $(patsubst %.F90,$(BUILDDIR)/%.o,$(SOURCES))
 LOCATION  =   -L/usr/lib64
 LIBRARIES =   -lX11 -lnetcdff -lnetcdf
 INCLUDE   =   -I/usr/include
+ifdef MODDIR
+	INCLUDE += -I$(MODDIR)
+endif
 ifdef MPIMODDIR
 	INCLUDE += -I$(MPIMODDIR)
 endif
@@ -57,16 +60,16 @@ CSPECIAL  = $(FFLAGS)
 OPTIMIZE  = -O1
 #force double prec -fdefault-real-8  -fdefault-double-8
 LDSPECIAL = -Wl,-noinhibit-exec
-COMPILE   = $(COMPILER) -fPIC -c $(MODDIRFLAG) $(PGFLAG) $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
-COMPILE_MPI  = $(COMPILER_MPI) -fPIC -c -D__MPI $(MODDIRFLAG) $(PGFLAG) $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
-LOAD      = $(COMPILER) -o $(NAME) $(LDSPECIAL) $(DEBUG)
-LOAD_MPI  = $(COMPILER_MPI) -o $(NAME_MPI) $(LDSPECIAL) $(DEBUG)
+COMPILE   = $(COMPILER) -fPIC -c $(PGFLAG) $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
+COMPILE_MPI  = $(COMPILER_MPI) -fPIC -c -D__MPI $(PGFLAG) $(DEBUG) $(CSPECIAL)  $(OPTIMIZE) $(INCLUDE)
+LOAD      = $(COMPILER) -o $(BUILDDIR)/$(NAME) $(LDSPECIAL) $(DEBUG)
+LOAD_MPI  = $(COMPILER_MPI) -o $(BUILDDIR)/$(NAME_MPI) $(LDSPECIAL) $(DEBUG)
 PROTECT   = chmod 755
 DELETE    = rm -f
 
 standalone: $(BUILDDIR)/$(NAME)
 libs: $(BUILDDIR)/lib$(NAME).a $(BUILDDIR)/lib$(NAME).so
-all: $(BUILDDIR)/libs $(BUILDDIR)/$(NAME)_shared standalone
+all: libs $(BUILDDIR)/$(NAME)_shared standalone
 
 $(BUILDDIR)/$(NAME):           $(OBJECTS)
 	$(LOAD)    $^  $(LOCATION) $(LIBRARIES)
@@ -82,8 +85,8 @@ $(BUILDDIR)/lib$(NAME).a: $(LIBOBJS)
 	$(LIBTOOL) $@ $^
 	$(PROTECT) $@
 
-$(BUILDDIR)/$(NAME)_shared: $(BUILDDIR)/$(NAME) $(BUILDDIR)/lib$(NAME).so $(BUILDDIR)/a_cqlp.o
-	$(COMPILER) -o $@ $(LDSPECIAL) $(DEBUG) a_cqlp.o -L. -l$< $(LOCATION) $(LIBRARIES)
+$(BUILDDIR)/$(NAME)_shared: $(BUILDDIR)/lib$(NAME).so $(BUILDDIR)/a_cqlp.o
+	$(COMPILER) -o $@ $(LDSPECIAL) $(DEBUG) $(BUILDDIR)/a_cqlp.o -L$(BUILDDIR) -l$(NAME) $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $@
 
 
@@ -101,9 +104,9 @@ $(OBJECTS): $(BUILDDIR)/%.o: %.F90 $(INCLUDES)
 
 # ------------------------  Similarly for MPI
 
-standalone_mpi: $(NAME_MPI)
-libs_mpi: lib$(NAME_MPI).a lib$(NAME_MPI).so
-mpi: libs_mpi $(NAME_MPI)_shared standalone_mpi
+standalone_mpi: $(BUILDDIR)/$(NAME_MPI)
+libs_mpi: $(BUILDDIR)/lib$(NAME_MPI).a $(BUILDDIR)/lib$(NAME_MPI).so
+mpi: libs_mpi $(BUILDDIR)/$(NAME_MPI)_shared standalone_mpi
 
 OBJECTS_MPI = $(OBJECTS:.o=.o_mpi) $(BUILDDIR)/cql3d_mpilib.o_mpi
 #INCLUDE_MPI = $(INCLUDE)
@@ -112,8 +115,8 @@ $(BUILDDIR)/$(NAME_MPI):           $(OBJECTS_MPI)
 	$(LOAD_MPI)    $^  $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $@
 
-$(BUILDDIR)/$(NAME_MPI)_shared: $(BUILDDIR)/$(NAME_MPI) $(BUILDDIR)/lib$(NAME_MPI).so $(BUILDDIR)/a_cqlp.o_mpi
-	$(COMPILER_MPI) -o $@ $(LDSPECIAL) $(DEBUG) a_cqlp.o_mpi -L. -l$< $(LOCATION) $(LIBRARIES)
+$(BUILDDIR)/$(NAME_MPI)_shared: $(BUILDDIR)/lib$(NAME_MPI).so $(BUILDDIR)/a_cqlp.o_mpi
+	$(COMPILER_MPI) -o $@ $(LDSPECIAL) $(DEBUG) $(BUILDDIR)/a_cqlp.o_mpi -L$(BUILDDIR) -l$(NAME_MPI) $(LOCATION) $(LIBRARIES)
 	$(PROTECT) $@
 
 LIBOBJS_MPI = $(filter-out $(BUILDDIR)/a_cqlp.o_mpi, $(OBJECTS_MPI))
@@ -139,15 +142,15 @@ rebuild:
 
 clean:
 	$(DELETE) $(BUILDDIR)/$(NAME)
-	$(DELETE) $(OBJECTS)
+	$(DELETE) $(BUILDDIR)/$(OBJECTS)
 	$(DELETE) $(BUILDDIR)/*.mod
 	$(DELETE) $(BUILDDIR)/*.so
 	$(DELETE) $(BUILDDIR)*.a
 	$(DELETE) $(BUILDDIR)/$(NAME)_shared
 	$(DELETE) $(BUILDDIR)*.o_mpi
-	$(DELETE) $(NAME_MPI)
-	$(DELETE) $(NAME_MPI)_shared
-	$(DELETE) $(NAME)
+	$(DELETE) $(BUILDDIR)/$(NAME_MPI)
+	$(DELETE) $(BUILDDIR)/$(NAME_MPI)_shared
+	$(DELETE) $(BUILDDIR)/$(NAME)
 
 .PHONY: all
 .PHONY: mpi

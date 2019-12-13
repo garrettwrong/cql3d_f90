@@ -3,18 +3,11 @@ MPIMODDIR=$(OBJ)/mpi_mod
 LIBDIR=$(OBJ)/lib
 DYLDIR=$(OBJ)/dylib
 EXEDIR=$(OBJ)/exe
-BUILDDIR=$(OBJ)/obj/mpi_cql3dlib
+BUILDDIR=$(OBJ)/obj/mpi_cql3d_lib
 
 ## TRANSP build stuff, should set FC90 and FFLAGS.
 SHR = $(CODESYSDIR)/source/misc/makeflags.mk
 include $(SHR)
-MODDIRFLAG = "-J$(BUILDDIR)"
-ifeq ($(FC90), ifort)
-    MODDIRFLAG = "-module $(BUILDDIR)"
-endif
-ifeq ($(FC90), mpifort)
-    MODDIRFLAG = "-module $(BUILDDIR)"
-endif
 export
 
 libmpi_cql3d_lib: install
@@ -32,7 +25,7 @@ install: pkg
 	$(MAKE) -f makefile_gfortran64.CentOS7 -j mpi
 	@cp $(BUILDDIR)/libmpi_xcql3d.so $(DYLDIR)/libmpi_cql3d_lib.so
 	@cp $(BUILDDIR)/libmpi_xcql3d.a $(LIBDIR)/mpi_cql3d_lib.a
-	@cp $(BUILDDIR)/cqlmpilib_mod.mod $(MPIMODDIR)
+	@mv cqlmpilib_mod.mod $(MPIMODDIR)
 	@cp $(BUILDDIR)/mpi_xcql3d $(EXEDIR)/mpi_xcql3d
 
 clean:
