@@ -45,6 +45,16 @@ ifdef MPIMODDIR
 endif
 
 # if netcdf_dir env var is set (like by a module), use it:
+## TRANSP PPPL circa 2019
+ifdef NETCDF_C_HOME
+	INCLUDE += -I$(NETCDF_C_HOME)/include
+	LOCATION += -L$(NETCDF_C_HOME)/lib
+endif
+ifdef NETCDF_FORTRAN_HOME
+	INCLUDE += -I$(NETCDF_FORTRAN_HOME)/include
+	LOCATION += -L$(NETCDF_FORTRAN_HOME)/lib
+endif
+# Another common location..
 ifdef NETCDF_DIR
 	INCLUDE += -I$(NETCDF_DIR)/include
 	LOCATION += -L$(NETCDF_DIR)/lib
