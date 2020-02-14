@@ -1,7 +1,5 @@
 # cql3d_f90
 
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/garrettwrong/cql3d_f90?include_prereleases)
-![master pipeline](https://gitlab.com/geebdubya/cql3d_f90/badges/master/pipeline.svg)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3463591.svg)](https://doi.org/10.5281/zenodo.3463591)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
@@ -86,7 +84,7 @@ packages prebuilt for you, so it is totally turn-key.
 Get a copy of the code:
 
 ```
-git clone git@github.com:garrettwrong/cql3d_f90.git
+git clone git@github.com:PrincetonUniversity/cql3d_f90.git
 cd cql3d_f90
 ```
 
