@@ -38,6 +38,10 @@ As in the original code, the standalone executable expects to read the `cqlinput
 file.  You can find exhausting notes on the options in cqlinput_help and further
 in the compx_archive, particularly in a_change, and the many READMEs.
 
+## Getting Access
+
+Currently the code is going through a review process (ie paperwork) to clear it for public open source.  In the mean time, you may request access by emailing <transp@pppl.gov>.
+
 ## Why does cql3d_f90 exist?
 
 Unfortunately, the original code required a little more attention than could be
