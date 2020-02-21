@@ -193,6 +193,13 @@ If you want to alter the environment, you can start with the
 provided file `ci/Dockerfile.centos7` used in this distribution, building and
  tagging as you would any docker image.
 
+### TRANSP Debug
+
+TRANSP was being transitioned to use modules and derived types instead of file
+based communication for invoking CQL.  It does at this time still dump an NML
+you may use for debugging.
+
+See `debug_cqlnml_converter.py`.
 
 ## Support
 
